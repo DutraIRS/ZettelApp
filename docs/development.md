@@ -36,7 +36,9 @@ They never touch your real preferences or Credential Manager entries beyond a th
 |---|---|
 | `python tools/make_icon.py` | Redraws the app icon (`zettelapp/resources/icon.ico`, PNGs) and the website icons. |
 | `python tools/screenshots.py` | Renders screenshots of the real app (light and dark) into `website/assets/screenshots/`, using a demo vault (`tools/demo_vault.py`) and temporary settings. |
-| `python tools/build_site.py` | Builds the documentation pages of the website (`website/docs/`) from `docs/*.md`, and `website/version.json` from the app version. |
+| `python tools/build_site.py` | Builds the documentation pages of the website (`website/docs/`, and `website/<language>/` from `docs/<language>/`) from Markdown, the language script and `website/version.json` from the app version. |
+| `python tools/i18n.py extract` | Collects every interface string passed to `_()`, `n_()` and `N_()` into `zettelapp/resources/locales/messages.json` (a test fails when it is out of date). |
+| `python tools/i18n.py check` | Reports missing, stale and broken entries in each translation catalogue. |
 
 ## Build the Windows app
 
@@ -106,12 +108,14 @@ zettelapp/
     secrets.py     Windows Credential Manager
     security.py    validation of URLs, file names, images, archives
   ui/              PySide6 widgets: main window, editor, graph views, pages, dialogs, theme
+  resources/       icon, adventure illustrations, translation catalogues (locales/)
+  i18n.py          interface languages: _(), n_(), plural rules, loading catalogues
   mcp_server.py    MCP server; mcp_main.py: its entry point (zettelapp-mcp.exe)
   app.py           startup, single instance, logging
   settings.py      preferences (QSettings)
   winintegration.py  taskbar identity, dark title bars, zettelapp:// protocol
 tests/             pytest suite
-tools/             icon, screenshots, demo vault, website builder
+tools/             icon, screenshots, demo vault, website builder, translation tools
 packaging/         PyInstaller spec, version info, Inno Setup script, build script
 docs/              this documentation (also published on the website)
 website/           the GitHub Pages site

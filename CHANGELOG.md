@@ -18,22 +18,36 @@ All notable changes to ZettelApp are documented here. The format follows
 - Insert file links, and manage several saved AI API keys.
 - Interface, documentation and website translations: Spanish, Portuguese (Brazil), French, German,
   Italian, Russian, Simplified Chinese, Japanese, Korean and Arabic. Change the app's language in
-  *Options ▸ General*; the website suggests your browser's language and offers a flag menu to switch.
+  *Options ▸ General*; the website suggests your browser's language once and has a language menu
+  (the globe) on every page. The installer is also offered in Korean and Arabic.
 
 ### Changed
 
 - Split view is the default; the delete button moved to the editor toolbar.
 - Menu and option check marks now show a tick.
-- The 3D graph labels are clearer, and 2D arrows follow nodes while dragging.
+- The 3D graph labels are clearer, its group areas are bounded hulls that follow depth, and 2D
+  arrows follow nodes while dragging.
 - Link styles now travel through archive and JSON export, import and MCP responses.
 - New vaults start with a small linked tour of ZettelApp.
 - The website, documentation navigation and footer now adapt to narrow phone screens.
+- Installing an update keeps the interface language picked in *Options*.
+- The main window can be made much narrower (about 1,000 px in every language): the editor and
+  graph toolbars wrap onto a second line instead of setting the window's minimum width.
+- Deleting a note's title image from its text also clears it as the title image.
 
 ### Fixed
 
 - Dragging and dropping images into a note now works.
-- Ticking "delete my data" when uninstalling now also removes your notes.
+- Ticking "delete my data" when uninstalling now also removes your notes, and only the files
+  ZettelApp created: other files in a vault's folders (even in its `assets` folder) are kept.
 - Close the database connection when opening or upgrading a vault fails.
+- *Options* showed "Use Windows setting" when the language had been chosen in the installer.
+- Options, the graph page, the link panel and many messages were still in English in the other
+  languages, and counts used English plurals.
+- An alarm time edited by hand into the database no longer breaks the alarm check.
+- Website: the first-visit language redirect opened the documentation index instead of the same
+  page, Arabic pages scrolled sideways, and between 720 and 900 px the header wrapped so the
+  language list opened off-screen.
 
 ## [1.0.0] - 2026-10-28
 

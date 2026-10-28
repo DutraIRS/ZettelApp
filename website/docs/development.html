@@ -131,7 +131,15 @@ import, Anki, quizzes, Zotero, the LLM providers (no network) and the MCP server
 </tr>
 <tr>
 <td><code>python tools/build_site.py</code></td>
-<td>Builds the documentation pages of the website (<code>website/docs/</code>) from <code>docs/*.md</code>, and <code>website/version.json</code> from the app version.</td>
+<td>Builds the documentation pages of the website (<code>website/docs/</code>, and <code>website/&lt;language&gt;/</code> from <code>docs/&lt;language&gt;/</code>) from Markdown, the language script and <code>website/version.json</code> from the app version.</td>
+</tr>
+<tr>
+<td><code>python tools/i18n.py extract</code></td>
+<td>Collects every interface string passed to <code>_()</code>, <code>n_()</code> and <code>N_()</code> into <code>zettelapp/resources/locales/messages.json</code> (a test fails when it is out of date).</td>
+</tr>
+<tr>
+<td><code>python tools/i18n.py check</code></td>
+<td>Reports missing, stale and broken entries in each translation catalogue.</td>
 </tr>
 </tbody>
 </table></div>
@@ -192,12 +200,14 @@ hand from <code>#tags</code> written in the text). Older vaults are upgraded aut
     secrets.py     Windows Credential Manager
     security.py    validation of URLs, file names, images, archives
   ui/              PySide6 widgets: main window, editor, graph views, pages, dialogs, theme
+  resources/       icon, adventure illustrations, translation catalogues (locales/)
+  i18n.py          interface languages: _(), n_(), plural rules, loading catalogues
   mcp_server.py    MCP server; mcp_main.py: its entry point (zettelapp-mcp.exe)
   app.py           startup, single instance, logging
   settings.py      preferences (QSettings)
   winintegration.py  taskbar identity, dark title bars, zettelapp:// protocol
 tests/             pytest suite
-tools/             icon, screenshots, demo vault, website builder
+tools/             icon, screenshots, demo vault, website builder, translation tools
 packaging/         PyInstaller spec, version info, Inno Setup script, build script
 docs/              this documentation (also published on the website)
 website/           the GitHub Pages site

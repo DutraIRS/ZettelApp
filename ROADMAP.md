@@ -6,32 +6,23 @@ Ideas and planned work for ZettelApp. Suggestions are welcome in
 **Companies can sponsor a specific roadmap item** through [Ko-fi](https://ko-fi.com/dutrairs) or by getting in
 touch on [GitHub](https://github.com/DutraIRS/ZettelApp).
 
-The first two items were requested for 1.0, evaluated, and **deferred because they are not quick**.
-Each would need careful work across the whole app rather than a small addition.
+Linux support was requested for 1.0, evaluated, and **deferred because it is not quick**: it needs
+careful work across the whole app rather than a small addition.
 
 ## 1. App localisation (many languages)
 
-**Status: translation infrastructure is ready; the app remains in English until translated catalogues
-are written and reviewed.**
+**Status: done in 1.1.** The app, its documentation and the website are available in English, Spanish,
+Portuguese (Brazil), French, German, Italian, Russian, Simplified Chinese, Japanese, Korean and Arabic
+(right to left). The language follows Windows or the installer's choice, and can be changed in
+*Tools ▸ Options ▸ General*.
 
-Already done:
+Still to do:
 
-- The Windows installer lets you pick a language, suggests your Windows display language, and is fully
-  translated (using Inno Setup's bundled translations).
-- The installer stores its language choice in
-  `HKEY_CURRENT_USER\Software\ZettelApp\ZettelApp\ui\language`, ready for the app catalogues.
-- User-visible interface strings are marked for translation and extracted into a source catalogue.
-- The app has safe catalogue loading, plural rules, right-to-left layout support and English fallback.
-
-Plan:
-
-1. Translate. Start with **Portuguese (Brazil), Spanish, French and German**, then accept community
-   translations and expose complete catalogues in *Tools ▸ Options ▸ General*.
-2. Review every catalogue with a native speaker and test layouts with longer strings.
-3. Translate the documentation.
-
-The remaining work needs native-speaker review and layout checks because longer strings can break the
-design.
+- A review of every catalogue by a native speaker. Corrections are welcome as GitHub issues or pull
+  requests against `zettelapp/resources/locales/<language>.json` and `docs/<language>/`.
+- More languages: `python tools/i18n.py extract` lists every string in
+  `zettelapp/resources/locales/messages.json`, and `python tools/i18n.py check` reports what a catalogue is
+  missing.
 
 ## 2. Linux (.deb, AppImage, Flatpak)
 

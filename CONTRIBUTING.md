@@ -15,8 +15,12 @@ Thanks for helping improve ZettelApp!
   5. Treat note contents and imported files as untrusted. Validate input at the edges and use bound SQL
      parameters (see the [security model](docs/privacy-and-security.md)).
   6. Open a pull request describing the change and how you tested it.
-- **Documentation and translations** are very welcome. The docs live in `docs/`, and app translations are
-  planned (see the [roadmap](ROADMAP.md)).
+- **Documentation and translations** are very welcome. The docs live in `docs/` (translations in
+  `docs/<language>/`), and the app's translations in `zettelapp/resources/locales/<language>.json`. Interface
+  text goes through `_()` (`n_()` for counted text, `N_()` for constants translated where they are shown);
+  never name a throwaway variable `_`, which would hide the translation function. After changing interface
+  text, run `python tools/i18n.py extract`, then `python tools/i18n.py check` to see what each catalogue is
+  missing.
 
 By contributing, you agree that your contributions are released into the public domain under
 [The Unlicense](LICENSE), like the rest of the project.
