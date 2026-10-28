@@ -66,22 +66,25 @@ part_of:: [[Zettelkasten method]]
 
 The built-in link types are:
 
-| Type | Name | Reverse name | Directed |
-|---|---|---|---|
-| `related` | Related to | Related to | no |
-| `supports` | Supports | Supported by | yes |
-| `contradicts` | Contradicts | Contradicts | no |
-| `extends` | Extends | Extended by | yes |
-| `example` | Example of | Has example | yes |
-| `part_of` | Part of | Contains | yes |
-| `cites` | Cites | Cited by | yes |
+| Type | Name | Reverse name | Directed | Line | Arrow tip |
+|---|---|---|---|---|---|
+| `related` | Related to | Related to | no | solid, grey | none |
+| `supports` | Supports | Supported by | yes | dashed, green | filled triangle |
+| `contradicts` | Contradicts | Contradicts | no | dotted, red | none |
+| `extends` | Extends | Extended by | yes | dash-dot, blue | filled triangle |
+| `example` | Example of | Has example | yes | dash-dot-dot, amber | circle |
+| `part_of` | Part of | Contains | yes | long dash, purple | diamond |
+| `cites` | Cites | Cited by | yes | solid, teal | open arrow |
+
+These are the looks of a new vault; you can change them (see below). A vault made with an earlier version
+keeps the lines it had.
 
 A plain `[[link]]` is *Related to*.
 
 ### Directed and undirected links
 
 A **directed** type reads differently from each side. If note A *supports* note B, then B's backlinks
-show A as *Supported by*. Directed links get arrowheads in the graph and stay directed in exports.
+show A as *Supported by*. Directed links get arrow tips in the graph and stay directed in exports.
 **Undirected** types such as *Related to* and *Contradicts* read the same both ways.
 
 To flip a directed link created the wrong way round, right-click it in the side panel and choose
@@ -98,10 +101,27 @@ The side panel lists the note's **Links** (outgoing) and **Backlinks** (incoming
 
 ### Your own link types
 
-Add, rename, recolour or remove link types in *Tools ▸ Options ▸ Link types*. Each type has a name, a
-reverse name, a colour and a *Directed* switch. In text, use the type's id (shown in the `type:: [[…]]`
-form, e.g. a type called "Inspired by" becomes `inspired_by::`). Removing a type turns its links into
-*Related to* links, so nothing is lost. *Related to* itself can't be removed.
+Add, rename, restyle or remove link types in *Tools ▸ Options ▸ Link types*. Pick a type in the list and
+change it beside the list:
+
+- **Name** and **Reverse name**: how the link reads from its source and from its target. The reverse
+  name is used only by directed types.
+- **Directed**: whether the type reads differently from each side and gets an arrow tip.
+- **Colour**: click the colour button to choose any colour.
+- **Line**: solid, dashed, dotted, dash-dot, dash-dot-dot or long dash.
+- **Arrow tip**: the tip drawn where a directed link arrives: a filled triangle, an open arrow, a
+  diamond, a circle or a bar.
+
+The preview shows two notes joined by the link, with its name and how it reads from the other side.
+The style is used wherever links appear: the graph, its legend, the side panel, the link picker and
+the website, GraphML and Graphviz exports. Give each type its own line as well as its own colour, so
+the types stay easy to tell apart for colour-blind readers and on paper. A new type starts with a
+colour and a line that few other types use.
+
+In text, use the type's id, shown under the preview (e.g. a type called "Inspired by" becomes
+`inspired_by::`). The id is set when the type is created, so renaming a type doesn't break links
+written in your notes. Removing one of your own types turns its links into *Related to* links, so
+nothing is lost. Built-in types can be renamed and restyled but not removed.
 
 ## Tags
 

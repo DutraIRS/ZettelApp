@@ -92,7 +92,7 @@ button exports the notes on screen) and from a graph node's menu.</p>
 <tr>
 <td><strong>ZettelApp archive</strong></td>
 <td><code>.zip</code></td>
-<td>Everything, including images: notes, typed links, link types, flashcards, mind maps. Re-import it into ZettelApp on any computer. Best for backups and moving vaults.</td>
+<td>Everything, including images: notes, typed links, link types (with their colours, line styles and arrow tips), flashcards, mind maps. Re-import it into ZettelApp on any computer. Best for backups and moving vaults.</td>
 </tr>
 <tr>
 <td><strong>Markdown files</strong></td>
@@ -102,7 +102,7 @@ button exports the notes on screen) and from a graph node's menu.</p>
 <tr>
 <td><strong>Website</strong></td>
 <td><code>.zip</code></td>
-<td>A self-contained static website: an index with a graph overview, a tag index and one page per note, with links, mind maps and flashcards (answers revealed on click). No scripts; it works offline by opening <code>index.html</code>. Light and dark themes.</td>
+<td>A self-contained static website: an index with a graph overview, a tag index and one page per note, with links drawn in their link types' colours and line styles, mind maps and flashcards (answers revealed on click). No scripts; it works offline by opening <code>index.html</code>. Light and dark themes.</td>
 </tr>
 <tr>
 <td><strong>JSON</strong></td>
@@ -112,12 +112,12 @@ button exports the notes on screen) and from a graph node's menu.</p>
 <tr>
 <td><strong>GraphML</strong></td>
 <td><code>.graphml</code></td>
-<td>The link graph for Gephi, yEd, Cytoscape or NetworkX, with titles, tags and dates on nodes and link types on edges (directed or not).</td>
+<td>The link graph for Gephi, yEd, Cytoscape or NetworkX, with titles, tags and dates on nodes and link types on edges (directed or not), with each type's colour, line style and arrow tip.</td>
 </tr>
 <tr>
 <td><strong>Graphviz DOT</strong></td>
 <td><code>.dot</code></td>
-<td>The graph as a Graphviz diagram, with link types coloured and labelled; undirected types have no arrows.</td>
+<td>The graph as a Graphviz diagram, with link types coloured, labelled and styled: solid, dashed or dotted lines (Graphviz draws dash-dot and long-dash lines dashed) and each type's arrow tip; undirected types have no arrows.</td>
 </tr>
 <tr>
 <td><strong>Anki deck</strong></td>
@@ -141,8 +141,9 @@ can be saved as a PNG image.</p>
 <p>What is kept:</p>
 <ul>
 <li><strong>From ZettelApp archives and JSON:</strong> notes keep their IDs, typed links, flashcards, mind maps and
-images. Importing the same archive twice skips notes that haven't changed. If an ID is already used by
-a different note, the import gets a new ID and the links are updated.</li>
+images. Link types the vault doesn't have yet are added with their colours and styles; types it has
+keep their own. Importing the same archive twice skips notes that haven't changed. If an ID is already
+used by a different note, the import gets a new ID and the links are updated.</li>
 <li><strong>From Markdown:</strong>
 <ul>
 <li>the title comes from the front matter <code>title</code>, the first <code># heading</code> or the file name;</li>
