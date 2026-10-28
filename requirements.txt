@@ -1,0 +1,9 @@
+# Runtime dependencies, pinned to the versions the release is built and tested with.
+# Dependabot proposes updates (see .github/dependabot.yml).
+PySide6-Essentials==6.12.0
+numpy==2.5.4
+rapidfuzz==3.14.6
+genanki==0.13.1
+markdown-it-py==4.2.0
+PyYAML==6.0.3
+anthropic==2.3.0

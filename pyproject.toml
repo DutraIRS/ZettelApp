@@ -1,0 +1,59 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zettelapp"
+description = "A Zettelkasten note-taking app for Windows with typed links, a knowledge graph, link suggestions, mind maps, quizzes, Anki and Zotero integration."
+readme = "README.md"
+license = "Unlicense"
+requires-python = ">=3.12"
+dynamic = ["version"]
+authors = [{ name = "ZettelApp contributors" }]
+classifiers = [
+    "Environment :: Win32 (MS Windows)",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+    "Topic :: Office/Business",
+]
+dependencies = [
+    "PySide6-Essentials>=6.8",
+    "numpy>=2.0",
+    "rapidfuzz>=3.0",
+    "genanki>=0.13",
+    "markdown-it-py>=3.0",
+    "PyYAML>=6.0",
+    "anthropic>=2.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pyinstaller>=6.10"]
+
+[project.urls]
+Homepage = "https://dutrairs.github.io/ZettelApp/"
+Documentation = "https://dutrairs.github.io/ZettelApp/docs/"
+Source = "https://github.com/DutraIRS/ZettelApp"
+Issues = "https://github.com/DutraIRS/ZettelApp/issues"
+Funding = "https://ko-fi.com/dutrairs"
+
+[project.gui-scripts]
+zettelapp = "zettelapp.app:main"
+
+[project.scripts]
+zettelapp-mcp = "zettelapp.mcp_main:main"
+
+[tool.setuptools.dynamic]
+version = { attr = "zettelapp.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["zettelapp*"]
+
+[tool.setuptools.package-data]
+zettelapp = ["resources/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+filterwarnings = ["ignore::DeprecationWarning:cached_property"]
