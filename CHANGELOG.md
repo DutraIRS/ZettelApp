@@ -4,6 +4,39 @@ All notable changes to ZettelApp are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **Tags in the text**: `#tags` written anywhere in a note are real tags (ignored in code, link targets and
+  `[[#headings]]`). They appear as outlined chips and disappear when the `#tag` is deleted. Tags typed in
+  the *Add tag* box stay separate.
+- **Ctrl+click in the editor** follows `[[note links]]` (creating the note if needed), web, e-mail and
+  Zotero links, and `#tags`, with a tooltip saying what will happen. In the preview a normal click follows
+  links.
+- **Links to local files** (*Insert ▸ Link to a File…*, or drag a file into the text): clicking one shows the
+  file in File Explorer without opening or running it. Network (UNC) paths are refused.
+- **Graph**: links between the same two notes are separate curves with arrowheads. Hovering or selecting a
+  note dims other links and labels each neighbour with the link types as read from that note.
+- **MCP switch** in the status bar: MCP clients can use the vault only while ZettelApp is open and the
+  switch, which is off at every start, is on. `zettelapp-mcp` stops by itself when it goes off.
+- **Update check** at start-up (one request, optional) with a small notice in the lower-right corner.
+- **Uninstaller option** to delete settings, saved API keys, logs, cache and backups. Notes are never
+  deleted.
+- **Documentation**: an MCP API reference, a *Bring your own LLM* section, and updated Anki, Zotero,
+  privacy, graph and FAQ pages.
+
+### Changed
+
+- The welcome note in new vaults explains links, tags, images, mind maps and flashcards.
+- The vault schema is now version 2 (`tags.source`) and upgrades automatically.
+
+### Fixed
+
+- Options sections overlapping on hover.
+- CI checks that could not fail.
+- Markdown imports are atomic: a failed import leaves the vault unchanged.
+
 ## [1.0.0] - 2026-10-27
 
 First release.

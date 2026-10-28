@@ -18,8 +18,9 @@ Atomic notes, typed links, mind maps, flashcards, a 2D/3D knowledge graph, and l
 
 ## Features
 
-- **Atomic notes in Markdown**, saved automatically. Each note has a timestamp ID, and can have tags, a
-  source link, images (paste or drop) and a picture.
+- **Atomic notes in Markdown**, saved automatically. Each note has a timestamp ID, and can have tags
+  (also written as `#tags` in the text), a source link, images (paste or drop), links to local files and a
+  picture. Ctrl+click follows links and tags in the editor.
 - **Typed, optionally directed links**: `supports:: [[Claim]]`, *contradicts*, *extends*, *example of*,
   *part of*, *cites*, or your own types. Backlinks read naturally (*Supported by*).
 - **Link suggestions that learn**: a Naive Bayes classifier combines semantic (LSA), keyword (TF-IDF),
@@ -34,14 +35,15 @@ Atomic notes, typed links, mind maps, flashcards, a 2D/3D knowledge graph, and l
 - **Zotero**: cite references and create literature notes linked to the item and its PDF.
 - **Ask your notes**: answers with citations from Anthropic Claude, OpenAI or Z.ai, using your own key,
   stored in Windows Credential Manager.
-- **MCP server**: let Claude Desktop, Claude Code and other MCP clients search and read your vault
-  (read-only by default).
+- **MCP server**: let Claude Desktop, Claude Code and other MCP clients search and read your vault, only
+  while ZettelApp is open with its status-bar MCP switch on (read-only by default).
 - **Export the whole collection or any subgraph**: ZettelApp archive, Markdown (Obsidian), static website,
   JSON, GraphML, Graphviz and Anki. Imports Markdown folders and Obsidian vaults.
 - **At home on Windows**: follows your light/dark theme and accent colour, with standard menus and
   shortcuts, a per-user installer and daily backups.
-- **Private and safe by design**: works offline; nothing leaves your computer unless you ask for it.
-  Notes can't run scripts, imports are sandboxed, and API keys never touch disk in plain text.
+- **Private and safe by design**: works offline; nothing leaves your computer unless you ask for it, apart
+  from one small, optional update check at start-up. Notes can't run scripts, imports are sandboxed, and
+  API keys never touch disk in plain text.
 
 ## Install
 
@@ -81,6 +83,7 @@ New to the method? Start with **[What is a Zettelkasten?](docs/what-is-zettelkas
 - [Zotero](docs/zotero.md)
 - [Ask your notes (AI)](docs/ai-assistant.md)
 - [MCP server](docs/mcp-server.md)
+- [MCP API reference](docs/mcp-reference.md)
 - [Export and import](docs/export-import.md)
 - [Keyboard shortcuts](docs/keyboard-shortcuts.md)
 - [Privacy and security](docs/privacy-and-security.md)
