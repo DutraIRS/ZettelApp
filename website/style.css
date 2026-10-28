@@ -256,20 +256,50 @@ h1, h2, h3 { font-family: var(--font-display); line-height: 1.2; }
 .footer-row .nav a { color: var(--muted); }
 
 /* Documentation pages ------------------------------------------------------ */
-.docs-layout { display: grid; gap: 24px; padding-top: 28px; padding-bottom: 56px; }
+.docs-layout { display: grid; grid-template-columns: minmax(0, 1fr); gap: 24px; padding-top: 28px; padding-bottom: 56px; }
 @media (min-width: 900px) { .docs-layout { grid-template-columns: 240px minmax(0, 1fr); gap: 40px; } }
-.docs-nav h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; }
-.docs-nav ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px; }
-.docs-nav a { display: block; padding: 6px 10px; border-radius: 8px; color: var(--text); text-decoration: none; font-size: 0.95rem; }
-.docs-nav a:hover { background: var(--surface-2); }
-.docs-nav a[aria-current="page"] {
+.docs-list { display: none; }
+.docs-list h2 { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 0 0 8px; }
+.docs-list ul { list-style: none; margin: 0; padding: 0; }
+.docs-list a { display: block; padding: 6px 10px; border-radius: 8px; color: var(--text); text-decoration: none; font-size: 0.95rem; }
+.docs-list a:hover { background: var(--surface-2); }
+.docs-list a[aria-current="page"] {
   background: var(--surface); box-shadow: var(--shadow); font-weight: 600;
   border-left: 3px solid var(--accent-a); padding-left: 9px;
 }
 @media (min-width: 900px) {
   .docs-nav { position: sticky; top: 80px; align-self: start; max-height: calc(100vh - 100px); overflow-y: auto; }
-  .docs-nav ul { display: block; }
+  .docs-list { display: block; }
+  .docs-menu { display: none; }
 }
+
+/* Below 900px the sidebar becomes a collapsible "Documentation" menu above the page. */
+.docs-menu > summary {
+  display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 16px; list-style: none; cursor: pointer;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
+  -webkit-tap-highlight-color: transparent;
+}
+.docs-menu > summary::-webkit-details-marker { display: none; }
+.docs-menu-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.3; }
+.docs-menu-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+.docs-menu-current { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.docs-menu > summary::after {
+  content: ""; flex: none; width: 9px; height: 9px; margin: 0 4px 3px auto;
+  border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted); transform: rotate(45deg);
+  transition: transform 0.15s ease;
+}
+.docs-menu[open] > summary::after { margin-bottom: 0; margin-top: 5px; transform: rotate(225deg); }
+.docs-menu ul {
+  list-style: none; margin: 8px 0 0; padding: 6px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow);
+}
+.docs-menu a {
+  display: flex; align-items: center; min-height: 44px; padding: 0 12px; border-radius: 8px;
+  color: var(--text); text-decoration: none;
+}
+.docs-menu a:hover { background: var(--surface-2); }
+.docs-menu a[aria-current="page"] { background: var(--surface-2); font-weight: 600; border-left: 3px solid var(--accent-a); padding-left: 9px; }
+@media (min-width: 560px) { .docs-menu ul { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .doc {
   min-width: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
   box-shadow: var(--shadow); padding: clamp(20px, 4vw, 44px);
@@ -291,3 +321,9 @@ h1, h2, h3 { font-family: var(--font-display); line-height: 1.2; }
 .doc th, .doc td { text-align: left; vertical-align: top; padding: 8px 12px; border-bottom: 1px solid var(--border); }
 .doc th { background: var(--surface-2); font-weight: 600; }
 .doc-footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; }
+
+/* Documentation on small screens ----------------------------------------------
+   Below 900px the page is one column; on phones the card runs edge to edge. */
+@media (max-width: 899.98px) {
+  .docs-layout { gap: 16px; padding-top: 16px; }
+}

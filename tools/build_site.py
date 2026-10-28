@@ -92,10 +92,18 @@ TEMPLATE = """<!doctype html>
 </header>
 <div class="wrap docs-layout">
   <nav class="docs-nav" aria-label="Documentation">
-    <h2>Documentation</h2>
-    <ul>
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentation</span><span class="docs-menu-current">{current}</span></span></summary>
+      <ul>
 {nav}
-    </ul>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentation</h2>
+      <ul>
+{nav}
+      </ul>
+    </div>
   </nav>
   <main id="content" class="doc">
 {body}
@@ -204,6 +212,7 @@ def build() -> list[Path]:
         page = TEMPLATE.format(
             csp=CSP,
             title=html.escape(title),
+            current=html.escape(label),
             description=description(text),
             nav=nav,
             body=body,
