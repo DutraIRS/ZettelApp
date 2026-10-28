@@ -28,8 +28,8 @@ installer. If you downloaded it from the official release page and the checksum 
 ## Your first vault
 
 A **vault** is a folder holding your notes: a database file (`zettel.db`) and an `assets` folder for images.
-On first start ZettelApp creates one in **Documents\ZettelApp** with three short notes that show the main
-ideas. Use *File ▸ New Vault…* or *File ▸ Open Vault…* to work elsewhere, for example in a OneDrive folder.
+On first start ZettelApp creates one in **Documents\ZettelApp** with three short notes. The welcome note
+explains links, tags, images, mind maps and flashcards. Use *File ▸ New Vault…* or *File ▸ Open Vault…* to work elsewhere, for example in a OneDrive folder.
 *File ▸ Open Recent* lists the vaults you used last.
 
 Notes save automatically as you type. There is no Save button.
@@ -55,6 +55,24 @@ size, link suggestions, link types, AI, MCP server, Anki, Zotero, Windows integr
 
 The app follows your Windows **light/dark** setting and **accent colour**. You can force a theme in
 *View ▸ Theme*.
+
+## Updates
+
+About four seconds after it starts, ZettelApp makes one HTTPS request to
+`https://dutrairs.github.io/ZettelApp/version.json` to learn the newest version. It sends nothing else
+(only a `ZettelApp/<version>` user-agent), and if the request fails you won't see anything. When a newer
+version exists, a small notice appears in the lower-right corner, at most once per version. It never
+takes focus. **Download** opens the releases page in your browser, **✕** closes the notice, and
+**Don't check for updates** turns checking off. You can turn it back on in
+*Tools ▸ Options ▸ General ▸ Check for updates when ZettelApp starts*. ZettelApp never installs
+anything by itself.
+
+## Uninstalling
+
+Use *Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall*. After you confirm, a dialog offers
+an unticked **Also delete my ZettelApp settings and data** option. It removes your settings, saved API
+keys, logs, cache and automatic backups (`%LOCALAPPDATA%\ZettelApp`). Your notes are never deleted:
+vault folders such as `Documents\ZettelApp` stay. For the portable version, delete its folder.
 
 ## Next steps
 

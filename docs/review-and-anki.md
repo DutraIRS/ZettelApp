@@ -53,7 +53,8 @@ are included as media.
 
 1. In Anki, install the **AnkiConnect** add-on (*Tools ▸ Add-ons ▸ Get Add-ons…*, code **2055492159**)
    and restart Anki.
-2. With Anki running, open **Review** in ZettelApp, choose the deck name and scope, and press
+2. With Anki running, open **Review** in ZettelApp, choose the deck name (**Default deck** in
+   *Options ▸ Anki*, `ZettelApp` at first) and scope, and press
    **Sync to Anki** (or *Tools ▸ Sync with Anki*). *Check connection* tests the link.
 
 ZettelApp remembers which Anki note belongs to each card. Syncing again **updates** cards instead of

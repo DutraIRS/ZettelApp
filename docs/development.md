@@ -36,7 +36,7 @@ They never touch your real preferences or Credential Manager entries beyond a th
 |---|---|
 | `python tools/make_icon.py` | Redraws the app icon (`zettelapp/resources/icon.ico`, PNGs) and the website icons. |
 | `python tools/screenshots.py` | Renders screenshots of the real app (light and dark) into `website/assets/screenshots/`, using a demo vault (`tools/demo_vault.py`) and temporary settings. |
-| `python tools/build_site.py` | Builds the documentation pages of the website (`website/docs/`) from `docs/*.md`. |
+| `python tools/build_site.py` | Builds the documentation pages of the website (`website/docs/`) from `docs/*.md`, and `website/version.json` from the app version. |
 
 ## Build the Windows app
 
@@ -59,11 +59,30 @@ trigger fewer antivirus false positives than single-file builds.
 
 ## Release
 
-1. Update `__version__` in `zettelapp/__init__.py` and `CHANGELOG.md`.
+1. Update `__version__` in `zettelapp/__init__.py` and `CHANGELOG.md`, run `python tools/build_site.py`
+   (it also writes `website/version.json` from `zettelapp.__version__`, which installed copies read to
+   learn about new versions) and commit the result.
 2. Commit, then tag and push: `git tag v1.0.1; git push origin v1.0.1`.
-3. GitHub Actions builds the app on Windows, runs the tests and publishes a GitHub release with
+3. GitHub Actions checks that the tag matches the app version, runs lint, formatting, the tests and the
+   dependency audit, builds the app on Windows and publishes a GitHub release with
    `ZettelApp-Setup.exe`, `ZettelApp-Portable.zip` and `SHA256SUMS.txt`. The website's download buttons
    always point to the latest release.
+
+A release needs a **code-signing certificate**, stored in the repository secrets
+`WINDOWS_SIGNING_CERT_BASE64` and `WINDOWS_SIGNING_CERT_PASSWORD`. Without it the release job stops,
+unless the repository variable `ALLOW_UNSIGNED_RELEASE` is set to `true` to approve an unsigned release
+(see `.github/workflows/release.yml`).
+
+The CI workflow (`.github/workflows/ci.yml`) runs each check as its own step: lint, formatting, the
+dependency audit and a check that the generated website files are up to date (it fails when
+`website/docs` or `website/version.json` differ from what `tools/build_site.py` writes), then the tests
+and a build of the packaged app with its self-test.
+
+`packaging/build.ps1` finds Inno Setup on `PATH`, installed for the current user
+(`%LOCALAPPDATA%\Programs\Inno Setup 6`) or for everyone.
+
+The vault database has a **schema version** (currently 2: the `tags.source` column tells tags added by
+hand from `#tags` written in the text). Older vaults are upgraded automatically when opened.
 
 The website (`website/`) is deployed to GitHub Pages by `.github/workflows/pages.yml` whenever `docs/` or
 `website/` change on `main`.

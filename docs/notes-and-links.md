@@ -10,7 +10,27 @@ The editor has three modes (Ctrl+E cycles through them): **Edit**, **Split** (te
 side) and **Preview**.
 
 For safety, raw HTML in a note is shown as text and never rendered. Links in the preview open only web
-pages (`http`, `https`), e-mail (`mailto`) and Zotero items. See [Privacy and security](privacy-and-security.md).
+pages (`http`, `https`), e-mail (`mailto`), notes, Zotero items and local files (shown in File Explorer,
+see [Links to local files](#links-to-local-files)). See [Privacy and security](privacy-and-security.md).
+
+### Following links
+
+- **In the editor**, **Ctrl+click** follows a `[[note link]]` (creating the note if it doesn't exist yet),
+  a web, e-mail or Zotero link, a local file link, or a `#tag` (which lists the notes with that tag).
+  Hover over the text and a tooltip says what the click will do. A plain click just places the caret, so
+  you can still edit link text.
+- **In the preview**, a normal click follows links.
+
+### Links to local files
+
+*Insert ▸ Link to a File…* (or the folder button on the toolbar) lets you pick a file and inserts a link
+such as `[report.pdf](file:///C:/Users/me/Documents/report.pdf)`. Dragging a file that isn't an image into
+the note text does the same. The file is linked where it is; nothing is copied into the vault.
+
+Clicking the link in the preview, or Ctrl+clicking it in the editor, opens **File Explorer with the file
+selected**. The file itself is never opened or run. Only paths on a local drive are allowed: network
+(UNC) paths such as `\\server\share\file.pdf` are refused, because looking them up can send your Windows
+credentials to that server.
 
 Every note has:
 
@@ -85,9 +105,15 @@ form, e.g. a type called "Inspired by" becomes `inspired_by::`). Removing a type
 
 ## Tags
 
-Add tags in the tag field under the title (press Enter after each). Tags are lower-case and may be
-nested with a slash, such as `math/algebra`. Filtering by `math` also finds notes tagged `math/algebra`.
+Add tags in the tag field under the title (press Enter after each), or write them **in the text** with a
+hash sign, like `#welcome` or `#math/algebra`. Tags are lower-case and may be nested with a slash, such as
+`math/algebra`. Filtering by `math` also finds notes tagged `math/algebra`.
 Use the tag filter above the note list, or type `tag:name` in the search box.
+
+Tags written in the text are real tags, shown as **outlined chips** next to the *Add tag* box. They
+disappear when you delete the `#tag` from the text. A `#tag` is ignored inside code, inside link targets
+and in `[[#headings]]`. Tags typed in the *Add tag* box are separate: they stay until you remove them with
+their ✕. Ctrl+click a `#tag` in the editor to list the notes that have it.
 
 ## Source link
 

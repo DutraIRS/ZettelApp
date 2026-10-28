@@ -17,6 +17,8 @@ then the underlined letter.
 | Bold / italic | Ctrl+B / Ctrl+I |
 | Undo / redo | Ctrl+Z / Ctrl+Y |
 | Complete a `[[link]]` | Type `[[`, then pick a title and press Enter |
+| Follow a link or `#tag` in the editor | Ctrl+click (in the preview, a plain click) |
+| Link to a local file | *Insert ▸ Link to a File…* |
 | Cite a Zotero reference | *Insert ▸ Zotero Reference…* |
 
 ## Navigate

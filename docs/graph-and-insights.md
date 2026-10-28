@@ -23,10 +23,14 @@ it has, and each line is a link.
 At the bottom right are zoom, fit, **recompute layout**, **save as image** (PNG) and **export these
 notes** (opens the [export](export-import.md) dialog with the notes on screen).
 
-**In 2D**, drag a note to move it, drag the background to pan, and use the mouse wheel to zoom. Hovering
-a note highlights it and its neighbours. Double-click a note to open it; right-click it for more (open,
-local graph, quiz on this neighbourhood, export with linked notes). A note's picture is shown inside its
-circle.
+**In 2D**, drag a note to move it, drag the background to pan, and use the mouse wheel to zoom. Double-click
+a note to open it; right-click it for more (open, local graph, quiz on this neighbourhood, export with
+linked notes). A note's picture is shown inside its circle.
+
+Several links between the same two notes are drawn as **separate curves**, each with an arrowhead, so none
+hides another. Hovering or selecting a note **dims the other links**, keeps the note's own links in their
+link-type colours, and labels each neighbour with the link types **as read from that note**, for example
+*Supports · Extended by*. This works the same in 2D and 3D.
 
 **In 3D**, drag to orbit, use the wheel to zoom, and double-click a note to open it. **Rotate
 automatically** spins the view. Nearer notes are larger and brighter, so depth is easy to read, and each

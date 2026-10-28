@@ -2,19 +2,24 @@
 
 ## What leaves your computer
 
-**Nothing, unless you ask for it.** ZettelApp has no accounts, telemetry, ads or automatic updates, and it
-doesn't load anything from the internet while you work. Network use happens only when you trigger
-it:
+**Nothing, unless you ask for it, apart from one small update check.** ZettelApp has no accounts,
+telemetry or ads, and it doesn't load anything from the internet while you work. These are all the network
+requests it can make:
 
-| When you… | ZettelApp contacts | What is sent |
+| When… | ZettelApp contacts | What is sent |
 |---|---|---|
-| Ask a question on the **Ask** page | The AI provider you configured (Anthropic, OpenAI, Z.ai or your own endpoint) | Your question and the notes listed under *Sources sent* |
-| Test the AI connection or refresh the model list | The same provider | Your API key, to authenticate |
-| **Sync to Anki** | AnkiConnect on **this computer** (`127.0.0.1`) | The flashcards in the chosen scope |
-| Use **Insert ▸ Zotero Reference** | Zotero on **this computer** (`127.0.0.1`) | Your search words (read-only) |
-| Click a web link, or use *Help ▸ Website / Documentation / Check for Updates* | Your web browser opens the page | Nothing from ZettelApp |
+| About 4 seconds after ZettelApp starts (can be turned off) | `https://dutrairs.github.io/ZettelApp/version.json` | One HTTPS request for that file, with the header `User-Agent: ZettelApp/<version>`. Nothing else: no notes, settings or identifiers. Any failure is silent. See [Updates](getting-started.md#updates). |
+| You ask a question on the **Ask** page | The AI provider you configured (Anthropic, OpenAI, Z.ai or your own endpoint) | Your question and the notes listed under *Sources sent* |
+| You test the AI connection or refresh the model list | The same provider | Your API key, to authenticate |
+| You **Sync to Anki** | AnkiConnect on **this computer** (`127.0.0.1`) | The flashcards in the chosen scope |
+| You use **Insert ▸ Zotero Reference** or *Test connection* in the Zotero options | Zotero on **this computer** (`127.0.0.1`) | Your search words (read-only) |
+| You click a web link, or use *Help ▸ Website / Documentation / Check for Updates*, or the update notice's **Download** button | Your web browser opens the page | Nothing from ZettelApp |
+
+To stop the update check, untick *Tools ▸ Options ▸ General ▸ Check for updates when ZettelApp starts*;
+ZettelApp then makes no request until you ask a question or use one of the other features above.
 
 Local connections to Anki and Zotero never use a proxy, so they can't be redirected off your computer.
+The MCP server makes no network requests at all.
 
 ## Where your data lives
 
@@ -48,8 +53,13 @@ Notes can come from imports, the web or AI answers, so ZettelApp treats their co
 - **No active content.** Raw HTML in notes is shown as text, never rendered; nothing in a note can run
   scripts. The note preview loads images **only from the vault's own `assets` folder**, never from the
   web or elsewhere on disk.
-- **Link allowlist.** Clicking a link opens only web pages (`http`/`https`), e-mail (`mailto`), notes, and
-  Zotero *select item* / *open PDF* links. `javascript:`, `file:` and other schemes are refused.
+- **Link allowlist.** Clicking a link opens only web pages (`http`/`https`), e-mail (`mailto`), notes,
+  Zotero *select item* / *open PDF* links, and links to local files (below). `javascript:` and other
+  schemes are refused.
+- **Local file links only reveal the file.** A `file:///` link opens **File Explorer with the file
+  selected**; the file itself is never opened or run. Only paths on a local drive are allowed. Network
+  (UNC) paths such as `\\server\share` are refused, because looking one up can send your Windows
+  credentials to that server.
 - **Images are verified by content**, not by file name. Only PNG, JPEG, GIF, WebP and BMP up to 25 MB are
   accepted; SVG is refused because it can carry scripts. Verification covers the file signature and
   compressed size; pixel dimensions are checked when the image is first displayed.
@@ -68,8 +78,18 @@ Notes can come from imports, the web or AI answers, so ZettelApp treats their co
 - **AI safety.** The AI model gets no tools, so instructions hidden in a note can't make it act, and its
   answer is rendered with the same safe renderer. API keys stay in Credential Manager and are removed from
   error messages.
-- **MCP server.** It is read-only by default and runs only when your MCP client starts it, over standard
+- **MCP server and its switch.** MCP clients can reach your notes only while ZettelApp is open **and** the
+  MCP switch in its status bar is on. The switch is off every time ZettelApp starts and is never saved.
+  The server is read-only by default, runs only when your MCP client starts it, and uses standard
   input/output with no network port. See [MCP server](mcp-server.md).
+
+## Uninstalling
+
+Uninstall from *Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall*. The uninstaller offers
+an unticked option, **Also delete my ZettelApp settings and data**. If you tick it, it removes your
+settings, the API keys saved in Credential Manager, logs, the cache and automatic backups
+(`%LOCALAPPDATA%\ZettelApp`). **Your notes are never deleted**: vault folders such as `Documents\ZettelApp`
+stay where they are.
 
 Found a security problem? Please report it privately; see
 [SECURITY.md](https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md).
