@@ -55,6 +55,7 @@ from zettelapp.ui.editor import NoteEditor
 from zettelapp.ui.graph_page import GraphPage
 from zettelapp.ui.insights import InsightsPage
 from zettelapp.ui.note_list import NoteListPanel
+from zettelapp.ui.quest import Quest
 from zettelapp.ui.review_page import ReviewPage
 from zettelapp.ui.settings_dialog import OptionsDialog
 from zettelapp.ui.side_panel import SidePanel
@@ -180,6 +181,7 @@ class MainWindow(QMainWindow):
         self.watch_timer = QTimer(self, interval=3000, timeout=self._check_external_changes)
         self.watch_timer.start()
         self._wire()
+        self.quest = Quest(self)
         self._build_menus()
         self.status_vault = label("", "caption")
         self.status_counts = label("", "caption")
@@ -353,6 +355,8 @@ class MainWindow(QMainWindow):
         )
         self._action(h, "&Keyboard Shortcuts", lambda: ShortcutsDialog(self).exec(), None)
         h.addSeparator()
+        self.quest.add_menu_actions(h)
+        h.addSeparator()
         self._action(
             h,
             "ZettelApp &Website",
@@ -439,6 +443,7 @@ class MainWindow(QMainWindow):
             return False
         self.close_vault()
         self.vault = vault
+        self.quest.attach(vault)
         self._data_version = self._read_data_version()
         self._maybe_backup()
         settings.put(settings.LAST_VAULT, str(vault.folder))
@@ -501,11 +506,13 @@ class MainWindow(QMainWindow):
     def open_default_vault(self) -> None:
         last = settings.get(settings.LAST_VAULT, "")
         if last and Vault.is_vault(last) and self.open_vault(last):
+            self.quest.start_up(first_run=False)
             return
         folder = default_vault_dir()
         fresh = not Vault.is_vault(folder)
         if self.open_vault(folder) and fresh:
             self._create_welcome_notes()
+        self.quest.start_up(first_run=fresh)  # the adventure is offered on the very first run
 
     def _create_welcome_notes(self) -> None:
         """Fill a new vault with the starter notes (in the interface language) and open the hub."""
