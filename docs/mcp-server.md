@@ -15,14 +15,24 @@ needed and talks to it over standard input/output. **No network port is opened.*
 zettelapp-mcp --vault "C:\Users\me\Documents\ZettelApp" [--allow-writes]
 ```
 
-Without `--vault`, it serves the vault you last opened in ZettelApp. It works whether or not ZettelApp is
-open; if the app is open, changes made through MCP appear in it within a few seconds.
+Without `--vault`, it serves the vault you last opened in ZettelApp. Changes made through MCP appear in
+the app within a few seconds.
+
+## The MCP switch
+
+MCP clients can reach your notes only while **ZettelApp is open and the MCP switch in its status bar is
+on**. The switch is **off every time ZettelApp starts**, so you decide, each session, whether assistants
+may read your notes. Turn it off, or close ZettelApp, and the server stops within about a second.
+Without the switch the server refuses to start and says why. For the exact behaviour, see the
+[MCP API reference](mcp-reference.md).
 
 ## Connect Claude Desktop
 
 Open *Tools ▸ Options ▸ MCP server* and click **Add to Claude Desktop…**. ZettelApp adds itself to
 `%APPDATA%\Claude\claude_desktop_config.json` (keeping a backup of the old file). Then restart Claude
-Desktop. To do it by hand, copy the snippet shown on that page into the file. It looks like this:
+Desktop. Turn on the **MCP switch** in ZettelApp's status bar before you start Claude Desktop; if you turn
+it on later, reconnect ZettelApp in Claude Desktop or restart it. To do it by hand, copy the snippet shown
+on that page into the file. It looks like this:
 
 ```json
 {
@@ -43,7 +53,8 @@ The same Options page shows the command to copy:
 claude mcp add zettelapp -- "C:\Users\me\AppData\Local\Programs\ZettelApp\zettelapp-mcp.exe" --vault "C:\Users\me\Documents\ZettelApp"
 ```
 
-Other MCP clients need the same command and arguments.
+Other MCP clients need the same command and arguments. As with Claude Desktop, switch MCP on in ZettelApp
+first, and reconnect the server (in Claude Code, `/mcp`) if you switch it on afterwards.
 
 ## Tools
 
@@ -76,7 +87,9 @@ outside the vault.
 
 ## Troubleshooting
 
-- **The client says the server failed to start.** Check that the path to `zettelapp-mcp.exe` is right.
+- **The client says the server failed to start, or tool calls say the switch is off.** Open ZettelApp
+  and turn on MCP in its status bar, then reconnect the server in your client.
+- **The server still fails to start.** Check that the path to `zettelapp-mcp.exe` is right.
   Run the command yourself in a terminal: it reports what's wrong (for example "No ZettelApp vault
   found") on standard error.
 - **Write tools are missing.** Tick the option *and* add `--allow-writes`, then restart the client.

@@ -23,6 +23,7 @@ Everything stays on your computer unless you ask for something that needs the ne
 - [Zotero](zotero.md): cite references and write literature notes
 - [Ask your notes (AI)](ai-assistant.md): answers from Claude, OpenAI or Z.ai, grounded in your notes
 - [MCP server](mcp-server.md): let Claude Desktop, Claude Code and other MCP clients read your vault
+- [MCP API reference](mcp-reference.md): the protocol, tools and errors, for people building MCP clients
 - [Export and import](export-import.md): the whole collection or any subgraph, in seven formats
 - [Keyboard shortcuts](keyboard-shortcuts.md)
 - [Privacy and security](privacy-and-security.md): what leaves your computer, where data lives and

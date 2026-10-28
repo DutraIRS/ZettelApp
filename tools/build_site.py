@@ -35,6 +35,7 @@ PAGES = [
     ("zotero", "Zotero"),
     ("ai-assistant", "Ask your notes (AI)"),
     ("mcp-server", "MCP server"),
+    ("mcp-reference", "MCP API reference"),
     ("export-import", "Export and import"),
     ("keyboard-shortcuts", "Keyboard shortcuts"),
     ("privacy-and-security", "Privacy and security"),
