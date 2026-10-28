@@ -33,6 +33,16 @@ from zettelapp.ui.link_style import LIST_ICON, MENU_ICON, type_icon
 from zettelapp.ui.widgets import FlowLayout, SearchBox, label, tool_button
 from zettelapp.ui.workers import run_task
 
+# Layouts and clusterings kept for switching views quickly. Editing a note changes their keys
+# (the vault's generation), so without a limit they would pile up for the whole session.
+CACHE_SIZE = 8
+
+
+def _remember(cache: dict, key: tuple, value) -> None:
+    cache[key] = value
+    while len(cache) > CACHE_SIZE:
+        del cache[next(iter(cache))]  # the oldest
+
 
 def _dot(color: QColor) -> QIcon:
     px = QPixmap(28, 28)
@@ -381,8 +391,8 @@ class GraphPage(QWidget):
                 return
             group_of, names, quality, positions, cluster_result = result
             if mode in ("kmeans", "hierarchical"):
-                self._clusters[cluster_key] = cluster_result
-            self._layouts[layout_key] = positions
+                _remember(self._clusters, cluster_key, cluster_result)
+            _remember(self._layouts, layout_key, positions)
             data.group_of = group_of
             data.group_names = names
             self._view().set_graph(data, positions, grouping, self.labels_box.isChecked())

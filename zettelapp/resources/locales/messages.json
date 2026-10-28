@@ -302,13 +302,13 @@
  "2D view": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:103"
+   "zettelapp/ui/graph_page.py:113"
   ]
  },
  "3D view": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:103"
+   "zettelapp/ui/graph_page.py:113"
   ]
  },
  "A link type needs a name.": {
@@ -603,7 +603,7 @@
  "All notes": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:86"
+   "zettelapp/ui/graph_page.py:96"
   ]
  },
  "All tags": {
@@ -789,7 +789,7 @@
  "Auto k": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:119"
+   "zettelapp/ui/graph_page.py:129"
   ]
  },
  "Back": {
@@ -1122,25 +1122,25 @@
  "Cluster {n}: {keywords}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:345"
+   "zettelapp/ui/graph_page.py:355"
   ]
  },
  "Clusters": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:412"
+   "zettelapp/ui/graph_page.py:422"
   ]
  },
  "Clusters: hierarchical": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:115"
+   "zettelapp/ui/graph_page.py:125"
   ]
  },
  "Clusters: k-means": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:114"
+   "zettelapp/ui/graph_page.py:124"
   ]
  },
  "Code": {
@@ -1159,20 +1159,20 @@
  "Colour by": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:112",
-   "zettelapp/ui/graph_page.py:122"
+   "zettelapp/ui/graph_page.py:122",
+   "zettelapp/ui/graph_page.py:132"
   ]
  },
  "Computing graph layout…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:306"
+   "zettelapp/ui/graph_page.py:316"
   ]
  },
  "Computing layout…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:305"
+   "zettelapp/ui/graph_page.py:315"
   ]
  },
  "Connect an AI provider": {
@@ -1259,7 +1259,7 @@
  "Could not draw the graph: {error}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:404"
+   "zettelapp/ui/graph_page.py:414"
   ]
  },
  "Could not get an answer.": {
@@ -1508,7 +1508,7 @@
  "Depth ": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:99",
+   "zettelapp/ui/graph_page.py:109",
    "zettelapp/ui/widgets.py:376"
   ]
  },
@@ -1623,7 +1623,7 @@
  "Each note takes the colour of its most common tag.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:336"
+   "zettelapp/ui/graph_page.py:346"
   ]
  },
  "Edit": {
@@ -1760,7 +1760,7 @@
  "Export these notes…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:175"
+   "zettelapp/ui/graph_page.py:185"
   ]
  },
  "Export this note and its links…": {
@@ -1864,7 +1864,7 @@
  "Find in graph": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:138"
+   "zettelapp/ui/graph_page.py:148"
   ]
  },
  "Find notes": {
@@ -1883,7 +1883,7 @@
   "plural": null,
   "where": [
    "zettelapp/ui/editor.py:281",
-   "zettelapp/ui/graph_page.py:169",
+   "zettelapp/ui/graph_page.py:179",
    "zettelapp/ui/mindmap.py:405"
   ]
  },
@@ -2046,33 +2046,33 @@
   "plural": null,
   "where": [
    "zettelapp/ui/dialogs.py:313",
-   "zettelapp/ui/graph_page.py:82",
+   "zettelapp/ui/graph_page.py:92",
    "zettelapp/ui/main_window.py:73"
   ]
  },
  "Graph image saved": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:471"
+   "zettelapp/ui/graph_page.py:481"
   ]
  },
  "Group": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:123"
+   "zettelapp/ui/graph_page.py:133"
   ]
  },
  "Groups": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:187",
-   "zettelapp/ui/graph_page.py:412"
+   "zettelapp/ui/graph_page.py:197",
+   "zettelapp/ui/graph_page.py:422"
   ]
  },
  "Groups legend": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:190"
+   "zettelapp/ui/graph_page.py:200"
   ]
  },
  "Has example": {
@@ -2374,7 +2374,7 @@
  "Labels": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:128"
+   "zettelapp/ui/graph_page.py:138"
   ]
  },
  "Language": {
@@ -2549,8 +2549,8 @@
  "Link types": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:132",
-   "zettelapp/ui/graph_page.py:195",
+   "zettelapp/ui/graph_page.py:142",
+   "zettelapp/ui/graph_page.py:205",
    "zettelapp/ui/settings_dialog.py:81",
    "zettelapp/ui/settings_dialog.py:391",
    "zettelapp/ui/settings_dialog.py:591"
@@ -2559,7 +2559,7 @@
  "Link types legend": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:197"
+   "zettelapp/ui/graph_page.py:207"
   ]
  },
  "Link with a reason": {
@@ -2592,7 +2592,7 @@
  "Links away from the open note": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:100"
+   "zettelapp/ui/graph_page.py:110"
   ]
  },
  "Links by type": {
@@ -2610,13 +2610,13 @@
  "Local": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:87"
+   "zettelapp/ui/graph_page.py:97"
   ]
  },
  "local graph": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:396"
+   "zettelapp/ui/graph_page.py:406"
   ]
  },
  "Long dash": {
@@ -2974,7 +2974,7 @@
  "No note in the graph matches that title.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:463"
+   "zettelapp/ui/graph_page.py:473"
   ]
  },
  "No notes are tagged #{tag} yet.": {
@@ -3152,7 +3152,7 @@
  "Nothing": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:116"
+   "zettelapp/ui/graph_page.py:126"
   ]
  },
  "Nothing to review": {
@@ -3170,7 +3170,7 @@
  "Number of clusters. Auto picks k with the best silhouette score.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:121"
+   "zettelapp/ui/graph_page.py:131"
   ]
  },
  "of {n} flashcard": {
@@ -3342,7 +3342,7 @@
  "Other / untagged ({n})": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:426"
+   "zettelapp/ui/graph_page.py:436"
   ]
  },
  "Outgoing links": {
@@ -3409,7 +3409,7 @@
   "plural": null,
   "where": [
    "zettelapp/ui/editor.py:668",
-   "zettelapp/ui/graph_page.py:467"
+   "zettelapp/ui/graph_page.py:477"
   ]
  },
  "PNG image…": {
@@ -3465,7 +3465,7 @@
  "Pull notes of the same group together and shade each group's area": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:126"
+   "zettelapp/ui/graph_page.py:136"
   ]
  },
  "Q&A": {
@@ -3525,7 +3525,7 @@
  "Recompute layout": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:170"
+   "zettelapp/ui/graph_page.py:180"
   ]
  },
  "Reference:": {
@@ -3724,7 +3724,7 @@
  "Rotate automatically (3D)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:164"
+   "zettelapp/ui/graph_page.py:174"
   ]
  },
  "Same as the name": {
@@ -3742,7 +3742,7 @@
  "Save as image…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:171"
+   "zettelapp/ui/graph_page.py:181"
   ]
  },
  "Save as note": {
@@ -3754,7 +3754,7 @@
  "Save graph as image": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:467"
+   "zettelapp/ui/graph_page.py:477"
   ]
  },
  "Scope": {
@@ -3917,7 +3917,7 @@
  "Show the open note and its neighbourhood": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:87"
+   "zettelapp/ui/graph_page.py:97"
   ]
  },
  "Show the Trash": {
@@ -3929,7 +3929,7 @@
  "Show the whole collection": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:86"
+   "zettelapp/ui/graph_page.py:96"
   ]
  },
  "Show Vault in &File Explorer": {
@@ -3941,7 +3941,7 @@
  "Silhouette score {score} (higher is better, max 1).": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:365"
+   "zettelapp/ui/graph_page.py:375"
   ]
  },
  "Silver threads are links: they tie one note to another.": {
@@ -4196,8 +4196,8 @@
  "Tags": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:113",
-   "zettelapp/ui/graph_page.py:412",
+   "zettelapp/ui/graph_page.py:123",
+   "zettelapp/ui/graph_page.py:422",
    "zettelapp/ui/insights.py:322"
   ]
  },
@@ -5068,13 +5068,13 @@
  "Zoom in": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:168"
+   "zettelapp/ui/graph_page.py:178"
   ]
  },
  "Zoom out": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:167"
+   "zettelapp/ui/graph_page.py:177"
   ]
  },
  "Zotero": {
@@ -5153,13 +5153,13 @@
  "{n} cluster by average-linkage hierarchical clustering of LSA embeddings.": {
   "plural": "{n} clusters by average-linkage hierarchical clustering of LSA embeddings.",
   "where": [
-   "zettelapp/ui/graph_page.py:358"
+   "zettelapp/ui/graph_page.py:368"
   ]
  },
  "{n} cluster by k-means clustering of LSA embeddings.": {
   "plural": "{n} clusters by k-means clustering of LSA embeddings.",
   "where": [
-   "zettelapp/ui/graph_page.py:352"
+   "zettelapp/ui/graph_page.py:362"
   ]
  },
  "{n} flashcard": {
@@ -5202,7 +5202,7 @@
  "{n} link": {
   "plural": "{n} links",
   "where": [
-   "zettelapp/ui/graph_page.py:393",
+   "zettelapp/ui/graph_page.py:403",
    "zettelapp/ui/insights.py:82",
    "zettelapp/ui/main_window.py:1076",
    "zettelapp/ui/main_window.py:1024",
@@ -5225,7 +5225,7 @@
  "{n} note": {
   "plural": "{n} notes",
   "where": [
-   "zettelapp/ui/graph_page.py:392",
+   "zettelapp/ui/graph_page.py:402",
    "zettelapp/ui/insights.py:80",
    "zettelapp/ui/main_window.py:1075",
    "zettelapp/ui/main_window.py:1023",
@@ -5235,7 +5235,7 @@
  "{n} note in this group": {
   "plural": "{n} notes in this group",
   "where": [
-   "zettelapp/ui/graph_page.py:447"
+   "zettelapp/ui/graph_page.py:457"
   ]
  },
  "{n} per note": {

@@ -45,6 +45,9 @@ All notable changes to ZettelApp are documented here. The format follows
 - Options, the graph page, the link panel and many messages were still in English in the other
   languages, and counts used English plurals.
 - An alarm time edited by hand into the database no longer breaks the alarm check.
+- Background tasks (link suggestions, the graph layout, Insights) were never freed, so memory grew
+  with every note opened (about 85 MB per 60 notes in a 2,000-note vault). Graph layouts kept for
+  quick switching are now also limited to the latest few.
 - Website: the first-visit language redirect opened the documentation index instead of the same
   page, Arabic pages scrolled sideways, and between 720 and 900 px the header wrapped so the
   language list opened off-screen.
