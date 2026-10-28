@@ -1,0 +1,57 @@
+name: Release
+
+# Push a tag such as v1.0.0 to build the installer and portable zip and publish a GitHub release.
+# The website's download buttons point at /releases/latest/download/<file>, so they update automatically.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    env:
+      # Optional code signing: add these repository secrets to sign the executables and installer.
+      SIGN_CERT: ${{ secrets.WINDOWS_SIGNING_CERT_BASE64 }}
+      ZETTELAPP_SIGN_PASSWORD: ${{ secrets.WINDOWS_SIGNING_CERT_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - name: Install dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Check that the tag matches the app version
+        shell: pwsh
+        run: |
+          $version = python -c "import zettelapp; print(zettelapp.__version__)"
+          if ("v$version" -ne "${{ github.ref_name }}") { throw "Tag ${{ github.ref_name }} does not match version $version" }
+      - name: Run tests
+        env:
+          QT_QPA_PLATFORM: offscreen
+        run: python -m pytest -q
+      - name: Install Inno Setup
+        run: choco install innosetup --no-progress -y
+      - name: Prepare signing certificate
+        if: env.SIGN_CERT != ''
+        shell: pwsh
+        run: |
+          $pfx = Join-Path $env:RUNNER_TEMP "signing.pfx"
+          [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:SIGN_CERT))
+          "ZETTELAPP_SIGN_PFX=$pfx" >> $env:GITHUB_ENV
+      - name: Build
+        shell: pwsh
+        run: ./packaging/build.ps1
+      - name: Publish the release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" `
+            dist/ZettelApp-Setup.exe dist/ZettelApp-Portable.zip dist/SHA256SUMS.txt `
+            --title "ZettelApp ${{ github.ref_name }}" --generate-notes
