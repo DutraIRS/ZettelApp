@@ -78,7 +78,7 @@ kbd {
   backdrop-filter: saturate(160%) blur(14px);
   border-bottom: 1px solid var(--border);
 }
-.header-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px; flex-wrap: wrap; }
+.header-row { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px; flex-wrap: wrap; }
 .brand {
   display: inline-flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none;
   font: 600 1.1rem/1 var(--font-display);
@@ -90,6 +90,65 @@ kbd {
 .nav .nav-donate { color: var(--heart); font-weight: 600; border: 1px solid color-mix(in srgb, var(--heart) 45%, transparent); }
 .nav .nav-donate:hover { background: color-mix(in srgb, var(--heart) 10%, transparent); }
 .nav .nav-cta:hover { filter: brightness(1.08); background: linear-gradient(135deg, var(--accent-a), var(--accent-b)); }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+  clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Phone header: brand, Donate, Download and a CSS-only <details> menu (no scripts allowed). */
+.header-actions { display: none; align-items: center; gap: 6px; }
+.hbtn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 0.35em;
+  min-width: 44px; min-height: 44px; padding: 0 12px; border-radius: 10px;
+  font-size: 0.95rem; font-weight: 600; text-decoration: none; white-space: nowrap;
+}
+.hbtn.donate { color: var(--heart); border: 1px solid color-mix(in srgb, var(--heart) 45%, transparent); }
+.hbtn.donate:hover { background: color-mix(in srgb, var(--heart) 10%, transparent); }
+.hbtn.cta { color: var(--on-accent); background: linear-gradient(135deg, var(--accent-a), var(--accent-b)); }
+.hbtn.cta:hover { filter: brightness(1.08); }
+.hbtn-text { display: none; }
+.menu > summary {
+  display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px;
+  list-style: none; cursor: pointer; color: var(--text); background: var(--surface);
+  border: 1px solid var(--border); border-radius: 10px; -webkit-tap-highlight-color: transparent;
+}
+.menu > summary::-webkit-details-marker { display: none; }
+.menu[open] > summary { background: var(--surface-2); }
+.menu-icon, .menu-icon::before, .menu-icon::after {
+  display: block; width: 18px; height: 2px; border-radius: 2px; background: currentColor;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+.menu-icon { position: relative; }
+.menu-icon::before, .menu-icon::after { content: ""; position: absolute; left: 0; }
+.menu-icon::before { top: -6px; }
+.menu-icon::after { top: 6px; }
+.menu[open] .menu-icon { background: transparent; }
+.menu[open] .menu-icon::before { top: 0; transform: rotate(45deg); }
+.menu[open] .menu-icon::after { top: 0; transform: rotate(-45deg); }
+/* Tapping anywhere outside the open menu closes it (the backdrop belongs to the summary). */
+.menu[open] > summary::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; cursor: default; }
+.menu-panel {
+  position: absolute; top: calc(100% + 4px); right: var(--gutter); width: min(260px, calc(100vw - 2 * var(--gutter)));
+  margin: 0; padding: 6px; list-style: none; background: var(--surface); border: 1px solid var(--border);
+  border-radius: 14px; box-shadow: var(--shadow-lg);
+}
+.menu-panel a {
+  display: flex; align-items: center; min-height: 46px; padding: 0 14px; border-radius: 10px;
+  color: var(--text); text-decoration: none; font-weight: 500;
+}
+.menu-panel a:hover { background: var(--surface-2); }
+@media (max-width: 719.98px) {
+  .nav-wide { display: none; }
+  .header-actions { display: flex; }
+  .header-row { min-height: 56px; flex-wrap: nowrap; gap: 8px; }
+  .brand { min-width: 0; min-height: 44px; font-size: 1rem; gap: 8px; }
+}
+@media (min-width: 420px) and (max-width: 719.98px) {
+  .hbtn.donate { padding: 0 14px; }
+  .hbtn-text { display: inline; }
+}
+@media (max-width: 359.98px) { .brand-name { display: none; } }
 
 /* Hero -------------------------------------------------------------------- */
 .hero {

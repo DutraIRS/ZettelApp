@@ -64,8 +64,8 @@ TEMPLATE = """<!doctype html>
 <a class="skip" href="#content">Skip to content</a>
 <header class="site-header">
   <div class="wrap header-row">
-    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
-    <nav aria-label="Main">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
       <ul class="nav">
         <li><a href="../#features">Features</a></li>
         <li><a href="tutorial.html">Tutorial</a></li>
@@ -75,6 +75,19 @@ TEMPLATE = """<!doctype html>
         <li><a class="nav-cta" href="../#download">Download</a></li>
       </ul>
     </nav>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Donate"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Donate</span></a>
+      <a class="hbtn cta" href="../#download">Download</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Features</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Docs</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
   </div>
 </header>
 <div class="wrap docs-layout">
