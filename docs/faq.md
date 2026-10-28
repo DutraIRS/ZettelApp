@@ -15,8 +15,29 @@ Reporting bugs, improving the docs and sharing ZettelApp help too.
 
 ### Does it need the internet?
 
-No. Everything works offline. The internet is used only when you ask a question on the **Ask** page or
-open a link. See [Privacy and security](privacy-and-security.md).
+No. Everything works offline. The internet is used only for a small update check at start-up (which you
+can turn off), when you ask a question on the **Ask** page, and when you open a link. See
+[Privacy and security](privacy-and-security.md).
+
+### Does ZettelApp check for updates?
+
+Yes, once at start-up: one request for a small file on the project's website, with nothing about you or
+your notes. If a newer version exists, a notice appears in the lower-right corner. Turn it off with
+*Tools ▸ Options ▸ General ▸ Check for updates when ZettelApp starts*, or with **Don't check for updates**
+on the notice. See [Getting started](getting-started.md#updates).
+
+### What is the MCP switch in the status bar?
+
+It lets AI assistants such as Claude Desktop or Claude Code use your notes through
+[MCP](mcp-server.md). It is **off every time ZettelApp starts**. While it is off, or ZettelApp is closed,
+assistants can't reach your notes. After you switch it on, reconnect ZettelApp in your MCP client (or
+restart the client).
+
+### Can I use a model on my own computer?
+
+Yes. In *Tools ▸ Options ▸ AI assistant*, choose **OpenAI** and set **Endpoint** to your local server, for
+example `http://localhost:11434/v1` (Ollama) or `http://localhost:1234/v1` (LM Studio). No API key is
+needed for `localhost`. See [Bring your own LLM](ai-assistant.md#bring-your-own-llm).
 
 ### Where are my notes?
 
@@ -68,12 +89,13 @@ The installer is. It offers many languages and suggests your Windows language. T
 English for now; translating it is on the
 [roadmap](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
 
-### How do I uninstall?
+### How do I uninstall, and what happens to my data?
 
-*Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall*. Your vaults in Documents are kept. For the
-portable version, delete its folder. Preferences live in the registry under
-`HKEY_CURRENT_USER\Software\ZettelApp`, and logs and backups in `%LOCALAPPDATA%\ZettelApp`. You can
-delete both if you no longer need them.
+*Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall*. The uninstaller offers an unticked **Also
+delete my ZettelApp settings and data** option that removes preferences, saved API keys, logs, cache and
+automatic backups. **Your notes are never deleted**: vaults such as Documents\ZettelApp are kept. For the
+portable version, delete its folder; its preferences live in the registry under
+`HKEY_CURRENT_USER\Software\ZettelApp`, and logs and backups in `%LOCALAPPDATA%\ZettelApp`.
 
 ### Something went wrong. Where are the logs?
 

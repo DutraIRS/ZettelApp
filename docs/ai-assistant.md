@@ -27,6 +27,26 @@ computer (`http://localhost:…`). Addresses must use `https://`; plain `http://
 With Claude you can also set the **effort** (low to max): higher effort thinks more before answering, and
 costs more. The default is *medium*.
 
+## Bring your own LLM
+
+Ask uses **your own account** with the provider you pick, so any usage is billed by that provider to you.
+ZettelApp has no AI service of its own. Your API key is saved in **Windows Credential Manager**, never in
+settings files.
+
+- **Providers**: Anthropic Claude, OpenAI and Z.ai (GLM), in *Tools ▸ Options ▸ AI assistant ▸ Provider*.
+  Pick a **Model** from the list (*Refresh list* asks the provider which models your key can use) or type
+  any model ID your key has access to.
+- **Your own server**: any service that offers an **OpenAI-style chat completions** API works. Choose
+  **OpenAI** and set **Endpoint (optional)** to its base address, for example
+  `https://my-proxy.example.com/v1`, `http://localhost:11434/v1` (Ollama) or `http://localhost:1234/v1`
+  (LM Studio). Plain `http://` is accepted only for `localhost`, `127.0.0.1` and `::1`; everything else
+  must use `https://`. For those local addresses the **API key** may stay empty.
+- **Check it**: press **Test connection**. For a local model, your question and notes never leave your
+  computer.
+- **What is sent**: only your question and the most relevant notes, found on your computer. The number of
+  notes is the **how many notes** box on the Ask page (8 by default), and the *Sources sent* list shows
+  exactly which ones went.
+
 ## Ask a question
 
 Type a question and press **Ask** (Ctrl+Enter). Choose where to look with **Search in**: the entire
