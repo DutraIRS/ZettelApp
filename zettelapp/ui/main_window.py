@@ -54,6 +54,39 @@ from zettelapp.ui.workers import SuggestionService, run_task
 
 log = logging.getLogger(__name__)
 
+WELCOME_TEXT = """\
+A Zettelkasten is a network of small, atomic notes. Each note holds **one idea** and links to \
+related ideas, so knowledge grows by connection rather than by folder.
+
+## Link notes
+- Type two square brackets and start typing a title, then pick a note from the list. \
+This makes a link like [[How link suggestions work]].
+- **Ctrl+click** a link to open that note. In the preview (switch views with Ctrl+E), \
+a normal click is enough.
+- Say *how* two notes relate by writing a type before the link: supports:: [[Writing atomic notes]]
+
+## Tags
+Type a tag in the **Add tag** box under the title and press Enter. You can also write a tag \
+anywhere in the text with a hash sign in front, like #welcome. Tags written in the text \
+appear next to the box, and disappear when you delete them from the text.
+
+## Source link and images
+- Paste a web address or a Zotero item link into the **Source link** box under the tags.
+- To add an image, copy it and press **Ctrl+V** in the text, drag an image file into the \
+text, or click **Insert image** on the toolbar (Ctrl+Shift+I). The first image also becomes \
+the note's picture in the graph.
+
+## Mind maps and flashcards
+- Click the **Mind map** tab above the text to sketch ideas around this note.
+- For a flashcard, write a question on a line that starts with Q: and the answer on the next \
+line, starting with A: — like the card below. Practise your cards on the **Review** page.
+
+Open the **Graph** to see your notes in 2D or 3D, coloured by tag or by topic cluster.
+
+Q: What should a single note contain?
+A: One idea, in your own words.
+"""
+
 NAV = [
     ("notes", "Notes"),
     ("graph", "Graph"),
@@ -499,15 +532,7 @@ class MainWindow(QMainWindow):
         v = self.vault
         start = v.create_note(
             "Welcome to ZettelApp",
-            (
-                "A Zettelkasten is a network of small, atomic notes. Each note holds **one idea** and links to "
-                "related ideas, so knowledge grows by connection rather than by folder.\n\n"
-                "- Link notes by typing [[ and a title, e.g. [[How link suggestions work]].\n"
-                "- Say *how* notes relate with typed links: supports:: [[Writing atomic notes]]\n"
-                "- Add #tags, a source link, images (paste or drop them), a mind map and flashcards.\n"
-                "- Open the **Graph** to see your notes in 2D or 3D, coloured by tag or by topic cluster.\n\n"
-                "Q: What should a single note contain?\nA: One idea, in your own words."
-            ),
+            WELCOME_TEXT,
             tags=["zettelkasten", "start"],
         )
         atomic = v.create_note(
@@ -533,6 +558,7 @@ class MainWindow(QMainWindow):
         v.add_link(atomic.id, start.id, "supports")
         self.list.refresh()
         self.list.refresh_tags()
+        self._update_counts()
         self.open_note(start.id)
 
     def _maybe_backup(self) -> None:

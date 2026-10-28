@@ -227,3 +227,14 @@ def test_hashtags_typed_in_the_text_show_as_tag_chips(window):
     assert window.vault.get_note(note.id).tags == ["idea", "manual"]
     assert window.vault.manual_tags(note.id) == ["manual"]
 
+
+def test_welcome_note_demonstrates_links_and_tags(window):
+    window._create_welcome_notes()
+    note = window.editor.note
+    assert note.title == "Welcome to ZettelApp"
+    assert "welcome" in note.tags  # the #welcome example in the text is a real tag
+    assert window.vault.resolve_title("How link suggestions work")
+    assert {l.dst for l in window.vault.links_from(note.id)} == {
+        window.vault.resolve_title("How link suggestions work"),
+        window.vault.resolve_title("Writing atomic notes"),
+    }
