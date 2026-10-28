@@ -81,11 +81,11 @@ class LinkType:
         return self.arrow if self.directed else None
 
 
-def stroke_dashes(line_style: str) -> list[float]:
+def stroke_dashes(line_style: str, scale: float = 1.0) -> list[float]:
     """The style's pattern as a pen with round caps takes it, in line widths: each cap
     adds half a width to both ends of a dash, so dashes are drawn shorter and gaps longer.
-    Empty for a solid line."""
-    pattern = DASH_PATTERNS.get(line_style, ())
+    *scale* shortens the pattern for small pictures. Empty for a solid line."""
+    pattern = [v * scale for v in DASH_PATTERNS.get(line_style, ())]
     return [max(v - 1, 0.01) if i % 2 == 0 else v + 1 for i, v in enumerate(pattern)]
 
 

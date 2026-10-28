@@ -28,7 +28,7 @@ from zettelapp.ui import icons, theme
 from zettelapp.ui.graph2d import Graph2DView
 from zettelapp.ui.graph3d import Graph3DView
 from zettelapp.ui.graph_common import MAX_GROUP_COLORS, GraphData
-from zettelapp.ui.side_panel import type_icon
+from zettelapp.ui.link_style import LIST_ICON, MENU_ICON, type_icon
 from zettelapp.ui.widgets import SearchBox, label, tool_button
 from zettelapp.ui.workers import run_task
 
@@ -190,7 +190,7 @@ class GraphPage(QWidget):
         legend_layout.addWidget(label("Link types", "section"))
         self.type_legend = QListWidget()
         self.type_legend.setAccessibleName("Link types legend")
-        self.type_legend.setIconSize(QSize(22, 22))
+        self.type_legend.setIconSize(LIST_ICON)
         legend_layout.addWidget(self.type_legend, 1)
         self.quality = label("", "caption", wrap=True)
         legend_layout.addWidget(self.quality)
@@ -241,8 +241,8 @@ class GraphPage(QWidget):
 
     def _rebuild_types_menu(self, types) -> None:
         self.types_menu.clear()
-        for i, lt in enumerate(types):
-            action = QAction(type_icon(lt, i), lt.label, self.types_menu)
+        for lt in types:
+            action = QAction(type_icon(lt, MENU_ICON), lt.label, self.types_menu)
             action.setCheckable(True)
             action.setChecked(lt.id not in self.hidden_types)
             action.toggled.connect(lambda on, t=lt.id: self._toggle_type(t, on))
@@ -259,7 +259,7 @@ class GraphPage(QWidget):
             return
         types = vault.link_types()
         self._rebuild_types_menu(types)
-        type_map = {lt.id: (i, lt) for i, lt in enumerate(types)}
+        type_map = {lt.id: lt for lt in types}
         notes = {n.id: n for n in vault.all_notes()}
         links = [l for l in vault.all_links() if l.type not in self.hidden_types]
         local = self.scope_group.checkedId() == 1 and self.focus_id in notes
@@ -406,10 +406,10 @@ class GraphPage(QWidget):
             self.legend.addItem(item)
         self.type_legend.clear()
         used = Counter(l.type for l in data.links)
-        for i, lt in enumerate(types):
+        for lt in types:
             if used.get(lt.id):
                 self.type_legend.addItem(
-                    QListWidgetItem(type_icon(lt, i), f"{lt.label}  ({used[lt.id]})")
+                    QListWidgetItem(type_icon(lt), f"{lt.label}  ({used[lt.id]})")
                 )
 
     def _legend_clicked(self, item: QListWidgetItem) -> None:
