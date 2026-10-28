@@ -253,16 +253,13 @@ def test_hashtags_typed_in_the_text_show_as_tag_chips(window):
     assert window.vault.manual_tags(note.id) == ["manual"]
 
 
-def test_welcome_note_demonstrates_links_and_tags(window):
+def test_a_new_vault_opens_on_the_start_here_hub(window):
     window._create_welcome_notes()
     note = window.editor.note
-    assert note.title == "Welcome to ZettelApp"
-    assert "welcome" in note.tags  # the #welcome example in the text is a real tag
-    assert window.vault.resolve_title("How link suggestions work")
-    assert {l.dst for l in window.vault.links_from(note.id)} == {
-        window.vault.resolve_title("How link suggestions work"),
-        window.vault.resolve_title("Writing atomic notes"),
-    }
+    assert note.title == "Start here"
+    assert window.list.current_id() == note.id
+    assert len(window.vault.links_from(note.id)) == 10  # the hub lists every starter note
+    assert "Start here" in window.editor.body.titles_model.stringList()  # [[ completes titles
 
 
 def test_mcp_switch_starts_off_and_closing_the_app_turns_it_off(window, monkeypatch, tmp_path):
