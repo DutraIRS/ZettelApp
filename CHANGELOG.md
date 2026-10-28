@@ -4,40 +4,7 @@ All notable changes to ZettelApp are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
-
-### Added
-
-- **Tags in the text**: `#tags` written anywhere in a note are real tags (ignored in code, link targets and
-  `[[#headings]]`). They appear as outlined chips and disappear when the `#tag` is deleted. Tags typed in
-  the *Add tag* box stay separate.
-- **Ctrl+click in the editor** follows `[[note links]]` (creating the note if needed), web, e-mail and
-  Zotero links, and `#tags`, with a tooltip saying what will happen. In the preview a normal click follows
-  links.
-- **Links to local files** (*Insert ▸ Link to a File…*, or drag a file into the text): clicking one shows the
-  file in File Explorer without opening or running it. Network (UNC) paths are refused.
-- **Graph**: links between the same two notes are separate curves with arrowheads. Hovering or selecting a
-  note dims other links and labels each neighbour with the link types as read from that note.
-- **MCP switch** in the status bar: MCP clients can use the vault only while ZettelApp is open and the
-  switch, which is off at every start, is on. `zettelapp-mcp` stops by itself when it goes off.
-- **Update check** at start-up (one request, optional) with a small notice in the lower-right corner.
-- **Uninstaller option** to delete settings, saved API keys, logs, cache and backups. Notes are never
-  deleted.
-- **Documentation**: an MCP API reference, a *Bring your own LLM* section, and updated Anki, Zotero,
-  privacy, graph and FAQ pages.
-
-### Changed
-
-- The welcome note in new vaults explains links, tags, images, mind maps and flashcards.
-- The vault schema is now version 2 (`tags.source`) and upgrades automatically.
-
-### Fixed
-
-- Options sections overlapping on hover.
-- CI checks that could not fail.
-- Markdown imports are atomic: a failed import leaves the vault unchanged.
-
-## [1.0.0] - 2026-10-27
+## [1.0.0] - 2026-10-28
 
 First release.
 
@@ -47,6 +14,14 @@ First release.
   - Atomic Markdown notes with timestamp IDs and autosave.
   - Edit, Split and Preview modes.
   - Tags (nested `a/b`), source links (web, e-mail or Zotero) and images (paste, drop or insert).
+  - `#tags` written anywhere in the text are real tags (ignored in code, link targets and
+    `[[#headings]]`), shown as outlined chips that disappear when the `#tag` is deleted.
+  - Ctrl+click in the editor follows `[[note links]]` (creating the note if needed), web, e-mail, Zotero
+    and file links, and `#tags`, with a tooltip saying what will happen. In the preview a normal click
+    follows links.
+  - Links to local files (*Insert ▸ Link to a File…*, or drag a file into the text) show the file in File
+    Explorer without opening or running it. Network (UNC) paths are refused.
+  - A welcome note in new vaults that explains links, tags, images, mind maps and flashcards.
   - Note pictures.
   - Full-text search with `tag:` filters.
   - A Trash with restore.
@@ -62,6 +37,8 @@ First release.
   FreeMind export.
 - **Graph**
   - 2D and 3D views, local graphs with depth, and link-type filters.
+  - Links between the same two notes are separate curves with arrowheads. Hovering or selecting a note
+    dims other links and labels each neighbour with the link types as read from that note.
   - Colouring by tag or by **k-means / hierarchical clusters** (auto k by silhouette, named by keywords).
   - **Grouping** with shaded regions.
   - Colour-vision-safe palette and dash patterns.
@@ -78,7 +55,9 @@ First release.
   `claude-opus-5-5`), OpenAI or Z.ai, through an extensible provider registry. Keys are kept in Windows
   Credential Manager.
 - **MCP server** (`zettelapp-mcp.exe`) for Claude Desktop, Claude Code and other MCP clients. It is
-  read-only by default.
+  read-only by default. It works only while ZettelApp is open and the MCP switch in its status bar, which
+  is off at every start, is on.
+- **Update check** at start-up (one optional HTTPS request) with a small notice in the lower-right corner.
 - **Export**
   - Scopes: the whole collection, a note's subgraph, or a tag.
   - Formats: ZettelApp archive, Markdown (Obsidian-compatible), static website, JSON, GraphML, Graphviz
@@ -91,4 +70,6 @@ First release.
   - Portable zip.
   - Daily backups.
   - Single instance with `zettelapp://` link handling.
-- **Documentation** and a website.
+  - An uninstaller option to delete settings, saved API keys, logs, cache and backups. Notes are never
+    deleted.
+- **Documentation** (including an MCP API reference and a *Bring your own LLM* guide) and a website.
