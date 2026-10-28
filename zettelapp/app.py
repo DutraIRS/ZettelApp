@@ -157,19 +157,31 @@ def _vault_folders() -> list[Path]:
 
 
 def _delete_vault(folder: Path) -> None:
-    """Delete only what ZettelApp created in a vault folder (its database and images)."""
+    """Delete only what ZettelApp created in a vault folder: its database and the images it
+    stored (recognised by their content-hash names), then the folders if they are empty."""
+    from zettelapp.core.security import is_valid_asset_name
     from zettelapp.core.storage import Vault
 
-    for suffix in ("", "-journal", "-wal", "-shm"):
-        try:
-            (folder / f"{Vault.DB_NAME}{suffix}").unlink(missing_ok=True)
-        except OSError:
-            log.warning("Could not delete %s", folder / f"{Vault.DB_NAME}{suffix}")
-    shutil.rmtree(folder / Vault.ASSETS_DIR, ignore_errors=True)
+    assets = folder / Vault.ASSETS_DIR
+    doomed = [folder / f"{Vault.DB_NAME}{suffix}" for suffix in ("", "-journal", "-wal", "-shm")]
     try:
-        folder.rmdir()  # only if nothing else of the user's is in it
+        doomed += [
+            p
+            for p in assets.iterdir()
+            if p.is_file() and is_valid_asset_name(p.name.removesuffix(".tmp"))
+        ]
     except OSError:
-        pass
+        pass  # no assets folder
+    for path in doomed:
+        try:
+            path.unlink(missing_ok=True)
+        except OSError:
+            log.warning("Could not delete %s", path)
+    for empty in (assets, folder):  # kept when the user has other files in them
+        try:
+            empty.rmdir()
+        except OSError:
+            pass
 
 
 def remove_user_data() -> int:

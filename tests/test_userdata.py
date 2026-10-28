@@ -2,6 +2,7 @@
 
 import os
 
+from tests.conftest import tiny_png
 from zettelapp import app, settings
 from zettelapp.core import secrets
 from zettelapp.core.storage import Vault
@@ -56,6 +57,22 @@ def test_remove_user_data_keeps_files_it_did_not_create(tmp_path, monkeypatch):
     assert app.main(["ZettelApp.exe", "--remove-user-data"]) == 0
     assert not Vault.is_vault(folder)
     assert (folder / "my-thesis.docx").read_text(encoding="utf-8") == "mine"
+
+
+def test_remove_user_data_keeps_the_users_own_files_in_the_assets_folder(tmp_path, monkeypatch):
+    _isolate(tmp_path, monkeypatch)
+    folder = tmp_path / "Documents"
+    (folder / "assets").mkdir(parents=True)
+    (folder / "assets" / "logo.png").write_text("mine", encoding="utf-8")
+    vault = Vault.open(folder)  # a vault made in a folder that already had an assets folder
+    image = vault.add_image(tiny_png(), "pic.png")
+    vault.close()
+    settings.put(settings.LAST_VAULT, str(folder))
+
+    assert app.main(["ZettelApp.exe", "--remove-user-data"]) == 0
+    assert not Vault.is_vault(folder)
+    assert not (folder / "assets" / image).exists()
+    assert (folder / "assets" / "logo.png").read_text(encoding="utf-8") == "mine"
 
 
 def test_remove_user_data_ignores_folders_that_are_not_vaults(tmp_path, monkeypatch):
