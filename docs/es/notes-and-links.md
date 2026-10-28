@@ -157,6 +157,7 @@ con un nombre derivado de su contenido, y se referencian así:
 La primera imagen que añades a una nota se convierte en su **imagen del título**. Se muestra como una pequeña miniatura redondeada en
 la lista de notas y dentro del círculo de la nota en el grafo. Haz clic derecho en cualquier imagen del editor o de la vista previa
 y elige *Usar como imagen del título* para escoger otra, o *Quitar imagen del título* para no tener ninguna.
+Borrar la imagen del título del texto de la nota también la quita como imagen del título.
 
 ## Listas de tareas
 

@@ -156,7 +156,8 @@ under a name derived from their content, and referenced like this:
 
 The first image you add to a note becomes its **title image**. It is shown as a small rounded thumbnail in
 the note list and inside the note's circle in the graph. Right-click any image in the editor or preview
-and choose *Use as title image* to pick another one, or *Remove title image* to have none.
+and choose *Use as title image* to pick another one, or *Remove title image* to have none. Deleting the
+title image from the note's text also clears it as the title image.
 
 ## Checklists
 

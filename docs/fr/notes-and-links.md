@@ -161,6 +161,7 @@ du coffre sous un nom dérivé de leur contenu, puis référencées ainsi :
 La première image ajoutée à une note devient son **image de titre**. Elle s’affiche sous forme de vignette arrondie dans
 la liste et dans le cercle de la note sur le graphe. Faites un clic droit sur une image dans l’éditeur ou l’aperçu, puis
 choisissez *Utiliser comme image du titre* pour en sélectionner une autre, ou *Retirer l’image du titre* pour n’en choisir aucune.
+Supprimer l’image du titre du texte de la note la retire aussi comme image du titre.
 
 ## Listes de contrôle
 

@@ -161,7 +161,8 @@ unter einem aus ihrem Inhalt abgeleiteten Namen gespeichert und wie folgt refere
 Das erste Bild, das Sie zu einer Notiz hinzufügen, wird zum **Titelbild**. Es wird als kleines abgerundetes
 Vorschaubild in der Notizliste und im Kreis der Notiz im Graph angezeigt. Klicken Sie im Editor oder in
 der Vorschau mit der rechten Maustaste auf ein beliebiges Bild und wählen Sie *Als Titelbild verwenden*,
-um ein anderes auszuwählen, oder *Titelbild entfernen*, um keins festzulegen.
+um ein anderes auszuwählen, oder *Titelbild entfernen*, um keins festzulegen. Löschen Sie das Titelbild aus
+dem Notiztext, wird es ebenfalls als Titelbild entfernt.
 
 ## Checklisten
 

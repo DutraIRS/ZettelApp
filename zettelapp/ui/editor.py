@@ -37,7 +37,7 @@ from zettelapp.core.textutil import extract_hashtags, find_tasks, strip_markdown
 from zettelapp.i18n import _, n_
 from zettelapp.ui import icons, theme
 from zettelapp.ui.dialogs import AlarmDialog, CardDialog, FormulaDialog, TextPromptDialog
-from zettelapp.ui.markdown_editor import MarkdownEditor
+from zettelapp.ui.markdown_editor import MarkdownEditor, referenced_assets
 from zettelapp.ui.mindmap import MindMapView
 from zettelapp.ui.preview import NotePreview
 from zettelapp.ui.widgets import TagEditor, accent_button, label, tool_button
@@ -367,6 +367,9 @@ class NoteEditor(QWidget):
         self.note.tags = sorted(set(self.tags.tags()) | set(extract_hashtags(self.note.body)))
         url = self.url.text().strip()
         self.note.url = (normalize_source_url(url) or "") if url else ""
+        if self.note.image and self.note.image not in referenced_assets(self.note.body):
+            self.note.image = ""
+            self._refresh_picture()
         return self.note
 
     def flush(self) -> None:

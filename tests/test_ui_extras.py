@@ -98,6 +98,37 @@ def test_title_image_can_be_chosen_and_removed(window):
     assert window.vault.get_note(note.id).image == ""
 
 
+def test_deleting_the_title_image_from_the_body_clears_it(window):
+    note = _new_note(window)
+    asset = window.vault.add_image(tiny_png((200, 0, 0)), "a.png")
+    editor = window.editor
+    editor.body.setPlainText(f"before ![a](asset:{asset}) after")
+    editor.note.image = asset
+    editor.flush()
+    assert window.vault.get_note(note.id).image == asset
+
+    editor.body.setPlainText("before  after")  # the image markdown is gone
+    editor.flush()
+    assert editor.note.image == ""
+    assert window.vault.get_note(note.id).image == ""
+    assert not editor.picture.isVisible()
+
+
+def test_deleting_an_unrelated_image_keeps_the_title_image(window):
+    note = _new_note(window)
+    kept = window.vault.add_image(tiny_png((200, 0, 0)), "a.png")
+    other = window.vault.add_image(tiny_png((0, 200, 0)), "b.png")
+    editor = window.editor
+    editor.body.setPlainText(f"![a](asset:{kept}) ![b](asset:{other})")
+    editor.note.image = kept
+    editor.flush()
+
+    editor.body.setPlainText(f"![a](asset:{kept})")  # only the other image is removed
+    editor.flush()
+    assert editor.note.image == kept
+    assert window.vault.get_note(note.id).image == kept
+
+
 def test_note_list_rows_carry_the_thumbnail_and_alarm(window):
     note = window.vault.create_note("Pic", "text")
     note.image = window.vault.add_image(tiny_png(), "p.png")

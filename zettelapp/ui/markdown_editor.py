@@ -34,6 +34,13 @@ from zettelapp.ui import theme
 
 _IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp")
 _ASSET_IMAGE_RE = re.compile(r"!\[[^\]\n]*\]\(asset:([^)\s]+)\)")
+
+
+def referenced_assets(text: str) -> set[str]:
+    """Every asset name a ![image](asset:…) in *text* points at."""
+    return set(_ASSET_IMAGE_RE.findall(text))
+
+
 _MD_LINK_RE = re.compile(r"(?<!!)\[[^\]\n]*\]\((?:<([^>\n]+)>|([^)\s]+))(?:\s+\"[^\"\n]*\")?\)")
 _URL_RE = re.compile(r"\b(?:https?://|mailto:|file:///)[^\s<>()\[\]]*[^\s<>()\[\].,;:!?'\"]")
 _PATH_RE = re.compile(r"(?<![\w/\\])[A-Za-z]:\\[^\s<>\"|?*]*[^\s<>\"|?*.,;:!']")  # C:\no\spaces
