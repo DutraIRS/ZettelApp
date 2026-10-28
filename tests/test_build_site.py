@@ -1,8 +1,13 @@
-"""The generated website: language redirect script, flag switcher, and link integrity."""
+"""The generated website: language redirect script, language menu, and link integrity."""
 
+import json
 import re
+import shutil
+import subprocess
 from pathlib import Path
 from urllib.parse import urlparse
+
+import pytest
 
 from tools import build_site
 
@@ -14,7 +19,7 @@ def test_csp_allows_the_language_script_but_nothing_else():
 
 def test_language_links_switch_the_same_page_and_fall_back_for_untranslated_pages():
     links = dict(
-        (folder, href) for folder, _n, _c, _f, href in build_site._language_links("", "docs", "faq")
+        (folder, href) for folder, _n, _c, href in build_site._language_links("", "docs", "faq")
     )
     assert links[""] == "faq.html"
     assert links["fr"] == "../fr/docs/faq.html"
@@ -22,14 +27,14 @@ def test_language_links_switch_the_same_page_and_fall_back_for_untranslated_page
     # mcp-reference.md has no translation: non-English links fall back to that language's docs index.
     links = dict(
         (folder, href)
-        for folder, _n, _c, _f, href in build_site._language_links("", "docs", "mcp-reference")
+        for folder, _n, _c, href in build_site._language_links("", "docs", "mcp-reference")
     )
     assert links["fr"] == "../fr/docs/"
 
     # From inside a translated page, switching to another translated page stays on the same stem.
     links = dict(
         (folder, href)
-        for folder, _n, _c, _f, href in build_site._language_links("fr", "docs", "faq")
+        for folder, _n, _c, href in build_site._language_links("fr", "docs", "faq")
     )
     assert links[""] == "../../docs/faq.html"
     assert links["de"] == "../../de/docs/faq.html"
@@ -53,6 +58,45 @@ def test_lang_script_detects_browser_language_and_redirects_once(tmp_path, monke
     # Every translated page stem is embedded so untranslated pages can fall back sensibly.
     for stem in build_site.TRANSLATED:
         assert f'"{stem}"' in script
+
+
+def _first_visit(script: str, path: str, browser_languages: list[str]) -> list[str]:
+    """The addresses lang.js sends a first-time visitor of *path* to (run with Node.js)."""
+    harness = (
+        "var calls = [];\n"
+        # Node 21+ has a read-only navigator of its own (with the machine's languages).
+        "Object.defineProperty(globalThis, 'navigator', { configurable: true, value:"
+        f" {{ languages: {json.dumps(browser_languages)} }} }});\n"
+        "globalThis.localStorage = { data: {}, getItem(k) { return k in this.data ? this.data[k] : null; },"
+        " setItem(k, v) { this.data[k] = String(v); } };\n"
+        f"globalThis.location = {{ pathname: {json.dumps(path)}, search: '', hash: '',"
+        " replace(u) { calls.push(u); } };\n"
+        + script
+        + "\nconsole.log(JSON.stringify(calls));\n"
+    )
+    done = subprocess.run(
+        ["node", "-"], input=harness, capture_output=True, text=True, timeout=30, check=True
+    )
+    return json.loads(done.stdout)
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="needs Node.js to run the script")
+def test_lang_script_sends_a_first_visit_to_the_same_page_in_the_browser_language(
+    tmp_path, monkeypatch
+):
+    monkeypatch.setattr(build_site, "ROOT", tmp_path)
+    (tmp_path / "website" / "assets").mkdir(parents=True)
+    script = build_site.write_lang_script().read_text(encoding="utf-8")
+    site = "/ZettelApp"
+    assert _first_visit(script, f"{site}/docs/faq.html", ["pt-BR", "en"]) == [
+        f"{site}/pt-br/docs/faq.html"
+    ]
+    assert _first_visit(script, f"{site}/docs/mcp-reference.html", ["de"]) == [f"{site}/de/docs/"]
+    assert _first_visit(script, f"{site}/", ["ja"]) == [f"{site}/ja/"]
+    assert _first_visit(script, f"{site}/fr/docs/zotero.html", ["en-US"]) == [
+        f"{site}/docs/zotero.html"
+    ]
+    assert _first_visit(script, f"{site}/docs/faq.html", ["en-GB"]) == []  # already English
 
 
 def test_build_writes_every_page_with_no_broken_local_links():

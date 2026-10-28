@@ -66,10 +66,11 @@ kbd {
 .wrap { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 var(--gutter); }
 
 .skip {
-  position: absolute; left: -999px; top: 8px; background: var(--surface); color: var(--text);
+  position: absolute; inset-inline-start: -999px; top: 8px; background: var(--surface); color: var(--text);
   padding: 8px 14px; border-radius: 8px; z-index: 10;
 }
-.skip:focus { left: 8px; }
+/* Logical sides: an off-screen left in a right-to-left page would scroll sideways. */
+.skip:focus { inset-inline-start: 8px; }
 
 /* Header ------------------------------------------------------------------ */
 .site-header {
@@ -96,7 +97,8 @@ kbd {
   clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
-/* Phone header: brand, Donate, Download and a CSS-only <details> menu. */
+/* Compact header (phones and anything below 900 px, where the full header would wrap in
+   some languages): brand, Donate, Download and a CSS-only <details> menu. */
 .header-actions { display: none; align-items: center; gap: 6px; }
 .hbtn {
   display: inline-flex; align-items: center; justify-content: center; gap: 0.35em;
@@ -138,14 +140,15 @@ kbd {
   color: var(--text); text-decoration: none; font-weight: 500;
 }
 .menu-panel a:hover { background: var(--surface-2); }
-/* Header language switch: a flag plus a CSS-only <details> dropdown of every translation. */
+/* Header language switch: a globe button and a CSS-only <details> dropdown of every translation. */
 .lang-switch { position: relative; }
 .lang-switch > summary {
   display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px;
-  list-style: none; cursor: pointer; font-size: 1.3rem; color: var(--text); background: var(--surface);
+  list-style: none; cursor: pointer; color: var(--text); background: var(--surface);
   border: 1px solid var(--border); border-radius: 10px; -webkit-tap-highlight-color: transparent;
 }
 .lang-switch > summary::-webkit-details-marker { display: none; }
+.lang-switch .globe { fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linejoin: round; }
 .lang-switch[open] > summary { background: var(--surface-2); }
 .lang-switch[open] > summary::after { content: ""; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; cursor: default; }
 .lang-switch-panel {
@@ -155,22 +158,27 @@ kbd {
 }
 [dir="rtl"] .lang-switch-panel { right: auto; left: 0; }
 .lang-switch-panel a {
-  display: flex; align-items: center; gap: 0.5em; min-height: 40px; padding: 0 14px; border-radius: 10px;
+  display: flex; align-items: center; min-height: 40px; padding: 0 14px; border-radius: 10px;
   color: var(--text); text-decoration: none; font-weight: 500; white-space: nowrap;
 }
 .lang-switch-panel a:hover { background: var(--surface-2); }
 .lang-switch-panel a[aria-current] { background: var(--surface-2); font-weight: 700; }
-@media (max-width: 719.98px) {
+@media (max-width: 899.98px) {
   .nav-wide { display: none; }
   .header-actions { display: flex; }
   .header-row { min-height: 56px; flex-wrap: nowrap; gap: 8px; }
   .brand { min-width: 0; min-height: 44px; font-size: 1rem; gap: 8px; }
+  /* The globe joins the buttons and opens its list at the header's edge, like the menu. */
+  .lang-switch { position: static; margin-inline-start: auto; }
+  .lang-switch-panel { right: var(--gutter); }
+  [dir="rtl"] .lang-switch-panel { right: auto; left: var(--gutter); }
 }
-@media (min-width: 420px) and (max-width: 719.98px) {
+@media (min-width: 600px) and (max-width: 899.98px) {
   .hbtn.donate { padding: 0 14px; }
   .hbtn-text { display: inline; }
 }
-@media (max-width: 359.98px) { .brand-name { display: none; } }
+/* Phones: the logo alone, so the globe, Donate, Download and menu fit in every language. */
+@media (max-width: 519.98px) { .brand-name { display: none; } }
 
 /* Hero -------------------------------------------------------------------- */
 .hero {

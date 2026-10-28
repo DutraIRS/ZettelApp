@@ -14,7 +14,7 @@
     var docsRe = new RegExp("^(.*?)(?:/(" + FOLDERS + "))?/docs/(?:([a-z0-9-]+)\\.html)?$", "i");
     var m = path.match(docsRe);
     if (m) {
-      var stem = m[2] || "index";
+      var stem = m[3] || "index"; // m[2] is the language folder, if any
       if (folder && TRANSLATED.indexOf(stem) === -1) {
         return m[1] + "/" + folder + "/docs/";
       }

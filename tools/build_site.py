@@ -48,21 +48,25 @@ CSP = (
     "base-uri 'none'; form-action 'none'"
 )
 
-# Translated sites: folder -> (native name, HTML language, right-to-left, flag emoji, browser
-# language prefixes that should redirect to it). English is the root ("").
+# Translated sites: folder -> (native name, HTML language, right-to-left, browser language
+# prefixes that should redirect to it). English is the root ("").
 LANGS = {
-    "es": ("Español", "es", False, "🇪🇸", ["es"]),
-    "pt-br": ("Português (Brasil)", "pt-BR", False, "🇧🇷", ["pt"]),
-    "fr": ("Français", "fr", False, "🇫🇷", ["fr"]),
-    "de": ("Deutsch", "de", False, "🇩🇪", ["de"]),
-    "it": ("Italiano", "it", False, "🇮🇹", ["it"]),
-    "ru": ("Русский", "ru", False, "🇷🇺", ["ru"]),
-    "zh-cn": ("简体中文", "zh-CN", False, "🇨🇳", ["zh"]),
-    "ja": ("日本語", "ja", False, "🇯🇵", ["ja"]),
-    "ko": ("한국어", "ko", False, "🇰🇷", ["ko"]),
-    "ar": ("العربية", "ar", True, "🇸🇦", ["ar"]),
+    "es": ("Español", "es", False, ["es"]),
+    "pt-br": ("Português (Brasil)", "pt-BR", False, ["pt"]),
+    "fr": ("Français", "fr", False, ["fr"]),
+    "de": ("Deutsch", "de", False, ["de"]),
+    "it": ("Italiano", "it", False, ["it"]),
+    "ru": ("Русский", "ru", False, ["ru"]),
+    "zh-cn": ("简体中文", "zh-CN", False, ["zh"]),
+    "ja": ("日本語", "ja", False, ["ja"]),
+    "ko": ("한국어", "ko", False, ["ko"]),
+    "ar": ("العربية", "ar", True, ["ar"]),
 }
-EN_FLAG = "🇺🇸"
+GLOBE_ICON = (
+    '<svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" '
+    'focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 '
+    '3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg>'
+)
 # Translated pages: the user documentation (development and the MCP reference stay English).
 TRANSLATED = [p for p, _ in PAGES if p not in ("mcp-reference", "development")]
 
@@ -401,16 +405,14 @@ def description(markdown: str) -> str:
 
 def _language_links(
     current: str, target: str, stem: str = ""
-) -> list[tuple[str, str, str, str, str]]:
-    """(folder, name, code, flag, href) for every language, for *current* page's language/kind.
+) -> list[tuple[str, str, str, str]]:
+    """(folder, name, code, href) for every language, for *current* page's language/kind.
 
     *target* is "docs" for a documentation page (linking to the same page) or "home".
     """
-    entries = [("", "English", "en", EN_FLAG)] + [
-        (d, n, h, f) for d, (n, h, _, f, _p) in LANGS.items()
-    ]
+    entries = [("", "English", "en")] + [(d, n, h) for d, (n, h, _r, _p) in LANGS.items()]
     links = []
-    for folder, name, code, flag in entries:
+    for folder, name, code in entries:
         if target == "home":
             if current:
                 href = f"../{folder}/" if folder else "../"
@@ -424,7 +426,7 @@ def _language_links(
                     href = ("../" if current == "" else "../../") + f"{folder}/docs/"
             else:
                 href = ("" if current == "" else "../../docs/") + f"{stem}.html"
-        links.append((folder, name, code, flag, href))
+        links.append((folder, name, code, href))
     return links
 
 
@@ -432,7 +434,7 @@ def language_row(current: str, target: str, stem: str = "") -> str:
     """The footer list of language links (full native names, one per language)."""
     label = CHROME[current or "en"][13]
     items = []
-    for folder, name, code, _flag, href in _language_links(current, target, stem):
+    for folder, name, code, href in _language_links(current, target, stem):
         marker = ' aria-current="true"' if folder == current else ""
         items.append(
             f'<li><a href="{href}" lang="{code}" hreflang="{code}"{marker}>{html.escape(name)}</a></li>'
@@ -441,18 +443,18 @@ def language_row(current: str, target: str, stem: str = "") -> str:
 
 
 def language_switch(current: str, target: str, stem: str = "") -> str:
-    """A CSS-only flag dropdown in the header to switch the current page's language."""
+    """A CSS-only dropdown in the header (a globe button) to switch the page's language.
+
+    Languages are listed by their native names, not flags: a flag stands for a country, and
+    Windows has no flag emoji, so they would show as letter pairs there."""
     label = CHROME[current or "en"][13]
-    links = _language_links(current, target, stem)
-    current_flag = next(flag for folder, _n, _c, flag, _h in links if folder == current)
     items = []
-    for folder, name, code, flag, href in links:
+    for folder, name, code, href in _language_links(current, target, stem):
         marker = ' aria-current="true"' if folder == current else ""
         items.append(
-            f'<li><a href="{href}" lang="{code}" hreflang="{code}"{marker}>'
-            f'<span aria-hidden="true">{flag}</span> {html.escape(name)}</a></li>'
+            f'<li><a href="{href}" lang="{code}" hreflang="{code}"{marker}>{html.escape(name)}</a></li>'
         )
-    summary = f'<span aria-hidden="true">{current_flag}</span><span class="sr-only">{html.escape(label)}</span>'
+    summary = f'{GLOBE_ICON}<span class="sr-only">{html.escape(label)}</span>'
     return (
         f'<details class="lang-switch"><summary>{summary}</summary>'
         f'<ul class="lang-switch-panel" aria-label="{html.escape(label)}">{"".join(items)}</ul></details>'
@@ -461,7 +463,7 @@ def language_switch(current: str, target: str, stem: str = "") -> str:
 
 def build_language(folder: str, md: MarkdownIt) -> list[Path]:
     """Build website/<folder>/docs/*.html from docs/<folder>/*.md."""
-    _, lang, rtl, _flag, _prefixes = LANGS[folder]
+    _, lang, rtl, _prefixes = LANGS[folder]
     chrome = CHROME[folder]
     out = ROOT / "website" / folder / "docs"
     out.mkdir(parents=True, exist_ok=True)
@@ -532,7 +534,7 @@ def render_page(md, text, stem, label, nav, chrome, lang, rtl, folder, source_ur
 
 def build_landing_pages() -> list[Path]:
     """Refresh the language links in the landing pages, between the <!--langs--> (footer list)
-    and <!--langswitch--> (header flag dropdown) markers."""
+    and <!--langswitch--> (header language menu) markers."""
     written = []
     for folder in ["", *LANGS]:
         path = (
@@ -569,7 +571,7 @@ def write_lang_script() -> Path:
     already reached by browsing (including picking one from the dropdown).
     """
     folder_alt = "|".join(re.escape(f) for f in LANGS)
-    prefixes = {"": ["en"], **{f: p for f, (_n, _h, _r, _fl, p) in LANGS.items()}}
+    prefixes = {"": ["en"], **{f: p for f, (_n, _h, _r, p) in LANGS.items()}}
     script = (
         TEMPLATE_JS.replace("__PREFIXES__", json.dumps(prefixes))
         .replace("__TRANSLATED__", json.dumps(TRANSLATED))
@@ -596,7 +598,7 @@ TEMPLATE_JS = """(function () {
     var docsRe = new RegExp("^(.*?)(?:/(" + FOLDERS + "))?/docs/(?:([a-z0-9-]+)\\\\.html)?$", "i");
     var m = path.match(docsRe);
     if (m) {
-      var stem = m[2] || "index";
+      var stem = m[3] || "index"; // m[2] is the language folder, if any
       if (folder && TRANSLATED.indexOf(stem) === -1) {
         return m[1] + "/" + folder + "/docs/";
       }
