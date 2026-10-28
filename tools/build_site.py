@@ -624,7 +624,8 @@ TEMPLATE_JS = """(function () {
   }
 
   try {
-    var path = location.pathname;
+    // One slash at a time: "//host/docs/" must never become a protocol-relative redirect.
+    var path = location.pathname.replace(/\\/{2,}/g, "/");
     var here = currentFolder(path);
     var stored = localStorage.getItem(KEY);
     if (stored === null) {

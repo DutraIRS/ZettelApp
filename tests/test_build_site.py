@@ -94,6 +94,9 @@ def test_lang_script_sends_a_first_visit_to_the_same_page_in_the_browser_languag
         f"{site}/docs/zotero.html"
     ]
     assert _first_visit(script, f"{site}/docs/faq.html", ["en-GB"]) == []  # already English
+    # A path starting with two slashes must not turn into a redirect to another site.
+    hostile = _first_visit(script, "//evil.example/docs/faq.html", ["de"])
+    assert hostile and not any(url.startswith("//") for url in hostile)
 
 
 def test_build_writes_every_page_with_no_broken_local_links():
