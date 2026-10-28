@@ -132,6 +132,7 @@ class StreamThread(QThread):
     chunk = Signal(str)
     failed = Signal(str)
     finished_ok = Signal()
+    cancelled = Signal()
 
     def __init__(self, make_stream: Callable, parent: QObject | None = None):
         super().__init__(parent)
@@ -150,10 +151,14 @@ class StreamThread(QThread):
                     break
                 self.chunk.emit(text)
         except Exception as exc:  # noqa: BLE001 - shown to the user
-            log.warning("Streaming failed: %s", exc.__class__.__name__)
-            self.failed.emit(str(exc) or exc.__class__.__name__)
-            return
+            if not self._cancel.is_set():
+                log.warning("Streaming failed: %s", exc.__class__.__name__)
+                self.failed.emit(str(exc) or exc.__class__.__name__)
+                return
         finally:
             if stream is not None and hasattr(stream, "close"):
                 stream.close()
-        self.finished_ok.emit()
+        if self._cancel.is_set():
+            self.cancelled.emit()
+        else:
+            self.finished_ok.emit()

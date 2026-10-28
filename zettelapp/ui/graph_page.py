@@ -83,12 +83,12 @@ class GraphPage(QWidget):
             self.scope_group.addButton(b, i)
             bar.addWidget(b)
         self.scope_group.button(0).setChecked(True)
-        self.depth = QSpinBox()
-        self.depth.setRange(1, 5)
-        self.depth.setValue(2)
-        self.depth.setPrefix("Depth ")
-        self.depth.setToolTip("Links away from the open note")
-        bar.addWidget(self.depth)
+        self.depth_spin = QSpinBox()
+        self.depth_spin.setRange(1, 5)
+        self.depth_spin.setValue(2)
+        self.depth_spin.setPrefix("Depth ")
+        self.depth_spin.setToolTip("Links away from the open note")
+        bar.addWidget(self.depth_spin)
         bar.addSpacing(12)
         self.dim_group = QButtonGroup(self)
         for i, text in enumerate(("2D", "3D")):
@@ -199,7 +199,7 @@ class GraphPage(QWidget):
 
         self.scope_group.idClicked.connect(lambda _: self.refresh())
         self.dim_group.idClicked.connect(self._dims_changed)
-        self.depth.valueChanged.connect(
+        self.depth_spin.valueChanged.connect(
             lambda _: self.refresh() if self.scope_group.checkedId() == 1 else None
         )
         self.color_by.currentIndexChanged.connect(lambda _: self.refresh())
@@ -264,7 +264,9 @@ class GraphPage(QWidget):
         links = [l for l in vault.all_links() if l.type not in self.hidden_types]
         local = self.scope_group.checkedId() == 1 and self.focus_id in notes
         ids = (
-            sorted(subgraph([self.focus_id], links, self.depth.value())) if local else sorted(notes)
+            sorted(subgraph([self.focus_id], links, self.depth_spin.value()))
+            if local
+            else sorted(notes)
         )
         id_set = set(ids)
         links = [l for l in links if l.src in id_set and l.dst in id_set]
@@ -306,6 +308,8 @@ class GraphPage(QWidget):
             self.k.value(),
             tuple(ids),
             tuple(sorted(self.hidden_types)),
+            vault.generation,
+            tuple((link.src, link.dst, link.type) for link in links),
         )
         cached_clusters = self._clusters.get(cluster_key)
         cached_layout = self._layouts.get(layout_key)
@@ -314,6 +318,7 @@ class GraphPage(QWidget):
             group_of: dict[str, int | None] = {}
             names: list[str] = []
             quality = ""
+            cluster_result = None
             if mode == "tag":
                 top = [t for t, _ in tag_counts.most_common()]
                 rank = {t: r for r, t in enumerate(top)}
@@ -323,25 +328,26 @@ class GraphPage(QWidget):
                 names = [f"#{t}" for t in top]
                 quality = "Each note takes the colour of its most common tag."
             elif mode in ("kmeans", "hierarchical"):
-                result = cached_clusters or cluster_notes(
+                cluster_result = cached_clusters or cluster_notes(
                     note_payload, mode, self.k.value() or None
                 )
-                if result is not None:
-                    label_of = result.label_of()
+                if cluster_result is not None:
+                    label_of = cluster_result.label_of()
                     group_of = {i: label_of.get(i) for i in ids}
                     names = [
-                        f"Cluster {c + 1}: {', '.join(result.keywords.get(c, [])[:3])}"
-                        for c in range(result.k)
+                        f"Cluster {c + 1}: {', '.join(cluster_result.keywords.get(c, [])[:3])}"
+                        for c in range(cluster_result.k)
                     ]
                     method = (
-                        "k-means" if result.method == "kmeans" else "average-linkage hierarchical"
+                        "k-means"
+                        if cluster_result.method == "kmeans"
+                        else "average-linkage hierarchical"
                     )
-                    quality = f"{result.k} clusters by {method} clustering of LSA embeddings."
-                    if result.silhouette is not None:
-                        quality += (
-                            f" Silhouette score {result.silhouette:.2f} (higher is better, max 1)."
-                        )
-                self._clusters[cluster_key] = result
+                    quality = (
+                        f"{cluster_result.k} clusters by {method} clustering of LSA embeddings."
+                    )
+                    if cluster_result.silhouette is not None:
+                        quality += f" Silhouette score {cluster_result.silhouette:.2f} (higher is better, max 1)."
             positions = cached_layout or force_layout(
                 ids,
                 [(l.src, l.dst) for l in links],
@@ -351,12 +357,14 @@ class GraphPage(QWidget):
                 else None,
                 group_strength=0.5 if grouping else 0.0,
             )
-            return group_of, names, quality, positions
+            return group_of, names, quality, positions, cluster_result
 
         def done(result) -> None:
             if request != self._request:
                 return
-            group_of, names, quality, positions = result
+            group_of, names, quality, positions, cluster_result = result
+            if mode in ("kmeans", "hierarchical"):
+                self._clusters[cluster_key] = cluster_result
             self._layouts[layout_key] = positions
             data.group_of = group_of
             data.group_names = names

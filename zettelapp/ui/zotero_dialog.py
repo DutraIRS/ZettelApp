@@ -148,9 +148,24 @@ class ZoteroDialog(QDialog):
             return
         self.result_item = current.data(Qt.ItemDataRole.UserRole)
         self.action = action
-        if action == "note":
-            try:  # link the PDF too when there is one; failure is not fatal
-                self.pdf_key = self.client.pdf_attachment(self.result_item.key)
-            except Exception:  # noqa: BLE001
-                self.pdf_key = None
-        self.accept()
+        if action != "note":
+            self.accept()
+            return
+
+        self._enable(False)
+        self.state.setText("Finding a PDF attachment…")
+
+        def done(pdf_key: str | None) -> None:
+            self.pdf_key = pdf_key
+            self.accept()
+
+        def failed(_message: str) -> None:
+            self.pdf_key = None
+            self.accept()
+
+        run_task(
+            self.client.pdf_attachment,
+            self.result_item.key,
+            on_done=done,
+            on_error=failed,
+        )

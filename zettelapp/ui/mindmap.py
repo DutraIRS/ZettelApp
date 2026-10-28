@@ -118,7 +118,7 @@ class MindMapView(QGraphicsView):
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.root: dict | None = None
         self.selected_id: str | None = None
-        self.items: dict[str, _NodeItem] = {}
+        self.node_items: dict[str, _NodeItem] = {}
         self._editor: QLineEdit | None = None
 
     # --- data ---------------------------------------------------------------
@@ -149,7 +149,7 @@ class MindMapView(QGraphicsView):
     def rebuild(self) -> None:
         scene = self.scene()
         scene.clear()
-        self.items.clear()
+        self.node_items.clear()
         t = theme.current()
         self.setBackgroundBrush(t.q("surface"))
         if self.root is None:
@@ -220,7 +220,7 @@ class MindMapView(QGraphicsView):
                 draw(child, depth + 1)
             item = _NodeItem(self, node, depth, branch_of.get(node["id"], 0), rect)
             scene.addItem(item)
-            self.items[node["id"]] = item
+            self.node_items[node["id"]] = item
 
         draw(self.root, 0)
         scene.setSceneRect(scene.itemsBoundingRect().adjusted(-40, -40, 40, 40))
@@ -294,7 +294,7 @@ class MindMapView(QGraphicsView):
             self._emit()
 
     def edit(self, node_id: str) -> None:
-        item = self.items.get(node_id)
+        item = self.node_items.get(node_id)
         if item is None:
             return
         self.select(node_id)

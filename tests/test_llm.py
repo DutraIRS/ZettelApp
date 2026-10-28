@@ -21,6 +21,7 @@ from zettelapp.core.llm import (
     validate_base_url,
 )
 from zettelapp.core.secrets import delete_secret, get_secret, set_secret
+from zettelapp.ui.workers import StreamThread
 
 NOTE = ContextNote(
     "20261027120000", "Spaced repetition", ["learning"], "Review at increasing intervals."
@@ -201,6 +202,24 @@ def test_question_validation():
         list(stream_answer(LLMSettings(), "k", "x" * 9000, []))
     with pytest.raises(LLMError):
         list(stream_answer(LLMSettings(), None, "q", []))
+
+
+def test_cancelled_stream_has_a_distinct_terminal_state():
+    events = []
+
+    def stream():
+        yield "first"
+        thread.cancel()
+        yield "second"
+
+    thread = StreamThread(stream)
+    thread.chunk.connect(lambda text: events.append(text))
+    thread.finished_ok.connect(lambda: events.append("complete"))
+    thread.cancelled.connect(lambda: events.append("cancelled"))
+
+    thread.run()
+
+    assert events == ["first", "cancelled"]
 
 
 class FakeAnthropic:

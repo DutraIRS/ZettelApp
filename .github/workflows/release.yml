@@ -14,7 +14,7 @@ jobs:
   release:
     runs-on: windows-latest
     env:
-      # Optional code signing: add these repository secrets to sign the executables and installer.
+      # Official releases must be signed unless an unsigned release is explicitly approved.
       SIGN_CERT: ${{ secrets.WINDOWS_SIGNING_CERT_BASE64 }}
       ZETTELAPP_SIGN_PASSWORD: ${{ secrets.WINDOWS_SIGNING_CERT_PASSWORD }}
     steps:
@@ -34,7 +34,15 @@ jobs:
       - name: Run tests
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m pytest -q
+        run: |
+          python -m ruff check .
+          python -m ruff format --check .
+          python -m pytest -q --cov --cov-report=term-missing
+          python -m pip_audit --progress-spinner off
+      - name: Require signing or explicit unsigned approval
+        if: env.SIGN_CERT == '' && vars.ALLOW_UNSIGNED_RELEASE != 'true'
+        shell: pwsh
+        run: throw "Signing certificate is absent. Set ALLOW_UNSIGNED_RELEASE=true only for an explicitly approved unsigned release."
       - name: Install Inno Setup
         run: choco install innosetup --no-progress -y
       - name: Prepare signing certificate
@@ -47,6 +55,14 @@ jobs:
       - name: Build
         shell: pwsh
         run: ./packaging/build.ps1
+      - name: Verify Authenticode signatures
+        if: env.SIGN_CERT != ''
+        shell: pwsh
+        run: |
+          foreach ($path in @("dist/ZettelApp/ZettelApp.exe", "dist/ZettelApp/zettelapp-mcp.exe", "dist/ZettelApp-Setup.exe")) {
+            $signature = Get-AuthenticodeSignature $path
+            if ($signature.Status -ne "Valid") { throw "$path signature is $($signature.Status)" }
+          }
       - name: Publish the release
         shell: pwsh
         env:

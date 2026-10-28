@@ -108,3 +108,45 @@ def test_mindmap_editor_blocks_children_beyond_the_storage_limit(window):
     view.add_child()
 
     assert list(mindmap_nodes(view.root)) == before
+
+
+@pytest.mark.parametrize("servers", [None, [], "invalid"])
+def test_mcp_config_rejects_invalid_server_collections(servers):
+    from zettelapp.ui.settings_dialog import _merge_mcp_entry
+
+    config = {"mcpServers": servers}
+    with pytest.raises(ValueError, match="mcpServers"):
+        _merge_mcp_entry(config, {"command": "zettelapp-mcp"})
+
+    assert config == {"mcpServers": servers}
+
+
+def test_zotero_pdf_lookup_is_dispatched_off_the_gui_thread(window, monkeypatch):
+    from PySide6.QtCore import Qt
+    from PySide6.QtWidgets import QListWidgetItem
+
+    from zettelapp.core.zotero import ZoteroItem
+    from zettelapp.ui import zotero_dialog
+
+    tasks = []
+    monkeypatch.setattr(
+        zotero_dialog,
+        "run_task",
+        lambda fn, *args, **kwargs: tasks.append((fn, args, kwargs)),
+    )
+    dialog = zotero_dialog.ZoteroDialog(window)
+    item = QListWidgetItem("Paper")
+    item.setData(Qt.ItemDataRole.UserRole, ZoteroItem("ABCD1234", "Paper"))
+    dialog.results.addItem(item)
+    dialog.results.setCurrentItem(item)
+    accepted = []
+    monkeypatch.setattr(dialog, "accept", lambda: accepted.append(True))
+
+    dialog._finish("note")
+
+    assert len(tasks) == 2
+    assert tasks[-1][0] == dialog.client.pdf_attachment
+    assert accepted == []
+    tasks[-1][2]["on_done"]("PDF12345")
+    assert dialog.pdf_key == "PDF12345"
+    assert accepted == [True]

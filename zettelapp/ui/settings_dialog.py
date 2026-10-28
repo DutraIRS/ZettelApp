@@ -51,6 +51,17 @@ from zettelapp.ui import icons
 from zettelapp.ui.widgets import label, link_button
 from zettelapp.ui.workers import run_task
 
+
+def _merge_mcp_entry(config: dict, entry: dict) -> dict:
+    """Return a copy with the ZettelApp server after validating the nested shape."""
+    servers = config.get("mcpServers", {})
+    if not isinstance(servers, dict):
+        raise ValueError("The existing 'mcpServers' configuration is not a JSON object.")
+    merged = dict(config)
+    merged["mcpServers"] = {**servers, "zettelapp": entry}
+    return merged
+
+
 PAGES = [
     "General",
     "Link suggestions",
@@ -500,9 +511,9 @@ class OptionsDialog(QDialog):
             config = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
             if not isinstance(config, dict):
                 raise ValueError("The existing configuration is not a JSON object.")
+            config = _merge_mcp_entry(config, self._mcp_entry())
             if path.exists():
                 shutil.copy2(path, path.with_suffix(".json.bak"))
-            config.setdefault("mcpServers", {})["zettelapp"] = self._mcp_entry()
             path.parent.mkdir(parents=True, exist_ok=True)
             tmp = path.with_suffix(".json.tmp")
             tmp.write_text(json.dumps(config, indent=2), encoding="utf-8")

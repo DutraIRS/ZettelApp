@@ -46,7 +46,7 @@ class AskPage(QWidget):
         super().__init__()
         self.window = window
         self.setObjectName("Page")
-        self.thread: StreamThread | None = None
+        self.stream_thread: StreamThread | None = None
         self.answer_text = ""
         self.question_text = ""
         self.sources: list = []
@@ -169,7 +169,7 @@ class AskPage(QWidget):
     def ask(self) -> None:
         vault = self.window.vault
         question = self.question.toPlainText().strip()
-        if vault is None or not question or self.thread is not None:
+        if vault is None or not question or self.stream_thread is not None:
             return
         cfg = current_llm_settings()
         info = cfg.info
@@ -230,8 +230,9 @@ class AskPage(QWidget):
         thread.chunk.connect(self._chunk)
         thread.failed.connect(self._failed)
         thread.finished_ok.connect(self._done)
+        thread.cancelled.connect(self._cancelled)
         thread.finished.connect(self._cleanup)
-        self.thread = thread
+        self.stream_thread = thread
         thread.start()
 
     def _chunk(self, text: str) -> None:
@@ -252,13 +253,19 @@ class AskPage(QWidget):
         self.answer.show_markdown(f"**Could not get an answer.**\n\n{message}")
         self.status.emit("")
 
+    def _cancelled(self) -> None:
+        self._render()
+        self.status.emit("Stopped.")
+        self.copy_button.setEnabled(bool(self.answer_text))
+        self.save_button.setEnabled(bool(self.answer_text))
+
     def _cleanup(self) -> None:
-        self.thread = None
+        self.stream_thread = None
         self._set_idle(True)
 
     def stop(self) -> None:
-        if self.thread is not None:
-            self.thread.cancel()
+        if self.stream_thread is not None:
+            self.stream_thread.cancel()
             self.status.emit("Stopped.")
 
     def copy_answer(self) -> None:

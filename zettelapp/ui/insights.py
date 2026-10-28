@@ -284,6 +284,7 @@ class InsightsPage(QWidget):
         super().__init__()
         self.window = window
         self.setObjectName("Page")
+        self._request = 0
         outer = QVBoxLayout(self)
         outer.setContentsMargins(0, 0, 0, 0)
         scroll = QScrollArea()
@@ -348,6 +349,8 @@ class InsightsPage(QWidget):
         self.refresh()
 
     def refresh(self) -> None:
+        self._request += 1
+        request = self._request
         vault = self.window.vault
         if vault is None:
             return
@@ -423,6 +426,8 @@ class InsightsPage(QWidget):
         self.hubs_card.set_table(["Note", "Links"], [(titles.get(i, i), d) for i, d in hubs])
 
         def done(result) -> None:
+            if request != self._request:
+                return
             if result is None:
                 self.clusters_chart.set_rows([])
                 return

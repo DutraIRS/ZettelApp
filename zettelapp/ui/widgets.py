@@ -305,20 +305,20 @@ class ScopePicker(QWidget):
         if allow_current:
             self.mode.addItem("Current note and linked notes", "subgraph")
         self.mode.addItem("Notes with tag", "tag")
-        self.depth = QSpinBox()
-        self.depth.setRange(1, 6)
-        self.depth.setValue(2)
-        self.depth.setPrefix("Depth ")
-        self.depth.setToolTip("How many links away from the current note to include")
+        self.depth_spin = QSpinBox()
+        self.depth_spin.setRange(1, 6)
+        self.depth_spin.setValue(2)
+        self.depth_spin.setPrefix("Depth ")
+        self.depth_spin.setToolTip("How many links away from the current note to include")
         self.tag = QComboBox()
         self.tag.setAccessibleName("Tag")
         self.tag.setMinimumWidth(140)
         row.addWidget(self.mode)
-        row.addWidget(self.depth)
+        row.addWidget(self.depth_spin)
         row.addWidget(self.tag)
         row.addStretch(1)
         self.mode.currentIndexChanged.connect(self._update)
-        self.depth.valueChanged.connect(self.changed)
+        self.depth_spin.valueChanged.connect(self.changed)
         self.tag.currentIndexChanged.connect(self.changed)
         self._update()
 
@@ -339,12 +339,12 @@ class ScopePicker(QWidget):
 
     def _update(self) -> None:
         mode = self.mode.currentData()
-        self.depth.setVisible(mode == "subgraph")
+        self.depth_spin.setVisible(mode == "subgraph")
         self.tag.setVisible(mode == "tag")
         self.changed.emit()
 
     def value(self) -> tuple[str, int, str | None]:
-        return self.mode.currentData(), self.depth.value(), self.tag.currentData()
+        return self.mode.currentData(), self.depth_spin.value(), self.tag.currentData()
 
 
 def hline() -> QFrame:
