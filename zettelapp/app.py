@@ -9,6 +9,7 @@ import json
 import logging
 import os
 import pkgutil
+import shutil
 import sys
 import traceback
 from logging.handlers import RotatingFileHandler
@@ -132,6 +133,21 @@ def _self_test(argv: list[str]) -> int:
     return 0
 
 
+def remove_user_data() -> int:
+    """Run by the uninstaller when the user ticks "Also delete my ZettelApp settings…":
+    removes settings, saved API keys, logs, cache and automatic backups. Notes are never
+    touched: vaults live in folders the user chose (Documents\\ZettelApp by default)."""
+    from zettelapp.core import secrets
+    from zettelapp.paths import local_data_dir
+
+    store = settings.store()
+    store.clear()
+    store.sync()
+    secrets.delete_all()
+    shutil.rmtree(local_data_dir(), ignore_errors=True)
+    return 0
+
+
 def _option(argv: list[str], name: str) -> str | None:
     if name in argv:
         index = argv.index(name)
@@ -144,6 +160,8 @@ def main(argv: list[str] | None = None) -> int:
     argv = list(sys.argv if argv is None else argv)
     if "--self-test" in argv:
         return _self_test(argv)
+    if "--remove-user-data" in argv:  # no window, no log file: the uninstaller is waiting
+        return remove_user_data()
     vault_arg = _option(argv, "--vault")
     winintegration.set_app_user_model_id()
     configure_logging()

@@ -1,11 +1,12 @@
-; Inno Setup 6 script for the ZettelApp installer.
+﻿; Inno Setup 6 script for the ZettelApp installer.
 ; Build with packaging/build.ps1, or: ISCC.exe /DAppVersion=1.0.0 packaging\installer.iss
 ;
 ; - Installs per user by default (no administrator rights; %LOCALAPPDATA%\Programs\ZettelApp),
 ;   with the standard option to install for all users instead.
 ; - Shows a language picker preselected with the Windows display language and stores the
 ;   choice in HKCU\Software\ZettelApp\ZettelApp\ui\language for the app.
-; - User data (vaults in Documents, settings, backups) is never removed on uninstall.
+; - Notes (vault folders such as Documents\ZettelApp) are never removed on uninstall. The
+;   uninstaller offers, unticked, to delete settings, saved API keys, logs, cache and backups.
 
 #ifndef AppVersion
   #define AppVersion "1.0.0"
@@ -83,6 +84,39 @@ french.Integration=Intégration :
 german.Integration=Integration:
 italian.Integration=Integrazione:
 dutch.Integration=Integratie:
+; The uninstaller's "delete my data" question (other languages use the English text).
+DeleteDataTitle=Uninstall ZettelApp
+brazilianportuguese.DeleteDataTitle=Desinstalar o ZettelApp
+portuguese.DeleteDataTitle=Desinstalar o ZettelApp
+spanish.DeleteDataTitle=Desinstalar ZettelApp
+french.DeleteDataTitle=Désinstaller ZettelApp
+german.DeleteDataTitle=ZettelApp deinstallieren
+italian.DeleteDataTitle=Disinstalla ZettelApp
+dutch.DeleteDataTitle=ZettelApp verwijderen
+DeleteDataCheck=Also &delete my ZettelApp settings and data
+brazilianportuguese.DeleteDataCheck=&Apagar também minhas configurações e dados do ZettelApp
+portuguese.DeleteDataCheck=&Eliminar também as minhas definições e dados do ZettelApp
+spanish.DeleteDataCheck=&Eliminar también mi configuración y datos de ZettelApp
+french.DeleteDataCheck=&Supprimer aussi mes paramètres et données ZettelApp
+german.DeleteDataCheck=Auch meine ZettelApp-Einstellungen und -Daten &löschen
+italian.DeleteDataCheck=&Elimina anche le mie impostazioni e i miei dati di ZettelApp
+dutch.DeleteDataCheck=Ook mijn ZettelApp-instellingen en -gegevens &verwijderen
+DeleteDataNote=Removes settings, saved API keys, logs and automatic backups. Your notes are never deleted: vault folders such as Documents\ZettelApp stay where they are.
+brazilianportuguese.DeleteDataNote=Remove configurações, chaves de API salvas, registros e backups automáticos. Suas notas nunca são apagadas: pastas de cofre como Documentos\ZettelApp continuam onde estão.
+portuguese.DeleteDataNote=Remove definições, chaves de API guardadas, registos e cópias de segurança automáticas. As suas notas nunca são eliminadas: pastas de cofre como Documentos\ZettelApp ficam onde estão.
+spanish.DeleteDataNote=Elimina la configuración, las claves de API guardadas, los registros y las copias de seguridad automáticas. Tus notas nunca se eliminan: las carpetas de bóveda como Documentos\ZettelApp se quedan donde están.
+french.DeleteDataNote=Supprime les paramètres, les clés d'API enregistrées, les journaux et les sauvegardes automatiques. Vos notes ne sont jamais supprimées : les dossiers de coffre comme Documents\ZettelApp restent en place.
+german.DeleteDataNote=Entfernt Einstellungen, gespeicherte API-Schlüssel, Protokolle und automatische Sicherungen. Ihre Notizen werden nie gelöscht: Tresorordner wie Dokumente\ZettelApp bleiben erhalten.
+italian.DeleteDataNote=Rimuove impostazioni, chiavi API salvate, log e backup automatici. Le tue note non vengono mai eliminate: le cartelle dei vault come Documenti\ZettelApp restano dove sono.
+dutch.DeleteDataNote=Verwijdert instellingen, opgeslagen API-sleutels, logboeken en automatische back-ups. Je notities worden nooit verwijderd: kluismappen zoals Documenten\ZettelApp blijven staan.
+DeleteDataContinue=&Continue
+brazilianportuguese.DeleteDataContinue=&Continuar
+portuguese.DeleteDataContinue=&Continuar
+spanish.DeleteDataContinue=&Continuar
+french.DeleteDataContinue=&Continuer
+german.DeleteDataContinue=&Weiter
+italian.DeleteDataContinue=&Continua
+dutch.DeleteDataContinue=&Doorgaan
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
@@ -108,3 +142,94 @@ Root: HKCU; Subkey: "Software\ZettelApp\ZettelApp\ui"; ValueType: string; ValueN
 
 [Run]
 Filename: "{app}\ZettelApp.exe"; Description: "{cm:LaunchProgram,ZettelApp}"; Flags: nowait postinstall skipifsilent
+
+[Code]
+var
+  DeleteUserData: Boolean;
+
+{ Asked after the user confirmed the uninstall. Unticked by default; closing the window
+  with its X button keeps the data too. }
+function AskToDeleteUserData(): Boolean;
+var
+  Form: TSetupForm;
+  Check: TNewCheckBox;
+  Note: TNewStaticText;
+  ContinueButton: TNewButton;
+begin
+  Form := CreateCustomForm(ScaleX(460), ScaleY(150), False, True);
+  try
+    Form.Caption := CustomMessage('DeleteDataTitle');
+
+    Check := TNewCheckBox.Create(Form);
+    Check.Parent := Form;
+    Check.Left := ScaleX(16);
+    Check.Top := ScaleY(16);
+    Check.Width := Form.ClientWidth - ScaleX(32);
+    Check.Height := ScaleY(17);
+    Check.Caption := CustomMessage('DeleteDataCheck');
+    Check.Checked := False;
+
+    Note := TNewStaticText.Create(Form);
+    Note.Parent := Form;
+    Note.AutoSize := False;
+    Note.WordWrap := True;
+    Note.Left := ScaleX(34);
+    Note.Top := Check.Top + Check.Height + ScaleY(6);
+    Note.Width := Form.ClientWidth - Note.Left - ScaleX(16);
+    Note.Height := ScaleY(52);
+    Note.Caption := CustomMessage('DeleteDataNote');
+
+    ContinueButton := TNewButton.Create(Form);
+    ContinueButton.Parent := Form;
+    ContinueButton.Caption := CustomMessage('DeleteDataContinue');
+    ContinueButton.Width := Form.CalculateButtonWidth([ContinueButton.Caption]);
+    ContinueButton.Height := ScaleY(23);
+    ContinueButton.Left := Form.ClientWidth - ContinueButton.Width - ScaleX(16);
+    ContinueButton.Top := Form.ClientHeight - ContinueButton.Height - ScaleY(12);
+    ContinueButton.ModalResult := mrOk;
+    ContinueButton.Default := True;
+
+    Form.ActiveControl := ContinueButton;
+    Form.FlipAndCenterIfNeeded(True, UninstallProgressForm, False);
+    Result := (Form.ShowModal() = mrOk) and Check.Checked;
+  finally
+    Form.Free();
+  end;
+end;
+
+{ ZettelApp can register zettelapp:// links itself (Options > Windows integration); remove
+  that registration when it points at this installation, since the program is gone. }
+procedure RemoveOwnLinkHandler();
+var
+  Command: String;
+begin
+  if RegQueryStringValue(HKCU, 'Software\Classes\zettelapp\shell\open\command', '', Command) and
+     (Pos(Lowercase(ExpandConstant('{app}')), Lowercase(Command)) > 0) then
+    RegDeleteKeyIncludingSubkeys(HKCU, 'Software\Classes\zettelapp');
+end;
+
+procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
+var
+  ResultCode: Integer;
+begin
+  case CurUninstallStep of
+    usUninstall:
+      begin
+        DeleteUserData := (not UninstallSilent()) and AskToDeleteUserData();
+        if DeleteUserData then
+          { Before the files go: the app also removes its API keys from Credential Manager. }
+          Exec(ExpandConstant('{app}\ZettelApp.exe'), '--remove-user-data', '', SW_HIDE,
+            ewWaitUntilTerminated, ResultCode);
+      end;
+    usPostUninstall:
+      begin
+        RemoveOwnLinkHandler();
+        if DeleteUserData then
+        begin
+          { Whatever the app could not remove itself. Notes are never touched. }
+          DelTree(ExpandConstant('{localappdata}\ZettelApp'), True, True, True);
+          RegDeleteKeyIncludingSubkeys(HKCU, 'Software\ZettelApp');
+        end;
+      end;
+  end;
+end;

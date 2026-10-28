@@ -59,6 +59,14 @@ if sys.platform == "win32":
     _CredFree = _advapi32.CredFree
     _CredFree.argtypes = [ctypes.c_void_p]
     _CredFree.restype = None
+    _CredEnumerate = _advapi32.CredEnumerateW
+    _CredEnumerate.argtypes = [
+        wintypes.LPCWSTR,
+        wintypes.DWORD,
+        ctypes.POINTER(wintypes.DWORD),
+        ctypes.POINTER(ctypes.POINTER(_PCREDENTIAL)),
+    ]
+    _CredEnumerate.restype = wintypes.BOOL
 
 
 def secrets_available() -> bool:
@@ -127,3 +135,27 @@ def delete_secret(name: str) -> None:
         error = ctypes.get_last_error()
         if error != ERROR_NOT_FOUND:
             raise OSError(error, "Could not remove from Windows Credential Manager.")
+
+
+def delete_all() -> int:
+    """Remove every ZettelApp secret (when the user deletes their data). Returns how many."""
+    if not secrets_available():
+        doomed = [t for t in _memory if t.startswith(PREFIX)]
+        for target in doomed:
+            del _memory[target]
+        return len(doomed)
+    count = wintypes.DWORD()
+    found = ctypes.POINTER(_PCREDENTIAL)()
+    if not _CredEnumerate(PREFIX + "*", 0, ctypes.byref(count), ctypes.byref(found)):
+        return 0  # none stored (ERROR_NOT_FOUND)
+    try:
+        targets = [
+            found[i].contents.TargetName
+            for i in range(count.value)
+            if found[i].contents.Type == CRED_TYPE_GENERIC
+        ]
+    finally:
+        _CredFree(found)
+    return sum(
+        1 for t in targets if t and t.startswith(PREFIX) and _CredDelete(t, CRED_TYPE_GENERIC, 0)
+    )
