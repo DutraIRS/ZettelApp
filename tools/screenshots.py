@@ -73,7 +73,10 @@ def main() -> None:
 
         window.show_page(1)
         settle(app, 600)
+        window.graph.view2d.select(ids["Spaced repetition"])  # shows its typed links, labelled
+        settle(app, 300)
         window.grab().save(str(out / f"graph-{mode}.png"))
+        window.graph.view2d.select(None)
         window.graph.color_by.setCurrentIndex(1)  # k-means clusters
         settle(app, 600)
         window.grab().save(str(out / f"graph-clusters-{mode}.png"))
