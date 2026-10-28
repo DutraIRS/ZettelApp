@@ -7,12 +7,13 @@ handler. Everything here fails closed: unknown input is rejected.
 
 from __future__ import annotations
 
+import ntpath
 import re
 import unicodedata
 import zipfile
 from pathlib import Path, PurePosixPath
 from typing import TypeGuard
-from urllib.parse import urlsplit
+from urllib.parse import quote, unquote, urlsplit
 
 from zettelapp import URL_SCHEME
 
@@ -78,7 +79,44 @@ def is_zotero_url(url: object) -> bool:
 
 def is_openable_url(url: object) -> bool:
     """Links ZettelApp will hand to Windows: web pages, e-mail and Zotero items."""
-    return isinstance(url, str) and is_safe_web_url(url) or is_zotero_url(url)
+    return isinstance(url, str) and (is_safe_web_url(url) or is_zotero_url(url))
+
+
+_DRIVE_PATH_RE = re.compile(r"^[A-Za-z]:[\\/]")
+
+
+def local_file_path(target: object) -> str | None:
+    """The Windows path a file link points to (file:///C:/… or C:\\…), or None.
+
+    Only absolute paths on a local drive letter are accepted. Network paths
+    (\\\\server\\share, file://server/…) and device paths (\\\\?\\…) are refused before
+    anything touches the disk: just looking up a network path makes Windows offer the
+    user's credentials to that server, so a crafted note could otherwise leak them.
+    """
+    if not isinstance(target, str) or len(target) > MAX_URL_LENGTH:
+        return None
+    text = target.strip()
+    if text[:5].lower() == "file:":
+        parts = urlsplit(text)
+        if parts.query or parts.fragment:
+            return None
+        if re.fullmatch(r"[A-Za-z]:", parts.netloc):  # file://C:/… (two slashes)
+            text = parts.netloc + unquote(parts.path)
+        elif parts.netloc.lower() in ("", "localhost"):
+            text = unquote(parts.path)
+            if re.match(r"^/[A-Za-z]:", text):
+                text = text[1:]
+        else:
+            return None
+    if not _DRIVE_PATH_RE.match(text) or _CONTROL_CHARS.search(text):
+        return None
+    path = ntpath.normpath(text)  # a string operation: nothing is looked up
+    return path if _DRIVE_PATH_RE.match(path) else None
+
+
+def file_url(path: str) -> str:
+    """The file:/// URL of a local Windows path, e.g. file:///C:/My%20Files/report.pdf."""
+    return "file:///" + quote(path.replace("\\", "/"), safe="/:")
 
 
 def normalize_source_url(text: str) -> str | None:

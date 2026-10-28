@@ -35,7 +35,12 @@ from zettelapp import (
 from zettelapp.core.export import export as run_export
 from zettelapp.core.graph import subgraph
 from zettelapp.core.importer import import_path
-from zettelapp.core.security import UnsafeInputError, is_valid_note_id, safe_filename
+from zettelapp.core.security import (
+    UnsafeInputError,
+    is_valid_note_id,
+    local_file_path,
+    safe_filename,
+)
 from zettelapp.core.storage import Vault, VaultError
 from zettelapp.core.suggest import FEATURES, NoteData
 from zettelapp.core.updates import available_update
@@ -351,6 +356,7 @@ class MainWindow(QMainWindow):
         i = bar.addMenu("&Insert")
         self._action(i, "&Link to Note…", self.link_note_inline, "Ctrl+K", "relationship")
         self._action(i, "&Web Link…", self.editor.insert_web_link, None, "globe")
+        self._action(i, "Link to a &File…", self.editor.insert_file_link, None, "folder")
         self._action(i, "&Image…", self.editor.insert_image, "Ctrl+Shift+I", "image")
         self._action(i, "&Zotero Reference…", self.zotero_reference, None, "library")
         self._action(i, "&Mind Map", self.editor.show_mindmap, None, "mindmap")
@@ -626,7 +632,23 @@ class MainWindow(QMainWindow):
             note = vault.get_note(note_id)
             return note.display_title if note else note_id
 
-        return NoteRenderer(vault.resolve_title, title_of, link_types=vault.link_type_map())
+        return NoteRenderer(
+            vault.resolve_title, title_of, link_types=vault.link_type_map(), allow_file_links=True
+        )
+
+    def reveal_file(self, path: str) -> None:
+        """Show a linked file in File Explorer, selected. The file is never opened or run."""
+        local = local_file_path(path)  # network paths are refused before any disk access
+        if local is None:
+            return
+        target = Path(local)
+        if target.exists():
+            winintegration.reveal_in_explorer(target)
+        elif target.parent.is_dir():
+            winintegration.reveal_in_explorer(target.parent)
+            self.statusBar().showMessage(f"{target.name} is no longer in that folder.", 6000)
+        else:
+            self.statusBar().showMessage(f"File not found: {local}", 6000)
 
     def current_note_id(self) -> str | None:
         return self.editor.note.id if self.editor.note else None

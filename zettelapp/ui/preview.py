@@ -16,7 +16,12 @@ from zettelapp.core.render import (
     NoteRenderer,
     new_note_title,
 )
-from zettelapp.core.security import is_openable_url, is_valid_asset_name, is_valid_note_id
+from zettelapp.core.security import (
+    is_openable_url,
+    is_valid_asset_name,
+    is_valid_note_id,
+    local_file_path,
+)
 from zettelapp.ui import theme
 
 
@@ -30,6 +35,7 @@ h3, h4, h5, h6 {{ font-size: 12pt; font-weight: 600; margin: 12px 0 4px 0; }}
 p {{ margin: 0 0 9px 0; line-height: 150%; }}
 a {{ color: {t.accent}; text-decoration: none; }}
 a.new-note {{ color: {t.text_muted}; text-decoration: underline; }}
+a.file {{ color: {t.accent}; text-decoration: underline; }}
 a.broken {{ color: {t.text_muted}; }}
 code {{ font-family: 'Cascadia Code', Consolas, monospace; background-color: {t.window}; }}
 pre {{ font-family: 'Cascadia Code', Consolas, monospace; background-color: {t.window}; padding: 8px; }}
@@ -43,6 +49,7 @@ td, th {{ padding: 3px 8px; border: 1px solid {t.border}; }}
 class NotePreview(QTextBrowser):
     noteRequested = Signal(str)
     newNoteRequested = Signal(str)
+    fileRequested = Signal(str)  # a local path to show in File Explorer
     hovered = Signal(str)
 
     def __init__(self, asset_path: Callable[[str], Path | None], parent=None):
@@ -53,7 +60,7 @@ class NotePreview(QTextBrowser):
         self.setOpenLinks(False)
         self.setOpenExternalLinks(False)
         self.anchorClicked.connect(self._on_anchor)
-        self.highlighted.connect(lambda url: self.hovered.emit(url.toString()))
+        self.highlighted.connect(self._on_hover)
         self.document().setDocumentMargin(4)
 
     def set_renderer(self, renderer: NoteRenderer) -> None:
@@ -83,9 +90,17 @@ class NotePreview(QTextBrowser):
                     return image
         return None
 
+    def _on_hover(self, url: QUrl) -> None:
+        href = url.toString()
+        path = local_file_path(href)
+        self.hovered.emit(f"Show in File Explorer: {path}" if path else href)
+
     def _on_anchor(self, url: QUrl) -> None:
         href = url.toString()
-        if href.startswith(NOTE_SCHEME) and is_valid_note_id(href[len(NOTE_SCHEME) :]):
+        path = local_file_path(href)
+        if path:  # shown in File Explorer, never opened or run
+            self.fileRequested.emit(path)
+        elif href.startswith(NOTE_SCHEME) and is_valid_note_id(href[len(NOTE_SCHEME) :]):
             self.noteRequested.emit(href[len(NOTE_SCHEME) :])
         elif href.startswith(NEW_NOTE_SCHEME):
             title = new_note_title(href)

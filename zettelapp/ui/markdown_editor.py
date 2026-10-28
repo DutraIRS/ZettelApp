@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import ntpath
 import re
 from collections.abc import Callable
 
@@ -26,12 +27,14 @@ from PySide6.QtGui import (
 )
 from PySide6.QtWidgets import QCompleter, QPlainTextEdit, QToolTip
 
+from zettelapp.core.security import file_url, local_file_path
 from zettelapp.core.textutil import HASHTAG_RE, find_wikilinks, normalize_tag
 from zettelapp.ui import theme
 
 _IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp")
-_MD_LINK_RE = re.compile(r"(?<!!)\[[^\]\n]*\]\(<?([^)>\s]+)>?(?:\s+\"[^\"\n]*\")?\)")
-_URL_RE = re.compile(r"\b(?:https?://|mailto:)[^\s<>()\[\]]*[^\s<>()\[\].,;:!?'\"]")
+_MD_LINK_RE = re.compile(r"(?<!!)\[[^\]\n]*\]\((?:<([^>\n]+)>|([^)\s]+))(?:\s+\"[^\"\n]*\")?\)")
+_URL_RE = re.compile(r"\b(?:https?://|mailto:|file:///)[^\s<>()\[\]]*[^\s<>()\[\].,;:!?'\"]")
+_PATH_RE = re.compile(r"(?<![\w/\\])[A-Za-z]:\\[^\s<>\"|?*]*[^\s<>\"|?*.,;:!']")  # C:\no\spaces
 
 
 def _fmt(
@@ -119,6 +122,7 @@ class MarkdownEditor(QPlainTextEdit):
     """
 
     imageError = Signal(str)
+    fileLinkError = Signal(str)
     linkActivated = Signal(str, str)  # kind ("note", "url" or "tag"), target
 
     def __init__(self, store_image: Callable[[bytes, str], str], parent=None):
@@ -238,10 +242,11 @@ class MarkdownEditor(QPlainTextEdit):
                 return "note", wl.target
         for m in _MD_LINK_RE.finditer(text):
             if m.start() <= col < m.end():
-                return "url", m.group(1)
-        for m in _URL_RE.finditer(text):
-            if m.start() <= col < m.end():
-                return "url", m.group(0)
+                return "url", m.group(1) or m.group(2)
+        for pattern in (_URL_RE, _PATH_RE):
+            for m in pattern.finditer(text):
+                if m.start() <= col < m.end():
+                    return "url", m.group(0)
         for m in HASHTAG_RE.finditer(text):
             if m.start() <= col < m.end():
                 return "tag", normalize_tag(m.group(1))
@@ -254,6 +259,9 @@ class MarkdownEditor(QPlainTextEdit):
             return f"Ctrl+click to open “{target}”"
         if kind == "tag":
             return f"Ctrl+click to list the notes tagged #{target}"
+        path = local_file_path(target)
+        if path:
+            return f"Ctrl+click to show {ntpath.basename(path) or path} in File Explorer"
         return f"Ctrl+click to open {target}"
 
     def _update_link_cursor(self, modifiers) -> None:
@@ -360,14 +368,17 @@ class MarkdownEditor(QPlainTextEdit):
 
     def canInsertFromMimeData(self, source) -> bool:  # noqa: N802
         return (
-            source.hasImage() or self._image_urls(source) or super().canInsertFromMimeData(source)
+            source.hasImage() or self._local_files(source) or super().canInsertFromMimeData(source)
         )
 
     def insertFromMimeData(self, source) -> None:  # noqa: N802
-        urls = self._image_urls(source)
-        if urls:
-            for path in urls:
-                self._insert_image_file(path)
+        files = self._local_files(source)
+        if files:  # images are copied into the vault; other files are linked where they are
+            for path in files:
+                if path.lower().endswith(_IMAGE_SUFFIXES):
+                    self._insert_image_file(path)
+                else:
+                    self.insert_file_link(path)
             return
         if source.hasImage():
             image = source.imageData()
@@ -380,14 +391,21 @@ class MarkdownEditor(QPlainTextEdit):
         super().insertFromMimeData(source)
 
     @staticmethod
-    def _image_urls(source) -> list[str]:
+    def _local_files(source) -> list[str]:
         if not source.hasUrls():
             return []
-        return [
-            u.toLocalFile()
-            for u in source.urls()
-            if u.isLocalFile() and u.toLocalFile().lower().endswith(_IMAGE_SUFFIXES)
-        ]
+        return [u.toLocalFile() for u in source.urls() if u.isLocalFile() and u.toLocalFile()]
+
+    def insert_file_link(self, path: str) -> bool:
+        """Insert [name](file:///…) for a file on a local drive; False if it can't be linked."""
+        local = local_file_path(path)
+        if local is None:
+            self.fileLinkError.emit("Only files on this computer's drives can be linked.")
+            return False
+        name = re.sub(r"[\[\]]", "", ntpath.basename(local))[:120] or local
+        self.textCursor().insertText(f"[{name}]({file_url(local)})")
+        self.setFocus()
+        return True
 
     def _insert_image_file(self, path: str) -> None:
         try:

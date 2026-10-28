@@ -28,6 +28,7 @@ from zettelapp.core.models import Flashcard, Note, new_mindmap_node
 from zettelapp.core.security import (
     UnsafeInputError,
     is_openable_url,
+    local_file_path,
     normalize_source_url,
     normalize_web_url,
 )
@@ -129,6 +130,7 @@ class NoteEditor(QWidget):
             tool_button("relationship", "Link to note (Ctrl+K)", self.linkNoteRequested.emit)
         )
         bar.addWidget(tool_button("globe", "Insert web link", self.insert_web_link))
+        bar.addWidget(tool_button("folder", "Link to a file", self.insert_file_link))
         bar.addWidget(tool_button("image", "Insert image (Ctrl+Shift+I)", self.insert_image))
         bar.addWidget(
             tool_button(
@@ -209,11 +211,13 @@ class NoteEditor(QWidget):
         self.body.textChanged.connect(self._edited)
         self.body.textChanged.connect(self.inline_tag_timer.start)
         self.body.imageError.connect(lambda msg: QMessageBox.warning(self, "Image not added", msg))
+        self.body.fileLinkError.connect(self.statusMessage)
         self.preview = NotePreview(
             lambda name: self.window.vault.asset_path(name) if self.window.vault else None
         )
         self.preview.noteRequested.connect(self.openNote)
         self.preview.newNoteRequested.connect(self.newNoteRequested)
+        self.preview.fileRequested.connect(lambda path: self.window.reveal_file(path))
         self.preview.hovered.connect(self.statusMessage)
         self.split = QSplitter(Qt.Orientation.Horizontal)
         self.split.addWidget(self.body)
@@ -388,10 +392,12 @@ class NoteEditor(QWidget):
                 self.newNoteRequested.emit(target)
         elif kind == "tag":
             self.window.show_tag(target)
+        elif local_file_path(target):  # shown in File Explorer, never opened or run
+            self.window.reveal_file(local_file_path(target))
         elif is_openable_url(target):  # web pages, e-mail and Zotero items only
             QDesktopServices.openUrl(QUrl(target))
         else:
-            self.statusMessage.emit("Only web, e-mail and Zotero links can be opened.")
+            self.statusMessage.emit("Only web, e-mail, Zotero and local file links can be opened.")
 
     # --- view modes -----------------------------------------------------
 
@@ -437,6 +443,14 @@ class NoteEditor(QWidget):
             self._refresh_picture()
         name = path.replace("\\", "/").rsplit("/", 1)[-1].rsplit(".", 1)[0]
         self.body.insert_block(f"![{name}](asset:{asset})\n")
+
+    def insert_file_link(self) -> None:
+        """Link a file where it is (nothing is copied); clicking shows it in File Explorer."""
+        if self.note is None:
+            return
+        path, _ = QFileDialog.getOpenFileName(self, "Link to a file")
+        if path:
+            self.body.insert_file_link(path)
 
     def insert_web_link(self) -> None:
         selected = self.body.textCursor().selectedText()

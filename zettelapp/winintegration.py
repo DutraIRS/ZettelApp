@@ -118,7 +118,9 @@ def reveal_in_explorer(path: str | Path) -> None:
     path = Path(path)
     if IS_WINDOWS:
         if path.is_file():
-            subprocess.Popen(["explorer", "/select,", str(path)])  # noqa: S603,S607 - fixed program, list args
+            # Full path: a bare "explorer" would be looked up in the current folder first.
+            explorer = Path(os.environ.get("WINDIR", r"C:\Windows")) / "explorer.exe"
+            subprocess.Popen([str(explorer), "/select,", str(path)])  # noqa: S603 - list args
         else:
             os.startfile(str(path if path.is_dir() else path.parent))  # noqa: S606
     else:  # pragma: no cover

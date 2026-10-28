@@ -1,9 +1,10 @@
 """Markdown rendering shared by the preview, the HTML export and Anki cards.
 
 Safety model: raw HTML in notes is never rendered (it is shown as text), link
-targets are limited to notes and http(s)/mailto URLs, and images may only
-come from the vault's own assets folder, so viewing a note never loads
-anything from the network or from elsewhere on disk.
+targets are limited to notes, http(s)/mailto URLs, Zotero items and (in the app
+only) files on a local drive, and images may only come from the vault's own
+assets folder, so viewing a note never loads anything from the network or from
+elsewhere on disk.
 """
 
 from __future__ import annotations
@@ -18,10 +19,12 @@ from markdown_it import MarkdownIt
 
 from zettelapp.core.models import LinkType, mindmap_nodes
 from zettelapp.core.security import (
+    file_url,
     is_safe_web_url,
     is_valid_asset_name,
     is_valid_note_id,
     is_zotero_url,
+    local_file_path,
 )
 from zettelapp.core.textutil import CLOZE_RE, WIKILINK_RE
 
@@ -43,7 +46,9 @@ class NoteRenderer:
 
     *resolve* maps a wiki-link target (title or id) to a note id. *note_href*
     and *asset_href* produce the final URLs, which lets the same renderer serve
-    the in-app preview (zettel:/asset: URLs) and exported web pages.
+    the in-app preview (zettel:/asset: URLs) and exported web pages. Links to local
+    files are only made clickable with *allow_file_links* (the app's own preview);
+    exports and Anki cards show them as plain text.
     """
 
     def __init__(
@@ -55,6 +60,7 @@ class NoteRenderer:
         link_types: dict[str, LinkType] | None = None,
         allow_new_note_links: bool = True,
         keep_cloze: bool = False,
+        allow_file_links: bool = False,
     ):
         self.resolve = resolve
         self.keep_cloze = keep_cloze
@@ -63,8 +69,13 @@ class NoteRenderer:
         self.asset_href = asset_href
         self.link_types = link_types or {}
         self.allow_new_note_links = allow_new_note_links
+        self.allow_file_links = allow_file_links
         self.md = MarkdownIt("commonmark", {"html": False, "breaks": True, "typographer": False})
         self.md.enable(["table", "strikethrough"])
+        # markdown-it drops file: links outright; let them through to _target_href,
+        # which decides what every link may point to.
+        validate = self.md.validateLink
+        self.md.validateLink = lambda url: url[:5].lower() == "file:" or validate(url)
         # markdown-it binds rule functions to its renderer, so pass plain functions.
         self.md.add_render_rule("link_open", lambda r, *args: self._render_link_open(r, *args))
         self.md.add_render_rule("image", lambda r, *args: self._render_image(r, *args))
@@ -102,7 +113,10 @@ class NoteRenderer:
             return self.note_href(note_id) if is_valid_note_id(note_id) else None
         if href.startswith(NEW_NOTE_SCHEME):
             return href if self.allow_new_note_links else None
-        return href if is_safe_web_url(href) or is_zotero_url(href) else None
+        if is_safe_web_url(href) or is_zotero_url(href):
+            return href
+        path = local_file_path(href) or local_file_path(unquote(href))  # file:/// or C:\…
+        return file_url(path) if path and self.allow_file_links else None
 
     def _render_link_open(self, renderer, tokens, idx, options, env):
         token = tokens[idx]
@@ -118,6 +132,8 @@ class NoteRenderer:
                 token.attrSet("rel", "noopener noreferrer")
             elif is_zotero_url(href):
                 token.attrSet("class", "zotero")
+            elif href.startswith("file:"):
+                token.attrSet("class", "file")
             elif href.startswith(NEW_NOTE_SCHEME):
                 token.attrSet("class", "new-note")
             else:
