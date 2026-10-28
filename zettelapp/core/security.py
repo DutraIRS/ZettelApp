@@ -11,6 +11,7 @@ import re
 import unicodedata
 import zipfile
 from pathlib import Path, PurePosixPath
+from typing import TypeGuard
 from urllib.parse import urlsplit
 
 from zettelapp import URL_SCHEME
@@ -38,7 +39,7 @@ class UnsafeInputError(ValueError):
     """Raised when input fails validation."""
 
 
-def is_valid_note_id(value: object) -> bool:
+def is_valid_note_id(value: object) -> TypeGuard[str]:
     return isinstance(value, str) and bool(NOTE_ID_RE.match(value))
 
 
@@ -77,7 +78,7 @@ def is_zotero_url(url: object) -> bool:
 
 def is_openable_url(url: object) -> bool:
     """Links ZettelApp will hand to Windows: web pages, e-mail and Zotero items."""
-    return is_safe_web_url(url) or is_zotero_url(url)
+    return isinstance(url, str) and is_safe_web_url(url) or is_zotero_url(url)
 
 
 def normalize_source_url(text: str) -> str | None:

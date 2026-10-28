@@ -275,13 +275,13 @@ class AnthropicAdapter:
                     f"Anthropic is having trouble right now (error {exc.status_code}). Try again later."
                 )
             return LLMError(
-                f"Anthropic returned an error: {_scrub(getattr(exc, 'message', exc), api_key)}"
+                f"Anthropic returned an error: {_scrub(str(getattr(exc, 'message', exc)), api_key)}"
             )
         if isinstance(exc, anthropic.APITimeoutError):
             return LLMError("The request to Anthropic timed out. Try again.")
         if isinstance(exc, anthropic.APIConnectionError):
             return LLMError("Could not reach Anthropic. Check your internet connection.")
-        return LLMError(_scrub(exc, api_key))
+        return LLMError(_scrub(str(exc), api_key))
 
     def stream(
         self, settings: LLMSettings, api_key: str | None, system: str, user: str

@@ -40,7 +40,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--version", action="version", version=f"zettelapp-mcp {__version__}")
     args = parser.parse_args(argv)
     if hasattr(sys.stderr, "reconfigure"):
-        sys.stderr.reconfigure(encoding="utf-8", errors="backslashreplace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="backslashreplace")  # type: ignore[attr-defined]  # TextIO lacks reconfigure; guarded by hasattr
     logging.basicConfig(
         stream=sys.stderr, level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s"
     )

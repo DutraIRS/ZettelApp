@@ -85,6 +85,7 @@ def kmeans(
         inertia = float(np.maximum(dist[np.arange(n), labels], 0).sum())
         if best is None or inertia < best[2]:
             best = (labels, centers, inertia)
+    assert best is not None  # n_init >= 1
     return best
 
 
@@ -208,7 +209,8 @@ def cluster_notes(
 
     best_score = None
     if k is None:
-        best_labels, best_score = None, -2.0
+        best_labels: np.ndarray | None = None
+        best_score = -2.0
         # sqrt(n/2) is the classic rule of thumb; search a little around it.
         k_max = max(2, min(12, round(math.sqrt(len(notes) / 2)) + 2, len(notes) - 1))
         for kk in range(2, k_max + 1):
@@ -216,6 +218,7 @@ def cluster_notes(
             score = silhouette(x, labels, seed=seed)
             if score > best_score + 1e-9:
                 best_labels, best_score, k = labels, score, kk
+        assert best_labels is not None and k is not None  # the loop runs at least once
         labels = best_labels
     else:
         k = max(1, min(k, len(notes)))

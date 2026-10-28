@@ -308,6 +308,7 @@ class LinkSuggester:
 
     def _pair_features(self, a: str, b: str, training: bool = False) -> np.ndarray:
         pa, pb = self.prepared[a], self.prepared[b]
+        assert self.index is not None  # built in refit() before any pair is scored
         i, j = self.index.position[a], self.index.position[b]
         f = np.full(len(FEATURES), np.nan)
         f[_IDX["tfidf"]] = self.index.pair_cosine(i, j)

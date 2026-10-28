@@ -95,8 +95,9 @@ def _creator_name(raw: dict) -> str | None:
         return None
     if isinstance(raw.get("name"), str):
         return raw["name"].strip()[:120] or None
-    last = raw.get("lastName") if isinstance(raw.get("lastName"), str) else ""
-    first = raw.get("firstName") if isinstance(raw.get("firstName"), str) else ""
+    last_v, first_v = raw.get("lastName"), raw.get("firstName")
+    last = last_v if isinstance(last_v, str) else ""
+    first = first_v if isinstance(first_v, str) else ""
     if not last:
         return first.strip()[:120] or None
     initials = " ".join(f"{p[0]}." for p in re.split(r"[\s-]+", first) if p)
@@ -107,7 +108,8 @@ def parse_item(raw: dict) -> ZoteroItem | None:
     """Build a ZoteroItem from Web API v3 JSON, validating every field."""
     if not isinstance(raw, dict):
         return None
-    data = raw.get("data") if isinstance(raw.get("data"), dict) else raw
+    data_v = raw.get("data")
+    data = data_v if isinstance(data_v, dict) else raw
     key = data.get("key") or raw.get("key")
     if not isinstance(key, str) or not ZOTERO_KEY_RE.fullmatch(key):
         return None
@@ -128,14 +130,17 @@ def parse_item(raw: dict) -> ZoteroItem | None:
         )
         if n
     ]
-    meta = raw.get("meta") if isinstance(raw.get("meta"), dict) else {}
-    parsed = meta.get("parsedDate") if isinstance(meta.get("parsedDate"), str) else ""
+    meta_v = raw.get("meta")
+    meta = meta_v if isinstance(meta_v, dict) else {}
+    parsed_v = meta.get("parsedDate")
+    parsed = parsed_v if isinstance(parsed_v, str) else ""
     year = (
         parsed[:4]
         if parsed[:4].isdigit()
         else (re.search(r"\b(1[5-9]|20)\d{2}\b", text("date")) or [""])[0]
     )
-    library = raw.get("library") if isinstance(raw.get("library"), dict) else {}
+    library_v = raw.get("library")
+    library = library_v if isinstance(library_v, dict) else {}
     group_id = (
         library.get("id")
         if library.get("type") == "group" and isinstance(library.get("id"), int)

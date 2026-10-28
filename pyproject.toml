@@ -82,3 +82,8 @@ source = ["zettelapp"]
 fail_under = 70
 show_missing = true
 skip_covered = true
+
+[tool.pyright]
+include = ["zettelapp/core", "zettelapp/mcp_server.py", "zettelapp/mcp_main.py"]
+typeCheckingMode = "basic"
+reportMissingImports = "warning"

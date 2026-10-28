@@ -417,8 +417,12 @@ class MainWindow(QMainWindow):
     def open_vault(self, folder: str | Path) -> bool:
         try:
             vault = Vault.open(folder)
-        except (VaultError, OSError, Exception) as exc:  # noqa: BLE001 - any failure is reported
+        except (VaultError, OSError) as exc:
             log.exception("Could not open vault")
+            QMessageBox.critical(self, "Could not open vault", f"{folder}\n\n{exc}")
+            return False
+        except Exception as exc:  # noqa: BLE001 - last-resort boundary, never crash the UI
+            log.exception("Unexpected error opening vault")
             QMessageBox.critical(self, "Could not open vault", f"{folder}\n\n{exc}")
             return False
         self.close_vault()

@@ -149,8 +149,9 @@ def extract_inline_cards(body: str) -> list[InlineCard]:
         ):
             question.append(lines[i])
             i += 1
-        if i < len(lines) and _A_RE.match(lines[i]):
-            answer = [_A_RE.match(lines[i]).group(1)]
+        a_match = _A_RE.match(lines[i]) if i < len(lines) else None
+        if a_match:
+            answer = [a_match.group(1)]
             i += 1
             while i < len(lines) and lines[i].strip() and not _Q_RE.match(lines[i]):
                 answer.append(lines[i])

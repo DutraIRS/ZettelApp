@@ -306,6 +306,7 @@ class AnkiConnect:
                     )
                     report.added += 1
                 if anki_id != p.card.anki_note_id:
+                    assert p.card.id is not None  # payloads come from stored cards
                     remember_id(p.card.id, anki_id)
             except AnkiConnectError as exc:
                 report.failed += 1

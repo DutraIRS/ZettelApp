@@ -269,7 +269,9 @@ def _import_data(
     for raw in data.get("links") or []:
         if not isinstance(raw, dict) or raw.get("origin") == "inline":
             continue  # inline links are re-created from the note text
-        src, dst = id_map.get(raw.get("src")), id_map.get(raw.get("dst"))
+        raw_src, raw_dst = raw.get("src"), raw.get("dst")
+        src = id_map.get(raw_src) if isinstance(raw_src, str) else None
+        dst = id_map.get(raw_dst) if isinstance(raw_dst, str) else None
         if (
             src
             and dst
@@ -280,7 +282,8 @@ def _import_data(
     for raw in data.get("flashcards") or []:
         if not isinstance(raw, dict) or raw.get("source") == "inline":
             continue
-        note_id = id_map.get(raw.get("note_id"))
+        raw_note_id = raw.get("note_id")
+        note_id = id_map.get(raw_note_id) if isinstance(raw_note_id, str) else None
         front = _str(raw.get("front"), 20_000)
         if note_id and front:
             vault.save_card(

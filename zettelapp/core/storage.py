@@ -714,7 +714,9 @@ class Vault:
                     else by_title.get(fold(wl.target))
                 )
                 if dst and dst != note.id:
-                    desired.add((dst, wl.link_type if wl.link_type in types else "related"))
+                    desired.add(
+                        (dst, wl.link_type if wl.link_type and wl.link_type in types else "related")
+                    )
         existing = {
             (r["dst"], r["type"])
             for r in self.conn.execute(

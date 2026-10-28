@@ -228,7 +228,9 @@ def _write_archive(bundle: Bundle, vault: Vault, path: Path) -> None:
             "manifest.json", json.dumps(bundle_to_dict(bundle), ensure_ascii=False, indent=1)
         )
         for name in bundle.assets:
-            zf.write(vault.asset_path(name), f"assets/{name}")
+            asset = vault.asset_path(name)
+            assert asset is not None  # Bundle.assets only lists existing files
+            zf.write(asset, f"assets/{name}")
 
 
 # --- Markdown -----------------------------------------------------------------
@@ -313,7 +315,9 @@ def _write_markdown(bundle: Bundle, vault: Vault, path: Path) -> None:
         for note in bundle.notes:
             zf.writestr(f"{stems[note.id]}.md", _markdown_for(note, bundle, stems, resolve, types))
         for name in bundle.assets:
-            zf.write(vault.asset_path(name), f"assets/{name}")
+            asset = vault.asset_path(name)
+            assert asset is not None  # Bundle.assets only lists existing files
+            zf.write(asset, f"assets/{name}")
 
 
 # --- static website ---------------------------------------------------------
@@ -464,7 +468,9 @@ def _write_site(bundle: Bundle, vault: Vault, path: Path, title: str) -> None:
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as zf:
         zf.writestr("style.css", SITE_CSS)
         for name in bundle.assets:
-            zf.write(vault.asset_path(name), f"assets/{name}")
+            asset = vault.asset_path(name)
+            assert asset is not None  # Bundle.assets only lists existing files
+            zf.write(asset, f"assets/{name}")
         for n in bundle.notes:
             zf.writestr(f"notes/{n.id}.html", _note_page(n, bundle, renderer, types, title))
         items = "".join(
