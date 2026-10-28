@@ -112,7 +112,10 @@ def sanitize_mindmap(data: Any) -> dict[str, Any] | None:
             out["id"] = node["id"]
         if is_valid_note_id(node.get("note")):
             out["note"] = node["note"]
-        for child in node.get("children") or []:
+        children = node.get("children") or []
+        if not isinstance(children, list):
+            return None
+        for child in children:
             c = clean(child, depth + 1)
             if c is not None:
                 out["children"].append(c)

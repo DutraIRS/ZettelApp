@@ -17,7 +17,14 @@ from pathlib import Path
 
 import yaml
 
-from zettelapp.core.models import Flashcard, LinkType, Note, sanitize_mindmap
+from zettelapp.core.models import (
+    MAX_MINDMAP_DEPTH,
+    MAX_MINDMAP_NODES,
+    Flashcard,
+    LinkType,
+    Note,
+    sanitize_mindmap,
+)
 from zettelapp.core.security import (
     MAX_IMAGE_BYTES,
     UnsafeInputError,
@@ -104,25 +111,27 @@ def _import_archive(vault: Vault, zf: zipfile.ZipFile) -> ImportResult:
     if info.file_size > MAX_JSON_BYTES:
         raise UnsafeInputError("The archive manifest is too large.")
     data = json.loads(zf.read(info).decode("utf-8"))
+    _validate_import_data(data)
     asset_map: dict[str, str] = {}
     result = ImportResult()
-    for name in data.get("assets", []) if isinstance(data, dict) else []:
-        if not is_valid_asset_name(name):
-            continue
-        try:
-            member = zf.getinfo(f"assets/{name}")
-        except KeyError:
-            result.warn(f"Missing image {name}")
-            continue
-        if member.file_size > MAX_IMAGE_BYTES:
-            result.warn(f"Skipped oversized image {name}")
-            continue
-        try:
-            asset_map[name] = vault.add_image(zf.read(member), name)
-            result.images += 1
-        except UnsafeInputError as exc:
-            result.warn(f"Skipped image {name}: {exc}")
-    return import_data(vault, data, asset_map, result)
+    with vault.transaction():
+        for name in data.get("assets", []):
+            if not is_valid_asset_name(name):
+                continue
+            try:
+                member = zf.getinfo(f"assets/{name}")
+            except KeyError:
+                result.warn(f"Missing image {name}")
+                continue
+            if member.file_size > MAX_IMAGE_BYTES:
+                result.warn(f"Skipped oversized image {name}")
+                continue
+            try:
+                asset_map[name] = vault.add_image(zf.read(member), name)
+                result.images += 1
+            except UnsafeInputError as exc:
+                result.warn(f"Skipped image {name}: {exc}")
+        return _import_data(vault, data, asset_map, result)
 
 
 def _str(value, limit: int) -> str:
@@ -144,15 +153,58 @@ def _timestamp(value) -> str | None:
         return None
 
 
-def import_data(
-    vault: Vault, data, asset_map: dict[str, str] | None = None, result: ImportResult | None = None
-) -> ImportResult:
-    result = result or ImportResult()
-    asset_map = asset_map or {}
+def _validate_mindmap(data) -> None:
+    count = 0
+    stack = [(data, 0)]
+    while stack:
+        node, depth = stack.pop()
+        if not isinstance(node, dict):
+            raise UnsafeInputError("A mind map node must be an object.")
+        if depth > MAX_MINDMAP_DEPTH:
+            raise UnsafeInputError(f"A mind map cannot be deeper than {MAX_MINDMAP_DEPTH} levels.")
+        count += 1
+        if count > MAX_MINDMAP_NODES:
+            raise UnsafeInputError(
+                f"A mind map cannot contain more than {MAX_MINDMAP_NODES} nodes."
+            )
+        children = node.get("children", [])
+        if children is None:
+            children = []
+        if not isinstance(children, list):
+            raise UnsafeInputError("A mind map node's children must be a list.")
+        stack.extend((child, depth + 1) for child in children)
+
+
+def _validate_import_data(data) -> None:
     if not isinstance(data, dict) or data.get("format") != "zettelapp":
         raise UnsafeInputError("This is not a ZettelApp export.")
     if not isinstance(data.get("version"), int) or data["version"] > 1:
         raise UnsafeInputError("This export was made by a newer version of ZettelApp.")
+    for field_name in ("link_types", "notes", "links", "flashcards", "assets"):
+        value = data.get(field_name)
+        if value is not None and not isinstance(value, list):
+            raise UnsafeInputError(f"The export field {field_name!r} must be a list.")
+    for raw in data.get("notes") or []:
+        if not isinstance(raw, dict):
+            continue
+        mindmap = raw.get("mindmap")
+        if mindmap is not None:
+            _validate_mindmap(mindmap)
+
+
+def import_data(
+    vault: Vault, data, asset_map: dict[str, str] | None = None, result: ImportResult | None = None
+) -> ImportResult:
+    _validate_import_data(data)
+    with vault.transaction():
+        return _import_data(vault, data, asset_map, result)
+
+
+def _import_data(
+    vault: Vault, data, asset_map: dict[str, str] | None = None, result: ImportResult | None = None
+) -> ImportResult:
+    result = result or ImportResult()
+    asset_map = asset_map or {}
 
     existing_types = vault.link_type_map()
     for raw in data.get("link_types") or []:

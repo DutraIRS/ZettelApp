@@ -7,7 +7,7 @@ import pytest
 from tests.conftest import tiny_png
 from zettelapp.core import export as ex
 from zettelapp.core.graph import force_layout, subgraph
-from zettelapp.core.importer import import_path
+from zettelapp.core.importer import import_data, import_path
 from zettelapp.core.render import NoteRenderer
 from zettelapp.core.security import UnsafeInputError
 from zettelapp.core.storage import Vault
@@ -140,3 +140,85 @@ def test_malicious_archives_are_rejected(vault, tmp_path):
     )
     result = import_path(vault, bad)
     assert result.notes == 1 and vault.all_notes()[0].title == ""
+
+
+def test_malformed_import_is_rejected_without_partial_changes(vault, tmp_path):
+    before = vault.count_notes()
+    source = tmp_path / "malformed.json"
+    source.write_text(
+        json.dumps(
+            {
+                "format": "zettelapp",
+                "version": 1,
+                "notes": [
+                    {"id": "20260101000000", "title": "Valid first note"},
+                    {
+                        "id": "20260101000001",
+                        "title": "Malformed second note",
+                        "mindmap": {"text": "Root", "children": 1},
+                    },
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    with pytest.raises(UnsafeInputError, match="mind map"):
+        import_path(vault, source)
+
+    assert vault.count_notes() == before
+    assert vault.get_note("20260101000000") is None
+
+
+def test_import_rolls_back_when_a_database_write_fails(vault, monkeypatch):
+    before = vault.count_notes()
+    original_save = vault.save_note
+
+    def fail_on_second_note(note, touch=True):
+        if note.id == "20260101000003":
+            raise RuntimeError("simulated write failure")
+        return original_save(note, touch)
+
+    monkeypatch.setattr(vault, "save_note", fail_on_second_note)
+    data = {
+        "format": "zettelapp",
+        "version": 1,
+        "notes": [
+            {"id": "20260101000002", "title": "First", "body": "first body"},
+            {"id": "20260101000003", "title": "Second", "body": "second body"},
+        ],
+    }
+
+    with pytest.raises(RuntimeError, match="simulated write failure"):
+        import_data(vault, data)
+
+    assert vault.count_notes() == before
+    assert vault.get_note("20260101000002") is None
+    assert vault.get_note("20260101000003") is None
+
+
+def test_archive_failure_rolls_back_imported_assets(vault, monkeypatch, tmp_path):
+    original_save = vault.save_note
+
+    def fail_save(note, touch=True):
+        raise RuntimeError("simulated archive failure")
+
+    monkeypatch.setattr(vault, "save_note", fail_save)
+    asset_name = "a" * 20 + ".png"
+    archive = tmp_path / "failing-archive.zip"
+    manifest = {
+        "format": "zettelapp",
+        "version": 1,
+        "assets": [asset_name],
+        "notes": [{"id": "20260101000004", "title": "Note", "image": asset_name}],
+    }
+    with zipfile.ZipFile(archive, "w") as zf:
+        zf.writestr("manifest.json", json.dumps(manifest))
+        zf.writestr(f"assets/{asset_name}", tiny_png())
+
+    with pytest.raises(RuntimeError, match="simulated archive failure"):
+        import_path(vault, archive)
+
+    monkeypatch.setattr(vault, "save_note", original_save)
+    assert vault.get_note("20260101000004") is None
+    assert not any(vault.assets_dir.iterdir())

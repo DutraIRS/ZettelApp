@@ -145,6 +145,9 @@ class Vault:
         self.generation = 0
         self.listeners: list[Callable[[str], None]] = []
         self.has_fts = False
+        self._transaction_depth = 0
+        self._pending_changes: set[str] = set()
+        self._rollback_paths: set[Path] = set()
 
     # --- lifecycle --------------------------------------------------------
 
@@ -195,7 +198,7 @@ class Vault:
         return row is not None
 
     def _migrate(self) -> None:
-        with self.conn:
+        with self.transaction():
             self.conn.executescript(_SCHEMA)
             try:
                 self.conn.executescript(_FTS_SCHEMA)
@@ -218,11 +221,55 @@ class Vault:
     def _set_meta(self, key: str, value: str) -> None:
         self.conn.execute("INSERT OR REPLACE INTO meta (key, value) VALUES (?, ?)", (key, value))
 
+    @contextlib.contextmanager
+    def transaction(self):
+        """Commit a group of writes atomically, including nested Vault operations."""
+        outermost = self._transaction_depth == 0
+        if outermost:
+            self.conn.execute("BEGIN")
+            self._pending_changes.clear()
+            self._rollback_paths.clear()
+        self._transaction_depth += 1
+        try:
+            yield
+        except BaseException:
+            self._transaction_depth -= 1
+            if outermost:
+                self.conn.rollback()
+                for path in self._rollback_paths:
+                    path.unlink(missing_ok=True)
+                self._pending_changes.clear()
+                self._rollback_paths.clear()
+            raise
+        else:
+            self._transaction_depth -= 1
+            if outermost:
+                try:
+                    self.conn.commit()
+                except BaseException:
+                    self.conn.rollback()
+                    for path in self._rollback_paths:
+                        path.unlink(missing_ok=True)
+                    self._pending_changes.clear()
+                    self._rollback_paths.clear()
+                    raise
+                changes = tuple(sorted(self._pending_changes))
+                self._pending_changes.clear()
+                self._rollback_paths.clear()
+                for kind in changes:
+                    self._emit_changed(kind)
+
     @property
     def vault_id(self) -> str:
         return self.get_meta("vault_id") or "unknown"
 
     def _changed(self, kind: str) -> None:
+        if self._transaction_depth:
+            self._pending_changes.add(kind)
+            return
+        self._emit_changed(kind)
+
+    def _emit_changed(self, kind: str) -> None:
         self.generation += 1
         for listener in list(self.listeners):
             listener(kind)
@@ -259,7 +306,7 @@ class Vault:
             created=created or now,
             modified=now,
         )
-        with self.conn:
+        with self.transaction():
             self.conn.execute(
                 "INSERT INTO notes (id, created, modified) VALUES (?, ?, ?)",
                 (note.id, note.created, note.modified),
@@ -269,7 +316,7 @@ class Vault:
         return note
 
     def save_note(self, note: Note, touch: bool = True) -> Note:
-        with self.conn:
+        with self.transaction():
             self._write_note(note, touch)
         self._changed("notes")
         return note
@@ -398,21 +445,21 @@ class Vault:
         return None
 
     def trash_note(self, note_id: str) -> None:
-        with self.conn:
+        with self.transaction():
             self.conn.execute(
                 "UPDATE notes SET deleted = 1, modified = ? WHERE id = ?", (utc_now(), note_id)
             )
         self._changed("notes")
 
     def restore_note(self, note_id: str) -> None:
-        with self.conn:
+        with self.transaction():
             self.conn.execute(
                 "UPDATE notes SET deleted = 0, modified = ? WHERE id = ?", (utc_now(), note_id)
             )
         self._changed("notes")
 
     def purge_note(self, note_id: str) -> None:
-        with self.conn:
+        with self.transaction():
             self.conn.execute("DELETE FROM notes WHERE id = ?", (note_id,))
             self.conn.execute(
                 "DELETE FROM suggestion_feedback WHERE a = ? OR b = ?", (note_id, note_id)
@@ -550,7 +597,7 @@ class Vault:
             ).fetchone()[0]
         )
         lt.builtin = bool(existing["builtin"]) if existing else False
-        with self.conn:
+        with self.transaction():
             self._insert_link_type(lt, position)
         self._changed("types")
         return lt
@@ -558,7 +605,7 @@ class Vault:
     def delete_link_type(self, type_id: str) -> None:
         if type_id == "related":
             raise VaultError("The default link type cannot be removed.")
-        with self.conn:
+        with self.transaction():
             # Re-type existing links; INSERT OR IGNORE avoids clashing with an existing "related" link.
             self.conn.execute(
                 "INSERT OR IGNORE INTO links (src, dst, type, origin, created) "
@@ -582,7 +629,7 @@ class Vault:
         if src == dst or not self.note_exists(src, True) or not self.note_exists(dst, True):
             return False
         link_type = self._valid_type(link_type)
-        with self.conn:
+        with self.transaction():
             cur = self.conn.execute(
                 "INSERT OR IGNORE INTO links (src, dst, type, origin, created) VALUES (?, ?, ?, ?, ?)",
                 (src, dst, link_type, origin, utc_now()),
@@ -591,7 +638,7 @@ class Vault:
         return cur.rowcount > 0
 
     def remove_link(self, src: str, dst: str, link_type: str | None = None) -> None:
-        with self.conn:
+        with self.transaction():
             if link_type is None:
                 self.conn.execute("DELETE FROM links WHERE src = ? AND dst = ?", (src, dst))
             else:
@@ -603,7 +650,7 @@ class Vault:
 
     def change_link_type(self, src: str, dst: str, old_type: str, new_type: str) -> None:
         new_type = self._valid_type(new_type)
-        with self.conn:
+        with self.transaction():
             self.conn.execute(
                 "UPDATE OR IGNORE links SET type = ?, origin = 'manual' WHERE src = ? AND dst = ? AND type = ?",
                 (new_type, src, dst, old_type),
@@ -612,7 +659,7 @@ class Vault:
 
     def reverse_link(self, src: str, dst: str, link_type: str) -> None:
         """Flip a link's direction (dst -> src), keeping its type."""
-        with self.conn:
+        with self.transaction():
             row = self.conn.execute(
                 "SELECT origin FROM links WHERE src = ? AND dst = ? AND type = ?",
                 (src, dst, link_type),
@@ -697,11 +744,12 @@ class Vault:
             raise UnsafeInputError("Unsupported image format. Use PNG, JPEG, GIF, WebP or BMP.")
         name = hashlib.sha256(data).hexdigest()[:20] + "." + ext
         path = self.assets_dir / name
-        if not path.exists():
-            tmp = path.with_suffix(path.suffix + ".tmp")
-            tmp.write_bytes(data)
-            os.replace(tmp, path)
-        with self.conn:
+        with self.transaction():
+            if not path.exists():
+                tmp = path.with_suffix(path.suffix + ".tmp")
+                tmp.write_bytes(data)
+                os.replace(tmp, path)
+                self._rollback_paths.add(path)
             self.conn.execute(
                 "INSERT OR IGNORE INTO assets (name, original_name, size, created) VALUES (?, ?, ?, ?)",
                 (name, Path(original_name).name[:200], len(data), utc_now()),
@@ -753,7 +801,7 @@ class Vault:
 
     def save_card(self, card: Flashcard) -> Flashcard:
         card.kind = "cloze" if card.kind == "cloze" else "basic"
-        with self.conn:
+        with self.transaction():
             if card.id is None:
                 cur = self.conn.execute(
                     "INSERT INTO flashcards (note_id, front, back, kind, source) VALUES (?, ?, ?, ?, ?)",
@@ -769,12 +817,12 @@ class Vault:
         return card
 
     def delete_card(self, card_id: int) -> None:
-        with self.conn:
+        with self.transaction():
             self.conn.execute("DELETE FROM flashcards WHERE id = ?", (card_id,))
         self._changed("cards")
 
     def set_anki_note_id(self, card_id: int, anki_note_id: int | None) -> None:
-        with self.conn:
+        with self.transaction():
             self.conn.execute(
                 "UPDATE flashcards SET anki_note_id = ? WHERE id = ?", (anki_note_id, card_id)
             )
@@ -811,7 +859,7 @@ class Vault:
         return ReviewState(card_id, r["ease"], r["interval"], r["reps"], r["lapses"], r["due"])
 
     def save_review(self, state: ReviewState) -> None:
-        with self.conn:
+        with self.transaction():
             self.conn.execute(
                 "INSERT OR REPLACE INTO reviews (card_id, ease, interval, reps, lapses, due) VALUES (?, ?, ?, ?, ?, ?)",
                 (state.card_id, state.ease, state.interval, state.reps, state.lapses, state.due),
@@ -836,7 +884,7 @@ class Vault:
 
     def record_feedback(self, a: str, b: str, label: int) -> None:
         a, b = _pair(a, b)
-        with self.conn:
+        with self.transaction():
             self.conn.execute(
                 "INSERT OR REPLACE INTO suggestion_feedback (a, b, label, created) VALUES (?, ?, ?, ?)",
                 (a, b, int(bool(label)), utc_now()),
@@ -850,7 +898,7 @@ class Vault:
         }
 
     def reset_feedback(self) -> None:
-        with self.conn:
+        with self.transaction():
             self.conn.execute("DELETE FROM suggestion_feedback")
         self._changed("feedback")
 
