@@ -7,6 +7,8 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
+from zettelapp.i18n import N_
+
 
 def utc_now() -> str:
     return datetime.now(UTC).isoformat(timespec="seconds")
@@ -38,6 +40,17 @@ class Link:
     origin: str = "manual"  # manual | inline | suggestion
 
 
+# How a link type is drawn. Dashes are a second cue besides colour (for colour-blind
+# readers and print), so the built-in types don't share one style.
+LINE_STYLES = ("solid", "dashed", "dotted", "dash_dot", "dash_dot_dot", "long_dash")
+# The tip at the target end of a directed link; undirected links have none.
+ARROW_TIPS = ("triangle", "open", "diamond", "circle", "bar")
+# Before schema 3 a type's dash followed its place in the list, cycling through these,
+# and every arrow was open.
+LEGACY_LINE_STYLES = ("solid", "dashed", "dotted", "dash_dot", "dash_dot_dot")
+LEGACY_ARROW = "open"
+
+
 @dataclass
 class LinkType:
     id: str
@@ -46,19 +59,73 @@ class LinkType:
     color: str
     directed: bool = True
     builtin: bool = False
+    line_style: str = "solid"
+    arrow: str = "triangle"
 
     def label_for(self, outgoing: bool) -> str:
         return self.label if outgoing or not self.directed else self.inverse_label
 
+    @property
+    def tip(self) -> str | None:
+        """The arrow tip drawn at the target, or None for an undirected type."""
+        return self.arrow if self.directed else None
 
+
+def least_used_line_style(types: list[LinkType]) -> str:
+    """A line style for a new link type: the one the fewest existing types use."""
+    used = [t.line_style for t in types]
+    return min(LINE_STYLES, key=used.count)
+
+
+# Names are stored in the vault when it is created, in the interface language.
 DEFAULT_LINK_TYPES = [
-    LinkType("related", "Related to", "Related to", "#898781", directed=False, builtin=True),
-    LinkType("supports", "Supports", "Supported by", "#008300", builtin=True),
-    LinkType("contradicts", "Contradicts", "Contradicts", "#E34948", directed=False, builtin=True),
-    LinkType("extends", "Extends", "Extended by", "#2A78D6", builtin=True),
-    LinkType("example", "Example of", "Has example", "#EDA100", builtin=True),
-    LinkType("part_of", "Part of", "Contains", "#6250D6", builtin=True),
-    LinkType("cites", "Cites", "Cited by", "#1BAF7A", builtin=True),
+    LinkType(
+        "related", N_("Related to"), N_("Related to"), "#898781", directed=False, builtin=True
+    ),
+    LinkType(
+        "supports",
+        N_("Supports"),
+        N_("Supported by"),
+        "#008300",
+        builtin=True,
+        line_style="dashed",
+    ),
+    LinkType(
+        "contradicts",
+        N_("Contradicts"),
+        N_("Contradicts"),
+        "#E34948",
+        directed=False,
+        builtin=True,
+        line_style="dotted",
+    ),
+    LinkType(
+        "extends",
+        N_("Extends"),
+        N_("Extended by"),
+        "#2A78D6",
+        builtin=True,
+        line_style="dash_dot",
+    ),
+    LinkType(
+        "example",
+        N_("Example of"),
+        N_("Has example"),
+        "#EDA100",
+        builtin=True,
+        line_style="dash_dot_dot",
+        arrow="circle",
+    ),
+    LinkType(
+        "part_of",
+        N_("Part of"),
+        N_("Contains"),
+        "#6250D6",
+        builtin=True,
+        line_style="long_dash",
+        arrow="diamond",
+    ),
+    LinkType("cites", N_("Cites"), N_("Cited by"), "#1BAF7A", builtin=True, arrow="open"),
 ]
 
 
