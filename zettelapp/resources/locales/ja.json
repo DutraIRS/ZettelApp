@@ -689,5 +689,6 @@
  "Use Windows setting": "Windows の設定を使う",
  "Language": "言語",
  "Restart ZettelApp to apply the new language.": "新しい言語を適用するには ZettelApp を再起動してください。",
- "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — Z.”": "インクがノートに広がり、あなたのものではない言葉を形作ります。「銀の糸をたどれ。— Z.」"
+ "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — Z.”": "インクがノートに広がり、あなたのものではない言葉を形作ります。「銀の糸をたどれ。— Z.」",
+ "Default": "既定"
 }

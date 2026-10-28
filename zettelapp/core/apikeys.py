@@ -15,6 +15,7 @@ from dataclasses import dataclass
 from zettelapp import settings
 from zettelapp.core.llm import PROVIDERS
 from zettelapp.core.secrets import delete_secret, get_secret, set_secret
+from zettelapp.i18n import _
 
 PROFILES_KEY = "llm/keyProfiles"
 LEGACY_ID = "default"
@@ -60,7 +61,7 @@ def list_keys(provider: str) -> list[KeyProfile]:
     known = {k.id for k in keys}
     if provider in PROVIDERS and LEGACY_ID not in known and entry.get("legacy") is not False:
         if get_secret(PROVIDERS[provider].secret_name):
-            keys.insert(0, KeyProfile(LEGACY_ID, "Default"))
+            keys.insert(0, KeyProfile(LEGACY_ID, _("Default")))
     return keys
 
 
@@ -82,15 +83,14 @@ def get_key(provider: str, key_id: str) -> str | None:
     return get_secret(secret_name(provider, key_id))
 
 
-def _store(provider: str, keys: list[KeyProfile], active: str | None, legacy: bool) -> None:
+def _store(provider: str, keys: list[KeyProfile], active: str | None) -> None:
     data = _load()
     data[provider] = {
-        "keys": [{"id": k.id, "label": k.label} for k in keys if k.id != LEGACY_ID or legacy],
+        "keys": [{"id": k.id, "label": k.label} for k in keys],
         "active": active,
-        "legacy": legacy,
+        # False once the pre-profile key is deleted, so list_keys() never brings it back.
+        "legacy": any(k.id == LEGACY_ID for k in keys),
     }
-    if legacy and not any(k.id == LEGACY_ID for k in keys):
-        data[provider]["keys"].insert(0, {"id": LEGACY_ID, "label": "Default"})
     _save(data)
 
 
@@ -99,11 +99,13 @@ def add_key(provider: str, label: str, value: str, make_active: bool = True) -> 
     if not value:
         raise ValueError("The key is empty.")
     keys = list_keys(provider)
-    profile = KeyProfile(uuid.uuid4().hex[:12], _clean_label(label, f"Key {len(keys) + 1}"))
+    profile = KeyProfile(
+        uuid.uuid4().hex[:12], _clean_label(label, _("Key {number}").format(number=len(keys) + 1))
+    )
     set_secret(secret_name(provider, profile.id), value)
     keys.append(profile)
     active = profile.id if make_active else active_id(provider) or profile.id
-    _store(provider, keys, active, legacy=any(k.id == LEGACY_ID for k in keys))
+    _store(provider, keys, active)
     return profile
 
 
@@ -112,19 +114,13 @@ def rename_key(provider: str, key_id: str, label: str) -> None:
         KeyProfile(k.id, _clean_label(label, k.label) if k.id == key_id else k.label)
         for k in list_keys(provider)
     ]
-    _store(provider, keys, active_id(provider), legacy=any(k.id == LEGACY_ID for k in keys))
-
-
-def replace_key(provider: str, key_id: str, value: str) -> None:
-    if key_id not in {k.id for k in list_keys(provider)}:
-        raise KeyError(key_id)
-    set_secret(secret_name(provider, key_id), value.strip())
+    _store(provider, keys, active_id(provider))
 
 
 def set_active(provider: str, key_id: str) -> None:
     keys = list_keys(provider)
     if key_id in {k.id for k in keys}:
-        _store(provider, keys, key_id, legacy=any(k.id == LEGACY_ID for k in keys))
+        _store(provider, keys, key_id)
 
 
 def delete_key(provider: str, key_id: str) -> None:
@@ -134,7 +130,7 @@ def delete_key(provider: str, key_id: str) -> None:
     active = active_id(provider)
     if active == key_id or active not in {k.id for k in keys}:
         active = keys[0].id if keys else None
-    _store(provider, keys, active, legacy=any(k.id == LEGACY_ID for k in keys))
+    _store(provider, keys, active)
 
 
 def has_key(provider: str) -> bool:

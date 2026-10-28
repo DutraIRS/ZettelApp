@@ -505,7 +505,7 @@
  "Alarm: {title}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:466"
+   "zettelapp/ui/main_window.py:468"
   ]
  },
  "All around you, the shelves begin to whisper the names of notes…": {
@@ -746,7 +746,7 @@
  "Built-in link types can be renamed and restyled but not removed.": {
   "plural": null,
   "where": [
-   "zettelapp/core/storage.py:772",
+   "zettelapp/core/storage.py:775",
    "zettelapp/ui/settings_dialog.py:470",
    "zettelapp/ui/settings_dialog.py:522"
   ]
@@ -1133,6 +1133,12 @@
   "plural": null,
   "where": [
    "zettelapp/ui/review_page.py:112"
+  ]
+ },
+ "Default": {
+  "plural": null,
+  "where": [
+   "zettelapp/core/apikeys.py:64"
   ]
  },
  "Default endpoint": {
@@ -1816,6 +1822,7 @@
  "Key {number}": {
   "plural": null,
   "where": [
+   "zettelapp/core/apikeys.py:103",
    "zettelapp/ui/settings_dialog.py:712"
   ]
  },
@@ -3261,7 +3268,7 @@
  "The default link type cannot be removed.": {
   "plural": null,
   "where": [
-   "zettelapp/core/storage.py:767"
+   "zettelapp/core/storage.py:770"
   ]
  },
  "The door swings open onto a spiral stair. At the top shines the Tower of Insight.": {
@@ -3514,7 +3521,7 @@
  "Time for this note.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:476"
+   "zettelapp/ui/main_window.py:478"
   ]
  },
  "Title": {
@@ -3639,7 +3646,7 @@
   "where": [
    "zettelapp/ui/ask_page.py:288",
    "zettelapp/ui/editor.py:180",
-   "zettelapp/ui/main_window.py:465",
+   "zettelapp/ui/main_window.py:467",
    "zettelapp/ui/settings_dialog.py:169",
    "zettelapp/ui/settings_dialog.py:494"
   ]
