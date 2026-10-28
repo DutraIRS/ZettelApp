@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="color-scheme" content="light dark">
 <meta name="description" content="Notes are written in Markdown: bold, italic, # headings, lists, &gt; quotes,  code , fenced code blocks, tables and ~~strikethrough~~. The toolbar above the editor inserts the common ">
 <title>Notes and links – ZettelApp documentation</title>
 <link rel="icon" type="image/png" href="../assets/favicon.png">
 <link rel="stylesheet" href="../style.css">
+<script src="../assets/lang.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#content">Skip to content</a>
@@ -25,6 +26,7 @@
         <li><a class="nav-cta" href="../#download">Download</a></li>
       </ul>
     </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇺🇸</span><span class="sr-only">Languages</span></summary><ul class="lang-switch-panel" aria-label="Languages"><li><a href="notes-and-links.html" lang="en" hreflang="en" aria-current="true"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../es/docs/notes-and-links.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../fr/docs/notes-and-links.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../de/docs/notes-and-links.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../it/docs/notes-and-links.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../ru/docs/notes-and-links.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../ja/docs/notes-and-links.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../ko/docs/notes-and-links.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../ar/docs/notes-and-links.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
     <div class="header-actions">
       <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Donate"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Donate</span></a>
       <a class="hbtn cta" href="../#download">Download</a>
@@ -266,8 +268,22 @@ SVG is refused on purpose, because SVG files can carry scripts.</p>
 under a name derived from their content, and referenced like this:</p>
 <pre><code class="language-markdown">![Diagram](asset:3f2a9c0b1d4e5f6a7b8c.png)
 </code></pre>
-<p>The first image you add to a note becomes its <strong>note picture</strong>. The picture is shown next to the title
-and inside the note's circle in the graph. Right-click it to remove it.</p>
+<p>The first image you add to a note becomes its <strong>title image</strong>. It is shown as a small rounded thumbnail in
+the note list and inside the note's circle in the graph. Right-click any image in the editor or preview
+and choose <em>Use as title image</em> to pick another one, or <em>Remove title image</em> to have none.</p>
+<h2 id="checklists">Checklists</h2>
+<p>Start a line with <code>- [ ]</code> (or press the checklist button in the toolbar) to make a task. <code>- [x]</code> is a
+completed task. In the preview, click the box to tick it; pressing Enter at the end of a task starts the
+next one, and Enter on an empty task ends the list.</p>
+<h2 id="alarms">Alarms</h2>
+<p>Press the alarm button (or <em>Insert ▸ Alarm…</em>) to set a date and, optionally, a time for a note. When it is
+due, ZettelApp shows a notification; click it to open the note. ZettelApp has to be running to notify you,
+and alarms that came due while it was closed fire shortly after you open the vault. Alarmed notes show a
+bell in the note list. Use <em>Remove alarm</em> in the same dialog to clear it.</p>
+<h2 id="formulas">Formulas</h2>
+<p>Write LaTeX between dollar signs: <code>$E = mc^2$</code> is inline and <code>$$\int_0^1 x^2\,dx$$</code> is a display formula.
+The formula button (<em>Insert ▸ Formula…</em>) opens a dialog with a live preview. Formulas are drawn in the
+preview; exports keep the LaTeX source.</p>
 <h2 id="mind-maps">Mind maps</h2>
 <p>Each note can carry a mind map (the <strong>Mind map</strong> tab, or <em>Insert ▸ Mind Map</em>). Branches are coloured
 automatically.</p>
@@ -346,6 +362,7 @@ and come back when the note is restored.</p>
       <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
     </ul>
   </div>
+  <ul class="nav lang-row" aria-label="Languages"><li><a href="notes-and-links.html" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/docs/notes-and-links.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/docs/notes-and-links.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul>
 </footer>
 </body>
 </html>

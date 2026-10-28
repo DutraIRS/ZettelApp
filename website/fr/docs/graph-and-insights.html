@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="La page Graphe  représente vos notes en réseau : chaque cercle correspond à une note, sa taille dépend du nombre de liens qu’elle possède, et chaque ligne représente un lien.">
+<title>Graphe et Insights – documentation de ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Aller au contenu</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Fonctionnalités</a></li>
+        <li><a href="tutorial.html">Tutoriel</a></li>
+        <li><a href="./">Documentation</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Faire un don</a></li>
+        <li><a class="nav-cta" href="../#download">Télécharger</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇫🇷</span><span class="sr-only">Langues</span></summary><ul class="lang-switch-panel" aria-label="Langues"><li><a href="../../docs/graph-and-insights.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/graph-and-insights.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/graph-and-insights.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/graph-and-insights.html" lang="fr" hreflang="fr" aria-current="true"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/graph-and-insights.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/graph-and-insights.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/graph-and-insights.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/graph-and-insights.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/graph-and-insights.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/graph-and-insights.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/graph-and-insights.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Faire un don"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Faire un don</span></a>
+      <a class="hbtn cta" href="../#download">Télécharger</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Fonctionnalités</a></li>
+          <li><a href="tutorial.html">Tutoriel</a></li>
+          <li><a href="./">Documentation</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentation</span><span class="docs-menu-current">Graphe et Insights</span></span></summary>
+      <ul>
+      <li><a href="index.html">Documentation de ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Qu’est-ce qu’un Zettelkasten ?</a></li>
+      <li><a href="tutorial.html">Tutoriel : vos 30 premières minutes</a></li>
+      <li><a href="getting-started.html">Bien démarrer</a></li>
+      <li><a href="notes-and-links.html">Notes et liens</a></li>
+      <li><a href="link-suggestions.html">Suggestions de liens</a></li>
+      <li><a href="graph-and-insights.html" aria-current="page">Graphe et Insights</a></li>
+      <li><a href="review-and-anki.html">Révision, quiz et Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Interroger vos notes (IA)</a></li>
+      <li><a href="mcp-server.html">Serveur MCP</a></li>
+      <li><a href="export-import.html">Exporter et importer</a></li>
+      <li><a href="keyboard-shortcuts.html">Raccourcis clavier</a></li>
+      <li><a href="privacy-and-security.html">Confidentialité et sécurité</a></li>
+      <li><a href="faq.html">Foire aux questions</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentation</h2>
+      <ul>
+      <li><a href="index.html">Documentation de ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Qu’est-ce qu’un Zettelkasten ?</a></li>
+      <li><a href="tutorial.html">Tutoriel : vos 30 premières minutes</a></li>
+      <li><a href="getting-started.html">Bien démarrer</a></li>
+      <li><a href="notes-and-links.html">Notes et liens</a></li>
+      <li><a href="link-suggestions.html">Suggestions de liens</a></li>
+      <li><a href="graph-and-insights.html" aria-current="page">Graphe et Insights</a></li>
+      <li><a href="review-and-anki.html">Révision, quiz et Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Interroger vos notes (IA)</a></li>
+      <li><a href="mcp-server.html">Serveur MCP</a></li>
+      <li><a href="export-import.html">Exporter et importer</a></li>
+      <li><a href="keyboard-shortcuts.html">Raccourcis clavier</a></li>
+      <li><a href="privacy-and-security.html">Confidentialité et sécurité</a></li>
+      <li><a href="faq.html">Foire aux questions</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="graphe-et-insights">Graphe et Insights</h1>
+<h2 id="le-graphe">Le graphe</h2>
+<p>La page <strong>Graphe</strong> (Ctrl+2) représente vos notes en réseau : chaque cercle correspond à une note, sa taille dépend du nombre de liens qu’elle possède, et chaque ligne représente un lien.</p>
+<p><img loading="lazy" src="../../assets/screenshots/graph-light.png" alt="Le graphe, coloré par tag" /></p>
+<h3 id="commandes">Commandes</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Commande</th>
+<th>Fonction</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Toutes les notes / Local</strong></td>
+<td>Afficher toute la collection ou uniquement la note ouverte et les notes situées à <strong>Profondeur</strong> liens ou moins (en suivant les liens dans les deux sens). <em>Afficher dans le graphe</em> dans le menu ⋯ d’une note ouvre le graphe local.</td>
+</tr>
+<tr>
+<td><strong>2D / 3D</strong></td>
+<td>Passer d’une disposition plane déplaçable à une vue 3D pivotante.</td>
+</tr>
+<tr>
+<td><strong>Couleur by</strong></td>
+<td>Colorer par tag, par <em>Clusters: k-means</em>, par <em>Clusters: hierarchical</em> ou sans coloration.</td>
+</tr>
+<tr>
+<td><strong>k</strong></td>
+<td>Nombre de clusters. <em>Auto k</em> le choisit automatiquement (voir ci-dessous).</td>
+</tr>
+<tr>
+<td><strong>Groupe</strong></td>
+<td>Rapprocher les notes d’un même groupe et ombrer la zone de chaque groupe.</td>
+</tr>
+<tr>
+<td><strong>Libellés</strong></td>
+<td>Afficher les titres des notes. Dans les grands graphes, seuls les titres des notes les plus connectées apparaissent jusqu’au survol.</td>
+</tr>
+<tr>
+<td><strong>Types de lien</strong></td>
+<td>Masquer ou afficher certains types de liens.</td>
+</tr>
+<tr>
+<td><strong>Rechercher dans le graphe</strong></td>
+<td>Saisir une partie d’un titre et appuyer sur Entrée pour accéder à la note.</td>
+</tr>
+</tbody>
+</table></div>
+<p>En bas à droite se trouvent les commandes de zoom et d’ajustement, <strong>recalculer la disposition</strong>, <strong>enregistrer comme image</strong> (PNG) et <strong>exporter ces notes</strong> (ouvre la boîte de dialogue d’<a href="export-import.html">exportation</a> avec les notes affichées).</p>
+<p><strong>En 2D</strong>, faites glisser une note pour la déplacer, l’arrière-plan pour effectuer un panoramique, et utilisez la molette pour zoomer. Double-cliquez sur une note pour l’ouvrir ; faites un clic droit pour accéder aux autres actions (ouvrir, graphe local, quiz sur ce voisinage, exporter avec les notes liées). L’image d’une note apparaît dans son cercle.</p>
+<p>Plusieurs liens entre deux mêmes notes sont dessinés sous forme de <strong>courbes distinctes</strong>, chacune avec sa propre pointe de flèche le long de la courbe, afin qu’aucune ne masque les autres. Le survol ou la sélection d’une note <strong>atténue les autres liens</strong>, conserve les couleurs de type des liens de cette note et étiquette chaque voisine avec le type de lien <strong>tel qu’il se lit depuis cette note</strong>, par exemple <em>Soutient · Étendu par</em>. Le comportement est identique en 2D et en 3D.</p>
+<p><strong>En 3D</strong>, faites glisser pour pivoter, utilisez la molette pour zoomer et double-cliquez sur une note pour l’ouvrir. <strong>Rotation automatique</strong> fait tourner la vue. Les notes les plus proches sont plus grandes et plus lumineuses, ce qui facilite la perception de la profondeur ; chaque groupe apparaît comme un halo coloré diffus.</p>
+<p>La disposition utilise un algorithme à forces (Fruchterman–Reingold) : les liens rapprochent les notes, toutes les notes se repoussent et une légère gravité maintient les composantes distinctes à l’écran. Le calcul s’exécute en arrière-plan et le résultat est mis en cache pour chaque vue.</p>
+<h3 id="coloration-par-tag">Coloration par tag</h3>
+<p>Chaque note prend la couleur de son <strong>tag le plus courant</strong>, celui utilisé par le plus grand nombre de notes affichées. Les grands thèmes du coffre obtiennent ainsi des couleurs distinctes.</p>
+<h3 id="coloration-par-cluster">Coloration par cluster</h3>
+<p>Le clustering regroupe les notes <strong>par sens</strong>, qu’elles soient liées ou non. Chaque note devient un vecteur dans un espace sémantique calculé par analyse sémantique latente (LSA) à partir de son titre, de son texte et de ses tags. L’une des deux méthodes regroupe ensuite les vecteurs :</p>
+<ul>
+<li><strong>k-means</strong> : algorithme de Lloyd avec initialisation k-means++, meilleur résultat de plusieurs exécutions. Rapide, il produit des groupes réguliers et de taille équilibrée.</li>
+<li><strong>Hiérarchique</strong> : clustering agglomératif par liaison moyenne sur la distance cosinus, calculé avec l’algorithme de chaîne de plus proches voisins (O(n²)). Il convient mieux aux sujets imbriqués et aux groupes de tailles inégales. Au-delà de 4 000 notes, le coffre utilise k-means.</li>
+</ul>
+<p>Avec <strong>k automatique</strong>, ZettelApp essaie les valeurs de k de 2 jusqu’à environ √(n/2) + 2 (12 au maximum) et retient celle qui donne le meilleur <strong>score de silhouette</strong>. Affiché sous la légende, ce score mesure la séparation des clusters : 1 correspond à une séparation parfaite ; autour de 0, les groupes se chevauchent. Chaque cluster porte le nom de ses mots les plus caractéristiques, c’est-à-dire ceux qui y sont plus fréquents que dans le reste du coffre.</p>
+<h3 id="groupes-et-couleurs">Groupes et couleurs</h3>
+<p>Lorsque <strong>Groupe</strong> est activé, les notes portant le même tag ou appartenant au même cluster sont rapprochées, et chaque groupe reçoit une zone légèrement ombrée avec son nom. La légende indique la taille des groupes. Cliquez sur l’un d’eux pour mettre ses notes en évidence.</p>
+<p>Les couleurs des groupes et graphiques proviennent d’une palette <strong>validée pour les déficiences de la vision des couleurs</strong>, en mode clair comme en mode sombre. Elles sont attribuées dans un ordre fixe et ne sont jamais réutilisées : au-delà du huitième groupe, les suivants partagent la couleur grise neutre « Other ». Les <strong>types de liens</strong> utilisent aussi la forme des lignes : chacune possède son propre style (plein, tireté, pointillé, etc.) et les liens orientés ont une pointe (triangle, losange…). Choisissez-les dans <em>Outils ▸ Options ▸ Types de lien</em> (voir <a href="notes-and-links.html#your-own-link-types">Vos propres types de liens</a>). La légende nomme toujours chaque élément ; l’information ne dépend donc pas uniquement des couleurs.</p>
+<h2 id="insights">Insights</h2>
+<p>La page <strong>Insights</strong> (Ctrl+3) résume votre coffre :</p>
+<ul>
+<li><strong>Tuiles</strong> : notes (et nombre de notes dans la Corbeille), liens (et liens par note), tags, <em>notes sans lien</em> (bonnes candidates pour créer des liens), cartes mémoire et cartes à réviser aujourd’hui.</li>
+<li><strong>Notes ajoutées par mois</strong> au cours des 12 derniers mois.</li>
+<li><strong>Tags principaux</strong>, <strong>Liens par type</strong> et <strong>Notes les plus connectées</strong> (cliquez sur une barre pour ouvrir la note).</li>
+<li><strong>Sujets</strong> : clusters k-means des notes, avec leurs mots-clés et leur taille.</li>
+</ul>
+<p>Chaque graphique possède un bouton <strong>Afficher sous forme de tableau</strong> (icône de liste) qui affiche les mêmes valeurs sous forme de tableau ; survolez les barres pour voir leur valeur.</p>
+
+    <p class="doc-footer">Une erreur ? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/fr/graph-and-insights.md">Modifier cette page sur GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Accueil</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Tickets</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Faire un don</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Langues"><li><a href="../../docs/graph-and-insights.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/graph-and-insights.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/graph-and-insights.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/graph-and-insights.html" lang="fr" hreflang="fr" aria-current="true">Français</a></li><li><a href="../../de/docs/graph-and-insights.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/graph-and-insights.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/graph-and-insights.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/graph-and-insights.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/graph-and-insights.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/graph-and-insights.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/graph-and-insights.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

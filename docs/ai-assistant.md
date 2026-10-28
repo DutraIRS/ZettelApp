@@ -11,6 +11,9 @@ you ask a question.
 1. Get an API key from one of the supported providers.
 2. Open *Tools ▸ Options ▸ AI assistant*. Choose the **provider**, paste the **API key**, and choose a
    **model** (*Refresh list* asks the provider which models your key can use).
+
+   You can save several keys per provider (for example personal and work). Use *Add…*, *Rename…* and
+   *Remove* next to the key list; the selected key is the one used by Ask.
 3. Press **Test connection**, then **OK**.
 
 | Provider | Default model | Other suggested models | Endpoint |

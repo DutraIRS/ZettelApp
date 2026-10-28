@@ -1,4 +1,208 @@
 {
+ "&About {app}": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:400"
+  ]
+ },
+ "&Alarm…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:346"
+  ]
+ },
+ "&Back Up Vault Now": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:282"
+  ]
+ },
+ "&Copy": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:297"
+  ]
+ },
+ "&Dark": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:326"
+  ]
+ },
+ "&Documentation": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:361"
+  ]
+ },
+ "&Donate (Ko-fi)…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:389"
+  ]
+ },
+ "&Edit": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:291"
+  ]
+ },
+ "&Export…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:280"
+  ]
+ },
+ "&File": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:256"
+  ]
+ },
+ "&Find Notes": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:309"
+  ]
+ },
+ "&Flashcard…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:341"
+  ]
+ },
+ "&Full Screen": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:320"
+  ]
+ },
+ "&Help": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:360"
+  ]
+ },
+ "&Image…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:338"
+  ]
+ },
+ "&Import…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:264"
+  ]
+ },
+ "&Insert": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:334"
+  ]
+ },
+ "&Keyboard Shortcuts": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:368"
+  ]
+ },
+ "&Light": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:325"
+  ]
+ },
+ "&Link to Note…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:335"
+  ]
+ },
+ "&Mind Map": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:340"
+  ]
+ },
+ "&New Note": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:257"
+  ]
+ },
+ "&Open Vault…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:259"
+  ]
+ },
+ "&Options…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:358"
+  ]
+ },
+ "&Paste": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:298"
+  ]
+ },
+ "&Quiz on This Note's Neighbourhood": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:352"
+  ]
+ },
+ "&Redo": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:294"
+  ]
+ },
+ "&Sync with Anki": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:354"
+  ]
+ },
+ "&Theme": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:321"
+  ]
+ },
+ "&Tools": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:348"
+  ]
+ },
+ "&Undo": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:293"
+  ]
+ },
+ "&View": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:313"
+  ]
+ },
+ "&Web Link…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:336"
+  ]
+ },
+ "&Zotero Reference…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:339"
+  ]
+ },
  "**Ask** (**Ctrl+5**) answers questions from your notes with an AI provider of your choice, and cites the notes it used. Add your API key in **Tools ▸ Options ▸ AI assistant**. Only your question and the notes listed as sources are sent.": {
   "plural": null,
   "where": [
@@ -86,13 +290,19 @@
  ", {failed} failed": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:476"
+   "zettelapp/ui/review_page.py:477"
   ]
  },
  "A mind map lets one note grow branches without splitting its idea: a place to brainstorm before you write. This note has a small one.": {
   "plural": null,
   "where": [
    "zettelapp/core/starter.py:201"
+  ]
+ },
+ "A name to recognise this key by:": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:711"
   ]
  },
  "A note can carry more than text:": {
@@ -134,19 +344,19 @@
  "A Zettelkasten for Windows: atomic notes, typed links, mind maps, flashcards and a knowledge graph, with link suggestions that learn from you.<br><br><a href=\"{HOMEPAGE_URL}\">Website</a> · <a href=\"{DOCS_URL}\">Documentation</a> · <a href=\"{REPO_URL}\">Source code</a><br><br>ZettelApp is free. If it helps you, please consider a donation.<br><br>Released into the public domain (The Unlicense). Built with Qt for Python (LGPLv3), NumPy, RapidFuzz, genanki, markdown-it-py, PyYAML and the Anthropic SDK; see THIRD_PARTY_NOTICES.md for licences.<br><br><span>Python {python_version} · {system} {release}</span>": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:266"
+   "zettelapp/ui/dialogs.py:268"
   ]
  },
  "About {APP_NAME}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:242"
+   "zettelapp/ui/dialogs.py:244"
   ]
  },
  "Action": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:352"
+   "zettelapp/ui/dialogs.py:354"
   ]
  },
  "Add a branch of your own.": {
@@ -164,7 +374,7 @@
  "Add child": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:331"
+   "zettelapp/ui/dialogs.py:333"
   ]
  },
  "Add child\tTab": {
@@ -176,46 +386,59 @@
  "Add child idea (Tab)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:245"
+   "zettelapp/ui/editor.py:256"
   ]
  },
  "Add flashcard": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:300",
-   "zettelapp/ui/editor.py:289",
-   "zettelapp/ui/editor.py:289"
+   "zettelapp/ui/dialogs.py:302",
+   "zettelapp/ui/editor.py:300",
+   "zettelapp/ui/editor.py:300"
   ]
  },
  "Add flashcard (Ctrl+Shift+F)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:146"
+   "zettelapp/ui/editor.py:153"
   ]
  },
  "Add idea": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:245",
+   "zettelapp/ui/editor.py:256",
    "zettelapp/ui/mindmap.py:404"
+  ]
+ },
+ "Add key": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:710",
+   "zettelapp/ui/settings_dialog.py:718"
+  ]
+ },
+ "Add key…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:609"
   ]
  },
  "Add link type": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:370"
+   "zettelapp/ui/settings_dialog.py:379"
   ]
  },
  "Add mind map": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:145"
+   "zettelapp/ui/editor.py:152"
   ]
  },
  "Add sibling": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:332"
+   "zettelapp/ui/dialogs.py:334"
   ]
  },
  "Add sibling\tEnter": {
@@ -240,7 +463,7 @@
  "Add your {label} API key in Options to ask questions about your notes. Open Options now?": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:184"
+   "zettelapp/ui/ask_page.py:185"
   ]
  },
  "Add your {label} API key in Tools ▸ Options ▸ AI assistant first.": {
@@ -252,19 +475,37 @@
  "Address (http, https or mailto):": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:479"
+   "zettelapp/ui/editor.py:552"
   ]
  },
  "Again / Hard / Good / Easy": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:340"
+   "zettelapp/ui/dialogs.py:342"
   ]
  },
  "ai": {
   "plural": null,
   "where": [
    "zettelapp/core/starter.py:49"
+  ]
+ },
+ "Alarm": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:477"
+  ]
+ },
+ "Alarm {when}": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/editor.py:390"
+  ]
+ },
+ "Alarm: {title}": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:466"
   ]
  },
  "All around you, the shelves begin to whisper the names of notes…": {
@@ -276,7 +517,13 @@
  "All tags": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:242"
+   "zettelapp/ui/note_list.py:280"
+  ]
+ },
+ "Also set a time of day": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:502"
   ]
  },
  "An optional adventure · about 10 minutes": {
@@ -289,10 +536,10 @@
   "plural": null,
   "where": [
    "zettelapp/ui/review_page.py:95",
-   "zettelapp/ui/review_page.py:439",
-   "zettelapp/ui/review_page.py:449",
-   "zettelapp/ui/review_page.py:483",
-   "zettelapp/ui/review_page.py:477"
+   "zettelapp/ui/review_page.py:440",
+   "zettelapp/ui/review_page.py:450",
+   "zettelapp/ui/review_page.py:484",
+   "zettelapp/ui/review_page.py:478"
   ]
  },
  "Anki deck name": {
@@ -311,7 +558,7 @@
  "Anki sync finished: {added} added, {updated} updated": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:472"
+   "zettelapp/ui/review_page.py:473"
   ]
  },
  "Answer": {
@@ -323,13 +570,13 @@
  "Answer complete.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:254"
+   "zettelapp/ui/ask_page.py:255"
   ]
  },
  "Answer copied.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:279"
+   "zettelapp/ui/ask_page.py:280"
   ]
  },
  "Anthropic is having trouble right now (error {status_code}). Try again later.": {
@@ -350,6 +597,15 @@
    "zettelapp/core/llm.py:282"
   ]
  },
+ "API key": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:605",
+   "zettelapp/ui/settings_dialog.py:616",
+   "zettelapp/ui/settings_dialog.py:727",
+   "zettelapp/ui/settings_dialog.py:760"
+  ]
+ },
  "Archivists mark their notes so they can gather them later.": {
   "plural": null,
   "where": [
@@ -359,20 +615,27 @@
  "Arrow keys": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:335"
+   "zettelapp/ui/dialogs.py:337"
   ]
  },
  "Arrow tip": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:413",
-   "zettelapp/ui/settings_dialog.py:418"
+   "zettelapp/ui/settings_dialog.py:422",
+   "zettelapp/ui/settings_dialog.py:427"
   ]
  },
  "Ask": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:89"
+   "zettelapp/ui/ask_page.py:89",
+   "zettelapp/ui/main_window.py:76"
+  ]
+ },
+ "Ask &About This Note…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:353"
   ]
  },
  "Ask a question about your notes, e.g. “How does spaced repetition relate to active recall?”  (Ctrl+Enter to ask)": {
@@ -384,14 +647,14 @@
  "Ask about this note…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:732"
+   "zettelapp/ui/editor.py:805"
   ]
  },
  "Ask your notes": {
   "plural": null,
   "where": [
    "zettelapp/ui/ask_page.py:57",
-   "zettelapp/ui/dialogs.py:314"
+   "zettelapp/ui/dialogs.py:316"
   ]
  },
  "Ask your notes and MCP": {
@@ -403,15 +666,15 @@
  "Asking {label} ({len} notes sent)…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:233"
+   "zettelapp/ui/ask_page.py:234"
   ]
  },
  "Back": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:136",
-   "zettelapp/ui/dialogs.py:139",
-   "zettelapp/ui/dialogs.py:156"
+   "zettelapp/ui/dialogs.py:138",
+   "zettelapp/ui/dialogs.py:141",
+   "zettelapp/ui/dialogs.py:158"
   ]
  },
  "Back to Review": {
@@ -429,7 +692,7 @@
  "Before you ask": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:195"
+   "zettelapp/ui/ask_page.py:196"
   ]
  },
  "Begin the adventure": {
@@ -459,13 +722,13 @@
  "Bold (Ctrl+B)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:125"
+   "zettelapp/ui/editor.py:130"
   ]
  },
  "Bold / italic": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:304"
+   "zettelapp/ui/dialogs.py:306"
   ]
  },
  "Both are optional, and nothing leaves your computer until you set them up.": {
@@ -477,27 +740,27 @@
  "Build a mind map from this note's links": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:251"
+   "zettelapp/ui/editor.py:262"
   ]
  },
  "Built-in link types can be renamed and restyled but not removed.": {
   "plural": null,
   "where": [
-   "zettelapp/core/storage.py:719",
-   "zettelapp/ui/settings_dialog.py:461",
-   "zettelapp/ui/settings_dialog.py:513"
+   "zettelapp/core/storage.py:772",
+   "zettelapp/ui/settings_dialog.py:470",
+   "zettelapp/ui/settings_dialog.py:522"
   ]
  },
  "Bulleted list": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:128"
+   "zettelapp/ui/editor.py:133"
   ]
  },
  "Cards also come from the note text: write “Q: …” then “A: …”, or hide words with {{c1::cloze}}.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:302"
+   "zettelapp/ui/editor.py:313"
   ]
  },
  "cards today": {
@@ -526,22 +789,40 @@
    "zettelapp/ui/quest.py:624"
   ]
  },
+ "Chec&klist": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:342"
+  ]
+ },
  "Check connection": {
   "plural": null,
   "where": [
    "zettelapp/ui/review_page.py:98"
   ]
  },
+ "Check for &Updates": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:379"
+  ]
+ },
  "Checking…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:432"
+   "zettelapp/ui/review_page.py:433"
+  ]
+ },
+ "Checklist": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/editor.py:134"
   ]
  },
  "Choose a colour": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:398"
+   "zettelapp/ui/settings_dialog.py:407"
   ]
  },
  "Choose notes and a question style.": {
@@ -559,20 +840,26 @@
  "Cite a Zotero reference": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:301",
-   "zettelapp/ui/editor.py:142"
+   "zettelapp/ui/dialogs.py:303",
+   "zettelapp/ui/editor.py:149"
   ]
  },
  "Cited by": {
   "plural": null,
   "where": [
-   "zettelapp/core/models.py:146"
+   "zettelapp/core/models.py:147"
   ]
  },
  "Cites": {
   "plural": null,
   "where": [
-   "zettelapp/core/models.py:146"
+   "zettelapp/core/models.py:147"
+  ]
+ },
+ "Claude only: how much the model thinks before answering (higher costs more)": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:633"
   ]
  },
  "Click a bar to open the note": {
@@ -621,13 +908,13 @@
  "Cloze": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:657"
+   "zettelapp/ui/editor.py:730"
   ]
  },
  "Cloze deletion  {{c1::hidden text}}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:131"
+   "zettelapp/ui/dialogs.py:133"
   ]
  },
  "Clue found!": {
@@ -645,32 +932,38 @@
  "Code": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:129"
+   "zettelapp/ui/editor.py:135"
   ]
  },
  "Colour": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:397",
-   "zettelapp/ui/settings_dialog.py:404"
+   "zettelapp/ui/settings_dialog.py:406",
+   "zettelapp/ui/settings_dialog.py:413"
   ]
  },
  "Connect an AI provider": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:183"
+   "zettelapp/ui/ask_page.py:184"
+  ]
+ },
+ "Connect an AI provider to ask questions about your notes (Ask page). Keys are stored in Windows Credential Manager, never in plain files. You can save several keys per provider and pick the one to use. Only your question and the most relevant notes are sent.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:587"
   ]
  },
  "Connected": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:479"
+   "zettelapp/ui/review_page.py:480"
   ]
  },
  "Connected (AnkiConnect v{version})": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:435"
+   "zettelapp/ui/review_page.py:436"
   ]
  },
  "Connected to {provider}. {n} model available.": {
@@ -682,20 +975,20 @@
  "Contains": {
   "plural": null,
   "where": [
-   "zettelapp/core/models.py:140"
+   "zettelapp/core/models.py:141"
   ]
  },
  "Contradicts": {
   "plural": null,
   "where": [
-   "zettelapp/core/models.py:113",
-   "zettelapp/core/models.py:114"
+   "zettelapp/core/models.py:114",
+   "zettelapp/core/models.py:115"
   ]
  },
  "Copied a [[link]] to this note.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:740"
+   "zettelapp/ui/editor.py:811"
   ]
  },
  "Copy": {
@@ -713,19 +1006,19 @@
  "Copy note ID": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:712"
+   "zettelapp/ui/editor.py:785"
   ]
  },
  "Copy note link": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:709"
+   "zettelapp/ui/editor.py:782"
   ]
  },
  "Could not get an answer.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:259"
+   "zettelapp/ui/ask_page.py:260"
   ]
  },
  "Could not reach Anki. Make sure Anki is running with the AnkiConnect add-on installed.": {
@@ -767,37 +1060,43 @@
  "Created": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:193"
+   "zettelapp/ui/note_list.py:231"
   ]
  },
  "Created {friendly_time}  ·  Edited {friendly_time2}  ·  {words} words  ·  ID {id}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:377"
+   "zettelapp/ui/editor.py:398"
   ]
  },
  "Ctrl+click to list the notes tagged #{tag}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:264"
+   "zettelapp/ui/markdown_editor.py:268"
   ]
  },
  "Ctrl+click to open {link}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:270"
+   "zettelapp/ui/markdown_editor.py:274"
   ]
  },
  "Ctrl+click to open “{title}”": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:262"
+   "zettelapp/ui/markdown_editor.py:266"
   ]
  },
  "Ctrl+click to show {name} in File Explorer": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:267"
+   "zettelapp/ui/markdown_editor.py:271"
+  ]
+ },
+ "Cu&t": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:296"
   ]
  },
  "Current note and linked notes": {
@@ -824,47 +1123,72 @@
    "zettelapp/ui/link_style.py:20"
   ]
  },
+ "Date": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:501"
+  ]
+ },
  "Deck": {
   "plural": null,
   "where": [
    "zettelapp/ui/review_page.py:112"
   ]
  },
+ "Default endpoint": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:681"
+  ]
+ },
  "Del": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:334"
+   "zettelapp/ui/dialogs.py:336"
   ]
  },
  "Delete": {
   "plural": null,
   "where": [
-   "zettelapp/ui/mindmap.py:402"
+   "zettelapp/ui/mindmap.py:402",
+   "zettelapp/ui/settings_dialog.py:612"
   ]
  },
  "Delete flashcard": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:292",
-   "zettelapp/ui/editor.py:699"
+   "zettelapp/ui/editor.py:303",
+   "zettelapp/ui/editor.py:772"
+  ]
+ },
+ "Delete key": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:751"
   ]
  },
  "Delete permanently…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:340"
+   "zettelapp/ui/note_list.py:384"
   ]
  },
  "Delete selected idea (Del)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:257"
+   "zettelapp/ui/editor.py:268"
+  ]
+ },
+ "Delete the key “{name}” from this computer?": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:752"
   ]
  },
  "Delete this flashcard?": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:699"
+   "zettelapp/ui/editor.py:772"
   ]
  },
  "Depth ": {
@@ -876,7 +1200,7 @@
  "Details were written to the log in {folder}.": {
   "plural": null,
   "where": [
-   "zettelapp/app.py:118"
+   "zettelapp/app.py:119"
   ]
  },
  "Diamond": {
@@ -888,7 +1212,7 @@
  "Directed: reads differently from each side": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:393"
+   "zettelapp/ui/settings_dialog.py:402"
   ]
  },
  "Dismiss": {
@@ -906,13 +1230,19 @@
  "Don't show this again": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:203"
+   "zettelapp/ui/ask_page.py:204"
+  ]
+ },
+ "Donate": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:99"
   ]
  },
  "Donate on Ko-fi": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:282"
+   "zettelapp/ui/dialogs.py:284"
   ]
  },
  "Dotted": {
@@ -939,17 +1269,29 @@
    "zettelapp/ui/review_page.py:62"
   ]
  },
+ "E&xit": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:289"
+  ]
+ },
  "Edit": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:150"
+   "zettelapp/ui/editor.py:158"
   ]
  },
  "Edit flashcard": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:126",
-   "zettelapp/ui/editor.py:291"
+   "zettelapp/ui/dialogs.py:128",
+   "zettelapp/ui/editor.py:302"
+  ]
+ },
+ "Effort": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:635"
   ]
  },
  "Empty or invalid path in archive.": {
@@ -961,13 +1303,19 @@
  "Empty Trash": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:223"
+   "zettelapp/ui/note_list.py:261"
+  ]
+ },
+ "Endpoint (optional)": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:627"
   ]
  },
  "Enter": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:332"
+   "zettelapp/ui/dialogs.py:334"
   ]
  },
  "Enter adds a sibling": {
@@ -1003,21 +1351,21 @@
  "Example of": {
   "plural": null,
   "where": [
-   "zettelapp/core/models.py:130"
+   "zettelapp/core/models.py:131"
   ]
  },
  "Exit": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:325"
+   "zettelapp/ui/dialogs.py:327"
   ]
  },
  "Export": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:182",
-   "zettelapp/ui/dialogs.py:234",
-   "zettelapp/ui/dialogs.py:322"
+   "zettelapp/ui/dialogs.py:184",
+   "zettelapp/ui/dialogs.py:236",
+   "zettelapp/ui/dialogs.py:324"
   ]
  },
  "Export deck (.apkg)…": {
@@ -1029,44 +1377,50 @@
  "Export mind map": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:263",
-   "zettelapp/ui/editor.py:586"
+   "zettelapp/ui/editor.py:274",
+   "zettelapp/ui/editor.py:659"
   ]
  },
  "Export this note and its links…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:723"
+   "zettelapp/ui/editor.py:796"
   ]
  },
  "Export with linked notes…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:353"
+   "zettelapp/ui/note_list.py:397"
   ]
  },
  "Export…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:206"
+   "zettelapp/ui/dialogs.py:208"
   ]
  },
  "Extended by": {
   "plural": null,
   "where": [
-   "zettelapp/core/models.py:123"
+   "zettelapp/core/models.py:124"
   ]
  },
  "Extends": {
   "plural": null,
   "where": [
-   "zettelapp/core/models.py:122"
+   "zettelapp/core/models.py:123"
   ]
  },
  "Extra (optional)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:156"
+   "zettelapp/ui/dialogs.py:158"
+  ]
+ },
+ "F&ormula…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:345"
   ]
  },
  "F2 renames an idea": {
@@ -1078,7 +1432,7 @@
  "Files": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:319"
+   "zettelapp/ui/dialogs.py:321"
   ]
  },
  "Filled triangle": {
@@ -1090,13 +1444,13 @@
  "Filter by tag": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:188"
+   "zettelapp/ui/note_list.py:226"
   ]
  },
  "Find notes": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:297"
+   "zettelapp/ui/dialogs.py:299"
   ]
  },
  "Finding a PDF attachment…": {
@@ -1108,22 +1462,22 @@
  "Fit to window": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:260",
+   "zettelapp/ui/editor.py:271",
    "zettelapp/ui/mindmap.py:405"
   ]
  },
  "Flashcard from text": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:686"
+   "zettelapp/ui/editor.py:759"
   ]
  },
  "Flashcards": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:296",
-   "zettelapp/ui/editor.py:310",
-   "zettelapp/ui/editor.py:662",
+   "zettelapp/ui/editor.py:307",
+   "zettelapp/ui/editor.py:321",
+   "zettelapp/ui/editor.py:735",
    "zettelapp/ui/insights.py:324"
   ]
  },
@@ -1136,7 +1490,7 @@
  "Flashcards ({len})": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:662"
+   "zettelapp/ui/editor.py:735"
   ]
  },
  "Flashcards and review": {
@@ -1166,31 +1520,31 @@
  "Format": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:193"
+   "zettelapp/ui/dialogs.py:195"
   ]
  },
  "FreeMind / XMind (.mm)…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:268"
+   "zettelapp/ui/editor.py:279"
   ]
  },
  "FreeMind mind map (*.mm)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:583"
+   "zettelapp/ui/editor.py:656"
   ]
  },
  "From links": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:253"
+   "zettelapp/ui/editor.py:264"
   ]
  },
  "from note text": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:654"
+   "zettelapp/ui/editor.py:727"
   ]
  },
  "From the Map Room you can see the whole Archive at once.": {
@@ -1208,20 +1562,26 @@
  "From: {note_title}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:303"
+   "zettelapp/ui/review_page.py:304"
   ]
  },
  "Front": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:135",
-   "zettelapp/ui/dialogs.py:138"
+   "zettelapp/ui/dialogs.py:137",
+   "zettelapp/ui/dialogs.py:140"
   ]
  },
  "Full screen": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:315"
+   "zettelapp/ui/dialogs.py:317"
+  ]
+ },
+ "Get a key": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:614"
   ]
  },
  "Give a note a tag.": {
@@ -1239,37 +1599,38 @@
  "Give the link type a name.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:510"
+   "zettelapp/ui/settings_dialog.py:519"
   ]
  },
  "Give the new link type a name.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:558"
+   "zettelapp/ui/settings_dialog.py:567"
   ]
  },
  "Graph": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:311"
+   "zettelapp/ui/dialogs.py:313",
+   "zettelapp/ui/main_window.py:73"
   ]
  },
  "Has example": {
   "plural": null,
   "where": [
-   "zettelapp/core/models.py:131"
+   "zettelapp/core/models.py:132"
   ]
  },
  "Heading": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:127"
+   "zettelapp/ui/editor.py:132"
   ]
  },
  "Help": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:324"
+   "zettelapp/ui/dialogs.py:326"
   ]
  },
  "His owl, Quill, lands on your desk: “Only a fox's nose can find him. Each clue hides in a corner of this app. Will you help?”": {
@@ -1293,7 +1654,7 @@
  "How the link reads from the note it points to": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:390"
+   "zettelapp/ui/settings_dialog.py:399"
   ]
  },
  "idea": {
@@ -1305,20 +1666,38 @@
  "Image not added": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:219",
-   "zettelapp/ui/editor.py:460"
+   "zettelapp/ui/editor.py:227",
+   "zettelapp/ui/editor.py:482"
   ]
  },
  "Images (*.png *.jpg *.jpeg *.gif *.webp *.bmp)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:453"
+   "zettelapp/ui/editor.py:475"
+  ]
+ },
+ "Import a folder of Markdown files, such as an Obsidian vault": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:272"
+  ]
+ },
+ "Import a ZettelApp archive, JSON or Markdown files": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:264"
+  ]
+ },
+ "Import Markdown &Folder…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:272"
   ]
  },
  "In a note, write {example}.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:508"
+   "zettelapp/ui/settings_dialog.py:517"
   ]
  },
  "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — A.”": {
@@ -1327,10 +1706,17 @@
    "zettelapp/ui/quest.py:188"
   ]
  },
+ "Inline, inside a sentence": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:422"
+  ]
+ },
  "Insert": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:479"
+   "zettelapp/ui/dialogs.py:438",
+   "zettelapp/ui/editor.py:552"
   ]
  },
  "Insert citation": {
@@ -1339,30 +1725,42 @@
    "zettelapp/ui/zotero_dialog.py:56"
   ]
  },
+ "Insert formula": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:403"
+  ]
+ },
+ "Insert formula (LaTeX)": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/editor.py:136"
+  ]
+ },
  "Insert image": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:299",
-   "zettelapp/ui/editor.py:453"
+   "zettelapp/ui/dialogs.py:301",
+   "zettelapp/ui/editor.py:475"
   ]
  },
  "Insert image (Ctrl+Shift+I)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:139"
+   "zettelapp/ui/editor.py:146"
   ]
  },
  "Insert web link": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:479",
-   "zettelapp/ui/editor.py:137"
+   "zettelapp/ui/editor.py:552",
+   "zettelapp/ui/editor.py:145"
   ]
  },
  "Insert ▸ Zotero Reference": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:301"
+   "zettelapp/ui/dialogs.py:303"
   ]
  },
  "Inside a note": {
@@ -1374,8 +1772,9 @@
  "Insights": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:312",
-   "zettelapp/ui/insights.py:312"
+   "zettelapp/ui/dialogs.py:314",
+   "zettelapp/ui/insights.py:312",
+   "zettelapp/ui/main_window.py:74"
   ]
  },
  "It learns from every answer you give.": {
@@ -1399,13 +1798,13 @@
  "Italic (Ctrl+I)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:126"
+   "zettelapp/ui/editor.py:131"
   ]
  },
  "just now": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:53"
+   "zettelapp/ui/editor.py:54"
   ]
  },
  "Key ideas": {
@@ -1414,22 +1813,53 @@
    "zettelapp/core/zotero.py:265"
   ]
  },
+ "Key {number}": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:712"
+  ]
+ },
+ "Key “{name}” deleted from this computer.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:763"
+  ]
+ },
+ "Key “{name}” saved on this computer.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:730"
+  ]
+ },
  "Keyboard shortcuts": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:348"
+   "zettelapp/ui/dialogs.py:350"
+  ]
+ },
+ "Language": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:258",
+   "zettelapp/ui/settings_dialog.py:1006"
   ]
  },
  "Last edited": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:192"
+   "zettelapp/ui/note_list.py:230"
+  ]
+ },
+ "LaTeX": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:417"
   ]
  },
  "Left out {n} link: a mind map holds at most {limit} ideas.": {
   "plural": "Left out {n} links: a mind map holds at most {limit} ideas.",
   "where": [
-   "zettelapp/ui/editor.py:560"
+   "zettelapp/ui/editor.py:633"
   ]
  },
  "Let the title state the idea, like the title of this note. When a note grows a second idea, split it: press **Ctrl+N** for a new note, move the text there and link the two.": {
@@ -1441,13 +1871,13 @@
  "Line": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:411"
+   "zettelapp/ui/settings_dialog.py:420"
   ]
  },
  "Line style": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:406"
+   "zettelapp/ui/settings_dialog.py:415"
   ]
  },
  "Link a note to another one: in its text, type [[ and pick a title, such as {example}.": {
@@ -1459,19 +1889,19 @@
  "Link colour": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:520"
+   "zettelapp/ui/settings_dialog.py:529"
   ]
  },
  "Link from the open note as": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:345"
+   "zettelapp/ui/note_list.py:389"
   ]
  },
  "Link not inserted": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:485"
+   "zettelapp/ui/editor.py:558"
   ]
  },
  "Link suggestions": {
@@ -1486,24 +1916,30 @@
    "zettelapp/ui/insights.py:391"
   ]
  },
+ "Link to a &File…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:337"
+  ]
+ },
  "Link to a file": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:472",
-   "zettelapp/ui/editor.py:138"
+   "zettelapp/ui/editor.py:545",
+   "zettelapp/ui/editor.py:144"
   ]
  },
  "Link to note": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:65",
-   "zettelapp/ui/dialogs.py:298"
+   "zettelapp/ui/dialogs.py:67",
+   "zettelapp/ui/dialogs.py:300"
   ]
  },
  "Link to note (Ctrl+K)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:135"
+   "zettelapp/ui/editor.py:142"
   ]
  },
  "Link to note…": {
@@ -1515,8 +1951,8 @@
  "Link type": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:81",
-   "zettelapp/ui/dialogs.py:88",
+   "zettelapp/ui/dialogs.py:83",
+   "zettelapp/ui/dialogs.py:90",
    "zettelapp/ui/insights.py:435"
   ]
  },
@@ -1535,8 +1971,8 @@
  "Link types": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:364",
-   "zettelapp/ui/settings_dialog.py:564"
+   "zettelapp/ui/settings_dialog.py:373",
+   "zettelapp/ui/settings_dialog.py:573"
   ]
  },
  "Link with a reason": {
@@ -1580,7 +2016,7 @@
  "Markdown, [[links]] and images work on both sides. Cloze cards hide each {{c1::…}} in turn.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:142"
+   "zettelapp/ui/dialogs.py:144"
   ]
  },
  "Marks on the Shelves": {
@@ -1598,9 +2034,9 @@
  "Mind map": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:329",
-   "zettelapp/ui/editor.py:282",
-   "zettelapp/ui/editor.py:585",
+   "zettelapp/ui/dialogs.py:331",
+   "zettelapp/ui/editor.py:293",
+   "zettelapp/ui/editor.py:658",
    "zettelapp/ui/mindmap.py:118",
    "zettelapp/ui/mindmap.py:432"
   ]
@@ -1608,7 +2044,7 @@
  "Mind map exported": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:595"
+   "zettelapp/ui/editor.py:668"
   ]
  },
  "Mind maps": {
@@ -1617,10 +2053,17 @@
    "zettelapp/core/starter.py:33"
   ]
  },
+ "Model": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:621",
+   "zettelapp/ui/settings_dialog.py:625"
+  ]
+ },
  "More": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:158"
+   "zettelapp/ui/editor.py:166"
   ]
  },
  "Most connected notes": {
@@ -1632,26 +2075,32 @@
  "Most linked": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:195"
+   "zettelapp/ui/note_list.py:233"
+  ]
+ },
+ "Move Note to &Trash": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:311"
   ]
  },
  "Move note to Trash": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:303"
+   "zettelapp/ui/dialogs.py:305",
+   "zettelapp/ui/editor.py:126"
   ]
  },
  "Move selection": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:335"
+   "zettelapp/ui/dialogs.py:337"
   ]
  },
  "Move to Trash": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:735",
-   "zettelapp/ui/note_list.py:358"
+   "zettelapp/ui/note_list.py:402"
   ]
  },
  "Multiple choice": {
@@ -1675,7 +2124,7 @@
  "Name": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:387"
+   "zettelapp/ui/settings_dialog.py:396"
   ]
  },
  "Name that note": {
@@ -1684,10 +2133,16 @@
    "zettelapp/core/quiz.py:33"
   ]
  },
+ "Name:": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:737"
+  ]
+ },
  "Navigate": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:308"
+   "zettelapp/ui/dialogs.py:310"
   ]
  },
  "Near your notes, a tiny drawing flickers on the map: a branching tree in Zetto's hand.": {
@@ -1711,13 +2166,19 @@
  "New": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:180"
+   "zettelapp/ui/note_list.py:218"
+  ]
+ },
+ "New &Vault…": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:258"
   ]
  },
  "New flashcard": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:126"
+   "zettelapp/ui/dialogs.py:128"
   ]
  },
  "New idea": {
@@ -1731,13 +2192,13 @@
  "New link type": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:529"
+   "zettelapp/ui/settings_dialog.py:538"
   ]
  },
  "New link type (reverse)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:530"
+   "zettelapp/ui/settings_dialog.py:539"
   ]
  },
  "New literature note": {
@@ -1749,14 +2210,14 @@
  "New note": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:296",
-   "zettelapp/ui/editor.py:107"
+   "zettelapp/ui/dialogs.py:298",
+   "zettelapp/ui/editor.py:108"
   ]
  },
  "New note (Ctrl+N)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:181"
+   "zettelapp/ui/note_list.py:219"
   ]
  },
  "Next  (Enter)": {
@@ -1768,7 +2229,7 @@
  "Next review in {n} day": {
   "plural": "Next review in {n} days",
   "where": [
-   "zettelapp/ui/review_page.py:337"
+   "zettelapp/ui/review_page.py:338"
   ]
  },
  "Next: {link}": {
@@ -1786,7 +2247,7 @@
  "No flashcards are due. Great job! Add more from a note's Flashcards tab.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:275"
+   "zettelapp/ui/review_page.py:276"
   ]
  },
  "No flashcards yet. Add some from a note's Flashcards tab, or write Q:/A: in a note.": {
@@ -1804,25 +2265,31 @@
  "No note called “{title}” yet. Ctrl+click to create it.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:259"
+   "zettelapp/ui/markdown_editor.py:263"
   ]
  },
  "No questions answered.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:402"
+   "zettelapp/ui/review_page.py:403"
+  ]
+ },
+ "No saved keys": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:659"
   ]
  },
  "No text": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:103"
+   "zettelapp/ui/note_list.py:117"
   ]
  },
  "Not connected": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:438"
+   "zettelapp/ui/review_page.py:439"
   ]
  },
  "Not now": {
@@ -1831,35 +2298,47 @@
    "zettelapp/ui/quest.py:492"
   ]
  },
+ "Not required": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:659"
+  ]
+ },
+ "Not understood: {problem}": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:455"
+  ]
+ },
  "Note": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:233",
+   "zettelapp/ui/editor.py:244",
    "zettelapp/ui/insights.py:442"
   ]
  },
  "Note A": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:158"
+   "zettelapp/ui/settings_dialog.py:159"
   ]
  },
  "Note B": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:158"
+   "zettelapp/ui/settings_dialog.py:159"
   ]
  },
  "Note picture (shown in the graph). Right-click to remove.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:185"
+   "zettelapp/ui/editor.py:193"
   ]
  },
  "Note text": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:136"
+   "zettelapp/ui/markdown_editor.py:140"
   ]
  },
  "Note: {model} is not in the provider's model list.": {
@@ -1871,15 +2350,16 @@
  "Notes": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:294",
-   "zettelapp/ui/dialogs.py:78",
-   "zettelapp/ui/dialogs.py:310",
+   "zettelapp/ui/dialogs.py:296",
+   "zettelapp/ui/dialogs.py:80",
+   "zettelapp/ui/dialogs.py:312",
    "zettelapp/ui/insights.py:419",
    "zettelapp/ui/insights.py:461",
    "zettelapp/ui/insights.py:320",
-   "zettelapp/ui/note_list.py:176",
-   "zettelapp/ui/note_list.py:207",
-   "zettelapp/ui/note_list.py:251"
+   "zettelapp/ui/main_window.py:72",
+   "zettelapp/ui/note_list.py:214",
+   "zettelapp/ui/note_list.py:245",
+   "zettelapp/ui/note_list.py:289"
   ]
  },
  "Notes added per month": {
@@ -1909,7 +2389,7 @@
  "Nothing to review": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:273"
+   "zettelapp/ui/review_page.py:274"
   ]
  },
  "Nothing to show yet": {
@@ -1927,7 +2407,13 @@
  "OK": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:49"
+   "zettelapp/ui/dialogs.py:51"
+  ]
+ },
+ "On its own line, centred": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:423"
   ]
  },
  "One idea per note": {
@@ -1939,7 +2425,7 @@
  "One idea per note. Link it to others to grow your Zettelkasten.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:101"
+   "zettelapp/ui/editor.py:102"
   ]
  },
  "One idea, in your own words.": {
@@ -1957,19 +2443,19 @@
  "Only files on this computer's drives can be linked.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:408"
+   "zettelapp/ui/markdown_editor.py:434"
   ]
  },
  "Only http(s) and mailto links are allowed.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:485"
+   "zettelapp/ui/editor.py:558"
   ]
  },
  "Only web, e-mail, Zotero and local file links can be opened.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:420"
+   "zettelapp/ui/editor.py:442"
   ]
  },
  "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes. Your API key is kept in Windows Credential Manager.": {
@@ -1981,7 +2467,13 @@
  "Open": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:344"
+   "zettelapp/ui/note_list.py:388"
+  ]
+ },
+ "Open &Recent": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:262"
   ]
  },
  "Open a note's Mind map tab and add an idea.": {
@@ -2029,25 +2521,38 @@
  "Open the source link": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:206"
+   "zettelapp/ui/editor.py:214"
   ]
  },
  "Open vault": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:321"
+   "zettelapp/ui/dialogs.py:323"
   ]
  },
  "Options": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:323"
+   "zettelapp/ui/dialogs.py:325",
+   "zettelapp/ui/main_window.py:104"
+  ]
+ },
+ "Options (Ctrl+,)": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:105"
   ]
  },
  "Part of": {
   "plural": null,
   "where": [
-   "zettelapp/core/models.py:139"
+   "zettelapp/core/models.py:140"
+  ]
+ },
+ "Paste your {label} API key:": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:719"
   ]
  },
  "Path escapes its folder: {relative!r}": {
@@ -2059,7 +2564,7 @@
  "Permanently delete everything in the Trash": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:221"
+   "zettelapp/ui/note_list.py:259"
   ]
  },
  "Pictures, documents and sources are evidence.": {
@@ -2083,13 +2588,13 @@
  "PNG image (*.png)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:581"
+   "zettelapp/ui/editor.py:654"
   ]
  },
  "PNG image…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:266"
+   "zettelapp/ui/editor.py:277"
   ]
  },
  "Practice quiz": {
@@ -2107,8 +2612,9 @@
  "Preview": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:150",
-   "zettelapp/ui/settings_dialog.py:127"
+   "zettelapp/ui/dialogs.py:434",
+   "zettelapp/ui/editor.py:158",
+   "zettelapp/ui/settings_dialog.py:128"
   ]
  },
  "Prince Zetto, keeper of the Archive, went in after it and hasn't come back.": {
@@ -2117,10 +2623,16 @@
    "zettelapp/ui/quest.py:385"
   ]
  },
+ "Provider": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:603"
+  ]
+ },
  "Q&A": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:657"
+   "zettelapp/ui/editor.py:730"
   ]
  },
  "Question": {
@@ -2132,13 +2644,13 @@
  "Question and answer": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:130"
+   "zettelapp/ui/dialogs.py:132"
   ]
  },
  "Quiz on this note's neighbourhood": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:728"
+   "zettelapp/ui/editor.py:801"
   ]
  },
  "Quiz type": {
@@ -2162,7 +2674,7 @@
  "Reads the same from both notes": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:174"
+   "zettelapp/ui/settings_dialog.py:175"
   ]
  },
  "Reference:": {
@@ -2178,17 +2690,35 @@
    "zettelapp/ui/insights.py:313"
   ]
  },
+ "Refresh list": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:624"
+  ]
+ },
  "Related to": {
   "plural": null,
   "where": [
-   "zettelapp/core/models.py:101",
-   "zettelapp/core/models.py:101"
+   "zettelapp/core/models.py:102",
+   "zettelapp/core/models.py:102"
+  ]
+ },
+ "Remind me on": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:509"
   ]
  },
  "Remove": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:371"
+   "zettelapp/ui/settings_dialog.py:380"
+  ]
+ },
+ "Remove alarm": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:516"
   ]
  },
  "Remove note link": {
@@ -2200,7 +2730,7 @@
  "Remove note picture": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:614"
+   "zettelapp/ui/editor.py:687"
   ]
  },
  "Remove tag “{tag}”": {
@@ -2209,23 +2739,42 @@
    "zettelapp/ui/widgets.py:244"
   ]
  },
+ "Remove title image": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/editor.py:532"
+  ]
+ },
  "Rename": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:333",
-   "zettelapp/ui/mindmap.py:388"
+   "zettelapp/ui/dialogs.py:335",
+   "zettelapp/ui/mindmap.py:388",
+   "zettelapp/ui/settings_dialog.py:610"
+  ]
+ },
+ "Rename key": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:737"
   ]
  },
  "Replace mind map": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:549"
+   "zettelapp/ui/editor.py:622"
   ]
  },
  "Replace the current mind map with one built from this note's links?": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:550"
+   "zettelapp/ui/editor.py:623"
+  ]
+ },
+ "Report an &Issue": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:386"
   ]
  },
  "Restart the Adventure": {
@@ -2234,10 +2783,16 @@
    "zettelapp/ui/quest.py:696"
   ]
  },
+ "Restart ZettelApp to apply the new language.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:1007"
+  ]
+ },
  "Restore": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:336"
+   "zettelapp/ui/note_list.py:380"
   ]
  },
  "Resume the adventure where you left it": {
@@ -2249,14 +2804,15 @@
  "Reverse name": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:392"
+   "zettelapp/ui/settings_dialog.py:401"
   ]
  },
  "Review": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:339",
-   "zettelapp/ui/dialogs.py:313",
+   "zettelapp/ui/dialogs.py:341",
+   "zettelapp/ui/dialogs.py:315",
+   "zettelapp/ui/main_window.py:75",
    "zettelapp/ui/review_page.py:57"
   ]
  },
@@ -2275,7 +2831,7 @@
  "Same as the name": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:489"
+   "zettelapp/ui/settings_dialog.py:498"
   ]
  },
  "Save as note": {
@@ -2299,13 +2855,13 @@
  "Search notes (Ctrl+F) · tag:name filters": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:184"
+   "zettelapp/ui/note_list.py:222"
   ]
  },
  "Search notes by title or text": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:75"
+   "zettelapp/ui/dialogs.py:77"
   ]
  },
  "Search Zotero by title, author or year": {
@@ -2323,37 +2879,55 @@
  "Seen from Note B: {reverse}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:172"
+   "zettelapp/ui/settings_dialog.py:173"
+  ]
+ },
+ "Select &All": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:299"
   ]
  },
  "Select a note or create a new one": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:97"
+   "zettelapp/ui/editor.py:98"
   ]
  },
  "Session complete": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:399"
+   "zettelapp/ui/review_page.py:400"
   ]
  },
  "Session ended": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:399"
+   "zettelapp/ui/review_page.py:400"
+  ]
+ },
+ "Set alarm": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:514"
+  ]
+ },
+ "Set an alarm for this note": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/editor.py:154"
   ]
  },
  "Shortcut": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:352"
+   "zettelapp/ui/dialogs.py:354"
   ]
  },
  "Show answer": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:340"
+   "zettelapp/ui/dialogs.py:342"
   ]
  },
  "Show answer  (Space)": {
@@ -2371,20 +2945,26 @@
  "Show in File Explorer: {path}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/preview.py:97"
+   "zettelapp/ui/preview.py:140"
   ]
  },
  "Show in graph": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:718",
-   "zettelapp/ui/note_list.py:349"
+   "zettelapp/ui/editor.py:791",
+   "zettelapp/ui/note_list.py:393"
   ]
  },
  "Show the Trash": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:215"
+   "zettelapp/ui/note_list.py:253"
+  ]
+ },
+ "Show Vault in &File Explorer": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:283"
   ]
  },
  "Silver threads are links: they tie one note to another.": {
@@ -2408,31 +2988,31 @@
  "Something went wrong. Your notes are saved automatically, so nothing should be lost.": {
   "plural": null,
   "where": [
-   "zettelapp/app.py:111"
+   "zettelapp/app.py:112"
   ]
  },
  "Sort notes": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:190"
+   "zettelapp/ui/note_list.py:228"
   ]
  },
  "Source link": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:198"
+   "zettelapp/ui/editor.py:206"
   ]
  },
  "Source link (optional): https://… or a zotero:// item link": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:197"
+   "zettelapp/ui/editor.py:205"
   ]
  },
  "Sources": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:290"
+   "zettelapp/ui/ask_page.py:291"
   ]
  },
  "Sources sent": {
@@ -2444,7 +3024,7 @@
  "Space": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:340"
+   "zettelapp/ui/dialogs.py:342"
   ]
  },
  "Space shows the answer, and keys 1 to 4 grade it. Nothing due? Write a Q: line and an A: line in a note first.": {
@@ -2462,7 +3042,13 @@
  "Split view": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:150"
+   "zettelapp/ui/editor.py:158"
+  ]
+ },
+ "Start &Review": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:349"
   ]
  },
  "Start quiz": {
@@ -2480,7 +3066,7 @@
  "Start writing… Use [[ to link a note, #tags, Q:/A: or {{c1::cloze}} for flashcards.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:138"
+   "zettelapp/ui/markdown_editor.py:142"
   ]
  },
  "Stop": {
@@ -2492,8 +3078,8 @@
  "Stopped.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:264",
-   "zettelapp/ui/ask_page.py:275"
+   "zettelapp/ui/ask_page.py:265",
+   "zettelapp/ui/ask_page.py:276"
   ]
  },
  "Suggestions need a note with a few sentences. If none appear, open another note or write a little more.": {
@@ -2505,13 +3091,13 @@
  "Supported by": {
   "plural": null,
   "where": [
-   "zettelapp/core/models.py:106"
+   "zettelapp/core/models.py:107"
   ]
  },
  "Supports": {
   "plural": null,
   "where": [
-   "zettelapp/core/models.py:105"
+   "zettelapp/core/models.py:106"
   ]
  },
  "Suspicious compression ratio in {filename!r}.": {
@@ -2523,13 +3109,13 @@
  "SVG image (*.svg)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:582"
+   "zettelapp/ui/editor.py:655"
   ]
  },
  "SVG image…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:267"
+   "zettelapp/ui/editor.py:278"
   ]
  },
  "Sync the flashcards in the chosen scope to Anki through the AnkiConnect add-on (code 2055492159), or export a deck file. Each card links back to its note with a zettelapp:// link, and syncing again updates cards instead of duplicating them.": {
@@ -2547,13 +3133,13 @@
  "Syncing {len} cards to Anki…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:462"
+   "zettelapp/ui/review_page.py:463"
   ]
  },
  "Tab": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:331"
+   "zettelapp/ui/dialogs.py:333"
   ]
  },
  "Tab adds a child idea": {
@@ -2565,7 +3151,7 @@
  "Tab adds a child, Enter a sibling, F2 renames, Del removes. Right-click an idea to link it to a note.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:275"
+   "zettelapp/ui/editor.py:286"
   ]
  },
  "Tag": {
@@ -2605,10 +3191,22 @@
    "zettelapp/core/starter.py:158"
   ]
  },
+ "Test connection": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:637"
+  ]
+ },
  "That is the end of the tour. Happy writing!": {
   "plural": null,
   "where": [
    "zettelapp/core/starter.py:286"
+  ]
+ },
+ "That time has passed, so the notification will appear straight away.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:533"
   ]
  },
  "The adventure is paused. Resume it any time from Help ▸ {title}.": {
@@ -2663,7 +3261,7 @@
  "The default link type cannot be removed.": {
   "plural": null,
   "where": [
-   "zettelapp/core/storage.py:714"
+   "zettelapp/core/storage.py:767"
   ]
  },
  "The door swings open onto a spiral stair. At the top shines the Tower of Insight.": {
@@ -2786,6 +3384,12 @@
    "zettelapp/ui/quest.py:347"
   ]
  },
+ "The selected key is the one used for questions. Keys are kept in Windows Credential Manager.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:667"
+  ]
+ },
  "The selected model was not found. Choose another model in Tools ▸ Options ▸ AI assistant.": {
   "plural": null,
   "where": [
@@ -2843,19 +3447,19 @@
  "There are no flashcards in the chosen scope.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:449"
+   "zettelapp/ui/review_page.py:450"
   ]
  },
  "There are no flashcards in this selection. Add flashcards to notes first, or choose “Name that note”.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:283"
+   "zettelapp/ui/review_page.py:284"
   ]
  },
  "There is already a link type “{name}”.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:560"
+   "zettelapp/ui/settings_dialog.py:569"
   ]
  },
  "thinking": {
@@ -2874,7 +3478,7 @@
  "This card comes from the note text (Q:/A: or {{c1::…}}). Edit it there.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:687"
+   "zettelapp/ui/editor.py:760"
   ]
  },
  "This habit is part of the method:": {
@@ -2886,13 +3490,13 @@
  "This note has no links yet. Link it to other notes first.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:510"
+   "zettelapp/ui/editor.py:583"
   ]
  },
  "This note has no mind map to export.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:575"
+   "zettelapp/ui/editor.py:648"
   ]
  },
  "This Zotero version has no local API. Update to Zotero 7 or later.": {
@@ -2907,11 +3511,17 @@
    "zettelapp/ui/quest.py:241"
   ]
  },
+ "Time for this note.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:476"
+  ]
+ },
  "Title": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:173",
-   "zettelapp/ui/note_list.py:194"
+   "zettelapp/ui/editor.py:181",
+   "zettelapp/ui/note_list.py:232"
   ]
  },
  "To find tagged notes, use the tag filter above the note list, type {search} in the search box, or **Ctrl+click** a tag in the text.": {
@@ -2920,10 +3530,16 @@
    "zettelapp/core/starter.py:167"
   ]
  },
+ "Toggle &Preview": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:319"
+  ]
+ },
  "Toggle edit / preview": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:302"
+   "zettelapp/ui/dialogs.py:304"
   ]
  },
  "Top tags": {
@@ -2941,8 +3557,8 @@
  "Trash": {
   "plural": null,
   "where": [
-   "zettelapp/ui/note_list.py:215",
-   "zettelapp/ui/note_list.py:251"
+   "zettelapp/ui/note_list.py:253",
+   "zettelapp/ui/note_list.py:289"
   ]
  },
  "Two habits make it work. Both notes link here, so you find them under **Backlinks** in the panel on the right: click one to open it.": {
@@ -2954,7 +3570,7 @@
  "Type": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:137"
+   "zettelapp/ui/dialogs.py:139"
   ]
  },
  "Type a question first.": {
@@ -2984,7 +3600,7 @@
  "Typed links say how notes relate. Directed types read differently from each side (“Supports” / “Supported by”). Each type has its own colour and line, so links stay easy to tell apart in the graph even without colour.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/settings_dialog.py:351"
+   "zettelapp/ui/settings_dialog.py:360"
   ]
  },
  "Under Suggested links on the right, click Link to accept a suggestion, or ✕ to dismiss one.": {
@@ -3021,10 +3637,11 @@
  "Untitled": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:287",
-   "zettelapp/ui/editor.py:172",
-   "zettelapp/ui/settings_dialog.py:168",
-   "zettelapp/ui/settings_dialog.py:485"
+   "zettelapp/ui/ask_page.py:288",
+   "zettelapp/ui/editor.py:180",
+   "zettelapp/ui/main_window.py:465",
+   "zettelapp/ui/settings_dialog.py:169",
+   "zettelapp/ui/settings_dialog.py:494"
   ]
  },
  "Update available": {
@@ -3033,16 +3650,34 @@
    "zettelapp/ui/update_notice.py:52"
   ]
  },
+ "Use &Windows Setting": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:324"
+  ]
+ },
  "Use an http(s), mailto or zotero:// item link as the source link.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:629"
+   "zettelapp/ui/editor.py:702"
+  ]
+ },
+ "Use as title image": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/editor.py:533"
+  ]
+ },
+ "Use Windows setting": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/settings_dialog.py:252"
   ]
  },
  "Version {version__}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:262"
+   "zettelapp/ui/dialogs.py:264"
   ]
  },
  "Welcome to ZettelApp": {
@@ -3078,7 +3713,7 @@
  "What to export": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:186"
+   "zettelapp/ui/dialogs.py:188"
   ]
  },
  "When you no longer need these notes, select each one and press **Ctrl+Delete** to move it to the Trash.": {
@@ -3099,10 +3734,22 @@
    "zettelapp/core/starter.py:254"
   ]
  },
+ "With no time of day, the alarm goes off at {time}.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:538"
+  ]
+ },
  "Write a question on a line that starts with {q} and the answer on the next line, starting with {a}, like this:": {
   "plural": null,
   "where": [
    "zettelapp/core/starter.py:218"
+  ]
+ },
+ "Write the formula in LaTeX, for example {example}.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:409"
   ]
  },
  "writing": {
@@ -3150,13 +3797,37 @@
  "Your question and the most relevant notes (up to {limit}) will be sent to {provider} using your API key. Nothing else leaves this computer.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:196"
+   "zettelapp/ui/ask_page.py:197"
   ]
  },
  "Your thread hums with meaning.": {
   "plural": null,
   "where": [
    "zettelapp/ui/quest.py:253"
+  ]
+ },
+ "ZettelApp &Website": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:372"
+  ]
+ },
+ "ZettelApp is free. Donate on Ko-fi to support it": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:101"
+  ]
+ },
+ "ZettelApp is free; donations help the roadmap happen sooner": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/main_window.py:389"
+  ]
+ },
+ "ZettelApp shows a notification for this note at the time you choose. It has to be running (it can sit in the background) for the notification to appear.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/dialogs.py:484"
   ]
  },
  "ZettelApp won't check for updates. Turn it back on in Tools ▸ Options ▸ General.": {
@@ -3247,19 +3918,19 @@
  "{len} notes · {links} links · {cards} flashcards": {
   "plural": null,
   "where": [
-   "zettelapp/ui/dialogs.py:222"
+   "zettelapp/ui/dialogs.py:224"
   ]
  },
  "{n} card": {
   "plural": "{n} cards",
   "where": [
-   "zettelapp/ui/note_list.py:121"
+   "zettelapp/ui/note_list.py:135"
   ]
  },
  "{n} h ago": {
   "plural": "{n} h ago",
   "where": [
-   "zettelapp/ui/editor.py:59"
+   "zettelapp/ui/editor.py:60"
   ]
  },
  "{n} in Trash": {
@@ -3284,13 +3955,13 @@
   "plural": "{n} links",
   "where": [
    "zettelapp/ui/insights.py:82",
-   "zettelapp/ui/note_list.py:119"
+   "zettelapp/ui/note_list.py:133"
   ]
  },
  "{n} min ago": {
   "plural": "{n} min ago",
   "where": [
-   "zettelapp/ui/editor.py:56"
+   "zettelapp/ui/editor.py:57"
   ]
  },
  "{n} note": {
@@ -3326,25 +3997,25 @@
  "{score} of {n} correct": {
   "plural": "{score} of {n} correct",
   "where": [
-   "zettelapp/ui/review_page.py:406"
+   "zettelapp/ui/review_page.py:407"
   ]
  },
  "{score} of {n} remembered": {
   "plural": "{score} of {n} remembered",
   "where": [
-   "zettelapp/ui/review_page.py:404"
+   "zettelapp/ui/review_page.py:405"
   ]
  },
  "{tip} (Ctrl+E cycles)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/editor.py:152"
+   "zettelapp/ui/editor.py:160"
   ]
  },
  "“Name that note” needs at least two notes with a title and some text.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:278"
+   "zettelapp/ui/review_page.py:279"
   ]
  },
  "“Rule one of the Archive,” says Quill: “what isn't written down is lost to the Fog.”": {
@@ -3374,31 +4045,31 @@
  "≈ Almost ({similarity} similar). Answer: {answer}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:383"
+   "zettelapp/ui/review_page.py:384"
   ]
  },
  "✓ Correct": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:368"
+   "zettelapp/ui/review_page.py:369"
   ]
  },
  "✓ Correct. Answer: {answer}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:382"
+   "zettelapp/ui/review_page.py:383"
   ]
  },
  "✗ Not quite. Answer: {answer}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:384"
+   "zettelapp/ui/review_page.py:385"
   ]
  },
  "✗ Not quite. The correct answer is highlighted.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/review_page.py:368"
+   "zettelapp/ui/review_page.py:369"
   ]
  }
 }

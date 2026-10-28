@@ -22,7 +22,7 @@ from zettelapp.core.quiz import MODES, Question, build_quiz, grade_typed, schedu
 from zettelapp.core.render import NoteRenderer
 from zettelapp.i18n import _, n_
 from zettelapp.ui import icons, theme
-from zettelapp.ui.preview import NotePreview
+from zettelapp.ui.preview import NotePreview, math_href
 from zettelapp.ui.widgets import Card, ScopePicker, accent_button, label, link_button
 from zettelapp.ui.workers import run_task
 
@@ -242,6 +242,7 @@ class ReviewPage(QWidget):
             lambda i: titles.get(i) or "Untitled",
             link_types=vault.link_type_map(),
             allow_new_note_links=False,
+            math_href=math_href,
         )
 
     def start_due(self, note_ids: set[str] | None = None) -> None:

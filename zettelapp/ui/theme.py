@@ -174,23 +174,54 @@ def ui_font(point_size: float = 10.0, weight: QFont.Weight = QFont.Weight.Normal
     return font
 
 
+def _draw_indicator(name: str, color: str, path) -> None:
+    """Paint a check mark or chevron to a 32x32 transparent PNG (no icon font needed)."""
+    from PySide6.QtCore import QPointF
+    from PySide6.QtGui import QImage, QPainter, QPainterPath, QPen
+
+    image = QImage(32, 32, QImage.Format.Format_ARGB32)
+    image.fill(Qt.GlobalColor.transparent)
+    painter = QPainter(image)
+    painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+    points = {
+        "check": [(8, 17), (13.5, 22.5), (24, 10.5)],
+        "down": [(8, 12), (16, 20), (24, 12)],
+        "up": [(8, 20), (16, 12), (24, 20)],
+    }[name]
+    shape = QPainterPath(QPointF(*points[0]))
+    for p in points[1:]:
+        shape.lineTo(QPointF(*p))
+    pen = QPen(
+        QColor(color),
+        3.4 if name == "check" else 2.6,
+        Qt.PenStyle.SolidLine,
+        Qt.PenCapStyle.RoundCap,
+        Qt.PenJoinStyle.RoundJoin,
+    )
+    painter.setPen(pen)
+    painter.drawPath(shape)
+    painter.end()
+    image.save(str(path), "PNG")
+
+
 def _indicator_images(t: Theme) -> str:
-    """Render check mark and chevrons (Windows icon font) to PNGs that QSS can reference."""
+    """Draw check mark and chevrons to PNGs that QSS can reference."""
     from zettelapp.paths import local_data_dir
-    from zettelapp.ui import icons
 
     folder = (
-        local_data_dir() / "Cache" / f"theme-{'dark' if t.dark else 'light'}-{t.accent.lstrip('#')}"
+        local_data_dir()
+        / "Cache"
+        / f"theme2-{'dark' if t.dark else 'light'}-{t.accent.lstrip('#')}"
     )
     folder.mkdir(parents=True, exist_ok=True)
-    for name, glyph, color in (
-        ("check", "check", t.on_accent),
-        ("down", "chevron_down", t.text_secondary),
-        ("up", "chevron_up", t.text_secondary),
+    for name, color in (
+        ("check", t.on_accent),
+        ("down", t.text_secondary),
+        ("up", t.text_secondary),
     ):
         path = folder / f"{name}.png"
         if not path.exists():
-            icons.icon(glyph, color, 16).pixmap(32, 32).save(str(path), "PNG")
+            _draw_indicator(name, color, path)
     return folder.as_posix()
 
 
@@ -311,6 +342,10 @@ QMenu::item:selected {{ background: {t.hover}; color: {t.text}; }}
 QMenu::item:disabled {{ color: {t.text_muted}; }}
 QMenu::separator {{ height: 1px; background: {t.border}; margin: 4px 8px; }}
 QMenu::icon {{ padding-left: 8px; }}
+QMenu::indicator {{ width: 16px; height: 16px; margin-left: 6px; border: 1px solid {t.border_strong};
+    border-radius: 4px; background: {t.surface}; }}
+QMenu::indicator:checked {{ background: {t.accent}; border-color: {t.accent}; image: url({images}/check.png); }}
+QMenu::indicator:exclusive {{ border-radius: 9px; }}
 QStatusBar {{ background: {t.window}; color: {t.text_secondary}; border-top: 1px solid {t.border}; }}
 QStatusBar::item {{ border: none; }}
 QSplitter::handle {{ background: transparent; }}

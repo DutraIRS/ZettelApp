@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Während Sie schreiben, listet der Bereich Linkvorschläge Notizen auf, die wahrscheinlich zu der gerade bearbeiteten Notiz passen. Klicken Sie auf Verknüpfen, um sie zu verbinden , ">
+<title>Linkvorschläge – ZettelApp-Dokumentation</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Zum Inhalt springen</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Funktionen</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Doku</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Spenden</a></li>
+        <li><a class="nav-cta" href="../#download">Herunterladen</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇩🇪</span><span class="sr-only">Sprachen</span></summary><ul class="lang-switch-panel" aria-label="Sprachen"><li><a href="../../docs/link-suggestions.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/link-suggestions.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/link-suggestions.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/link-suggestions.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/link-suggestions.html" lang="de" hreflang="de" aria-current="true"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/link-suggestions.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/link-suggestions.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/link-suggestions.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/link-suggestions.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/link-suggestions.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/link-suggestions.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Spenden"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Spenden</span></a>
+      <a class="hbtn cta" href="../#download">Herunterladen</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menü</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Funktionen</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Doku</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Dokumentation">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Dokumentation</span><span class="docs-menu-current">Linkvorschläge</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp-Dokumentation</a></li>
+      <li><a href="what-is-zettelkasten.html">Was ist ein Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: Ihre ersten 30 Minuten</a></li>
+      <li><a href="getting-started.html">Erste Schritte</a></li>
+      <li><a href="notes-and-links.html">Notizen und Links</a></li>
+      <li><a href="link-suggestions.html" aria-current="page">Linkvorschläge</a></li>
+      <li><a href="graph-and-insights.html">Graph und Einblicke</a></li>
+      <li><a href="review-and-anki.html">Wiederholung, Quizfragen und Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ihre Notizen befragen (KI)</a></li>
+      <li><a href="mcp-server.html">MCP-Server</a></li>
+      <li><a href="export-import.html">Export und Import</a></li>
+      <li><a href="keyboard-shortcuts.html">Tastenkombinationen</a></li>
+      <li><a href="privacy-and-security.html">Datenschutz und Sicherheit</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Dokumentation</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp-Dokumentation</a></li>
+      <li><a href="what-is-zettelkasten.html">Was ist ein Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: Ihre ersten 30 Minuten</a></li>
+      <li><a href="getting-started.html">Erste Schritte</a></li>
+      <li><a href="notes-and-links.html">Notizen und Links</a></li>
+      <li><a href="link-suggestions.html" aria-current="page">Linkvorschläge</a></li>
+      <li><a href="graph-and-insights.html">Graph und Einblicke</a></li>
+      <li><a href="review-and-anki.html">Wiederholung, Quizfragen und Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ihre Notizen befragen (KI)</a></li>
+      <li><a href="mcp-server.html">MCP-Server</a></li>
+      <li><a href="export-import.html">Export und Import</a></li>
+      <li><a href="keyboard-shortcuts.html">Tastenkombinationen</a></li>
+      <li><a href="privacy-and-security.html">Datenschutz und Sicherheit</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="linkvorschlage">Linkvorschläge</h1>
+<p>Während Sie schreiben, listet der Bereich <strong>Linkvorschläge</strong> Notizen auf, die wahrscheinlich zu der gerade
+bearbeiteten Notiz passen. Klicken Sie auf <strong>Verknüpfen</strong>, um sie zu verbinden (mit dem Pfeil daneben
+wählen Sie den Linktyp), oder auf <strong>✕</strong>, um einen Vorschlag zu verwerfen. Beides bringt dem Modell etwas
+bei. Wenn Sie auf einen Vorschlag zeigen, sehen Sie, <em>warum</em> er vorgeschlagen wurde.</p>
+<p>Die Vorschläge werden etwa eine Sekunde, nachdem Sie mit dem Tippen aufgehört haben, im Hintergrund
+aktualisiert. Der Editor muss nicht darauf warten. Auch ungespeicherter Text wird berücksichtigt.</p>
+<h2 id="funktionsweise">Funktionsweise</h2>
+<p>ZettelApp behandelt die Frage „Sollten diese beiden Notizen verknüpft werden?“ als Klassifizierungsproblem
+und beantwortet sie mit einem <strong>Naive-Bayes-Klassifikator</strong>. Für eine Notiz <em>q</em> und jeden möglichen
+Kandidaten <em>c</em> berechnet der Klassifikator acht Ähnlichkeitsmerkmale und kombiniert die Belege zu einer
+Wahrscheinlichkeit.</p>
+<h3 id="merkmale">Merkmale</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Merkmal</th>
+<th>Was es misst</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Semantische Ähnlichkeit (LSA)</strong></td>
+<td>Kosinusähnlichkeit in einem latenten semantischen Raum: eine gekürzte SVD der TF-IDF-Matrix (randomisierte SVD mit bis zu 64 Dimensionen). Notizen mit verwandtem Vokabular liegen nahe beieinander, selbst wenn sie nur wenige identische Wörter enthalten.</td>
+</tr>
+<tr>
+<td><strong>Gemeinsame Stichwörter (TF-IDF-Kosinus)</strong></td>
+<td>Kosinusähnlichkeit der TF-IDF-Vektoren (sublineare Termhäufigkeit, geglättete inverse Dokumenthäufigkeit). Titel zählen doppelt; Tags werden einbezogen.</td>
+</tr>
+<tr>
+<td><strong>Titelähnlichkeit (Levenshtein)</strong></td>
+<td>1 − Bearbeitungsabstand ÷ Länge des längeren Titels.</td>
+</tr>
+<tr>
+<td><strong>Titelähnlichkeit (Jaro-Winkler)</strong></td>
+<td>Jaro-Winkler-Ähnlichkeit der Titel, die einen gemeinsamen Anfang stärker gewichtet.</td>
+</tr>
+<tr>
+<td><strong>Textähnlichkeit (Levenshtein)</strong></td>
+<td>Normalisierter Bearbeitungsabstand zwischen den ersten 400 Zeichen der beiden Texte.</td>
+</tr>
+<tr>
+<td><strong>Gemeinsame Tags (Jaccard)</strong></td>
+<td>Gemeinsame Tags ÷ alle Tags.</td>
+</tr>
+<tr>
+<td><strong>Titel im Text erwähnt</strong></td>
+<td>1, wenn der Titel einer Notiz im Text der anderen als ganzes Wort vorkommt; andernfalls 0.</td>
+</tr>
+<tr>
+<td><strong>Gemeinsame Links (Jaccard)</strong></td>
+<td>Überschneidung zwischen den verknüpften Notizen beider Notizen (schließt Dreiecke im Graph).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Text wird kleingeschrieben, Akzente werden vereinheitlicht (sodass <em>informação</em> zu <em>informacao</em> passt),
+Markdown-Syntax wird entfernt und häufige englische, portugiesische und spanische Stoppwörter werden
+ignoriert. Bearbeitungsabstände werden mit <a href="https://github.com/rapidfuzz/RapidFuzz">RapidFuzz</a> berechnet;
+wenn es nicht verfügbar ist, liefert ein reiner Python-Bitparallelalgorithmus dieselben Ergebnisse.</p>
+<h3 id="von-merkmalen-zu-einer-wahrscheinlichkeit">Von Merkmalen zu einer Wahrscheinlichkeit</h3>
+<p>Jeder Merkmalswert (zwischen 0 und 1) wird einem von <strong>8 Intervallen</strong> zugeordnet. Für jedes Merkmal merkt
+sich das Modell, wie häufig verknüpfte und nicht verknüpfte Paare in jedes Intervall fallen, und schätzt:</p>
+<pre><code class="language-text">P(link | f1 … f8)  ∝  P(link) × Π P(fi | link)
+</code></pre>
+<p>Der <strong>Belegwert</strong> eines Merkmals ist das logarithmische Wahrscheinlichkeitsverhältnis:
+log P(bin | link) − log P(bin | no link). Die angezeigte Wahrscheinlichkeit ist die logistische Funktion
+der vorherigen Log-Odds plus der (gewichteten) Summe der Belegwerte.</p>
+<p><strong>Woher die Anzahlen stammen.</strong> Das Modell trainiert jedes Mal mit Ihrem Tresor, wenn sich dieser deutlich
+verändert:</p>
+<ul>
+<li><strong>Positive Beispiele</strong>: jedes Paar verknüpfter Notizen sowie angenommene Vorschläge (in sehr großen Tresoren werden bis zu 600 Paare ausgewählt);</li>
+<li><strong>Negative Beispiele</strong>: zufällige Paare nicht verknüpfter Notizen, drei pro positivem Beispiel, sowie jeder von Ihnen <strong>abgelehnte</strong> Vorschlag, der doppelt zählt.</li>
+</ul>
+<p><strong>Ein Prior, der vom ersten Tag an funktioniert.</strong> Bevor Daten vorhanden sind, beginnt jedes Intervall mit
+Dirichlet-<strong>Pseudozählungen</strong> (standardmäßig 10 pro Merkmal und Klasse). Sie kodieren eine schwache
+Annahme: Bei verknüpften Paaren steigen die Zählungen mit der Ähnlichkeit, bei nicht verknüpften Paaren
+fallen sie stark ab. Das reicht aus, um Vorschläge in einem neuen Tresor zu sortieren. Wenn Sie Notizen
+verknüpfen, überwiegen echte Zählungen den Prior und das Modell passt sich an <em>Ihre</em> Verknüpfungsweise an.
+Da positive und negative Beispiele im Verhältnis eins zu drei ausgewählt werden, liegt der Klassenprior
+P(link) (bei passenden Pseudozählungen) bei etwa einem Viertel.</p>
+<p><strong>Zwei Korrekturen sorgen für verlässliche Schätzungen:</strong></p>
+<ol>
+<li><strong>Keine Informationslecks durch Labels.</strong> <code>[[Wiki links]]</code> werden aus dem Text entfernt, bevor Merkmale berechnet werden. Andernfalls würde ein Inline-Link den Titel des Ziels in den Text aufnehmen und das Modell würde bestehende Links statt verwandter Ideen erkennen lernen. Aus demselben Grund ignoriert das Merkmal „gemeinsame Links“ beim Training mit einem verknüpften Paar den Link zwischen den beiden Notizen.</li>
+<li><strong>Gewichtung korrelierter Belege.</strong> Naive Bayes setzt unabhängige Merkmale voraus, einige sind es aber nicht: TF-IDF und LSA überschneiden sich, ebenso die drei Zeichenkettenabstände. Wenn korrelierte Belege als unabhängig gezählt werden, wird gewöhnliches Naive Bayes übermäßig selbstsicher. Deshalb multipliziert ZettelApp jeden Belegwert mit <strong>0.6</strong> (merkmalgewichtetes Naive Bayes); so bleiben die Wahrscheinlichkeiten realistisch.</li>
+</ol>
+<p><strong>Fehlende oder deaktivierte Merkmale liefern keinen Beleg.</strong> Wenn Sie ein Merkmal ausschalten oder es nicht
+berechnet werden kann, trägt es nichts bei – genau so behandelt Naive Bayes fehlende Werte auf natürliche
+Weise.</p>
+<h3 id="schnelles-sortieren">Schnelles Sortieren</h3>
+<p>Der Vergleich langer Texte per Levenshtein-Abstand ist der langsamste Schritt; deshalb wird in zwei Stufen
+sortiert. Zunächst werden alle Kandidaten ohne das Merkmal Textähnlichkeit bewertet, und nur die besten
+150 erhalten die vollständige Bewertung. Bereits verknüpfte Kandidaten und Paare, die Sie abgelehnt haben,
+werden nie vorgeschlagen.</p>
+<h2 id="den-tooltip-warum-lesen">Den Tooltip „Warum“ lesen</h2>
+<p>Zeigen Sie auf einen Vorschlag, um die Schätzung des Modells und den Belegwert jedes Merkmals zu sehen.
+Positive Zahlen sprechen für einen Link, negative dagegen. Die Beschriftung neben dem Balken fasst die
+Wahrscheinlichkeit zusammen: <strong>stark</strong> (50 % oder mehr), <strong>wahrscheinlich</strong> (25 % oder mehr) oder <strong>möglich</strong>.</p>
+<p>Die Wahrscheinlichkeiten sind ehrliche Schätzungen. In einem spärlich gefüllten Tresor sind die meisten
+Notizpaare tatsächlich nicht verknüpft; 15–30 % können also ein guter Vorschlag sein. Am wichtigsten ist
+die Reihenfolge.</p>
+<h2 id="abstimmen">Abstimmen</h2>
+<p>Unter <em>Werkzeuge ▸ Optionen ▸ Linkvorschläge</em>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Standard</th>
+<th>Wirkung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Beim Schreiben Links vorschlagen</td>
+<td>ein</td>
+<td>Schaltet die Vorschläge im Bereich vollständig aus.</td>
+</tr>
+<tr>
+<td>Merkmale</td>
+<td>alle acht</td>
+<td>Deaktivieren Sie Merkmale, die nicht berücksichtigt werden sollen.</td>
+</tr>
+<tr>
+<td>Höchstens anzeigen</td>
+<td>8</td>
+<td>Anzahl der angezeigten Vorschläge.</td>
+</tr>
+<tr>
+<td>Mindestübereinstimmung</td>
+<td>10%</td>
+<td>Blendet Vorschläge unterhalb dieser Wahrscheinlichkeit aus.</td>
+</tr>
+<tr>
+<td>Priorstärke</td>
+<td>10</td>
+<td>Anzahl der Pseudobeobachtungen, auf die sich der Prior stützt. Höhere Werte bedeuten, dass der Prior länger gilt; niedrigere Werte führen dazu, dass das Modell sich schneller an Ihre Links anpasst.</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Modelldetails…</strong> zeigt die Anzahl der verknüpften und nicht verknüpften Paare, mit denen das Modell trainiert wurde, und wie informativ jedes Merkmal ist (die symmetrische Kullback–Leibler-Divergenz zwischen den Verteilungen für verknüpfte und nicht verknüpfte Paare).</li>
+<li><strong>Abgelehnte Vorschläge vergessen</strong> löscht Ihre Ablehnungen. Diese Paare können dann wieder vorgeschlagen werden und zählen nicht mehr als negative Beispiele.</li>
+</ul>
+
+    <p class="doc-footer">Fehler gefunden? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/de/link-suggestions.md">Diese Seite auf GitHub bearbeiten</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Start</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Spenden</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Sprachen"><li><a href="../../docs/link-suggestions.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/link-suggestions.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/link-suggestions.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/link-suggestions.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/link-suggestions.html" lang="de" hreflang="de" aria-current="true">Deutsch</a></li><li><a href="../../it/docs/link-suggestions.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/link-suggestions.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/link-suggestions.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/link-suggestions.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/link-suggestions.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/link-suggestions.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

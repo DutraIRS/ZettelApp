@@ -146,7 +146,7 @@ def test_upgrade_from_schema_2_keeps_how_links_looked(tmp_path):
     _rewind_to_schema_2(folder)
     v = Vault.open(folder)
     try:
-        assert v.get_meta("schema_version") == "3"
+        assert v.get_meta("schema_version") == "4"
         looks = {t.id: (t.line_style, t.arrow) for t in v.link_types()}
         # Schema 2 took the dash from the type's place in the list and drew open arrows.
         assert looks == {

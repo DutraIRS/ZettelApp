@@ -101,14 +101,14 @@ french.DeleteDataCheck=&Supprimer aussi mes paramètres et données ZettelApp
 german.DeleteDataCheck=Auch meine ZettelApp-Einstellungen und -Daten &löschen
 italian.DeleteDataCheck=&Elimina anche le mie impostazioni e i miei dati di ZettelApp
 dutch.DeleteDataCheck=Ook mijn ZettelApp-instellingen en -gegevens &verwijderen
-DeleteDataNote=Removes settings, saved API keys, logs and automatic backups. Your notes are never deleted: vault folders such as Documents\ZettelApp stay where they are.
-brazilianportuguese.DeleteDataNote=Remove configurações, chaves de API salvas, registros e backups automáticos. Suas notas nunca são apagadas: pastas de cofre como Documentos\ZettelApp continuam onde estão.
-portuguese.DeleteDataNote=Remove definições, chaves de API guardadas, registos e cópias de segurança automáticas. As suas notas nunca são eliminadas: pastas de cofre como Documentos\ZettelApp ficam onde estão.
-spanish.DeleteDataNote=Elimina la configuración, las claves de API guardadas, los registros y las copias de seguridad automáticas. Tus notas nunca se eliminan: las carpetas de bóveda como Documentos\ZettelApp se quedan donde están.
-french.DeleteDataNote=Supprime les paramètres, les clés d'API enregistrées, les journaux et les sauvegardes automatiques. Vos notes ne sont jamais supprimées : les dossiers de coffre comme Documents\ZettelApp restent en place.
-german.DeleteDataNote=Entfernt Einstellungen, gespeicherte API-Schlüssel, Protokolle und automatische Sicherungen. Ihre Notizen werden nie gelöscht: Tresorordner wie Dokumente\ZettelApp bleiben erhalten.
-italian.DeleteDataNote=Rimuove impostazioni, chiavi API salvate, log e backup automatici. Le tue note non vengono mai eliminate: le cartelle dei vault come Documenti\ZettelApp restano dove sono.
-dutch.DeleteDataNote=Verwijdert instellingen, opgeslagen API-sleutels, logboeken en automatische back-ups. Je notities worden nooit verwijderd: kluismappen zoals Documenten\ZettelApp blijven staan.
+DeleteDataNote=Removes settings, saved API keys, logs, automatic backups and ALL your notes (the database and images of your vaults, such as Documents\ZettelApp). This cannot be undone.
+brazilianportuguese.DeleteDataNote=Remove configurações, chaves de API salvas, registros, backups automáticos e TODAS as suas notas (o banco de dados e as imagens dos seus cofres, como Documentos\ZettelApp). Isso não pode ser desfeito.
+portuguese.DeleteDataNote=Remove definições, chaves de API guardadas, registos, cópias de segurança automáticas e TODAS as suas notas (a base de dados e as imagens dos seus cofres, como Documentos\ZettelApp). Não pode ser anulado.
+spanish.DeleteDataNote=Elimina la configuración, las claves de API guardadas, los registros, las copias de seguridad automáticas y TODAS tus notas (la base de datos y las imágenes de tus bóvedas, como Documentos\ZettelApp). No se puede deshacer.
+french.DeleteDataNote=Supprime les paramètres, les clés d'API enregistrées, les journaux, les sauvegardes automatiques et TOUTES vos notes (la base de données et les images de vos coffres, comme Documents\ZettelApp). Cette action est irréversible.
+german.DeleteDataNote=Entfernt Einstellungen, gespeicherte API-Schlüssel, Protokolle, automatische Sicherungen und ALLE Ihre Notizen (Datenbank und Bilder Ihrer Tresore, z. B. Dokumente\ZettelApp). Das lässt sich nicht rückgängig machen.
+italian.DeleteDataNote=Rimuove impostazioni, chiavi API salvate, log, backup automatici e TUTTE le tue note (database e immagini dei tuoi vault, come Documenti\ZettelApp). L'operazione non può essere annullata.
+dutch.DeleteDataNote=Verwijdert instellingen, opgeslagen API-sleutels, logboeken, automatische back-ups en AL je notities (de database en afbeeldingen van je kluizen, zoals Documenten\ZettelApp). Dit kan niet ongedaan worden gemaakt.
 DeleteDataContinue=&Continue
 brazilianportuguese.DeleteDataContinue=&Continuar
 portuguese.DeleteDataContinue=&Continuar
@@ -156,7 +156,7 @@ var
   Note: TNewStaticText;
   ContinueButton: TNewButton;
 begin
-  Form := CreateCustomForm(ScaleX(460), ScaleY(150), False, True);
+  Form := CreateCustomForm(ScaleX(460), ScaleY(178), False, True);
   try
     Form.Caption := CustomMessage('DeleteDataTitle');
 
@@ -176,7 +176,7 @@ begin
     Note.Left := ScaleX(34);
     Note.Top := Check.Top + Check.Height + ScaleY(6);
     Note.Width := Form.ClientWidth - Note.Left - ScaleX(16);
-    Note.Height := ScaleY(52);
+    Note.Height := ScaleY(80);
     Note.Caption := CustomMessage('DeleteDataNote');
 
     ContinueButton := TNewButton.Create(Form);
@@ -226,7 +226,7 @@ begin
         RemoveOwnLinkHandler();
         if DeleteUserData then
         begin
-          { Whatever the app could not remove itself. Notes are never touched. }
+          { Whatever the app could not remove itself. Vaults were removed by the app above. }
           DelTree(ExpandConstant('{localappdata}\ZettelApp'), True, True, True);
           RegDeleteKeyIncludingSubkeys(HKCU, 'Software\ZettelApp');
         end;

@@ -4,14 +4,16 @@ from __future__ import annotations
 
 import platform
 from collections.abc import Callable
-from datetime import date
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
-from PySide6.QtCore import QSize, Qt, QUrl
-from PySide6.QtGui import QDesktopServices
+from PySide6.QtCore import QDateTime, QLocale, QSize, Qt, QUrl
+from PySide6.QtGui import QDesktopServices, QPixmap
 from PySide6.QtWidgets import (
     QButtonGroup,
+    QCheckBox,
     QComboBox,
+    QDateTimeEdit,
     QDialog,
     QDialogButtonBox,
     QFileDialog,
@@ -391,3 +393,164 @@ class TextPromptDialog(QDialog):
 
     def value(self) -> str:
         return self.edit.text().strip()
+
+
+class FormulaDialog(QDialog):
+    """Type LaTeX and see the formula as it will look in the note."""
+
+    def __init__(self, parent=None, latex: str = "", display: bool = False):
+        super().__init__(parent)
+        self.setWindowTitle(_("Insert formula"))
+        self.setMinimumWidth(520)
+        layout = QVBoxLayout(self)
+        layout.setSpacing(8)
+        layout.addWidget(
+            label(
+                _("Write the formula in LaTeX, for example {example}.").format(
+                    example=r"\frac{a}{b},  x^2,  \sqrt{x},  \sum_{i=1}^{n} i,  \alpha"
+                ),
+                "secondary",
+                wrap=True,
+            )
+        )
+        self.edit = QPlainTextEdit(latex)
+        self.edit.setAccessibleName(_("LaTeX"))
+        self.edit.setFixedHeight(80)
+        self.edit.textChanged.connect(self._update)
+        layout.addWidget(self.edit)
+        row = QHBoxLayout()
+        self.inline = QRadioButton(_("Inline, inside a sentence"))
+        self.block = QRadioButton(_("On its own line, centred"))
+        (self.block if display else self.inline).setChecked(True)
+        self.inline.toggled.connect(self._update)
+        row.addWidget(self.inline)
+        row.addWidget(self.block)
+        row.addStretch(1)
+        layout.addLayout(row)
+        self.preview = QLabel()
+        self.preview.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.preview.setMinimumHeight(70)
+        self.preview.setObjectName("FormulaPreview")
+        self.preview.setAccessibleName(_("Preview"))
+        layout.addWidget(self.preview)
+        self.problem = label("", "caption", wrap=True)
+        layout.addWidget(self.problem)
+        self.buttons = _buttons(self, _("Insert"))
+        layout.addWidget(self.buttons)
+        self._update()
+
+    def _update(self) -> None:
+        from zettelapp.ui import mathrender
+
+        latex = self.edit.toPlainText().strip()
+        ok_button = self.buttons.button(QDialogButtonBox.StandardButton.Ok)
+        ok_button.setEnabled(bool(latex))
+        if not latex:
+            self.preview.clear()
+            self.problem.setText("")
+            return
+        result = mathrender.render(latex, 22, theme.current().text, self.is_display())
+        self.preview.setPixmap(QPixmap.fromImage(result.image))
+        self.problem.setText(
+            "" if result.ok else _("Not understood: {problem}").format(problem=result.message)
+        )
+
+    def is_display(self) -> bool:
+        return self.block.isChecked()
+
+    def value(self) -> tuple[str, bool]:
+        return self.edit.toPlainText().strip(), self.is_display()
+
+    def markdown(self) -> str:
+        latex, display = self.value()
+        latex = " ".join(latex.split()) if "\n" in latex and not display else latex
+        return f"$${latex}$$" if display else f"${latex}$"
+
+
+class AlarmDialog(QDialog):
+    """Pick when a note should remind you. *removed* is set when the user clears the alarm."""
+
+    DEFAULT_HOUR = 9
+
+    def __init__(self, parent=None, current: str = ""):
+        super().__init__(parent)
+        self.setWindowTitle(_("Alarm"))
+        self.setMinimumWidth(380)
+        self.removed = False
+        layout = QVBoxLayout(self)
+        layout.setSpacing(10)
+        layout.addWidget(
+            label(
+                _(
+                    "ZettelApp shows a notification for this note at the time you choose. It has to be running (it can sit in the background) for the notification to appear."
+                ),
+                "secondary",
+                wrap=True,
+            )
+        )
+        existing = None
+        if current:
+            try:
+                existing = datetime.fromisoformat(current).astimezone()
+            except ValueError:
+                existing = None
+        base = existing or (datetime.now().astimezone() + timedelta(days=1))
+        self.when = QDateTimeEdit(QDateTime(base.replace(tzinfo=None)))
+        self.when.setCalendarPopup(True)
+        self.when.setDisplayFormat(QLocale().dateFormat(QLocale.FormatType.ShortFormat))
+        self.when.setAccessibleName(_("Date"))
+        self.has_time = QCheckBox(_("Also set a time of day"))
+        self.has_time.setChecked(
+            existing is not None and (existing.hour, existing.minute) != (self.DEFAULT_HOUR, 0)
+        )
+        self.has_time.toggled.connect(self._format)
+        self.when.dateTimeChanged.connect(self._hint)
+        form = QFormLayout()
+        form.addRow(_("Remind me on"), self.when)
+        layout.addLayout(form)
+        layout.addWidget(self.has_time)
+        self.note = label("", "caption", wrap=True)
+        layout.addWidget(self.note)
+        buttons = _buttons(self, _("Set alarm"))
+        if current:
+            remove = QPushButton(_("Remove alarm"))
+            remove.clicked.connect(self._remove)
+            buttons.addButton(remove, QDialogButtonBox.ButtonRole.ResetRole)
+        layout.addWidget(buttons)
+        self._format()
+
+    def _format(self) -> None:
+        locale = QLocale()
+        fmt = locale.dateFormat(QLocale.FormatType.ShortFormat)
+        if self.has_time.isChecked():
+            fmt += " " + locale.timeFormat(QLocale.FormatType.ShortFormat)
+        self.when.setDisplayFormat(fmt)
+        self._hint()
+
+    def _hint(self) -> None:
+        past = self.value() <= datetime.now().astimezone()
+        self.note.setText(
+            _("That time has passed, so the notification will appear straight away.")
+            if past
+            else (
+                ""
+                if self.has_time.isChecked()
+                else _("With no time of day, the alarm goes off at {time}.").format(
+                    time=f"{self.DEFAULT_HOUR:02d}:00"
+                )
+            )
+        )
+
+    def _remove(self) -> None:
+        self.removed = True
+        self.accept()
+
+    def value(self) -> datetime:
+        """The chosen moment as an aware local time."""
+        picked = self.when.dateTime().toPython()
+        if not self.has_time.isChecked():
+            picked = picked.replace(hour=self.DEFAULT_HOUR, minute=0, second=0, microsecond=0)
+        return picked.replace(second=0, microsecond=0).astimezone()
+
+    def iso(self) -> str:
+        return self.value().astimezone(UTC).isoformat(timespec="seconds")

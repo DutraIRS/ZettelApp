@@ -154,8 +154,28 @@ under a name derived from their content, and referenced like this:
 ![Diagram](asset:3f2a9c0b1d4e5f6a7b8c.png)
 ```
 
-The first image you add to a note becomes its **note picture**. The picture is shown next to the title
-and inside the note's circle in the graph. Right-click it to remove it.
+The first image you add to a note becomes its **title image**. It is shown as a small rounded thumbnail in
+the note list and inside the note's circle in the graph. Right-click any image in the editor or preview
+and choose *Use as title image* to pick another one, or *Remove title image* to have none.
+
+## Checklists
+
+Start a line with `- [ ]` (or press the checklist button in the toolbar) to make a task. `- [x]` is a
+completed task. In the preview, click the box to tick it; pressing Enter at the end of a task starts the
+next one, and Enter on an empty task ends the list.
+
+## Alarms
+
+Press the alarm button (or *Insert ▸ Alarm…*) to set a date and, optionally, a time for a note. When it is
+due, ZettelApp shows a notification; click it to open the note. ZettelApp has to be running to notify you,
+and alarms that came due while it was closed fire shortly after you open the vault. Alarmed notes show a
+bell in the note list. Use *Remove alarm* in the same dialog to clear it.
+
+## Formulas
+
+Write LaTeX between dollar signs: `$E = mc^2$` is inline and `$$\int_0^1 x^2\,dx$$` is a display formula.
+The formula button (*Insert ▸ Formula…*) opens a dialog with a live preview. Formulas are drawn in the
+preview; exports keep the LaTeX source.
 
 ## Mind maps
 

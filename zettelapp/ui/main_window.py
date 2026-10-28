@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QSplitter,
     QStackedWidget,
+    QSystemTrayIcon,
     QToolButton,
     QVBoxLayout,
     QWidget,
@@ -45,7 +46,9 @@ from zettelapp.core.starter import HUB as STARTER_HUB
 from zettelapp.core.starter import create_starter_notes
 from zettelapp.core.storage import Vault, VaultError
 from zettelapp.core.suggest import FEATURES, NoteData
+from zettelapp.core.textutil import strip_markdown
 from zettelapp.core.updates import available_update
+from zettelapp.i18n import N_, _
 from zettelapp.mcp_switch import McpSwitch
 from zettelapp.paths import backups_dir, default_vault_dir, documents_dir
 from zettelapp.ui import icons, theme
@@ -66,11 +69,11 @@ from zettelapp.ui.workers import SuggestionService, run_task
 log = logging.getLogger(__name__)
 
 NAV = [
-    ("notes", "Notes"),
-    ("graph", "Graph"),
-    ("insights", "Insights"),
-    ("review", "Review"),
-    ("chat", "Ask"),
+    ("notes", N_("Notes")),
+    ("graph", N_("Graph")),
+    ("insights", N_("Insights")),
+    ("review", N_("Review")),
+    ("chat", N_("Ask")),
 ]
 
 
@@ -86,20 +89,20 @@ class NavRail(QWidget):
         self.group = QButtonGroup(self)
         self.buttons: list[QToolButton] = []
         for i, (glyph, text) in enumerate(NAV):
-            b = self._button(glyph, text)
+            b = self._button(glyph, _(text))
             b.setCheckable(True)
-            b.setToolTip(f"{text} (Ctrl+{i + 1})")
+            b.setToolTip(f"{_(text)} (Ctrl+{i + 1})")
             self.group.addButton(b, i)
             self.buttons.append(b)
             layout.addWidget(b)
         layout.addStretch(1)
-        donate = self._button("heart", "Donate")
+        donate = self._button("heart", _("Donate"))
         donate.setIcon(icons.icon("heart", theme.current().categorical[4], size=22))
-        donate.setToolTip("ZettelApp is free. Donate on Ko-fi to support it")
+        donate.setToolTip(_("ZettelApp is free. Donate on Ko-fi to support it"))
         donate.clicked.connect(on_donate)
         layout.addWidget(donate)
-        settings_button = self._button("settings", "Options")
-        settings_button.setToolTip("Options (Ctrl+,)")
+        settings_button = self._button("settings", _("Options"))
+        settings_button.setToolTip(_("Options (Ctrl+,)"))
         settings_button.clicked.connect(on_settings)
         layout.addWidget(settings_button)
         self.group.idClicked.connect(on_change)
@@ -180,6 +183,10 @@ class MainWindow(QMainWindow):
         )
         self.watch_timer = QTimer(self, interval=3000, timeout=self._check_external_changes)
         self.watch_timer.start()
+        self.alarm_timer = QTimer(self, interval=20000, timeout=self.check_alarms)
+        self.alarm_timer.start()
+        self._tray = None
+        self._tray_note: str | None = None
         self._wire()
         self.quest = Quest(self)
         self._build_menus()
@@ -233,26 +240,26 @@ class MainWindow(QMainWindow):
     def _action(
         self, menu, text: str, slot, shortcut=None, glyph: str | None = None, tip: str = ""
     ) -> QAction:
-        action = QAction(text, self)
+        action = QAction(_(text), self)
         if glyph:
             action.setIcon(icons.icon(glyph))
         if shortcut is not None:
             action.setShortcut(QKeySequence(shortcut))
         if tip:
-            action.setStatusTip(tip)
+            action.setStatusTip(_(tip))
         action.triggered.connect(slot)
         menu.addAction(action)
         return action
 
     def _build_menus(self) -> None:
         bar = self.menuBar()
-        f = bar.addMenu("&File")
+        f = bar.addMenu(_("&File"))
         self._action(f, "&New Note", self.new_note, QKeySequence.StandardKey.New, "add")
         self._action(f, "New &Vault…", self.new_vault_dialog, None, "folder")
         self._action(
             f, "&Open Vault…", self.open_vault_dialog, QKeySequence.StandardKey.Open, "open"
         )
-        self.recent_menu = f.addMenu("Open &Recent")
+        self.recent_menu = f.addMenu(_("Open &Recent"))
         f.addSeparator()
         self._action(
             f,
@@ -281,15 +288,15 @@ class MainWindow(QMainWindow):
         f.addSeparator()
         self._action(f, "E&xit", self.close, "Alt+F4")
 
-        e = bar.addMenu("&Edit")
+        e = bar.addMenu(_("&Edit"))
         for text, method, key in (
-            ("&Undo", "undo", QKeySequence.StandardKey.Undo),
-            ("&Redo", "redo", "Ctrl+Y"),
+            (N_("&Undo"), "undo", QKeySequence.StandardKey.Undo),
+            (N_("&Redo"), "redo", "Ctrl+Y"),
             (None, None, None),
-            ("Cu&t", "cut", QKeySequence.StandardKey.Cut),
-            ("&Copy", "copy", QKeySequence.StandardKey.Copy),
-            ("&Paste", "paste", QKeySequence.StandardKey.Paste),
-            ("Select &All", "selectAll", QKeySequence.StandardKey.SelectAll),
+            (N_("Cu&t"), "cut", QKeySequence.StandardKey.Cut),
+            (N_("&Copy"), "copy", QKeySequence.StandardKey.Copy),
+            (N_("&Paste"), "paste", QKeySequence.StandardKey.Paste),
+            (N_("Select &All"), "selectAll", QKeySequence.StandardKey.SelectAll),
         ):
             if text is None:
                 e.addSeparator()
@@ -303,28 +310,28 @@ class MainWindow(QMainWindow):
         e.addSeparator()
         self._action(e, "Move Note to &Trash", self.trash_current, "Ctrl+Delete", "delete")
 
-        v = bar.addMenu("&View")
+        v = bar.addMenu(_("&View"))
         for i, (glyph, text) in enumerate(NAV):
             self._action(
-                v, f"&{text}", lambda _=False, n=i: self.show_page(n), f"Ctrl+{i + 1}", glyph
+                v, f"&{_(text)}", lambda _=False, n=i: self.show_page(n), f"Ctrl+{i + 1}", glyph
             )
         v.addSeparator()
         self._action(v, "Toggle &Preview", self.editor.cycle_view_mode, "Ctrl+E", "view")
         self._action(v, "&Full Screen", self._toggle_full_screen, "F11", "fit")
-        theme_menu = v.addMenu("&Theme")
+        theme_menu = v.addMenu(_("&Theme"))
         group = QActionGroup(self)
         for text, key in (
-            ("Use &Windows Setting", "system"),
-            ("&Light", "light"),
-            ("&Dark", "dark"),
+            (N_("Use &Windows Setting"), "system"),
+            (N_("&Light"), "light"),
+            (N_("&Dark"), "dark"),
         ):
-            action = QAction(text, self, checkable=True)
+            action = QAction(_(text), self, checkable=True)
             action.setChecked(settings.get(settings.THEME) == key)
             action.triggered.connect(lambda _=False, k=key: self._set_theme(k))
             group.addAction(action)
             theme_menu.addAction(action)
 
-        i = bar.addMenu("&Insert")
+        i = bar.addMenu(_("&Insert"))
         self._action(i, "&Link to Note…", self.link_note_inline, "Ctrl+K", "relationship")
         self._action(i, "&Web Link…", self.editor.insert_web_link, None, "globe")
         self._action(i, "Link to a &File…", self.editor.insert_file_link, None, "folder")
@@ -332,8 +339,13 @@ class MainWindow(QMainWindow):
         self._action(i, "&Zotero Reference…", self.zotero_reference, None, "library")
         self._action(i, "&Mind Map", self.editor.show_mindmap, None, "mindmap")
         self._action(i, "&Flashcard…", self.editor.add_card, "Ctrl+Shift+F", "cards")
+        self._action(
+            i, "Chec&klist", lambda: self.editor.body.prefix_lines("- [ ] "), None, "checklist"
+        )
+        self._action(i, "F&ormula…", self.editor.insert_formula, None, "formula")
+        self._action(i, "&Alarm…", self.editor.set_alarm, None, "alarm")
 
-        t = bar.addMenu("&Tools")
+        t = bar.addMenu(_("&Tools"))
         self._action(
             t, "Start &Review", lambda: (self.show_page(3), self.review.start_due()), None, "review"
         )
@@ -345,7 +357,7 @@ class MainWindow(QMainWindow):
         t.addSeparator()
         self._action(t, "&Options…", lambda: self.open_options(), "Ctrl+,", "settings")
 
-        h = bar.addMenu("&Help")
+        h = bar.addMenu(_("&Help"))
         self._action(
             h,
             "&Documentation",
@@ -383,7 +395,13 @@ class MainWindow(QMainWindow):
             "ZettelApp is free; donations help the roadmap happen sooner",
         )
         h.addSeparator()
-        self._action(h, f"&About {APP_NAME}", lambda: AboutDialog(self).exec(), None, "info")
+        self._action(
+            h,
+            _("&About {app}").format(app=APP_NAME),
+            lambda: AboutDialog(self).exec(),
+            None,
+            "info",
+        )
 
     def donate(self) -> None:
         QDesktopServices.openUrl(QUrl(SPONSOR_URL))
@@ -428,6 +446,45 @@ class MainWindow(QMainWindow):
         self.show_page(4)
         self.ask.focus_with_scope("subgraph" if self.current_note_id() else "all")
 
+    # --- alarms ---------------------------------------------------------------
+
+    def alarms_changed(self) -> None:
+        self.list.refresh()
+        self.check_alarms()
+
+    def check_alarms(self) -> None:
+        """Pop up a notification for every alarm note whose time has come."""
+        if self.vault is None:
+            return
+        for note in self.vault.due_alarms():
+            self.vault.mark_alarm_fired(note.id)
+            self._notify_alarm(note)
+            self.list.refresh()
+
+    def _notify_alarm(self, note) -> None:
+        title = note.title or _("Untitled")
+        self.info.show_message(_("Alarm: {title}").format(title=title))
+        if not QSystemTrayIcon.isSystemTrayAvailable():
+            return
+        if self._tray is None:
+            self._tray = QSystemTrayIcon(self.windowIcon(), self)
+            self._tray.messageClicked.connect(self._open_alarm_note)
+            self._tray.show()
+        self._tray_note = note.id
+        self._tray.showMessage(
+            title,
+            strip_markdown(note.body)[:140] or _("Time for this note."),
+            QSystemTrayIcon.MessageIcon.Information,
+            15000,
+        )
+
+    def _open_alarm_note(self) -> None:
+        if self._tray_note and self.vault is not None:
+            self.showNormal()
+            self.raise_()
+            self.activateWindow()
+            self.open_note(self._tray_note)
+
     # --- vault lifecycle ---------------------------------------------------
 
     def open_vault(self, folder: str | Path) -> bool:
@@ -464,6 +521,7 @@ class MainWindow(QMainWindow):
         self.editor.body.set_titles(list(vault.titles().values()))
         first = self.list.model.rows[0]["id"] if self.list.model.rows else None
         self.open_note(first) if first else self.editor.load(None)
+        QTimer.singleShot(1500, self.check_alarms)
         return True
 
     def close_vault(self) -> None:
@@ -582,6 +640,7 @@ class MainWindow(QMainWindow):
 
     def note_renderer(self):
         from zettelapp.core.render import NoteRenderer
+        from zettelapp.ui.preview import math_href
 
         vault = self.vault
 
@@ -590,7 +649,12 @@ class MainWindow(QMainWindow):
             return note.display_title if note else note_id
 
         return NoteRenderer(
-            vault.resolve_title, title_of, link_types=vault.link_type_map(), allow_file_links=True
+            vault.resolve_title,
+            title_of,
+            link_types=vault.link_type_map(),
+            allow_file_links=True,
+            task_links=True,
+            math_href=math_href,
         )
 
     def reveal_file(self, path: str) -> None:
@@ -1136,4 +1200,6 @@ class MainWindow(QMainWindow):
         store.setValue("window/splitter", self.splitter.saveState())
         store.sync()
         self.close_vault()
+        if self._tray is not None:
+            self._tray.hide()
         super().closeEvent(event)

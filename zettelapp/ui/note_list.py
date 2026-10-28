@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 from datetime import datetime
+from functools import lru_cache
 
 from PySide6.QtCore import QAbstractListModel, QModelIndex, QRectF, QSize, Qt, QTimer, Signal
-from PySide6.QtGui import QFontMetrics, QPainter, QPainterPath
+from PySide6.QtGui import QFontMetrics, QImage, QPainter, QPainterPath, QPen, QPixmap
 from PySide6.QtWidgets import (
     QComboBox,
     QHBoxLayout,
@@ -73,6 +74,19 @@ class NoteDelegate(QStyledItemDelegate):
             pill.addRoundedRect(QRectF(rect.left(), rect.center().y() - 9, 3, 18), 1.5, 1.5)
             painter.fillPath(pill, t.q("accent"))
         inner = rect.adjusted(14, 9, -10, -8)
+        thumb = _thumbnail(row.get("image"))
+        if thumb is not None:
+            side = 48
+            target = QRectF(rect.left() + 14, rect.center().y() - side / 2, side, side)
+            clip = QPainterPath()
+            clip.addRoundedRect(target, 8, 8)
+            painter.save()
+            painter.setClipPath(clip)
+            painter.drawPixmap(target.toRect(), thumb)
+            painter.restore()
+            painter.setPen(QPen(t.q("border"), 1))
+            painter.drawPath(clip)
+            inner = inner.adjusted(side + 10, 0, 0, 0)
         title_font = theme.ui_font(10.5, theme.QFont.Weight.DemiBold)
         painter.setFont(title_font)
         painter.setPen(t.q("text"))
@@ -119,22 +133,46 @@ class NoteDelegate(QStyledItemDelegate):
             extras.append(n_("{n} link", "{n} links", row["links"]).format(n=row["links"]))
         if row["cards"]:
             extras.append(n_("{n} card", "{n} cards", row["cards"]).format(n=row["cards"]))
+        foot_rect = QRectF(
+            inner.left(),
+            inner.bottom() - QFontMetrics(date_font).height(),
+            inner.width(),
+            QFontMetrics(date_font).height(),
+        )
+        if row.get("alarm"):
+            icon_size = 14
+            icons.icon("alarm", t.accent, icon_size).paint(
+                painter,
+                int(foot_rect.right() - icon_size),
+                int(foot_rect.center().y() - icon_size / 2),
+                icon_size,
+                icon_size,
+            )
+            foot_rect.setWidth(foot_rect.width() - icon_size - 4)
         painter.setFont(date_font)
         painter.setPen(t.q("text_muted"))
         foot = QFontMetrics(date_font).elidedText(
-            "  ·  ".join(extras), Qt.TextElideMode.ElideRight, int(inner.width())
+            "  ·  ".join(extras), Qt.TextElideMode.ElideRight, int(foot_rect.width())
         )
-        painter.drawText(
-            QRectF(
-                inner.left(),
-                inner.bottom() - QFontMetrics(date_font).height(),
-                inner.width(),
-                QFontMetrics(date_font).height(),
-            ),
-            Qt.AlignmentFlag.AlignLeft,
-            foot,
-        )
+        painter.drawText(foot_rect, Qt.AlignmentFlag.AlignLeft, foot)
         painter.restore()
+
+
+@lru_cache(maxsize=256)
+def _thumbnail(path: str | None) -> QPixmap | None:
+    """A square, centre-cropped 48 px preview (at 2x for sharp edges), or None."""
+    if not path:
+        return None
+    image = QImage(path)
+    if image.isNull():
+        return None
+    side = min(image.width(), image.height())
+    image = image.copy((image.width() - side) // 2, (image.height() - side) // 2, side, side)
+    return QPixmap.fromImage(
+        image.scaled(
+            96, 96, Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation
+        )
+    )
 
 
 def _short_date(iso: str) -> str:
@@ -296,6 +334,8 @@ class NoteListPanel(QWidget):
                 "tags": notes[i].tags,
                 "links": degree.get(i, 0),
                 "cards": cards.get(i, 0),
+                "alarm": bool(notes[i].alarm),
+                "image": self._image_path(notes[i].image),
             }
             for i in ids
         ]
@@ -304,6 +344,10 @@ class NoteListPanel(QWidget):
         self.count.setText(f"{len(rows)} of {total}" if len(rows) != total else f"{total}")
         if selected:
             self.select(selected, emit=False)
+
+    def _image_path(self, asset: str) -> str | None:
+        path = self.vault.asset_path(asset) if asset and self.vault else None
+        return str(path) if path else None
 
     def current_id(self) -> str | None:
         index = self.view.currentIndex()

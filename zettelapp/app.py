@@ -13,6 +13,7 @@ import shutil
 import sys
 import traceback
 from logging.handlers import RotatingFileHandler
+from pathlib import Path
 
 from PySide6.QtCore import QByteArray, Qt, QTimer
 from PySide6.QtGui import QIcon
@@ -138,18 +139,54 @@ def _self_test(argv: list[str]) -> int:
     return 0
 
 
+def _vault_folders() -> list[Path]:
+    """Every vault the app knows about: the last opened, the recent ones, and the default."""
+    from zettelapp.core.storage import Vault
+    from zettelapp.paths import default_vault_dir
+
+    candidates = [settings.get(settings.LAST_VAULT), *settings.get_list(settings.RECENT_VAULTS)]
+    candidates.append(str(default_vault_dir()))
+    folders: list[Path] = []
+    for raw in candidates:
+        if not raw:
+            continue
+        folder = Path(raw)
+        if folder not in folders and Vault.is_vault(folder):
+            folders.append(folder)
+    return folders
+
+
+def _delete_vault(folder: Path) -> None:
+    """Delete only what ZettelApp created in a vault folder (its database and images)."""
+    from zettelapp.core.storage import Vault
+
+    for suffix in ("", "-journal", "-wal", "-shm"):
+        try:
+            (folder / f"{Vault.DB_NAME}{suffix}").unlink(missing_ok=True)
+        except OSError:
+            log.warning("Could not delete %s", folder / f"{Vault.DB_NAME}{suffix}")
+    shutil.rmtree(folder / Vault.ASSETS_DIR, ignore_errors=True)
+    try:
+        folder.rmdir()  # only if nothing else of the user's is in it
+    except OSError:
+        pass
+
+
 def remove_user_data() -> int:
-    """Run by the uninstaller when the user ticks "Also delete my ZettelApp settings…":
-    removes settings, saved API keys, logs, cache and automatic backups. Notes are never
-    touched: vaults live in folders the user chose (Documents\\ZettelApp by default)."""
+    """Run by the uninstaller when the user ticks "Also delete my ZettelApp settings and data":
+    removes settings, saved API keys, logs, cache, automatic backups and the notes of every
+    vault the app has used (its database and images; other files in those folders are kept)."""
     from zettelapp.core import secrets
     from zettelapp.paths import local_data_dir
 
+    vaults = _vault_folders()
     store = settings.store()
     store.clear()
     store.sync()
     secrets.delete_all()
     shutil.rmtree(local_data_dir(), ignore_errors=True)
+    for folder in vaults:
+        _delete_vault(folder)
     return 0
 
 

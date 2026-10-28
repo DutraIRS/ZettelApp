@@ -10,18 +10,29 @@ All notable changes to ZettelApp are documented here. The format follows
 
 - **The Lost Prince of the Archive**, an optional first-run adventure that teaches notes, links, tags,
   suggestions, the graph, mind maps, attachments, review and Insights through real actions.
-- Translation infrastructure, a source message catalogue and language selection for future community
-  translations.
 - Line styles and arrow-tip choices for built-in and custom link types, including a live preview.
+- Checklists (`- [ ]`) in note bodies, toggled from the preview.
+- Alarm notes: set a date and optional time and get a notification (ZettelApp must be running).
+- LaTeX formulas (`$…$` and `$$…$$`) with a formula dialog and live preview.
+- A title image per note (right-click an image), shown as a rounded thumbnail in the note list.
+- Insert file links, and manage several saved AI API keys.
+- Interface, documentation and website translations: Spanish, Portuguese (Brazil), French, German,
+  Italian, Russian, Simplified Chinese, Japanese, Korean and Arabic. Change the app's language in
+  *Options ▸ General*; the website suggests your browser's language and offers a flag menu to switch.
 
 ### Changed
 
+- Split view is the default; the delete button moved to the editor toolbar.
+- Menu and option check marks now show a tick.
+- The 3D graph labels are clearer, and 2D arrows follow nodes while dragging.
 - Link styles now travel through archive and JSON export, import and MCP responses.
 - New vaults start with a small linked tour of ZettelApp.
 - The website, documentation navigation and footer now adapt to narrow phone screens.
 
 ### Fixed
 
+- Dragging and dropping images into a note now works.
+- Ticking "delete my data" when uninstalling now also removes your notes.
 - Close the database connection when opening or upgrading a vault fails.
 
 ## [1.0.0] - 2026-10-28

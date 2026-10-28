@@ -11,7 +11,7 @@ ZettelApp runs on **Windows 10 (21H2 or later) and Windows 11, 64-bit**. Downloa
 | `ZettelApp-Portable.zip` | You can't install software, or you want to run it from a USB drive. Unzip it anywhere and run `ZettelApp.exe`. |
 
 The installer asks which language to use and suggests your Windows display language. The installer
-itself is translated; the app is in English for now (see the [roadmap](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md)).
+and the app are translated into 11 languages; change the app's language in *Options*.
 
 Each release lists SHA-256 checksums (`SHA256SUMS.txt`). To check a download in PowerShell:
 
@@ -74,8 +74,8 @@ anything by itself.
 
 Use *Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall*. After you confirm, a dialog offers
 an unticked **Also delete my ZettelApp settings and data** option. It removes your settings, saved API
-keys, logs, cache and automatic backups (`%LOCALAPPDATA%\ZettelApp`). Your notes are never deleted:
-vault folders such as `Documents\ZettelApp` stay. For the portable version, delete its folder.
+keys, logs, cache and automatic backups (`%LOCALAPPDATA%\ZettelApp`) **and all your notes** (the database
+and attachments of your vaults). Leave it unticked to keep your notes. For the portable version, delete its folder.
 
 ## Next steps
 

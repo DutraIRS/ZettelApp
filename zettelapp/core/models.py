@@ -26,6 +26,7 @@ class Note:
     created: str = ""
     modified: str = ""
     deleted: bool = False
+    alarm: str = ""  # UTC ISO time at which to remind the user, or empty
 
     @property
     def display_title(self) -> str:

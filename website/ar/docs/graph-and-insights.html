@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="تعرض صفحة الرسم البياني  ملاحظاتك على شكل شبكة: تمثل كل دائرة ملاحظة، ويحدد عدد روابطها حجمها، ويمثل كل خط رابطًا.">
+<title>الرسم البياني والإحصاءات – توثيق ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">انتقل إلى المحتوى</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">الميزات</a></li>
+        <li><a href="tutorial.html">الدرس</a></li>
+        <li><a href="./">التوثيق</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> تبرّع</a></li>
+        <li><a class="nav-cta" href="../#download">تنزيل</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇸🇦</span><span class="sr-only">اللغات</span></summary><ul class="lang-switch-panel" aria-label="اللغات"><li><a href="../../docs/graph-and-insights.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/graph-and-insights.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/graph-and-insights.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/graph-and-insights.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/graph-and-insights.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/graph-and-insights.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/graph-and-insights.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/graph-and-insights.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/graph-and-insights.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/graph-and-insights.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/graph-and-insights.html" lang="ar" hreflang="ar" aria-current="true"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="تبرّع"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">تبرّع</span></a>
+      <a class="hbtn cta" href="../#download">تنزيل</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">القائمة</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">الميزات</a></li>
+          <li><a href="tutorial.html">الدرس</a></li>
+          <li><a href="./">التوثيق</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="التوثيق">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">التوثيق</span><span class="docs-menu-current">الرسم البياني والإحصاءات</span></span></summary>
+      <ul>
+      <li><a href="index.html">توثيق ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">ما هو Zettelkasten؟</a></li>
+      <li><a href="tutorial.html">دليل عملي: أول 30 دقيقة لك</a></li>
+      <li><a href="getting-started.html">البدء</a></li>
+      <li><a href="notes-and-links.html">الملاحظات والروابط</a></li>
+      <li><a href="link-suggestions.html">اقتراحات الروابط</a></li>
+      <li><a href="graph-and-insights.html" aria-current="page">الرسم البياني والإحصاءات</a></li>
+      <li><a href="review-and-anki.html">المراجعة والاختبارات وAnki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">اسأل ملاحظاتك (الذكاء الاصطناعي)</a></li>
+      <li><a href="mcp-server.html">خادم MCP</a></li>
+      <li><a href="export-import.html">التصدير والاستيراد</a></li>
+      <li><a href="keyboard-shortcuts.html">اختصارات لوحة المفاتيح</a></li>
+      <li><a href="privacy-and-security.html">الخصوصية والأمان</a></li>
+      <li><a href="faq.html">الأسئلة الشائعة</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>التوثيق</h2>
+      <ul>
+      <li><a href="index.html">توثيق ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">ما هو Zettelkasten؟</a></li>
+      <li><a href="tutorial.html">دليل عملي: أول 30 دقيقة لك</a></li>
+      <li><a href="getting-started.html">البدء</a></li>
+      <li><a href="notes-and-links.html">الملاحظات والروابط</a></li>
+      <li><a href="link-suggestions.html">اقتراحات الروابط</a></li>
+      <li><a href="graph-and-insights.html" aria-current="page">الرسم البياني والإحصاءات</a></li>
+      <li><a href="review-and-anki.html">المراجعة والاختبارات وAnki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">اسأل ملاحظاتك (الذكاء الاصطناعي)</a></li>
+      <li><a href="mcp-server.html">خادم MCP</a></li>
+      <li><a href="export-import.html">التصدير والاستيراد</a></li>
+      <li><a href="keyboard-shortcuts.html">اختصارات لوحة المفاتيح</a></li>
+      <li><a href="privacy-and-security.html">الخصوصية والأمان</a></li>
+      <li><a href="faq.html">الأسئلة الشائعة</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="الرسم-البياني-والاحصاءات">الرسم البياني والإحصاءات</h1>
+<h2 id="الرسم-البياني">الرسم البياني</h2>
+<p>تعرض صفحة <strong>الرسم البياني</strong> (Ctrl+2) ملاحظاتك على شكل شبكة: تمثل كل
+دائرة ملاحظة، ويحدد عدد روابطها حجمها، ويمثل كل خط رابطًا.</p>
+<p><img loading="lazy" src="../../assets/screenshots/graph-light.png" alt="الرسم البياني، ملوّنًا بحسب الوسم" /></p>
+<h3 id="عناصر-التحكم">عناصر التحكم</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>عنصر التحكم</th>
+<th>وظيفته</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>كل الملاحظات / محلي</strong></td>
+<td>عرض المجموعة كلها، أو الملاحظة المفتوحة والملاحظات التي تبعد عنها <strong>عمق</strong> الروابط المحدد (باتباع الروابط في الاتجاهين). يفتح <em>إظهار في الرسم البياني</em> من قائمة ⋯ للملاحظة الرسم البياني المحلي.</td>
+</tr>
+<tr>
+<td><strong>2D / 3D</strong></td>
+<td>التبديل بين تخطيط مسطح يمكن سحب عناصره وعرض ثلاثي الأبعاد يمكن تدويره.</td>
+</tr>
+<tr>
+<td><strong>التلوين حسب</strong></td>
+<td>الوسوم أو <em>المجموعات: k-means</em> أو <em>المجموعات: hierarchical</em> أو بلا تلوين.</td>
+</tr>
+<tr>
+<td><strong>k</strong></td>
+<td>عدد المجموعات. يختارها <em>Auto k</em> تلقائيًا (انظر أدناه).</td>
+</tr>
+<tr>
+<td><strong>المجموعة</strong></td>
+<td>تجميع الملاحظات المنتمية إلى المجموعة نفسها وتظليل مساحة كل مجموعة.</td>
+</tr>
+<tr>
+<td><strong>التسميات</strong></td>
+<td>عرض عناوين الملاحظات. في الرسوم الكبيرة، لا تُعرض التسميات إلا لأفضل الملاحظات اتصالًا حتى تمرر المؤشر فوقها.</td>
+</tr>
+<tr>
+<td><strong>أنواع الروابط</strong></td>
+<td>إخفاء أنواع الروابط المحددة أو إظهارها.</td>
+</tr>
+<tr>
+<td><strong>البحث في الرسم البياني</strong></td>
+<td>اكتب جزءًا من العنوان واضغط Enter للانتقال إلى الملاحظة.</td>
+</tr>
+</tbody>
+</table></div>
+<p>توجد في أسفل اليمين عناصر التكبير والملاءمة و<strong>إعادة حساب التخطيط</strong> و<strong>حفظ كصورة</strong>
+(PNG) و<strong>تصدير هذه الملاحظات</strong> (يفتح مربع حوار <a href="export-import.html">التصدير</a> مع الملاحظات المعروضة).</p>
+<p><strong>في 2D</strong>، اسحب ملاحظة لتحريكها، واسحب الخلفية للتحريك، واستخدم عجلة الفأرة للتكبير. انقر الملاحظة مرتين
+لفتحها، أو انقرها بزر الفأرة الأيمن لعرض المزيد (فتحها أو عرض الرسم المحلي أو
+اختبار عن هذا الحيّز أو تصديرها مع الملاحظات المرتبطة). تظهر صورة الملاحظة داخل دائرتها.</p>
+<p>تُرسم الروابط المتعددة بين الملاحظتين نفسيهما <strong>على هيئة منحنيات منفصلة</strong>، ولكل منحنى رأس سهم يتبعه،
+فلا يخفي أي منها الآخر. عند تمرير المؤشر فوق ملاحظة أو تحديدها، <strong>تخفت الروابط الأخرى</strong>،
+وتبقى روابطها بلون نوع الرابط، وتظهر على كل ملاحظة مجاورة أنواع الروابط <strong>كما تُقرأ من
+تلك الملاحظة</strong>، مثل <em>يدعم · موسّع بواسطة</em>. تعمل هذه الميزة بالطريقة نفسها في 2D و3D.</p>
+<p><strong>في 3D</strong>، اسحب لتدوير العرض، واستخدم العجلة للتكبير، وانقر الملاحظة مرتين
+لفتحها. يدير <strong>تدوير تلقائيًا</strong> العرض. تظهر الملاحظات الأقرب أكبر وأكثر
+سطوعًا، فيسهل إدراك العمق، وتظهر كل مجموعة كهالة لونية ناعمة.</p>
+<p>يعتمد التخطيط على القوى (Fruchterman–Reingold): تجذب الروابط الملاحظات بعضها إلى بعض،
+وتتنافر الملاحظات، وتحافظ قوة جاذبية لطيفة على ظهور المكونات المنفصلة
+في الشاشة. يُحسب التخطيط في الخلفية ويُخزّن مؤقتًا لكل عرض.</p>
+<h3 id="التلوين-بحسب-الوسم">التلوين بحسب الوسم</h3>
+<p>تأخذ كل ملاحظة لون <strong>وسمها الأكثر شيوعًا</strong>، أي الوسم الذي تستخدمه أكبر
+مجموعة من الملاحظات المعروضة، لتتميز الموضوعات الرئيسية في مستودعك بألوان مختلفة.</p>
+<h3 id="التلوين-بحسب-المجموعة">التلوين بحسب المجموعة</h3>
+<p>يجمع التجميع الملاحظات <strong>بحسب المعنى</strong>، سواء ارتبطت أم لا. تتحول
+كل ملاحظة إلى متجه في فضاء دلالي باستخدام تحليل دلالي
+كامن (LSA) لعنوانها ونصها ووسومها. ثم تجمع إحدى الطريقتين المتجهات:</p>
+<ul>
+<li><strong>k-means</strong>: خوارزمية Lloyd مع تهيئة k-means++، واختيار أفضل نتيجة من
+عدة محاولات. إنها سريعة وتنتج مجموعات متقاربة ومتساوية الحجم.</li>
+<li><strong>هرمي</strong>: تجميع هرمي تراكمي باستخدام ربط المتوسط على مسافة جيب التمام،
+محسوبة بخوارزمية سلسلة أقرب الجيران (O(n²)). وهو أفضل للموضوعات غير
+المتساوية والمتداخلة. تعود المستودعات التي تتجاوز 4,000 ملاحظة إلى k-means.</li>
+</ul>
+<p>عند استخدام <strong>Auto k</strong>، يجرّب ZettelApp قيم k من 2 إلى نحو √(n/2) +
+2 (وبحد أقصى 12)، ويختار القيمة ذات أفضل <strong>درجة silhouette</strong>. تقيس الدرجة المعروضة أسفل
+المفتاح مدى انفصال المجموعات: 1 مثالي، والقيم القريبة من 0 تعني تداخل المجموعات. تسمّى
+كل مجموعة بكلماتها الأكثر تميّزًا، أي الكلمات الأكثر شيوعًا داخلها مقارنة ببقية المستودع.</p>
+<h3 id="المجموعات-والالوان">المجموعات والألوان</h3>
+<p>عند تفعيل <strong>المجموعة</strong>، تنجذب الملاحظات ذات الوسم أو المجموعة نفسها
+بعضها إلى بعض، وتحصل كل مجموعة على منطقة مظللة بلطف
+تحمل اسمها. يسرد المفتاح المجموعات وأحجامها. انقر مجموعة لإبراز ملاحظاتها.</p>
+<p>تأتي ألوان المجموعات والمخططات من لوحة <strong>تم التحقق من ملاءمتها لاضطرابات رؤية الألوان</strong> في الوضعين
+الفاتح والداكن. تُسند الألوان بترتيب ثابت ولا يعاد استخدامها: تتشارك المجموعات التي تتجاوز الثامنة لونًا
+رماديًا محايدًا بعنوان «أخرى». تستخدم <strong>أنواع الروابط</strong> إشارة أخرى إلى جانب اللون: لكل منها نمط
+خط مختلف (متصل أو متقطع أو منقّط وما إلى ذلك)، وللأنواع الموجّهة رأس سهم
+مثلث أو معين. اختر الأنواع من <em>الأدوات ▸ خيارات ▸ أنواع الروابط</em> (راجع <a href="notes-and-links.html#your-own-link-types">أنواع
+الروابط الخاصة بك</a>). يسمي المفتاح كل العناصر، فلا يعتمد أي شيء على اللون وحده.</p>
+<h2 id="الاحصاءات">الإحصاءات</h2>
+<p>تلخص صفحة <strong>الإحصاءات</strong> (Ctrl+3) مستودعك:</p>
+<ul>
+<li><strong>البطاقات</strong>: الملاحظات (وعدد ما في سلة المحذوفات) والروابط (والروابط لكل ملاحظة) والوسوم
+و<em>الملاحظات غير المرتبطة</em> (مرشحة جيدة للربط) والبطاقات التعليمية والبطاقات المستحقة اليوم.</li>
+<li><strong>الملاحظات المضافة شهريًا</strong> خلال آخر 12 شهرًا.</li>
+<li><strong>أبرز الوسوم</strong> و<strong>الروابط بحسب النوع</strong> و<strong>الملاحظات الأكثر ارتباطًا</strong> (انقر شريطًا لفتح الملاحظة).</li>
+<li><strong>الموضوعات</strong>: مجموعات k-means لملاحظاتك مع كلماتها المفتاحية وأحجامها.</li>
+</ul>
+<p>يتضمن كل مخطط زر <strong>عرض كجدول</strong> (أيقونة القائمة) يعرض الأرقام
+نفسها في جدول، وتظهر قيمة الأشرطة عند تمرير المؤشر فوقها.</p>
+
+    <p class="doc-footer">وجدت خطأ؟ <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ar/graph-and-insights.md">حرّر هذه الصفحة على GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">الرئيسية</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">المشكلات</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">تبرّع</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="اللغات"><li><a href="../../docs/graph-and-insights.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/graph-and-insights.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/graph-and-insights.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/graph-and-insights.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/graph-and-insights.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/graph-and-insights.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/graph-and-insights.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/graph-and-insights.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/graph-and-insights.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/graph-and-insights.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/graph-and-insights.html" lang="ar" hreflang="ar" aria-current="true">العربية</a></li></ul>
+</footer>
+</body>
+</html>

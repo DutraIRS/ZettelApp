@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Заметки пишутся на Markdown: жирный, курсив, # заголовки, списки, &gt; цитаты,  код , блоки кода в ограждении, таблицы и ~~зачёркивание~~. Панель инструментов над редактором вставляет">
+<title>Заметки и связи – документация ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">К содержимому</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Возможности</a></li>
+        <li><a href="tutorial.html">Руководство</a></li>
+        <li><a href="./">Документация</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Поддержать</a></li>
+        <li><a class="nav-cta" href="../#download">Скачать</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇷🇺</span><span class="sr-only">Языки</span></summary><ul class="lang-switch-panel" aria-label="Языки"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru" aria-current="true"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Поддержать"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Поддержать</span></a>
+      <a class="hbtn cta" href="../#download">Скачать</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Меню</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Возможности</a></li>
+          <li><a href="tutorial.html">Руководство</a></li>
+          <li><a href="./">Документация</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Документация">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Документация</span><span class="docs-menu-current">Заметки и связи</span></span></summary>
+      <ul>
+      <li><a href="index.html">Документация ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Руководство: ваши первые 30 минут</a></li>
+      <li><a href="getting-started.html">Начало работы</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">Заметки и связи</a></li>
+      <li><a href="link-suggestions.html">Подсказки ссылок</a></li>
+      <li><a href="graph-and-insights.html">Граф и статистика</a></li>
+      <li><a href="review-and-anki.html">Повторение, викторины и Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Спросите свои заметки (ИИ)</a></li>
+      <li><a href="mcp-server.html">MCP-сервер</a></li>
+      <li><a href="export-import.html">Экспорт и импорт</a></li>
+      <li><a href="keyboard-shortcuts.html">Горячие клавиши</a></li>
+      <li><a href="privacy-and-security.html">Конфиденциальность и безопасность</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Документация</h2>
+      <ul>
+      <li><a href="index.html">Документация ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Руководство: ваши первые 30 минут</a></li>
+      <li><a href="getting-started.html">Начало работы</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">Заметки и связи</a></li>
+      <li><a href="link-suggestions.html">Подсказки ссылок</a></li>
+      <li><a href="graph-and-insights.html">Граф и статистика</a></li>
+      <li><a href="review-and-anki.html">Повторение, викторины и Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Спросите свои заметки (ИИ)</a></li>
+      <li><a href="mcp-server.html">MCP-сервер</a></li>
+      <li><a href="export-import.html">Экспорт и импорт</a></li>
+      <li><a href="keyboard-shortcuts.html">Горячие клавиши</a></li>
+      <li><a href="privacy-and-security.html">Конфиденциальность и безопасность</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="заметки-и-связи">Заметки и связи</h1>
+<h2 id="написание-заметок">Написание заметок</h2>
+<p>Заметки пишутся на <strong>Markdown</strong>: <code>**жирный**</code>, <code>*курсив*</code>, <code># заголовки</code>, списки, <code>&gt; цитаты</code>,
+<code>`код`</code>, блоки кода в ограждении, таблицы и <code>~~зачёркивание~~</code>. Панель инструментов над редактором вставляет
+самые частые из них, а Ctrl+B / Ctrl+I работают как обычно. Списки продолжаются, когда вы нажимаете Enter.</p>
+<p>В редакторе три режима (Ctrl+E переключает их по кругу): <strong>Правка</strong>, <strong>Разделённый вид</strong> (текст и просмотр
+рядом) и <strong>Просмотр</strong>.</p>
+<p>В целях безопасности «сырой» HTML в заметке показывается как текст и никогда не отображается. Ссылки в просмотре открывают только веб-
+страницы (<code>http</code>, <code>https</code>), электронную почту (<code>mailto</code>), заметки, элементы Zotero и локальные файлы (показываются в Проводнике,
+см. <a href="#links-to-local-files">Ссылки на локальные файлы</a>). См. <a href="privacy-and-security.html">Конфиденциальность и безопасность</a>.</p>
+<h3 id="переход-по-ссылкам">Переход по ссылкам</h3>
+<ul>
+<li><strong>В редакторе</strong> <strong>Ctrl+щелчок</strong> переходит по <code>[[ссылке на заметку]]</code> (создавая заметку, если её ещё нет),
+по веб-ссылке, ссылке на электронную почту или Zotero, ссылке на локальный файл или по <code>#тегу</code> (он показывает список заметок с этим тегом).
+Наведите курсор на текст, и подсказка скажет, что сделает щелчок. Обычный щелчок просто ставит курсор, так что
+вы по-прежнему можете править текст ссылки.</li>
+<li><strong>В просмотре</strong> обычный щелчок переходит по ссылкам.</li>
+</ul>
+<h3 id="ссылки-на-локальные-фаилы">Ссылки на локальные файлы</h3>
+<p><em>Вставка ▸ Ссылка на файл…</em> (или кнопка с папкой на панели инструментов) позволяет выбрать файл и вставляет ссылку
+вида <code>[report.pdf](file:///C:/Users/me/Documents/report.pdf)</code>. Перетаскивание файла, не являющегося изображением, в
+текст заметки делает то же самое. Файл связывается там, где лежит; в хранилище ничего не копируется.</p>
+<p>Щелчок по ссылке в просмотре или Ctrl+щелчок по ней в редакторе открывает <strong>Проводник с выделенным
+файлом</strong>. Сам файл никогда не открывается и не запускается. Разрешены только пути на локальном диске: сетевые
+(UNC) пути вроде <code>\\server\share\file.pdf</code> отклоняются, потому что их разрешение может отправить ваши учётные данные
+Windows на этот сервер.</p>
+<p>У каждой заметки есть:</p>
+<ul>
+<li><strong>заголовок</strong> (крупное поле вверху);</li>
+<li><strong>ID</strong> — метка времени вроде <code>20261027153012</code>, показанная под заголовком (<em>Ещё ▸ Копировать ID заметки</em>);</li>
+<li>необязательные <strong>теги</strong>, <strong>ссылка на источник</strong>, <strong>картинка</strong>, <strong>ментальная карта</strong> и <strong>карточки</strong>.</li>
+</ul>
+<h2 id="связи-между-заметками">Связи между заметками</h2>
+<h3 id="вики-ссылки">Вики-ссылки</h3>
+<p>Введите <code>[[</code> и начните набирать заголовок: ZettelApp дополнит его из ваших заметок. Внутри заметки все эти варианты являются ссылками:</p>
+<pre><code class="language-markdown">См. [[Кривая забывания]].
+См. [[20261027153012]].              (по ID)
+См. [[Кривая забывания|эту кривую]].  (свой текст ссылки)
+</code></pre>
+<p>Ctrl+K (<em>Вставка ▸ Ссылка на заметку…</em>) открывает окно выбора, которое ищет по заголовкам и тексту и позволяет выбрать
+тип связи. Ссылка на ещё не существующий заголовок показывается в просмотре серым; щёлкните по ней, чтобы создать
+эту заметку. Когда вы позже создаёте или переименовываете заметку, ссылки, упоминающие её заголовок, обновляются.</p>
+<h3 id="типизированные-связи">Типизированные связи</h3>
+<p>Связи могут говорить, <strong>как</strong> две заметки соотносятся. Поставьте тип связи перед ссылкой, а за ним — <code>::</code>:</p>
+<pre><code class="language-markdown">supports:: [[Кривая забывания]]
+contradicts:: [[Перечитывание заметок]]
+part_of:: [[Метод Zettelkasten]]
+</code></pre>
+<p>Встроенные типы связей:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Тип</th>
+<th>Название</th>
+<th>Обратное название</th>
+<th>Направленная</th>
+<th>Линия</th>
+<th>Наконечник стрелки</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>related</code></td>
+<td>Связано с</td>
+<td>Связано с</td>
+<td>нет</td>
+<td>сплошная, серая</td>
+<td>нет</td>
+</tr>
+<tr>
+<td><code>supports</code></td>
+<td>Подтверждает</td>
+<td>Подтверждается</td>
+<td>да</td>
+<td>штриховая, зелёная</td>
+<td>закрашенный треугольник</td>
+</tr>
+<tr>
+<td><code>contradicts</code></td>
+<td>Противоречит</td>
+<td>Противоречит</td>
+<td>нет</td>
+<td>пунктирная, красная</td>
+<td>нет</td>
+</tr>
+<tr>
+<td><code>extends</code></td>
+<td>Расширяет</td>
+<td>Расширяется</td>
+<td>да</td>
+<td>штрих-пунктир, синяя</td>
+<td>закрашенный треугольник</td>
+</tr>
+<tr>
+<td><code>example</code></td>
+<td>Пример для</td>
+<td>Есть пример</td>
+<td>да</td>
+<td>штрих-двойной пунктир, янтарная</td>
+<td>круг</td>
+</tr>
+<tr>
+<td><code>part_of</code></td>
+<td>Часть</td>
+<td>Содержит</td>
+<td>да</td>
+<td>длинный штрих, фиолетовая</td>
+<td>ромб</td>
+</tr>
+<tr>
+<td><code>cites</code></td>
+<td>Цитирует</td>
+<td>Цитируется</td>
+<td>да</td>
+<td>сплошная, бирюзовая</td>
+<td>открытая стрелка</td>
+</tr>
+</tbody>
+</table></div>
+<p>Так выглядят типы в новом хранилище; вы можете их изменить (см. ниже). Хранилище, созданное в более ранней версии,
+сохраняет прежние линии.</p>
+<p>Простая <code>[[ссылка]]</code> означает <em>Связано с</em>.</p>
+<h3 id="направленные-и-ненаправленные-связи">Направленные и ненаправленные связи</h3>
+<p><strong>Направленный</strong> тип читается по-разному с каждой стороны. Если заметка A <em>подтверждает</em> заметку B, то в обратных ссылках B
+заметка A показана как <em>Подтверждается</em>. Направленные связи получают наконечники стрелок на графе и остаются направленными при экспорте.
+<strong>Ненаправленные</strong> типы, такие как <em>Связано с</em> и <em>Противоречит</em>, читаются одинаково в обе стороны.</p>
+<p>Чтобы развернуть направленную связь, созданную не в ту сторону, щёлкните по ней правой кнопкой на боковой панели и выберите
+<strong>Изменить направление</strong>. Связи, написанные в тексте, разворачиваются правкой текста.</p>
+<h3 id="связи-на-боковои-панели">Связи на боковой панели</h3>
+<p>Боковая панель перечисляет <strong>Связи</strong> заметки (исходящие) и <strong>Обратные ссылки</strong> (входящие), каждую с её типом.</p>
+<ul>
+<li><strong>Добавить связь…</strong> создаёт связь без записи её в тексте.</li>
+<li>Щёлкните по связи правой кнопкой, чтобы открыть другую заметку, изменить тип связи, развернуть её направление или удалить её.
+Связи, написанные в тексте, удаляются правкой текста.</li>
+<li>В списке заметок щёлкните правой кнопкой по другой заметке и выберите <strong>Ссылка от открытой заметки как</strong>.</li>
+</ul>
+<h3 id="ваши-собственные-типы-связеи">Ваши собственные типы связей</h3>
+<p>Добавляйте, переименовывайте, меняйте оформление или удаляйте типы связей в <em>Сервис ▸ Параметры ▸ Типы связей</em>. Выберите тип в списке и
+измените его рядом со списком:</p>
+<ul>
+<li><strong>Название</strong> и <strong>Обратное название</strong>: как связь читается от источника и от цели. Обратное
+название используется только направленными типами.</li>
+<li><strong>Направленная</strong>: читается ли тип по-разному с каждой стороны и получает ли наконечник стрелки.</li>
+<li><strong>Цвет</strong>: нажмите кнопку цвета, чтобы выбрать любой цвет.</li>
+<li><strong>Линия</strong>: сплошная, штриховая, пунктирная, штрих-пунктир, штрих-двойной пунктир или длинный штрих.</li>
+<li><strong>Наконечник стрелки</strong>: наконечник, рисуемый там, куда приходит направленная связь: закрашенный треугольник, открытая стрелка,
+ромб, круг или черта.</li>
+</ul>
+<p>Предпросмотр показывает две заметки, соединённые связью, с её названием и тем, как она читается с другой стороны.
+Стиль используется везде, где появляются связи: на графе, в его легенде, на боковой панели, в окне выбора ссылки и
+при экспорте в сайт, GraphML и Graphviz. Давайте каждому типу свою линию, а не только свой цвет, чтобы
+типы оставались различимыми для людей с нарушением цветовосприятия и на бумаге. Новый тип начинает с
+цвета и линии, которые мало кто из других типов использует.</p>
+<p>В тексте используйте id типа, показанный под предпросмотром (например, тип «Inspired by» превращается в
+<code>inspired_by::</code>). Id задаётся при создании типа, поэтому переименование типа не ломает связи,
+написанные в ваших заметках. Удаление одного из ваших типов превращает его связи в связи <em>Связано с</em>, так что
+ничего не теряется. Встроенные типы можно переименовывать и менять их оформление, но нельзя удалять.</p>
+<h2 id="теги">Теги</h2>
+<p>Добавляйте теги в поле тегов под заголовком (нажимайте Enter после каждого) или пишите их <strong>в тексте</strong> со
+знаком решётки, например <code>#привет</code> или <code>#математика/алгебра</code>. Теги пишутся строчными буквами и могут быть вложенными через косую черту, например
+<code>математика/алгебра</code>. Фильтрация по <code>математика</code> находит также заметки с тегом <code>математика/алгебра</code>.
+Используйте фильтр по тегам над списком заметок или введите <code>tag:имя</code> в поле поиска.</p>
+<p>Теги, написанные в тексте, — настоящие теги, они показаны как <strong>контурные чипы</strong> рядом с полем <em>Добавить тег</em>. Они
+исчезают, когда вы удаляете <code>#тег</code> из текста. <code>#тег</code> игнорируется внутри кода, внутри целей ссылок
+и в <code>[[#заголовках]]</code>. Теги, введённые в поле <em>Добавить тег</em>, отдельные: они остаются, пока вы не удалите их
+значком ✕. Ctrl+щелчок по <code>#тегу</code> в редакторе показывает список заметок с ним.</p>
+<h2 id="ссылка-на-источник">Ссылка на источник</h2>
+<p>Поле со значком глобуса содержит <strong>источник</strong> заметки: веб-страницу (<code>https://…</code>), адрес электронной почты
+или элемент Zotero (<code>zotero://select/library/items/…</code>). Кнопка рядом открывает ссылку. Другие виды
+ссылок отклоняются. См. <a href="zotero.html">Zotero</a>, чтобы создавать заметки прямо из вашей библиотеки Zotero.</p>
+<h2 id="изображения">Изображения</h2>
+<p>Вставляйте изображения через <em>Вставка ▸ Изображение…</em> (Ctrl+Shift+I), <strong>вставкой</strong> из буфера обмена или
+<strong>перетаскиванием</strong> файлов изображений в редактор. Поддерживаемые форматы: PNG, JPEG, GIF, WebP и BMP, до 25 МБ.
+SVG отклоняется намеренно, потому что файлы SVG могут содержать скрипты.</p>
+<p>Изображения проверяются по содержимому (а не по имени файла), хранятся один раз в папке <code>assets</code> хранилища
+под именем, полученным из их содержимого, и указываются так:</p>
+<pre><code class="language-markdown">![Схема](asset:3f2a9c0b1d4e5f6a7b8c.png)
+</code></pre>
+<p>Первое добавленное в заметку изображение становится её <strong>картинкой заголовка</strong>. Оно показывается небольшой скруглённой миниатюрой в
+списке заметок и внутри круга заметки на графе. Щёлкните правой кнопкой по любому изображению в редакторе или просмотре
+и выберите <em>Использовать как картинку заголовка</em>, чтобы выбрать другое, или <em>Удалить картинку заголовка</em>, чтобы её не было.</p>
+<h2 id="чек-листы">Чек-листы</h2>
+<p>Начните строку с <code>- [ ]</code> (или нажмите кнопку чек-листа на панели инструментов), чтобы создать задачу. <code>- [x]</code> — это
+выполненная задача. В просмотре щёлкните по флажку, чтобы отметить её; нажатие Enter в конце задачи начинает
+следующую, а Enter на пустой задаче завершает список.</p>
+<h2 id="напоминания">Напоминания</h2>
+<p>Нажмите кнопку напоминания (или <em>Вставка ▸ Напоминание…</em>), чтобы задать для заметки дату и, при желании, время. Когда оно
+наступит, ZettelApp покажет уведомление; щёлкните по нему, чтобы открыть заметку. Чтобы уведомить вас, ZettelApp должна быть запущена,
+а напоминания, наступившие, пока она была закрыта, срабатывают вскоре после открытия хранилища. Заметки с напоминанием показывают
+колокольчик в списке заметок. Используйте <em>Удалить напоминание</em> в том же диалоге, чтобы убрать его.</p>
+<h2 id="формулы">Формулы</h2>
+<p>Пишите LaTeX между знаками доллара: <code>$E = mc^2$</code> — формула в строке, а <code>$$\int_0^1 x^2\,dx$$</code> — отдельная формула.
+Кнопка формулы (<em>Вставка ▸ Формула…</em>) открывает диалог с живым просмотром. Формулы рисуются в
+просмотре; при экспорте сохраняется исходный код LaTeX.</p>
+<h2 id="ментальные-карты">Ментальные карты</h2>
+<p>Каждая заметка может содержать ментальную карту (вкладка <strong>Ментальная карта</strong> или <em>Вставка ▸ Ментальная карта</em>). Ветви раскрашиваются
+автоматически.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Клавиша</th>
+<th>Действие</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tab</td>
+<td>Добавить дочернюю идею</td>
+</tr>
+<tr>
+<td>Enter</td>
+<td>Добавить соседнюю идею</td>
+</tr>
+<tr>
+<td>F2 или двойной щелчок</td>
+<td>Переименовать</td>
+</tr>
+<tr>
+<td>Del</td>
+<td>Удалить выбранную идею</td>
+</tr>
+<tr>
+<td>Клавиши со стрелками</td>
+<td>Переместить выделение</td>
+</tr>
+<tr>
+<td>Колесо мыши / перетаскивание</td>
+<td>Масштаб / сдвиг</td>
+</tr>
+</tbody>
+</table></div>
+<p>Щёлкните по идее правой кнопкой, чтобы <strong>связать её с заметкой</strong>; связанная идея показывает значок ссылки и открывает эту заметку.
+<strong>По ссылкам</strong> строит ментальную карту по связям заметки, сгруппированным по типу связи, где связи связанных заметок
+идут на уровень глубже. <strong>Экспорт</strong> сохраняет карту как изображение PNG или SVG либо как файл FreeMind
+(<code>.mm</code>), который могут открыть FreeMind, Freeplane и XMind.</p>
+<h2 id="карточки">Карточки</h2>
+<p>Карточки превращают заметки в материал для повторения (см. <a href="review-and-anki.html">Повторение, викторины и Anki</a>). Есть
+два способа их создать:</p>
+<p><strong>В тексте заметки.</strong> Они становятся карточками автоматически и обновляются при правке:</p>
+<pre><code class="language-markdown">Q: Кто описал кривую забывания?
+A: Герман Эббингауз
+
+{{c1::Практика воспроизведения}} также называют активным вспоминанием.
+</code></pre>
+<p>Вопрос может занимать несколько строк до строки <code>A:</code>. Любой абзац с <code>{{c1::…}}</code> становится карточкой с
+<strong>пропуском</strong>, которая по очереди скрывает каждый пропуск. <code>{{c1::текст::подсказка}}</code> показывает подсказку вместо <code>[…]</code>.</p>
+<p><strong>На вкладке «Карточки».</strong> Используйте <em>Вставка ▸ Карточка…</em> (Ctrl+Shift+F) для карточек, которые не должны появляться в
+тексте заметки. Карточки из текста помечены <em>из текста заметки</em> и правятся в тексте.</p>
+<h2 id="поиск">Поиск</h2>
+<p>Поле поиска (Ctrl+F) использует полнотекстовый поиск по заголовкам, тексту и тегам, игнорирует диакритику и сопоставляет
+префиксы слов, так что <code>забыв</code> находит <em>забывание</em>. Добавьте <code>tag:имя</code>, чтобы отфильтровать по тегу, например
+<code>память tag:психология</code>. Результаты упорядочены по релевантности; без запроса заметки следуют выбранному порядку
+сортировки (<em>Последнее изменение</em>, <em>Создано</em>, <em>Заголовок</em> или <em>Больше всего ссылок</em>).</p>
+<h2 id="корзина">Корзина</h2>
+<p><em>В корзину</em> (Ctrl+Delete) скрывает заметку, не удаляя её. Сразу появляется кнопка отмены, а
+кнопка <strong>Корзина</strong> под списком заметок показывает удалённые заметки: щёлкните правой кнопкой, чтобы <strong>Восстановить</strong> или <strong>Удалить
+навсегда</strong>. <strong>Очистить корзину</strong> удаляет всё в ней после подтверждения. Ссылки на заметки в корзине скрываются
+и возвращаются, когда заметка восстановлена.</p>
+
+    <p class="doc-footer">Нашли ошибку? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ru/notes-and-links.md">Править страницу на GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Главная</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Проблемы</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Поддержать</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Языки"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru" aria-current="true">Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

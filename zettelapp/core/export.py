@@ -193,6 +193,7 @@ def bundle_to_dict(bundle: Bundle) -> dict:
                 "mindmap": n.mindmap,
                 "created": n.created,
                 "modified": n.modified,
+                "alarm": n.alarm,
             }
             for n in bundle.notes
         ],

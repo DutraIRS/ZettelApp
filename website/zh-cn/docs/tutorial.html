@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="一次动手实践的导览。每一步都会说明该做什么以及你应该看到什么。标有可选的步骤需要 Zotero、AI 密钥或 Anki;如果你不使用它们,可以跳过。">
+<title>教程:你的前 30 分钟 – ZettelApp 文档</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">跳到内容</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">功能</a></li>
+        <li><a href="tutorial.html">教程</a></li>
+        <li><a href="./">文档</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 捐赠</a></li>
+        <li><a class="nav-cta" href="../#download">下载</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇨🇳</span><span class="sr-only">语言</span></summary><ul class="lang-switch-panel" aria-label="语言"><li><a href="../../docs/tutorial.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/tutorial.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/tutorial.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/tutorial.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/tutorial.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/tutorial.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/tutorial.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/tutorial.html" lang="zh-CN" hreflang="zh-CN" aria-current="true"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/tutorial.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/tutorial.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/tutorial.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="捐赠"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">捐赠</span></a>
+      <a class="hbtn cta" href="../#download">下载</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">菜单</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">功能</a></li>
+          <li><a href="tutorial.html">教程</a></li>
+          <li><a href="./">文档</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="文档">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">文档</span><span class="docs-menu-current">教程:你的前 30 分钟</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 文档</a></li>
+      <li><a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a></li>
+      <li><a href="tutorial.html" aria-current="page">教程:你的前 30 分钟</a></li>
+      <li><a href="getting-started.html">入门</a></li>
+      <li><a href="notes-and-links.html">笔记与链接</a></li>
+      <li><a href="link-suggestions.html">链接建议</a></li>
+      <li><a href="graph-and-insights.html">图谱与 Insights</a></li>
+      <li><a href="review-and-anki.html">复习、测验与 Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">询问你的笔记(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 服务器</a></li>
+      <li><a href="export-import.html">导出与导入</a></li>
+      <li><a href="keyboard-shortcuts.html">键盘快捷键</a></li>
+      <li><a href="privacy-and-security.html">隐私与安全</a></li>
+      <li><a href="faq.html">常见问题</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>文档</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 文档</a></li>
+      <li><a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a></li>
+      <li><a href="tutorial.html" aria-current="page">教程:你的前 30 分钟</a></li>
+      <li><a href="getting-started.html">入门</a></li>
+      <li><a href="notes-and-links.html">笔记与链接</a></li>
+      <li><a href="link-suggestions.html">链接建议</a></li>
+      <li><a href="graph-and-insights.html">图谱与 Insights</a></li>
+      <li><a href="review-and-anki.html">复习、测验与 Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">询问你的笔记(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 服务器</a></li>
+      <li><a href="export-import.html">导出与导入</a></li>
+      <li><a href="keyboard-shortcuts.html">键盘快捷键</a></li>
+      <li><a href="privacy-and-security.html">隐私与安全</a></li>
+      <li><a href="faq.html">常见问题</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="教程你的前-30-分钟">教程:你的前 30 分钟</h1>
+<p>一次动手实践的导览。每一步都会说明该做什么以及你应该看到什么。标有<em>可选</em>的步骤需要 Zotero、AI 密钥或 Anki;如果你不使用它们,可以跳过。</p>
+<p>对这种方法本身还不了解?请先阅读<a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a>,只需五分钟。</p>
+<h2 id="1-安装并打开欢迎库">1. 安装并打开欢迎库</h2>
+<ol>
+<li>从<a href="https://github.com/DutraIRS/ZettelApp/releases/latest">最新版本</a>下载 <strong>ZettelApp-Setup.exe</strong> 并运行,或者解压 <strong>ZettelApp-Portable.zip</strong> 并运行 <code>ZettelApp.exe</code>。</li>
+<li>启动 ZettelApp。</li>
+</ol>
+<p><strong>你应该看到</strong>“笔记”页面,以及位于 <em>Documents\ZettelApp</em> 中新库里的十一条相互链接的入门笔记。“欢迎使用 ZettelApp”已在编辑器中打开。片刻之后,ZettelApp 还会提供可选的<em>档案馆的失踪王子</em>探险;如果你更喜欢这份文字导览,请选择<strong>以后再说</strong>。</p>
+<h2 id="2-新建笔记">2. 新建笔记</h2>
+<ol>
+<li>按 <strong>Ctrl+N</strong>。</li>
+<li>输入标题,例如 <em>Spaced repetition</em>(间隔重复),然后按 <strong>Enter</strong> 移动到正文。</li>
+<li>用你自己的话写下一个想法,两三句即可:
+<em>以递增的间隔复习材料有助于长期记忆,因为每次复习都发生在即将遗忘之前。</em></li>
+</ol>
+<p><strong>你应该看到</strong>这条笔记出现在列表顶部。这里没有“保存”按钮:笔记会在你输入时自动保存。标题下方的 ID(例如 <code>20261027153012</code>)就是这条笔记的永久地址。</p>
+<h2 id="3-添加标签">3. 添加标签</h2>
+<p>点击标题下方的<strong>添加标签</strong>,输入 <code>learning</code>,然后按 <strong>Enter</strong>。再添加 <code>memory</code>。</p>
+<p><strong>你应该看到</strong>两个标签块,<em>#learning</em> 和 <em>#memory</em>。列表上方的标签筛选器现在会提供它们,在搜索框中输入 <code>tag:memory</code> 就能找到这条笔记。</p>
+<h2 id="4-链接到另一条笔记">4. 链接到另一条笔记</h2>
+<ol>
+<li>新建第二条笔记(<strong>Ctrl+N</strong>),标题为 <em>Forgetting curve</em>(遗忘曲线),内容一句话:<em>除非复习信息,否则记忆会迅速消退。</em></li>
+<li>回到 <em>Spaced repetition</em>(在列表中点击它)。在正文中输入 <code>[[</code>,然后输入 <code>Forg</code>。</li>
+<li>在补全列表中选择 <strong>Forgetting curve</strong>,然后按 <strong>Enter</strong>。</li>
+</ol>
+<p><strong>你应该看到</strong>正文中 <code>[[Forgetting curve]]</code> 带有下划线。在侧边栏的<strong>链接</strong>下会出现 <em>Forgetting curve</em>。点击工具栏中的眼睛按钮(<strong>分屏</strong>):预览中会显示一个可点击的链接。</p>
+<h2 id="5-说明笔记之间如何关联">5. 说明笔记之间<em>如何</em>关联</h2>
+<p>在链接前面加上 <code>supports::</code>,把它变成类型链接:</p>
+<pre><code class="language-markdown">supports:: [[Forgetting curve]]
+</code></pre>
+<p><strong>你应该看到</strong>该链接在侧边栏中被列为<em>支持</em>。打开 <em>Forgetting curve</em>:它的<strong>反向链接</strong>显示为 <em>Spaced repetition:<strong>支持者</strong></em>,因为<em>支持</em>是一种有向链接类型。普通的 <code>[[links]]</code> 表示<em>相关于</em>。</p>
+<h2 id="6-使用建议的链接">6. 使用建议的链接</h2>
+<p>再写几条关于相关想法的笔记,例如 <em>Active recall</em> 和 <em>Interleaving</em>,每条写一两句话,并加上标签 <code>learning</code>。然后打开其中一条,查看侧边栏中的<strong>链接建议</strong>。</p>
+<ul>
+<li>点击<strong>链接</strong>接受一条建议。旁边的小箭头可选择链接类型。</li>
+<li>点击 <strong>✕</strong> 忽略不合适的建议。</li>
+<li>将鼠标悬停在建议上,可查看它<strong>为何</strong>被建议:每项度量支持或反对的依据。</li>
+</ul>
+<p>**模型学到了什么:**被接受的建议会变成链接,作为正例训练分类器。被忽略的建议会作为反例被记住,并且这一对笔记不会再被建议。你用得越多,建议就越准确。参见<a href="link-suggestions.html">链接建议</a>。</p>
+<p><img loading="lazy" src="../../assets/screenshots/notes-light.png" alt="带有链接建议的笔记" /></p>
+<h2 id="7-添加图片">7. 添加图片</h2>
+<p>复制任意图片(例如使用 <em>Win+Shift+S</em>),在笔记正文中点击并按 <strong>Ctrl+V</strong>。你也可以拖入图片文件,或使用<em>插入 ▸ 图片…</em>。</p>
+<p><strong>你应该看到</strong>正文中出现 <code>![…](asset:…)</code>,预览中显示该图片。因为这是这条笔记的第一张图片,它同时会成为<strong>笔记图片</strong>,显示在标题旁边以及图谱中该笔记的圆圈内。</p>
+<h2 id="8-绘制思维导图">8. 绘制思维导图</h2>
+<ol>
+<li>打开<strong>思维导图</strong>标签页,点击<strong>添加想法</strong>。</li>
+<li>按 <strong>Tab</strong> 添加子想法,按 <strong>Enter</strong> 添加同级想法,按 <strong>F2</strong> 重命名,按 <strong>Del</strong> 删除。方向键可在想法之间移动。</li>
+<li>现在点击<strong>从链接生成</strong>,并确认它可以替换你刚才绘制的导图。</li>
+</ol>
+<p><strong>你应该看到</strong>一张根据该笔记的链接生成的思维导图,按链接类型分组,每条被链接笔记自己的链接则深入一层。右键点击任意想法,可将它链接到某条笔记。导出按钮可保存为 PNG、SVG 或 FreeMind。</p>
+<p><img loading="lazy" src="../../assets/screenshots/mindmap-light.png" alt="思维导图" /></p>
+<h2 id="9-制作闪卡并复习">9. 制作闪卡并复习</h2>
+<p>把这些行添加到 <em>Spaced repetition</em> 的正文中:</p>
+<pre><code class="language-markdown">Q: Why space reviews out?
+A: Each effortful retrieval just before forgetting strengthens the memory.
+
+{{c1::Hermann Ebbinghaus}} described the forgetting curve.
+</code></pre>
+<p><strong>你应该看到</strong>标签页上显示<strong>闪卡 (2)</strong>:一张问答卡和一张填空卡。现在打开<strong>复习</strong>(<strong>Ctrl+4</strong>)并点击<strong>开始复习</strong>。</p>
+<ul>
+<li>按 <strong>Space</strong> 显示答案。</li>
+<li>用 <strong>1–4</strong> 给自己评分(<em>重来、困难、良好、简单</em>)。</li>
+</ul>
+<p>SM-2 调度算法会决定每张卡片何时再次出现。也可以试试<strong>练习测验 ▸ 选择题</strong>或<strong>为笔记命名</strong>。</p>
+<p><img loading="lazy" src="../../assets/screenshots/quiz-light.png" alt="选择题测验" /></p>
+<h2 id="10-探索图谱">10. 探索图谱</h2>
+<p>打开<strong>图谱</strong>(<strong>Ctrl+2</strong>)。</p>
+<ol>
+<li>拖动笔记,用滚轮缩放,将鼠标悬停在笔记上可高亮其相邻笔记。</li>
+<li>在“笔记”页面选中一条笔记,返回后点击 <strong>Local</strong>,然后把 <strong>Depth</strong> 改为 1、2 或 3。</li>
+<li>把 <strong>Colour by</strong> 设为 <strong>Clusters: k-means</strong>。笔记会按语义分组,图例用关键词为每个聚类命名。</li>
+<li>切换 <strong>Group</strong>,把每组笔记拉到一起,并显示在带阴影的背景上。</li>
+<li>点击 <strong>3D</strong>,拖动可环绕查看,并试试 <strong>Rotate automatically</strong>。</li>
+</ol>
+<p><img loading="lazy" src="../../assets/screenshots/graph-light.png" alt="按标签着色并分组的图谱" /></p>
+<h2 id="11-查看你的-insights">11. 查看你的 Insights</h2>
+<p>打开 <strong>Insights</strong>(<strong>Ctrl+3</strong>),可查看数量、每月笔记数、热门标签、按类型的链接以及连接最多的笔记。<strong>未链接的笔记</strong>是你的待办清单:把它们链接到某处。每个图表都有表格视图。</p>
+<h2 id="12-引用-zotero-条目并撰写文献笔记可选">12. 引用 Zotero 条目并撰写文献笔记(可选)</h2>
+<p>在 Zotero 7+ 运行,并且在其 <em>Settings ▸ Advanced</em> 中开启了 <em>Allow other applications on this computer to communicate with Zotero</em> 的情况下:</p>
+<ol>
+<li>选择<em>插入 ▸ Zotero 引用…</em>,搜索条目并点击<strong>插入引用</strong>:会生成类似 <em>Ebbinghaus (1885)</em> 的链接,点击后在 Zotero 中打开该条目。</li>
+<li>再做一次,这次点击<strong>新建文献笔记</strong>。</li>
+</ol>
+<p><strong>你应该看到</strong>一条新笔记,包含参考文献、<em>在 Zotero 中打开</em>和<em>打开 PDF</em> 链接、摘要,以及<em>关键想法</em> / <em>我的想法</em>两个小节,并带有标签 <code>literature</code>。参见 <a href="zotero.html">Zotero</a>。</p>
+<h2 id="13-询问你的笔记可选">13. 询问你的笔记(可选)</h2>
+<ol>
+<li>在<em>工具 ▸ 选项 ▸ AI 助手</em>中选择一个服务商(Anthropic、OpenAI 或 Z.ai),粘贴你的 API 密钥并点击<strong>测试连接</strong>。</li>
+<li>打开<strong>提问</strong>(<strong>Ctrl+5</strong>)并提问:<em>间隔和提取如何协同作用?</em></li>
+</ol>
+<p><strong>你应该看到</strong>一个以链接形式引用你的笔记的回答,以及<strong>已发送的来源</strong>的准确列表。只有这些笔记和你的问题会离开你的电脑。参见<a href="ai-assistant.html">询问你的笔记</a>。</p>
+<h2 id="14-导出子图并同步到-anki可选">14. 导出子图并同步到 Anki(可选)</h2>
+<ol>
+<li>打开一条笔记,选择<em>文件 ▸ 导出…</em>(<strong>Ctrl+Shift+E</strong>),选择<strong>当前笔记及其链接笔记</strong>,深度 2,格式选<strong>网站</strong>。</li>
+<li>在浏览器中打开压缩包里的 <code>index.html</code>:这是你 Zettelkasten 中那一部分内容的小型网站。</li>
+<li>在 Anki 运行且已安装 AnkiConnect 插件(代码 <code>2055492159</code>)的情况下,打开<strong>复习</strong>并点击<strong>同步到 Anki</strong>。每张卡片的来源链接都会在 ZettelApp 中打开对应笔记。</li>
+</ol>
+<p>参见<a href="export-import.html">导出与导入</a>和 <a href="review-and-anki.html#anki">Anki</a>。</p>
+<h2 id="15-了解你的数据存放在哪里">15. 了解你的数据存放在哪里</h2>
+<ul>
+<li>你的笔记存放在库文件夹中(<em>文件 ▸ 在文件资源管理器中显示库</em>):<code>zettel.db</code> 加上 <code>assets</code>。</li>
+<li>每天会自动备份一次,<em>文件 ▸ 立即备份库</em>可随时手动备份。</li>
+<li>删除的笔记会进入笔记列表下方的<strong>回收站</strong>,你可以在那里还原它们。</li>
+</ul>
+<p>详情参见<a href="privacy-and-security.html">隐私与安全</a>。</p>
+<p>**就是这些。**坚持每条笔记一个想法,带着原因链接每条新笔记,让建议和图谱向你展示你所拥有的一切。快捷键请见<a href="keyboard-shortcuts.html">键盘快捷键</a>。</p>
+
+    <p class="doc-footer">发现错误？<a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/zh-cn/tutorial.md">在 GitHub 上编辑此页</a>。</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">首页</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">问题</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">捐赠</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="语言"><li><a href="../../docs/tutorial.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/tutorial.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/tutorial.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/tutorial.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/tutorial.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/tutorial.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/tutorial.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/tutorial.html" lang="zh-CN" hreflang="zh-CN" aria-current="true">简体中文</a></li><li><a href="../../ja/docs/tutorial.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/tutorial.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/tutorial.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

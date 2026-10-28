@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="تُكتب الملاحظات بلغة Markdown: عريض ومائل و# عناوين والقوائم والاقتباسات &gt; و الرمز  وكتل التعليمات البرمجية والجداول و~~يتوسطه خط~~. يدرج شريط الأدوات أعلى المحرر العناصر الشائعة، ">
+<title>الملاحظات والروابط – توثيق ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">انتقل إلى المحتوى</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">الميزات</a></li>
+        <li><a href="tutorial.html">الدرس</a></li>
+        <li><a href="./">التوثيق</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> تبرّع</a></li>
+        <li><a class="nav-cta" href="../#download">تنزيل</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇸🇦</span><span class="sr-only">اللغات</span></summary><ul class="lang-switch-panel" aria-label="اللغات"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar" aria-current="true"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="تبرّع"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">تبرّع</span></a>
+      <a class="hbtn cta" href="../#download">تنزيل</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">القائمة</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">الميزات</a></li>
+          <li><a href="tutorial.html">الدرس</a></li>
+          <li><a href="./">التوثيق</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="التوثيق">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">التوثيق</span><span class="docs-menu-current">الملاحظات والروابط</span></span></summary>
+      <ul>
+      <li><a href="index.html">توثيق ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">ما هو Zettelkasten؟</a></li>
+      <li><a href="tutorial.html">دليل عملي: أول 30 دقيقة لك</a></li>
+      <li><a href="getting-started.html">البدء</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">الملاحظات والروابط</a></li>
+      <li><a href="link-suggestions.html">اقتراحات الروابط</a></li>
+      <li><a href="graph-and-insights.html">الرسم البياني والإحصاءات</a></li>
+      <li><a href="review-and-anki.html">المراجعة والاختبارات وAnki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">اسأل ملاحظاتك (الذكاء الاصطناعي)</a></li>
+      <li><a href="mcp-server.html">خادم MCP</a></li>
+      <li><a href="export-import.html">التصدير والاستيراد</a></li>
+      <li><a href="keyboard-shortcuts.html">اختصارات لوحة المفاتيح</a></li>
+      <li><a href="privacy-and-security.html">الخصوصية والأمان</a></li>
+      <li><a href="faq.html">الأسئلة الشائعة</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>التوثيق</h2>
+      <ul>
+      <li><a href="index.html">توثيق ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">ما هو Zettelkasten؟</a></li>
+      <li><a href="tutorial.html">دليل عملي: أول 30 دقيقة لك</a></li>
+      <li><a href="getting-started.html">البدء</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">الملاحظات والروابط</a></li>
+      <li><a href="link-suggestions.html">اقتراحات الروابط</a></li>
+      <li><a href="graph-and-insights.html">الرسم البياني والإحصاءات</a></li>
+      <li><a href="review-and-anki.html">المراجعة والاختبارات وAnki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">اسأل ملاحظاتك (الذكاء الاصطناعي)</a></li>
+      <li><a href="mcp-server.html">خادم MCP</a></li>
+      <li><a href="export-import.html">التصدير والاستيراد</a></li>
+      <li><a href="keyboard-shortcuts.html">اختصارات لوحة المفاتيح</a></li>
+      <li><a href="privacy-and-security.html">الخصوصية والأمان</a></li>
+      <li><a href="faq.html">الأسئلة الشائعة</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="الملاحظات-والروابط">الملاحظات والروابط</h1>
+<h2 id="كتابة-الملاحظات">كتابة الملاحظات</h2>
+<p>تُكتب الملاحظات بلغة <strong>Markdown</strong>: <code>**عريض**</code> و<code>*مائل*</code> و<code># عناوين</code> والقوائم والاقتباسات <code>&gt;</code> و<code>`الرمز`</code> وكتل التعليمات البرمجية والجداول و<code>~~يتوسطه خط~~</code>. يدرج شريط الأدوات أعلى المحرر
+العناصر الشائعة، ويعمل Ctrl+B وCtrl+I كالمعتاد. تستمر القوائم عند الضغط على Enter.</p>
+<p>للمحرر ثلاثة أوضاع (يتنقل بينها Ctrl+E): <strong>تحرير</strong>
+و<strong>تقسيم</strong> (النص والمعاينة جنبًا إلى جنب) و<strong>معاينة</strong>.</p>
+<p>لأسباب أمنية، يُعرض HTML الخام في الملاحظة كنص ولا يُعرض بصيغته المنسقة مطلقًا. لا
+تفتح الروابط في المعاينة إلا صفحات الويب (<code>http</code> و<code>https</code>) والبريد الإلكتروني (<code>mailto</code>) والملاحظات وعناصر
+Zotero والملفات المحلية (المعروضة في مستكشف الملفات، راجع <a href="#links-to-local-files">روابط الملفات المحلية</a>). راجع <a href="privacy-and-security.html">الخصوصية والأمان</a>.</p>
+<h3 id="اتباع-الروابط">اتباع الروابط</h3>
+<ul>
+<li><strong>في المحرر</strong>، يؤدي <strong>Ctrl+النقر</strong> إلى اتباع <code>[[note link]]</code> (وإنشاء الملاحظة إن لم تكن
+موجودة)، أو رابط ويب أو بريد إلكتروني أو Zotero أو ملف محلي، أو
+<code>#وسم</code> (لعرض الملاحظات ذات ذلك الوسم). مرّر المؤشر فوق النص لتظهر تلميحة توضح
+نتيجة النقر. أما النقر العادي فيضع مؤشر الكتابة، لتتمكن من تحرير نص الرابط.</li>
+<li><strong>في المعاينة</strong>، يؤدي النقر العادي إلى اتباع الروابط.</li>
+</ul>
+<h3 id="روابط-الملفات-المحلية">روابط الملفات المحلية</h3>
+<p>يتيح <em>إدراج ▸ ربط بملف…</em> (أو زر المجلد في شريط الأدوات) اختيار
+ملف وإدراج رابط مثل <code>[report.pdf](file:///C:/Users/me/Documents/report.pdf)</code>. ويؤدي سحب ملف ليس صورة إلى نص
+الملاحظة إلى النتيجة نفسها. يظل الملف في مكانه؛ ولا يُنسخ إلى المستودع.</p>
+<p>يؤدي النقر على الرابط في المعاينة أو Ctrl+النقر عليه في المحرر إلى
+فتح <strong>مستكشف الملفات مع تحديد الملف</strong>. لا يُفتح الملف نفسه ولا يُشغّل.
+يُسمح بالمسارات على محرك أقراص محلي فقط؛ وتُرفض مسارات الشبكة (UNC) مثل
+<code>\\server\share\file.pdf</code>، لأن الوصول إليها قد يرسل بيانات اعتماد Windows إلى ذلك الخادم.</p>
+<p>تحتوي كل ملاحظة على:</p>
+<ul>
+<li><strong>عنوان</strong> (الحقل الكبير في الأعلى)؛</li>
+<li><strong>معرّف</strong>، وهو طابع زمني مثل <code>20261027153012</code>، يظهر أسفل العنوان (<em>المزيد ▸ نسخ معرّف الملاحظة</em>)؛</li>
+<li><strong>وسوم</strong> اختيارية و<strong>رابط مصدر</strong> و<strong>صورة</strong> و<strong>خريطة ذهنية</strong> و<strong>بطاقات تعليمية</strong>.</li>
+</ul>
+<h2 id="الروابط-بين-الملاحظات">الروابط بين الملاحظات</h2>
+<h3 id="روابط-wiki">روابط wiki</h3>
+<p>اكتب <code>[[</code> وابدأ بكتابة عنوان؛ يكمله ZettelApp من ملاحظاتك. داخل الملاحظة، ترتبط كل الصيغ التالية:</p>
+<pre><code class="language-markdown">See [[Forgetting curve]].
+See [[20261027153012]].              (by ID)
+See [[Forgetting curve|the curve]].  (custom link text)
+</code></pre>
+<p>يفتح Ctrl+K (<em>إدراج ▸ رابط إلى ملاحظة…</em>) منتقيًا يبحث في العناوين والنصوص ويتيح اختيار
+نوع الرابط. يظهر الرابط إلى عنوان غير موجود بالرمادي في المعاينة؛ انقره لإنشاء
+الملاحظة. وعند إنشاء ملاحظة لاحقًا أو تغيير اسمها، تُحدّث الروابط التي تذكر عنوانها.</p>
+<h3 id="الروابط-المصنفة">الروابط المصنّفة</h3>
+<p>يمكن للروابط توضيح <strong>كيفية</strong> ارتباط ملاحظتين. ضع نوع الرابط قبل الرابط متبوعًا بـ <code>::</code>:</p>
+<pre><code class="language-markdown">supports:: [[Forgetting curve]]
+contradicts:: [[Rereading notes]]
+part_of:: [[Zettelkasten method]]
+</code></pre>
+<p>أنواع الروابط المدمجة:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>النوع</th>
+<th>الاسم</th>
+<th>الاسم العكسي</th>
+<th>موجّه</th>
+<th>الخط</th>
+<th>رأس السهم</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>related</code></td>
+<td>ذو صلة بـ</td>
+<td>ذو صلة بـ</td>
+<td>لا</td>
+<td>متصل، رمادي</td>
+<td>لا شيء</td>
+</tr>
+<tr>
+<td><code>supports</code></td>
+<td>يدعم</td>
+<td>مدعوم من</td>
+<td>نعم</td>
+<td>متقطع، أخضر</td>
+<td>مثلث ممتلئ</td>
+</tr>
+<tr>
+<td><code>contradicts</code></td>
+<td>يناقض</td>
+<td>يناقض</td>
+<td>لا</td>
+<td>منقّط، أحمر</td>
+<td>لا شيء</td>
+</tr>
+<tr>
+<td><code>extends</code></td>
+<td>يوسّع</td>
+<td>موسّع بواسطة</td>
+<td>نعم</td>
+<td>شرطة-نقطة، أزرق</td>
+<td>مثلث ممتلئ</td>
+</tr>
+<tr>
+<td><code>example</code></td>
+<td>مثال على</td>
+<td>له مثال</td>
+<td>نعم</td>
+<td>شرطة-نقطة-نقطة، كهرماني</td>
+<td>دائرة</td>
+</tr>
+<tr>
+<td><code>part_of</code></td>
+<td>جزء من</td>
+<td>يحتوي على</td>
+<td>نعم</td>
+<td>شرطة طويلة، أرجواني</td>
+<td>معين</td>
+</tr>
+<tr>
+<td><code>cites</code></td>
+<td>يستشهد بـ</td>
+<td>مستشهَد به من</td>
+<td>نعم</td>
+<td>متصل، فيروزي</td>
+<td>سهم مفتوح</td>
+</tr>
+</tbody>
+</table></div>
+<p>هذه هي الأشكال في المستودع الجديد؛ يمكنك تغييرها (انظر
+أدناه). يحتفظ المستودع الذي أُنشئ بإصدار أقدم بخطوطه.</p>
+<p>الرابط العادي <code>[[link]]</code> يعني <em>ذو صلة بـ</em>.</p>
+<h3 id="الروابط-الموجهة-وغير-الموجهة">الروابط الموجّهة وغير الموجّهة</h3>
+<p>يُقرأ النوع <strong>الموجّه</strong> بطريقة مختلفة من كل جهة. إذا كانت الملاحظة A <em>تدعم</em> الملاحظة B، فستعرض الروابط
+الخلفية في B أن A <em>مدعومة من</em>. تظهر للروابط الموجّهة رؤوس أسهم في الرسم البياني، وتظل موجّهة
+عند التصدير. أما الأنواع <strong>غير الموجّهة</strong> مثل <em>ذو صلة بـ</em> و<em>يناقض</em> فتُقرأ بالطريقة نفسها من الجهتين.</p>
+<p>لعكس اتجاه رابط موجّه أُنشئ بالاتجاه الخطأ، انقر عليه بزر الفأرة الأيمن في
+اللوحة الجانبية واختر <strong>عكس الاتجاه</strong>. أما الروابط المكتوبة في النص فاعكسها بتحرير النص.</p>
+<h3 id="الروابط-في-اللوحة-الجانبية">الروابط في اللوحة الجانبية</h3>
+<p>تعرض اللوحة الجانبية <strong>الروابط</strong> (الصادرة) و<strong>الروابط الخلفية</strong> (الواردة) للملاحظة، مع نوع كل رابط.</p>
+<ul>
+<li>ينشئ <strong>إضافة رابط…</strong> رابطًا من دون كتابته في النص.</li>
+<li>انقر رابطًا بزر الفأرة الأيمن لفتح الملاحظة الأخرى أو تغيير نوع الرابط
+أو عكس اتجاهه أو إزالته. تُزال الروابط المكتوبة في النص بتحريره.</li>
+<li>من قائمة الملاحظات، انقر ملاحظة أخرى بزر الفأرة الأيمن واختر <strong>ربط من الملاحظة المفتوحة كـ</strong>.</li>
+</ul>
+<h3 id="انواع-الروابط-الخاصة-بك">أنواع الروابط الخاصة بك</h3>
+<p>أضف أنواع الروابط أو أعد تسميتها أو غيّر نمطها أو أزلها من
+<em>الأدوات ▸ خيارات ▸ أنواع الروابط</em>. اختر نوعًا في القائمة وعدّله بجانبها:</p>
+<ul>
+<li><strong>الاسم</strong> و<strong>الاسم العكسي</strong>: طريقة قراءة الرابط من مصدره
+ومن هدفه. يُستخدم الاسم العكسي للأنواع الموجّهة فقط.</li>
+<li><strong>موجّه</strong>: يحدد ما إذا كان النوع يُقرأ بشكل مختلف من الجهتين ويحصل على رأس سهم.</li>
+<li><strong>اللون</strong>: انقر زر اللون لاختيار أي لون.</li>
+<li><strong>الخط</strong>: متصل أو متقطع أو منقّط أو شرطة-نقطة أو شرطة-نقطة-نقطة أو شرطة طويلة.</li>
+<li><strong>رأس السهم</strong>: الرأس المرسوم عند وصول الرابط الموجّه: مثلث ممتلئ
+أو سهم مفتوح أو معين أو دائرة أو شَرطة.</li>
+</ul>
+<p>تعرض المعاينة ملاحظتين يربطهما نوع الرابط، مع اسمه وطريقة قراءته من الجهة
+الأخرى. يُستخدم النمط أينما ظهرت الروابط: في الرسم البياني ومفتاحه واللوحة
+الجانبية ومنتقي الروابط وتصديرات Website وGraphML وGraphviz. امنح كل نوع خطًا
+ولونًا خاصين به، لتسهيل تمييز الأنواع لمن لديهم عمى ألوان وعلى
+الورق. يبدأ النوع الجديد بلون وخط لا تستخدمهما أنواع أخرى كثيرًا.</p>
+<p>استخدم معرّف النوع في النص، وهو ظاهر أسفل المعاينة (مثلًا يصبح نوع اسمه «مستوحى من»
+<code>inspired_by::</code>). يُحدد المعرّف عند إنشاء النوع، لذلك لا يؤدي تغيير اسمه إلى كسر الروابط المكتوبة
+في ملاحظاتك. يؤدي حذف نوع خاص بك إلى تحويل روابطه إلى روابط <em>ذو صلة بـ</em>،
+فلا يضيع شيء. يمكن إعادة تسمية الأنواع المدمجة وتغيير نمطها، لكن لا يمكن حذفها.</p>
+<h2 id="الوسوم">الوسوم</h2>
+<p>أضف الوسوم في حقل الوسوم أسفل العنوان (اضغط Enter بعد كل وسم)، أو اكتبها
+<strong>في النص</strong> مسبوقة بعلامة المربع، مثل <code>#welcome</code> أو <code>#math/algebra</code>. تكون الوسوم بأحرف صغيرة ويمكن
+تداخلها بشرطة مائلة، مثل <code>math/algebra</code>. يعثر التصفية عن <code>math</code> أيضًا على الملاحظات الموسومة بـ
+<code>math/algebra</code>. استخدم مرشح الوسوم أعلى قائمة الملاحظات، أو اكتب <code>tag:name</code> في مربع البحث.</p>
+<p>الوسوم المكتوبة في النص وسوم فعلية، وتظهر على هيئة <strong>شارات محددة الإطار</strong> بجوار مربع <em>إضافة
+وسم</em>. تختفي عند حذف <code>#tag</code> من النص. يُتجاهل <code>#tag</code> داخل التعليمات البرمجية وداخل أهداف الروابط
+وفي <code>[[#headings]]</code>. أما الوسوم المكتوبة في مربع <em>إضافة وسم</em> فهي منفصلة وتبقى حتى تزيلها
+بالنقر على ✕. استخدم Ctrl+النقر على <code>#tag</code> في المحرر لعرض الملاحظات التي تحمل الوسم.</p>
+<h2 id="رابط-المصدر">رابط المصدر</h2>
+<p>يحتوي الحقل المصحوب بأيقونة الكرة الأرضية على <strong>مصدر</strong> الملاحظة: صفحة ويب (<code>https://…</code>)
+أو عنوان بريد إلكتروني أو عنصر Zotero (<code>zotero://select/library/items/…</code>). يفتح الزر المجاور الرابط.
+تُرفض أنواع الروابط الأخرى. راجع <a href="zotero.html">Zotero</a> لإنشاء ملاحظات مباشرة من مكتبة Zotero.</p>
+<h2 id="الصور">الصور</h2>
+<p>أدرج الصور عبر <em>إدراج ▸ صورة…</em> (Ctrl+Shift+I)، أو <strong>لصقها</strong> من الحافظة، أو <strong>سحب</strong> ملفات
+الصور إلى المحرر. التنسيقات المدعومة: PNG وJPEG وGIF وWebP وBMP، بحجم يصل إلى
+25 MB. تُرفض SVG عمدًا لأن ملفات SVG قد تحتوي على نصوص برمجية.</p>
+<p>تُفحص الصور بحسب محتواها (لا اسم ملفها)، وتُخزّن مرة واحدة في مجلد
+<code>assets</code> بالمستودع تحت اسم مشتق من محتواها، وتُشار إليها كما يلي:</p>
+<pre><code class="language-markdown">![Diagram](asset:3f2a9c0b1d4e5f6a7b8c.png)
+</code></pre>
+<p>تصبح أول صورة تضيفها إلى الملاحظة <strong>صورة العنوان</strong>. وتظهر كصورة مصغّرة صغيرة مستديرة في قائمة الملاحظات
+وداخل دائرة الملاحظة في الرسم البياني. انقر بزر الفأرة الأيمن على أي صورة في المحرر
+أو المعاينة واختر <em>استخدام كصورة للعنوان</em> لتحديد صورة أخرى، أو <em>إزالة صورة العنوان</em> لإلغاء تعيينها.</p>
+<h2 id="قوايم-المهام">قوائم المهام</h2>
+<p>ابدأ سطرًا بـ <code>- [ ]</code> (أو اضغط زر <strong>قائمة مهام</strong> في شريط الأدوات) لإنشاء مهمة.
+تعني <code>- [x]</code> أن المهمة مكتملة. انقر المربع في المعاينة لتحديده؛ يؤدي الضغط على Enter
+في نهاية مهمة إلى بدء المهمة التالية، ويُنهي الضغط على Enter في مهمة فارغة القائمة.</p>
+<h2 id="التنبيهات">التنبيهات</h2>
+<p>اضغط زر التنبيه (أو <em>إدراج ▸ تنبيه…</em>) لضبط تاريخ للملاحظة، ووقت اختياري. عند حلول الموعد،
+يعرض ZettelApp إشعارًا؛ انقره لفتح الملاحظة. يجب أن يكون ZettelApp قيد التشغيل لإظهار الإشعار، وتظهر
+التنبيهات التي حان موعدها أثناء إغلاق التطبيق بعد فتح المستودع بوقت قصير. وتظهر أيقونة
+جرس بجوار الملاحظات التي لها تنبيه. استخدم <em>إزالة التنبيه</em> في مربع الحوار نفسه لمسحه.</p>
+<h2 id="الصيغ">الصيغ</h2>
+<p>اكتب LaTeX بين علامتي الدولار: <code>$E = mc^2$</code> صيغة ضمن السطر،
+و<code>$$\int_0^1 x^2\,dx$$</code> صيغة معروضة. يفتح زر الصيغة (<em>إدراج ▸ صيغة…</em>) مربع
+حوار بمعاينة مباشرة. تُرسم الصيغ في المعاينة؛ وتحتفظ الصادرات بمصدر LaTeX.</p>
+<h2 id="الخرايط-الذهنية">الخرائط الذهنية</h2>
+<p>يمكن أن تحتوي كل ملاحظة على خريطة ذهنية (علامة تبويب
+<strong>الخريطة الذهنية</strong> أو <em>إدراج ▸ خريطة ذهنية</em>). تُلوّن الفروع تلقائيًا.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>المفتاح</th>
+<th>الإجراء</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tab</td>
+<td>إضافة فكرة فرعية</td>
+</tr>
+<tr>
+<td>Enter</td>
+<td>إضافة فكرة شقيقة</td>
+</tr>
+<tr>
+<td>F2 أو النقر المزدوج</td>
+<td>إعادة التسمية</td>
+</tr>
+<tr>
+<td>Del</td>
+<td>حذف الفكرة المحددة</td>
+</tr>
+<tr>
+<td>مفاتيح الأسهم</td>
+<td>تحريك التحديد</td>
+</tr>
+<tr>
+<td>عجلة الفأرة / السحب</td>
+<td>تكبير / تحريك</td>
+</tr>
+</tbody>
+</table></div>
+<p>انقر فكرة بزر الفأرة الأيمن <strong>لربطها بملاحظة</strong>؛ تعرض الفكرة المرتبطة أيقونة رابط وتفتح
+تلك الملاحظة. ينشئ <strong>من الروابط</strong> خريطة ذهنية من روابط الملاحظة، مجمّعة حسب نوع
+الرابط، ويضيف روابط الملاحظات المرتبطة على مستوى أعمق. يحفظ <strong>تصدير</strong> الخريطة كصورة PNG
+أو SVG أو ملف FreeMind (<code>.mm</code>)، ويمكن فتحه في FreeMind وFreeplane وXMind.</p>
+<h2 id="البطاقات-التعليمية">البطاقات التعليمية</h2>
+<p>تحوّل البطاقات التعليمية الملاحظات إلى مادة للمراجعة
+(راجع <a href="review-and-anki.html">المراجعة والاختبارات وAnki</a>). ويمكن إنشاؤها بطريقتين:</p>
+<p><strong>في نص الملاحظة.</strong> تُنشأ هذه البطاقات تلقائيًا وتُحدّث أثناء تحرير النص:</p>
+<pre><code class="language-markdown">Q: Who described the forgetting curve?
+A: Hermann Ebbinghaus
+
+{{c1::Retrieval practice}} is also called active recall.
+</code></pre>
+<p>قد يمتد السؤال إلى عدة أسطر حتى سطر <code>A:</code>. وتصبح أي فقرة تحتوي على
+<code>{{c1::…}}</code> بطاقة <strong>إخفاء</strong>، تخفي كل جزء محذوف بالتتابع. تعرض <code>{{c1::text::hint}}</code> تلميحًا بدلًا من <code>[…]</code>.</p>
+<p><strong>في علامة تبويب البطاقات التعليمية.</strong> استخدم <em>إدراج ▸ بطاقة تعليمية…</em> (Ctrl+Shift+F) للبطاقات التي لا ينبغي
+أن تظهر في الملاحظة. تُعلّم البطاقات من النص بعبارة <em>من نص الملاحظة</em> وتُحرر في النص.</p>
+<h2 id="البحث">البحث</h2>
+<p>يستخدم مربع البحث (Ctrl+F) بحثًا كامل النص في العناوين والنصوص والوسوم، ويتجاهل علامات
+التشكيل ويطابق بدايات الكلمات، لذا يعثر <code>forget</code> على <em>forgetting</em>. أضف <code>tag:name</code> لتصفية الوسوم،
+مثل <code>memory tag:psychology</code>. تُرتب النتائج بحسب مدى الصلة؛ ومن دون استعلام، تتبع الملاحظات
+ترتيب الفرز المختار (<em>آخر تعديل</em> أو <em>تاريخ الإنشاء</em> أو <em>العنوان</em> أو <em>الأكثر ارتباطًا</em>).</p>
+<h2 id="سلة-المحذوفات">سلة المحذوفات</h2>
+<p>يخفي <em>نقل إلى سلة المحذوفات</em> (Ctrl+Delete) الملاحظة من دون حذفها. يظهر زر تراجع فورًا،
+ويعرض زر <strong>سلة المحذوفات</strong> أسفل قائمة الملاحظات العناصر المحذوفة: انقر بزر الفأرة الأيمن لاستعادة
+<strong>استعادة</strong> أو <strong>حذف نهائي</strong>. يحذف <strong>إفراغ سلة المحذوفات</strong> كل ما فيها بعد طلب
+التأكيد. تُخفى الروابط إلى الملاحظات الموجودة في سلة المحذوفات، وتعود عند استعادة الملاحظة.</p>
+
+    <p class="doc-footer">وجدت خطأ؟ <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ar/notes-and-links.md">حرّر هذه الصفحة على GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">الرئيسية</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">المشكلات</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">تبرّع</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="اللغات"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar" aria-current="true">العربية</a></li></ul>
+</footer>
+</body>
+</html>

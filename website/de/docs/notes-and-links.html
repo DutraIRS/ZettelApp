@@ -1,0 +1,378 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Notizen werden in Markdown geschrieben: fett, kursiv, # Überschriften, Listen, &gt; Zitate,  Code , Codeblöcke, Tabellen und ~~durchgestrichen~~. Die Symbolleiste über dem Editor fügt">
+<title>Notizen und Links – ZettelApp-Dokumentation</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Zum Inhalt springen</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Funktionen</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Doku</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Spenden</a></li>
+        <li><a class="nav-cta" href="../#download">Herunterladen</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇩🇪</span><span class="sr-only">Sprachen</span></summary><ul class="lang-switch-panel" aria-label="Sprachen"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de" aria-current="true"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Spenden"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Spenden</span></a>
+      <a class="hbtn cta" href="../#download">Herunterladen</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menü</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Funktionen</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Doku</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Dokumentation">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Dokumentation</span><span class="docs-menu-current">Notizen und Links</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp-Dokumentation</a></li>
+      <li><a href="what-is-zettelkasten.html">Was ist ein Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: Ihre ersten 30 Minuten</a></li>
+      <li><a href="getting-started.html">Erste Schritte</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">Notizen und Links</a></li>
+      <li><a href="link-suggestions.html">Linkvorschläge</a></li>
+      <li><a href="graph-and-insights.html">Graph und Einblicke</a></li>
+      <li><a href="review-and-anki.html">Wiederholung, Quizfragen und Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ihre Notizen befragen (KI)</a></li>
+      <li><a href="mcp-server.html">MCP-Server</a></li>
+      <li><a href="export-import.html">Export und Import</a></li>
+      <li><a href="keyboard-shortcuts.html">Tastenkombinationen</a></li>
+      <li><a href="privacy-and-security.html">Datenschutz und Sicherheit</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Dokumentation</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp-Dokumentation</a></li>
+      <li><a href="what-is-zettelkasten.html">Was ist ein Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: Ihre ersten 30 Minuten</a></li>
+      <li><a href="getting-started.html">Erste Schritte</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">Notizen und Links</a></li>
+      <li><a href="link-suggestions.html">Linkvorschläge</a></li>
+      <li><a href="graph-and-insights.html">Graph und Einblicke</a></li>
+      <li><a href="review-and-anki.html">Wiederholung, Quizfragen und Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ihre Notizen befragen (KI)</a></li>
+      <li><a href="mcp-server.html">MCP-Server</a></li>
+      <li><a href="export-import.html">Export und Import</a></li>
+      <li><a href="keyboard-shortcuts.html">Tastenkombinationen</a></li>
+      <li><a href="privacy-and-security.html">Datenschutz und Sicherheit</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="notizen-und-links">Notizen und Links</h1>
+<h2 id="notizen-schreiben">Notizen schreiben</h2>
+<p>Notizen werden in <strong>Markdown</strong> geschrieben: <code>**fett**</code>, <code>*kursiv*</code>, <code># Überschriften</code>, Listen, <code>&gt; Zitate</code>,
+<code>`Code`</code>, Codeblöcke, Tabellen und <code>~~durchgestrichen~~</code>. Die Symbolleiste über dem Editor fügt häufig
+verwendete Elemente ein; Ctrl+B und Ctrl+I funktionieren wie gewohnt. Listen werden bei Enter fortgesetzt.</p>
+<p>Der Editor hat drei Modi (Ctrl+E wechselt zwischen ihnen): <strong>Bearbeiten</strong>, <strong>Geteilte Ansicht</strong> (Text und
+Vorschau nebeneinander) und <strong>Vorschau</strong>.</p>
+<p>Aus Sicherheitsgründen wird rohes HTML in einer Notiz als Text angezeigt und nie dargestellt. Links in der
+Vorschau öffnen nur Webseiten (<code>http</code>, <code>https</code>), E-Mail-Adressen (<code>mailto</code>), Notizen, Zotero-Einträge und
+lokale Dateien (werden im Datei-Explorer angezeigt, siehe <a href="#links-to-local-files">Links zu lokalen Dateien</a>).
+Siehe <a href="privacy-and-security.html">Datenschutz und Sicherheit</a>.</p>
+<h3 id="links-folgen">Links folgen</h3>
+<ul>
+<li><strong>Im Editor</strong> folgt <strong>Ctrl+Klick</strong> einem <code>[[Notizlink]]</code> (und erstellt die Notiz, falls sie noch nicht existiert), einem Web-, E-Mail- oder Zotero-Link, einem Link zu einer lokalen Datei oder einem <code>#tag</code> (und listet Notizen mit diesem Tag auf). Wenn Sie auf den Text zeigen, erklärt ein Tooltip, was beim Klicken geschieht. Ein normaler Klick setzt nur den Cursor, sodass Sie den Linktext weiterhin bearbeiten können.</li>
+<li><strong>In der Vorschau</strong> folgen Sie Links mit einem normalen Klick.</li>
+</ul>
+<h3 id="links-zu-lokalen-dateien">Links zu lokalen Dateien</h3>
+<p>Mit <em>Einfügen ▸ Link zu einer Datei…</em> (oder der Ordnerschaltfläche in der Symbolleiste) wählen Sie eine
+Datei aus und fügen einen Link wie <code>[report.pdf](file:///C:/Users/me/Documents/report.pdf)</code> ein. Wenn Sie
+eine Datei, die kein Bild ist, in den Notiztext ziehen, passiert dasselbe. Die Datei bleibt an ihrem
+Speicherort; in den Tresor wird keine Kopie eingefügt.</p>
+<p>Wenn Sie in der Vorschau auf den Link oder im Editor bei gedrückter Ctrl-Taste darauf klicken, wird <strong>der
+Datei-Explorer mit ausgewählter Datei geöffnet</strong>. Die Datei selbst wird weder geöffnet noch ausgeführt.
+Erlaubt sind nur Pfade auf einem lokalen Laufwerk: Netzwerkpfade (UNC) wie <code>\\server\share\file.pdf</code> werden
+abgelehnt, denn deren Abfrage könnte Ihre Windows-Anmeldedaten an den Server senden.</p>
+<p>Jede Notiz hat:</p>
+<ul>
+<li>einen <strong>Titel</strong> (das große Feld oben);</li>
+<li>eine <strong>ID</strong>, einen Zeitstempel wie <code>20261027153012</code>, der unter dem Titel angezeigt wird (<em>Mehr ▸ Notiz-ID kopieren</em>);</li>
+<li>optional <strong>Tags</strong>, einen <strong>Quellenlink</strong>, ein <strong>Titelbild</strong>, eine <strong>Mindmap</strong> und <strong>Lernkarten</strong>.</li>
+</ul>
+<h2 id="links-zwischen-notizen">Links zwischen Notizen</h2>
+<h3 id="wiki-links">Wiki-Links</h3>
+<p>Tippen Sie <code>[[</code> und beginnen Sie mit der Eingabe eines Titels: ZettelApp vervollständigt ihn anhand Ihrer
+Notizen. Innerhalb einer Notiz funktionieren alle diese Links:</p>
+<pre><code class="language-markdown">See [[Forgetting curve]].
+See [[20261027153012]].              (by ID)
+See [[Forgetting curve|the curve]].  (custom link text)
+</code></pre>
+<p>Ctrl+K (<em>Einfügen ▸ Link zu Notiz…</em>) öffnet eine Auswahlliste, die Titel und Text durchsucht und Sie den
+Linktyp auswählen lässt. Ein Link zu einem Titel, der noch nicht existiert, wird in der Vorschau grau
+angezeigt; klicken Sie darauf, um die Notiz zu erstellen. Wenn Sie später eine Notiz erstellen oder
+umbenennen, werden Links, die ihren Titel enthalten, aktualisiert.</p>
+<h3 id="typisierte-links">Typisierte Links</h3>
+<p>Links können beschreiben, <strong>wie</strong> zwei Notizen zusammenhängen. Setzen Sie den Linktyp mit <code>::</code> vor den Link:</p>
+<pre><code class="language-markdown">supports:: [[Forgetting curve]]
+contradicts:: [[Rereading notes]]
+part_of:: [[Zettelkasten method]]
+</code></pre>
+<p>Die integrierten Linktypen sind:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Typ</th>
+<th>Name</th>
+<th>Gegenrichtung</th>
+<th>Gerichteter Link</th>
+<th>Linie</th>
+<th>Pfeilspitze</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>related</code></td>
+<td>Steht in Beziehung zu</td>
+<td>Steht in Beziehung zu</td>
+<td>nein</td>
+<td>durchgezogen, grau</td>
+<td>keine</td>
+</tr>
+<tr>
+<td><code>supports</code></td>
+<td>Unterstützt</td>
+<td>Wird unterstützt von</td>
+<td>ja</td>
+<td>gestrichelt, grün</td>
+<td>ausgefülltes Dreieck</td>
+</tr>
+<tr>
+<td><code>contradicts</code></td>
+<td>Widerspricht</td>
+<td>Widerspricht</td>
+<td>nein</td>
+<td>gepunktet, rot</td>
+<td>keine</td>
+</tr>
+<tr>
+<td><code>extends</code></td>
+<td>Erweitert</td>
+<td>Wird erweitert von</td>
+<td>ja</td>
+<td>Strich-Punkt, blau</td>
+<td>ausgefülltes Dreieck</td>
+</tr>
+<tr>
+<td><code>example</code></td>
+<td>Beispiel für</td>
+<td>Hat als Beispiel</td>
+<td>ja</td>
+<td>Strich-Punkt-Punkt, bernsteinfarben</td>
+<td>Kreis</td>
+</tr>
+<tr>
+<td><code>part_of</code></td>
+<td>Teil von</td>
+<td>Enthält</td>
+<td>ja</td>
+<td>langer Strich, violett</td>
+<td>Raute</td>
+</tr>
+<tr>
+<td><code>cites</code></td>
+<td>Zitiert</td>
+<td>Wird zitiert von</td>
+<td>ja</td>
+<td>durchgezogen, türkis</td>
+<td>offener Pfeil</td>
+</tr>
+</tbody>
+</table></div>
+<p>Dies sind die Voreinstellungen eines neuen Tresors; Sie können sie ändern (siehe unten). Ein Tresor aus
+einer älteren Version behält seine bisherigen Linien bei.</p>
+<p>Ein einfacher <code>[[Link]]</code> bedeutet <em>Steht in Beziehung zu</em>.</p>
+<h3 id="gerichtete-und-ungerichtete-links">Gerichtete und ungerichtete Links</h3>
+<p>Ein <strong>gerichteter</strong> Linktyp wird von jeder Seite anders gelesen. Wenn Notiz A Notiz B <em>unterstützt</em>, zeigen
+B's Backlinks A als <em>Wird unterstützt von</em> an. Gerichtete Links erhalten Pfeilspitzen im Graph und bleiben
+beim Export gerichtet. <strong>Ungerichtete</strong> Typen wie <em>Steht in Beziehung zu</em> und <em>Widerspricht</em> lesen sich in
+beide Richtungen gleich.</p>
+<p>Um die Richtung eines falsch herum angelegten gerichteten Links umzukehren, klicken Sie in der Seitenleiste
+mit der rechten Maustaste darauf und wählen <strong>Richtung umkehren</strong>. Links im Text kehren Sie um, indem Sie
+den Text bearbeiten.</p>
+<h3 id="links-in-der-seitenleiste">Links in der Seitenleiste</h3>
+<p>Die Seitenleiste listet die <strong>Links</strong> (ausgehend) und <strong>Backlinks</strong> (eingehend) der Notiz jeweils mit ihrem Typ auf.</p>
+<ul>
+<li><strong>Link hinzufügen…</strong> erstellt einen Link, ohne ihn in den Text zu schreiben.</li>
+<li>Mit der rechten Maustaste auf einen Link können Sie die andere Notiz öffnen, den Linktyp ändern, seine Richtung umkehren oder ihn entfernen. Links im Text entfernen Sie durch Bearbeiten des Textes.</li>
+<li>Klicken Sie in der Notizliste mit der rechten Maustaste auf eine andere Notiz und wählen Sie <strong>Link von der geöffneten Notiz als</strong>.</li>
+</ul>
+<h3 id="eigene-linktypen">Eigene Linktypen</h3>
+<p>Unter <em>Werkzeuge ▸ Optionen ▸ Linktypen</em> können Sie Linktypen hinzufügen, umbenennen, neu gestalten oder
+entfernen. Wählen Sie einen Typ in der Liste aus und ändern Sie die Einstellungen daneben:</p>
+<ul>
+<li><strong>Name</strong> und <strong>Gegenrichtung</strong>: So wird der Link von der Quelle bzw. vom Ziel aus gelesen. Der Name der Gegenrichtung wird nur bei gerichteten Typen verwendet.</li>
+<li><strong>Gerichtet</strong>: Legt fest, ob der Typ von jeder Seite aus anders gelesen wird und eine Pfeilspitze erhält.</li>
+<li><strong>Farbe</strong>: Klicken Sie auf die Farbschaltfläche, um eine beliebige Farbe zu wählen.</li>
+<li><strong>Linie</strong>: durchgezogen, gestrichelt, gepunktet, Strich-Punkt, Strich-Punkt-Punkt oder langer Strich.</li>
+<li><strong>Pfeilspitze</strong>: Die Spitze am Ziel eines gerichteten Links: ausgefülltes Dreieck, offener Pfeil, Raute, Kreis oder Balken.</li>
+</ul>
+<p>Die Vorschau zeigt zwei Notizen, die durch einen Link verbunden sind, mit seinem Namen und der Bezeichnung
+von der anderen Seite. Der Stil wird überall verwendet, wo Links angezeigt werden: im Graph, seiner Legende,
+der Seitenleiste, der Linkauswahl sowie in den Exporten Website, GraphML und Graphviz. Geben Sie jedem Typ
+eine eigene Linie und Farbe, damit die Typen für farbenblinde Leser und auf Papier unterscheidbar bleiben.
+Ein neuer Typ erhält zunächst eine Farbe und Linie, die nur wenige andere Typen verwenden.</p>
+<p>Verwenden Sie im Text die ID des Typs, die unter der Vorschau angezeigt wird (zum Beispiel wird aus einem
+Typ namens „Inspiriert von“ <code>inspired_by::</code>). Die ID wird beim Anlegen festgelegt; durch Umbenennen eines
+Typs werden Links im Text also nicht ungültig. Wenn Sie einen eigenen Typ entfernen, werden seine Links zu
+Links vom Typ <em>Steht in Beziehung zu</em>; es geht nichts verloren. Integrierte Typen können umbenannt und neu
+gestaltet, aber nicht entfernt werden.</p>
+<h2 id="tags">Tags</h2>
+<p>Fügen Sie Tags in das Tagfeld unter dem Titel ein (drücken Sie nach jedem Tag Enter) oder schreiben Sie sie
+<strong>im Text</strong> mit einem Rautezeichen, etwa <code>#welcome</code> oder <code>#math/algebra</code>. Tags werden kleingeschrieben und
+können mit einem Schrägstrich verschachtelt werden, zum Beispiel <code>math/algebra</code>. Eine Suche nach <code>math</code>
+findet auch Notizen mit dem Tag <code>math/algebra</code>.
+Verwenden Sie den Tagfilter über der Notizliste oder geben Sie <code>tag:name</code> in das Suchfeld ein.</p>
+<p>Im Text geschriebene Tags sind echte Tags und erscheinen als <strong>umrandete Chips</strong> neben dem Feld <em>Tag
+hinzufügen</em>. Wenn Sie <code>#tag</code> aus dem Text löschen, verschwinden sie. Ein <code>#tag</code> wird innerhalb von Code,
+in Linkzielen und in <code>[[#headings]]</code> ignoriert. Tags aus dem Feld <em>Tag hinzufügen</em> sind davon unabhängig:
+Sie bleiben erhalten, bis Sie sie mit ✕ entfernen. Mit Ctrl+Klick auf ein <code>#tag</code> im Editor listen Sie die
+Notizen mit diesem Tag auf.</p>
+<h2 id="quellenlink">Quellenlink</h2>
+<p>Das Feld mit dem Globussymbol enthält die <strong>Quelle</strong> der Notiz: eine Webseite (<code>https://…</code>), eine
+E-Mail-Adresse oder einen Zotero-Eintrag (<code>zotero://select/library/items/…</code>). Die Schaltfläche daneben
+öffnet den Link. Andere Linktypen werden abgelehnt. Unter <a href="zotero.html">Zotero</a> erfahren Sie, wie Sie Notizen
+direkt aus Ihrer Zotero-Bibliothek erstellen.</p>
+<h2 id="bilder">Bilder</h2>
+<p>Fügen Sie Bilder über <em>Einfügen ▸ Bild…</em> (Ctrl+Shift+I), durch <strong>Einfügen</strong> aus der Zwischenablage oder
+indem Sie Bilddateien auf den Editor <strong>ziehen</strong> ein. Unterstützte Formate: PNG, JPEG, GIF, WebP und BMP,
+bis zu 25 MB. SVG wird absichtlich abgelehnt, da SVG-Dateien Skripte enthalten können.</p>
+<p>Bilder werden anhand ihres Inhalts (nicht des Dateinamens) geprüft, einmalig im Ordner <code>assets</code> des Tresors
+unter einem aus ihrem Inhalt abgeleiteten Namen gespeichert und wie folgt referenziert:</p>
+<pre><code class="language-markdown">![Diagram](asset:3f2a9c0b1d4e5f6a7b8c.png)
+</code></pre>
+<p>Das erste Bild, das Sie zu einer Notiz hinzufügen, wird zum <strong>Titelbild</strong>. Es wird als kleines abgerundetes
+Vorschaubild in der Notizliste und im Kreis der Notiz im Graph angezeigt. Klicken Sie im Editor oder in
+der Vorschau mit der rechten Maustaste auf ein beliebiges Bild und wählen Sie <em>Als Titelbild verwenden</em>,
+um ein anderes auszuwählen, oder <em>Titelbild entfernen</em>, um keins festzulegen.</p>
+<h2 id="checklisten">Checklisten</h2>
+<p>Beginnen Sie eine Zeile mit <code>- [ ]</code> (oder klicken Sie in der Symbolleiste auf die Schaltfläche <strong>Checkliste</strong>),
+um eine Aufgabe zu erstellen. <code>- [x]</code> kennzeichnet eine erledigte Aufgabe. Klicken Sie in der Vorschau auf
+das Kästchen, um es anzukreuzen. Wenn Sie am Ende einer Aufgabe Enter drücken, wird die nächste begonnen;
+Enter bei einer leeren Aufgabe beendet die Liste.</p>
+<h2 id="alarme">Alarme</h2>
+<p>Klicken Sie auf die Alarm-Schaltfläche (oder wählen Sie <em>Einfügen ▸ Alarm…</em>), um für eine Notiz ein Datum
+und optional eine Uhrzeit festzulegen. Wenn der Alarm fällig ist, zeigt ZettelApp eine Benachrichtigung;
+klicken Sie darauf, um die Notiz zu öffnen. ZettelApp muss laufen, damit Sie benachrichtigt werden. Alarme,
+die während der Schließzeit fällig wurden, werden kurz nach dem Öffnen des Tresors ausgelöst. Notizen mit
+Alarm sind in der Notizliste mit einer Glocke markiert. Wählen Sie im selben Dialog <em>Alarm entfernen</em>, um
+den Alarm zu löschen.</p>
+<h2 id="formeln">Formeln</h2>
+<p>Schreiben Sie LaTeX zwischen Dollarzeichen: <code>$E = mc^2$</code> ist eine Inline-Formel und
+<code>$$\int_0^1 x^2\,dx$$</code> eine abgesetzte Formel. Die Formelschaltfläche (<em>Einfügen ▸ Formel…</em>) öffnet einen
+Dialog mit einer Live-Vorschau. Formeln werden in der Vorschau dargestellt; Exporte behalten den
+LaTeX-Quelltext.</p>
+<h2 id="mindmaps">Mindmaps</h2>
+<p>Jede Notiz kann eine Mindmap enthalten (Registerkarte <strong>Mindmap</strong> oder <em>Einfügen ▸ Mindmap</em>). Die Zweige
+werden automatisch eingefärbt.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Taste</th>
+<th>Aktion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tab</td>
+<td>Untergeordnete Idee hinzufügen</td>
+</tr>
+<tr>
+<td>Enter</td>
+<td>Gleichrangige Idee hinzufügen</td>
+</tr>
+<tr>
+<td>F2 oder Doppelklick</td>
+<td>Umbenennen</td>
+</tr>
+<tr>
+<td>Del</td>
+<td>Ausgewählte Idee löschen</td>
+</tr>
+<tr>
+<td>Pfeiltasten</td>
+<td>Auswahl verschieben</td>
+</tr>
+<tr>
+<td>Mausrad / Ziehen</td>
+<td>Zoomen / verschieben</td>
+</tr>
+</tbody>
+</table></div>
+<p>Klicken Sie mit der rechten Maustaste auf eine Idee, um sie <strong>mit einer Notiz zu verknüpfen</strong>; ein
+verknüpfter Gedanke zeigt ein Linksymbol und öffnet die Notiz. <strong>Aus Links erstellen</strong> erstellt eine
+Mindmap aus den Links der Notiz, nach Linktyp gruppiert, mit den eigenen Links der verknüpften Notizen eine
+Ebene tiefer. <strong>Exportieren</strong> speichert die Map als PNG- oder SVG-Bild oder als FreeMind-Datei (<code>.mm</code>), die
+FreeMind, Freeplane und XMind öffnen können.</p>
+<h2 id="lernkarten">Lernkarten</h2>
+<p>Lernkarten machen aus Notizen Wiederholungsmaterial (siehe <a href="review-and-anki.html">Wiederholung, Quizfragen und Anki</a>).
+Es gibt zwei Möglichkeiten, sie zu erstellen:</p>
+<p><strong>Im Notiztext.</strong> Diese Karten werden automatisch erstellt und beim Bearbeiten aktualisiert:</p>
+<pre><code class="language-markdown">Q: Who described the forgetting curve?
+A: Hermann Ebbinghaus
+
+{{c1::Retrieval practice}} is also called active recall.
+</code></pre>
+<p>Eine Frage kann sich über mehrere Zeilen erstrecken, bis die Zeile <code>A:</code> beginnt. Jeder Absatz mit
+<code>{{c1::…}}</code> wird zu einer <strong>Lückentextkarte</strong>, die jede Lücke nacheinander ausblendet. <code>{{c1::text::hint}}</code>
+zeigt einen Hinweis statt <code>[…]</code>.</p>
+<p><strong>Auf der Registerkarte „Lernkarten“.</strong> Verwenden Sie <em>Einfügen ▸ Lernkarte…</em> (Ctrl+Shift+F) für Karten,
+die nicht in der Notiz erscheinen sollen. Karten aus dem Text sind mit <em>aus Notiztext</em> gekennzeichnet und
+werden im Text bearbeitet.</p>
+<h2 id="suche">Suche</h2>
+<p>Das Suchfeld (Ctrl+F) durchsucht Titel, Text und Tags im Volltext, ignoriert Akzente und findet
+Wortanfänge: <code>forget</code> findet also <em>forgetting</em>. Mit <code>tag:name</code> filtern Sie nach Tags, zum Beispiel
+<code>memory tag:psychology</code>. Ergebnisse werden nach Relevanz sortiert; ohne Suchbegriff folgen die Notizen der
+ausgewählten Sortierung (<em>Zuletzt bearbeitet</em>, <em>Erstellt</em>, <em>Titel</em> oder <em>Am stärksten verknüpft</em>).</p>
+<h2 id="papierkorb">Papierkorb</h2>
+<p><em>In den Papierkorb verschieben</em> (Ctrl+Delete) blendet eine Notiz aus, ohne sie zu löschen. Sofort erscheint
+eine Schaltfläche zum Rückgängigmachen. Über die Schaltfläche <strong>Papierkorb</strong> unter der Notizliste sehen Sie
+gelöschte Notizen: Klicken Sie mit der rechten Maustaste auf eine Notiz, um sie <strong>wiederherzustellen</strong> oder
+<strong>endgültig zu löschen</strong>. <strong>Papierkorb leeren</strong> löscht alle darin enthaltenen Notizen nach einer
+Bestätigung. Links zu Notizen im Papierkorb werden ausgeblendet und sind nach dem Wiederherstellen wieder
+sichtbar.</p>
+
+    <p class="doc-footer">Fehler gefunden? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/de/notes-and-links.md">Diese Seite auf GitHub bearbeiten</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Start</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Spenden</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Sprachen"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de" aria-current="true">Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

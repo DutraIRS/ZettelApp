@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Файл ▸ Экспорт…  экспортирует всю коллекцию или любую её часть:">
+<title>Экспорт и импорт – документация ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">К содержимому</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Возможности</a></li>
+        <li><a href="tutorial.html">Руководство</a></li>
+        <li><a href="./">Документация</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Поддержать</a></li>
+        <li><a class="nav-cta" href="../#download">Скачать</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇷🇺</span><span class="sr-only">Языки</span></summary><ul class="lang-switch-panel" aria-label="Языки"><li><a href="../../docs/export-import.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/export-import.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/export-import.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/export-import.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/export-import.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/export-import.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/export-import.html" lang="ru" hreflang="ru" aria-current="true"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/export-import.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/export-import.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/export-import.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/export-import.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Поддержать"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Поддержать</span></a>
+      <a class="hbtn cta" href="../#download">Скачать</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Меню</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Возможности</a></li>
+          <li><a href="tutorial.html">Руководство</a></li>
+          <li><a href="./">Документация</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Документация">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Документация</span><span class="docs-menu-current">Экспорт и импорт</span></span></summary>
+      <ul>
+      <li><a href="index.html">Документация ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Руководство: ваши первые 30 минут</a></li>
+      <li><a href="getting-started.html">Начало работы</a></li>
+      <li><a href="notes-and-links.html">Заметки и связи</a></li>
+      <li><a href="link-suggestions.html">Подсказки ссылок</a></li>
+      <li><a href="graph-and-insights.html">Граф и статистика</a></li>
+      <li><a href="review-and-anki.html">Повторение, викторины и Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Спросите свои заметки (ИИ)</a></li>
+      <li><a href="mcp-server.html">MCP-сервер</a></li>
+      <li><a href="export-import.html" aria-current="page">Экспорт и импорт</a></li>
+      <li><a href="keyboard-shortcuts.html">Горячие клавиши</a></li>
+      <li><a href="privacy-and-security.html">Конфиденциальность и безопасность</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Документация</h2>
+      <ul>
+      <li><a href="index.html">Документация ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Руководство: ваши первые 30 минут</a></li>
+      <li><a href="getting-started.html">Начало работы</a></li>
+      <li><a href="notes-and-links.html">Заметки и связи</a></li>
+      <li><a href="link-suggestions.html">Подсказки ссылок</a></li>
+      <li><a href="graph-and-insights.html">Граф и статистика</a></li>
+      <li><a href="review-and-anki.html">Повторение, викторины и Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Спросите свои заметки (ИИ)</a></li>
+      <li><a href="mcp-server.html">MCP-сервер</a></li>
+      <li><a href="export-import.html" aria-current="page">Экспорт и импорт</a></li>
+      <li><a href="keyboard-shortcuts.html">Горячие клавиши</a></li>
+      <li><a href="privacy-and-security.html">Конфиденциальность и безопасность</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="экспорт-и-импорт">Экспорт и импорт</h1>
+<h2 id="экспорт">Экспорт</h2>
+<p><em>Файл ▸ Экспорт…</em> (Ctrl+Shift+E) экспортирует <strong>всю коллекцию или любую её часть</strong>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Область</th>
+<th>Что экспортируется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Вся коллекция</strong></td>
+<td>Каждая заметка (кроме корзины).</td>
+</tr>
+<tr>
+<td><strong>Текущая заметка и связанные заметки</strong></td>
+<td>Открытая заметка и заметки в пределах <strong>Глубины</strong> связей от неё в обоих направлениях: <em>подграф</em>.</td>
+</tr>
+<tr>
+<td><strong>Заметки с тегом</strong></td>
+<td>Заметки с этим тегом, включая вложенные теги (<code>math</code> включает <code>math/algebra</code>).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Диалог показывает, сколько заметок, связей и карточек содержит выбранная область. Экспортировать можно также из
+списка заметок (правый щелчок ▸ <em>Экспорт со связанными заметками…</em>), из меню ⋯ заметки, из графа (кнопка
+экспорта экспортирует заметки, видимые на экране) и из меню узла графа.</p>
+<h3 id="форматы">Форматы</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Формат</th>
+<th>Файл</th>
+<th>Содержимое</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Архив ZettelApp</strong></td>
+<td><code>.zip</code></td>
+<td>Всё, включая изображения: заметки, типизированные связи, типы связей (с их цветами, стилями линий и наконечниками стрелок), карточки, ментальные карты. Импортируйте его обратно в ZettelApp на любом компьютере. Лучше всего подходит для резервных копий и переноса хранилищ.</td>
+</tr>
+<tr>
+<td><strong>Файлы Markdown</strong></td>
+<td><code>.zip</code></td>
+<td>По одному файлу <code>.md</code> на заметку с YAML-метаданными (id, заголовок, теги, ссылка на источник, даты, типизированные связи, ментальная карта) и <code>[[вики-ссылками]]</code> между файлами. Связи, не записанные в тексте, перечислены в разделе <em>Links</em> как <code>type:: [[Note]]</code>, а ручные карточки — в разделе <em>Flashcards</em> как <code>Q:</code>/<code>A:</code>. Изображения лежат в <code>assets/</code>. Открывается в Obsidian и других редакторах Markdown.</td>
+</tr>
+<tr>
+<td><strong>Сайт</strong></td>
+<td><code>.zip</code></td>
+<td>Автономный статический сайт: индекс с обзором графа, индекс тегов и по одной странице на заметку, со связями, нарисованными цветами и стилями линий их типов, ментальными картами и карточками (ответы раскрываются по щелчку). Без скриптов; работает офлайн при открытии <code>index.html</code>. Светлая и тёмная темы.</td>
+</tr>
+<tr>
+<td><strong>JSON</strong></td>
+<td><code>.json</code></td>
+<td>Структурированные данные для скриптов и других инструментов (изображения указаны ссылками, но не включены).</td>
+</tr>
+<tr>
+<td><strong>GraphML</strong></td>
+<td><code>.graphml</code></td>
+<td>Граф связей для Gephi, yEd, Cytoscape или NetworkX, с заголовками, тегами и датами на узлах и типами связей на рёбрах (направленными или нет), с цветом, стилем линии и наконечником стрелки каждого типа.</td>
+</tr>
+<tr>
+<td><strong>Graphviz DOT</strong></td>
+<td><code>.dot</code></td>
+<td>Граф в виде диаграммы Graphviz, где типы связей раскрашены, подписаны и оформлены: сплошные, штриховые или пунктирные линии (Graphviz рисует штрих-пунктирные и длинноштриховые линии штриховыми) и наконечник стрелки каждого типа; у ненаправленных типов стрелок нет.</td>
+</tr>
+<tr>
+<td><strong>Колода Anki</strong></td>
+<td><code>.apkg</code></td>
+<td>Карточки экспортируемых заметок. См. <a href="review-and-anki.html#anki">Anki</a>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Экспорт записывается во временный файл и переносится на место только по завершении, так что прерванный
+экспорт никогда не оставляет наполовину записанный файл. Он выполняется в фоне, а <strong>Показать в папке</strong> открывает
+результат в Проводнике.</p>
+<p>У ментальных карт есть и свой экспорт (PNG, SVG или FreeMind <code>.mm</code>) на вкладке <strong>Ментальная карта</strong>, а граф
+можно сохранить как изображение PNG.</p>
+<h2 id="импорт">Импорт</h2>
+<p><em>Файл ▸ Импорт…</em> принимает:</p>
+<ul>
+<li><strong>архивы ZettelApp</strong> (<code>.zip</code>) и экспорт <strong>JSON</strong>;</li>
+<li><strong>файлы Markdown</strong> (<code>.md</code>) или <strong><code>.zip</code> с файлами Markdown</strong>;</li>
+<li><em>Файл ▸ Импорт папки Markdown…</em> для папки с файлами Markdown, например <strong>хранилища Obsidian</strong>.</li>
+</ul>
+<p>Что сохраняется:</p>
+<ul>
+<li><strong>Из архивов ZettelApp и JSON:</strong> заметки сохраняют свои ID, типизированные связи, карточки, ментальные карты и
+изображения. Типы связей, которых ещё нет в хранилище, добавляются с их цветами и стилями; уже имеющиеся
+типы сохраняют свои. Повторный импорт того же архива пропускает не изменившиеся заметки. Если ID уже
+занят другой заметкой, импорт присваивает новый ID и обновляет связи.</li>
+<li><strong>Из Markdown:</strong>
+<ul>
+<li>заголовок берётся из поля <code>title</code> метаданных, первого <code># заголовка</code> или имени файла;</li>
+<li>теги берутся из поля <code>tags</code> метаданных и встроенных <code>#хэштегов</code>;</li>
+<li>ссылка на источник берётся из <code>url</code> или <code>source</code>, а дата создания — из <code>created</code>;</li>
+<li><code>[[вики-ссылки]]</code> (включая ссылки по имени файла в Obsidian) и <code>type:: [[ссылки]]</code> становятся связями;</li>
+<li>изображения, указанные через <code>![](path)</code> или <code>![[image.png]]</code> Obsidian, копируются в хранилище;</li>
+<li>скрытые папки вроде <code>.obsidian</code> и <code>.trash</code> пропускаются;</li>
+<li>собственный экспорт ZettelApp в Markdown импортируется обратно с типизированными связями, карточками и ментальными картами.</li>
+</ul>
+</li>
+</ul>
+<h3 id="безопасность">Безопасность</h3>
+<p>Импортируемые файлы считаются недоверенными:</p>
+<ul>
+<li>пути в архиве проверяются, поэтому файлы нельзя записать за пределы импорта (никакого «zip-slip»);</li>
+<li>архивы со слишком большим числом файлов, слишком большим объёмом данных или подозрительным коэффициентом сжатия («бомбы»
+распаковки) отклоняются;</li>
+<li>тип каждого поля проверяется, а размер ограничивается;</li>
+<li>изображения повторно проверяются по содержимому;</li>
+<li>удалённые изображения и ссылки на другие места на диске не импортируются.</li>
+</ul>
+<p>Ежедневная резервная копия создаётся при открытии хранилища, а в любой момент вы можете создать её через <em>Файл ▸ Создать резервную копию
+хранилища</em>. См. <a href="privacy-and-security.html">Конфиденциальность и безопасность</a>.</p>
+
+    <p class="doc-footer">Нашли ошибку? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ru/export-import.md">Править страницу на GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Главная</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Проблемы</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Поддержать</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Языки"><li><a href="../../docs/export-import.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/export-import.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/export-import.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/export-import.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/export-import.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/export-import.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/export-import.html" lang="ru" hreflang="ru" aria-current="true">Русский</a></li><li><a href="../../zh-cn/docs/export-import.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/export-import.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/export-import.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/export-import.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from datetime import UTC, datetime
 
 from PySide6.QtCore import QLocale, QSize, Qt, QTimer, QUrl, Signal
-from PySide6.QtGui import QDesktopServices, QGuiApplication, QPixmap
+from PySide6.QtGui import QDesktopServices, QGuiApplication, QPixmap, QTextCursor
 from PySide6.QtWidgets import (
     QButtonGroup,
     QFileDialog,
@@ -32,10 +33,10 @@ from zettelapp.core.security import (
     normalize_source_url,
     normalize_web_url,
 )
-from zettelapp.core.textutil import extract_hashtags, strip_markdown
+from zettelapp.core.textutil import extract_hashtags, find_tasks, strip_markdown
 from zettelapp.i18n import _, n_
 from zettelapp.ui import icons, theme
-from zettelapp.ui.dialogs import CardDialog, TextPromptDialog
+from zettelapp.ui.dialogs import AlarmDialog, CardDialog, FormulaDialog, TextPromptDialog
 from zettelapp.ui.markdown_editor import MarkdownEditor
 from zettelapp.ui.mindmap import MindMapView
 from zettelapp.ui.preview import NotePreview
@@ -121,12 +122,18 @@ class NoteEditor(QWidget):
         # Toolbar --------------------------------------------------------
         bar = QHBoxLayout()
         bar.setSpacing(2)
+        bar.addWidget(
+            tool_button("trash", _("Move note to Trash"), lambda: self.window.trash_current())
+        )
+        bar.addSpacing(6)
         self.fmt_buttons = [
             tool_button("bold", _("Bold (Ctrl+B)"), lambda: self.body.wrap_selection("**")),
             tool_button("italic", _("Italic (Ctrl+I)"), lambda: self.body.wrap_selection("*")),
             tool_button("heading", _("Heading"), lambda: self.body.prefix_lines("## ")),
             tool_button("bullets", _("Bulleted list"), lambda: self.body.prefix_lines("- ")),
+            tool_button("checklist", _("Checklist"), lambda: self.body.prefix_lines("- [ ] ")),
             tool_button("code", _("Code"), lambda: self.body.wrap_selection("`")),
+            tool_button("formula", _("Insert formula (LaTeX)"), self.insert_formula),
         ]
         for b in self.fmt_buttons:
             bar.addWidget(b)
@@ -134,8 +141,8 @@ class NoteEditor(QWidget):
         bar.addWidget(
             tool_button("relationship", _("Link to note (Ctrl+K)"), self.linkNoteRequested.emit)
         )
-        bar.addWidget(tool_button("globe", _("Insert web link"), self.insert_web_link))
         bar.addWidget(tool_button("folder", _("Link to a file"), self.insert_file_link))
+        bar.addWidget(tool_button("globe", _("Insert web link"), self.insert_web_link))
         bar.addWidget(tool_button("image", _("Insert image (Ctrl+Shift+I)"), self.insert_image))
         bar.addWidget(
             tool_button(
@@ -144,6 +151,7 @@ class NoteEditor(QWidget):
         )
         bar.addWidget(tool_button("mindmap", _("Add mind map"), self.show_mindmap))
         bar.addWidget(tool_button("cards", _("Add flashcard (Ctrl+Shift+F)"), self.add_card))
+        bar.addWidget(tool_button("alarm", _("Set an alarm for this note"), self.set_alarm))
         bar.addStretch(1)
         self.mode_group = QButtonGroup(self)
         for i, (name, tip) in enumerate(
@@ -226,6 +234,9 @@ class NoteEditor(QWidget):
         self.preview.newNoteRequested.connect(self.newNoteRequested)
         self.preview.fileRequested.connect(lambda path: self.window.reveal_file(path))
         self.preview.hovered.connect(self.statusMessage)
+        self.preview.taskToggled.connect(self._toggle_task)
+        self.preview.image_actions = self._image_actions
+        self.body.image_actions = self._image_actions
         self.split = QSplitter(Qt.Orientation.Horizontal)
         self.split.addWidget(self.body)
         self.split.addWidget(self.preview)
@@ -311,8 +322,7 @@ class NoteEditor(QWidget):
         layout.addWidget(self.tabs, 1)
 
         self._build_more_menu()
-        self.set_view_mode(0)
-        self.load(None)
+        self.set_view_mode(1)
 
     # --- loading and saving -------------------------------------------------
 
@@ -373,6 +383,17 @@ class NoteEditor(QWidget):
     def _refresh_meta(self) -> None:
         n = self.note
         words = len(strip_markdown(n.body).split())
+        alarm = ""
+        if n.alarm:
+            try:
+                when = datetime.fromisoformat(n.alarm).astimezone()
+                alarm = "  ·  " + _("Alarm {when}").format(
+                    when=QLocale().toString(
+                        when.replace(tzinfo=None), QLocale.FormatType.ShortFormat
+                    )
+                )
+            except ValueError:
+                alarm = ""
         self.meta.setText(
             _(
                 "Created {friendly_time}  ·  Edited {friendly_time2}  ·  {words} words  ·  ID {id}"
@@ -382,6 +403,7 @@ class NoteEditor(QWidget):
                 words=words,
                 id=n.id,
             )
+            + alarm
         )
 
     def _refresh_preview(self) -> None:
@@ -464,6 +486,57 @@ class NoteEditor(QWidget):
             self._refresh_picture()
         name = path.replace("\\", "/").rsplit("/", 1)[-1].rsplit(".", 1)[0]
         self.body.insert_block(f"![{name}](asset:{asset})\n")
+
+    # --- checklists, formulas, alarms, title image --------------------------------
+
+    def _toggle_task(self, index: int) -> None:
+        text = self.body.toPlainText()
+        tasks = find_tasks(text)
+        if not 0 <= index < len(tasks):
+            return
+        start, end, checked = tasks[index]
+        utf16 = lambda s: len(s.encode("utf-16-le")) // 2  # noqa: E731 - Qt positions
+        cursor = QTextCursor(self.body.document())
+        cursor.setPosition(utf16(text[:start]))
+        cursor.setPosition(utf16(text[:end]), QTextCursor.MoveMode.KeepAnchor)
+        cursor.insertText("[ ]" if checked else "[x]")
+
+    def insert_formula(self) -> None:
+        if self.note is None:
+            return
+        selected = self.body.textCursor().selectedText().strip("$ ")
+        dialog = FormulaDialog(self, selected)
+        if dialog.exec():
+            _latex, display = dialog.value()
+            if display:
+                self.body.insert_block(dialog.markdown() + "\n")
+            else:
+                self.body.textCursor().insertText(dialog.markdown())
+            self.body.setFocus()
+
+    def set_alarm(self) -> None:
+        if self.note is None:
+            return
+        dialog = AlarmDialog(self, self.note.alarm)
+        if not dialog.exec():
+            return
+        self.note.alarm = "" if dialog.removed else dialog.iso()
+        self._dirty = True
+        self.flush()
+        self.window.alarms_changed()
+
+    def _image_actions(self, asset: str) -> list[tuple[str, Callable[[], None]]]:
+        if self.note is None:
+            return []
+        if self.note.image == asset:
+            return [(_("Remove title image"), self._remove_picture)]
+        return [(_("Use as title image"), lambda: self._set_picture(asset))]
+
+    def _set_picture(self, asset: str) -> None:
+        if self.note:
+            self.note.image = asset
+            self._refresh_picture()
+            self._edited()
 
     def insert_file_link(self) -> None:
         """Link a file where it is (nothing is copied); clicking shows it in File Explorer."""
@@ -731,8 +804,6 @@ class NoteEditor(QWidget):
         m.addAction(
             icons.icon("chat"), _("Ask about this note…"), lambda: self.window.ask_about_current()
         )
-        m.addSeparator()
-        m.addAction(icons.icon("delete"), _("Move to Trash"), lambda: self.window.trash_current())
 
     def _copy_link(self) -> None:
         if self.note:

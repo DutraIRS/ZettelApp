@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Zettelkasten은 노트가 계속 나를 위해 일하도록 만드는 노트 작성법이에요. 노트를 주제별로 분류해 보관하지 않아요. 아이디어 하나를 노트 하나에 쓰고, 관련된 노트에 링크해요. 시간이 지나면 링크가 네트워크를 이루고, 그 링크를 따라가는 것이 곧 생각하고, 글을 쓰고, 계획하지 않았던 연결을 발견하는 방법이 돼요">
+<title>Zettelkasten이란? – ZettelApp 문서</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">본문으로 건너뛰기</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">기능</a></li>
+        <li><a href="tutorial.html">튜토리얼</a></li>
+        <li><a href="./">문서</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 후원</a></li>
+        <li><a class="nav-cta" href="../#download">다운로드</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇰🇷</span><span class="sr-only">언어</span></summary><ul class="lang-switch-panel" aria-label="언어"><li><a href="../../docs/what-is-zettelkasten.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/what-is-zettelkasten.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/what-is-zettelkasten.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/what-is-zettelkasten.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/what-is-zettelkasten.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/what-is-zettelkasten.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/what-is-zettelkasten.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/what-is-zettelkasten.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/what-is-zettelkasten.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/what-is-zettelkasten.html" lang="ko" hreflang="ko" aria-current="true"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/what-is-zettelkasten.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="후원"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">후원</span></a>
+      <a class="hbtn cta" href="../#download">다운로드</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">메뉴</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">기능</a></li>
+          <li><a href="tutorial.html">튜토리얼</a></li>
+          <li><a href="./">문서</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="문서">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">문서</span><span class="docs-menu-current">Zettelkasten이란?</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html" aria-current="page">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>문서</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html" aria-current="page">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="zettelkasten이란">Zettelkasten이란?</h1>
+<p><strong>Zettelkasten</strong>(독일어로 &quot;슬립 박스&quot;)은 노트가 계속 나를 위해 일하도록 만드는 노트 작성법이에요. 노트를
+주제별로 분류해 보관하지 않아요. 아이디어 하나를 노트 하나에 쓰고, 관련된 노트에 <strong>링크</strong>해요. 시간이 지나면
+링크가 네트워크를 이루고, 그 링크를 따라가는 것이 곧 생각하고, 글을 쓰고, 계획하지 않았던 연결을 발견하는 방법이 돼요.</p>
+<p>이 방법이 처음이라면 이 페이지를 읽은 다음 <a href="tutorial.html">튜토리얼</a>을 해 보세요.</p>
+<h2 id="유래">유래</h2>
+<p>이 방법은 사회 시스템 이론으로 가장 잘 알려진 독일 사회학자 **니클라스 루만(1927–1998)**과 깊이 연관돼요.
+그는 약 40년 동안 약 <strong>9만 장의 색인 카드</strong>로 이루어진 슬립 박스를 운영했어요. 두 가지 특징 덕분에 이것은
+단순한 카드 모음 이상이었어요.</p>
+<ul>
+<li><strong>모든 카드에 고정된 주소가 있었어요.</strong> 예를 들어 <code>21/3d7a</code>처럼요. 기존 생각에 관한 새 카드는 바로 뒤에
+가지처럼 뻗는 주소(<code>21/3d7a</code> → <code>21/3d7a1</code>)로 꽂았기 때문에, 아무것도 재정리하지 않고도 생각의 흐름이
+어느 방향으로든 자랄 수 있었어요.</li>
+<li><strong>카드가 주소로 다른 카드를 가리켰어요.</strong> 그래서 슬립 박스는 범주의 집합이 아니라 아이디어의 그물이 되었어요.</li>
+</ul>
+<p>루만은 약 70권의 책과 400편에 가까운 논문(집계 방식에 따라 수치는 달라요)이라는 방대한 저작의 상당 부분이
+슬립 박스 덕분이라고 말했어요. 슬립 박스를 일종의 대화 상대로 삼아 작업하는 것에 관한 에세이
+<em>Kommunikation mit Zettelkästen</em>(1981)도 썼어요. 그의 슬립 박스는 이후 빌레펠트 대학교의 니클라스 루만
+아카이브에서 디지털화되었어요.</p>
+<p>이 방법은 **죈케 아렌스의 <em>How to Take Smart Notes</em>(2017)**와 zettelkasten.de 같은 커뮤니티를 통해
+학계 밖에서도 널리 알려졌어요.</p>
+<h2 id="핵심-원칙">핵심 원칙</h2>
+<ol>
+<li><strong>원자적 노트: 노트당 아이디어 하나.</strong> 노트 하나에는 아이디어 하나만 담아야 해요. 정확하게 링크하고 여러
+맥락에서 재사용할 수 있을 만큼 작게요. 제목으로 노트를 요약할 수 없다면 아이디어가 둘 이상 들어 있을 가능성이 커요.</li>
+<li><strong>자신의 말로.</strong> 아이디어를 자신의 말로 쓰는 순간 이해가 일어나요. 구절을 그대로 복사하면 생산적인 느낌은
+들지만 생각하는 과정을 건너뛰게 돼요.</li>
+<li><strong>모든 노트를 이유와 함께 링크하세요.</strong> 노트를 추가할 때 어떤 기존 노트와 관련되는지, 그리고 <em>어떻게</em>
+관련되는지 물어보세요. 하나를 뒷받침하나요, 다른 하나를 반박하나요, 세 번째의 예시인가요? 이유가 있는 링크는
+관련 노트를 쌓아 두는 것보다 훨씬 가치 있어요.</li>
+<li><strong>고유하고 영구적인 ID.</strong> 제목은 바뀌고 주제는 달라지지만 노트의 주소는 그대로여야 링크가 끊기지 않아요.</li>
+<li><strong>구조가 저절로 생기게 두세요.</strong> 폴더로 범주를 미리 정하는 대신 직접 만든 링크에서 아이디어 클러스터가
+형성되게 하세요. 구조는 아래에서 위로 자라요.</li>
+<li><strong>구조(허브) 노트.</strong> 주제가 커지면 그것을 정리하는 노트를 쓰세요. 핵심 노트들을 알맞은 순서로 링크하는
+짧은 개요예요. 폴더가 아니라 진입점이에요.</li>
+<li><strong>복습하고 다시 떠올리기.</strong> 노트를 다시 보고, 링크를 따라가고, 오래된 아이디어와 새 아이디어가 만나게 하세요.
+Zettelkasten은 계속 대화할 때만 생각의 파트너가 돼요.</li>
+</ol>
+<h2 id="세-가지-종류의-노트">세 가지 종류의 노트</h2>
+<p>아렌스는 수명이 서로 다른 세 가지 종류의 노트를 설명해요.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>종류</th>
+<th>설명</th>
+<th>활용 방법</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>임시 노트</strong></td>
+<td>어디서나 적어 두는 생각의 빠른 메모예요.</td>
+<td>하루나 이틀 안에 처리한 다음 버리세요.</td>
+</tr>
+<tr>
+<td><strong>문헌 노트</strong></td>
+<td>출처에 대해 자신의 말로 쓴 짧은 노트와 참고 문헌이에요.</td>
+<td>출처와 함께 보관하세요(예: Zotero 항목에 링크).</td>
+</tr>
+<tr>
+<td><strong>영구 노트</strong></td>
+<td>미래의 나를 위해 쓰고 네트워크에 연결한, 독립적인 자신의 아이디어 노트예요.</td>
+<td>이것이 Zettelkasten이에요. 신중하게 쓰고 링크하세요.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="흔한-함정">흔한 함정</h2>
+<ul>
+<li><strong>생각하는 대신 수집하기.</strong> 기사와 하이라이트를 저장하면 진전이 있는 것 같지만, Zettelkasten은 직접 쓰고
+연결한 노트로만 자라요. 이 함정은 흔히 &quot;수집가의 오류&quot;라고 불러요.</li>
+<li><strong>인용문 복사.</strong> 대부분이 인용문인 노트는 아직 이해되지 않은 노트예요. 필요하면 인용문은 문헌 노트에
+보관하고, 영구 노트는 자신의 말로 쓰세요.</li>
+<li><strong>태그 남발.</strong> 노트마다 태그가 수십 개면 이름만 바꾼 폴더를 다시 만드는 셈이에요. 폭넓은 태그 몇 개는 노트를
+찾는 데 도움이 되지만, 의미는 링크가 담아요.</li>
+<li><strong>고아 노트.</strong> 링크가 없는 노트는 다시 찾기 어렵고 네트워크에 아무것도 더하지 못해요. 새 노트는 최소한
+기존 노트 하나에 링크하세요.</li>
+<li><strong>과도한 설계.</strong> 이 방법에는 거의 아무것도 필요하지 않아요. 노트, ID, 링크면 돼요. 일단 쓰기 시작하세요.
+구조는 나중에 따라와요.</li>
+</ul>
+<h2 id="zettelapp은-이-방법을-어떻게-돕나요">ZettelApp은 이 방법을 어떻게 돕나요</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>원칙</th>
+<th>ZettelApp에서는</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>고유하고 영구적인 ID</td>
+<td>모든 노트가 타임스탬프 ID(예: <code>20261027153012</code>)를 자동으로 받아요. 제목이나 ID로 링크하세요. <a href="notes-and-links.html#wiki-links">위키 링크</a>는 제목이 바뀌어도 계속 동작해요.</td>
+</tr>
+<tr>
+<td>원자적 노트</td>
+<td>빠른 노트 만들기(Ctrl+N), 자동 저장, 미리 보기에 잘 맞는 작은 노트.</td>
+</tr>
+<tr>
+<td>이유가 있는 링크</td>
+<td><a href="notes-and-links.html#typed-links">유형이 있는 링크</a>: <code>supports:: [[…]]</code>, <em>반박</em>, <em>확장</em>, <em>예시</em>, <em>상위 항목</em>, <em>인용</em>, 또는 직접 만든 유형. 방향이 있는 유형은 양쪽에서 자연스럽게 읽혀요(<em>뒷받침하는 노트</em>).</td>
+</tr>
+<tr>
+<td>연결을 놓치지 않기</td>
+<td><a href="link-suggestions.html">링크 제안</a>이 각 노트를 볼트와 비교하고, 수락하거나 닫은 것에서 배워요. <strong>백링크</strong>는 노트를 링크한 노트를 보여 줘요.</td>
+</tr>
+<tr>
+<td>구조가 저절로 생기게 하기</td>
+<td><a href="graph-and-insights.html">그래프</a>: 어느 노트 주변이든 볼 수 있는 <strong>로컬 그래프</strong>와, 분류한 적 없는 주제를 드러내는 <strong>클러스터</strong>. <em>인사이트</em>는 고쳐야 할 <strong>연결되지 않은 노트</strong>를 나열해요.</td>
+</tr>
+<tr>
+<td>구조 노트</td>
+<td>노트 안의 마인드맵은 정리하는 노트에 링크되고, <em>상위 항목</em> 링크도 있어요.</td>
+</tr>
+<tr>
+<td>문헌 노트</td>
+<td><a href="zotero.html">Zotero</a> 연동이 항목과 PDF에 연결된 문헌 노트를 만들어 줘요.</td>
+</tr>
+<tr>
+<td>복습하고 다시 떠올리기</td>
+<td>노트로 만든 <a href="review-and-anki.html">플래시카드, 간격 반복, 퀴즈</a>, 또는 Anki와 동기화.</td>
+</tr>
+<tr>
+<td>모든 것을 보관</td>
+<td>노트는 바로 삭제되지 않고 <strong>휴지통</strong>으로 가며, 매일 백업이 기록을 안전하게 지켜 줘요.</td>
+</tr>
+</tbody>
+</table></div>
+<p>해 볼 준비가 되셨나요? <a href="tutorial.html">튜토리얼</a>을 시작하세요.</p>
+
+    <p class="doc-footer">오류를 발견하셨나요? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ko/what-is-zettelkasten.md">GitHub에서 이 페이지 편집</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">홈</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">이슈</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">후원</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="언어"><li><a href="../../docs/what-is-zettelkasten.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/what-is-zettelkasten.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/what-is-zettelkasten.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/what-is-zettelkasten.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/what-is-zettelkasten.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/what-is-zettelkasten.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/what-is-zettelkasten.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/what-is-zettelkasten.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/what-is-zettelkasten.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/what-is-zettelkasten.html" lang="ko" hreflang="ko" aria-current="true">한국어</a></li><li><a href="../../ar/docs/what-is-zettelkasten.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

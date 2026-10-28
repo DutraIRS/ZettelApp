@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="文件 ▸ 导出…可导出整个集合或其中任意一部分:">
+<title>导出与导入 – ZettelApp 文档</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">跳到内容</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">功能</a></li>
+        <li><a href="tutorial.html">教程</a></li>
+        <li><a href="./">文档</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 捐赠</a></li>
+        <li><a class="nav-cta" href="../#download">下载</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇨🇳</span><span class="sr-only">语言</span></summary><ul class="lang-switch-panel" aria-label="语言"><li><a href="../../docs/export-import.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/export-import.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/export-import.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/export-import.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/export-import.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/export-import.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/export-import.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/export-import.html" lang="zh-CN" hreflang="zh-CN" aria-current="true"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/export-import.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/export-import.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/export-import.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="捐赠"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">捐赠</span></a>
+      <a class="hbtn cta" href="../#download">下载</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">菜单</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">功能</a></li>
+          <li><a href="tutorial.html">教程</a></li>
+          <li><a href="./">文档</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="文档">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">文档</span><span class="docs-menu-current">导出与导入</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 文档</a></li>
+      <li><a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a></li>
+      <li><a href="tutorial.html">教程:你的前 30 分钟</a></li>
+      <li><a href="getting-started.html">入门</a></li>
+      <li><a href="notes-and-links.html">笔记与链接</a></li>
+      <li><a href="link-suggestions.html">链接建议</a></li>
+      <li><a href="graph-and-insights.html">图谱与 Insights</a></li>
+      <li><a href="review-and-anki.html">复习、测验与 Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">询问你的笔记(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 服务器</a></li>
+      <li><a href="export-import.html" aria-current="page">导出与导入</a></li>
+      <li><a href="keyboard-shortcuts.html">键盘快捷键</a></li>
+      <li><a href="privacy-and-security.html">隐私与安全</a></li>
+      <li><a href="faq.html">常见问题</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>文档</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 文档</a></li>
+      <li><a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a></li>
+      <li><a href="tutorial.html">教程:你的前 30 分钟</a></li>
+      <li><a href="getting-started.html">入门</a></li>
+      <li><a href="notes-and-links.html">笔记与链接</a></li>
+      <li><a href="link-suggestions.html">链接建议</a></li>
+      <li><a href="graph-and-insights.html">图谱与 Insights</a></li>
+      <li><a href="review-and-anki.html">复习、测验与 Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">询问你的笔记(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 服务器</a></li>
+      <li><a href="export-import.html" aria-current="page">导出与导入</a></li>
+      <li><a href="keyboard-shortcuts.html">键盘快捷键</a></li>
+      <li><a href="privacy-and-security.html">隐私与安全</a></li>
+      <li><a href="faq.html">常见问题</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="导出与导入">导出与导入</h1>
+<h2 id="导出">导出</h2>
+<p><em>文件 ▸ 导出…</em>(Ctrl+Shift+E)可导出<strong>整个集合或其中任意一部分</strong>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>范围</th>
+<th>导出内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>整个集合</strong></td>
+<td>每一条笔记(不含回收站)。</td>
+</tr>
+<tr>
+<td><strong>当前笔记及其链接笔记</strong></td>
+<td>当前笔记以及与其相距在 <strong>Depth</strong> 个链接以内的笔记(沿两个方向跟随链接):一个<em>子图</em>。</td>
+</tr>
+<tr>
+<td><strong>带标签的笔记</strong></td>
+<td>带有该标签的笔记,包括嵌套标签(<code>math</code> 包含 <code>math/algebra</code>)。</td>
+</tr>
+</tbody>
+</table></div>
+<p>对话框会显示该范围包含多少条笔记、链接和闪卡。你也可以从笔记列表(右键点击 ▸ <em>连同链接笔记一起导出…</em>)、笔记的 ⋯ 菜单、图谱(导出按钮会导出屏幕上的笔记)以及图谱节点的菜单中导出。</p>
+<h3 id="格式">格式</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>格式</th>
+<th>文件</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ZettelApp 归档</strong></td>
+<td><code>.zip</code></td>
+<td>包含图片在内的一切:笔记、类型链接、链接类型(含其颜色、线条样式和箭头)、闪卡、思维导图。可在任何电脑上重新导入 ZettelApp。最适合备份和迁移库。</td>
+</tr>
+<tr>
+<td><strong>Markdown 文件</strong></td>
+<td><code>.zip</code></td>
+<td>每条笔记一个 <code>.md</code> 文件,带有 YAML front matter(id、标题、标签、来源链接、日期、类型链接、思维导图),文件之间使用 <code>[[wiki links]]</code>。未写在正文中的链接会以 <code>type:: [[Note]]</code> 的形式列在<em>链接</em>下,手动创建的闪卡则以 <code>Q:</code>/<code>A:</code> 的形式列在<em>闪卡</em>下。图片位于 <code>assets/</code>。可在 Obsidian 和其他 Markdown 编辑器中打开。</td>
+</tr>
+<tr>
+<td><strong>网站</strong></td>
+<td><code>.zip</code></td>
+<td>一个自包含的静态网站:带有图谱概览的索引、标签索引,以及每条笔记一个页面,链接以其链接类型的颜色和线条样式绘制,并包含思维导图和闪卡(点击后显示答案)。不含脚本;打开 <code>index.html</code> 即可离线使用。支持浅色和深色主题。</td>
+</tr>
+<tr>
+<td><strong>JSON</strong></td>
+<td><code>.json</code></td>
+<td>供脚本和其他工具使用的结构化数据(引用图片,但不包含图片)。</td>
+</tr>
+<tr>
+<td><strong>GraphML</strong></td>
+<td><code>.graphml</code></td>
+<td>供 Gephi、yEd、Cytoscape 或 NetworkX 使用的链接图,节点上带有标题、标签和日期,边上带有链接类型(有向或无向),以及每种类型的颜色、线条样式和箭头。</td>
+</tr>
+<tr>
+<td><strong>Graphviz DOT</strong></td>
+<td><code>.dot</code></td>
+<td>以 Graphviz 图表呈现的图谱,链接类型带有颜色、标签和样式:实线、虚线或点线(Graphviz 会把点划线和长划线画成虚线)以及每种类型的箭头;无向类型没有箭头。</td>
+</tr>
+<tr>
+<td><strong>Anki 牌组</strong></td>
+<td><code>.apkg</code></td>
+<td>所导出笔记的闪卡。参见 <a href="review-and-anki.html#anki">Anki</a>。</td>
+</tr>
+</tbody>
+</table></div>
+<p>导出内容会先写入临时文件,只有完成后才移动到位,因此被中断的导出绝不会留下写了一半的文件。导出在后台运行,<strong>在文件夹中显示</strong>会在文件资源管理器中展示结果。</p>
+<p>思维导图在<strong>思维导图</strong>标签页中也有自己的导出(PNG、SVG 或 FreeMind <code>.mm</code>),图谱则可保存为 PNG 图像。</p>
+<h2 id="导入">导入</h2>
+<p><em>文件 ▸ 导入…</em> 接受:</p>
+<ul>
+<li><strong>ZettelApp 归档</strong>(<code>.zip</code>)和 <strong>JSON</strong> 导出文件;</li>
+<li><strong>Markdown 文件</strong>(<code>.md</code>)或<strong>由 Markdown 文件组成的 <code>.zip</code></strong>;</li>
+<li>对于 Markdown 文件夹(例如 <strong>Obsidian 库</strong>),使用<em>文件 ▸ 导入 Markdown 文件夹…</em>。</li>
+</ul>
+<p>会保留的内容:</p>
+<ul>
+<li>**来自 ZettelApp 归档和 JSON:**笔记保留其 ID、类型链接、闪卡、思维导图和图片。库中尚没有的链接类型会连同其颜色和样式一并添加;库中已有的类型则保留自己的样式。重复导入同一个归档会跳过未更改的笔记。如果某个 ID 已被另一条笔记使用,导入的笔记会获得新的 ID,并更新链接。</li>
+<li><strong>来自 Markdown:</strong>
+<ul>
+<li>标题来自 front matter 的 <code>title</code>、第一个 <code># heading</code> 或文件名;</li>
+<li>标签来自 front matter 的 <code>tags</code> 和行内 <code>#hashtags</code>;</li>
+<li>来源链接来自 <code>url</code> 或 <code>source</code>,创建日期来自 <code>created</code>;</li>
+<li><code>[[wiki links]]</code>(包括 Obsidian 的文件名链接)和 <code>type:: [[links]]</code> 会变成链接;</li>
+<li>通过 <code>![](path)</code> 或 Obsidian 的 <code>![[image.png]]</code> 引用的图片会被复制到库中;</li>
+<li>诸如 <code>.obsidian</code> 和 <code>.trash</code> 之类的隐藏文件夹会被跳过;</li>
+<li>ZettelApp 自己导出的 Markdown 可连同其类型链接、闪卡和思维导图一起导回。</li>
+</ul>
+</li>
+</ul>
+<h3 id="安全">安全</h3>
+<p>导入的文件会被视为不可信:</p>
+<ul>
+<li>会检查归档路径,因此文件无法被写到导入范围之外(不存在“zip-slip”);</li>
+<li>文件过多、数据过多或压缩比可疑(解压“炸弹”)的归档会被拒绝;</li>
+<li>每个字段都会进行类型检查和大小限制;</li>
+<li>图片会按内容重新验证;</li>
+<li>远程图片和指向磁盘上其他位置的链接不会被导入。</li>
+</ul>
+<p>打开库时会进行每日备份,你也可以随时通过<em>文件 ▸ 立即备份库</em>进行备份。参见<a href="privacy-and-security.html">隐私与安全</a>。</p>
+
+    <p class="doc-footer">发现错误？<a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/zh-cn/export-import.md">在 GitHub 上编辑此页</a>。</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">首页</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">问题</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">捐赠</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="语言"><li><a href="../../docs/export-import.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/export-import.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/export-import.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/export-import.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/export-import.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/export-import.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/export-import.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/export-import.html" lang="zh-CN" hreflang="zh-CN" aria-current="true">简体中文</a></li><li><a href="../../ja/docs/export-import.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/export-import.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/export-import.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

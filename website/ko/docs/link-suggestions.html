@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="글을 쓰는 동안 링크 제안 패널이 지금 편집 중인 노트와 연결될 가능성이 높은 노트를 나열해요. 링크를 클릭해 연결하거나, ✕를 클릭해 제안을 닫으세요. 둘 다 모델을 학습시켜요. 제안에 마우스를 올리면 왜 제안되었는지 볼 수 있어요.">
+<title>링크 제안 – ZettelApp 문서</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">본문으로 건너뛰기</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">기능</a></li>
+        <li><a href="tutorial.html">튜토리얼</a></li>
+        <li><a href="./">문서</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 후원</a></li>
+        <li><a class="nav-cta" href="../#download">다운로드</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇰🇷</span><span class="sr-only">언어</span></summary><ul class="lang-switch-panel" aria-label="언어"><li><a href="../../docs/link-suggestions.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/link-suggestions.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/link-suggestions.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/link-suggestions.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/link-suggestions.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/link-suggestions.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/link-suggestions.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/link-suggestions.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/link-suggestions.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/link-suggestions.html" lang="ko" hreflang="ko" aria-current="true"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/link-suggestions.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="후원"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">후원</span></a>
+      <a class="hbtn cta" href="../#download">다운로드</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">메뉴</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">기능</a></li>
+          <li><a href="tutorial.html">튜토리얼</a></li>
+          <li><a href="./">문서</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="문서">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">문서</span><span class="docs-menu-current">링크 제안</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html" aria-current="page">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>문서</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html" aria-current="page">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="링크-제안">링크 제안</h1>
+<p>글을 쓰는 동안 <strong>링크 제안</strong> 패널이 지금 편집 중인 노트와 연결될 가능성이 높은 노트를 나열해요. <strong>링크</strong>를 클릭해
+연결하거나(옆의 화살표로 링크 유형을 고를 수 있어요), **✕**를 클릭해 제안을 닫으세요. 둘 다 모델을 학습시켜요.
+제안에 마우스를 올리면 <em>왜</em> 제안되었는지 볼 수 있어요.</p>
+<p>제안은 입력을 멈추고 약 1초 뒤에 백그라운드에서 업데이트되므로 편집기가 기다리는 일은 없어요. 저장하지 않은 텍스트도
+사용해요.</p>
+<h2 id="동작-방식">동작 방식</h2>
+<p>ZettelApp은 &quot;이 두 노트를 링크해야 할까?&quot;를 분류 문제로 보고 <strong>나이브 베이즈</strong> 분류기로 답해요. 노트 <em>q</em>와 모든 후보 노트
+<em>c</em>에 대해 여덟 가지 유사도 특성을 계산하고, 그 근거를 하나의 확률로 합쳐요.</p>
+<h3 id="특성">특성</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>특성</th>
+<th>측정하는 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>의미 유사도(LSA)</strong></td>
+<td>잠재 의미 공간에서의 코사인 유사도예요. TF-IDF 행렬의 절단 SVD(무작위 SVD, 최대 64차원)를 사용해요. 정확히 같은 단어를 거의 공유하지 않아도 관련된 어휘를 쓰는 노트는 가까워져요.</td>
+</tr>
+<tr>
+<td><strong>공유 키워드(TF-IDF 코사인)</strong></td>
+<td>TF-IDF 벡터의 코사인 유사도예요(서브리니어 단어 빈도, 평활화된 역문서 빈도). 제목은 두 배로 계산되고 태그도 포함돼요.</td>
+</tr>
+<tr>
+<td><strong>제목 유사도(Levenshtein)</strong></td>
+<td>1 − 편집 거리 ÷ 더 긴 제목의 길이.</td>
+</tr>
+<tr>
+<td><strong>제목 유사도(Jaro-Winkler)</strong></td>
+<td>제목의 Jaro-Winkler 유사도로, 시작 부분이 같으면 점수를 더 줘요.</td>
+</tr>
+<tr>
+<td><strong>본문 유사도(Levenshtein)</strong></td>
+<td>두 본문의 처음 400자 사이의 정규화된 편집 거리.</td>
+</tr>
+<tr>
+<td><strong>공유 태그(Jaccard)</strong></td>
+<td>공통 태그 ÷ 전체 태그.</td>
+</tr>
+<tr>
+<td><strong>본문에 언급된 제목</strong></td>
+<td>한 노트의 제목이 다른 노트의 본문에 단어 단위로 나타나면 1, 아니면 0.</td>
+</tr>
+<tr>
+<td><strong>공유 링크(Jaccard)</strong></td>
+<td>두 노트가 링크한 노트들의 겹침(그래프에서 삼각형 닫기).</td>
+</tr>
+</tbody>
+</table></div>
+<p>텍스트는 소문자로 바뀌고, 악센트는 통합되며(<em>informação</em>가 <em>informacao</em>와 일치해요), Markdown 문법은 제거되고,
+영어, 포르투갈어, 스페인어의 흔한 불용어는 무시돼요. 편집 거리는 <a href="https://github.com/rapidfuzz/RapidFuzz">RapidFuzz</a>를
+사용해요. 사용할 수 없을 때는 순수 Python 비트 병렬 알고리즘이 동일한 결과를 내요.</p>
+<h3 id="특성에서-확률로">특성에서 확률로</h3>
+<p>각 특성 값(0과 1 사이)은 <strong>8개 구간</strong> 중 하나에 놓여요. 각 특성마다 모델은 링크된 쌍과 링크되지 않은 쌍이 각 구간에
+얼마나 자주 속하는지를 기억하고 다음과 같이 추정해요.</p>
+<pre><code class="language-text">P(link | f1 … f8)  ∝  P(link) × Π P(fi | link)
+</code></pre>
+<p>특성의 <strong>근거</strong>는 로그 가능도비, 즉 log P(bin | link) − log P(bin | no link)예요.
+표시되는 확률은 사전 로그 오즈에 (가중된) 근거의 합을 더한 값의 로지스틱 함수예요.</p>
+<p><strong>횟수는 어디서 오나요.</strong> 모델은 볼트가 눈에 띄게 바뀔 때마다 볼트로 학습해요.</p>
+<ul>
+<li><strong>긍정 예시</strong>: 링크된 모든 노트 쌍과 수락한 제안(아주 큰 볼트에서는 최대 600쌍을 샘플링해요).</li>
+<li><strong>부정 예시</strong>: 링크되지 않은 노트의 무작위 쌍(긍정 예시 하나당 세 개)과 <strong>닫은</strong> 모든 제안이에요. 닫은 제안은 두 배로
+계산돼요.</li>
+</ul>
+<p><strong>첫날부터 동작하는 사전 분포.</strong> 데이터가 없을 때는 각 구간이 디리클레 <em>의사 횟수</em>(기본적으로 특성과 클래스마다 10)로
+시작해요. 이는 약한 믿음을 나타내요. 링크된 쌍은 유사도가 높을수록 횟수가 늘고, 링크되지 않은 쌍은 가파르게 줄어요.
+새 볼트에서 제안의 순위를 매기기에는 충분해요. 노트를 링크할수록 실제 횟수가 사전 분포보다 커지고 모델이 <em>나만의</em>
+링크 방식에 적응해요. 긍정과 부정을 1 대 3으로 샘플링하므로 클래스 사전 확률 P(link)는 약 4분의 1이에요(의사 횟수도
+그에 맞춰져요).</p>
+<p><strong>두 가지 보정으로 추정치를 정직하게 유지해요.</strong></p>
+<ol>
+<li><strong>레이블 누출 없음.</strong> 특성을 계산하기 전에 <code>[[위키 링크]]</code>를 본문에서 제거해요. 그렇지 않으면 인라인 링크가 대상의
+제목을 본문에 넣게 되고, 모델이 관련된 아이디어가 아니라 이미 존재하는 링크를 알아보도록 학습하게 돼요. 같은 이유로
+링크된 쌍으로 학습할 때 &quot;공유 링크&quot; 특성은 두 노트 사이의 링크를 무시해요.</li>
+<li><strong>상관된 근거에 가중치를 줘요.</strong> 나이브 베이즈는 특성이 서로 독립이라고 가정하지만, 일부는 그렇지 않아요. TF-IDF와
+LSA는 겹치고, 세 가지 문자열 거리도 마찬가지예요. 상관된 근거를 독립으로 세면 단순한 나이브 베이즈는 과신하게 돼요.
+그래서 ZettelApp은 각 특성의 근거에 <strong>0.6</strong>을 곱해(특성 가중 나이브 베이즈) 확률을 현실적으로 유지해요.</li>
+</ol>
+<p><strong>누락되거나 꺼진 특성은 근거가 없는 것으로 쳐요.</strong> 특성을 끄거나 계산할 수 없으면 아무것도 더하지 않아요. 나이브
+베이즈가 누락된 값을 자연스럽게 다루는 방식이에요.</p>
+<h3 id="빠른-순위-매기기">빠른 순위 매기기</h3>
+<p>긴 텍스트를 Levenshtein 거리로 비교하는 것이 가장 느린 단계이므로 순위는 두 단계로 매겨요. 먼저 모든 후보를
+본문 유사도 특성 없이 채점하고, 상위 150개만 전체 점수를 받아요. 이미 링크한 후보와 닫은 쌍은 제안되지 않아요.</p>
+<h2 id="이유-툴팁-읽기">&quot;이유&quot; 툴팁 읽기</h2>
+<p>제안에 마우스를 올리면 모델의 추정치와 각 특성의 근거를 볼 수 있어요. 양수는 링크에 찬성하고 음수는 반대하는 근거예요.
+막대 옆의 라벨은 확률을 요약해요. <strong>강함</strong>(50% 이상), <strong>가능성 높음</strong>(25% 이상), <strong>가능성 있음</strong>이에요.</p>
+<p>확률은 정직한 추정치이고, 링크가 드문 볼트에서는 대부분의 쌍이 실제로 링크되지 않았기 때문에 15–30%도 좋은 제안일 수
+있어요. 가장 중요한 것은 순서예요.</p>
+<h2 id="조정">조정</h2>
+<p><em>도구 ▸ 옵션 ▸ 링크 제안</em>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>옵션</th>
+<th>기본값</th>
+<th>효과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>글을 쓰는 동안 링크 제안</td>
+<td>켜짐</td>
+<td>패널의 제안을 완전히 꺼요.</td>
+</tr>
+<tr>
+<td>특성</td>
+<td>여덟 가지 모두</td>
+<td>고려하고 싶지 않은 특성의 체크를 해제해요.</td>
+</tr>
+<tr>
+<td>최대 표시 개수</td>
+<td>8</td>
+<td>나열되는 제안의 수예요.</td>
+</tr>
+<tr>
+<td>최소 일치도</td>
+<td>10%</td>
+<td>이 확률보다 낮은 제안을 숨겨요.</td>
+</tr>
+<tr>
+<td>사전 분포 강도</td>
+<td>10</td>
+<td>사전 분포를 뒷받침하는 의사 관측의 수예요. 값이 높을수록 사전 분포를 더 오래 신뢰하고, 낮을수록 내 링크에 더 빨리 적응해요.</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>**모델 상세…**는 모델이 학습한 링크된 쌍과 링크되지 않은 쌍의 수, 그리고 각 특성이 얼마나 유용한지(링크된 쌍과
+링크되지 않은 쌍의 분포 사이의 대칭 쿨백–라이블러 발산)를 보여 줘요.</li>
+<li><strong>닫은 제안 잊기</strong>는 닫은 기록을 지워서, 그 쌍이 다시 제안될 수 있고 부정 예시로 더는 계산되지 않게 해요.</li>
+</ul>
+
+    <p class="doc-footer">오류를 발견하셨나요? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ko/link-suggestions.md">GitHub에서 이 페이지 편집</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">홈</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">이슈</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">후원</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="언어"><li><a href="../../docs/link-suggestions.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/link-suggestions.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/link-suggestions.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/link-suggestions.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/link-suggestions.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/link-suggestions.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/link-suggestions.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/link-suggestions.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/link-suggestions.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/link-suggestions.html" lang="ko" hreflang="ko" aria-current="true">한국어</a></li><li><a href="../../ar/docs/link-suggestions.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

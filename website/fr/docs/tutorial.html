@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Une visite pratique : chaque étape indique quoi faire et ce que vous devriez voir. Les étapes marquées facultatif nécessitent Zotero, une clé d’IA ou Anki ; ignorez-les si vous ne ">
+<title>Tutoriel : vos 30 premières minutes – documentation de ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Aller au contenu</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Fonctionnalités</a></li>
+        <li><a href="tutorial.html">Tutoriel</a></li>
+        <li><a href="./">Documentation</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Faire un don</a></li>
+        <li><a class="nav-cta" href="../#download">Télécharger</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇫🇷</span><span class="sr-only">Langues</span></summary><ul class="lang-switch-panel" aria-label="Langues"><li><a href="../../docs/tutorial.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/tutorial.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/tutorial.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/tutorial.html" lang="fr" hreflang="fr" aria-current="true"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/tutorial.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/tutorial.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/tutorial.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/tutorial.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/tutorial.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/tutorial.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/tutorial.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Faire un don"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Faire un don</span></a>
+      <a class="hbtn cta" href="../#download">Télécharger</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Fonctionnalités</a></li>
+          <li><a href="tutorial.html">Tutoriel</a></li>
+          <li><a href="./">Documentation</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentation</span><span class="docs-menu-current">Tutoriel : vos 30 premières minutes</span></span></summary>
+      <ul>
+      <li><a href="index.html">Documentation de ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Qu’est-ce qu’un Zettelkasten ?</a></li>
+      <li><a href="tutorial.html" aria-current="page">Tutoriel : vos 30 premières minutes</a></li>
+      <li><a href="getting-started.html">Bien démarrer</a></li>
+      <li><a href="notes-and-links.html">Notes et liens</a></li>
+      <li><a href="link-suggestions.html">Suggestions de liens</a></li>
+      <li><a href="graph-and-insights.html">Graphe et Insights</a></li>
+      <li><a href="review-and-anki.html">Révision, quiz et Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Interroger vos notes (IA)</a></li>
+      <li><a href="mcp-server.html">Serveur MCP</a></li>
+      <li><a href="export-import.html">Exporter et importer</a></li>
+      <li><a href="keyboard-shortcuts.html">Raccourcis clavier</a></li>
+      <li><a href="privacy-and-security.html">Confidentialité et sécurité</a></li>
+      <li><a href="faq.html">Foire aux questions</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentation</h2>
+      <ul>
+      <li><a href="index.html">Documentation de ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Qu’est-ce qu’un Zettelkasten ?</a></li>
+      <li><a href="tutorial.html" aria-current="page">Tutoriel : vos 30 premières minutes</a></li>
+      <li><a href="getting-started.html">Bien démarrer</a></li>
+      <li><a href="notes-and-links.html">Notes et liens</a></li>
+      <li><a href="link-suggestions.html">Suggestions de liens</a></li>
+      <li><a href="graph-and-insights.html">Graphe et Insights</a></li>
+      <li><a href="review-and-anki.html">Révision, quiz et Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Interroger vos notes (IA)</a></li>
+      <li><a href="mcp-server.html">Serveur MCP</a></li>
+      <li><a href="export-import.html">Exporter et importer</a></li>
+      <li><a href="keyboard-shortcuts.html">Raccourcis clavier</a></li>
+      <li><a href="privacy-and-security.html">Confidentialité et sécurité</a></li>
+      <li><a href="faq.html">Foire aux questions</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="tutoriel--vos-30-premieres-minutes">Tutoriel : vos 30 premières minutes</h1>
+<p>Une visite pratique : chaque étape indique quoi faire et ce que vous devriez voir. Les étapes marquées <em>facultatif</em> nécessitent Zotero,
+une clé d’IA ou Anki ; ignorez-les si vous ne les utilisez pas.</p>
+<p>Vous découvrez la méthode ? Lisez d’abord <a href="what-is-zettelkasten.html">Qu’est-ce qu’un Zettelkasten ?</a>. Cela prend cinq minutes.</p>
+<h2 id="1-installer-et-ouvrir-le-coffre-de-bienvenue">1. Installer et ouvrir le coffre de bienvenue</h2>
+<ol>
+<li>Téléchargez <strong>ZettelApp-Setup.exe</strong> depuis la <a href="https://github.com/DutraIRS/ZettelApp/releases/latest">dernière version</a>
+et exécutez-le, ou décompressez <strong>ZettelApp-Portable.zip</strong> et lancez <code>ZettelApp.exe</code>.</li>
+<li>Démarrez ZettelApp.</li>
+</ol>
+<p><strong>Vous devriez voir</strong> la page Notes avec onze notes de démarrage reliées dans un nouveau coffre situé dans
+<em>Documents\ZettelApp</em>. La note « Welcome to ZettelApp » est ouverte dans l’éditeur. Après quelques instants, ZettelApp propose
+également l’aventure facultative <em>Lost Prince of the Archive</em> ; choisissez <strong>Pas maintenant</strong> si vous préférez suivre ce guide écrit.</p>
+<h2 id="2-creer-une-note">2. Créer une note</h2>
+<ol>
+<li>Appuyez sur <strong>Ctrl+N</strong>.</li>
+<li>Saisissez un titre, par exemple <em>Répétition espacée</em>, puis appuyez sur <strong>Entrée</strong> pour passer au texte.</li>
+<li>Formulez une idée avec vos propres mots, en deux ou trois phrases :
+<em>Réviser des informations à intervalles croissants favorise la mémoire à long terme, car chaque révision a lieu juste avant l’oubli.</em></li>
+</ol>
+<p><strong>Vous devriez voir</strong> la note apparaître en haut de la liste. Il n’y a pas de bouton Enregistrer : les notes sont sauvegardées pendant
+la saisie. L’identifiant sous le titre (par exemple <code>20261027153012</code>) est l’adresse permanente de la note.</p>
+<h2 id="3-ajouter-des-tags">3. Ajouter des tags</h2>
+<p>Cliquez sur <strong>Ajouter un tag</strong> sous le titre, saisissez <code>learning</code> et appuyez sur <strong>Entrée</strong>. Ajoutez aussi <code>memory</code>.</p>
+<p><strong>Vous devriez voir</strong> deux pastilles, <em>#learning</em> et <em>#mémoire</em>. Le filtre de tags au-dessus de la liste les propose désormais, et la
+recherche <code>tag:memory</code> retrouve la note.</p>
+<h2 id="4-relier-une-autre-note">4. Relier une autre note</h2>
+<ol>
+<li>Créez une deuxième note (<strong>Ctrl+N</strong>) intitulée <em>Forgetting curve</em>, avec une phrase : <em>La mémoire s’efface rapidement si l’on ne révise pas.</em></li>
+<li>Revenez à <em>Répétition espacée</em> (cliquez dessus dans la liste). Dans le texte, saisissez <code>[[</code>, puis <code>Forg</code>.</li>
+<li>Choisissez <strong>Forgetting curve</strong> dans la liste de complétion et appuyez sur <strong>Entrée</strong>.</li>
+</ol>
+<p><strong>Vous devriez voir</strong> <code>[[Forgetting curve]]</code> souligné dans le texte. Dans le panneau latéral, <em>Forgetting curve</em> apparaît sous <strong>Liens</strong>.
+Cliquez sur le bouton en forme d’œil (<strong>Split</strong>) de la barre d’outils : l’aperçu affiche un lien cliquable.</p>
+<h2 id="5-preciser-comment-les-notes-sont-liees">5. Préciser <em>comment</em> les notes sont liées</h2>
+<p>Transformez le lien en lien typé en ajoutant <code>supports::</code> devant :</p>
+<pre><code class="language-markdown">supports:: [[Forgetting curve]]
+</code></pre>
+<p><strong>Vous devriez voir</strong> le lien répertorié sous <em>Soutient</em> dans le panneau latéral. Ouvrez <em>Forgetting curve</em> : ses <strong>Rétroliens</strong> affichent
+<em>Répétition espacée : <strong>Soutenu par</strong></em>, car <em>supports</em> est un type de lien orienté. Un simple <code>[[lien]]</code> signifie <em>Lié à</em>.</p>
+<h2 id="6-utiliser-une-suggestion-de-lien">6. Utiliser une suggestion de lien</h2>
+<p>Rédigez quelques autres notes sur des idées apparentées, par exemple <em>Active recall</em> et <em>Interleaving</em>, avec une ou deux phrases et le tag
+<code>learning</code>. Ouvrez ensuite l’une d’elles et consultez les <strong>Suggestions de liens</strong> dans le panneau latéral.</p>
+<ul>
+<li>Cliquez sur <strong>Lier</strong> pour accepter une suggestion. La petite flèche voisine permet de choisir un type de lien.</li>
+<li>Cliquez sur <strong>✕</strong> pour rejeter une suggestion inadaptée.</li>
+<li>Survolez une suggestion pour comprendre <strong>pourquoi</strong> elle a été proposée : chaque mesure fournit des indices pour ou contre le lien.</li>
+</ul>
+<p><strong>Ce qu’apprend le modèle :</strong> les suggestions acceptées deviennent des liens et entraînent le classificateur comme exemples positifs. Les
+suggestions rejetées sont mémorisées comme exemples négatifs et ne sont plus proposées pour cette paire. Les suggestions s’améliorent à
+mesure que vous utilisez cette fonction. Consultez <a href="link-suggestions.html">Suggestions de liens</a>.</p>
+<p><img loading="lazy" src="../../assets/screenshots/notes-light.png" alt="Notes avec des suggestions de liens" /></p>
+<h2 id="7-ajouter-une-image">7. Ajouter une image</h2>
+<p>Copiez une image (par exemple avec <em>Win+Shift+S</em>), cliquez dans le texte de la note et appuyez sur <strong>Ctrl+V</strong>. Vous pouvez aussi faire
+glisser un fichier image dans la note ou utiliser <em>Insertion ▸ Image…</em>.</p>
+<p><strong>Vous devriez voir</strong> <code>![…](asset:…)</code> dans le texte et l’image dans l’aperçu. Comme il s’agit de la première image de la note, elle devient
+aussi son <strong>image de titre</strong>, affichée près du titre et dans le cercle de la note sur le graphe.</p>
+<h2 id="8-esquisser-une-carte-mentale">8. Esquisser une carte mentale</h2>
+<ol>
+<li>Ouvrez l’onglet <strong>Carte mentale</strong> et cliquez sur <strong>Ajouter une idée</strong>.</li>
+<li>Appuyez sur <strong>Tab</strong> pour ajouter une idée enfant, sur <strong>Entrée</strong> pour une idée sœur, sur <strong>F2</strong> pour renommer et sur <strong>Suppr</strong> pour supprimer.
+Les touches fléchées permettent de passer d’une idée à l’autre.</li>
+<li>Cliquez maintenant sur <strong>À partir des liens</strong> et confirmez que la carte que vous venez de dessiner peut être remplacée.</li>
+</ol>
+<p><strong>Vous devriez voir</strong> une carte mentale construite à partir des liens de la note, regroupés par type, avec un niveau supplémentaire
+correspondant aux liens propres à chaque note liée. Faites un clic droit sur une idée pour la relier à une note. Le bouton d’exportation
+permet d’enregistrer la carte en PNG, SVG ou FreeMind.</p>
+<p><img loading="lazy" src="../../assets/screenshots/mindmap-light.png" alt="Une carte mentale" /></p>
+<h2 id="9-creer-des-cartes-memoire-et-les-reviser">9. Créer des cartes mémoire et les réviser</h2>
+<p>Ajoutez ces lignes au texte de <em>Répétition espacée</em> :</p>
+<pre><code class="language-markdown">Q: Why space reviews out?
+A: Each effortful retrieval just before forgetting strengthens the memory.
+
+{{c1::Hermann Ebbinghaus}} described the forgetting curve.
+</code></pre>
+<p><strong>Vous devriez voir</strong> <strong>Cartes mémoire (2)</strong> dans l’onglet : une carte question-réponse et une carte à trous. Ouvrez ensuite <strong>Révision</strong>
+(<strong>Ctrl+4</strong>) et cliquez sur <strong>Commencer la révision</strong>.</p>
+<ul>
+<li>Appuyez sur <strong>Espace</strong> pour afficher la réponse.</li>
+<li>Évaluez votre réponse avec <strong>1–4</strong> (<em>Encore, Difficile, Bien, Facile</em>).</li>
+</ul>
+<p>Le calendrier SM-2 détermine quand chaque carte revient. Essayez aussi <strong>Quiz d’entraînement ▸ Choix multiple</strong> ou <strong>Nommez cette note</strong>.</p>
+<p><img loading="lazy" src="../../assets/screenshots/quiz-light.png" alt="Un quiz à choix multiple" /></p>
+<h2 id="10-explorer-le-graphe">10. Explorer le graphe</h2>
+<p>Ouvrez <strong>Graphe</strong> (<strong>Ctrl+2</strong>).</p>
+<ol>
+<li>Déplacez les notes par glisser-déposer, utilisez la molette pour zoomer et survolez une note pour mettre ses voisines en évidence.</li>
+<li>Sélectionnez une note sur la page Notes, revenez au graphe et cliquez sur <strong>Local</strong>, puis réglez <strong>Depth</strong> sur 1, 2 ou 3.</li>
+<li>Réglez <strong>Couleur by</strong> sur <strong>Clusters: k-means</strong>. Les notes sont regroupées par sens, et la légende nomme chaque cluster à partir de ses mots-clés.</li>
+<li>Activez <strong>Group</strong> pour rapprocher les éléments de chaque groupe sur un fond ombré.</li>
+<li>Cliquez sur <strong>3D</strong>, faites glisser pour pivoter et essayez <strong>Rotate automatically</strong>.</li>
+</ol>
+<p><img loading="lazy" src="../../assets/screenshots/graph-light.png" alt="Le graphe, coloré par tag et regroupé" /></p>
+<h2 id="11-consulter-insights">11. Consulter Insights</h2>
+<p>Ouvrez <strong>Insights</strong> (<strong>Ctrl+3</strong>) pour voir le nombre de notes, les notes par mois, les tags principaux, les liens par type et les notes les
+plus connectées. <strong>Notes sans lien</strong> constitue votre liste de tâches : reliez ces notes à d’autres. Chaque graphique dispose d’une vue en tableau.</p>
+<h2 id="12-citer-un-element-zotero-et-rediger-une-note-de-lecture-facultatif">12. Citer un élément Zotero et rédiger une note de lecture (facultatif)</h2>
+<p>Zotero 7 ou une version ultérieure doit être ouvert, et l’option <em>Autoriser les autres applications de cet ordinateur à communiquer avec Zotero</em>
+doit être activée dans <em>Paramètres ▸ Avancé</em> :</p>
+<ol>
+<li>Choisissez <em>Insertion ▸ Référence Zotero…</em>, recherchez un élément et cliquez sur <strong>Insertion citation</strong> : un lien tel que <em>Ebbinghaus (1885)</em>
+qui ouvre l’élément dans Zotero est ajouté.</li>
+<li>Recommencez et cliquez sur <strong>Nouvelle literature note</strong>.</li>
+</ol>
+<p><strong>Vous devriez voir</strong> une nouvelle note contenant la référence, les liens <em>Ouvrir in Zotero</em> et <em>Ouvrir PDF</em>, le résumé, les sections
+<em>Idées clés</em> / <em>Mes réflexions</em> et le tag <code>literature</code>. Consultez <a href="zotero.html">Zotero</a>.</p>
+<h2 id="13-interroger-vos-notes-facultatif">13. Interroger vos notes (facultatif)</h2>
+<ol>
+<li>Dans <em>Outils ▸ Options ▸ Assistant IA</em>, choisissez un fournisseur (Anthropic, OpenAI ou Z.ai), collez votre clé API et cliquez sur
+<strong>Tester la connexion</strong>.</li>
+<li>Ouvrez <strong>Ask</strong> (<strong>Ctrl+5</strong>) et posez la question : <em>Comment l’espacement et la récupération en mémoire agissent-ils ensemble ?</em></li>
+</ol>
+<p><strong>Vous devriez voir</strong> une réponse citant vos notes sous forme de liens, ainsi que la liste exacte des <strong>sources envoyées</strong>. Seules ces
+notes et votre question quittent votre ordinateur. Consultez <a href="ai-assistant.html">Interroger vos notes</a>.</p>
+<h2 id="14-exporter-un-sous-graphe-et-synchroniser-avec-anki-facultatif">14. Exporter un sous-graphe et synchroniser avec Anki (facultatif)</h2>
+<ol>
+<li>Ouvrez une note, choisissez <em>Fichier ▸ Exporter…</em> (<strong>Ctrl+Shift+E</strong>), sélectionnez <strong>Note actuelle et notes liées</strong>, définissez la
+profondeur sur 2 et choisissez le format <strong>Website</strong>.</li>
+<li>Ouvrez le fichier <code>index.html</code> de l’archive zip dans votre navigateur : il présente une petite partie de votre Zettelkasten.</li>
+<li>Avec Anki ouvert et l’extension AnkiConnect (code <code>2055492159</code>) installée, ouvrez <strong>Révision</strong> et cliquez sur <strong>Synchroniser avec Anki</strong>.
+Le lien source de chaque carte ouvre la note dans ZettelApp.</li>
+</ol>
+<p>Consultez <a href="export-import.html">Exporter et importer</a> et <a href="review-and-anki.html#anki">Anki</a>.</p>
+<h2 id="15-savoir-ou-se-trouvent-vos-donnees">15. Savoir où se trouvent vos données</h2>
+<ul>
+<li>Vos notes sont dans le dossier du coffre (<em>Fichier ▸ Show Vault in File Explorer</em>) : <code>zettel.db</code> et <code>assets</code>.</li>
+<li>Une sauvegarde est créée automatiquement chaque jour ; <em>Fichier ▸ Sauvegarder le coffre maintenant</em> en crée une à tout moment.</li>
+<li>Les notes supprimées vont dans la <strong>Corbeille</strong>, sous la liste des notes, où vous pouvez les restaurer.</li>
+</ul>
+<p>Consultez <a href="privacy-and-security.html">Confidentialité et sécurité</a>.</p>
+<p><strong>Voilà !</strong> Continuez à rédiger une idée par note, à justifier chaque nouveau lien et à laisser les suggestions et le graphe vous révéler
+ce que vous avez construit. Les raccourcis figurent dans <a href="keyboard-shortcuts.html">Raccourcis clavier</a>.</p>
+
+    <p class="doc-footer">Une erreur ? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/fr/tutorial.md">Modifier cette page sur GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Accueil</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Tickets</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Faire un don</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Langues"><li><a href="../../docs/tutorial.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/tutorial.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/tutorial.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/tutorial.html" lang="fr" hreflang="fr" aria-current="true">Français</a></li><li><a href="../../de/docs/tutorial.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/tutorial.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/tutorial.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/tutorial.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/tutorial.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/tutorial.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/tutorial.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

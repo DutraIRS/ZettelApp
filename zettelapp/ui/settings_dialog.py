@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (
     QDoubleSpinBox,
     QFormLayout,
     QHBoxLayout,
+    QInputDialog,
     QLineEdit,
     QListWidget,
     QListWidgetItem,
@@ -33,7 +34,8 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from zettelapp import settings, winintegration
+from zettelapp import i18n, settings, winintegration
+from zettelapp.core import apikeys
 from zettelapp.core.llm import (
     EFFORTS,
     PROVIDERS,
@@ -43,7 +45,6 @@ from zettelapp.core.llm import (
     test_connection,
 )
 from zettelapp.core.models import LinkType, least_used_line_style
-from zettelapp.core.secrets import delete_secret, get_secret, set_secret
 from zettelapp.core.suggest import FEATURES
 from zettelapp.core.textutil import slugify_type
 from zettelapp.i18n import _
@@ -247,6 +248,14 @@ class OptionsDialog(QDialog):
             self.theme.addItem(text, key)
         self.theme.setCurrentIndex(max(0, self.theme.findData(settings.get(settings.THEME))))
         form.addRow("App theme", self.theme)
+        self.language = QComboBox()
+        self.language.addItem(_("Use Windows setting"), "system")
+        for code, name in i18n.LANGUAGES.items():
+            self.language.addItem(name, code)
+        stored = settings.get(settings.UI_LANGUAGE)
+        self.language.setCurrentIndex(max(0, self.language.findData(stored)))
+        self._language_before = self.language.currentData()
+        form.addRow(_("Language"), self.language)
         self.font_size = QSpinBox()
         self.font_size.setRange(9, 20)
         self.font_size.setValue(settings.get(settings.EDITOR_FONT_SIZE))
@@ -575,9 +584,11 @@ class OptionsDialog(QDialog):
     def _ai(self, lay: QVBoxLayout) -> None:
         lay.addWidget(
             label(
-                "Connect an AI provider to ask questions about your notes (Ask page). Keys are stored "
-                "in Windows Credential Manager, never in plain files. Only your question and the "
-                "most relevant notes are sent.",
+                _(
+                    "Connect an AI provider to ask questions about your notes (Ask page). Keys are stored "
+                    "in Windows Credential Manager, never in plain files. You can save several keys per provider and pick the one to use. Only your question and the "
+                    "most relevant notes are sent."
+                ),
                 "caption",
                 wrap=True,
             )
@@ -589,36 +600,41 @@ class OptionsDialog(QDialog):
         self.provider.setCurrentIndex(
             max(0, self.provider.findData(settings.get(settings.LLM_PROVIDER)))
         )
-        form.addRow("Provider", self.provider)
-        self.key = QLineEdit()
-        self.key.setEchoMode(QLineEdit.EchoMode.Password)
-        self.key.setAccessibleName("API key")
+        form.addRow(_("Provider"), self.provider)
+        self.key_choice = QComboBox()
+        self.key_choice.setAccessibleName(_("API key"))
+        self.key_choice.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToContents)
         key_row = QHBoxLayout()
-        key_row.addWidget(self.key, 1)
-        self.key_link = link_button("Get a key", self._open_key_page)
+        key_row.addWidget(self.key_choice, 1)
+        key_row.addWidget(link_button(_("Add key…"), self._add_key))
+        self.key_rename = link_button(_("Rename"), self._rename_key)
+        key_row.addWidget(self.key_rename)
+        self.key_remove = link_button(_("Delete"), self._remove_key)
+        key_row.addWidget(self.key_remove)
+        self.key_link = link_button(_("Get a key"), self._open_key_page)
         key_row.addWidget(self.key_link)
-        remove = link_button("Remove key", self._remove_key)
-        key_row.addWidget(remove)
-        form.addRow("API key", key_row)
+        form.addRow(_("API key"), key_row)
+        self.key_hint = label("", "caption", wrap=True)
+        form.addRow("", self.key_hint)
         self.model = QComboBox()
         self.model.setEditable(True)
-        self.model.setAccessibleName("Model")
+        self.model.setAccessibleName(_("Model"))
         model_row = QHBoxLayout()
         model_row.addWidget(self.model, 1)
-        model_row.addWidget(link_button("Refresh list", self._refresh_models))
-        form.addRow("Model", model_row)
+        model_row.addWidget(link_button(_("Refresh list"), self._refresh_models))
+        form.addRow(_("Model"), model_row)
         self.base_url = QLineEdit(settings.get(settings.LLM_BASE_URL, "") or "")
-        form.addRow("Endpoint (optional)", self.base_url)
+        form.addRow(_("Endpoint (optional)"), self.base_url)
         self.effort = QComboBox()
         for e in EFFORTS:
             self.effort.addItem(e.capitalize(), e)
         self.effort.setCurrentIndex(max(0, self.effort.findData(settings.get(settings.LLM_EFFORT))))
         self.effort.setToolTip(
-            "Claude only: how much the model thinks before answering (higher costs more)"
+            _("Claude only: how much the model thinks before answering (higher costs more)")
         )
-        form.addRow("Effort", self.effort)
+        form.addRow(_("Effort"), self.effort)
         lay.addLayout(form)
-        test = QPushButton("Test connection")
+        test = QPushButton(_("Test connection"))
         test.setIcon(icons.icon("check"))
         test.clicked.connect(self._test)
         self.ai_status = label("", "secondary", wrap=True)
@@ -629,20 +645,40 @@ class OptionsDialog(QDialog):
         self.provider.currentIndexChanged.connect(self._provider_changed)
         self._provider_changed(initial=True)
 
+    def _fill_keys(self, select: str | None = None) -> None:
+        provider = self.provider.currentData()
+        info = PROVIDERS[provider]
+        keys = apikeys.list_keys(provider)
+        select = select or apikeys.active_id(provider)
+        self.key_choice.blockSignals(True)
+        self.key_choice.clear()
+        for k in keys:
+            self.key_choice.addItem(k.label, k.id)
+        if not keys:
+            self.key_choice.addItem(
+                _("No saved keys") if info.requires_key else _("Not required"), None
+            )
+        self.key_choice.setCurrentIndex(max(0, self.key_choice.findData(select)))
+        self.key_choice.blockSignals(False)
+        self.key_choice.setEnabled(bool(keys))
+        self.key_rename.setEnabled(bool(keys))
+        self.key_remove.setEnabled(bool(keys))
+        self.key_hint.setText(
+            _(
+                "The selected key is the one used for questions. Keys are kept in Windows Credential Manager."
+            )
+            if len(keys) > 1
+            else ""
+        )
+
     def _provider_changed(self, *_args, initial: bool = False) -> None:
         info = PROVIDERS[self.provider.currentData()]
-        has_key = bool(get_secret(info.secret_name))
-        self.key.clear()
-        self.key.setPlaceholderText(
-            "Saved in Windows Credential Manager (type to replace)"
-            if has_key
-            else ("Paste your API key" if info.requires_key else "Not required")
-        )
+        self._fill_keys()
         self.model.clear()
         self.model.addItems(list(info.suggested_models))
         saved = settings.get(settings.LLM_MODEL, "") if initial else ""
         self.model.setCurrentText(saved or info.default_model)
-        self.base_url.setPlaceholderText(info.base_url or "Default endpoint")
+        self.base_url.setPlaceholderText(info.base_url or _("Default endpoint"))
         if not initial:
             self.base_url.clear()
         self.effort.setEnabled(info.kind == "anthropic")
@@ -656,9 +692,8 @@ class OptionsDialog(QDialog):
         )
 
     def _key_for_test(self) -> str | None:
-        return self.key.text().strip() or get_secret(
-            PROVIDERS[self.provider.currentData()].secret_name
-        )
+        key_id = self.key_choice.currentData()
+        return apikeys.get_key(self.provider.currentData(), key_id) if key_id else None
 
     def _open_key_page(self) -> None:
         from PySide6.QtCore import QUrl
@@ -666,11 +701,66 @@ class OptionsDialog(QDialog):
 
         QDesktopServices.openUrl(QUrl(PROVIDERS[self.provider.currentData()].key_url))
 
+    def _add_key(self) -> None:
+        provider = self.provider.currentData()
+        info = PROVIDERS[provider]
+        count = len(apikeys.list_keys(provider)) + 1
+        name, ok = QInputDialog.getText(
+            self,
+            _("Add key"),
+            _("A name to recognise this key by:"),
+            text=_("Key {number}").format(number=count),
+        )
+        if not ok:
+            return
+        value, ok = QInputDialog.getText(
+            self,
+            _("Add key"),
+            _("Paste your {label} API key:").format(label=info.label),
+            QLineEdit.EchoMode.Password,
+        )
+        if not ok or not value.strip():
+            return
+        try:
+            profile = apikeys.add_key(provider, name, value)
+        except (OSError, ValueError) as exc:
+            QMessageBox.warning(self, _("API key"), str(exc))
+            return
+        self._fill_keys(profile.id)
+        self.ai_status.setText(_("Key “{name}” saved on this computer.").format(name=profile.label))
+
+    def _rename_key(self) -> None:
+        provider, key_id = self.provider.currentData(), self.key_choice.currentData()
+        if not key_id:
+            return
+        name, ok = QInputDialog.getText(
+            self, _("Rename key"), _("Name:"), text=self.key_choice.currentText()
+        )
+        if ok and name.strip():
+            apikeys.rename_key(provider, key_id, name)
+            self._fill_keys(key_id)
+
     def _remove_key(self) -> None:
-        info = PROVIDERS[self.provider.currentData()]
-        delete_secret(info.secret_name)
-        self._provider_changed()
-        self.ai_status.setText(f"{info.label} key removed from this computer.")
+        provider, key_id = self.provider.currentData(), self.key_choice.currentData()
+        if not key_id:
+            return
+        name = self.key_choice.currentText()
+        if (
+            QMessageBox.question(
+                self,
+                _("Delete key"),
+                _("Delete the key “{name}” from this computer?").format(name=name),
+            )
+            != QMessageBox.StandardButton.Yes
+        ):
+            return
+        try:
+            apikeys.delete_key(provider, key_id)
+        except OSError as exc:
+            QMessageBox.warning(self, _("API key"), str(exc))
+            return
+        self._fill_keys()
+        self.ai_status.setText(_("Key “{name}” deleted from this computer.").format(name=name))
 
     def _test(self) -> None:
         cfg, key = self._llm_settings(), self._key_for_test()
@@ -908,6 +998,14 @@ class OptionsDialog(QDialog):
 
     def apply(self) -> bool:
         settings.put(settings.THEME, self.theme.currentData())
+        if self.language.currentData() != self._language_before:
+            settings.put(settings.UI_LANGUAGE, self.language.currentData())
+            self._language_before = self.language.currentData()
+            QMessageBox.information(
+                self,
+                _("Language"),
+                _("Restart ZettelApp to apply the new language."),
+            )
         settings.put(settings.EDITOR_FONT_SIZE, self.font_size.value())
         settings.put(settings.AUTOSAVE_MS, self.autosave.value())
         settings.put(settings.UPDATE_CHECK, self.update_check.isChecked())
@@ -937,10 +1035,9 @@ class OptionsDialog(QDialog):
                 QMessageBox.warning(self, "Endpoint", str(exc))
                 return False
         settings.put(settings.LLM_BASE_URL, base_url)
-        if self.key.text().strip():
-            set_secret(PROVIDERS[self.provider.currentData()].secret_name, self.key.text().strip())
-            self.key.clear()
-            self._provider_changed()
+        key_id = self.key_choice.currentData()
+        if key_id:
+            apikeys.set_active(self.provider.currentData(), key_id)
         vault = self.window.vault
         if vault is not None and not self._save_link_types(vault):
             return False

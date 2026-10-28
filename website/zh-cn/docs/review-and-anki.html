@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="笔记是用来思考的,而记住它们会有所帮助。ZettelApp 会把笔记变成闪卡,并让你在应用内或在 Anki 中复习它们。">
+<title>复习、测验与 Anki – ZettelApp 文档</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">跳到内容</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">功能</a></li>
+        <li><a href="tutorial.html">教程</a></li>
+        <li><a href="./">文档</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 捐赠</a></li>
+        <li><a class="nav-cta" href="../#download">下载</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇨🇳</span><span class="sr-only">语言</span></summary><ul class="lang-switch-panel" aria-label="语言"><li><a href="../../docs/review-and-anki.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/review-and-anki.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/review-and-anki.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/review-and-anki.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/review-and-anki.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/review-and-anki.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/review-and-anki.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/review-and-anki.html" lang="zh-CN" hreflang="zh-CN" aria-current="true"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/review-and-anki.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/review-and-anki.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/review-and-anki.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="捐赠"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">捐赠</span></a>
+      <a class="hbtn cta" href="../#download">下载</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">菜单</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">功能</a></li>
+          <li><a href="tutorial.html">教程</a></li>
+          <li><a href="./">文档</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="文档">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">文档</span><span class="docs-menu-current">复习、测验与 Anki</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 文档</a></li>
+      <li><a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a></li>
+      <li><a href="tutorial.html">教程:你的前 30 分钟</a></li>
+      <li><a href="getting-started.html">入门</a></li>
+      <li><a href="notes-and-links.html">笔记与链接</a></li>
+      <li><a href="link-suggestions.html">链接建议</a></li>
+      <li><a href="graph-and-insights.html">图谱与 Insights</a></li>
+      <li><a href="review-and-anki.html" aria-current="page">复习、测验与 Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">询问你的笔记(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 服务器</a></li>
+      <li><a href="export-import.html">导出与导入</a></li>
+      <li><a href="keyboard-shortcuts.html">键盘快捷键</a></li>
+      <li><a href="privacy-and-security.html">隐私与安全</a></li>
+      <li><a href="faq.html">常见问题</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>文档</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 文档</a></li>
+      <li><a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a></li>
+      <li><a href="tutorial.html">教程:你的前 30 分钟</a></li>
+      <li><a href="getting-started.html">入门</a></li>
+      <li><a href="notes-and-links.html">笔记与链接</a></li>
+      <li><a href="link-suggestions.html">链接建议</a></li>
+      <li><a href="graph-and-insights.html">图谱与 Insights</a></li>
+      <li><a href="review-and-anki.html" aria-current="page">复习、测验与 Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">询问你的笔记(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 服务器</a></li>
+      <li><a href="export-import.html">导出与导入</a></li>
+      <li><a href="keyboard-shortcuts.html">键盘快捷键</a></li>
+      <li><a href="privacy-and-security.html">隐私与安全</a></li>
+      <li><a href="faq.html">常见问题</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="复习测验与-anki">复习、测验与 Anki</h1>
+<p>笔记是用来思考的,而记住它们会有所帮助。ZettelApp 会把笔记变成<a href="notes-and-links.html#flashcards">闪卡</a>,并让你在应用内或在 Anki 中复习它们。</p>
+<h2 id="间隔重复">间隔重复</h2>
+<p><strong>复习</strong>页面(Ctrl+4)会显示<strong>今日到期</strong>的卡片数量。<strong>开始复习</strong>会逐张过一遍:</p>
+<ol>
+<li>阅读问题并尝试回忆答案。</li>
+<li>按 <strong>Space</strong>(或<em>显示答案</em>)。</li>
+<li>给自己评分:<strong>重来 (1)</strong>、<strong>困难 (2)</strong>、<strong>良好 (3)</strong> 或 <strong>简单 (4)</strong>。将鼠标悬停在按钮上,可查看该卡片何时会再次出现。</li>
+</ol>
+<p>调度使用 <strong>SM-2</strong> 算法(Anki 所源自的 SuperMemo 算法):</p>
+<ul>
+<li>新卡片在 1 天后再次出现,然后是 6 天后,之后的间隔按卡片的<em>简易系数</em>增长(起初为 2.5)。</li>
+<li><em>重来</em>会把卡片重置为 1 天并降低其简易度。<em>困难</em>会缩短下一个间隔,<em>简单</em>则会延长它。</li>
+</ul>
+<p>填空卡片会为每处挖空(<code>{{c1::…}}</code>、<code>{{c2::…}}</code>、…)产生一次复习。每个问题都会显示指向其笔记的**来自:**链接。</p>
+<h2 id="测验">测验</h2>
+<p><strong>练习测验</strong>会根据一个范围生成测验:整个集合、当前笔记及其链接笔记(带深度),或带有某个标签的笔记。选择一种形式和题目数量:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>形式</th>
+<th>工作方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>闪卡(间隔重复)</strong></td>
+<td>类似复习,你的评分会更新调度。</td>
+</tr>
+<tr>
+<td><strong>选择题</strong></td>
+<td>在四个选项中选出正确答案。错误选项是其他卡片中长度相近的答案,因此看起来很合理。按键 1–4 选择。</td>
+</tr>
+<tr>
+<td><strong>输入答案</strong></td>
+<td>输入答案并按 Enter。系统按编辑(Levenshtein)相似度评分,忽略大小写、重音符号和格式:85% 或更高算正确,60% 或更高算<em>差一点</em>,因此小的拼写错误不会让你失分。</td>
+</tr>
+<tr>
+<td><strong>为笔记命名</strong></td>
+<td>显示一条笔记的文本,其标题中的词语被挖空;选出正确的标题。错误选项是<strong>最相似的笔记</strong>(按 TF-IDF),这样你就能学会区分相关的想法。无需闪卡。</td>
+</tr>
+</tbody>
+</table></div>
+<p><em>工具 ▸ 测验此笔记的相邻笔记</em>会针对当前笔记以及与其相距两个链接以内的笔记开始测验。在图谱中右键点击一条笔记也可以做到。</p>
+<h2 id="anki">Anki</h2>
+<p>ZettelApp 通过两种方式与 <a href="https://apps.ankiweb.net/">Anki</a> 配合使用。两者都使用两种笔记类型,<strong>ZettelApp Basic</strong> 和 <strong>ZettelApp Cloze</strong>,字段如下:</p>
+<ul>
+<li><em>Front</em> 和 <em>Back</em>(填空卡片则为 <em>Text</em> 和 <em>Extra</em>),由 Markdown 渲染;</li>
+<li><em>Source</em>,指回笔记的链接;</li>
+<li><em>ZettelID</em> 和 <em>CardKey</em>。</li>
+</ul>
+<p>你笔记的标签会变成 Anki 标签(嵌套标签变为 <code>parent::child</code>),另外还有 <code>zettelapp</code>。卡片中的图片会作为媒体一并包含。</p>
+<h3 id="通过-ankiconnect-同步">通过 AnkiConnect 同步</h3>
+<ol>
+<li>在 Anki 中,安装 <strong>AnkiConnect</strong> 插件(<em>Tools ▸ Add-ons ▸ Get Add-ons…</em>,代码 <strong>2055492159</strong>)并重启 Anki。</li>
+<li>在 Anki 运行的情况下,在 ZettelApp 中打开<strong>复习</strong>,选择牌组名称(<em>选项 ▸ Anki</em> 中的 <strong>Default deck</strong>,起初为 <code>ZettelApp</code>)和范围,然后按<strong>同步到 Anki</strong>(或<em>工具 ▸ 与 Anki 同步</em>)。<em>检查连接</em>可测试该连接。</li>
+</ol>
+<p>ZettelApp 会记住每张卡片对应哪条 Anki 笔记。再次同步会<strong>更新</strong>卡片而不是添加重复项,即使这份记忆丢失了,也可以通过 <em>CardKey</em> 重新找到卡片。你在 ZettelApp 中删除的卡片不会从 Anki 中删除。</p>
+<p>ZettelApp 只会与本机上的 AnkiConnect 通信(<code>127.0.0.1</code>,默认端口 8765,可在<em>选项 ▸ Anki</em> 中更改)。</p>
+<h3 id="导出牌组apkg">导出牌组(.apkg)</h3>
+<p><strong>导出牌组 (.apkg)…</strong>(或使用 <em>Anki deck</em> 格式的<em>文件 ▸ 导出…</em>)会写出一个软件包,你可在 Anki 中通过 <em>File ▸ Import</em> 导入。无需插件。笔记类型、牌组以及每张卡片的标识都是稳定的,因此导入较新的导出文件会<strong>更新</strong>你之前导入的卡片。</p>
+<h3 id="从-anki-回到你的笔记">从 Anki 回到你的笔记</h3>
+<p>每张卡片的 <strong>Source</strong> 是一个 <code>zettelapp://note/&lt;id&gt;</code> 链接。在 Anki 中点击它,笔记就会在 ZettelApp 中打开。安装程序会完成这项设置。对于便携版,请使用<em>选项 ▸ Windows 集成 ▸ 注册链接</em>。链接处理程序只接受<em>打开笔记</em>链接;参见<a href="privacy-and-security.html">隐私与安全</a>。</p>
+
+    <p class="doc-footer">发现错误？<a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/zh-cn/review-and-anki.md">在 GitHub 上编辑此页</a>。</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">首页</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">问题</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">捐赠</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="语言"><li><a href="../../docs/review-and-anki.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/review-and-anki.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/review-and-anki.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/review-and-anki.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/review-and-anki.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/review-and-anki.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/review-and-anki.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/review-and-anki.html" lang="zh-CN" hreflang="zh-CN" aria-current="true">简体中文</a></li><li><a href="../../ja/docs/review-and-anki.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/review-and-anki.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/review-and-anki.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

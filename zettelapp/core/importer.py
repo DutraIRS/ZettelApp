@@ -290,6 +290,7 @@ def _import_data(
         note.image = asset_map.get(image, image) if isinstance(image, str) else ""
         note.tags = [t for t in (raw.get("tags") or []) if isinstance(t, str)][:200]
         note.mindmap = sanitize_mindmap(raw.get("mindmap")) if raw.get("mindmap") else None
+        note.alarm = _str(raw.get("alarm"), 40)
         vault.save_note(note, touch=False)
         result.notes += 1
 

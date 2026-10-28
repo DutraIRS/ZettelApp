@@ -60,6 +60,7 @@ _MD_NOISE = [
     (re.compile(r"\[([^\]]*)\]\([^)]*\)"), r"\1"),
     (re.compile(r"\[\[([^\]|]*)(?:\|([^\]]*))?\]\]"), lambda m: m.group(2) or m.group(1)),
     (re.compile(r"\{\{c\d+::(.*?)(?:::[^}]*)?\}\}"), r"\1"),
+    (re.compile(r"^(\s{0,3}(?:[-*+]|\d+[.)])\s+)\[[ xX]\]\s*", re.M), r"\1"),
     (re.compile(r"^\s{0,3}(?:#{1,6}|>|[-*+]|\d+[.)])\s+", re.M), ""),
     (re.compile(r"[*_`~]+"), ""),
 ]
@@ -76,6 +77,46 @@ def snippet(body: str, length: int = 140) -> str:
     if len(plain) <= length:
         return plain
     return plain[: length - 1].rsplit(" ", 1)[0] + "…"
+
+
+# --- checklists -------------------------------------------------------------
+
+TASK_RE = re.compile(r"^[ \t]*(?:[-*+]|\d+[.)])[ \t]+(\[([ xX])\])(?=[ \t]|$)")
+
+
+def find_tasks(text: str) -> list[tuple[int, int, bool]]:
+    """Checklist items ("- [ ] item", "- [x] item") outside code blocks, in order, as
+    (start, end, checked) where start:end spans the "[ ]" or "[x]" itself."""
+    found: list[tuple[int, int, bool]] = []
+    in_fence = False
+    offset = 0
+    for line in (text or "").split("\n"):
+        stripped = line.lstrip()
+        if stripped.startswith(("```", "~~~")):
+            in_fence = not in_fence
+        elif not in_fence:
+            m = TASK_RE.match(line)
+            if m:
+                found.append((offset + m.start(1), offset + m.end(1), m.group(2) != " "))
+        offset += len(line) + 1
+    return found
+
+
+def toggle_task(text: str, index: int) -> str:
+    """*text* with the checklist item number *index* (see find_tasks) ticked or unticked."""
+    tasks = find_tasks(text)
+    if not 0 <= index < len(tasks):
+        return text
+    start, end, checked = tasks[index]
+    return text[:start] + ("[ ]" if checked else "[x]") + text[end:]
+
+
+# --- LaTeX ------------------------------------------------------------------
+
+MATH_RE = re.compile(
+    r"\$\$(?P<display>[^$]+?)\$\$"
+    r"|(?<![\\$\w])\$(?P<inline>[^\s$](?:[^$\n]*?[^\s$\\])?)\$(?!\d)"
+)
 
 
 # --- wiki links -------------------------------------------------------------

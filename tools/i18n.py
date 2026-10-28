@@ -32,7 +32,18 @@ def extract() -> dict[str, dict]:
     for path in sorted((ROOT / "zettelapp").rglob("*.py")):
         rel = path.relative_to(ROOT).as_posix()
         for node in ast.walk(ast.parse(path.read_text(encoding="utf-8"))):
-            if not isinstance(node, ast.Call) or not isinstance(node.func, ast.Name):
+            if not isinstance(node, ast.Call):
+                continue
+            if isinstance(node.func, ast.Attribute) and node.func.attr == "_action":
+                # MainWindow._action(menu, text, slot, shortcut, glyph, tip) translates both
+                # the menu text and the status tip it is given.
+                for position in (1, 5):
+                    arg = node.args[position] if len(node.args) > position else None
+                    if isinstance(arg, ast.Constant) and isinstance(arg.value, str) and arg.value:
+                        entry = messages.setdefault(arg.value, {"plural": None, "where": []})
+                        entry["where"].append(f"{rel}:{node.lineno}")
+                continue
+            if not isinstance(node.func, ast.Name):
                 continue
             name, args = node.func.id, node.args
             literal = [

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="グラフページ  は、ノートをネットワークとして描きます。各円がノートで、リンクの数に応じた大きさになり、各線がリンクです。">
+<title>グラフとインサイト – ZettelApp ドキュメント</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">本文へスキップ</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">機能</a></li>
+        <li><a href="tutorial.html">チュートリアル</a></li>
+        <li><a href="./">ドキュメント</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 寄付</a></li>
+        <li><a class="nav-cta" href="../#download">ダウンロード</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇯🇵</span><span class="sr-only">言語</span></summary><ul class="lang-switch-panel" aria-label="言語"><li><a href="../../docs/graph-and-insights.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/graph-and-insights.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/graph-and-insights.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/graph-and-insights.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/graph-and-insights.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/graph-and-insights.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/graph-and-insights.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/graph-and-insights.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/graph-and-insights.html" lang="ja" hreflang="ja" aria-current="true"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/graph-and-insights.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/graph-and-insights.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="寄付"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">寄付</span></a>
+      <a class="hbtn cta" href="../#download">ダウンロード</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">メニュー</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">機能</a></li>
+          <li><a href="tutorial.html">チュートリアル</a></li>
+          <li><a href="./">ドキュメント</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="ドキュメント">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">ドキュメント</span><span class="docs-menu-current">グラフとインサイト</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp ドキュメント</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten とは?</a></li>
+      <li><a href="tutorial.html">チュートリアル: 最初の 30 分</a></li>
+      <li><a href="getting-started.html">はじめに</a></li>
+      <li><a href="notes-and-links.html">ノートとリンク</a></li>
+      <li><a href="link-suggestions.html">リンク候補</a></li>
+      <li><a href="graph-and-insights.html" aria-current="page">グラフとインサイト</a></li>
+      <li><a href="review-and-anki.html">復習、クイズ、Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">ノートに質問 (AI)</a></li>
+      <li><a href="mcp-server.html">MCP サーバー</a></li>
+      <li><a href="export-import.html">エクスポートとインポート</a></li>
+      <li><a href="keyboard-shortcuts.html">キーボード ショートカット</a></li>
+      <li><a href="privacy-and-security.html">プライバシーとセキュリティ</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>ドキュメント</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp ドキュメント</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten とは?</a></li>
+      <li><a href="tutorial.html">チュートリアル: 最初の 30 分</a></li>
+      <li><a href="getting-started.html">はじめに</a></li>
+      <li><a href="notes-and-links.html">ノートとリンク</a></li>
+      <li><a href="link-suggestions.html">リンク候補</a></li>
+      <li><a href="graph-and-insights.html" aria-current="page">グラフとインサイト</a></li>
+      <li><a href="review-and-anki.html">復習、クイズ、Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">ノートに質問 (AI)</a></li>
+      <li><a href="mcp-server.html">MCP サーバー</a></li>
+      <li><a href="export-import.html">エクスポートとインポート</a></li>
+      <li><a href="keyboard-shortcuts.html">キーボード ショートカット</a></li>
+      <li><a href="privacy-and-security.html">プライバシーとセキュリティ</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="クラフとインサイト">グラフとインサイト</h1>
+<h2 id="クラフ">グラフ</h2>
+<p><strong>グラフ</strong>ページ (Ctrl+2) は、ノートをネットワークとして描きます。各円がノートで、リンクの数に応じた大きさになり、各線がリンクです。</p>
+<p><img loading="lazy" src="../../assets/screenshots/graph-light.png" alt="タグで色分けされたグラフ" /></p>
+<h3 id="操作">操作</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>操作</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>すべてのノート / ローカル</strong></td>
+<td>コレクション全体、または開いているノートと、そこから<strong>深さ</strong>のリンク数以内にあるノート (リンクを両方向にたどります) だけを表示します。ノートの ⋯ メニューの<em>グラフで表示</em>でローカルグラフが開きます。</td>
+</tr>
+<tr>
+<td><strong>2D / 3D</strong></td>
+<td>ドラッグできる平面のレイアウトと、視点を回せる 3D ビューを切り替えます。</td>
+</tr>
+<tr>
+<td><strong>色分け</strong></td>
+<td>タグ、<em>クラスター: k-means</em>、<em>クラスター: 階層的</em>、または色分けなし。</td>
+</tr>
+<tr>
+<td><strong>k</strong></td>
+<td>クラスターの数。<em>自動 k</em> が自動で選びます (後述)。</td>
+</tr>
+<tr>
+<td><strong>グループ</strong></td>
+<td>同じグループのノートを引き寄せ、各グループの領域に網掛けをします。</td>
+</tr>
+<tr>
+<td><strong>ラベル</strong></td>
+<td>ノートのタイトルを表示します。大きなグラフでは、マウスを重ねるまでは、最もつながりの多いノートだけにラベルが付きます。</td>
+</tr>
+<tr>
+<td><strong>リンクの種類</strong></td>
+<td>個々のリンクの種類を表示または非表示にします。</td>
+</tr>
+<tr>
+<td><strong>グラフ内を検索</strong></td>
+<td>タイトルの一部を入力して Enter を押すと、そのノートに移動します。</td>
+</tr>
+</tbody>
+</table></div>
+<p>右下には、ズーム、全体表示、<strong>レイアウトを再計算</strong>、<strong>画像として保存</strong> (PNG)、<strong>これらのノートをエクスポート</strong> (画面上のノートで<a href="export-import.html">エクスポート</a>ダイアログを開きます) があります。</p>
+<p><strong>2D では</strong>、ノートをドラッグして動かし、背景をドラッグしてパンし、マウスホイールでズームします。ノートをダブルクリックで開き、右クリックでその他の操作 (開く、ローカルグラフ、このノートの周辺ノートでクイズ、リンクされたノートごとエクスポート) を使えます。ノートの画像は円の中に表示されます。</p>
+<p>同じ 2 つのノート間に複数のリンクがある場合は、<strong>別々の曲線</strong>として描かれ、それぞれが曲線に沿った自分の矢印の先端を持つので、どれも他を隠しません。ノートにマウスを重ねるか選択すると、<strong>他のリンクが薄く表示</strong>され、そのノート自身のリンクはリンクの種類の色のまま残り、各隣接ノートには<strong>そのノートから見た</strong>リンクの種類 (たとえば<em>サポート対象 · 拡張元</em>) がラベルとして付きます。これは 2D と 3D で同じように動作します。</p>
+<p><strong>3D では</strong>、ドラッグで視点を回し、ホイールでズームし、ノートをダブルクリックで開きます。<strong>自動回転</strong>でビューが回ります。近くのノートほど大きく明るく表示されるので奥行きが読み取りやすく、各グループは柔らかな色のハローとして現れます。</p>
+<p>レイアウトは力指向 (Fruchterman–Reingold) です。リンクがノートを引き寄せ、すべてのノートが互いに押し合い、穏やかな重力が独立した成分を画面内に収めます。バックグラウンドで実行され、ビューごとにキャッシュされます。</p>
+<h3 id="タクによる色分け">タグによる色分け</h3>
+<p>各ノートは、<strong>最も一般的なタグ</strong>、つまり表示中のノートで最も多く使われているタグの色になるので、保管庫の大きなテーマが異なる色で表示されます。</p>
+<h3 id="クラスターによる色分け">クラスターによる色分け</h3>
+<p>クラスタリングは、リンクされているかどうかにかかわらず、ノートを<strong>意味ごとに</strong>グループ化します。各ノートは、タイトル、本文、タグに対する潜在意味解析 (LSA) を使って、意味空間のベクトルになります。その後、次の 2 つの方法のいずれかでベクトルをグループ化します。</p>
+<ul>
+<li><strong>k-means</strong>: k-means++ による初期化を使う Lloyd のアルゴリズムで、複数回実行して最良のものを採用します。高速で、丸く、大きさの揃ったグループになります。</li>
+<li><strong>階層的</strong>: コサイン距離に対する平均連結法の凝集型クラスタリングで、最近傍連鎖アルゴリズム (O(n²)) で計算します。大きさが不揃いで入れ子になったトピックに向いています。4,000 件を超えるノートの保管庫では、k-means にフォールバックします。</li>
+</ul>
+<p><strong>自動 k</strong> では、ZettelApp は k を 2 から約 √(n/2) + 2 (最大 12) まで試し、<strong>シルエットスコア</strong>が最も良い k を採用します。凡例の下に表示されるスコアは、クラスターがどれだけよく分離しているかを表します。1 が完璧で、0 付近はグループが重なっていることを意味します。各クラスターは、最も特徴的な単語、つまり保管庫の他の部分よりもその内部で頻度の高い語で名付けられます。</p>
+<h3 id="クルーフと色">グループと色</h3>
+<p><strong>グループ</strong>をオンにすると、同じタグまたはクラスターのノートが互いに引き寄せられ、各グループには名前付きの薄く網掛けされた領域が付きます。凡例には、グループがその大きさとともに一覧表示されます。1 つをクリックすると、そのノートが強調表示されます。</p>
+<p>グループやチャートの色は、ライトモードとダークモードの両方で<strong>色覚特性に対して検証された</strong>パレットから選ばれます。色は決まった順序で割り当てられ、再利用されません。8 番目より後のグループは、中立的な灰色の「その他」の色を共有します。<strong>リンクの種類</strong>は色のほかに第 2 の手がかりを使います。それぞれが独自の線 (実線、破線、点線など) を持ち、有向の種類は三角形やひし形などの矢印の先端を描きます。これらは<em>ツール ▸ オプション ▸ リンクの種類</em>で選びます (<a href="notes-and-links.html#your-own-link-types">独自のリンクの種類</a>を参照)。凡例にはすべてが名前付きで載っているので、色だけに頼るものはありません。</p>
+<h2 id="インサイト">インサイト</h2>
+<p><strong>インサイト</strong>ページ (Ctrl+3) は、保管庫を要約します。</p>
+<ul>
+<li><strong>タイル</strong>: ノート (およびごみ箱に入っている数)、リンク (およびノートあたりのリンク数)、タグ、<em>リンクのないノート</em> (リンクの良い候補)、フラッシュカード、今日が期限のカード。</li>
+<li>過去 12 か月の<strong>月ごとの追加ノート数</strong>。</li>
+<li><strong>上位のタグ</strong>、<strong>種類別のリンク</strong>、<strong>最もつながりの多いノート</strong> (棒をクリックするとノートが開きます)。</li>
+<li><strong>トピック</strong>: ノートの k-means クラスターと、そのキーワードおよび大きさ。</li>
+</ul>
+<p>すべてのチャートに、同じ数値を表にして表示する<strong>表として表示</strong>ボタン (リストのアイコン) があり、棒にマウスを重ねると値が表示されます。</p>
+
+    <p class="doc-footer">誤りを見つけたら：<a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ja/graph-and-insights.md">GitHub でこのページを編集</a>。</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">ホーム</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">寄付</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="言語"><li><a href="../../docs/graph-and-insights.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/graph-and-insights.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/graph-and-insights.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/graph-and-insights.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/graph-and-insights.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/graph-and-insights.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/graph-and-insights.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/graph-and-insights.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/graph-and-insights.html" lang="ja" hreflang="ja" aria-current="true">日本語</a></li><li><a href="../../ko/docs/graph-and-insights.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/graph-and-insights.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

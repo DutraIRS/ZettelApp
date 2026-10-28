@@ -224,7 +224,9 @@ class Graph2DView(QGraphicsView):
         self.fit()
 
     def schedule_edges(self) -> None:
-        self._edge_timer.start()
+        # Restarting the timer on every move would postpone the redraw until the drop.
+        if not self._edge_timer.isActive():
+            self._edge_timer.start()
 
     def _rebuild_edges(self) -> None:
         scene = self.scene()

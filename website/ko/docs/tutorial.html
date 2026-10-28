@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="직접 해 보는 투어예요. 각 단계에서 무엇을 할지, 무엇이 보여야 하는지 알려 드려요. 선택 사항이라고 표시된 단계는 Zotero, AI 키 또는 Anki가 필요해요. 사용하지 않는다면 건너뛰세요.">
+<title>튜토리얼: 첫 30분 – ZettelApp 문서</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">본문으로 건너뛰기</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">기능</a></li>
+        <li><a href="tutorial.html">튜토리얼</a></li>
+        <li><a href="./">문서</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 후원</a></li>
+        <li><a class="nav-cta" href="../#download">다운로드</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇰🇷</span><span class="sr-only">언어</span></summary><ul class="lang-switch-panel" aria-label="언어"><li><a href="../../docs/tutorial.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/tutorial.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/tutorial.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/tutorial.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/tutorial.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/tutorial.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/tutorial.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/tutorial.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/tutorial.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/tutorial.html" lang="ko" hreflang="ko" aria-current="true"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/tutorial.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="후원"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">후원</span></a>
+      <a class="hbtn cta" href="../#download">다운로드</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">메뉴</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">기능</a></li>
+          <li><a href="tutorial.html">튜토리얼</a></li>
+          <li><a href="./">문서</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="문서">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">문서</span><span class="docs-menu-current">튜토리얼: 첫 30분</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html" aria-current="page">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>문서</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html" aria-current="page">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="튜토리얼-첫-30분">튜토리얼: 첫 30분</h1>
+<p>직접 해 보는 투어예요. 각 단계에서 무엇을 할지, 무엇이 보여야 하는지 알려 드려요. <em>선택 사항</em>이라고 표시된 단계는
+Zotero, AI 키 또는 Anki가 필요해요. 사용하지 않는다면 건너뛰세요.</p>
+<p>이 방법 자체가 처음이라면 먼저 <a href="what-is-zettelkasten.html">Zettelkasten이란?</a>을 읽어 보세요. 5분이면 돼요.</p>
+<h2 id="1-설치하고-환영-볼트-열기">1. 설치하고 환영 볼트 열기</h2>
+<ol>
+<li><a href="https://github.com/DutraIRS/ZettelApp/releases/latest">최신 릴리스</a>에서 <strong>ZettelApp-Setup.exe</strong>를
+내려받아 실행하거나, <strong>ZettelApp-Portable.zip</strong>의 압축을 풀고 <code>ZettelApp.exe</code>를 실행하세요.</li>
+<li>ZettelApp을 시작하세요.</li>
+</ol>
+<p><em><strong>Documents\ZettelApp</strong></em>에 만들어진 새 볼트에 서로 링크된 시작용 노트 11개가 있는 노트 페이지가 <strong>보일 거예요</strong>.
+편집기에는 &quot;ZettelApp에 오신 것을 환영해요&quot;가 열려 있어요. 잠시 후 ZettelApp이 선택 사항인
+<em>잃어버린 기록 보관소의 왕자</em> 모험도 제안해요. 글로 된 이 투어를 먼저 하고 싶다면 <strong>나중에</strong>를 선택하세요.</p>
+<h2 id="2-노트-만들기">2. 노트 만들기</h2>
+<ol>
+<li><strong>Ctrl+N</strong>을 누르세요.</li>
+<li><em>간격 반복</em> 같은 제목을 입력하고 <strong>Enter</strong>를 눌러 본문으로 이동하세요.</li>
+<li>아이디어 하나를 자신의 말로 두세 문장으로 쓰세요.
+<em>점점 늘어나는 간격으로 자료를 복습하면 장기 기억에 도움이 돼요. 각 복습이 잊어버리기 직전에 이루어지기 때문이에요.</em></li>
+</ol>
+<p>목록 맨 위에 노트가 나타나는 것이 <strong>보일 거예요</strong>. 저장 버튼은 없어요. 입력하는 대로 노트가 저장돼요. 제목 아래의
+ID(예: <code>20261027153012</code>)가 노트의 영구 주소예요.</p>
+<h2 id="3-태그-추가하기">3. 태그 추가하기</h2>
+<p>제목 아래의 <strong>태그 추가</strong>를 클릭하고 <code>learning</code>을 입력한 다음 <strong>Enter</strong>를 누르세요. <code>memory</code>도 추가하세요.</p>
+<p><em>#learning</em>과 <em>#memory</em> 칩 두 개가 <strong>보일 거예요</strong>. 이제 목록 위의 태그 필터에 두 태그가 나오고, 검색창에
+<code>tag:memory</code>를 입력하면 이 노트를 찾을 수 있어요.</p>
+<h2 id="4-다른-노트에-링크하기">4. 다른 노트에 링크하기</h2>
+<ol>
+<li>두 번째 노트(<strong>Ctrl+N</strong>)를 <em>망각 곡선</em>이라는 제목으로 만들고 한 문장을 쓰세요. <em>정보를 복습하지 않으면 기억은
+빠르게 흐려져요.</em></li>
+<li><em>간격 반복</em>으로 돌아가세요(목록에서 클릭). 본문에 <code>[[</code>를 입력한 다음 <code>망각</code>을 입력하세요.</li>
+<li>자동 완성 목록에서 <strong>망각 곡선</strong>을 선택하고 <strong>Enter</strong>를 누르세요.</li>
+</ol>
+<p>본문에 <code>[[망각 곡선]]</code>에 밑줄이 그어져 <strong>보일 거예요</strong>. 사이드 패널의 <strong>링크</strong> 아래에 <em>망각 곡선</em>이 나타나요.
+도구 모음의 눈 모양 버튼(<strong>분할 보기</strong>)을 클릭하면 미리 보기에 클릭할 수 있는 링크가 보여요.</p>
+<h2 id="5-노트가-어떻게-관련되는지-표현하기">5. 노트가 <em>어떻게</em> 관련되는지 표현하기</h2>
+<p>링크 앞에 <code>supports::</code>를 붙여 유형이 있는 링크로 바꿔 보세요.</p>
+<pre><code class="language-markdown">supports:: [[망각 곡선]]
+</code></pre>
+<p>사이드 패널에 이 링크가 <em>뒷받침</em>으로 표시되는 것이 <strong>보일 거예요</strong>. <em>망각 곡선</em>을 열어 보세요. <em>뒷받침</em>은 방향이 있는
+링크 유형이기 때문에 <strong>백링크</strong>에 <em>간격 반복: <strong>뒷받침하는 노트</strong></em>라고 나와요. 일반 <code>[[링크]]</code>는 <em>관련</em>을 뜻해요.</p>
+<h2 id="6-제안된-링크-사용하기">6. 제안된 링크 사용하기</h2>
+<p><em>능동적 회상</em>, <em>교차 학습</em> 등 관련 아이디어로 노트를 몇 개 더 쓰고, 각각 한두 문장과 <code>learning</code> 태그를 붙이세요.
+그런 다음 그중 하나를 열고 사이드 패널의 <strong>링크 제안</strong>을 보세요.</p>
+<ul>
+<li>제안을 수락하려면 <strong>링크</strong>를 클릭하세요. 옆의 작은 화살표로 링크 유형을 고를 수 있어요.</li>
+<li>맞지 않는 제안은 **✕**를 클릭해 닫으세요.</li>
+<li>제안에 마우스를 올리면 <strong>왜</strong> 제안되었는지, 즉 각 척도의 찬반 근거를 볼 수 있어요.</li>
+</ul>
+<p><strong>모델이 배우는 내용:</strong> 수락한 제안은 링크가 되어 분류기의 긍정 예시로 학습돼요. 닫은 제안은 부정 예시로
+기억되며 그 노트 쌍에는 다시 제안되지 않아요. 사용할수록 제안이 더 좋아져요. <a href="link-suggestions.html">링크 제안</a>을 참고하세요.</p>
+<p><img loading="lazy" src="../../assets/screenshots/notes-light.png" alt="제안된 링크가 있는 노트" /></p>
+<h2 id="7-이미지-추가하기">7. 이미지 추가하기</h2>
+<p>아무 그림이나 복사한 다음(예: <em>Win+Shift+S</em>) 노트 본문을 클릭하고 <strong>Ctrl+V</strong>를 누르세요. 이미지 파일을 끌어다
+놓거나 *삽입 ▸ 이미지…*를 사용해도 돼요.</p>
+<p>본문에 <code>![…](asset:…)</code>가 나타나고 미리 보기에 이미지가 <strong>보일 거예요</strong>. 노트의 첫 번째 이미지이므로 <strong>노트 그림</strong>도 되어
+제목 옆과 그래프의 노트 원 안에 표시돼요.</p>
+<h2 id="8-마인드맵-스케치하기">8. 마인드맵 스케치하기</h2>
+<ol>
+<li><strong>마인드맵</strong> 탭을 열고 <strong>아이디어 추가</strong>를 클릭하세요.</li>
+<li><strong>Tab</strong>으로 하위 아이디어, <strong>Enter</strong>로 같은 단계 아이디어를 추가하고, <strong>F2</strong>로 이름을 바꾸고 <strong>Del</strong>로 삭제하세요.
+화살표 키로 아이디어 사이를 이동해요.</li>
+<li>이제 <strong>링크로 만들기</strong>를 클릭하고, 방금 그린 마인드맵이 대체될 수 있다는 것을 확인하세요.</li>
+</ol>
+<p>노트의 링크로 만들어진 마인드맵이 <strong>보일 거예요</strong>. 링크 유형별로 묶이고, 링크된 각 노트의 링크는 한 단계 더
+깊이 표시돼요. 아이디어를 마우스 오른쪽 버튼으로 클릭하면 노트에 연결할 수 있어요. 내보내기 버튼은 PNG, SVG,
+FreeMind로 저장해요.</p>
+<p><img loading="lazy" src="../../assets/screenshots/mindmap-light.png" alt="마인드맵" /></p>
+<h2 id="9-플래시카드-만들고-복습하기">9. 플래시카드 만들고 복습하기</h2>
+<p><em>간격 반복</em> 노트의 본문에 다음 줄을 추가하세요.</p>
+<pre><code class="language-markdown">Q: Why space reviews out?
+A: Each effortful retrieval just before forgetting strengthens the memory.
+
+{{c1::Hermann Ebbinghaus}} described the forgetting curve.
+</code></pre>
+<p>탭에 **플래시카드(2)**가 <strong>보일 거예요</strong>. 질문 카드 하나와 빈칸 카드 하나예요. 이제 <strong>복습</strong>(<strong>Ctrl+4</strong>)을 열고
+<strong>복습 시작</strong>을 클릭하세요.</p>
+<ul>
+<li><strong>Space</strong>를 눌러 답을 보세요.</li>
+<li><strong>1–4</strong>로 스스로 채점하세요(<em>다시, 어려움, 좋음, 쉬움</em>).</li>
+</ul>
+<p>SM-2 일정이 각 카드가 다시 나올 시점을 정해요. <strong>연습 퀴즈 ▸ 객관식</strong>이나 <strong>노트에 이름 붙이기</strong>도 해 보세요.</p>
+<p><img loading="lazy" src="../../assets/screenshots/quiz-light.png" alt="객관식 퀴즈" /></p>
+<h2 id="10-그래프-탐색하기">10. 그래프 탐색하기</h2>
+<p><strong>그래프</strong>(<strong>Ctrl+2</strong>)를 여세요.</p>
+<ol>
+<li>노트를 끌어서 옮기고, 휠로 확대·축소하고, 노트에 마우스를 올려 이웃 노트를 강조해 보세요.</li>
+<li>노트 페이지에서 노트를 선택하고 돌아와 <strong>로컬</strong>을 클릭한 다음 <strong>깊이</strong>를 1, 2, 3으로 바꿔 보세요.</li>
+<li><strong>색상 기준</strong>을 <strong>클러스터: k-평균</strong>으로 설정하세요. 노트가 의미별로 묶이고, 범례가 각 클러스터를 키워드로 이름 붙여 줘요.</li>
+<li><strong>그룹</strong>을 켜면 각 그룹이 음영 배경 위에 모여요.</li>
+<li><strong>3D</strong>를 클릭하고, 끌어서 궤도를 돌려 보고 <strong>자동 회전</strong>을 써 보세요.</li>
+</ol>
+<p><img loading="lazy" src="../../assets/screenshots/graph-light.png" alt="태그별로 색을 입히고 그룹화한 그래프" /></p>
+<h2 id="11-인사이트-확인하기">11. 인사이트 확인하기</h2>
+<p><strong>인사이트</strong>(<strong>Ctrl+3</strong>)를 열면 개수, 월별 노트, 인기 태그, 유형별 링크, 연결이 가장 많은 노트를 볼 수 있어요.
+<strong>연결되지 않은 노트</strong>는 할 일 목록이에요. 어딘가에 링크해 주세요. 모든 차트에는 표 보기가 있어요.</p>
+<h2 id="12-zotero-항목을-인용하고-문헌-노트-쓰기선택-사항">12. Zotero 항목을 인용하고 문헌 노트 쓰기(선택 사항)</h2>
+<p>Zotero 7 이상을 실행 중이고, <em>설정 ▸ 고급</em>에서 <em>이 컴퓨터의 다른 애플리케이션이 Zotero와 통신하도록 허용</em>이
+켜져 있다면:</p>
+<ol>
+<li>*삽입 ▸ Zotero 참조…*를 선택하고 항목을 검색한 다음 <strong>인용 삽입</strong>을 클릭하세요. Zotero에서 항목을 여는
+<em>Ebbinghaus (1885)</em> 같은 링크가 만들어져요.</li>
+<li>다시 한 번 같은 과정을 거치고 <strong>새 문헌 노트</strong>를 클릭하세요.</li>
+</ol>
+<p>참고 문헌, <em>Zotero에서 열기</em>와 <em>PDF 열기</em> 링크, 초록, <em>핵심 아이디어</em> / <em>내 생각</em> 섹션이 있고 <code>literature</code> 태그가
+붙은 새 노트가 <strong>보일 거예요</strong>. <a href="zotero.html">Zotero</a>를 참고하세요.</p>
+<h2 id="13-노트에-질문하기선택-사항">13. 노트에 질문하기(선택 사항)</h2>
+<ol>
+<li><em>도구 ▸ 옵션 ▸ AI 어시스턴트</em>에서 공급자(Anthropic, OpenAI 또는 Z.ai)를 고르고 API 키를 붙여넣은 다음
+<strong>연결 테스트</strong>를 클릭하세요.</li>
+<li><strong>질문</strong>(<strong>Ctrl+5</strong>)을 열고 물어보세요. <em>간격과 인출은 어떻게 함께 작동하나요?</em></li>
+</ol>
+<p>노트를 링크로 인용한 답변과 <strong>전송된 출처</strong>의 정확한 목록이 <strong>보일 거예요</strong>. 그 노트들과 질문만 컴퓨터 밖으로 나가요.
+<a href="ai-assistant.html">노트에 질문하기</a>를 참고하세요.</p>
+<h2 id="14-서브그래프-내보내기와-anki-동기화선택-사항">14. 서브그래프 내보내기와 Anki 동기화(선택 사항)</h2>
+<ol>
+<li>노트를 열고 <em>파일 ▸ 내보내기…</em>(<strong>Ctrl+Shift+E</strong>)를 선택한 다음 <strong>현재 노트와 연결된 노트</strong>, 깊이 2,
+<strong>웹사이트</strong> 형식을 고르세요.</li>
+<li>zip 안의 <code>index.html</code>을 브라우저에서 여세요. Zettelkasten의 그 부분으로 만든 작은 웹사이트예요.</li>
+<li>Anki를 실행하고 AnkiConnect 애드온(코드 <code>2055492159</code>)을 설치한 상태에서 <strong>복습</strong>을 열고 <strong>Anki와 동기화</strong>를
+클릭하세요. 각 카드의 출처 링크를 누르면 ZettelApp에서 노트가 열려요.</li>
+</ol>
+<p><a href="export-import.html">내보내기와 가져오기</a> 및 <a href="review-and-anki.html#anki">Anki</a>를 참고하세요.</p>
+<h2 id="15-데이터가-어디에-있는지-알기">15. 데이터가 어디에 있는지 알기</h2>
+<ul>
+<li>노트는 볼트 폴더(<em>파일 ▸ 볼트를 파일 탐색기에서 표시</em>)에 있어요. <code>zettel.db</code>와 <code>assets</code>예요.</li>
+<li>백업은 하루에 한 번 자동으로 만들어지고, <em>파일 ▸ 지금 볼트 백업</em>으로 언제든 만들 수 있어요.</li>
+<li>삭제한 노트는 노트 목록 아래의 <strong>휴지통</strong>으로 가며, 거기서 복원할 수 있어요.</li>
+</ul>
+<p>자세한 내용은 <a href="privacy-and-security.html">개인정보 보호와 보안</a>에 있어요.</p>
+<p><strong>여기까지예요.</strong> 노트당 아이디어 하나를 쓰고, 새 노트마다 이유를 붙여 링크하고, 제안과 그래프가 지금 가진 것을
+보여 주게 하세요. 단축키는 <a href="keyboard-shortcuts.html">키보드 단축키</a>에 있어요.</p>
+
+    <p class="doc-footer">오류를 발견하셨나요? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ko/tutorial.md">GitHub에서 이 페이지 편집</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">홈</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">이슈</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">후원</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="언어"><li><a href="../../docs/tutorial.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/tutorial.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/tutorial.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/tutorial.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/tutorial.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/tutorial.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/tutorial.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/tutorial.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/tutorial.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/tutorial.html" lang="ko" hreflang="ko" aria-current="true">한국어</a></li><li><a href="../../ar/docs/tutorial.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

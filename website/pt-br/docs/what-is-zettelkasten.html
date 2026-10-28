@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Um Zettelkasten  é uma forma de tomar notas para que elas continuem trabalhando por você. Você não arquiva as notas por assunto. Escreve cada ideia em uma nota própria e a liga às ">
+<title>O que é um Zettelkasten? – documentação do ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Ir para o conteúdo</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Recursos</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Documentação</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Doar</a></li>
+        <li><a class="nav-cta" href="../#download">Baixar</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇧🇷</span><span class="sr-only">Idiomas</span></summary><ul class="lang-switch-panel" aria-label="Idiomas"><li><a href="../../docs/what-is-zettelkasten.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/what-is-zettelkasten.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/what-is-zettelkasten.html" lang="pt-BR" hreflang="pt-BR" aria-current="true"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/what-is-zettelkasten.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/what-is-zettelkasten.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/what-is-zettelkasten.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/what-is-zettelkasten.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/what-is-zettelkasten.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/what-is-zettelkasten.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/what-is-zettelkasten.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/what-is-zettelkasten.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Doar"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Doar</span></a>
+      <a class="hbtn cta" href="../#download">Baixar</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Recursos</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Documentação</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentação">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentação</span><span class="docs-menu-current">O que é um Zettelkasten?</span></span></summary>
+      <ul>
+      <li><a href="index.html">Documentação do ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html" aria-current="page">O que é um Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: seus primeiros 30 minutos</a></li>
+      <li><a href="getting-started.html">Primeiros passos</a></li>
+      <li><a href="notes-and-links.html">Notas e links</a></li>
+      <li><a href="link-suggestions.html">Sugestões de links</a></li>
+      <li><a href="graph-and-insights.html">Grafo e Insights</a></li>
+      <li><a href="review-and-anki.html">Revisão, quizzes e Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Pergunte às suas notas (IA)</a></li>
+      <li><a href="mcp-server.html">Servidor MCP</a></li>
+      <li><a href="export-import.html">Exportar e importar</a></li>
+      <li><a href="keyboard-shortcuts.html">Atalhos de teclado</a></li>
+      <li><a href="privacy-and-security.html">Privacidade e segurança</a></li>
+      <li><a href="faq.html">Perguntas frequentes</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentação</h2>
+      <ul>
+      <li><a href="index.html">Documentação do ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html" aria-current="page">O que é um Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: seus primeiros 30 minutos</a></li>
+      <li><a href="getting-started.html">Primeiros passos</a></li>
+      <li><a href="notes-and-links.html">Notas e links</a></li>
+      <li><a href="link-suggestions.html">Sugestões de links</a></li>
+      <li><a href="graph-and-insights.html">Grafo e Insights</a></li>
+      <li><a href="review-and-anki.html">Revisão, quizzes e Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Pergunte às suas notas (IA)</a></li>
+      <li><a href="mcp-server.html">Servidor MCP</a></li>
+      <li><a href="export-import.html">Exportar e importar</a></li>
+      <li><a href="keyboard-shortcuts.html">Atalhos de teclado</a></li>
+      <li><a href="privacy-and-security.html">Privacidade e segurança</a></li>
+      <li><a href="faq.html">Perguntas frequentes</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="o-que-e-um-zettelkasten">O que é um Zettelkasten?</h1>
+<p>Um <strong>Zettelkasten</strong> (do alemão, &quot;caixa de fichas&quot;) é uma forma de tomar notas para que elas continuem trabalhando
+por você. Você não arquiva as notas por assunto. Escreve cada ideia em uma nota própria e <strong>a liga</strong> às notas com
+as quais ela se relaciona. Com o tempo, os links formam uma rede, e segui-los é como você pensa, escreve e descobre
+conexões que não havia planejado.</p>
+<p>Novo no método? Leia esta página e depois experimente o <a href="tutorial.html">tutorial</a>.</p>
+<h2 id="de-onde-vem">De onde vem</h2>
+<p>O método está intimamente associado a <strong>Niklas Luhmann (1927–1998)</strong>, sociólogo alemão mais conhecido por
+sua teoria dos sistemas sociais. Ao longo de cerca de quatro décadas, ele manteve uma caixa de fichas com aproximadamente <strong>90.000
+fichas de índice</strong>. Duas características a tornavam mais do que um simples fichário:</p>
+<ul>
+<li><strong>Toda ficha tinha um endereço fixo</strong>, como <code>21/3d7a</code>. Uma nova ficha sobre um pensamento existente era arquivada
+logo depois dele, com um endereço ramificado (<code>21/3d7a</code> → <code>21/3d7a1</code>), de modo que linhas de pensamento podiam crescer em
+qualquer direção sem reorganizar nada.</li>
+<li><strong>As fichas faziam referência a outras fichas pelo endereço.</strong> Isso transformava a caixa em uma teia de ideias, e não em um
+conjunto de categorias.</li>
+</ul>
+<p>Luhmann atribuía à caixa de fichas grande parte de sua enorme produção, cerca de 70 livros e quase 400
+artigos (os números variam conforme a contagem). Ele chegou a escrever um ensaio sobre trabalhar com ela como uma espécie de
+parceira de conversa, <em>Kommunikation mit Zettelkästen</em> (1981). Desde então, sua caixa de fichas foi digitalizada pelo
+Arquivo Niklas Luhmann da Universidade de Bielefeld.</p>
+<p>O método se tornou amplamente conhecido fora da academia graças a <strong><em>How to Take Smart Notes</em> (2017), de Sönke Ahrens</strong>,
+e a comunidades como a zettelkasten.de.</p>
+<h2 id="os-principios-fundamentais">Os princípios fundamentais</h2>
+<ol>
+<li><strong>Notas atômicas: uma ideia por nota.</strong> Uma nota deve conter uma única ideia, pequena o bastante para ser ligada com precisão
+e reutilizada em muitos contextos. Se você não consegue resumir uma nota em seu título, ela provavelmente contém mais de uma
+ideia.</li>
+<li><strong>Com suas próprias palavras.</strong> Escrever uma ideia com suas próprias palavras é onde a compreensão acontece. Copiar uma
+passagem dá a sensação de produtividade, mas pula o pensar.</li>
+<li><strong>Ligue cada nota, com um motivo.</strong> Ao adicionar uma nota, pergunte-se com quais notas existentes ela se relaciona,
+e <em>como</em>. Ela apoia uma, contradiz outra, dá um exemplo de uma terceira? Um link com um motivo
+vale muito mais do que uma pilha de notas relacionadas.</li>
+<li><strong>IDs únicos e permanentes.</strong> Títulos mudam e assuntos se deslocam, mas o endereço de uma nota não deve mudar, para que os links
+nunca quebrem.</li>
+<li><strong>Deixe a estrutura emergir.</strong> Em vez de decidir categorias de antemão com pastas, deixe que grupos de
+ideias se formem a partir dos links que você cria. A estrutura cresce de baixo para cima.</li>
+<li><strong>Notas de estrutura (hubs).</strong> Quando um assunto fica grande, escreva uma nota que o mapeie: uma visão geral curta que
+liga às notas principais em uma ordem sensata. É um ponto de entrada, não uma pasta.</li>
+<li><strong>Revise e traga de volta.</strong> Revisite as notas, siga seus links e deixe ideias antigas encontrarem as novas. Um
+Zettelkasten só é um parceiro de pensamento se você continuar conversando com ele.</li>
+</ol>
+<h2 id="tres-tipos-de-notas">Três tipos de notas</h2>
+<p>Ahrens descreve três tipos de notas, cada um com uma vida útil diferente:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>O que é</th>
+<th>O que fazer com ela</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Notas passageiras</strong></td>
+<td>Lembretes rápidos de um pensamento, capturados em qualquer lugar.</td>
+<td>Processe-as em um ou dois dias e depois descarte-as.</td>
+</tr>
+<tr>
+<td><strong>Notas de literatura</strong></td>
+<td>Notas curtas sobre uma fonte, com suas próprias palavras, junto com a referência.</td>
+<td>Guarde-as com a fonte (por exemplo, ligadas à entrada dela no Zotero).</td>
+</tr>
+<tr>
+<td><strong>Notas permanentes</strong></td>
+<td>Notas autossuficientes com ideias suas, escritas para o seu eu do futuro e ligadas à rede.</td>
+<td>Elas são o Zettelkasten. Escreva-as com cuidado e ligue-as.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="armadilhas-comuns">Armadilhas comuns</h2>
+<ul>
+<li><strong>Coletar em vez de pensar.</strong> Salvar artigos e destaques dá a sensação de progresso, mas um
+Zettelkasten só cresce com notas que você escreve e conecta. Essa armadilha costuma ser chamada de &quot;falácia do
+colecionador&quot;.</li>
+<li><strong>Copiar citações.</strong> Uma nota que é principalmente uma citação ainda não foi compreendida. Guarde a citação em uma
+nota de literatura, se precisar, e escreva a nota permanente com suas palavras.</li>
+<li><strong>Excesso de tags.</strong> Dezenas de tags por nota recriam pastas com outro nome. Poucas tags amplas ajudam
+a encontrar notas; os links carregam o significado.</li>
+<li><strong>Notas órfãs.</strong> Uma nota sem links é difícil de reencontrar e não acrescenta nada à rede. Ligue
+cada nova nota a pelo menos uma nota existente.</li>
+<li><strong>Excesso de engenharia.</strong> O método precisa de muito pouco: uma nota, um ID e um link. Comece a escrever; a
+estrutura vem depois.</li>
+</ul>
+<h2 id="como-o-zettelapp-apoia-o-metodo">Como o ZettelApp apoia o método</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Princípio</th>
+<th>No ZettelApp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IDs únicos e permanentes</td>
+<td>Cada nota recebe automaticamente um ID de data e hora (como <code>20261027153012</code>). Ligue por título ou por ID: os <a href="notes-and-links.html#wiki-links">links wiki</a> continuam funcionando quando os títulos mudam.</td>
+</tr>
+<tr>
+<td>Notas atômicas</td>
+<td>Criação rápida de notas (Ctrl+N), salvamento automático e notas pequenas que ficam bem na pré-visualização.</td>
+</tr>
+<tr>
+<td>Link com um motivo</td>
+<td><a href="notes-and-links.html#typed-links">Links tipados</a>: <code>supports:: [[…]]</code>, <em>contradiz</em>, <em>estende</em>, <em>exemplo de</em>, <em>parte de</em>, <em>cita</em>, ou os seus. Tipos direcionados se leem naturalmente dos dois lados (<em>Apoiada por</em>).</td>
+</tr>
+<tr>
+<td>Nunca perca uma conexão</td>
+<td>Os <a href="link-suggestions.html">links sugeridos</a> comparam cada nota com seu cofre e aprendem com o que você aceita e dispensa. Os <strong>backlinks</strong> mostram quem liga a uma nota.</td>
+</tr>
+<tr>
+<td>Deixe a estrutura emergir</td>
+<td>O <a href="graph-and-insights.html">grafo</a>: um <strong>grafo local</strong> ao redor de qualquer nota e <strong>clusters</strong> que revelam assuntos que você nunca arquivou. O <em>Insights</em> lista as <strong>notas sem links</strong> a corrigir.</td>
+</tr>
+<tr>
+<td>Notas de estrutura</td>
+<td>Mapas mentais dentro das notas, ligados às notas que organizam, e links <em>parte de</em>.</td>
+</tr>
+<tr>
+<td>Notas de literatura</td>
+<td>A integração com o <a href="zotero.html">Zotero</a> cria notas de literatura ligadas ao item e ao seu PDF.</td>
+</tr>
+<tr>
+<td>Revise e traga de volta</td>
+<td><a href="review-and-anki.html">Flashcards, repetição espaçada e quizzes</a> criados a partir das suas notas, ou sincronizados com o Anki.</td>
+</tr>
+<tr>
+<td>Guarde tudo</td>
+<td>As notas vão para a <strong>Lixeira</strong>, e não direto para a exclusão, e backups diários mantêm seu histórico seguro.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Pronto para experimentar? Comece o <a href="tutorial.html">tutorial</a>.</p>
+
+    <p class="doc-footer">Encontrou um erro? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/pt-br/what-is-zettelkasten.md">Edite esta página no GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Início</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Problemas</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Doar</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Idiomas"><li><a href="../../docs/what-is-zettelkasten.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/what-is-zettelkasten.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/what-is-zettelkasten.html" lang="pt-BR" hreflang="pt-BR" aria-current="true">Português (Brasil)</a></li><li><a href="../../fr/docs/what-is-zettelkasten.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/what-is-zettelkasten.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/what-is-zettelkasten.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/what-is-zettelkasten.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/what-is-zettelkasten.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/what-is-zettelkasten.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/what-is-zettelkasten.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/what-is-zettelkasten.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

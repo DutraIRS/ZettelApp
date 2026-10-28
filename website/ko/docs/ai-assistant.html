@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="질문 페이지는 클릭할 수 있는 인용과 함께 내 노트를 근거로 질문에 답해요. 직접 고른 AI 공급자와 본인의 API 키를 사용해요. 완전히 선택 사항이며, 질문하기 전까지는 어디로도 아무것도 전송되지 않아요.">
+<title>노트에 질문하기(AI) – ZettelApp 문서</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">본문으로 건너뛰기</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">기능</a></li>
+        <li><a href="tutorial.html">튜토리얼</a></li>
+        <li><a href="./">문서</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 후원</a></li>
+        <li><a class="nav-cta" href="../#download">다운로드</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇰🇷</span><span class="sr-only">언어</span></summary><ul class="lang-switch-panel" aria-label="언어"><li><a href="../../docs/ai-assistant.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/ai-assistant.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/ai-assistant.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/ai-assistant.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/ai-assistant.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/ai-assistant.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/ai-assistant.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/ai-assistant.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/ai-assistant.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/ai-assistant.html" lang="ko" hreflang="ko" aria-current="true"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/ai-assistant.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="후원"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">후원</span></a>
+      <a class="hbtn cta" href="../#download">다운로드</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">메뉴</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">기능</a></li>
+          <li><a href="tutorial.html">튜토리얼</a></li>
+          <li><a href="./">문서</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="문서">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">문서</span><span class="docs-menu-current">노트에 질문하기(AI)</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html" aria-current="page">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>문서</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html" aria-current="page">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="노트에-질문하기ai">노트에 질문하기(AI)</h1>
+<p><strong>질문</strong> 페이지(Ctrl+5)는 클릭할 수 있는 인용과 함께 <strong>내 노트를 근거로</strong> 질문에 답해요. 직접 고른 AI 공급자와 본인의 API
+키를 사용해요. 완전히 선택 사항이며, 질문하기 전까지는 어디로도 아무것도 전송되지 않아요.</p>
+<p><img loading="lazy" src="../../assets/screenshots/ask-light.png" alt="노트에 질문하기" /></p>
+<h2 id="설정">설정</h2>
+<ol>
+<li>
+<p>지원되는 공급자 중 한 곳에서 API 키를 받으세요.</p>
+</li>
+<li>
+<p><em>도구 ▸ 옵션 ▸ AI 어시스턴트</em>를 여세요. <strong>공급자</strong>를 고르고, <strong>API 키</strong>를 붙여넣고, <strong>모델</strong>을 고르세요(<em>목록 새로
+고침</em>은 내 키로 사용할 수 있는 모델을 공급자에게 물어봐요).</p>
+<p>공급자마다 키를 여러 개 저장할 수 있어요(예: 개인용과 업무용). 키 목록 옆의 <em>추가…</em>, <em>이름 바꾸기…</em>, <em>제거</em>를 사용하세요.
+선택된 키가 질문에 사용돼요.</p>
+</li>
+<li>
+<p><strong>연결 테스트</strong>를 누른 다음 <strong>확인</strong>을 누르세요.</p>
+</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>공급자</th>
+<th>기본 모델</th>
+<th>그 밖의 추천 모델</th>
+<th>엔드포인트</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Anthropic Claude</strong>(기본)</td>
+<td><code>claude-opus-5-5</code></td>
+<td><code>claude-sonnet-5-5</code>, <code>claude-haiku-5-5</code></td>
+<td><code>https://api.anthropic.com</code></td>
+</tr>
+<tr>
+<td><strong>OpenAI</strong></td>
+<td><code>gpt-6.1-sol</code></td>
+<td><code>gpt-6-astra</code>, <code>gpt-6-luna</code></td>
+<td><code>https://api.openai.com/v1</code></td>
+</tr>
+<tr>
+<td><strong>Z.ai (GLM)</strong></td>
+<td><code>glm-5.3</code></td>
+<td><code>glm-5.3-flash</code>, <code>glm-4.7-flash</code></td>
+<td><code>https://api.z.ai/api/paas/v4</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>키로 접근할 수 있는 모델 ID라면 무엇이든 입력할 수 있어요. **엔드포인트(선택 사항)**는 주소를 재정의해요. 예를 들어
+Z.ai 코딩 플랜 엔드포인트, OpenAI 호환 프록시, 내 컴퓨터에서 실행 중인 모델(<code>http://localhost:…</code>)을 쓸 때예요. 주소는
+<code>https://</code>를 써야 하며, 일반 <code>http://</code>는 <code>localhost</code>에서만 허용돼요.</p>
+<p>Claude에서는 <strong>노력</strong>(낮음부터 최대까지)도 설정할 수 있어요. 노력이 높을수록 답하기 전에 더 오래 생각하고 비용도 더 들어요.
+기본값은 <em>중간</em>이에요.</p>
+<h2 id="나만의-llm-사용">나만의 LLM 사용</h2>
+<p>질문은 선택한 공급자의 <strong>내 계정</strong>을 사용하므로 모든 사용량은 그 공급자가 나에게 청구해요. ZettelApp에는 자체 AI 서비스가
+없어요. API 키는 <strong>Windows 자격 증명 관리자</strong>에 저장되며 설정 파일에는 절대 저장되지 않아요.</p>
+<ul>
+<li><strong>공급자</strong>: <em>도구 ▸ 옵션 ▸ AI 어시스턴트 ▸ 공급자</em>에서 Anthropic Claude, OpenAI, Z.ai(GLM)를 고를 수 있어요. 목록에서
+<strong>모델</strong>을 고르거나(<em>목록 새로 고침</em>은 내 키로 사용할 수 있는 모델을 공급자에게 물어봐요) 키로 접근할 수 있는 모델 ID를
+직접 입력하세요.</li>
+<li><strong>내 서버</strong>: <strong>OpenAI 방식 채팅 완성</strong> API를 제공하는 서비스라면 무엇이든 동작해요. <strong>OpenAI</strong>를 선택하고 **엔드포인트
+(선택 사항)**에 기본 주소를 설정하세요. 예: <code>https://my-proxy.example.com/v1</code>, <code>http://localhost:11434/v1</code>(Ollama),
+<code>http://localhost:1234/v1</code>(LM Studio). 일반 <code>http://</code>는 <code>localhost</code>, <code>127.0.0.1</code>, <code>::1</code>에서만 허용되며, 그 밖에는
+모두 <code>https://</code>를 써야 해요. 이런 로컬 주소에서는 <strong>API 키</strong>를 비워 둬도 돼요.</li>
+<li><strong>확인하기</strong>: <strong>연결 테스트</strong>를 누르세요. 로컬 모델이라면 질문과 노트가 컴퓨터 밖으로 나가지 않아요.</li>
+<li><strong>전송되는 것</strong>: 질문과 내 컴퓨터에서 찾은 가장 관련 있는 노트만이에요. 노트 수는 질문 페이지의 <strong>노트 수</strong> 상자(기본값
+8)이며, <em>전송된 출처</em> 목록에 정확히 어떤 노트가 전송되었는지 표시돼요.</li>
+</ul>
+<h2 id="질문하기">질문하기</h2>
+<p>질문을 입력하고 <strong>질문</strong>(Ctrl+Enter)을 누르세요. <strong>검색 위치</strong>로 어디를 찾을지 고르세요. 전체 컬렉션, 열린 노트와 연결된
+노트, 또는 태그가 있는 노트예요. 전송할 <strong>노트 수</strong>도 고르세요.</p>
+<p>진행 과정은 다음과 같아요.</p>
+<ol>
+<li>ZettelApp이 <a href="link-suggestions.html">링크 제안</a>과 같은 TF-IDF 및 LSA 유사도를 사용해 <strong>내 컴퓨터에서</strong> 가장 관련 있는
+노트를 찾아요. <em>현재 노트와 연결된 노트</em>에서는 열린 노트가 항상 맨 앞이에요.</li>
+<li>질문과 그 노트들이 공급자에게 전송돼요. 노트는 최대 120,000자예요. 길이에 맞추려고 잘린 노트는 눈에 보이는
+&quot;[note truncated]&quot; 표시로 끝나요. <strong>전송된 출처</strong> 목록에 정확히 어떤 노트가 전송되었는지 표시돼요.</li>
+<li>답변이 작성되는 대로 스트리밍돼요. <code>[[20261027153012]]</code> 같은 인용은 노트로 가는 링크로 나타나요. <strong>중지</strong>를 누르면
+취소돼요.</li>
+</ol>
+<p>모델은 내 노트만을 근거로 답하고, 노트에 답이 없으면 그렇게 말하도록 지시받아요. <strong>복사</strong>는 답변을 Markdown으로 복사해요.
+<strong>노트로 저장</strong>은 <code>ai-answer</code> 태그가 붙고 출처로 가는 <code>cites::</code> 링크가 있는 새 노트로 보관해요.</p>
+<h2 id="개인정보와-안전">개인정보와 안전</h2>
+<ul>
+<li><strong>질문한 것만 전송돼요</strong>: 질문과 <em>전송된 출처</em>에 나열된 노트예요. 질문하기 전에 알림이 이를 상기시켜 줘요(건너뛰려면
+<em>다시 표시하지 않음</em>을 체크하세요).</li>
+<li><strong>API 키</strong>는 <strong>Windows 자격 증명 관리자</strong>(<code>ZettelApp/llm/&lt;provider&gt;</code>)에 저장되며 설정 파일이나 로그에는 절대
+저장되지 않고, 표시되는 오류 메시지에서도 제거돼요. <em>키 제거</em>는 키를 삭제해요.</li>
+<li><strong>모델에는 도구가 없어요.</strong> 웹 검색, 코드 실행, 노트 변경을 할 수 없으므로 노트(또는 가져온 파일)에 숨겨진 지시로
+모델이 무언가를 하게 만들 수 없어요. 답변은 노트와 같은 안전한 렌더러로 표시되며 HTML이나 스크립트는 없어요.</li>
+<li>Claude에서 ZettelApp은 Anthropic의 공식 SDK를 사용하며 <strong>서버 측 거부 대체</strong>를 사용해요. 안전 분류기가 요청을 거부하면
+Anthropic이 권장하는 대체 모델로 다시 시도해요. Claude Opus 5.5, Opus 5, Sonnet 5.5, Fable 5.1에 적용돼요.</li>
+<li>전송한 내용에는 각 공급자 자체의 약관과 데이터 정책이 적용돼요.</li>
+</ul>
+<h2 id="다른-공급자-추가">다른 공급자 추가</h2>
+<p>공급자는 작은 레지스트리(<code>zettelapp/core/llm.py</code>의 <code>PROVIDERS</code>)에 있어요. 기존 프로토콜(Anthropic의 Messages API, 또는
+많은 공급자가 제공하는 OpenAI 방식 채팅 완성)을 쓰는 서비스는 <strong>항목 하나</strong>면 돼요. 이름, 엔드포인트, 기본 모델, 사용자가
+키를 받는 페이지예요. 새 프로토콜에는 작은 어댑터 클래스가 필요해요. <a href="../../docs/development.html">개발</a>을 참고하세요.</p>
+
+    <p class="doc-footer">오류를 발견하셨나요? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ko/ai-assistant.md">GitHub에서 이 페이지 편집</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">홈</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">이슈</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">후원</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="언어"><li><a href="../../docs/ai-assistant.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/ai-assistant.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/ai-assistant.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/ai-assistant.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/ai-assistant.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/ai-assistant.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/ai-assistant.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/ai-assistant.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/ai-assistant.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/ai-assistant.html" lang="ko" hreflang="ko" aria-current="true">한국어</a></li><li><a href="../../ar/docs/ai-assistant.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

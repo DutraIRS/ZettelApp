@@ -16,7 +16,7 @@ import uuid
 from collections import defaultdict
 from collections.abc import Callable, Iterable
 from dataclasses import replace
-from datetime import date, datetime, timedelta
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
 from zettelapp.core.models import (
@@ -53,7 +53,7 @@ from zettelapp.i18n import _
 
 # 2: tags.source tells tags added by hand from #tags written in the text
 # 3: link_types.line_style and link_types.arrow store how each link type is drawn
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 MAX_TITLE = 500
 MAX_BODY = 5_000_000
 
@@ -68,7 +68,9 @@ CREATE TABLE IF NOT EXISTS notes (
     mindmap TEXT,
     created TEXT NOT NULL,
     modified TEXT NOT NULL,
-    deleted INTEGER NOT NULL DEFAULT 0
+    deleted INTEGER NOT NULL DEFAULT 0,
+    alarm TEXT NOT NULL DEFAULT '',
+    alarm_fired INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS tags (
     note_id TEXT NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
@@ -140,6 +142,19 @@ CREATE VIRTUAL TABLE IF NOT EXISTS notes_fts USING fts5(
 
 class VaultError(RuntimeError):
     pass
+
+
+def _clean_alarm(value: str | None) -> str:
+    """An alarm as a timezone-aware UTC ISO string, or "" when it isn't a valid time."""
+    if not value:
+        return ""
+    try:
+        when = datetime.fromisoformat(str(value))
+    except ValueError:
+        return ""
+    if when.tzinfo is None:
+        when = when.astimezone()  # naive times are the machine's local time
+    return when.astimezone(UTC).isoformat(timespec="seconds")
 
 
 def _pair(a: str, b: str) -> tuple[str, str]:
@@ -235,8 +250,18 @@ class Vault:
             elif int(version) < SCHEMA_VERSION:
                 if int(version) < 2:
                     self._upgrade_to_v2()
-                self._upgrade_to_v3()
+                if int(version) < 3:
+                    self._upgrade_to_v3()
+                self._upgrade_to_v4()
                 self._set_meta("schema_version", str(SCHEMA_VERSION))
+
+    def _upgrade_to_v4(self) -> None:
+        """Add the per-note alarm."""
+        columns = {r["name"] for r in self.conn.execute("PRAGMA table_info(notes)")}
+        if "alarm" not in columns:
+            self.conn.execute("ALTER TABLE notes ADD COLUMN alarm TEXT NOT NULL DEFAULT ''")
+        if "alarm_fired" not in columns:
+            self.conn.execute("ALTER TABLE notes ADD COLUMN alarm_fired INTEGER NOT NULL DEFAULT 0")
 
     def _upgrade_to_v2(self) -> None:
         """Add tags.source and turn #tags already written in notes into tags."""
@@ -417,10 +442,15 @@ class Vault:
         note.tags = sorted(manual | inline)
         if touch:
             note.modified = utc_now()
-        row = self.conn.execute("SELECT title FROM notes WHERE id = ?", (note.id,)).fetchone()
+        note.alarm = _clean_alarm(note.alarm)
+        row = self.conn.execute(
+            "SELECT title, alarm, alarm_fired FROM notes WHERE id = ?", (note.id,)
+        ).fetchone()
         old_title = row["title"] if row else ""
+        fired = int(row["alarm_fired"]) if row and row["alarm"] == note.alarm else 0
         self.conn.execute(
-            "UPDATE notes SET title = ?, body = ?, url = ?, image = ?, mindmap = ?, modified = ? WHERE id = ?",
+            "UPDATE notes SET title = ?, body = ?, url = ?, image = ?, mindmap = ?, modified = ?,"
+            " alarm = ?, alarm_fired = ? WHERE id = ?",
             (
                 note.title,
                 note.body,
@@ -428,6 +458,8 @@ class Vault:
                 note.image,
                 json.dumps(note.mindmap, ensure_ascii=False) if note.mindmap else None,
                 note.modified,
+                note.alarm,
+                fired,
                 note.id,
             ),
         )
@@ -478,7 +510,28 @@ class Vault:
             created=row["created"],
             modified=row["modified"],
             deleted=bool(row["deleted"]),
+            alarm=row["alarm"],
         )
+
+    def due_alarms(self, now: str | None = None) -> list[Note]:
+        """Live notes whose alarm time has come and that haven't been announced yet."""
+        rows = self.conn.execute(
+            "SELECT * FROM notes WHERE deleted = 0 AND alarm != '' AND alarm_fired = 0 "
+            "ORDER BY alarm"
+        ).fetchall()
+        limit = datetime.fromisoformat(now or utc_now())
+        due = [r for r in rows if datetime.fromisoformat(r["alarm"]) <= limit]
+        return [n for r in due if (n := self.get_note(r["id"]))]
+
+    def mark_alarm_fired(self, note_id: str) -> None:
+        with self.transaction():
+            self.conn.execute("UPDATE notes SET alarm_fired = 1 WHERE id = ?", (note_id,))
+
+    def pending_alarm_count(self) -> int:
+        row = self.conn.execute(
+            "SELECT COUNT(*) AS n FROM notes WHERE deleted = 0 AND alarm != '' AND alarm_fired = 0"
+        ).fetchone()
+        return int(row["n"])
 
     def manual_tags(self, note_id: str) -> list[str]:
         """The note's tags that were added by hand rather than written as #tags in its text."""

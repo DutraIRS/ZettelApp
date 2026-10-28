@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="الغرض من الملاحظات أن تفكر من خلالها، ويساعدك تذكرها. يحوّل ZettelApp الملاحظات إلى بطاقات تعليمية ويتيح مراجعتها داخل التطبيق أو باستخدام Anki.">
+<title>المراجعة والاختبارات وAnki – توثيق ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">انتقل إلى المحتوى</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">الميزات</a></li>
+        <li><a href="tutorial.html">الدرس</a></li>
+        <li><a href="./">التوثيق</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> تبرّع</a></li>
+        <li><a class="nav-cta" href="../#download">تنزيل</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇸🇦</span><span class="sr-only">اللغات</span></summary><ul class="lang-switch-panel" aria-label="اللغات"><li><a href="../../docs/review-and-anki.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/review-and-anki.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/review-and-anki.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/review-and-anki.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/review-and-anki.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/review-and-anki.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/review-and-anki.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/review-and-anki.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/review-and-anki.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/review-and-anki.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/review-and-anki.html" lang="ar" hreflang="ar" aria-current="true"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="تبرّع"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">تبرّع</span></a>
+      <a class="hbtn cta" href="../#download">تنزيل</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">القائمة</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">الميزات</a></li>
+          <li><a href="tutorial.html">الدرس</a></li>
+          <li><a href="./">التوثيق</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="التوثيق">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">التوثيق</span><span class="docs-menu-current">المراجعة والاختبارات وAnki</span></span></summary>
+      <ul>
+      <li><a href="index.html">توثيق ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">ما هو Zettelkasten؟</a></li>
+      <li><a href="tutorial.html">دليل عملي: أول 30 دقيقة لك</a></li>
+      <li><a href="getting-started.html">البدء</a></li>
+      <li><a href="notes-and-links.html">الملاحظات والروابط</a></li>
+      <li><a href="link-suggestions.html">اقتراحات الروابط</a></li>
+      <li><a href="graph-and-insights.html">الرسم البياني والإحصاءات</a></li>
+      <li><a href="review-and-anki.html" aria-current="page">المراجعة والاختبارات وAnki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">اسأل ملاحظاتك (الذكاء الاصطناعي)</a></li>
+      <li><a href="mcp-server.html">خادم MCP</a></li>
+      <li><a href="export-import.html">التصدير والاستيراد</a></li>
+      <li><a href="keyboard-shortcuts.html">اختصارات لوحة المفاتيح</a></li>
+      <li><a href="privacy-and-security.html">الخصوصية والأمان</a></li>
+      <li><a href="faq.html">الأسئلة الشائعة</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>التوثيق</h2>
+      <ul>
+      <li><a href="index.html">توثيق ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">ما هو Zettelkasten؟</a></li>
+      <li><a href="tutorial.html">دليل عملي: أول 30 دقيقة لك</a></li>
+      <li><a href="getting-started.html">البدء</a></li>
+      <li><a href="notes-and-links.html">الملاحظات والروابط</a></li>
+      <li><a href="link-suggestions.html">اقتراحات الروابط</a></li>
+      <li><a href="graph-and-insights.html">الرسم البياني والإحصاءات</a></li>
+      <li><a href="review-and-anki.html" aria-current="page">المراجعة والاختبارات وAnki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">اسأل ملاحظاتك (الذكاء الاصطناعي)</a></li>
+      <li><a href="mcp-server.html">خادم MCP</a></li>
+      <li><a href="export-import.html">التصدير والاستيراد</a></li>
+      <li><a href="keyboard-shortcuts.html">اختصارات لوحة المفاتيح</a></li>
+      <li><a href="privacy-and-security.html">الخصوصية والأمان</a></li>
+      <li><a href="faq.html">الأسئلة الشائعة</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="المراجعة-والاختبارات-وanki">المراجعة والاختبارات وAnki</h1>
+<p>الغرض من الملاحظات أن تفكر من خلالها، ويساعدك تذكرها. يحوّل ZettelApp
+الملاحظات إلى <a href="notes-and-links.html#flashcards">بطاقات تعليمية</a> ويتيح مراجعتها داخل التطبيق أو باستخدام Anki.</p>
+<h2 id="التكرار-المتباعد">التكرار المتباعد</h2>
+<p>تعرض صفحة <strong>المراجعة</strong> (Ctrl+4) عدد البطاقات <strong>المستحقة اليوم</strong>. يمر <strong>بدء المراجعة</strong> عليها واحدة تلو الأخرى:</p>
+<ol>
+<li>اقرأ السؤال وحاول تذكر الإجابة.</li>
+<li>اضغط <strong>Space</strong> (أو <em>إظهار الإجابة</em>).</li>
+<li>قيّم نفسك: <strong>مرة أخرى (1)</strong> أو <strong>صعب (2)</strong> أو <strong>جيد (3)</strong>
+أو <strong>سهل (4)</strong>. مرّر المؤشر فوق زر لمعرفة موعد عودة البطاقة.</li>
+</ol>
+<p>يستخدم الجدول خوارزمية <strong>SM-2</strong> (خوارزمية SuperMemo التي انطلق منها Anki):</p>
+<ul>
+<li>تعود البطاقات الجديدة بعد يوم، ثم بعد 6 أيام، ثم
+على فترات تتزايد بحسب <em>معامل سهولة</em> البطاقة (2.5 في البداية).</li>
+<li>تعيد <em>مرة أخرى</em> البطاقة إلى يوم واحد وتخفض معامل
+سهولتها. وتقصّر <em>صعب</em> الفترة التالية، بينما تطيلها <em>سهل</em>.</li>
+</ul>
+<p>تنشئ بطاقات الإخفاء مراجعة لكل جزء محذوف (<code>{{c1::…}}</code> و<code>{{c2::…}}</code>
+وغيرها). ويعرض كل سؤال رابط <strong>من:</strong> إلى ملاحظته.</p>
+<h2 id="الاختبارات">الاختبارات</h2>
+<p>ينشئ <strong>اختبار تدريبي</strong> اختبارًا من نطاق تحدده: المجموعة كلها، أو الملاحظة المفتوحة وملاحظاتها
+المرتبطة (حتى عمق معين)، أو الملاحظات التي تحمل وسمًا. اختر النمط وعدد الأسئلة:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>النمط</th>
+<th>آلية العمل</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>البطاقات التعليمية (التكرار المتباعد)</strong></td>
+<td>مثل المراجعة، وتحدّث تقييماتك الجدول.</td>
+</tr>
+<tr>
+<td><strong>اختيار من متعدد</strong></td>
+<td>اختر الإجابة الصحيحة من بين أربع. تكون الإجابات الخاطئة من إجابات بطاقات أخرى متقاربة في الطول، لتبدو معقولة. اختر الإجابة بالمفاتيح 1–4.</td>
+</tr>
+<tr>
+<td><strong>اكتب الإجابة</strong></td>
+<td>اكتب الإجابة واضغط Enter. تُقيّم حسب تشابه التحرير (Levenshtein)، مع تجاهل حالة الأحرف وعلامات التشكيل والتنسيق: تُحسب الإجابة صحيحة إذا بلغت النسبة 85%، و<em>قريبة</em> إذا بلغت 60%، فلا تعاقبك الأخطاء المطبعية البسيطة.</td>
+</tr>
+<tr>
+<td><strong>سمّ تلك الملاحظة</strong></td>
+<td>يعرض نص الملاحظة مع إخفاء كلمات عنوانها؛ اختر العنوان الصحيح. الخيارات الخاطئة هي <strong>الملاحظات الأكثر تشابهًا</strong> (بحسب TF-IDF)، لتتعلم تمييز الأفكار ذات الصلة بعضها عن بعض. لا حاجة إلى بطاقات تعليمية.</td>
+</tr>
+</tbody>
+</table></div>
+<p>يبدأ <em>الأدوات ▸ اختبار في نطاق هذه الملاحظة</em> اختبارًا عن الملاحظة المفتوحة والملاحظات التي تبعد
+عنها رابطين. ويمكنك فعل الشيء نفسه بالنقر بزر الفأرة الأيمن على ملاحظة في الرسم البياني.</p>
+<h2 id="anki">Anki</h2>
+<p>يتكامل ZettelApp مع <a href="https://apps.ankiweb.net/">Anki</a> بطريقتين. وتستخدم كلتاهما نوعي
+الملاحظات <strong>ZettelApp Basic</strong> و<strong>ZettelApp Cloze</strong>، مع الحقول التالية:</p>
+<ul>
+<li><em>Front</em> و<em>Back</em> (أو <em>Text</em> و<em>Extra</em> لبطاقات الإخفاء)، معروضة من Markdown؛</li>
+<li><em>Source</em>، رابط إلى الملاحظة؛</li>
+<li><em>ZettelID</em> و<em>CardKey</em>.</li>
+</ul>
+<p>تتحول وسوم ملاحظاتك إلى وسوم في Anki (تصبح الوسوم
+المتداخلة <code>parent::child</code>)، وتضاف <code>zettelapp</code>. تُضمّن الصور في البطاقات كوسائط.</p>
+<h3 id="المزامنة-مع-ankiconnect">المزامنة مع AnkiConnect</h3>
+<ol>
+<li>في Anki، ثبّت إضافة <strong>AnkiConnect</strong> (<em>الأدوات ▸ الإضافات ▸
+الحصول على إضافات…</em>، الرمز <strong>2055492159</strong>) ثم أعد تشغيل Anki.</li>
+<li>مع تشغيل Anki، افتح <strong>المراجعة</strong> في ZettelApp، واختر اسم الحزمة (<strong>الحزمة الافتراضية</strong>
+في <em>الخيارات ▸ Anki</em>، واسمها أول مرة <code>ZettelApp</code>) والنطاق، واضغط <strong>مزامنة مع
+Anki</strong> (أو <em>الأدوات ▸ مزامنة مع Anki</em>). يختبر <strong>اختبار الاتصال</strong> الاتصال.</li>
+</ol>
+<p>يتذكر ZettelApp ملاحظة Anki المرتبطة بكل بطاقة. وتؤدي المزامنة مجددًا إلى <strong>تحديث</strong> البطاقات
+بدل إنشاء نسخ مكررة، كما يمكن العثور على البطاقة عبر <em>CardKey</em> حتى إن
+فُقد هذا التذكر. لا تُحذف البطاقات التي تحذفها من ZettelApp من Anki.</p>
+<p>لا يتصل ZettelApp مطلقًا إلا بـ AnkiConnect على هذا الكمبيوتر
+(<code>127.0.0.1</code>، والمنفذ الافتراضي 8765، ويمكن تغييره من <em>الخيارات ▸ Anki</em>).</p>
+<h3 id="تصدير-حزمة-apkg">تصدير حزمة (.apkg)</h3>
+<p>ينشئ <strong>تصدير حزمة (.apkg)…</strong> (أو <em>ملف ▸ تصدير…</em> مع تنسيق <em>حزمة Anki</em>) حزمة تستوردها في
+Anki باستخدام <em>ملف ▸ استيراد</em>. لا حاجة إلى إضافة. تظل أنواع الملاحظات والحزمة وهوية
+كل بطاقة ثابتة، لذا يؤدي استيراد تصدير أحدث إلى <strong>تحديث</strong> البطاقات التي استوردتها سابقًا.</p>
+<h3 id="من-anki-الى-ملاحظاتك">من Anki إلى ملاحظاتك</h3>
+<p>يكون <strong>Source</strong> لكل بطاقة رابطًا بصيغة <code>zettelapp://note/&lt;id&gt;</code>. انقره في Anki
+لفتح الملاحظة في ZettelApp. يضبط المثبّت ذلك تلقائيًا. وفي النسخة
+المحمولة، استخدم <em>الخيارات ▸ تكامل Windows ▸ تسجيل الروابط</em>. لا
+يقبل معالج الروابط إلا روابط <em>فتح ملاحظة</em>؛ راجع <a href="privacy-and-security.html">الخصوصية والأمان</a>.</p>
+
+    <p class="doc-footer">وجدت خطأ؟ <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ar/review-and-anki.md">حرّر هذه الصفحة على GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">الرئيسية</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">المشكلات</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">تبرّع</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="اللغات"><li><a href="../../docs/review-and-anki.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/review-and-anki.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/review-and-anki.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/review-and-anki.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/review-and-anki.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/review-and-anki.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/review-and-anki.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/review-and-anki.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/review-and-anki.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/review-and-anki.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/review-and-anki.html" lang="ar" hreflang="ar" aria-current="true">العربية</a></li></ul>
+</footer>
+</body>
+</html>

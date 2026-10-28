@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="description" content="ZettelApp은 Windows용 무료 Zettelkasten 앱이에요. 원자적 노트, 유형이 있는 링크, 마인드맵, 플래시카드, 2D/3D 지식 그래프, 사용자에게서 배우는 링크 제안을 제공해요.">
+<meta name="color-scheme" content="light dark">
+<title>ZettelApp – Windows용 Zettelkasten</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="stylesheet" href="../style.css">
+<script src="../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="./"><img src="../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="주 메뉴">
+      <ul class="nav">
+        <li><a href="#features">기능</a></li>
+        <li><a href="docs/tutorial.html">튜토리얼</a></li>
+        <li><a href="docs/">설명서</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 후원</a></li>
+        <li><a class="nav-cta" href="#download">다운로드</a></li>
+      </ul>
+    </nav>
+    <!--langswitch--><details class="lang-switch"><summary><span aria-hidden="true">🇰🇷</span><span class="sr-only">언어</span></summary><ul class="lang-switch-panel" aria-label="언어"><li><a href="../" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../es/" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../pt-br/" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../fr/" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../de/" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../it/" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../ru/" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../zh-cn/" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../ja/" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../ko/" lang="ko" hreflang="ko" aria-current="true"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../ar/" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details><!--/langswitch-->
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="후원"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">후원</span></a>
+      <a class="hbtn cta" href="#download">다운로드</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">메뉴</span></summary>
+        <ul class="menu-panel">
+          <li><a href="#features">기능</a></li>
+          <li><a href="docs/tutorial.html">튜토리얼</a></li>
+          <li><a href="docs/">설명서</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <img class="hero-icon" src="../assets/icon-512.png" alt="" width="96" height="96">
+      <h1>아이디어를 연결하세요.</h1>
+      <p class="lead">ZettelApp은 Windows용 Zettelkasten이에요. 작은 노트를 쓰고, 의미를 담아 링크하고, 놓친 연결은
+        제안을 받아 보세요. 지식을 2D 또는 3D 그래프로 탐색하고 플래시카드로 바꿀 수 있어요.</p>
+      <div class="actions">
+        <a class="button primary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe">Windows용 다운로드</a>
+        <a class="button secondary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Portable.zip">포터블 .zip</a>
+      </div>
+      <p class="fine">무료 오픈 소스 · Windows 10 &amp; 11, 64비트 ·
+        <a href="https://github.com/DutraIRS/ZettelApp/releases/latest">모든 릴리스와 체크섬</a></p>
+    </div>
+    <div class="wrap">
+      <figure class="shot hero-shot">
+        <picture>
+          <source srcset="../assets/screenshots/notes-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/notes-light.png" width="1440" height="900"
+               alt="ZettelApp의 노트 페이지: 왼쪽에는 노트 목록, 가운데에는 간격 반복에 관한 노트의 Markdown 텍스트와 미리 보기, 오른쪽에는 일치 점수가 표시된 링크 제안이 있어요.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section id="start" class="section">
+    <div class="wrap">
+      <h2 class="section-title">Zettelkasten이 처음이신가요?</h2>
+      <p class="section-lead">5분 만에 방법을 배우고 직접 해 보세요.</p>
+      <ul class="cards duo">
+        <li class="card feature-link">
+          <p class="eyebrow">방법</p>
+          <h3><a href="docs/what-is-zettelkasten.html">Zettelkasten이란?</a></h3>
+          <p>슬립 박스의 유래, 원칙(원자적 노트, 이유가 있는 링크, 저절로 생기는 구조), 세 가지 종류의 노트,
+            흔한 함정을 소개해요.</p>
+        </li>
+        <li class="card feature-link">
+          <p class="eyebrow">직접 해 보기</p>
+          <h3><a href="docs/tutorial.html">튜토리얼 시작하기</a></h3>
+          <p>첫 30분: 노트 쓰기와 링크, 유형이 있는 링크, 제안, 마인드맵, 플래시카드, 2D·3D 그래프를 다뤄요.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="features" class="section">
+    <div class="wrap">
+      <h2 class="section-title">Zettelkasten에 필요한 모든 것</h2>
+      <p class="section-lead">노트 하나에 아이디어 하나, 그리고 아이디어가 어떻게 관련되는지 말해 주는 링크로 연결해요.
+        ZettelApp은 이 방법은 지키고 번거로움은 없애 줘요.</p>
+      <ul class="cards">
+        <li class="card">
+          <h3>원자적 노트</h3>
+          <p>자동 타임스탬프 ID가 붙는 Markdown 노트, 태그(태그 상자 또는 본문의 #tags), 출처 링크, 붙여넣거나
+            끌어다 놓을 수 있는 이미지, PC의 파일 링크, 자동 저장을 지원해요.</p>
+        </li>
+        <li class="card">
+          <h3>유형이 있고 방향이 있는 링크</h3>
+          <p><code>supports:: [[Claim]]</code>처럼 쓰세요. <em>반박</em>, <em>확장</em>,
+            <em>예시</em>, <em>상위 항목</em>, <em>인용</em>, 또는 직접 만든 유형도 쓸 수 있어요. 백링크는 자연스럽게
+            읽혀요: <em>뒷받침하는 노트</em>.</p>
+        </li>
+        <li class="card">
+          <h3>배우는 제안</h3>
+          <p>나이브 베이즈 모델이 의미, 키워드, 문자열 유사도와 공유 태그, 공유 링크를 따져 보고, 수락하거나 닫은
+            모든 제안에서 배워요.</p>
+        </li>
+        <li class="card">
+          <h3>2D·3D 그래프</h3>
+          <p>태그별로, 또는 의미의 k-평균·계층적 클러스터별로 노트에 색을 입히고, 그룹을 음영 배경 위에 모아 보세요.</p>
+        </li>
+        <li class="card">
+          <h3>마인드맵</h3>
+          <p>키보드로 노트의 아이디어를 마인드맵으로 스케치하고, 아이디어를 노트에 연결하고, PNG, SVG, FreeMind로
+            내보내세요.</p>
+        </li>
+        <li class="card">
+          <h3>복습과 퀴즈</h3>
+          <p><code>Q:</code>/<code>A:</code>와 <code>{{c1::cloze}}</code> 텍스트로 만든 플래시카드, SM-2 간격 반복,
+            객관식, 답 입력, <em>노트에 이름 붙이기</em>를 지원해요.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split">
+      <div class="split-text">
+        <p class="eyebrow">링크 제안</p>
+        <h2>놓친 연결을 확인하세요</h2>
+        <p>글을 쓰는 동안 ZettelApp이 노트를 볼트의 나머지 노트와 여덟 가지 척도로 비교해요.</p>
+        <ul class="ticks">
+          <li>의미(잠재 의미 분석)</li>
+          <li>공유 키워드(TF-IDF)</li>
+          <li>제목과 본문의 Levenshtein 및 Jaro-Winkler 유사도</li>
+          <li>공유 태그, 공유 링크, 본문에 언급된 제목</li>
+        </ul>
+        <p>나이브 베이즈 분류기가 그 근거를 확률로 바꾸고 각 제안을 설명해 줘요.</p>
+        <p>클릭 한 번으로 제안을 링크하고 링크 유형을 고르거나, 닫을 수 있어요. 어느 쪽이든 모델은 <em>내가</em> 아이디어를
+          어떻게 연결하는지 배워요.</p>
+        <p><a class="more" href="docs/link-suggestions.html">링크 제안이 동작하는 방식</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/graph-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/graph-light.png" width="1440" height="900" loading="lazy"
+               alt="2D 지식 그래프: 태그별로 색 배경 위에 묶인 노트와, 색이 있거나 파선이거나 화살표가 있는 선으로 그려진 유형이 있는 링크, 그리고 범례가 있어요.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split reverse">
+      <div class="split-text">
+        <p class="eyebrow">그래프</p>
+        <h2>2D와 3D로 보는 나의 지식</h2>
+        <p>전체 컬렉션이나 노트 하나의 주변을 탐색하세요. 태그별로 색을 입히거나 클러스터링으로 주제를 찾아 보세요.</p>
+        <ul class="ticks">
+          <li>노트 의미의 <b>k-평균</b> 또는 <b>계층적</b> 클러스터링</li>
+          <li>실루엣 점수로 정해지는 클러스터 수</li>
+          <li>키워드로 이름 붙은 클러스터</li>
+        </ul>
+        <p><b>그룹</b>을 켜면 관련된 노트가 음영 배경 위에 모여요. 색각 이상이 있어도 구별할 수 있도록 색상을
+          골랐어요.</p>
+        <p><a class="more" href="docs/graph-and-insights.html">그래프와 인사이트</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/graph-3d-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/graph-3d-light.png" width="1440" height="900" loading="lazy"
+               alt="3D 그래프: k-평균 클러스터별로 색이 입혀지고 부드러운 후광이 있는 노트와, 각 클러스터를 키워드로 이름 붙인 범례가 있어요.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split">
+      <div class="split-text">
+        <p class="eyebrow">마인드맵</p>
+        <h2>가지로 생각하세요</h2>
+        <p>모든 노트에 마인드맵을 담을 수 있어요.</p>
+        <ul class="ticks">
+          <li><kbd>Tab</kbd>은 하위, <kbd>Enter</kbd>는 같은 단계 추가, <kbd>F2</kbd>는 이름 바꾸기</li>
+          <li>아이디어를 노트에 링크</li>
+          <li>클릭 한 번으로 노트의 링크로 마인드맵 만들기</li>
+          <li>PNG, SVG, FreeMind로 내보내기</li>
+        </ul>
+        <p><a class="more" href="docs/notes-and-links.html#mind-maps">마인드맵</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/mindmap-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/mindmap-light.png" width="1440" height="900" loading="lazy"
+               alt="오래 가는 학습이라는 제목의 마인드맵: 간격, 인출, 난이도, 의미를 나타내는 가지가 각각 다른 색으로 그려져 있어요.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split reverse">
+      <div class="split-text">
+        <p class="eyebrow">복습</p>
+        <h2>쓴 것을 기억하세요</h2>
+        <p>노트를 플래시카드로 바꾸고 SM-2 간격 반복으로 복습하세요. 스스로 퀴즈를 풀 수도 있어요.</p>
+        <ul class="ticks">
+          <li>객관식</li>
+          <li>오타를 너그럽게 봐 주는 답 입력</li>
+          <li><em>노트에 이름 붙이기</em>: 오답 선택지는 가장 비슷한 노트예요</li>
+        </ul>
+        <p>Anki를 선호하세요? AnkiConnect로 동기화하거나 덱을 내보내세요. 모든 카드는 해당 노트로 다시 링크돼요.</p>
+        <p><a class="more" href="docs/review-and-anki.html">복습, 퀴즈, Anki</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/insights-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/insights-light.png" width="1440" height="900" loading="lazy"
+               alt="인사이트 페이지: 노트, 링크, 태그, 연결되지 않은 노트, 플래시카드의 개수 타일, 월별 추가된 노트 차트, 인기 태그와 유형별 링크의 막대 차트가 있어요.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split">
+      <div class="split-text">
+        <p class="eyebrow">노트에 질문하기</p>
+        <h2>내 노트를 근거로 한 답변</h2>
+        <p><b>Anthropic Claude</b>, <b>OpenAI</b>, <b>Z.ai</b>의 본인 키를 연결하고 질문해 보세요.</p>
+        <ul class="ticks">
+          <li>가장 관련 있는 노트는 내 컴퓨터에서 찾아요.</li>
+          <li>그 노트만 전송되며, 정확히 어떤 노트인지 확인할 수 있어요.</li>
+          <li>답변은 클릭할 수 있는 링크로 노트를 인용해요.</li>
+          <li>키는 Windows 자격 증명 관리자에 남아 있어요.</li>
+        </ul>
+        <p><a class="more" href="docs/ai-assistant.html">노트에 질문하기</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/ask-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/ask-light.png" width="1440" height="900" loading="lazy"
+               alt="간격과 인출에 관한 질문과, 노트를 링크로 인용한 답변이 있는 질문 페이지.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="section-title">내가 쓰는 도구와 함께</h2>
+      <ul class="cards">
+        <li class="card">
+          <h3>Zotero</h3>
+          <p>라이브러리를 검색하고, 항목을 여는 인용을 삽입하고, PDF 링크가 있는 문헌 노트를 시작하세요.</p>
+          <a class="more" href="docs/zotero.html">Zotero</a>
+        </li>
+        <li class="card">
+          <h3>Anki</h3>
+          <p>AnkiConnect로 플래시카드를 동기화하거나 <code>.apkg</code> 덱을 내보내세요. 다시 동기화하면 카드가
+            중복되지 않고 업데이트돼요.</p>
+          <a class="more" href="docs/review-and-anki.html#anki">Anki</a>
+        </li>
+        <li class="card">
+          <h3>MCP 서버</h3>
+          <p>Claude Desktop, Claude Code 등 MCP 클라이언트가 볼트를 검색하고 읽게 하세요. ZettelApp이 열려 있고 MCP
+            스위치가 켜져 있는 동안만 가능하며, 변경을 허용하지 않는 한 읽기 전용이에요.</p>
+          <a class="more" href="docs/mcp-server.html">MCP 서버</a>
+        </li>
+        <li class="card">
+          <h3>Obsidian과 Markdown</h3>
+          <p>Markdown 폴더와 Obsidian 볼트를 가져오거나, 머리말과 <code>[[links]]</code>가 있는 Markdown 파일로
+            노트를 내보내세요.</p>
+          <a class="more" href="docs/export-import.html">가져오기</a>
+        </li>
+        <li class="card">
+          <h3>무엇이든 내보내기</h3>
+          <p>전체 컬렉션이나 일부 서브그래프를 보관 파일, 정적 웹사이트, JSON, GraphML, Graphviz, Anki 덱으로
+            내보내세요.</p>
+          <a class="more" href="docs/export-import.html">내보내기</a>
+        </li>
+        <li class="card">
+          <h3>Windows에 잘 어울려요</h3>
+          <p>밝은 테마나 어두운 테마, 강조 색상을 따라가요. 표준 메뉴와 단축키, 사용자별 설치 프로그램,
+            매일 백업을 제공해요.</p>
+          <a class="more" href="docs/getting-started.html">시작하기</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="privacy" class="section tinted">
+    <div class="wrap">
+      <h2 class="section-title">설계부터 비공개이고 안전해요</h2>
+      <p class="section-lead">노트는 내 것이에요. ZettelApp은 오프라인으로 동작해요. 시작할 때 새 버전을 조용히 확인하는
+        것(끌 수 있어요)을 빼면, 요청할 때만 네트워크를 사용해요.</p>
+      <ul class="cards compact">
+        <li class="card"><h3>오프라인 우선</h3><p>계정도, 원격 측정도, 추적도 없어요. 노트는 직접 고른 폴더에 있어요.</p></li>
+        <li class="card"><h3>활성 콘텐츠 없음</h3><p>노트는 스크립트를 실행하거나 웹에서 무언가를 불러올 수 없어요.
+          가져오기는 경로 조작과 압축 해제 폭탄을 검사해요.</p></li>
+        <li class="card"><h3>키는 비밀로</h3><p>API 키는 Windows 자격 증명 관리자에 있으며 파일이나 로그에는 절대
+          기록되지 않아요.</p></li>
+        <li class="card"><h3>안전망</h3><p>자동 저장, 복원할 수 있는 휴지통, 연 모든 볼트의 매일 백업을 제공해요.</p></li>
+      </ul>
+      <p class="center"><a class="more" href="docs/privacy-and-security.html">개인정보 보호와 보안 자세히 보기</a></p>
+    </div>
+  </section>
+
+  <section id="download" class="section">
+    <div class="wrap download">
+      <div>
+        <h2>ZettelApp 다운로드</h2>
+        <p>무료 오픈 소스이며 퍼블릭 도메인으로 공개되어 있어요.</p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe">설치 프로그램 다운로드</a>
+          <a class="button secondary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Portable.zip">포터블 .zip</a>
+        </div>
+        <p class="fine"><a href="https://github.com/DutraIRS/ZettelApp/releases/latest">모든 릴리스, 릴리스 노트,
+          SHA-256 체크섬</a></p>
+      </div>
+      <dl class="specs">
+        <dt>시스템</dt><dd>Windows 10(21H2 이상) 또는 Windows 11, 64비트</dd>
+        <dt>설치</dt><dd>사용자별 설치이며 관리자 권한이 필요 없어요. 시작할 때 설치 프로그램의 언어를 고르세요.</dd>
+        <dt>SmartScreen</dt><dd>빌드는 아직 코드 서명이 되어 있지 않아요. Windows가 경고하면 체크섬을 확인한 뒤
+          <i>추가 정보 ▸ 실행</i>을 선택하세요.</dd>
+        <dt>소스</dt><dd><a href="https://github.com/DutraIRS/ZettelApp">github.com/DutraIRS/ZettelApp</a></dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section tinted">
+    <div class="wrap">
+      <h2 class="section-title">다음 계획</h2>
+      <ul class="cards compact">
+        <li class="card"><h3>더 많은 언어</h3><p>앱과 이 페이지는 11개 언어로 제공돼요. 더 많은 언어도 환영해요.</p></li>
+        <li class="card"><h3>Linux</h3><p>.deb 및 AppImage 패키지.</p></li>
+        <li class="card"><h3>서명된 빌드</h3><p>SmartScreen 경고가 더는 나타나지 않아요.</p></li>
+        <li class="card"><h3>오프라인 AI</h3><p>더 나은 제안을 위한 로컬 임베딩 모델.</p></li>
+      </ul>
+      <p class="center"><a class="more" href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">로드맵
+        읽기</a></p>
+    </div>
+  </section>
+
+  <section id="support" class="section">
+    <div class="wrap support">
+      <h2>ZettelApp 후원하기</h2>
+      <p>ZettelApp은 공개적으로 만들어지는 무료 퍼블릭 도메인 소프트웨어예요. 시간을 아껴 주었거나 로드맵이 더 빨리
+        실현되기를 바란다면 후원을 고려해 주세요.</p>
+      <div class="actions">
+        <a class="button donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Ko-fi에서 후원</a>
+      </div>
+      <p class="fine">기업: 후원으로 특정 로드맵 항목을 지원할 수 있어요.
+        <a href="https://github.com/DutraIRS/ZettelApp">GitHub를 통해 연락해 주세요</a>. 후원자는 릴리스 노트에서
+        감사 인사를 받아요.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · 퍼블릭 도메인 (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="docs/">설명서</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">이슈</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md">보안</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/blob/main/THIRD_PARTY_NOTICES.md">고지 사항</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">후원</a></li>
+    </ul>
+  </div>
+  <!--langs--><ul class="nav lang-row" aria-label="언어"><li><a href="../" lang="en" hreflang="en">English</a></li><li><a href="../es/" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/" lang="ko" hreflang="ko" aria-current="true">한국어</a></li><li><a href="../ar/" lang="ar" hreflang="ar">العربية</a></li></ul><!--/langs-->
+</footer>
+</body>
+</html>

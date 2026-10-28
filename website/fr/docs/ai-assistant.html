@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="La page Ask  répond à vos questions à partir de vos notes, avec des citations cliquables. Elle utilise le fournisseur d’IA de votre choix et votre propre clé API. La fonction est e">
+<title>Interroger vos notes (IA) – documentation de ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Aller au contenu</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Fonctionnalités</a></li>
+        <li><a href="tutorial.html">Tutoriel</a></li>
+        <li><a href="./">Documentation</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Faire un don</a></li>
+        <li><a class="nav-cta" href="../#download">Télécharger</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇫🇷</span><span class="sr-only">Langues</span></summary><ul class="lang-switch-panel" aria-label="Langues"><li><a href="../../docs/ai-assistant.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/ai-assistant.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/ai-assistant.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/ai-assistant.html" lang="fr" hreflang="fr" aria-current="true"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/ai-assistant.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/ai-assistant.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/ai-assistant.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/ai-assistant.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/ai-assistant.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/ai-assistant.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/ai-assistant.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Faire un don"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Faire un don</span></a>
+      <a class="hbtn cta" href="../#download">Télécharger</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Fonctionnalités</a></li>
+          <li><a href="tutorial.html">Tutoriel</a></li>
+          <li><a href="./">Documentation</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentation</span><span class="docs-menu-current">Interroger vos notes (IA)</span></span></summary>
+      <ul>
+      <li><a href="index.html">Documentation de ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Qu’est-ce qu’un Zettelkasten ?</a></li>
+      <li><a href="tutorial.html">Tutoriel : vos 30 premières minutes</a></li>
+      <li><a href="getting-started.html">Bien démarrer</a></li>
+      <li><a href="notes-and-links.html">Notes et liens</a></li>
+      <li><a href="link-suggestions.html">Suggestions de liens</a></li>
+      <li><a href="graph-and-insights.html">Graphe et Insights</a></li>
+      <li><a href="review-and-anki.html">Révision, quiz et Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html" aria-current="page">Interroger vos notes (IA)</a></li>
+      <li><a href="mcp-server.html">Serveur MCP</a></li>
+      <li><a href="export-import.html">Exporter et importer</a></li>
+      <li><a href="keyboard-shortcuts.html">Raccourcis clavier</a></li>
+      <li><a href="privacy-and-security.html">Confidentialité et sécurité</a></li>
+      <li><a href="faq.html">Foire aux questions</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentation</h2>
+      <ul>
+      <li><a href="index.html">Documentation de ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Qu’est-ce qu’un Zettelkasten ?</a></li>
+      <li><a href="tutorial.html">Tutoriel : vos 30 premières minutes</a></li>
+      <li><a href="getting-started.html">Bien démarrer</a></li>
+      <li><a href="notes-and-links.html">Notes et liens</a></li>
+      <li><a href="link-suggestions.html">Suggestions de liens</a></li>
+      <li><a href="graph-and-insights.html">Graphe et Insights</a></li>
+      <li><a href="review-and-anki.html">Révision, quiz et Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html" aria-current="page">Interroger vos notes (IA)</a></li>
+      <li><a href="mcp-server.html">Serveur MCP</a></li>
+      <li><a href="export-import.html">Exporter et importer</a></li>
+      <li><a href="keyboard-shortcuts.html">Raccourcis clavier</a></li>
+      <li><a href="privacy-and-security.html">Confidentialité et sécurité</a></li>
+      <li><a href="faq.html">Foire aux questions</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="interroger-vos-notes-ia">Interroger vos notes (IA)</h1>
+<p>La page <strong>Ask</strong> (Ctrl+5) répond à vos questions <strong>à partir de vos notes</strong>, avec des citations cliquables. Elle utilise le fournisseur d’IA de votre choix et votre propre clé API. La fonction est entièrement facultative : aucune donnée n’est envoyée tant que vous ne posez pas de question.</p>
+<p><img loading="lazy" src="../../assets/screenshots/ask-light.png" alt="Interroger vos notes" /></p>
+<h2 id="configuration">Configuration</h2>
+<ol>
+<li>
+<p>Obtenez une clé API auprès de l’un des fournisseurs pris en charge.</p>
+</li>
+<li>
+<p>Ouvrez <em>Outils ▸ Options ▸ Assistant IA</em>. Choisissez le <strong>fournisseur</strong>, collez la <strong>clé API</strong> et sélectionnez un <strong>modèle</strong> (<em>Actualiser la liste</em> demande au fournisseur quels modèles sont accessibles avec votre clé).</p>
+<p>Vous pouvez enregistrer plusieurs clés par fournisseur (par exemple, une clé personnelle et une clé professionnelle). Utilisez <em>Ajouter…</em>, <em>Renommer…</em> et <em>Retirer</em> à côté de la liste des clés ; Ask utilise la clé sélectionnée.</p>
+</li>
+<li>
+<p>Cliquez sur <strong>Tester la connexion</strong>, puis sur <strong>OK</strong>.</p>
+</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Fournisseur</th>
+<th>Modèle par défaut</th>
+<th>Autres modèles suggérés</th>
+<th>Point de terminaison</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Anthropic Claude</strong> (par défaut)</td>
+<td><code>claude-opus-5-5</code></td>
+<td><code>claude-sonnet-5-5</code>, <code>claude-haiku-5-5</code></td>
+<td><code>https://api.anthropic.com</code></td>
+</tr>
+<tr>
+<td><strong>OpenAI</strong></td>
+<td><code>gpt-6.1-sol</code></td>
+<td><code>gpt-6-astra</code>, <code>gpt-6-luna</code></td>
+<td><code>https://api.openai.com/v1</code></td>
+</tr>
+<tr>
+<td><strong>Z.ai (GLM)</strong></td>
+<td><code>glm-5.3</code></td>
+<td><code>glm-5.3-flash</code>, <code>glm-4.7-flash</code></td>
+<td><code>https://api.z.ai/api/paas/v4</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Vous pouvez saisir n’importe quel identifiant de modèle accessible avec votre clé. <strong>Point d'accès (facultatif)</strong> remplace l’adresse, par exemple pour utiliser un point de terminaison de forfait de programmation Z.ai, un proxy compatible OpenAI ou un modèle exécuté sur votre ordinateur (<code>http://localhost:…</code>). Les adresses doivent utiliser <code>https://</code> ; <code>http://</code> est accepté uniquement pour <code>localhost</code>.</p>
+<p>Avec Claude, vous pouvez également régler l’<strong>effort</strong> (de faible à maximale) : plus il est élevé, plus la réflexion avant réponse est longue et coûteuse. La valeur par défaut est <em>moyen</em>.</p>
+<h2 id="utiliser-votre-propre-llm">Utiliser votre propre LLM</h2>
+<p>Ask utilise <strong>votre propre compte</strong> chez le fournisseur choisi ; celui-ci vous facture l’utilisation. ZettelApp n’a pas de service d’IA propre. Votre clé API est enregistrée dans le <strong>Gestionnaire d’identifiants Windows</strong>, jamais dans les fichiers de paramètres.</p>
+<ul>
+<li><strong>Fournisseurs</strong> : Anthropic Claude, OpenAI et Z.ai (GLM), dans <em>Outils ▸ Options ▸ Assistant IA ▸ Fournisseur</em>. Choisissez un <strong>Modèle</strong> dans la liste (<em>Actualiser la liste</em> demande au fournisseur les modèles accessibles avec votre clé) ou saisissez un identifiant de modèle disponible.</li>
+<li><strong>Votre propre serveur</strong> : tout service proposant une API <strong>complétion de conversation compatible avec OpenAI</strong> est compatible. Choisissez <strong>OpenAI</strong> et indiquez son adresse de base dans <strong>Point d'accès (facultatif)</strong>, par exemple <code>https://my-proxy.example.com/v1</code>, <code>http://localhost:11434/v1</code> (Ollama) ou <code>http://localhost:1234/v1</code> (LM Studio). <code>http://</code> est accepté uniquement pour <code>localhost</code>, <code>127.0.0.1</code> et <code>::1</code> ; les autres adresses doivent utiliser <code>https://</code>. Pour ces adresses locales, la <strong>clé API</strong> peut rester vide.</li>
+<li><strong>Vérifier la connexion</strong> : cliquez sur <strong>Tester la connexion</strong>. Avec un modèle local, votre question et vos notes ne quittent pas votre ordinateur.</li>
+<li><strong>Données transmises</strong> : uniquement votre question et les notes les plus pertinentes, trouvées sur votre ordinateur. Le nombre de notes est défini par le champ <strong>nombre de notes</strong> de la page Ask (8 par défaut) ; la liste <em>Sources envoyées</em> montre précisément lesquelles ont été envoyées.</li>
+</ul>
+<h2 id="poser-une-question">Poser une question</h2>
+<p>Saisissez une question et appuyez sur <strong>Ask</strong> (Ctrl+Enter). Choisissez où chercher dans <strong>Rechercher dans</strong> : toute la collection, la note ouverte et ses notes liées, ou les notes portant un tag. Choisissez le nombre de notes à envoyer.</p>
+<p>Déroulement :</p>
+<ol>
+<li>ZettelApp trouve les notes les plus pertinentes <strong>sur votre ordinateur</strong>, en utilisant les mêmes similarités TF-IDF et LSA que le <a href="link-suggestions.html">suggesteur de liens</a>. Avec <em>Note actuelle et notes liées</em>, la note ouverte apparaît toujours en premier.</li>
+<li>Votre question et ces notes sont envoyées au fournisseur ; le texte des notes est limité à 120 000 caractères. Une note tronquée pour respecter cette limite se termine par le marqueur visible « [note truncated] ». La liste <strong>Sources envoyées</strong> indique exactement quelles notes ont été transmises.</li>
+<li>La réponse s’affiche au fur et à mesure. Les citations telles que <code>[[20261027153012]]</code> sont des liens vers les notes. <strong>Arrêter</strong> annule la génération.</li>
+</ol>
+<p>Le modèle reçoit pour instruction de répondre uniquement à partir de vos notes et de signaler quand elles ne contiennent pas la réponse. <strong>Copier</strong> copie la réponse au format Markdown. <strong>Enregistrer comme note</strong> l’enregistre dans une nouvelle note portant le tag <code>ai-answer</code> et des liens <code>cites::</code> vers ses sources.</p>
+<h2 id="confidentialite-et-securite">Confidentialité et sécurité</h2>
+<ul>
+<li><strong>Seules les données nécessaires à votre demande sont envoyées</strong> : votre question et les notes figurant sous <em>Sources envoyées</em>. Un avis vous le rappelle avant la question (cochez <em>Ne plus afficher</em> pour ne plus l’afficher).</li>
+<li><strong>Votre clé API</strong> est stockée dans le <strong>Gestionnaire d’identifiants Windows</strong> (sous <code>ZettelApp/llm/&lt;provider&gt;</code>), jamais dans les fichiers de paramètres ou les journaux ; elle est supprimée des messages d’erreur affichés. <em>Retirer key</em> la supprime.</li>
+<li><strong>Le modèle ne dispose d’aucun outil.</strong> Il ne peut ni chercher sur le Web, ni exécuter de code, ni modifier vos notes. Des instructions cachées dans une note (ou un fichier importé) ne peuvent donc pas lui faire effectuer d’action. La réponse utilise le même affichage sécurisé que les notes, sans HTML ni scripts.</li>
+<li>Avec Claude, ZettelApp utilise le SDK officiel d’Anthropic et active le <strong>repli de refus côté serveur</strong> : si un classificateur de sécurité refuse une requête, Anthropic la réessaie avec son modèle de repli recommandé. Cela concerne Claude Opus 5.5, Opus 5, Sonnet 5.5 et Fable 5.1.</li>
+<li>Les conditions et politiques de données de chaque fournisseur s’appliquent aux données que vous lui envoyez.</li>
+</ul>
+<h2 id="ajouter-un-autre-fournisseur">Ajouter un autre fournisseur</h2>
+<p>Les fournisseurs sont déclarés dans un registre simple (<code>PROVIDERS</code> dans <code>zettelapp/core/llm.py</code>). Un service utilisant un protocole déjà pris en charge (l’API Messages d’Anthropic ou les complétions de chat au format OpenAI, proposées par de nombreux fournisseurs) ne nécessite qu’<strong>une entrée</strong> : son nom, son point de terminaison, son modèle par défaut et la page permettant d’obtenir une clé. Un nouveau protocole nécessite une petite classe d’adaptation. Consultez <a href="../../docs/development.html">Développement</a>.</p>
+
+    <p class="doc-footer">Une erreur ? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/fr/ai-assistant.md">Modifier cette page sur GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Accueil</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Tickets</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Faire un don</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Langues"><li><a href="../../docs/ai-assistant.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/ai-assistant.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/ai-assistant.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/ai-assistant.html" lang="fr" hreflang="fr" aria-current="true">Français</a></li><li><a href="../../de/docs/ai-assistant.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/ai-assistant.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/ai-assistant.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/ai-assistant.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/ai-assistant.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/ai-assistant.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/ai-assistant.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

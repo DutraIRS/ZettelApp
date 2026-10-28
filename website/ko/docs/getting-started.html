@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="ZettelApp은 Windows 10과 Windows 11, 64비트에서 실행돼요. 최신 릴리스에서 내려받으세요.">
+<title>시작하기 – ZettelApp 문서</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">본문으로 건너뛰기</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">기능</a></li>
+        <li><a href="tutorial.html">튜토리얼</a></li>
+        <li><a href="./">문서</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 후원</a></li>
+        <li><a class="nav-cta" href="../#download">다운로드</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇰🇷</span><span class="sr-only">언어</span></summary><ul class="lang-switch-panel" aria-label="언어"><li><a href="../../docs/getting-started.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/getting-started.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/getting-started.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/getting-started.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/getting-started.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/getting-started.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/getting-started.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/getting-started.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/getting-started.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/getting-started.html" lang="ko" hreflang="ko" aria-current="true"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/getting-started.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="후원"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">후원</span></a>
+      <a class="hbtn cta" href="../#download">다운로드</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">메뉴</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">기능</a></li>
+          <li><a href="tutorial.html">튜토리얼</a></li>
+          <li><a href="./">문서</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="문서">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">문서</span><span class="docs-menu-current">시작하기</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html" aria-current="page">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>문서</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html" aria-current="page">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="시작하기">시작하기</h1>
+<h2 id="설치">설치</h2>
+<p>ZettelApp은 <strong>Windows 10(21H2 이상)과 Windows 11, 64비트</strong>에서 실행돼요.
+<a href="https://github.com/DutraIRS/ZettelApp/releases/latest">최신 릴리스</a>에서 내려받으세요.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>다운로드</th>
+<th>이럴 때 사용하세요</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ZettelApp-Setup.exe</code></td>
+<td>시작 메뉴 항목, <em>설정 ▸ 앱</em>의 제거 프로그램, Anki에서 노트를 여는 <code>zettelapp://</code> 링크가 있는 일반적인 설치를 원할 때. 관리자 권한은 필요 없어요. 내 계정에만 설치돼요.</td>
+</tr>
+<tr>
+<td><code>ZettelApp-Portable.zip</code></td>
+<td>소프트웨어를 설치할 수 없거나 USB 드라이브에서 실행하고 싶을 때. 아무 곳에나 압축을 풀고 <code>ZettelApp.exe</code>를 실행하세요.</td>
+</tr>
+</tbody>
+</table></div>
+<p>설치 프로그램은 사용할 언어를 묻고 Windows 표시 언어를 추천해요. 설치 프로그램과 앱은 11개 언어로 번역되어 있으며,
+앱의 언어는 <em>옵션</em>에서 바꿀 수 있어요.</p>
+<p>각 릴리스에는 SHA-256 체크섬(<code>SHA256SUMS.txt</code>)이 있어요. PowerShell에서 다운로드 파일을 확인하려면:</p>
+<pre><code class="language-powershell">Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
+</code></pre>
+<h3 id="windows에서-pc를-보호했습니다">&quot;Windows에서 PC를 보호했습니다&quot;</h3>
+<p>빌드는 아직 코드 서명이 되어 있지 않아서, 설치 프로그램을 처음 실행할 때 Microsoft Defender SmartScreen이
+경고할 수 있어요. 공식 릴리스 페이지에서 내려받았고 체크섬이 일치한다면 <strong>추가 정보 ▸ 실행</strong>을 선택하세요.
+코드 서명은 <a href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">로드맵</a>에 있어요.</p>
+<h2 id="첫-볼트">첫 볼트</h2>
+<p><strong>볼트</strong>는 노트를 담는 폴더예요. 데이터베이스 파일(<code>zettel.db</code>)과 이미지용 <code>assets</code> 폴더로 이루어져요.
+처음 시작하면 ZettelApp이 <strong>Documents\ZettelApp</strong>에 서로 링크된 시작용 노트 11개가 있는 볼트를 만들어요.
+<em>ZettelApp에 오신 것을 환영해요</em> 노트가 링크, 태그, 이미지, 마인드맵, 플래시카드와 앱의 나머지 기능을 안내해
+줘요. 선택 사항인 10분짜리 모험은 같은 투어를 실제 동작으로 진행해요. *파일 ▸ 새 볼트…*나 *파일 ▸ 볼트 열기…*로
+만든 새 볼트에도 같은 시작 자료가 들어가므로, 다른 곳(예: OneDrive 폴더)에서도 작업할 수 있어요.
+<em>파일 ▸ 최근 항목 열기</em>에는 최근에 사용한 볼트가 나와요.</p>
+<p>노트는 입력하는 대로 자동 저장돼요. 저장 버튼은 없어요.</p>
+<h2 id="창-둘러보기">창 둘러보기</h2>
+<p><img loading="lazy" src="../../assets/screenshots/notes-light.png" alt="노트 페이지" /></p>
+<p>왼쪽의 <strong>탐색 레일</strong>로 페이지를 전환해요(Ctrl+1~Ctrl+5).</p>
+<ul>
+<li><strong>노트</strong>: 노트 목록, 편집기, 사이드 패널.
+<ul>
+<li><em>목록</em>에는 검색(<code>tag:name</code> 필터도 동작해요), 태그 필터, 정렬, 휴지통이 있어요.</li>
+<li><em>편집기</em>에는 제목, 태그, 선택 사항인 출처 링크, 그리고 <strong>노트</strong>(Markdown, 편집·분할·미리 보기 모드),
+<strong>마인드맵</strong>, <strong>플래시카드</strong> 탭이 있어요.</li>
+<li><em>사이드 패널</em>에는 <strong>링크 제안</strong>, 노트의 <strong>링크</strong>, <strong>백링크</strong>가 나와요.</li>
+</ul>
+</li>
+<li><strong>그래프</strong>: 노트를 2D 또는 3D 네트워크로 보여 주고, 태그나 주제 클러스터별로 색을 입혀요.</li>
+<li><strong>인사이트</strong>: 볼트에 대한 통계와 차트.</li>
+<li><strong>복습</strong>: 간격 반복 복습, 퀴즈, Anki.</li>
+<li><strong>질문</strong>: 원하는 AI 공급자로 노트에 대해 질문해요(선택 사항).</li>
+</ul>
+<p><strong>옵션</strong>(레일 맨 아래 또는 <em>도구 ▸ 옵션…</em>, Ctrl+,)에는 테마, 편집기 글자 크기, 링크 제안, 링크 유형, AI, MCP 서버,
+Anki, Zotero, Windows 통합, 백업 설정이 있어요.</p>
+<p>앱은 Windows의 <strong>밝게/어둡게</strong> 설정과 <strong>강조 색상</strong>을 따라요. <em>보기 ▸ 테마</em>에서 테마를 고정할 수 있어요.</p>
+<h2 id="업데이트">업데이트</h2>
+<p>시작하고 약 4초 뒤에 ZettelApp은 최신 버전을 확인하려고 <code>https://dutrairs.github.io/ZettelApp/version.json</code>에
+HTTPS 요청을 한 번 보내요. 그 밖에는 아무것도 보내지 않으며(<code>ZettelApp/&lt;version&gt;</code> 사용자 에이전트뿐), 요청이
+실패해도 아무 알림이 없어요. 더 새로운 버전이 있으면 오른쪽 아래에 작은 알림이 버전당 최대 한 번 나타나요.
+포커스를 가져가지 않아요. <strong>다운로드</strong>는 브라우저에서 릴리스 페이지를 열고, **✕**는 알림을 닫고,
+<strong>업데이트 확인 안 함</strong>은 확인을 꺼요. <em>도구 ▸ 옵션 ▸ 일반 ▸ ZettelApp을 시작할 때 업데이트 확인</em>에서 다시 켤 수
+있어요. ZettelApp은 스스로 아무것도 설치하지 않아요.</p>
+<h2 id="제거">제거</h2>
+<p><em>Windows 설정 ▸ 앱 ▸ 설치된 앱 ▸ ZettelApp ▸ 제거</em>를 사용하세요. 확인하면 선택되지 않은
+<strong>내 ZettelApp 설정과 데이터도 삭제</strong> 옵션이 있는 대화 상자가 나와요. 이 옵션은 설정, 저장된 API 키, 로그, 캐시,
+자동 백업(<code>%LOCALAPPDATA%\ZettelApp</code>)과 <strong>모든 노트</strong>(볼트의 데이터베이스와 첨부 파일)를 삭제해요.
+노트를 유지하려면 선택하지 마세요. 포터블 버전은 폴더를 삭제하세요.</p>
+<h2 id="다음-단계">다음 단계</h2>
+<ul>
+<li><a href="notes-and-links.html">노트와 링크</a>에서 노트 문법을 배워 보세요.</li>
+<li><a href="link-suggestions.html">링크 제안</a>이 어떻게 동작하는지 읽어 보세요.</li>
+<li>언제든 <strong>F1</strong>을 눌러 이 설명서를 열거나 <a href="keyboard-shortcuts.html">키보드 단축키</a>를 보세요.</li>
+</ul>
+
+    <p class="doc-footer">오류를 발견하셨나요? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ko/getting-started.md">GitHub에서 이 페이지 편집</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">홈</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">이슈</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">후원</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="언어"><li><a href="../../docs/getting-started.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/getting-started.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/getting-started.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/getting-started.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/getting-started.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/getting-started.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/getting-started.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/getting-started.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/getting-started.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/getting-started.html" lang="ko" hreflang="ko" aria-current="true">한국어</a></li><li><a href="../../ar/docs/getting-started.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

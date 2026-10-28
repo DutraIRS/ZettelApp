@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Les notes sont faites pour nourrir la réflexion, et s’en souvenir est utile. ZettelApp transforme les notes en cartes mémoire et permet de les réviser dans l’application ou avec An">
+<title>Révision, quiz et Anki – documentation de ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Aller au contenu</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Fonctionnalités</a></li>
+        <li><a href="tutorial.html">Tutoriel</a></li>
+        <li><a href="./">Documentation</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Faire un don</a></li>
+        <li><a class="nav-cta" href="../#download">Télécharger</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇫🇷</span><span class="sr-only">Langues</span></summary><ul class="lang-switch-panel" aria-label="Langues"><li><a href="../../docs/review-and-anki.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/review-and-anki.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/review-and-anki.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/review-and-anki.html" lang="fr" hreflang="fr" aria-current="true"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/review-and-anki.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/review-and-anki.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/review-and-anki.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/review-and-anki.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/review-and-anki.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/review-and-anki.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/review-and-anki.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Faire un don"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Faire un don</span></a>
+      <a class="hbtn cta" href="../#download">Télécharger</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Fonctionnalités</a></li>
+          <li><a href="tutorial.html">Tutoriel</a></li>
+          <li><a href="./">Documentation</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentation</span><span class="docs-menu-current">Révision, quiz et Anki</span></span></summary>
+      <ul>
+      <li><a href="index.html">Documentation de ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Qu’est-ce qu’un Zettelkasten ?</a></li>
+      <li><a href="tutorial.html">Tutoriel : vos 30 premières minutes</a></li>
+      <li><a href="getting-started.html">Bien démarrer</a></li>
+      <li><a href="notes-and-links.html">Notes et liens</a></li>
+      <li><a href="link-suggestions.html">Suggestions de liens</a></li>
+      <li><a href="graph-and-insights.html">Graphe et Insights</a></li>
+      <li><a href="review-and-anki.html" aria-current="page">Révision, quiz et Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Interroger vos notes (IA)</a></li>
+      <li><a href="mcp-server.html">Serveur MCP</a></li>
+      <li><a href="export-import.html">Exporter et importer</a></li>
+      <li><a href="keyboard-shortcuts.html">Raccourcis clavier</a></li>
+      <li><a href="privacy-and-security.html">Confidentialité et sécurité</a></li>
+      <li><a href="faq.html">Foire aux questions</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentation</h2>
+      <ul>
+      <li><a href="index.html">Documentation de ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Qu’est-ce qu’un Zettelkasten ?</a></li>
+      <li><a href="tutorial.html">Tutoriel : vos 30 premières minutes</a></li>
+      <li><a href="getting-started.html">Bien démarrer</a></li>
+      <li><a href="notes-and-links.html">Notes et liens</a></li>
+      <li><a href="link-suggestions.html">Suggestions de liens</a></li>
+      <li><a href="graph-and-insights.html">Graphe et Insights</a></li>
+      <li><a href="review-and-anki.html" aria-current="page">Révision, quiz et Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Interroger vos notes (IA)</a></li>
+      <li><a href="mcp-server.html">Serveur MCP</a></li>
+      <li><a href="export-import.html">Exporter et importer</a></li>
+      <li><a href="keyboard-shortcuts.html">Raccourcis clavier</a></li>
+      <li><a href="privacy-and-security.html">Confidentialité et sécurité</a></li>
+      <li><a href="faq.html">Foire aux questions</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="revision-quiz-et-anki">Révision, quiz et Anki</h1>
+<p>Les notes sont faites pour nourrir la réflexion, et s’en souvenir est utile. ZettelApp transforme les notes en <a href="notes-and-links.html#flashcards">cartes mémoire</a> et permet de les réviser dans l’application ou avec Anki.</p>
+<h2 id="repetition-espacee">Répétition espacée</h2>
+<p>La page <strong>Révision</strong> (Ctrl+4) indique le nombre de cartes <strong>à réviser aujourd’hui</strong>. <strong>Commencer la révision</strong> les fait défiler :</p>
+<ol>
+<li>Lisez la question et essayez de retrouver la réponse.</li>
+<li>Appuyez sur <strong>Espace</strong> (ou <em>Afficher la réponse</em>).</li>
+<li>Évaluez votre réponse : <strong>Encore (1)</strong>, <strong>Difficile (2)</strong>, <strong>Bien (3)</strong> ou <strong>Facile (4)</strong>. Survolez un bouton pour voir quand la carte réapparaîtra.</li>
+</ol>
+<p>La planification utilise l’algorithme <strong>SM-2</strong> (l’algorithme SuperMemo dont Anki est issu) :</p>
+<ul>
+<li>Les nouvelles cartes réapparaissent après 1 jour, puis 6 jours, puis selon des intervalles qui augmentent avec leur <em>facteur de facilité</em> (2,5 au départ).</li>
+<li><em>Encore</em> ramène la carte à 1 jour et réduit son facteur de facilité. <em>Difficile</em> raccourcit l’intervalle suivant et <em>Facile</em> l’allonge.</li>
+</ul>
+<p>Les cartes à trous produisent une révision pour chaque suppression (<code>{{c1::…}}</code>, <code>{{c2::…}}</code>, …). Chaque question affiche un lien <strong>From:</strong> vers sa note.</p>
+<h2 id="quiz">Quiz</h2>
+<p><strong>Quiz d’entraînement</strong> crée un quiz à partir d’un périmètre : toute la collection, la note ouverte et ses notes liées (avec une profondeur donnée), ou les notes portant un tag. Choisissez un format et le nombre de questions :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Fonctionnement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Cartes mémoire (répétition espacée)</strong></td>
+<td>Comme une révision ; vos évaluations mettent à jour le calendrier.</td>
+</tr>
+<tr>
+<td><strong>Choix multiple</strong></td>
+<td>Choisissez la bonne réponse parmi quatre. Les mauvaises réponses proviennent d’autres cartes et ont une longueur similaire, ce qui les rend plausibles. Utilisez les touches 1–4.</td>
+</tr>
+<tr>
+<td><strong>Saisir la réponse</strong></td>
+<td>Saisissez la réponse et appuyez sur Entrée. La correction mesure la similarité d’édition (Levenshtein), sans tenir compte de la casse, des accents ni de la mise en forme : 85 % ou plus est correct, 60 % ou plus est « presque », afin que de petites fautes de frappe ne vous pénalisent pas.</td>
+</tr>
+<tr>
+<td><strong>Nommez cette note</strong></td>
+<td>Le texte d’une note s’affiche, mais les mots de son titre sont masqués ; choisissez le bon titre. Les mauvaises propositions sont les <strong>notes les plus similaires</strong> (TF-IDF) pour vous apprendre à distinguer des idées liées. Aucune carte mémoire n’est nécessaire.</td>
+</tr>
+</tbody>
+</table></div>
+<p><em>Outils ▸ Quiz sur l'entourage de cette note</em> lance un quiz sur la note ouverte et les notes situées à deux liens de distance. Vous pouvez aussi faire un clic droit sur une note du graphe.</p>
+<h2 id="anki">Anki</h2>
+<p>ZettelApp fonctionne avec <a href="https://apps.ankiweb.net/">Anki</a> de deux façons. Dans les deux cas, deux types de note sont utilisés : <strong>ZettelApp Basic</strong> et <strong>ZettelApp Texte à trous</strong>, avec les champs suivants :</p>
+<ul>
+<li><em>Recto</em> et <em>Retour</em> (ou <em>Text</em> et <em>Extra</em> pour les cartes à trous), affichés à partir du Markdown ;</li>
+<li><em>Source</em>, un lien vers la note ;</li>
+<li><em>ZettelID</em> et <em>CardKey</em>.</li>
+</ul>
+<p>Les tags de vos notes deviennent des tags Anki (les tags imbriqués deviennent <code>parent::child</code>), auxquels s’ajoute <code>zettelapp</code>. Les images des cartes sont incluses comme médias.</p>
+<h3 id="synchroniser-avec-ankiconnect">Synchroniser avec AnkiConnect</h3>
+<ol>
+<li>Dans Anki, installez l’extension <strong>AnkiConnect</strong> (<em>Outils ▸ Add-ons ▸ Get Add-ons…</em>, code <strong>2055492159</strong>), puis redémarrez Anki.</li>
+<li>Avec Anki ouvert, accédez à <strong>Révision</strong> dans ZettelApp, choisissez le nom du paquet (<strong>Default deck</strong> dans <em>Options ▸ Anki</em>, <code>ZettelApp</code> au départ) et le périmètre, puis cliquez sur <strong>Synchroniser avec Anki</strong> (ou <em>Outils ▸ Synchroniser avec Anki</em>). <em>Tester la connexion</em> vérifie la connexion.</li>
+</ol>
+<p>ZettelApp mémorise la note Anki associée à chaque carte. Une nouvelle synchronisation <strong>met à jour</strong> les cartes au lieu d’en créer des doublons ; une carte peut être retrouvée grâce à son <em>CardKey</em> même si cette association a été perdue. Les cartes supprimées dans ZettelApp ne sont pas supprimées d’Anki.</p>
+<p>ZettelApp communique uniquement avec AnkiConnect sur cet ordinateur (<code>127.0.0.1</code>, port 8765 par défaut, modifiable dans <em>Options ▸ Anki</em>).</p>
+<h3 id="exporter-un-paquet-apkg">Exporter un paquet (.apkg)</h3>
+<p><strong>Exporter deck (.apkg)…</strong> (ou <em>Fichier ▸ Exporter…</em> avec le format <em>Anki deck</em>) crée un paquet à importer dans Anki avec <em>Fichier ▸ Import</em>. Aucune extension n’est nécessaire. Les types de note, le paquet et l’identité de chaque carte sont stables : l’importation d’un nouvel export <strong>met à jour</strong> les cartes déjà importées.</p>
+<h3 id="danki-vers-vos-notes">D’Anki vers vos notes</h3>
+<p>Le champ <strong>Source</strong> de chaque carte contient un lien <code>zettelapp://note/&lt;id&gt;</code>. Cliquez dessus dans Anki pour ouvrir la note dans ZettelApp. L’installateur configure cette association. Avec la version portable, utilisez <em>Options ▸ Intégration Windows ▸ Enregistrer les liens</em>. Le gestionnaire de liens n’accepte que les liens d’ouverture de note ; consultez <a href="privacy-and-security.html">Confidentialité et sécurité</a>.</p>
+
+    <p class="doc-footer">Une erreur ? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/fr/review-and-anki.md">Modifier cette page sur GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Accueil</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Tickets</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Faire un don</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Langues"><li><a href="../../docs/review-and-anki.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/review-and-anki.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/review-and-anki.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/review-and-anki.html" lang="fr" hreflang="fr" aria-current="true">Français</a></li><li><a href="../../de/docs/review-and-anki.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/review-and-anki.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/review-and-anki.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/review-and-anki.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/review-and-anki.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/review-and-anki.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/review-and-anki.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

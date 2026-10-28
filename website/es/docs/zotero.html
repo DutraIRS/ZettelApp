@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="ZettelApp se conecta a Zotero, el gestor de referencias gratuito, para que puedas citar referencias en tus notas y escribir notas bibliográficas enlazadas al elemento, y a su PDF, ">
+<title>Zotero – documentación de ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Saltar al contenido</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Funciones</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Documentación</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Donar</a></li>
+        <li><a class="nav-cta" href="../#download">Descargar</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇪🇸</span><span class="sr-only">Idiomas</span></summary><ul class="lang-switch-panel" aria-label="Idiomas"><li><a href="../../docs/zotero.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/zotero.html" lang="es" hreflang="es" aria-current="true"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/zotero.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/zotero.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/zotero.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/zotero.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/zotero.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/zotero.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/zotero.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/zotero.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/zotero.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Donar"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Donar</span></a>
+      <a class="hbtn cta" href="../#download">Descargar</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menú</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Funciones</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Documentación</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentación">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentación</span><span class="docs-menu-current">Zotero</span></span></summary>
+      <ul>
+      <li><a href="index.html">Documentación de ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">¿Qué es un Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: tus primeros 30 minutos</a></li>
+      <li><a href="getting-started.html">Primeros pasos</a></li>
+      <li><a href="notes-and-links.html">Notas y enlaces</a></li>
+      <li><a href="link-suggestions.html">Sugerencias de enlaces</a></li>
+      <li><a href="graph-and-insights.html">Grafo y Estadísticas</a></li>
+      <li><a href="review-and-anki.html">Repaso, cuestionarios y Anki</a></li>
+      <li><a href="zotero.html" aria-current="page">Zotero</a></li>
+      <li><a href="ai-assistant.html">Pregunta a tus notas (IA)</a></li>
+      <li><a href="mcp-server.html">Servidor MCP</a></li>
+      <li><a href="export-import.html">Exportar e importar</a></li>
+      <li><a href="keyboard-shortcuts.html">Atajos de teclado</a></li>
+      <li><a href="privacy-and-security.html">Privacidad y seguridad</a></li>
+      <li><a href="faq.html">Preguntas frecuentes</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentación</h2>
+      <ul>
+      <li><a href="index.html">Documentación de ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">¿Qué es un Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: tus primeros 30 minutos</a></li>
+      <li><a href="getting-started.html">Primeros pasos</a></li>
+      <li><a href="notes-and-links.html">Notas y enlaces</a></li>
+      <li><a href="link-suggestions.html">Sugerencias de enlaces</a></li>
+      <li><a href="graph-and-insights.html">Grafo y Estadísticas</a></li>
+      <li><a href="review-and-anki.html">Repaso, cuestionarios y Anki</a></li>
+      <li><a href="zotero.html" aria-current="page">Zotero</a></li>
+      <li><a href="ai-assistant.html">Pregunta a tus notas (IA)</a></li>
+      <li><a href="mcp-server.html">Servidor MCP</a></li>
+      <li><a href="export-import.html">Exportar e importar</a></li>
+      <li><a href="keyboard-shortcuts.html">Atajos de teclado</a></li>
+      <li><a href="privacy-and-security.html">Privacidad y seguridad</a></li>
+      <li><a href="faq.html">Preguntas frecuentes</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="zotero">Zotero</h1>
+<p>ZettelApp se conecta a <a href="https://www.zotero.org/">Zotero</a>, el gestor de referencias gratuito, para que puedas citar
+referencias en tus notas y escribir <strong>notas bibliográficas</strong> enlazadas al elemento, y a su PDF, de tu biblioteca.</p>
+<h2 id="configuracion">Configuración</h2>
+<ol>
+<li>Usa <strong>Zotero 7 o posterior</strong> y mantenlo abierto.</li>
+<li>En Zotero, abre <em>Ajustes ▸ Avanzado</em> y activa <strong>«Permitir que otras aplicaciones de este equipo se
+comuniquen con Zotero»</strong>.</li>
+<li>En ZettelApp, <em>Herramientas ▸ Opciones ▸ Zotero ▸ Probar conexión</em> debería decir <em>Conectado a Zotero</em>.</li>
+</ol>
+<p>ZettelApp lee tu biblioteca a través de la <strong>API local</strong> de Zotero en este equipo (<code>127.0.0.1</code>, puerto 23119 por
+defecto). Solo lee: nunca modifica tu biblioteca de Zotero y no viaja nada por internet.
+Se busca en tu biblioteca personal (<em>Mi biblioteca</em>); las bibliotecas de grupo aún no.</p>
+<h2 id="citar-una-referencia">Citar una referencia</h2>
+<p><em>Insertar ▸ Referencia de Zotero…</em>, o el botón de libros de la barra de herramientas del editor, abre un cuadro de búsqueda. Escribe parte de
+un título, un autor o un año. Con la búsqueda vacía se enumeran tus elementos modificados más recientemente. Selecciona
+un elemento para ver sus detalles y luego:</p>
+<ul>
+<li>
+<p><strong>Insertar cita</strong> (o doble clic) añade una cita de autor–año que abre el elemento en Zotero:</p>
+<pre><code class="language-markdown">[Ebbinghaus (1885)](zotero://select/library/items/ABCD2345)
+</code></pre>
+</li>
+<li>
+<p><strong>Nueva nota bibliográfica</strong> crea una nota para el elemento, con:</p>
+<ul>
+<li>el título del elemento;</li>
+<li>una línea de referencia (autores, año, título, publicación, DOI);</li>
+<li>enlaces a <em>Abrir en Zotero</em>, <em>Abrir PDF</em> (cuando el elemento tiene un PDF adjunto) y al DOI;</li>
+<li>el resumen;</li>
+<li>secciones <em>Ideas clave</em> y <em>Mis ideas</em> para completar;</li>
+<li>la etiqueta <code>literature</code> más las etiquetas de Zotero del elemento;</li>
+<li>el elemento de Zotero como <strong>enlace de la fuente</strong> de la nota.</li>
+</ul>
+</li>
+</ul>
+<p>Las notas bibliográficas son el puente clásico del Zettelkasten entre la lectura y tus propias notas permanentes: escribe
+las ideas clave con tus propias palabras y luego enlázalas con las notas a las que apoyan, que amplían o contradicen.</p>
+<h2 id="enlaces-de-zotero">Enlaces de Zotero</h2>
+<p>Al hacer clic en un enlace de Zotero en una nota se abre Zotero en el elemento, o se abre el PDF en el lector de Zotero. Por seguridad,
+ZettelApp solo sigue dos tipos de enlace de Zotero y rechaza cualquier otra dirección <code>zotero://</code>:</p>
+<pre><code class="language-text">zotero://select/library/items/&lt;KEY&gt;
+zotero://open-pdf/library/items/&lt;KEY&gt;?page=&lt;N&gt;
+</code></pre>
+<p>También se aceptan enlaces de bibliotecas de grupo (<code>zotero://select/groups/&lt;ID&gt;/items/&lt;KEY&gt;</code>). También puedes pegar un
+enlace de Zotero en el campo <strong>Enlace de la fuente</strong> de una nota. En Zotero, haz clic derecho en un elemento y copia su enlace (o usa
+un complemento como Zutilo) y luego pégalo.</p>
+<h2 id="solucion-de-problemas">Solución de problemas</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Mensaje</th>
+<th>Qué hacer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>No se pudo conectar con Zotero</em></td>
+<td>Inicia Zotero 7 o posterior. Comprueba el puerto en <em>Opciones ▸ Zotero</em> (predeterminado 23119).</td>
+</tr>
+<tr>
+<td><em>Zotero rechazó la solicitud</em></td>
+<td>Activa el ajuste <em>Permitir que otras aplicaciones…</em> (paso 2 anterior).</td>
+</tr>
+<tr>
+<td><em>Esta versión de Zotero no tiene API local</em></td>
+<td>Actualiza Zotero a la versión 7 o posterior.</td>
+</tr>
+</tbody>
+</table></div>
+
+    <p class="doc-footer">¿Encontraste un error? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/es/zotero.md">Edita esta página en GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Inicio</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Incidencias</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donar</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Idiomas"><li><a href="../../docs/zotero.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/zotero.html" lang="es" hreflang="es" aria-current="true">Español</a></li><li><a href="../../pt-br/docs/zotero.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/zotero.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/zotero.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/zotero.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/zotero.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/zotero.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/zotero.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/zotero.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/zotero.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

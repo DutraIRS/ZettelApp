@@ -6,7 +6,7 @@ import math
 
 import numpy as np
 from PySide6.QtCore import QPointF, QRectF, Qt, QTimer, Signal
-from PySide6.QtGui import QColor, QFontMetricsF, QPainter, QPen, QRadialGradient
+from PySide6.QtGui import QColor, QFontMetricsF, QPainter, QPainterPath, QPen, QRadialGradient
 from PySide6.QtWidgets import QWidget
 
 from zettelapp.ui import theme
@@ -191,6 +191,7 @@ class Graph3DView(QWidget):
         font = theme.ui_font(8.5)
         metrics = QFontMetricsF(font)
         painter.setFont(font)
+        candidates: list[tuple[bool, float, str, QPointF, float]] = []
         for i in order:
             node = self.data.ids[i]
             d = depth[i]
@@ -215,15 +216,40 @@ class Graph3DView(QWidget):
                 or node in neighbors
                 or (self.show_labels and node in labelled and d > 0.45)
             ):
-                painter.setPen(t.q("text") if node == focus else t.q("text_secondary"))
-                text = metrics.elidedText(
-                    self.data.titles.get(node) or "Untitled", Qt.TextElideMode.ElideRight, 150
+                candidates.append((node == focus, d, node, p, r))
+        # Labels are drawn after every node, nearest first, so no node covers a label and
+        # a label that would overlap one already placed is skipped.
+        placed: list[QRectF] = []
+        surface = t.q("surface")
+        for is_focus, d, node, p, r in sorted(candidates, key=lambda c: (not c[0], -c[1])):
+            text = metrics.elidedText(
+                self.data.titles.get(node) or "Untitled", Qt.TextElideMode.ElideRight, 150
+            )
+            width = metrics.horizontalAdvance(text) + 8
+            box = QRectF(p.x() - width / 2, p.y() + r + 3, width, metrics.height())
+            if not is_focus and any(box.intersects(other) for other in placed):
+                continue
+            placed.append(box)
+            path = QPainterPath()
+            path.addText(box.left() + 4, box.top() + metrics.ascent(), font, text)
+            halo = QColor(surface)
+            halo.setAlphaF(0.9)
+            painter.setBrush(Qt.BrushStyle.NoBrush)
+            painter.setPen(
+                QPen(
+                    halo,
+                    3.2,
+                    Qt.PenStyle.SolidLine,
+                    Qt.PenCapStyle.RoundCap,
+                    Qt.PenJoinStyle.RoundJoin,
                 )
-                painter.drawText(
-                    QRectF(p.x() - 80, p.y() + r + 2, 160, metrics.height()),
-                    Qt.AlignmentFlag.AlignHCenter,
-                    text,
-                )
+            )
+            painter.drawPath(path)
+            fill = QColor(t.q("text") if is_focus else t.q("text_secondary"))
+            fill.setAlphaF(1.0 if is_focus else 0.55 + 0.45 * d)
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.setBrush(fill)
+            painter.drawPath(path)
         if focus is not None and focus in self._index:
             label_font = theme.ui_font(8)
             here = QPointF(*screen[self._index[focus]])

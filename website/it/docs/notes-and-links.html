@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Le note si scrivono in Markdown: grassetto, corsivo, # titoli, elenchi, &gt; citazioni,  codice , blocchi di codice delimitati, tabelle e ~~testo barrato~~. La barra degli strumenti s">
+<title>Note e collegamenti – documentazione di ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Vai al contenuto</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Funzionalità</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Documentazione</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Dona</a></li>
+        <li><a class="nav-cta" href="../#download">Scarica</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇮🇹</span><span class="sr-only">Lingue</span></summary><ul class="lang-switch-panel" aria-label="Lingue"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it" aria-current="true"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Dona"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Dona</span></a>
+      <a class="hbtn cta" href="../#download">Scarica</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Funzionalità</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Documentazione</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentazione">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentazione</span><span class="docs-menu-current">Note e collegamenti</span></span></summary>
+      <ul>
+      <li><a href="index.html">Documentazione di ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Che cos&#x27;è uno Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: i tuoi primi 30 minuti</a></li>
+      <li><a href="getting-started.html">Per iniziare</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">Note e collegamenti</a></li>
+      <li><a href="link-suggestions.html">Suggerimenti di collegamento</a></li>
+      <li><a href="graph-and-insights.html">Grafo e Statistiche</a></li>
+      <li><a href="review-and-anki.html">Ripasso, quiz e Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Chiedi alle tue note (IA)</a></li>
+      <li><a href="mcp-server.html">Server MCP</a></li>
+      <li><a href="export-import.html">Esportazione e importazione</a></li>
+      <li><a href="keyboard-shortcuts.html">Scorciatoie da tastiera</a></li>
+      <li><a href="privacy-and-security.html">Privacy e sicurezza</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentazione</h2>
+      <ul>
+      <li><a href="index.html">Documentazione di ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Che cos&#x27;è uno Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: i tuoi primi 30 minuti</a></li>
+      <li><a href="getting-started.html">Per iniziare</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">Note e collegamenti</a></li>
+      <li><a href="link-suggestions.html">Suggerimenti di collegamento</a></li>
+      <li><a href="graph-and-insights.html">Grafo e Statistiche</a></li>
+      <li><a href="review-and-anki.html">Ripasso, quiz e Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Chiedi alle tue note (IA)</a></li>
+      <li><a href="mcp-server.html">Server MCP</a></li>
+      <li><a href="export-import.html">Esportazione e importazione</a></li>
+      <li><a href="keyboard-shortcuts.html">Scorciatoie da tastiera</a></li>
+      <li><a href="privacy-and-security.html">Privacy e sicurezza</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="note-e-collegamenti">Note e collegamenti</h1>
+<h2 id="scrivere-note">Scrivere note</h2>
+<p>Le note si scrivono in <strong>Markdown</strong>: <code>**grassetto**</code>, <code>*corsivo*</code>, <code># titoli</code>, elenchi, <code>&gt; citazioni</code>,
+<code>`codice`</code>, blocchi di codice delimitati, tabelle e <code>~~testo barrato~~</code>. La barra degli strumenti sopra l'editor inserisce
+i più comuni, e Ctrl+B / Ctrl+I funzionano come al solito. Gli elenchi continuano quando premi Enter.</p>
+<p>L'editor ha tre modalità (Ctrl+E le alterna): <strong>Modifica</strong>, <strong>Divisa</strong> (testo e anteprima affiancati)
+e <strong>Anteprima</strong>.</p>
+<p>Per sicurezza, l'HTML grezzo in una nota viene mostrato come testo e non viene mai interpretato. I collegamenti nell'anteprima aprono solo pagine
+web (<code>http</code>, <code>https</code>), e-mail (<code>mailto</code>), note, elementi di Zotero e file locali (mostrati in Esplora file,
+vedi <a href="#links-to-local-files">Collegamenti a file locali</a>). Vedi <a href="privacy-and-security.html">Privacy e sicurezza</a>.</p>
+<h3 id="seguire-i-collegamenti">Seguire i collegamenti</h3>
+<ul>
+<li><strong>Nell'editor</strong>, <strong>Ctrl+clic</strong> segue un <code>[[collegamento a nota]]</code> (creando la nota se non esiste ancora),
+un collegamento web, e-mail o Zotero, un collegamento a un file locale o un <code>#tag</code> (che elenca le note con quel tag).
+Passa il mouse sul testo e un suggerimento dice cosa farà il clic. Un semplice clic posiziona solo il cursore, così
+puoi comunque modificare il testo del collegamento.</li>
+<li><strong>Nell'anteprima</strong>, un normale clic segue i collegamenti.</li>
+</ul>
+<h3 id="collegamenti-a-file-locali">Collegamenti a file locali</h3>
+<p><em>Inserisci ▸ Collega a un file…</em> (o il pulsante cartella nella barra degli strumenti) ti permette di scegliere un file e inserisce un collegamento
+come <code>[report.pdf](file:///C:/Users/me/Documents/report.pdf)</code>. Trascinare nel testo della nota un file che non è un'immagine
+ottiene lo stesso risultato. Il file resta collegato dov'è; nulla viene copiato nel vault.</p>
+<p>Cliccando il collegamento nell'anteprima, o con Ctrl+clic nell'editor, si apre <strong>Esplora file con il file
+selezionato</strong>. Il file in sé non viene mai aperto né eseguito. Sono consentiti solo percorsi su un'unità locale: i percorsi
+di rete (UNC) come <code>\\server\share\file.pdf</code> vengono rifiutati, perché cercarli può inviare le tue credenziali
+Windows a quel server.</p>
+<p>Ogni nota ha:</p>
+<ul>
+<li>un <strong>titolo</strong> (il campo grande in alto);</li>
+<li>un <strong>ID</strong>, una data e ora come <code>20261027153012</code>, mostrato sotto il titolo (<em>Altro ▸ Copia ID nota</em>);</li>
+<li>facoltativamente <strong>tag</strong>, un <strong>collegamento alla fonte</strong>, un'<strong>immagine</strong>, una <strong>mappa mentale</strong> e delle <strong>flashcard</strong>.</li>
+</ul>
+<h2 id="collegamenti-tra-note">Collegamenti tra note</h2>
+<h3 id="collegamenti-wiki">Collegamenti wiki</h3>
+<p>Scrivi <code>[[</code> e inizia a digitare un titolo: ZettelApp lo completa dalle tue note. All'interno di una nota, tutti questi sono collegamenti:</p>
+<pre><code class="language-markdown">See [[Forgetting curve]].
+See [[20261027153012]].              (per ID)
+See [[Forgetting curve|the curve]].  (testo del collegamento personalizzato)
+</code></pre>
+<p>Ctrl+K (<em>Inserisci ▸ Collega a nota…</em>) apre un selettore che cerca nei titoli e nei testi e ti permette di scegliere il
+tipo di collegamento. Un collegamento a un titolo che non esiste ancora è mostrato in grigio nell'anteprima; cliccalo per creare
+quella nota. Quando in seguito crei o rinomini una nota, i collegamenti che ne citano il titolo vengono aggiornati.</p>
+<h3 id="collegamenti-tipizzati">Collegamenti tipizzati</h3>
+<p>I collegamenti possono dire <strong>come</strong> due note sono in relazione. Metti il tipo di collegamento davanti al collegamento, seguito da <code>::</code>:</p>
+<pre><code class="language-markdown">supports:: [[Forgetting curve]]
+contradicts:: [[Rereading notes]]
+part_of:: [[Zettelkasten method]]
+</code></pre>
+<p>I tipi di collegamento predefiniti sono:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Nome</th>
+<th>Nome inverso</th>
+<th>Orientato</th>
+<th>Linea</th>
+<th>Punta della freccia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>related</code></td>
+<td>Correlata a</td>
+<td>Correlata a</td>
+<td>no</td>
+<td>continua, grigia</td>
+<td>nessuna</td>
+</tr>
+<tr>
+<td><code>supports</code></td>
+<td>Supporta</td>
+<td>Supportata da</td>
+<td>sì</td>
+<td>tratteggiata, verde</td>
+<td>triangolo pieno</td>
+</tr>
+<tr>
+<td><code>contradicts</code></td>
+<td>Contraddice</td>
+<td>Contraddice</td>
+<td>no</td>
+<td>punteggiata, rossa</td>
+<td>nessuna</td>
+</tr>
+<tr>
+<td><code>extends</code></td>
+<td>Estende</td>
+<td>Esteso da</td>
+<td>sì</td>
+<td>tratto-punto, blu</td>
+<td>triangolo pieno</td>
+</tr>
+<tr>
+<td><code>example</code></td>
+<td>Esempio di</td>
+<td>Ha esempio</td>
+<td>sì</td>
+<td>tratto-punto-punto, ambra</td>
+<td>cerchio</td>
+</tr>
+<tr>
+<td><code>part_of</code></td>
+<td>Parte di</td>
+<td>Contiene</td>
+<td>sì</td>
+<td>tratto lungo, viola</td>
+<td>rombo</td>
+</tr>
+<tr>
+<td><code>cites</code></td>
+<td>Cita</td>
+<td>Citata da</td>
+<td>sì</td>
+<td>continua, verde acqua</td>
+<td>freccia aperta</td>
+</tr>
+</tbody>
+</table></div>
+<p>Questo è l'aspetto di un nuovo vault; puoi modificarlo (vedi sotto). Un vault creato con una versione precedente
+mantiene le linee che aveva.</p>
+<p>Un semplice <code>[[collegamento]]</code> è <em>Correlata a</em>.</p>
+<h3 id="collegamenti-orientati-e-non-orientati">Collegamenti orientati e non orientati</h3>
+<p>Un tipo <strong>orientato</strong> si legge in modo diverso da ciascun lato. Se la nota A <em>supporta</em> la nota B, allora i collegamenti entranti
+di B mostrano A come <em>Supportata da</em>. I collegamenti orientati hanno punte di freccia nel grafo e restano orientati nelle esportazioni.
+I tipi <strong>non orientati</strong> come <em>Correlata a</em> e <em>Contraddice</em> si leggono allo stesso modo in entrambe le direzioni.</p>
+<p>Per invertire un collegamento orientato creato nel verso sbagliato, fai clic destro su di esso nel pannello laterale e scegli
+<strong>Inverti direzione</strong>. I collegamenti scritti nel testo si invertono modificando il testo.</p>
+<h3 id="collegamenti-nel-pannello-laterale">Collegamenti nel pannello laterale</h3>
+<p>Il pannello laterale elenca i <strong>Collegamenti</strong> (uscenti) e i <strong>Collegamenti entranti</strong> della nota, ciascuno con il suo tipo.</p>
+<ul>
+<li><strong>Aggiungi collegamento…</strong> crea un collegamento senza scriverlo nel testo.</li>
+<li>Clic destro su un collegamento per aprire l'altra nota, cambiare il tipo di collegamento, invertirne la direzione o rimuoverlo.
+I collegamenti scritti nel testo si rimuovono modificando il testo.</li>
+<li>Dall'elenco delle note, fai clic destro su un'altra nota e scegli <strong>Collega dalla nota aperta come</strong>.</li>
+</ul>
+<h3 id="i-tuoi-tipi-di-collegamento">I tuoi tipi di collegamento</h3>
+<p>Aggiungi, rinomina, cambia lo stile o rimuovi i tipi di collegamento in <em>Strumenti ▸ Opzioni ▸ Tipi di collegamento</em>. Scegli un tipo nell'elenco e
+modificalo accanto all'elenco:</p>
+<ul>
+<li><strong>Nome</strong> e <strong>Nome inverso</strong>: come il collegamento si legge dall'origine e dalla destinazione. Il nome
+inverso è usato solo dai tipi orientati.</li>
+<li><strong>Orientato</strong>: se il tipo si legge in modo diverso da ciascun lato e ottiene una punta di freccia.</li>
+<li><strong>Colore</strong>: clicca il pulsante del colore per sceglierne uno qualsiasi.</li>
+<li><strong>Linea</strong>: continua, tratteggiata, punteggiata, tratto-punto, tratto-punto-punto o tratto lungo.</li>
+<li><strong>Punta della freccia</strong>: la punta disegnata dove arriva un collegamento orientato: un triangolo pieno, una freccia aperta, un
+rombo, un cerchio o una barra.</li>
+</ul>
+<p>L'anteprima mostra due note unite dal collegamento, con il suo nome e come si legge dall'altro lato.
+Lo stile viene usato ovunque compaiano i collegamenti: il grafo, la sua legenda, il pannello laterale, il selettore dei collegamenti e
+le esportazioni in sito web, GraphML e Graphviz. Dai a ogni tipo una linea propria oltre a un colore proprio, così
+i tipi restano facili da distinguere per chi ha difficoltà con i colori e su carta. Un nuovo tipo parte con un
+colore e una linea che pochi altri tipi usano.</p>
+<p>Nel testo, usa l'id del tipo, mostrato sotto l'anteprima (per esempio un tipo chiamato «Ispirato da» diventa
+<code>ispirato_da::</code>). L'id viene impostato quando il tipo è creato, quindi rinominare un tipo non rompe i collegamenti
+scritti nelle tue note. Rimuovere uno dei tuoi tipi trasforma i suoi collegamenti in collegamenti <em>Correlata a</em>, così
+nulla va perso. I tipi predefiniti possono essere rinominati e cambiati di stile ma non rimossi.</p>
+<h2 id="tag">Tag</h2>
+<p>Aggiungi i tag nel campo tag sotto il titolo (premi Enter dopo ciascuno), oppure scrivili <strong>nel testo</strong> con il
+cancelletto, come <code>#welcome</code> o <code>#math/algebra</code>. I tag sono in minuscolo e possono essere annidati con una barra, come
+<code>math/algebra</code>. Filtrare per <code>math</code> trova anche le note con tag <code>math/algebra</code>.
+Usa il filtro tag sopra l'elenco delle note, oppure scrivi <code>tag:nome</code> nella casella di ricerca.</p>
+<p>I tag scritti nel testo sono tag veri e propri, mostrati come <strong>chip con il bordo</strong> accanto alla casella <em>Aggiungi tag</em>. Spariscono
+quando elimini il <code>#tag</code> dal testo. Un <code>#tag</code> viene ignorato nel codice, nelle destinazioni dei collegamenti
+e in <code>[[#headings]]</code>. I tag scritti nella casella <em>Aggiungi tag</em> sono separati: restano finché non li rimuovi con
+la loro ✕. Ctrl+clic su un <code>#tag</code> nell'editor per elencare le note che lo hanno.</p>
+<h2 id="collegamento-alla-fonte">Collegamento alla fonte</h2>
+<p>Il campo con l'icona del globo contiene la <strong>fonte</strong> della nota: una pagina web (<code>https://…</code>), un indirizzo e-mail
+o un elemento Zotero (<code>zotero://select/library/items/…</code>). Il pulsante accanto apre il collegamento. Altri tipi di
+collegamenti vengono rifiutati. Vedi <a href="zotero.html">Zotero</a> per creare note direttamente dalla tua libreria Zotero.</p>
+<h2 id="immagini">Immagini</h2>
+<p>Inserisci le immagini con <em>Inserisci ▸ Immagine…</em> (Ctrl+Shift+I), <strong>incollandole</strong> dagli appunti o
+<strong>trascinando</strong> file immagine sull'editor. Formati supportati: PNG, JPEG, GIF, WebP e BMP, fino a 25 MB.
+SVG è rifiutato di proposito, perché i file SVG possono contenere script.</p>
+<p>Le immagini vengono verificate dal loro contenuto (non dal nome del file), salvate una sola volta nella cartella <code>assets</code> del vault
+con un nome derivato dal loro contenuto e referenziate così:</p>
+<pre><code class="language-markdown">![Diagram](asset:3f2a9c0b1d4e5f6a7b8c.png)
+</code></pre>
+<p>La prima immagine che aggiungi a una nota diventa la sua <strong>immagine del titolo</strong>. È mostrata come una piccola miniatura arrotondata nell'
+elenco delle note e dentro il cerchio della nota nel grafo. Fai clic destro su qualsiasi immagine nell'editor o nell'anteprima
+e scegli <em>Usa come immagine del titolo</em> per sceglierne un'altra, oppure <em>Rimuovi immagine del titolo</em> per non averne nessuna.</p>
+<h2 id="liste-di-controllo">Liste di controllo</h2>
+<p>Inizia una riga con <code>- [ ]</code> (oppure premi il pulsante della lista di controllo nella barra degli strumenti) per creare un'attività. <code>- [x]</code> è un'
+attività completata. Nell'anteprima, clicca la casella per spuntarla; premere Enter alla fine di un'attività avvia
+la successiva, ed Enter su un'attività vuota termina l'elenco.</p>
+<h2 id="allarmi">Allarmi</h2>
+<p>Premi il pulsante dell'allarme (oppure <em>Inserisci ▸ Allarme…</em>) per impostare una data e, facoltativamente, un'ora per una nota. Quando
+scade, ZettelApp mostra una notifica; cliccala per aprire la nota. ZettelApp deve essere in esecuzione per avvisarti,
+e gli allarmi scaduti mentre era chiuso scattano poco dopo l'apertura del vault. Le note con un allarme mostrano una
+campanella nell'elenco delle note. Usa <em>Rimuovi allarme</em> nella stessa finestra per cancellarlo.</p>
+<h2 id="formule">Formule</h2>
+<p>Scrivi LaTeX tra segni di dollaro: <code>$E = mc^2$</code> è in linea e <code>$$\int_0^1 x^2\,dx$$</code> è una formula in evidenza.
+Il pulsante della formula (<em>Inserisci ▸ Formula…</em>) apre una finestra con anteprima in tempo reale. Le formule vengono disegnate
+nell'anteprima; le esportazioni mantengono il sorgente LaTeX.</p>
+<h2 id="mappe-mentali">Mappe mentali</h2>
+<p>Ogni nota può contenere una mappa mentale (la scheda <strong>Mappa mentale</strong>, oppure <em>Inserisci ▸ Mappa mentale</em>). I rami sono colorati
+automaticamente.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tasto</th>
+<th>Azione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tab</td>
+<td>Aggiungi un'idea figlia</td>
+</tr>
+<tr>
+<td>Enter</td>
+<td>Aggiungi un'idea sorella</td>
+</tr>
+<tr>
+<td>F2 o doppio clic</td>
+<td>Rinomina</td>
+</tr>
+<tr>
+<td>Del</td>
+<td>Elimina l'idea selezionata</td>
+</tr>
+<tr>
+<td>Tasti freccia</td>
+<td>Sposta la selezione</td>
+</tr>
+<tr>
+<td>Rotellina / trascinamento</td>
+<td>Zoom / panoramica</td>
+</tr>
+</tbody>
+</table></div>
+<p>Fai clic destro su un'idea per <strong>collegarla a una nota</strong>; un'idea collegata mostra un'icona di collegamento e apre quella nota.
+<strong>Dai collegamenti</strong> crea una mappa mentale dai collegamenti della nota, raggruppati per tipo di collegamento, con i collegamenti
+delle note collegate un livello più in profondità. <strong>Esporta</strong> salva la mappa come immagine PNG o SVG, oppure come file FreeMind
+(<code>.mm</code>), che FreeMind, Freeplane e XMind possono aprire.</p>
+<h2 id="flashcard">Flashcard</h2>
+<p>Le flashcard trasformano le note in materiale di ripasso (vedi <a href="review-and-anki.html">Ripasso, quiz e Anki</a>). Ci sono
+due modi per crearle:</p>
+<p><strong>Nel testo della nota.</strong> Diventano schede automaticamente e si aggiornano mentre modifichi:</p>
+<pre><code class="language-markdown">Q: Who described the forgetting curve?
+A: Hermann Ebbinghaus
+
+{{c1::Retrieval practice}} is also called active recall.
+</code></pre>
+<p>Una domanda può estendersi su più righe fino alla riga <code>A:</code>. Qualsiasi paragrafo con <code>{{c1::…}}</code> diventa una
+scheda <strong>cloze</strong>, che nasconde a turno ogni cancellazione. <code>{{c1::testo::suggerimento}}</code> mostra un suggerimento al posto di <code>[…]</code>.</p>
+<p><strong>Nella scheda Flashcard.</strong> Usa <em>Inserisci ▸ Flashcard…</em> (Ctrl+Shift+F) per le schede che non devono comparire nel
+testo della nota. Le schede dal testo sono contrassegnate come <em>dal testo della nota</em> e si modificano nel testo.</p>
+<h2 id="ricerca">Ricerca</h2>
+<p>La casella di ricerca (Ctrl+F) usa la ricerca full-text su titoli, testi e tag, ignora gli accenti e trova
+i prefissi delle parole, quindi <code>forget</code> trova <em>forgetting</em>. Aggiungi <code>tag:nome</code> per filtrare per tag, per esempio
+<code>memory tag:psychology</code>. I risultati sono ordinati per pertinenza; senza una query, le note seguono l'ordinamento
+scelto (<em>Ultima modifica</em>, <em>Creata</em>, <em>Titolo</em> o <em>Più collegate</em>).</p>
+<h2 id="cestino">Cestino</h2>
+<p><em>Sposta nel cestino</em> (Ctrl+Delete) nasconde una nota senza eliminarla. Compare subito un pulsante di annullamento e il pulsante
+<strong>Cestino</strong> sotto l'elenco delle note mostra le note cestinate: clic destro per <strong>Ripristina</strong> o <strong>Elimina
+definitivamente</strong>. <strong>Svuota cestino</strong> elimina tutto il contenuto dopo una richiesta di conferma. I collegamenti alle note nel cestino sono nascosti
+e tornano quando la nota viene ripristinata.</p>
+
+    <p class="doc-footer">Hai trovato un errore? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/it/notes-and-links.md">Modifica questa pagina su GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Home</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Segnalazioni</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Dona</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Lingue"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it" aria-current="true">Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

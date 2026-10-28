@@ -25,7 +25,7 @@ notes** (opens the [export](export-import.md) dialog with the notes on screen).
 
 **In 2D**, drag a note to move it, drag the background to pan, and use the mouse wheel to zoom. Double-click
 a note to open it; right-click it for more (open, local graph, quiz on this neighbourhood, export with
-linked notes). A note's picture is shown inside its circle.
+linked notes). A note's title image is shown inside its circle.
 
 Several links between the same two notes are drawn as **separate curves**, each with its own arrow tip
 following the curve, so none hides another. Hovering or selecting a note **dims the other links**, keeps the note's own links in their

@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="color-scheme" content="light dark">
 <meta name="description" content="ZettelApp runs on Windows 10  and Windows 11, 64-bit. Download it from the latest release:">
 <title>Getting started – ZettelApp documentation</title>
 <link rel="icon" type="image/png" href="../assets/favicon.png">
 <link rel="stylesheet" href="../style.css">
+<script src="../assets/lang.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#content">Skip to content</a>
@@ -25,6 +26,7 @@
         <li><a class="nav-cta" href="../#download">Download</a></li>
       </ul>
     </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇺🇸</span><span class="sr-only">Languages</span></summary><ul class="lang-switch-panel" aria-label="Languages"><li><a href="getting-started.html" lang="en" hreflang="en" aria-current="true"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../es/docs/getting-started.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../pt-br/docs/getting-started.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../fr/docs/getting-started.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../de/docs/getting-started.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../it/docs/getting-started.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../ru/docs/getting-started.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../zh-cn/docs/getting-started.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../ja/docs/getting-started.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../ko/docs/getting-started.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../ar/docs/getting-started.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
     <div class="header-actions">
       <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Donate"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Donate</span></a>
       <a class="hbtn cta" href="../#download">Download</a>
@@ -111,7 +113,7 @@
 </tbody>
 </table></div>
 <p>The installer asks which language to use and suggests your Windows display language. The installer
-itself is translated; the app is in English for now (see the <a href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">roadmap</a>).</p>
+and the app are translated into 11 languages; change the app's language in <em>Options</em>.</p>
 <p>Each release lists SHA-256 checksums (<code>SHA256SUMS.txt</code>). To check a download in PowerShell:</p>
 <pre><code class="language-powershell">Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 </code></pre>
@@ -161,8 +163,8 @@ anything by itself.</p>
 <h2 id="uninstalling">Uninstalling</h2>
 <p>Use <em>Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall</em>. After you confirm, a dialog offers
 an unticked <strong>Also delete my ZettelApp settings and data</strong> option. It removes your settings, saved API
-keys, logs, cache and automatic backups (<code>%LOCALAPPDATA%\ZettelApp</code>). Your notes are never deleted:
-vault folders such as <code>Documents\ZettelApp</code> stay. For the portable version, delete its folder.</p>
+keys, logs, cache and automatic backups (<code>%LOCALAPPDATA%\ZettelApp</code>) <strong>and all your notes</strong> (the database
+and attachments of your vaults). Leave it unticked to keep your notes. For the portable version, delete its folder.</p>
 <h2 id="next-steps">Next steps</h2>
 <ul>
 <li>Learn the note syntax in <a href="notes-and-links.html">Notes and links</a>.</li>
@@ -183,6 +185,7 @@ vault folders such as <code>Documents\ZettelApp</code> stay. For the portable ve
       <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
     </ul>
   </div>
+  <ul class="nav lang-row" aria-label="Languages"><li><a href="getting-started.html" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="../es/docs/getting-started.html" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/docs/getting-started.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/docs/getting-started.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/docs/getting-started.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/docs/getting-started.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/docs/getting-started.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/docs/getting-started.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/docs/getting-started.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/docs/getting-started.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/docs/getting-started.html" lang="ar" hreflang="ar">العربية</a></li></ul>
 </footer>
 </body>
 </html>

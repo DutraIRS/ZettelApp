@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="يتيح Model Context Protocol ، وهو بروتوكول مفتوح، للمساعدات الذكية استخدام أدوات وبيانات من برامج أخرى. يتضمن ZettelApp خادم MCP، ليتمكن مساعدون مثل Claude Desktop وClaude Code من ">
+<title>خادم MCP – توثيق ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">انتقل إلى المحتوى</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">الميزات</a></li>
+        <li><a href="tutorial.html">الدرس</a></li>
+        <li><a href="./">التوثيق</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> تبرّع</a></li>
+        <li><a class="nav-cta" href="../#download">تنزيل</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇸🇦</span><span class="sr-only">اللغات</span></summary><ul class="lang-switch-panel" aria-label="اللغات"><li><a href="../../docs/mcp-server.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/mcp-server.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/mcp-server.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/mcp-server.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/mcp-server.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/mcp-server.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/mcp-server.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/mcp-server.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/mcp-server.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/mcp-server.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/mcp-server.html" lang="ar" hreflang="ar" aria-current="true"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="تبرّع"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">تبرّع</span></a>
+      <a class="hbtn cta" href="../#download">تنزيل</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">القائمة</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">الميزات</a></li>
+          <li><a href="tutorial.html">الدرس</a></li>
+          <li><a href="./">التوثيق</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="التوثيق">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">التوثيق</span><span class="docs-menu-current">خادم MCP</span></span></summary>
+      <ul>
+      <li><a href="index.html">توثيق ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">ما هو Zettelkasten؟</a></li>
+      <li><a href="tutorial.html">دليل عملي: أول 30 دقيقة لك</a></li>
+      <li><a href="getting-started.html">البدء</a></li>
+      <li><a href="notes-and-links.html">الملاحظات والروابط</a></li>
+      <li><a href="link-suggestions.html">اقتراحات الروابط</a></li>
+      <li><a href="graph-and-insights.html">الرسم البياني والإحصاءات</a></li>
+      <li><a href="review-and-anki.html">المراجعة والاختبارات وAnki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">اسأل ملاحظاتك (الذكاء الاصطناعي)</a></li>
+      <li><a href="mcp-server.html" aria-current="page">خادم MCP</a></li>
+      <li><a href="export-import.html">التصدير والاستيراد</a></li>
+      <li><a href="keyboard-shortcuts.html">اختصارات لوحة المفاتيح</a></li>
+      <li><a href="privacy-and-security.html">الخصوصية والأمان</a></li>
+      <li><a href="faq.html">الأسئلة الشائعة</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>التوثيق</h2>
+      <ul>
+      <li><a href="index.html">توثيق ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">ما هو Zettelkasten؟</a></li>
+      <li><a href="tutorial.html">دليل عملي: أول 30 دقيقة لك</a></li>
+      <li><a href="getting-started.html">البدء</a></li>
+      <li><a href="notes-and-links.html">الملاحظات والروابط</a></li>
+      <li><a href="link-suggestions.html">اقتراحات الروابط</a></li>
+      <li><a href="graph-and-insights.html">الرسم البياني والإحصاءات</a></li>
+      <li><a href="review-and-anki.html">المراجعة والاختبارات وAnki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">اسأل ملاحظاتك (الذكاء الاصطناعي)</a></li>
+      <li><a href="mcp-server.html" aria-current="page">خادم MCP</a></li>
+      <li><a href="export-import.html">التصدير والاستيراد</a></li>
+      <li><a href="keyboard-shortcuts.html">اختصارات لوحة المفاتيح</a></li>
+      <li><a href="privacy-and-security.html">الخصوصية والأمان</a></li>
+      <li><a href="faq.html">الأسئلة الشائعة</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="خادم-mcp">خادم MCP</h1>
+<p>يتيح <a href="https://modelcontextprotocol.io/">Model Context Protocol</a> (MCP)، وهو بروتوكول مفتوح، للمساعدات الذكية استخدام
+أدوات وبيانات من برامج أخرى. يتضمن ZettelApp خادم MCP، ليتمكن
+مساعدون مثل <strong>Claude Desktop</strong> و<strong>Claude Code</strong> من البحث في Zettelkasten
+وقراءة الملاحظات واتباع الروابط المصنّفة وطلب اقتراحات روابط أثناء مساعدتك.</p>
+<h2 id="الية-التشغيل">آلية التشغيل</h2>
+<p>الخادم برنامج صغير منفصل، <strong><code>zettelapp-mcp.exe</code></strong>، يُثبّت بجوار <code>ZettelApp.exe</code>. وعند التشغيل من المصدر،
+يعمل الخادم نفسه باستخدام <code>python -m zettelapp.mcp_main</code>. يشغّله عميل MCP عند الحاجة
+ويتواصل معه عبر الإدخال والإخراج القياسيين. <strong>لا يُفتح أي منفذ شبكة.</strong></p>
+<pre><code class="language-text">zettelapp-mcp --vault &quot;C:\Users\me\Documents\ZettelApp&quot; [--allow-writes]
+</code></pre>
+<p>إن لم تستخدم <code>--vault</code>، يخدم الخادم آخر مستودع فتحته في ZettelApp.
+تظهر التغييرات التي تُجرى عبر MCP في التطبيق خلال ثوانٍ قليلة.</p>
+<h2 id="مفتاح-mcp">مفتاح MCP</h2>
+<p>لا يمكن لعملاء MCP الوصول إلى ملاحظاتك إلا عندما يكون <strong>ZettelApp مفتوحًا ومفتاح
+MCP في شريط الحالة مفعّلًا</strong>. يكون المفتاح <strong>مغلقًا في كل مرة يبدأ
+فيها ZettelApp</strong>، لتقرر في كل جلسة ما إذا كان مسموحًا للمساعدات بقراءة
+ملاحظاتك. أوقفه أو أغلق ZettelApp، فيتوقف الخادم خلال نحو ثانية. من دون
+المفتاح، يرفض الخادم البدء ويوضح السبب. للسلوك التفصيلي، راجع <a href="../../docs/mcp-reference.html">مرجع MCP API</a>.</p>
+<h2 id="الاتصال-بـ-claude-desktop">الاتصال بـ Claude Desktop</h2>
+<p>افتح <em>الأدوات ▸ خيارات ▸ خادم MCP</em> وانقر <strong>إضافة إلى Claude Desktop…</strong>. يضيف ZettelApp
+إعداداته إلى <code>%APPDATA%\Claude\claude_desktop_config.json</code> (مع الاحتفاظ بنسخة احتياطية من الملف السابق). ثم أعد تشغيل
+Claude Desktop. فعّل <strong>مفتاح MCP</strong> في شريط حالة ZettelApp قبل تشغيل Claude Desktop؛
+وإذا فعلته لاحقًا، فأعد اتصال ZettelApp في Claude Desktop أو أعد تشغيله. ولإعداد
+الاتصال يدويًا، انسخ المقتطف المعروض في الصفحة إلى الملف. سيكون على النحو التالي:</p>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;zettelapp&quot;: {
+      &quot;command&quot;: &quot;C:\\Users\\me\\AppData\\Local\\Programs\\ZettelApp\\zettelapp-mcp.exe&quot;,
+      &quot;args&quot;: [&quot;--vault&quot;, &quot;C:\\Users\\me\\Documents\\ZettelApp&quot;]
+    }
+  }
+}
+</code></pre>
+<h2 id="الاتصال-بـ-claude-code">الاتصال بـ Claude Code</h2>
+<p>تعرض صفحة الخيارات نفسها الأمر المراد نسخه:</p>
+<pre><code class="language-powershell">claude mcp add zettelapp -- &quot;C:\Users\me\AppData\Local\Programs\ZettelApp\zettelapp-mcp.exe&quot; --vault &quot;C:\Users\me\Documents\ZettelApp&quot;
+</code></pre>
+<p>تحتاج عملاء MCP الآخرون إلى الأمر والوسيطات نفسيهما. وكما في Claude Desktop، فعّل MCP في
+ZettelApp أولًا، ثم أعد الاتصال بالخادم (في Claude Code، <code>/mcp</code>) إن فعلت المفتاح بعد ذلك.</p>
+<h2 id="الادوات">الأدوات</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>الأداة</th>
+<th>وظيفتها</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search_notes</code></td>
+<td>البحث الكامل في العناوين والنصوص والوسوم (تعمل مرشحات <code>tag:name</code>). يعرض الاستعلام الفارغ الملاحظات المعدّلة مؤخرًا.</td>
+</tr>
+<tr>
+<td><code>get_note</code></td>
+<td>النص الكامل للملاحظة ووسومها ورابط مصدرها وتواريخها وروابطها المصنّفة بالاتجاهين وبطاقاتها التعليمية ومخطط خريطتها الذهنية.</td>
+</tr>
+<tr>
+<td><code>list_tags</code></td>
+<td>جميع الوسوم وعدد الملاحظات التي تستخدم كلًا منها.</td>
+</tr>
+<tr>
+<td><code>get_subgraph</code></td>
+<td>الملاحظات التي تبعد 1–4 روابط عن ملاحظة، والروابط المصنّفة بينها (مع إمكانية اقتصارها على أنواع محددة).</td>
+</tr>
+<tr>
+<td><code>suggest_links</code></td>
+<td>ملاحظات يُرجح ارتباطها بملاحظة وغير مرتبطة بها بعد، مرتبة وفق <a href="link-suggestions.html">مقترح Naive Bayes</a>.</td>
+</tr>
+<tr>
+<td><code>list_link_types</code></td>
+<td>أنواع الروابط في المستودع، مثل <em>يدعم</em> و<em>يناقض</em> و<em>جزء من</em>.</td>
+</tr>
+<tr>
+<td><code>create_note</code></td>
+<td><em>(كتابة)</em> إنشاء ملاحظة. تربط <code>[[Title]]</code> في النص بملاحظات موجودة.</td>
+</tr>
+<tr>
+<td><code>add_link</code></td>
+<td><em>(كتابة)</em> إضافة رابط مصنّف من ملاحظة إلى أخرى.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="للقراءة-فقط-افتراضيا">للقراءة فقط افتراضيًا</h2>
+<p>يفتح الخادم مستودعك <strong>للقراءة فقط</strong>. ولا تتوفر أداتا
+الكتابة إلا عند تحقق الشرطين التاليين معًا:</p>
+<ol>
+<li>تحديد <strong>السماح لعملاء MCP بإنشاء ملاحظات وروابط</strong> في <em>الخيارات ▸ خادم MCP</em>؛</li>
+<li>بدء الخادم باستخدام <code>--allow-writes</code>. يتضمن المقتطف في
+صفحة الخيارات هذا الوسيط عند تحديد الخيار.</li>
+</ol>
+<p>يُعاد التحقق من الإعداد مع كل عملية كتابة، لذا يسري إلغاء
+التحديد فورًا. أما تفعيله فيتطلب إعادة تشغيل الخادم من عميل MCP.</p>
+<p>تُمرر محتويات الملاحظات للمساعد باعتبارها بيانات، ويطلب الخادم منه
+عدم التعامل معها على أنها تعليمات. تُتحقق المدخلات (المعرّفات
+والأحجام والحدود)، ولا يلمس الخادم أي ملفات خارج المستودع.</p>
+<h2 id="استكشاف-الاخطاء-واصلاحها">استكشاف الأخطاء وإصلاحها</h2>
+<ul>
+<li><strong>يقول العميل إن الخادم لم يبدأ، أو تفيد استدعاءات الأدوات بأن المفتاح مغلق.</strong>
+افتح ZettelApp وفعّل MCP من شريط الحالة، ثم أعد الاتصال بالخادم من العميل.</li>
+<li><strong>ما زال الخادم لا يبدأ.</strong> تحقق من صحة مسار <code>zettelapp-mcp.exe</code>.
+شغّل الأمر بنفسك في طرفية؛ سيعرض سبب المشكلة على
+مجرى الخطأ القياسي (مثل «لم يُعثر على مستودع ZettelApp»).</li>
+<li><strong>أدوات الكتابة غير متاحة.</strong> فعّل الخيار وأضف <code>--allow-writes</code>، ثم أعد تشغيل العميل.</li>
+</ul>
+
+    <p class="doc-footer">وجدت خطأ؟ <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ar/mcp-server.md">حرّر هذه الصفحة على GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">الرئيسية</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">المشكلات</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">تبرّع</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="اللغات"><li><a href="../../docs/mcp-server.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/mcp-server.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/mcp-server.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/mcp-server.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/mcp-server.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/mcp-server.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/mcp-server.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/mcp-server.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/mcp-server.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/mcp-server.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/mcp-server.html" lang="ar" hreflang="ar" aria-current="true">العربية</a></li></ul>
+</footer>
+</body>
+</html>

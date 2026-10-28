@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Las notas se escriben en Markdown: negrita, cursiva, # encabezados, listas, &gt; citas,  código , bloques de código delimitados, tablas y ~~tachado~~. La barra de herramientas sobre e">
+<title>Notas y enlaces – documentación de ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Saltar al contenido</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Funciones</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Documentación</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Donar</a></li>
+        <li><a class="nav-cta" href="../#download">Descargar</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇪🇸</span><span class="sr-only">Idiomas</span></summary><ul class="lang-switch-panel" aria-label="Idiomas"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es" aria-current="true"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Donar"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Donar</span></a>
+      <a class="hbtn cta" href="../#download">Descargar</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menú</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Funciones</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Documentación</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentación">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentación</span><span class="docs-menu-current">Notas y enlaces</span></span></summary>
+      <ul>
+      <li><a href="index.html">Documentación de ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">¿Qué es un Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: tus primeros 30 minutos</a></li>
+      <li><a href="getting-started.html">Primeros pasos</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">Notas y enlaces</a></li>
+      <li><a href="link-suggestions.html">Sugerencias de enlaces</a></li>
+      <li><a href="graph-and-insights.html">Grafo y Estadísticas</a></li>
+      <li><a href="review-and-anki.html">Repaso, cuestionarios y Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Pregunta a tus notas (IA)</a></li>
+      <li><a href="mcp-server.html">Servidor MCP</a></li>
+      <li><a href="export-import.html">Exportar e importar</a></li>
+      <li><a href="keyboard-shortcuts.html">Atajos de teclado</a></li>
+      <li><a href="privacy-and-security.html">Privacidad y seguridad</a></li>
+      <li><a href="faq.html">Preguntas frecuentes</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentación</h2>
+      <ul>
+      <li><a href="index.html">Documentación de ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">¿Qué es un Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: tus primeros 30 minutos</a></li>
+      <li><a href="getting-started.html">Primeros pasos</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">Notas y enlaces</a></li>
+      <li><a href="link-suggestions.html">Sugerencias de enlaces</a></li>
+      <li><a href="graph-and-insights.html">Grafo y Estadísticas</a></li>
+      <li><a href="review-and-anki.html">Repaso, cuestionarios y Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Pregunta a tus notas (IA)</a></li>
+      <li><a href="mcp-server.html">Servidor MCP</a></li>
+      <li><a href="export-import.html">Exportar e importar</a></li>
+      <li><a href="keyboard-shortcuts.html">Atajos de teclado</a></li>
+      <li><a href="privacy-and-security.html">Privacidad y seguridad</a></li>
+      <li><a href="faq.html">Preguntas frecuentes</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="notas-y-enlaces">Notas y enlaces</h1>
+<h2 id="escribir-notas">Escribir notas</h2>
+<p>Las notas se escriben en <strong>Markdown</strong>: <code>**negrita**</code>, <code>*cursiva*</code>, <code># encabezados</code>, listas, <code>&gt; citas</code>,
+<code>`código`</code>, bloques de código delimitados, tablas y <code>~~tachado~~</code>. La barra de herramientas sobre el editor inserta los
+más comunes, y Ctrl+B / Ctrl+I funcionan como siempre. Las listas continúan al pulsar Enter.</p>
+<p>El editor tiene tres modos (Ctrl+E alterna entre ellos): <strong>Editar</strong>, <strong>Dividir</strong> (texto y vista previa uno junto
+al otro) y <strong>Vista previa</strong>.</p>
+<p>Por seguridad, el HTML sin procesar de una nota se muestra como texto y nunca se renderiza. Los enlaces de la vista previa solo abren páginas
+web (<code>http</code>, <code>https</code>), correo electrónico (<code>mailto</code>), notas, elementos de Zotero y archivos locales (se muestran en el Explorador de archivos,
+consulta <a href="#links-to-local-files">Enlaces a archivos locales</a>). Consulta <a href="privacy-and-security.html">Privacidad y seguridad</a>.</p>
+<h3 id="seguir-enlaces">Seguir enlaces</h3>
+<ul>
+<li><strong>En el editor</strong>, <strong>Ctrl+clic</strong> sigue un <code>[[enlace a nota]]</code> (creando la nota si aún no existe),
+un enlace web, de correo o de Zotero, un enlace a un archivo local o una <code>#etiqueta</code> (que lista las notas con esa etiqueta).
+Pasa el cursor sobre el texto y un cuadro de ayuda indica qué hará el clic. Un clic normal solo coloca el cursor de texto, así
+que aún puedes editar el texto del enlace.</li>
+<li><strong>En la vista previa</strong>, un clic normal sigue los enlaces.</li>
+</ul>
+<h3 id="enlaces-a-archivos-locales">Enlaces a archivos locales</h3>
+<p><em>Insertar ▸ Enlazar a un archivo…</em> (o el botón de carpeta de la barra de herramientas) te permite elegir un archivo e inserta un enlace
+como <code>[informe.pdf](file:///C:/Users/me/Documents/report.pdf)</code>. Arrastrar al texto de la nota un archivo que no sea una imagen
+hace lo mismo. El archivo se enlaza donde está; no se copia nada a la bóveda.</p>
+<p>Al hacer clic en el enlace en la vista previa, o Ctrl+clic en el editor, se abre el <strong>Explorador de archivos con el archivo
+seleccionado</strong>. El archivo en sí nunca se abre ni se ejecuta. Solo se permiten rutas de una unidad local: las rutas de red
+(UNC) como <code>\\servidor\recurso\archivo.pdf</code> se rechazan, porque consultarlas puede enviar tus credenciales de Windows
+a ese servidor.</p>
+<p>Cada nota tiene:</p>
+<ul>
+<li>un <strong>título</strong> (el campo grande de la parte superior);</li>
+<li>un <strong>ID</strong>, una marca de tiempo como <code>20261027153012</code>, que se muestra bajo el título (<em>Más ▸ Copiar ID de la nota</em>);</li>
+<li>opcionalmente <strong>etiquetas</strong>, un <strong>enlace de fuente</strong>, una <strong>imagen</strong>, un <strong>mapa mental</strong> y <strong>tarjetas</strong>.</li>
+</ul>
+<h2 id="enlaces-entre-notas">Enlaces entre notas</h2>
+<h3 id="enlaces-wiki">Enlaces wiki</h3>
+<p>Escribe <code>[[</code> y empieza a escribir un título: ZettelApp lo completa a partir de tus notas. Dentro de una nota, todos estos enlazan:</p>
+<pre><code class="language-markdown">Ver [[Curva del olvido]].
+Ver [[20261027153012]].              (por ID)
+Ver [[Curva del olvido|la curva]].   (texto de enlace personalizado)
+</code></pre>
+<p>Ctrl+K (<em>Insertar ▸ Enlazar a nota…</em>) abre un selector que busca en títulos y texto y te permite elegir el
+tipo de enlace. Un enlace a un título que aún no existe se muestra en gris en la vista previa; haz clic en él para crear
+esa nota. Cuando más tarde creas o renombras una nota, se actualizan los enlaces que mencionan su título.</p>
+<h3 id="enlaces-con-tipo">Enlaces con tipo</h3>
+<p>Los enlaces pueden decir <strong>cómo</strong> se relacionan dos notas. Pon el tipo de enlace delante del enlace, seguido de <code>::</code>:</p>
+<pre><code class="language-markdown">supports:: [[Curva del olvido]]
+contradicts:: [[Releer apuntes]]
+part_of:: [[Método Zettelkasten]]
+</code></pre>
+<p>Los tipos de enlace integrados son:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tipo</th>
+<th>Nombre</th>
+<th>Nombre inverso</th>
+<th>Dirigido</th>
+<th>Línea</th>
+<th>Punta de flecha</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>related</code></td>
+<td>Relacionada con</td>
+<td>Relacionada con</td>
+<td>no</td>
+<td>continua, gris</td>
+<td>ninguna</td>
+</tr>
+<tr>
+<td><code>supports</code></td>
+<td>Apoya a</td>
+<td>Apoyada por</td>
+<td>sí</td>
+<td>guiones, verde</td>
+<td>triángulo relleno</td>
+</tr>
+<tr>
+<td><code>contradicts</code></td>
+<td>Contradice a</td>
+<td>Contradice a</td>
+<td>no</td>
+<td>punteada, roja</td>
+<td>ninguna</td>
+</tr>
+<tr>
+<td><code>extends</code></td>
+<td>Amplía a</td>
+<td>Ampliada por</td>
+<td>sí</td>
+<td>guion-punto, azul</td>
+<td>triángulo relleno</td>
+</tr>
+<tr>
+<td><code>example</code></td>
+<td>Ejemplo de</td>
+<td>Tiene ejemplo</td>
+<td>sí</td>
+<td>guion-punto-punto, ámbar</td>
+<td>círculo</td>
+</tr>
+<tr>
+<td><code>part_of</code></td>
+<td>Parte de</td>
+<td>Contiene</td>
+<td>sí</td>
+<td>guion largo, morada</td>
+<td>rombo</td>
+</tr>
+<tr>
+<td><code>cites</code></td>
+<td>Cita a</td>
+<td>Citada por</td>
+<td>sí</td>
+<td>continua, turquesa</td>
+<td>flecha abierta</td>
+</tr>
+</tbody>
+</table></div>
+<p>Estos son los estilos de una bóveda nueva; puedes cambiarlos (ver más abajo). Una bóveda creada con una versión anterior
+conserva las líneas que tenía.</p>
+<p>Un <code>[[enlace]]</code> simple es <em>Relacionada con</em>.</p>
+<h3 id="enlaces-dirigidos-y-no-dirigidos">Enlaces dirigidos y no dirigidos</h3>
+<p>Un tipo <strong>dirigido</strong> se lee distinto desde cada lado. Si la nota A <em>apoya a</em> la nota B, los retroenlaces de B
+muestran A como <em>Apoyada por</em>. Los enlaces dirigidos tienen puntas de flecha en el grafo y siguen siendo dirigidos en las exportaciones.
+Los tipos <strong>no dirigidos</strong>, como <em>Relacionada con</em> y <em>Contradice a</em>, se leen igual en ambos sentidos.</p>
+<p>Para invertir un enlace dirigido creado al revés, haz clic derecho en él en el panel lateral y elige
+<strong>Invertir dirección</strong>. Los enlaces escritos en el texto se invierten editando el texto.</p>
+<h3 id="enlaces-en-el-panel-lateral">Enlaces en el panel lateral</h3>
+<p>El panel lateral enumera los <strong>Enlaces</strong> (salientes) de la nota y sus <strong>Retroenlaces</strong> (entrantes), cada uno con su tipo.</p>
+<ul>
+<li><strong>Añadir enlace…</strong> crea un enlace sin escribirlo en el texto.</li>
+<li>Haz clic derecho en un enlace para abrir la otra nota, cambiar el tipo de enlace, invertir su dirección o quitarlo.
+Los enlaces escritos en el texto se quitan editando el texto.</li>
+<li>Desde la lista de notas, haz clic derecho en otra nota y elige <strong>Enlace desde la nota abierta como</strong>.</li>
+</ul>
+<h3 id="tus-propios-tipos-de-enlace">Tus propios tipos de enlace</h3>
+<p>Añade, renombra, cambia el estilo o elimina tipos de enlace en <em>Herramientas ▸ Opciones ▸ Tipos de enlace</em>. Elige un tipo en la lista y
+cámbialo junto a la lista:</p>
+<ul>
+<li><strong>Nombre</strong> y <strong>Nombre inverso</strong>: cómo se lee el enlace desde su origen y desde su destino. El nombre
+inverso solo lo usan los tipos dirigidos.</li>
+<li><strong>Dirigido</strong>: si el tipo se lee distinto desde cada lado y tiene punta de flecha.</li>
+<li><strong>Color</strong>: haz clic en el botón de color para elegir cualquier color.</li>
+<li><strong>Línea</strong>: continua, guiones, punteada, guion-punto, guion-punto-punto o guion largo.</li>
+<li><strong>Punta de flecha</strong>: la punta que se dibuja donde llega un enlace dirigido: un triángulo relleno, una flecha abierta, un
+rombo, un círculo o una barra.</li>
+</ul>
+<p>La vista previa muestra dos notas unidas por el enlace, con su nombre y cómo se lee desde el otro lado.
+El estilo se usa dondequiera que aparezcan enlaces: el grafo, su leyenda, el panel lateral, el selector de enlaces y
+las exportaciones a sitio web, GraphML y Graphviz. Da a cada tipo su propia línea además de su propio color, para que
+los tipos sigan siendo fáciles de distinguir para personas daltónicas y en papel. Un tipo nuevo empieza con un
+color y una línea que pocos otros tipos usan.</p>
+<p>En el texto, usa el id del tipo, que se muestra bajo la vista previa (p. ej., un tipo llamado «Inspirada por» se convierte en
+<code>inspired_by::</code>). El id se fija al crear el tipo, así que renombrar un tipo no rompe los enlaces
+escritos en tus notas. Eliminar uno de tus propios tipos convierte sus enlaces en enlaces <em>Relacionada con</em>, de modo que
+no se pierde nada. Los tipos integrados se pueden renombrar y cambiar de estilo, pero no eliminar.</p>
+<h2 id="etiquetas">Etiquetas</h2>
+<p>Añade etiquetas en el campo de etiquetas bajo el título (pulsa Enter tras cada una) o escríbelas <strong>en el texto</strong> con una
+almohadilla, como <code>#welcome</code> o <code>#math/algebra</code>. Las etiquetas van en minúsculas y pueden anidarse con una barra, como
+<code>math/algebra</code>. Filtrar por <code>math</code> también encuentra las notas con la etiqueta <code>math/algebra</code>.
+Usa el filtro de etiquetas sobre la lista de notas o escribe <code>tag:name</code> en el cuadro de búsqueda.</p>
+<p>Las etiquetas escritas en el texto son etiquetas reales, que se muestran como <strong>pastillas con contorno</strong> junto al cuadro <em>Añadir etiqueta</em>. Desaparecen
+cuando borras la <code>#etiqueta</code> del texto. Una <code>#etiqueta</code> se ignora dentro de código, dentro de destinos de enlace
+y en <code>[[#encabezados]]</code>. Las etiquetas escritas en el cuadro <em>Añadir etiqueta</em> son independientes: permanecen hasta que las quitas con
+su ✕. Ctrl+clic en una <code>#etiqueta</code> del editor para listar las notas que la tienen.</p>
+<h2 id="enlace-de-la-fuente">Enlace de la fuente</h2>
+<p>El campo con el icono de globo contiene la <strong>fuente</strong> de la nota: una página web (<code>https://…</code>), una dirección de correo
+o un elemento de Zotero (<code>zotero://select/library/items/…</code>). El botón junto a él abre el enlace. Otros tipos de
+enlaces se rechazan. Consulta <a href="zotero.html">Zotero</a> para crear notas directamente desde tu biblioteca de Zotero.</p>
+<h2 id="imagenes">Imágenes</h2>
+<p>Inserta imágenes con <em>Insertar ▸ Imagen…</em> (Ctrl+Shift+I), <strong>pegándolas</strong> desde el portapapeles o
+<strong>arrastrando</strong> archivos de imagen al editor. Formatos admitidos: PNG, JPEG, GIF, WebP y BMP, de hasta 25 MB.
+SVG se rechaza a propósito, porque los archivos SVG pueden contener scripts.</p>
+<p>Las imágenes se comprueban por su contenido (no por el nombre del archivo), se almacenan una sola vez en la carpeta <code>assets</code> de la bóveda
+con un nombre derivado de su contenido, y se referencian así:</p>
+<pre><code class="language-markdown">![Diagrama](asset:3f2a9c0b1d4e5f6a7b8c.png)
+</code></pre>
+<p>La primera imagen que añades a una nota se convierte en su <strong>imagen del título</strong>. Se muestra como una pequeña miniatura redondeada en
+la lista de notas y dentro del círculo de la nota en el grafo. Haz clic derecho en cualquier imagen del editor o de la vista previa
+y elige <em>Usar como imagen del título</em> para escoger otra, o <em>Quitar imagen del título</em> para no tener ninguna.</p>
+<h2 id="listas-de-tareas">Listas de tareas</h2>
+<p>Empieza una línea con <code>- [ ]</code> (o pulsa el botón de lista de tareas de la barra de herramientas) para crear una tarea. <code>- [x]</code> es una
+tarea completada. En la vista previa, haz clic en la casilla para marcarla; al pulsar Enter al final de una tarea se inicia la
+siguiente, y Enter en una tarea vacía termina la lista.</p>
+<h2 id="alarmas">Alarmas</h2>
+<p>Pulsa el botón de alarma (o <em>Insertar ▸ Alarma…</em>) para fijar una fecha y, opcionalmente, una hora para una nota. Cuando llega el momento, ZettelApp muestra una notificación; haz clic en ella para abrir la nota. ZettelApp tiene que estar en ejecución para avisarte,
+y las alarmas que vencieron mientras estaba cerrado suenan poco después de que abras la bóveda. Las notas con alarma muestran una
+campana en la lista de notas. Usa <em>Quitar alarma</em> en el mismo cuadro de diálogo para borrarla.</p>
+<h2 id="formulas">Fórmulas</h2>
+<p>Escribe LaTeX entre signos de dólar: <code>$E = mc^2$</code> es en línea y <code>$$\int_0^1 x^2\,dx$$</code> es una fórmula en bloque.
+El botón de fórmula (<em>Insertar ▸ Fórmula…</em>) abre un cuadro de diálogo con vista previa en vivo. Las fórmulas se dibujan en la
+vista previa; las exportaciones conservan el código fuente LaTeX.</p>
+<h2 id="mapas-mentales">Mapas mentales</h2>
+<p>Cada nota puede llevar un mapa mental (la pestaña <strong>Mapa mental</strong> o <em>Insertar ▸ Mapa mental</em>). Las ramas se colorean
+automáticamente.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tecla</th>
+<th>Acción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tab</td>
+<td>Añadir una idea hija</td>
+</tr>
+<tr>
+<td>Enter</td>
+<td>Añadir una idea hermana</td>
+</tr>
+<tr>
+<td>F2 o doble clic</td>
+<td>Renombrar</td>
+</tr>
+<tr>
+<td>Supr</td>
+<td>Eliminar la idea seleccionada</td>
+</tr>
+<tr>
+<td>Teclas de flecha</td>
+<td>Mover la selección</td>
+</tr>
+<tr>
+<td>Rueda del ratón / arrastrar</td>
+<td>Zoom / desplazar</td>
+</tr>
+</tbody>
+</table></div>
+<p>Haz clic derecho en una idea para <strong>enlazarla con una nota</strong>; una idea enlazada muestra un icono de enlace y abre esa nota.
+<strong>Desde enlaces</strong> crea un mapa mental a partir de los enlaces de la nota, agrupados por tipo de enlace, con los
+enlaces propios de las notas enlazadas un nivel más abajo. <strong>Exportar</strong> guarda el mapa como imagen PNG o SVG, o como archivo FreeMind
+(<code>.mm</code>), que FreeMind, Freeplane y XMind pueden abrir.</p>
+<h2 id="tarjetas">Tarjetas</h2>
+<p>Las tarjetas convierten las notas en material de repaso (consulta <a href="review-and-anki.html">Repaso, cuestionarios y Anki</a>). Hay
+dos formas de crearlas:</p>
+<p><strong>En el texto de la nota.</strong> Estas se convierten en tarjetas automáticamente y se actualizan al editar:</p>
+<pre><code class="language-markdown">Q: ¿Quién describió la curva del olvido?
+A: Hermann Ebbinghaus
+
+{{c1::La práctica de recuperación}} también se llama recuperación activa.
+</code></pre>
+<p>Una pregunta puede ocupar varias líneas hasta la línea <code>A:</code>. Cualquier párrafo con <code>{{c1::…}}</code> se convierte en una
+tarjeta <strong>cloze</strong>, que oculta cada omisión por turno. <code>{{c1::texto::pista}}</code> muestra una pista en lugar de <code>[…]</code>.</p>
+<p><strong>En la pestaña Tarjetas.</strong> Usa <em>Insertar ▸ Tarjeta de estudio…</em> (Ctrl+Shift+F) para tarjetas que no deban aparecer en
+la nota. Las tarjetas del texto se marcan como <em>del texto de la nota</em> y se editan en el texto.</p>
+<h2 id="busqueda">Búsqueda</h2>
+<p>El cuadro de búsqueda (Ctrl+F) usa búsqueda de texto completo en títulos, texto y etiquetas, ignora los acentos y coincide con
+prefijos de palabra, así que <code>olvid</code> encuentra <em>olvidando</em>. Añade <code>tag:name</code> para filtrar por etiqueta, por ejemplo
+<code>memoria tag:psicologia</code>. Los resultados se ordenan por relevancia; sin consulta, las notas siguen el orden elegido
+(<em>Última edición</em>, <em>Creada</em>, <em>Título</em> o <em>Más enlazadas</em>).</p>
+<h2 id="papelera">Papelera</h2>
+<p><em>Mover a la papelera</em> (Ctrl+Supr) oculta una nota sin eliminarla. Aparece de inmediato un botón de deshacer, y
+el botón <strong>Papelera</strong> bajo la lista de notas muestra las notas eliminadas: haz clic derecho para <strong>Restaurar</strong> o <strong>Eliminar
+definitivamente</strong>. <strong>Vaciar papelera</strong> elimina todo lo que contiene tras pedir confirmación. Los enlaces a notas en la papelera se ocultan
+y vuelven cuando se restaura la nota.</p>
+
+    <p class="doc-footer">¿Encontraste un error? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/es/notes-and-links.md">Edita esta página en GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Inicio</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Incidencias</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donar</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Idiomas"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es" aria-current="true">Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

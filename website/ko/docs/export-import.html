@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="파일 ▸ 내보내기…는 전체 컬렉션 또는 그 일부를 내보내요.">
+<title>내보내기와 가져오기 – ZettelApp 문서</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">본문으로 건너뛰기</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">기능</a></li>
+        <li><a href="tutorial.html">튜토리얼</a></li>
+        <li><a href="./">문서</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 후원</a></li>
+        <li><a class="nav-cta" href="../#download">다운로드</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇰🇷</span><span class="sr-only">언어</span></summary><ul class="lang-switch-panel" aria-label="언어"><li><a href="../../docs/export-import.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/export-import.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/export-import.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/export-import.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/export-import.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/export-import.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/export-import.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/export-import.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/export-import.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/export-import.html" lang="ko" hreflang="ko" aria-current="true"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/export-import.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="후원"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">후원</span></a>
+      <a class="hbtn cta" href="../#download">다운로드</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">메뉴</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">기능</a></li>
+          <li><a href="tutorial.html">튜토리얼</a></li>
+          <li><a href="./">문서</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="문서">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">문서</span><span class="docs-menu-current">내보내기와 가져오기</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html" aria-current="page">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>문서</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html" aria-current="page">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="내보내기와-가져오기">내보내기와 가져오기</h1>
+<h2 id="내보내기">내보내기</h2>
+<p><em>파일 ▸ 내보내기…</em>(Ctrl+Shift+E)는 <strong>전체 컬렉션 또는 그 일부</strong>를 내보내요.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>범위</th>
+<th>내보내는 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>전체 컬렉션</strong></td>
+<td>모든 노트(휴지통 제외).</td>
+</tr>
+<tr>
+<td><strong>현재 노트와 연결된 노트</strong></td>
+<td>열린 노트와 그 노트에서 <strong>깊이</strong>만큼 링크로 떨어진 노트(양방향 링크를 따라). 즉 <em>서브그래프</em>예요.</td>
+</tr>
+<tr>
+<td><strong>태그가 있는 노트</strong></td>
+<td>해당 태그가 있는 노트이며 중첩 태그를 포함해요(<code>math</code>는 <code>math/algebra</code>를 포함해요).</td>
+</tr>
+</tbody>
+</table></div>
+<p>대화 상자에는 범위에 포함된 노트, 링크, 플래시카드의 수가 표시돼요. 노트 목록(마우스 오른쪽 버튼 ▸ <em>연결된 노트와 함께
+내보내기…</em>), 노트의 ⋯ 메뉴, 그래프(내보내기 버튼은 화면에 있는 노트를 내보내요), 그래프 노드의 메뉴에서도 내보낼 수 있어요.</p>
+<h3 id="형식">형식</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>형식</th>
+<th>파일</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ZettelApp 보관 파일</strong></td>
+<td><code>.zip</code></td>
+<td>이미지를 포함한 모든 것: 노트, 유형이 있는 링크, 링크 유형(색상, 선 스타일, 화살표 끝 포함), 플래시카드, 마인드맵. 어느 컴퓨터의 ZettelApp에든 다시 가져올 수 있어요. 백업과 볼트 이동에 가장 좋아요.</td>
+</tr>
+<tr>
+<td><strong>Markdown 파일</strong></td>
+<td><code>.zip</code></td>
+<td>노트마다 <code>.md</code> 파일 하나이며 YAML 머리말(id, 제목, 태그, 출처 링크, 날짜, 유형이 있는 링크, 마인드맵)과 파일 사이의 <code>[[위키 링크]]</code>가 들어 있어요. 본문에 쓰지 않은 링크는 <em>Links</em> 아래에 <code>type:: [[Note]]</code>로, 수동 플래시카드는 <em>Flashcards</em> 아래에 <code>Q:</code>/<code>A:</code>로 나열돼요. 이미지는 <code>assets/</code>에 있어요. Obsidian과 다른 Markdown 편집기에서 열려요.</td>
+</tr>
+<tr>
+<td><strong>웹사이트</strong></td>
+<td><code>.zip</code></td>
+<td>독립적인 정적 웹사이트예요. 그래프 개요가 있는 색인, 태그 색인, 노트마다 한 페이지가 있고, 링크는 링크 유형의 색상과 선 스타일로 그려지며 마인드맵과 플래시카드(클릭하면 답이 나타나요)도 있어요. 스크립트가 없고 <code>index.html</code>을 열어 오프라인으로 동작해요. 밝은 테마와 어두운 테마를 지원해요.</td>
+</tr>
+<tr>
+<td><strong>JSON</strong></td>
+<td><code>.json</code></td>
+<td>스크립트와 다른 도구를 위한 구조화된 데이터(이미지는 참조만 하고 포함하지 않아요).</td>
+</tr>
+<tr>
+<td><strong>GraphML</strong></td>
+<td><code>.graphml</code></td>
+<td>Gephi, yEd, Cytoscape, NetworkX를 위한 링크 그래프예요. 노드에 제목, 태그, 날짜가 있고 엣지에 링크 유형(방향 여부 포함)과 각 유형의 색상, 선 스타일, 화살표 끝이 들어 있어요.</td>
+</tr>
+<tr>
+<td><strong>Graphviz DOT</strong></td>
+<td><code>.dot</code></td>
+<td>Graphviz 다이어그램으로 된 그래프예요. 링크 유형은 색상, 라벨, 스타일(실선, 파선, 점선. Graphviz는 파선-점선과 긴 파선을 파선으로 그려요)과 각 유형의 화살표 끝으로 표현되고, 방향 없는 유형에는 화살표가 없어요.</td>
+</tr>
+<tr>
+<td><strong>Anki 덱</strong></td>
+<td><code>.apkg</code></td>
+<td>내보낸 노트의 플래시카드. <a href="review-and-anki.html#anki">Anki</a>를 참고하세요.</td>
+</tr>
+</tbody>
+</table></div>
+<p>내보내기는 임시 파일에 쓴 다음 완료되었을 때만 제자리로 옮겨지므로, 중단된 내보내기가 반쯤 쓰인 파일을 남기는 일은
+없어요. 백그라운드에서 실행되며 <strong>폴더에서 표시</strong>를 누르면 파일 탐색기에서 결과를 보여 줘요.</p>
+<p>마인드맵에는 <strong>마인드맵</strong> 탭에 별도의 내보내기(PNG, SVG, FreeMind <code>.mm</code>)도 있고, 그래프는 PNG 이미지로 저장할 수 있어요.</p>
+<h2 id="가져오기">가져오기</h2>
+<p>*파일 ▸ 가져오기…*는 다음을 받아들여요.</p>
+<ul>
+<li><strong>ZettelApp 보관 파일</strong>(<code>.zip</code>)과 <strong>JSON</strong> 내보내기</li>
+<li><strong>Markdown 파일</strong>(<code>.md</code>) 또는 <strong>Markdown 파일의 <code>.zip</code></strong></li>
+<li><strong>Obsidian 볼트</strong>처럼 Markdown 파일이 든 폴더에는 <em>파일 ▸ Markdown 폴더 가져오기…</em></li>
+</ul>
+<p>유지되는 것:</p>
+<ul>
+<li><strong>ZettelApp 보관 파일과 JSON에서:</strong> 노트가 ID, 유형이 있는 링크, 플래시카드, 마인드맵, 이미지를 유지해요. 볼트에 아직
+없는 링크 유형은 색상과 스타일과 함께 추가되고, 이미 있는 유형은 기존 설정을 유지해요. 같은 보관 파일을 두 번 가져오면
+변경되지 않은 노트는 건너뛰어요. ID가 이미 다른 노트에 쓰이고 있으면 가져온 노트가 새 ID를 받고 링크가 업데이트돼요.</li>
+<li><strong>Markdown에서:</strong>
+<ul>
+<li>제목은 머리말의 <code>title</code>, 첫 <code># heading</code>, 또는 파일 이름에서 가져와요.</li>
+<li>태그는 머리말의 <code>tags</code>와 인라인 <code>#hashtags</code>에서 가져와요.</li>
+<li>출처 링크는 <code>url</code> 또는 <code>source</code>에서, 생성 날짜는 <code>created</code>에서 가져와요.</li>
+<li><code>[[위키 링크]]</code>(Obsidian의 파일 이름 링크 포함)와 <code>type:: [[links]]</code>가 링크가 돼요.</li>
+<li><code>![](path)</code> 또는 Obsidian의 <code>![[image.png]]</code>로 참조된 이미지는 볼트로 복사돼요.</li>
+<li><code>.obsidian</code>, <code>.trash</code> 같은 숨김 폴더는 건너뛰어요.</li>
+<li>ZettelApp 자체의 Markdown 내보내기는 유형이 있는 링크, 플래시카드, 마인드맵과 함께 다시 가져올 수 있어요.</li>
+</ul>
+</li>
+</ul>
+<h3 id="안전">안전</h3>
+<p>가져온 파일은 신뢰할 수 없는 것으로 취급돼요.</p>
+<ul>
+<li>보관 파일의 경로를 검사하므로 가져오기 범위 밖에 파일을 쓸 수 없어요(&quot;zip-slip&quot; 방지).</li>
+<li>파일이 너무 많거나, 데이터가 너무 많거나, 압축률이 의심스러운 보관 파일(압축 해제 &quot;폭탄&quot;)은 거부돼요.</li>
+<li>모든 필드는 형식이 검사되고 크기가 제한돼요.</li>
+<li>이미지는 내용으로 다시 검증돼요.</li>
+<li>원격 이미지와 디스크의 다른 위치로 가는 링크는 가져오지 않아요.</li>
+</ul>
+<p>볼트를 열 때 매일 백업이 만들어지며, <em>파일 ▸ 지금 볼트 백업</em>으로 언제든 만들 수 있어요.
+<a href="privacy-and-security.html">개인정보 보호와 보안</a>을 참고하세요.</p>
+
+    <p class="doc-footer">오류를 발견하셨나요? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ko/export-import.md">GitHub에서 이 페이지 편집</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">홈</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">이슈</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">후원</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="언어"><li><a href="../../docs/export-import.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/export-import.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/export-import.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/export-import.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/export-import.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/export-import.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/export-import.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/export-import.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/export-import.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/export-import.html" lang="ko" hreflang="ko" aria-current="true">한국어</a></li><li><a href="../../ar/docs/export-import.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

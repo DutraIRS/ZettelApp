@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="ZettelApp은 무료 참고 문헌 관리 도구인 Zotero와 연결돼요. 그래서 노트에서 참고 문헌을 인용하고, 라이브러리의 항목과 그 PDF에 링크된 문헌 노트를 쓸 수 있어요.">
+<title>Zotero – ZettelApp 문서</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">본문으로 건너뛰기</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">기능</a></li>
+        <li><a href="tutorial.html">튜토리얼</a></li>
+        <li><a href="./">문서</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 후원</a></li>
+        <li><a class="nav-cta" href="../#download">다운로드</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇰🇷</span><span class="sr-only">언어</span></summary><ul class="lang-switch-panel" aria-label="언어"><li><a href="../../docs/zotero.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/zotero.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/zotero.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/zotero.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/zotero.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/zotero.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/zotero.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/zotero.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/zotero.html" lang="ja" hreflang="ja"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/zotero.html" lang="ko" hreflang="ko" aria-current="true"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/zotero.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="후원"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">후원</span></a>
+      <a class="hbtn cta" href="../#download">다운로드</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">메뉴</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">기능</a></li>
+          <li><a href="tutorial.html">튜토리얼</a></li>
+          <li><a href="./">문서</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="문서">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">문서</span><span class="docs-menu-current">Zotero</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html" aria-current="page">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>문서</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html" aria-current="page">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="zotero">Zotero</h1>
+<p>ZettelApp은 무료 참고 문헌 관리 도구인 <a href="https://www.zotero.org/">Zotero</a>와 연결돼요. 그래서 노트에서 참고 문헌을
+인용하고, 라이브러리의 항목과 그 PDF에 링크된 <strong>문헌 노트</strong>를 쓸 수 있어요.</p>
+<h2 id="설정">설정</h2>
+<ol>
+<li><strong>Zotero 7 이상</strong>을 사용하고 계속 실행해 두세요.</li>
+<li>Zotero에서 <em>설정 ▸ 고급</em>을 열고 **&quot;이 컴퓨터의 다른 애플리케이션이 Zotero와 통신하도록 허용&quot;**을 켜세요.</li>
+<li>ZettelApp의 <em>도구 ▸ 옵션 ▸ Zotero ▸ 연결 테스트</em>에 <em>Zotero에 연결됨</em>이 표시되어야 해요.</li>
+</ol>
+<p>ZettelApp은 이 컴퓨터에서 Zotero의 <strong>로컬 API</strong>(<code>127.0.0.1</code>, 기본 포트 23119)로 라이브러리를 읽어요. 읽기만 하며
+Zotero 라이브러리를 절대 변경하지 않고, 인터넷으로는 아무것도 나가지 않아요. 개인 라이브러리(<em>내 라이브러리</em>)를 검색하며,
+그룹 라이브러리는 아직 검색하지 않아요.</p>
+<h2 id="참고-문헌-인용">참고 문헌 인용</h2>
+<p><em>삽입 ▸ Zotero 참조…</em> 또는 편집기 도구 모음의 책 버튼이 검색 상자를 열어요. 제목, 저자, 연도의 일부를 입력하세요.
+검색어가 비어 있으면 가장 최근에 수정한 항목이 나열돼요. 항목을 선택하면 상세 정보가 보이고, 그런 다음:</p>
+<ul>
+<li>
+<p><strong>인용 삽입</strong>(또는 더블 클릭)은 Zotero에서 항목을 여는 저자–연도 인용을 추가해요.</p>
+<pre><code class="language-markdown">[Ebbinghaus (1885)](zotero://select/library/items/ABCD2345)
+</code></pre>
+</li>
+<li>
+<p><strong>새 문헌 노트</strong>는 항목에 대한 노트를 만들며 다음이 포함돼요.</p>
+<ul>
+<li>항목의 제목</li>
+<li>참조 줄(저자, 연도, 제목, 출판물, DOI)</li>
+<li><em>Zotero에서 열기</em>, <em>PDF 열기</em>(항목에 PDF 첨부 파일이 있을 때), DOI 링크</li>
+<li>초록</li>
+<li>채워 넣을 <em>핵심 아이디어</em>와 <em>내 생각</em> 섹션</li>
+<li><code>literature</code> 태그와 항목의 Zotero 태그</li>
+<li>노트의 <strong>출처 링크</strong>로 설정된 Zotero 항목</li>
+</ul>
+</li>
+</ul>
+<p>문헌 노트는 읽기와 자신만의 영구 노트를 잇는 전통적인 Zettelkasten의 다리예요. 핵심 아이디어를 자신의 말로 쓰고,
+그것이 뒷받침하거나 확장하거나 반박하는 노트에 링크하세요.</p>
+<h2 id="zotero-링크">Zotero 링크</h2>
+<p>노트에서 Zotero 링크를 클릭하면 Zotero에서 항목이 열리거나 Zotero 리더에서 PDF가 열려요. 안전을 위해 ZettelApp은 두
+종류의 Zotero 링크만 따라가고 그 밖의 <code>zotero://</code> 주소는 거부해요.</p>
+<pre><code class="language-text">zotero://select/library/items/&lt;KEY&gt;
+zotero://open-pdf/library/items/&lt;KEY&gt;?page=&lt;N&gt;
+</code></pre>
+<p>그룹 라이브러리 링크(<code>zotero://select/groups/&lt;ID&gt;/items/&lt;KEY&gt;</code>)도 허용돼요. Zotero 링크를 노트의 <strong>출처 링크</strong> 입력란에
+붙여넣을 수도 있어요. Zotero에서 항목을 마우스 오른쪽 버튼으로 클릭해 링크를 복사한(또는 Zutilo 같은 애드온을 사용한) 다음
+붙여넣으세요.</p>
+<h2 id="문제-해결">문제 해결</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>메시지</th>
+<th>해결 방법</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Zotero에 연결할 수 없었어요</em></td>
+<td>Zotero 7 이상을 시작하세요. <em>옵션 ▸ Zotero</em>의 포트(기본값 23119)를 확인하세요.</td>
+</tr>
+<tr>
+<td><em>Zotero가 요청을 거부했어요</em></td>
+<td><em>다른 애플리케이션이 … 허용</em> 설정을 켜세요(위의 2단계).</td>
+</tr>
+<tr>
+<td><em>이 Zotero 버전에는 로컬 API가 없어요</em></td>
+<td>Zotero를 7 이상으로 업데이트하세요.</td>
+</tr>
+</tbody>
+</table></div>
+
+    <p class="doc-footer">오류를 발견하셨나요? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ko/zotero.md">GitHub에서 이 페이지 편집</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">홈</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">이슈</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">후원</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="언어"><li><a href="../../docs/zotero.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/zotero.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/zotero.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/zotero.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/zotero.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/zotero.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/zotero.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/zotero.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/zotero.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/zotero.html" lang="ko" hreflang="ko" aria-current="true">한국어</a></li><li><a href="../../ar/docs/zotero.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

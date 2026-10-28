@@ -18,12 +18,12 @@ from PySide6.QtWidgets import (
 )
 
 from zettelapp import settings
+from zettelapp.core import apikeys
 from zettelapp.core.llm import LLMSettings, retrieve_context, stream_answer
 from zettelapp.core.render import NoteRenderer
-from zettelapp.core.secrets import get_secret
 from zettelapp.i18n import _
 from zettelapp.ui import icons
-from zettelapp.ui.preview import NotePreview
+from zettelapp.ui.preview import NotePreview, math_href
 from zettelapp.ui.widgets import Card, ScopePicker, accent_button, label, link_button
 from zettelapp.ui.workers import StreamThread
 
@@ -136,7 +136,7 @@ class AskPage(QWidget):
     def refresh(self) -> None:
         cfg = current_llm_settings()
         info = cfg.info
-        has_key = not info.requires_key or bool(get_secret(info.secret_name))
+        has_key = not info.requires_key or apikeys.has_key(info.id)
         model = cfg.effective_model()
         self.provider_label.setText(
             f"{info.label} · {model}" + ("" if has_key else " · " + _("no API key"))
@@ -166,6 +166,7 @@ class AskPage(QWidget):
             lambda i: titles.get(i) or "Untitled",
             link_types=vault.link_type_map(),
             allow_new_note_links=False,
+            math_href=math_href,
         )
 
     def ask(self) -> None:
@@ -175,7 +176,7 @@ class AskPage(QWidget):
             return
         cfg = current_llm_settings()
         info = cfg.info
-        key = get_secret(info.secret_name)
+        key = apikeys.active_secret(info.id)
         if info.requires_key and not key:
             if (
                 QMessageBox.question(

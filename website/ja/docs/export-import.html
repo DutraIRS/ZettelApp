@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="ファイル ▸ エクスポート…  は、コレクション全体または任意の一部をエクスポートします。">
+<title>エクスポートとインポート – ZettelApp ドキュメント</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">本文へスキップ</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">機能</a></li>
+        <li><a href="tutorial.html">チュートリアル</a></li>
+        <li><a href="./">ドキュメント</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 寄付</a></li>
+        <li><a class="nav-cta" href="../#download">ダウンロード</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><span aria-hidden="true">🇯🇵</span><span class="sr-only">言語</span></summary><ul class="lang-switch-panel" aria-label="言語"><li><a href="../../docs/export-import.html" lang="en" hreflang="en"><span aria-hidden="true">🇺🇸</span> English</a></li><li><a href="../../es/docs/export-import.html" lang="es" hreflang="es"><span aria-hidden="true">🇪🇸</span> Español</a></li><li><a href="../../pt-br/docs/export-import.html" lang="pt-BR" hreflang="pt-BR"><span aria-hidden="true">🇧🇷</span> Português (Brasil)</a></li><li><a href="../../fr/docs/export-import.html" lang="fr" hreflang="fr"><span aria-hidden="true">🇫🇷</span> Français</a></li><li><a href="../../de/docs/export-import.html" lang="de" hreflang="de"><span aria-hidden="true">🇩🇪</span> Deutsch</a></li><li><a href="../../it/docs/export-import.html" lang="it" hreflang="it"><span aria-hidden="true">🇮🇹</span> Italiano</a></li><li><a href="../../ru/docs/export-import.html" lang="ru" hreflang="ru"><span aria-hidden="true">🇷🇺</span> Русский</a></li><li><a href="../../zh-cn/docs/export-import.html" lang="zh-CN" hreflang="zh-CN"><span aria-hidden="true">🇨🇳</span> 简体中文</a></li><li><a href="../../ja/docs/export-import.html" lang="ja" hreflang="ja" aria-current="true"><span aria-hidden="true">🇯🇵</span> 日本語</a></li><li><a href="../../ko/docs/export-import.html" lang="ko" hreflang="ko"><span aria-hidden="true">🇰🇷</span> 한국어</a></li><li><a href="../../ar/docs/export-import.html" lang="ar" hreflang="ar"><span aria-hidden="true">🇸🇦</span> العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="寄付"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">寄付</span></a>
+      <a class="hbtn cta" href="../#download">ダウンロード</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">メニュー</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">機能</a></li>
+          <li><a href="tutorial.html">チュートリアル</a></li>
+          <li><a href="./">ドキュメント</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="ドキュメント">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">ドキュメント</span><span class="docs-menu-current">エクスポートとインポート</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp ドキュメント</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten とは?</a></li>
+      <li><a href="tutorial.html">チュートリアル: 最初の 30 分</a></li>
+      <li><a href="getting-started.html">はじめに</a></li>
+      <li><a href="notes-and-links.html">ノートとリンク</a></li>
+      <li><a href="link-suggestions.html">リンク候補</a></li>
+      <li><a href="graph-and-insights.html">グラフとインサイト</a></li>
+      <li><a href="review-and-anki.html">復習、クイズ、Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">ノートに質問 (AI)</a></li>
+      <li><a href="mcp-server.html">MCP サーバー</a></li>
+      <li><a href="export-import.html" aria-current="page">エクスポートとインポート</a></li>
+      <li><a href="keyboard-shortcuts.html">キーボード ショートカット</a></li>
+      <li><a href="privacy-and-security.html">プライバシーとセキュリティ</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>ドキュメント</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp ドキュメント</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten とは?</a></li>
+      <li><a href="tutorial.html">チュートリアル: 最初の 30 分</a></li>
+      <li><a href="getting-started.html">はじめに</a></li>
+      <li><a href="notes-and-links.html">ノートとリンク</a></li>
+      <li><a href="link-suggestions.html">リンク候補</a></li>
+      <li><a href="graph-and-insights.html">グラフとインサイト</a></li>
+      <li><a href="review-and-anki.html">復習、クイズ、Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">ノートに質問 (AI)</a></li>
+      <li><a href="mcp-server.html">MCP サーバー</a></li>
+      <li><a href="export-import.html" aria-current="page">エクスポートとインポート</a></li>
+      <li><a href="keyboard-shortcuts.html">キーボード ショートカット</a></li>
+      <li><a href="privacy-and-security.html">プライバシーとセキュリティ</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="エクスホートとインホート">エクスポートとインポート</h1>
+<h2 id="エクスホート">エクスポート</h2>
+<p><em>ファイル ▸ エクスポート…</em> (Ctrl+Shift+E) は、<strong>コレクション全体または任意の一部</strong>をエクスポートします。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>範囲</th>
+<th>エクスポートされるもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>コレクション全体</strong></td>
+<td>すべてのノート (ごみ箱を除く)。</td>
+</tr>
+<tr>
+<td><strong>現在のノートとリンクされたノート</strong></td>
+<td>開いているノートと、そこから<strong>深さ</strong>のリンク数以内にあるノート (リンクを両方向にたどります): <em>サブグラフ</em>。</td>
+</tr>
+<tr>
+<td><strong>タグ付きのノート</strong></td>
+<td>そのタグが付いたノート (階層タグを含みます。<code>math</code> には <code>math/algebra</code> が含まれます)。</td>
+</tr>
+</tbody>
+</table></div>
+<p>ダイアログには、その範囲に含まれるノート、リンク、フラッシュカードの数が表示されます。ノート一覧 (右クリック ▸ <em>リンクされたノートごとエクスポート…</em>)、ノートの ⋯ メニュー、グラフ (エクスポートボタンは画面上のノートをエクスポートします)、グラフのノードのメニューからもエクスポートできます。</p>
+<h3 id="形式">形式</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>形式</th>
+<th>ファイル</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ZettelApp archive</strong></td>
+<td><code>.zip</code></td>
+<td>画像を含むすべて: ノート、種類付きリンク、リンクの種類 (色、線のスタイル、矢印の先端を含む)、フラッシュカード、マインドマップ。どのコンピューターの ZettelApp にも再インポートできます。バックアップや保管庫の移行に最適です。</td>
+</tr>
+<tr>
+<td><strong>Markdown files</strong></td>
+<td><code>.zip</code></td>
+<td>ノートごとに 1 つの <code>.md</code> ファイル。YAML フロントマター (id、タイトル、タグ、情報源リンク、日付、種類付きリンク、マインドマップ) と、ファイル間の <code>[[wiki links]]</code> が含まれます。テキストに書かれていないリンクは<em>リンク</em>の下に <code>type:: [[Note]]</code> として、手動のフラッシュカードは<em>フラッシュカード</em>の下に <code>Q:</code>/<code>A:</code> として一覧されます。画像は <code>assets/</code> にあります。Obsidian などの Markdown エディターで開けます。</td>
+</tr>
+<tr>
+<td><strong>Website</strong></td>
+<td><code>.zip</code></td>
+<td>単体で完結する静的 Web サイト: グラフ概要付きのインデックス、タグインデックス、ノートごとの 1 ページ。リンクはその種類の色と線のスタイルで描かれ、マインドマップとフラッシュカード (答えはクリックで表示) も含まれます。スクリプトなしで、<code>index.html</code> を開けばオフラインで動作します。ライトとダークのテーマに対応します。</td>
+</tr>
+<tr>
+<td><strong>JSON</strong></td>
+<td><code>.json</code></td>
+<td>スクリプトや他のツール向けの構造化データ (画像は参照のみで、含まれません)。</td>
+</tr>
+<tr>
+<td><strong>GraphML</strong></td>
+<td><code>.graphml</code></td>
+<td>Gephi、yEd、Cytoscape、NetworkX 向けのリンクグラフ。ノードにタイトル、タグ、日付、エッジにリンクの種類 (有向か無向か) が付き、各種類の色、線のスタイル、矢印の先端も含まれます。</td>
+</tr>
+<tr>
+<td><strong>Graphviz DOT</strong></td>
+<td><code>.dot</code></td>
+<td>Graphviz の図としてのグラフ。リンクの種類が色分け、ラベル付け、スタイル付けされます: 実線、破線、点線 (Graphviz は一点鎖線と長破線を破線で描きます) と、各種類の矢印の先端。無向の種類には矢印がありません。</td>
+</tr>
+<tr>
+<td><strong>Anki deck</strong></td>
+<td><code>.apkg</code></td>
+<td>エクスポートしたノートのフラッシュカード。<a href="review-and-anki.html#anki">Anki</a> を参照してください。</td>
+</tr>
+</tbody>
+</table></div>
+<p>エクスポートは一時ファイルに書き込まれ、完了したときにだけ所定の場所に移動されるので、中断されたエクスポートが書きかけのファイルを残すことはありません。バックグラウンドで実行され、<strong>フォルダーで表示</strong>で結果をエクスプローラーに表示できます。</p>
+<p>マインドマップには、<strong>マインドマップ</strong>タブに独自のエクスポート (PNG、SVG、FreeMind の <code>.mm</code>) もあり、グラフは PNG 画像として保存できます。</p>
+<h2 id="インホート">インポート</h2>
+<p><em>ファイル ▸ インポート…</em> で受け付けるもの:</p>
+<ul>
+<li><strong>ZettelApp アーカイブ</strong> (<code>.zip</code>) と <strong>JSON</strong> のエクスポート</li>
+<li><strong>Markdown ファイル</strong> (<code>.md</code>)、または <strong>Markdown ファイルの <code>.zip</code></strong></li>
+<li><strong>Obsidian の保管庫</strong>のような Markdown ファイルのフォルダーには、<em>ファイル ▸ Markdown フォルダーをインポート…</em></li>
+</ul>
+<p>保持されるもの:</p>
+<ul>
+<li><strong>ZettelApp アーカイブと JSON から:</strong> ノートは ID、種類付きリンク、フラッシュカード、マインドマップ、画像を保持します。保管庫にまだないリンクの種類は、色とスタイルとともに追加され、すでにある種類は自身のものを保持します。同じアーカイブを 2 回インポートしても、変更されていないノートはスキップされます。ID が別のノートですでに使われている場合、インポートされるノートには新しい ID が付き、リンクも更新されます。</li>
+<li><strong>Markdown から:</strong>
+<ul>
+<li>タイトルは、フロントマターの <code>title</code>、最初の <code># 見出し</code>、またはファイル名から取得されます。</li>
+<li>タグは、フロントマターの <code>tags</code> とインラインの <code>#hashtags</code> から取得されます。</li>
+<li>情報源リンクは <code>url</code> または <code>source</code> から、作成日は <code>created</code> から取得されます。</li>
+<li><code>[[wiki links]]</code> (Obsidian のファイル名リンクを含む) と <code>type:: [[links]]</code> はリンクになります。</li>
+<li><code>![](path)</code> または Obsidian の <code>![[image.png]]</code> で参照された画像は、保管庫にコピーされます。</li>
+<li><code>.obsidian</code> や <code>.trash</code> などの隠しフォルダーはスキップされます。</li>
+<li>ZettelApp 自身の Markdown エクスポートは、種類付きリンク、フラッシュカード、マインドマップごとインポートし直せます。</li>
+</ul>
+</li>
+</ul>
+<h3 id="安全性">安全性</h3>
+<p>インポートされるファイルは信頼できないものとして扱われます。</p>
+<ul>
+<li>アーカイブ内のパスが検査されるので、インポート範囲の外にファイルが書き込まれることはありません (「zip-slip」対策)。</li>
+<li>ファイル数が多すぎる、データ量が多すぎる、または圧縮率が疑わしい (解凍「爆弾」) アーカイブは拒否されます。</li>
+<li>すべてのフィールドは型が検査され、サイズが制限されます。</li>
+<li>画像は内容で再検証されます。</li>
+<li>リモートの画像や、ディスク上の他の場所へのリンクはインポートされません。</li>
+</ul>
+<p>保管庫を開くたびに毎日のバックアップが作られ、<em>ファイル ▸ 今すぐ保管庫をバックアップ</em>でいつでも作成できます。<a href="privacy-and-security.html">プライバシーとセキュリティ</a>を参照してください。</p>
+
+    <p class="doc-footer">誤りを見つけたら：<a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ja/export-import.md">GitHub でこのページを編集</a>。</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">ホーム</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">寄付</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="言語"><li><a href="../../docs/export-import.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/export-import.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/export-import.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/export-import.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/export-import.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/export-import.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/export-import.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/export-import.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/export-import.html" lang="ja" hreflang="ja" aria-current="true">日本語</a></li><li><a href="../../ko/docs/export-import.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/export-import.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>
