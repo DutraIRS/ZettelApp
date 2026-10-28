@@ -280,3 +280,41 @@ def test_update_notice_is_quiet_and_shown_once_per_version(window, monkeypatch):
     monkeypatch.setattr("zettelapp.ui.main_window.run_task", lambda *a, **k: calls.append(a))
     window.check_for_updates()
     assert calls == []  # silenced for good
+
+
+def test_every_screen_paints_with_data(window):
+    """Painting runs Python code (charts, graph labels, chips, switches). Grabbing each
+    screen with real data makes any error in it fail here instead of in front of users."""
+    from tools.demo_vault import build_demo
+    from zettelapp.ui.settings_dialog import PAGES, OptionsDialog
+
+    ids = build_demo(window.vault)
+    window.list.refresh()
+    window.open_note(ids["Spaced repetition"])
+    window.editor.set_view_mode(1)
+    for tab in range(3):  # note, mind map, flashcards
+        window.editor.tabs.setCurrentIndex(tab)
+        pump(50)
+        window.grab()
+    window.editor.tabs.setCurrentIndex(0)
+    for page in range(5):  # notes, graph, insights, review, ask
+        window.show_page(page)
+        pump(300)
+        window.grab()
+    window.show_page(1)
+    window.graph.view2d.select(ids["Spaced repetition"])  # labelled, fanned-out links
+    window.grab()
+    window.graph.dim_group.button(1).click()
+    window.graph.view3d.focus_node(ids["Spaced repetition"])
+    pump(200)
+    window.grab()
+    window.mcp_toggle.click()
+    window._show_update_notice("999.0.0")
+    window.grab()
+    window.mcp_toggle.click()
+    dialog = OptionsDialog(window)
+    dialog.show()
+    for row in range(len(PAGES)):
+        dialog.nav.setCurrentRow(row)
+        dialog.grab()
+    dialog.close()

@@ -393,7 +393,7 @@ class NoteEditor(QWidget):
         elif kind == "tag":
             self.window.show_tag(target)
         elif local_file_path(target):  # shown in File Explorer, never opened or run
-            self.window.reveal_file(local_file_path(target))
+            self.window.reveal_file(target)
         elif is_openable_url(target):  # web pages, e-mail and Zotero items only
             QDesktopServices.openUrl(QUrl(target))
         else:
