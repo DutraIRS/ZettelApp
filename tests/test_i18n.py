@@ -22,6 +22,15 @@ def test_resolves_settings_installer_names_and_windows_languages():
     assert i18n.resolve("system", "zh_TW") == "zh_CN"
     assert i18n.resolve("system", "hi_IN") == "en"
     assert i18n.resolve("klingon", "en_US") == "en"
+    assert i18n.resolve("dutch", "nl_NL") == "en"  # an installer language with no translation
+
+
+def test_options_shows_the_installer_choice_as_a_language_or_windows():
+    assert i18n.setting_code("ko") == "ko"
+    assert i18n.setting_code("brazilianportuguese") == "pt_BR"
+    assert i18n.setting_code("English") == "en"
+    assert i18n.setting_code("dutch") == "system"
+    assert i18n.setting_code(None) == "system"
 
 
 @pytest.mark.parametrize(

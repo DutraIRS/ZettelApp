@@ -252,7 +252,7 @@ class OptionsDialog(QDialog):
         self.language.addItem(_("Use Windows setting"), "system")
         for code, name in i18n.LANGUAGES.items():
             self.language.addItem(name, code)
-        stored = settings.get(settings.UI_LANGUAGE)
+        stored = i18n.setting_code(settings.get(settings.UI_LANGUAGE))
         self.language.setCurrentIndex(max(0, self.language.findData(stored)))
         self._language_before = self.language.currentData()
         form.addRow(_("Language"), self.language)

@@ -106,13 +106,20 @@ def is_right_to_left() -> bool:
     return _language in RIGHT_TO_LEFT
 
 
-def resolve(setting: str | None, system_name: str = "en") -> str:
-    """The language code for a setting: a code, an installer name, or "system"."""
+def setting_code(setting: str | None) -> str:
+    """The ui/language setting as a code from LANGUAGES, or "system". The installer stores
+    its own names ("brazilianportuguese"); one the app has no translation for means "system"."""
     value = (setting or "system").strip()
     if value in LANGUAGES:
         return value
-    if value.lower() in _INSTALLER_NAMES:
-        return _INSTALLER_NAMES[value.lower()]
+    return _INSTALLER_NAMES.get(value.lower(), "system")
+
+
+def resolve(setting: str | None, system_name: str = "en") -> str:
+    """The language code for a setting: a code, an installer name, or "system"."""
+    value = setting_code(setting)
+    if value != "system":
+        return value
     for candidate in (system_name, system_name.split("_")[0]):
         if candidate in LANGUAGES:
             return candidate
