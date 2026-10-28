@@ -43,6 +43,16 @@ class Link:
 # How a link type is drawn. Dashes are a second cue besides colour (for colour-blind
 # readers and print), so the built-in types don't share one style.
 LINE_STYLES = ("solid", "dashed", "dotted", "dash_dot", "dash_dot_dot", "long_dash")
+# What each style looks like: dash and gap lengths in line widths, measured with round
+# caps (so 0 is a round dot). Every renderer draws the same pattern.
+DASH_PATTERNS: dict[str, tuple[float, ...]] = {
+    "solid": (),
+    "dashed": (4, 2.5),
+    "dotted": (0, 2.5),
+    "dash_dot": (4, 2.5, 0, 2.5),
+    "dash_dot_dot": (4, 2.5, 0, 2.5, 0, 2.5),
+    "long_dash": (9, 3),
+}
 # The tip at the target end of a directed link; undirected links have none.
 ARROW_TIPS = ("triangle", "open", "diamond", "circle", "bar")
 # Before schema 3 a type's dash followed its place in the list, cycling through these,
@@ -69,6 +79,14 @@ class LinkType:
     def tip(self) -> str | None:
         """The arrow tip drawn at the target, or None for an undirected type."""
         return self.arrow if self.directed else None
+
+
+def stroke_dashes(line_style: str) -> list[float]:
+    """The style's pattern as a pen with round caps takes it, in line widths: each cap
+    adds half a width to both ends of a dash, so dashes are drawn shorter and gaps longer.
+    Empty for a solid line."""
+    pattern = DASH_PATTERNS.get(line_style, ())
+    return [max(v - 1, 0.01) if i % 2 == 0 else v + 1 for i, v in enumerate(pattern)]
 
 
 def least_used_line_style(types: list[LinkType]) -> str:

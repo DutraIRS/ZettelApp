@@ -19,11 +19,14 @@ from pathlib import Path
 import yaml
 
 from zettelapp.core.models import (
+    ARROW_TIPS,
+    LINE_STYLES,
     MAX_MINDMAP_DEPTH,
     MAX_MINDMAP_NODES,
     Flashcard,
     LinkType,
     Note,
+    least_used_line_style,
     sanitize_mindmap,
 )
 from zettelapp.core.security import (
@@ -37,6 +40,7 @@ from zettelapp.core.security import (
 )
 from zettelapp.core.storage import MAX_BODY, MAX_TITLE, Vault
 from zettelapp.core.textutil import WIKILINK_RE, fold, normalize_tag
+from zettelapp.i18n import _
 
 MAX_JSON_BYTES = 300 * 1024 * 1024
 MAX_MARKDOWN_FILES = 20_000
@@ -176,6 +180,19 @@ def _validate_mindmap(data) -> None:
         stack.extend((child, depth + 1) for child in children)
 
 
+def _validate_link_style(raw: dict) -> None:
+    """A link type's line style and arrow tip may be missing (older exports) but not
+    unknown."""
+    name = str(raw.get("id"))[:40]
+    for key, allowed, message in (
+        ("line_style", LINE_STYLES, _("Link type “{name}” has an unknown line style: {value}")),
+        ("arrow", ARROW_TIPS, _("Link type “{name}” has an unknown arrow tip: {value}")),
+    ):
+        value = raw.get(key)
+        if value is not None and (not isinstance(value, str) or value not in allowed):
+            raise UnsafeInputError(message.format(name=name, value=str(value)[:40]))
+
+
 def _validate_import_data(data) -> None:
     if not isinstance(data, dict) or data.get("format") != "zettelapp":
         raise UnsafeInputError("This is not a ZettelApp export.")
@@ -185,6 +202,9 @@ def _validate_import_data(data) -> None:
         value = data.get(field_name)
         if value is not None and not isinstance(value, list):
             raise UnsafeInputError(f"The export field {field_name!r} must be a list.")
+    for raw in data.get("link_types") or []:
+        if isinstance(raw, dict):
+            _validate_link_style(raw)
     for raw in data.get("notes") or []:
         if not isinstance(raw, dict):
             continue
@@ -214,6 +234,8 @@ def _import_data(
             and isinstance(raw.get("id"), str)
             and raw["id"] not in existing_types
         ):
+            # Exports before link styles have none: such a type gets the least used line.
+            line_style = raw.get("line_style") or least_used_line_style(vault.link_types())
             vault.save_link_type(
                 LinkType(
                     raw["id"],
@@ -221,6 +243,8 @@ def _import_data(
                     _str(raw.get("inverse_label"), 60),
                     _str(raw.get("color"), 7),
                     bool(raw.get("directed", True)),
+                    line_style=line_style,
+                    arrow=raw.get("arrow") or "triangle",
                 )
             )
 

@@ -529,6 +529,9 @@ class ZettelMcpServer:
                     "label": t.label,
                     "inverse_label": t.inverse_label,
                     "directed": t.directed,
+                    "color": t.color,
+                    "line_style": t.line_style,
+                    "arrow": t.tip or "none",
                 }
                 for t in self.vault.link_types()
             ]
