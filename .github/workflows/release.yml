@@ -31,14 +31,18 @@ jobs:
         run: |
           $version = python -c "import zettelapp; print(zettelapp.__version__)"
           if ("v$version" -ne "${{ github.ref_name }}") { throw "Tag ${{ github.ref_name }} does not match version $version" }
+      # One command per step: in PowerShell a multi-line step only fails when its last
+      # command fails, which would let failing tests through.
+      - name: Lint
+        run: python -m ruff check .
+      - name: Check formatting
+        run: python -m ruff format --check .
       - name: Run tests
         env:
           QT_QPA_PLATFORM: offscreen
-        run: |
-          python -m ruff check .
-          python -m ruff format --check .
-          python -m pytest -q --cov --cov-report=term-missing
-          python -m pip_audit --progress-spinner off
+        run: python -m pytest -q --cov --cov-report=term-missing
+      - name: Audit installed dependencies
+        run: python -m pip_audit --progress-spinner off
       - name: Require signing or explicit unsigned approval
         if: env.SIGN_CERT == '' && vars.ALLOW_UNSIGNED_RELEASE != 'true'
         shell: pwsh
