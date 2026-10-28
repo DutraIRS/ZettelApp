@@ -64,7 +64,7 @@ class ReviewPage(QWidget):
         self.due_detail = label("", "caption")
         due.body.addWidget(self.due_detail)
         due.body.addStretch(1)
-        due.body.addWidget(accent_button("Start review", self.start_due, "play"))
+        due.body.addWidget(accent_button("Start review", lambda: self.start_due(), "play"))
         row.addWidget(due, 1)
 
         quiz = Card()

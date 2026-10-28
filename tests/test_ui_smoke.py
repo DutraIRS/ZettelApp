@@ -150,3 +150,15 @@ def test_zotero_pdf_lookup_is_dispatched_off_the_gui_thread(window, monkeypatch)
     tasks[-1][2]["on_done"]("PDF12345")
     assert dialog.pdf_key == "PDF12345"
     assert accepted == [True]
+
+
+def test_review_start_button_click_starts_review(window):
+    from zettelapp.ui.widgets import accent_button
+
+    window.vault.create_note("N", "Q: q\nA: a")
+    # find the Start review button wired to start_due on the Review page
+    button = next(
+        w for w in window.review.findChildren(type(accent_button(""))) if w.text() == "Start review"
+    )
+    button.click()  # Qt passes checked: bool; start_due must not receive it
+    assert window.review.stack.currentIndex() == 1  # quiz started, no TypeError raised
