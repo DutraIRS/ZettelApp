@@ -15,11 +15,16 @@ import sqlite3
 import uuid
 from collections import defaultdict
 from collections.abc import Callable, Iterable
-from datetime import date, datetime, timedelta
+from dataclasses import replace
+from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
 from zettelapp.core.models import (
+    ARROW_TIPS,
     DEFAULT_LINK_TYPES,
+    LEGACY_ARROW,
+    LEGACY_LINE_STYLES,
+    LINE_STYLES,
     Flashcard,
     Link,
     LinkType,
@@ -44,8 +49,12 @@ from zettelapp.core.textutil import (
     normalize_tag,
     slugify_type,
 )
+from zettelapp.i18n import _
 
-SCHEMA_VERSION = 2  # 2: tags.source tells tags added by hand from #tags written in the text
+# 2: tags.source tells tags added by hand from #tags written in the text
+# 3: link_types.line_style and link_types.arrow store how each link type is drawn
+# 4: notes.alarm and notes.alarm_fired remind the user of a note at a chosen time
+SCHEMA_VERSION = 4
 MAX_TITLE = 500
 MAX_BODY = 5_000_000
 
@@ -60,7 +69,9 @@ CREATE TABLE IF NOT EXISTS notes (
     mindmap TEXT,
     created TEXT NOT NULL,
     modified TEXT NOT NULL,
-    deleted INTEGER NOT NULL DEFAULT 0
+    deleted INTEGER NOT NULL DEFAULT 0,
+    alarm TEXT NOT NULL DEFAULT '',
+    alarm_fired INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS tags (
     note_id TEXT NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
@@ -76,7 +87,9 @@ CREATE TABLE IF NOT EXISTS link_types (
     color TEXT NOT NULL,
     directed INTEGER NOT NULL DEFAULT 1,
     builtin INTEGER NOT NULL DEFAULT 0,
-    position INTEGER NOT NULL DEFAULT 0
+    position INTEGER NOT NULL DEFAULT 0,
+    line_style TEXT NOT NULL DEFAULT 'solid',
+    arrow TEXT NOT NULL DEFAULT 'triangle'
 );
 CREATE TABLE IF NOT EXISTS links (
     src TEXT NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
@@ -132,6 +145,19 @@ class VaultError(RuntimeError):
     pass
 
 
+def _clean_alarm(value: str | None) -> str:
+    """An alarm as a timezone-aware UTC ISO string, or "" when it isn't a valid time."""
+    if not value:
+        return ""
+    try:
+        when = datetime.fromisoformat(str(value))
+    except ValueError:
+        return ""
+    if when.tzinfo is None:
+        when = when.astimezone()  # naive times are the machine's local time
+    return when.astimezone(UTC).isoformat(timespec="seconds")
+
+
 def _pair(a: str, b: str) -> tuple[str, str]:
     return (a, b) if a <= b else (b, a)
 
@@ -159,24 +185,28 @@ class Vault:
         db_path = folder / cls.DB_NAME
         if not db_path.exists():
             if readonly or not create:
-                raise VaultError(f"No vault found in {folder}")
+                raise VaultError(_("No vault found in {folder}").format(folder=folder))
             folder.mkdir(parents=True, exist_ok=True)
         if readonly:
             conn = sqlite3.connect(f"{db_path.as_uri()}?mode=ro", uri=True)
         else:
             conn = sqlite3.connect(db_path)
-        conn.row_factory = sqlite3.Row
-        conn.execute("PRAGMA foreign_keys = ON")
-        vault = cls(folder, conn, readonly)
-        if not readonly:
-            # Rollback journal + full sync: safest choice for folders that are
-            # synchronised by OneDrive or similar tools.
-            conn.execute("PRAGMA journal_mode = DELETE")
-            conn.execute("PRAGMA synchronous = FULL")
-            vault._migrate()
-            (folder / cls.ASSETS_DIR).mkdir(exist_ok=True)
-        vault.has_fts = vault._table_exists("notes_fts")
-        return vault
+        try:
+            conn.row_factory = sqlite3.Row
+            conn.execute("PRAGMA foreign_keys = ON")
+            vault = cls(folder, conn, readonly)
+            if not readonly:
+                # Rollback journal + full sync: safest choice for folders that are
+                # synchronised by OneDrive or similar tools.
+                conn.execute("PRAGMA journal_mode = DELETE")
+                conn.execute("PRAGMA synchronous = FULL")
+                vault._migrate()
+                (folder / cls.ASSETS_DIR).mkdir(exist_ok=True)
+            vault.has_fts = vault._table_exists("notes_fts")
+            return vault
+        except BaseException:
+            conn.close()
+            raise
 
     @staticmethod
     def is_vault(folder: str | Path) -> bool:
@@ -214,12 +244,25 @@ class Vault:
                 self._set_meta("vault_id", uuid.uuid4().hex)
                 self._set_meta("created", utc_now())
                 for pos, lt in enumerate(DEFAULT_LINK_TYPES):
-                    self._insert_link_type(lt, pos)
+                    names = {"label": _(lt.label), "inverse_label": _(lt.inverse_label)}
+                    self._insert_link_type(replace(lt, **names), pos)
             elif int(version) > SCHEMA_VERSION:
-                raise VaultError("This vault was created by a newer version of ZettelApp.")
-            elif int(version) < 2:
-                self._upgrade_to_v2()
+                raise VaultError(_("This vault was created by a newer version of ZettelApp."))
+            elif int(version) < SCHEMA_VERSION:
+                if int(version) < 2:
+                    self._upgrade_to_v2()
+                if int(version) < 3:
+                    self._upgrade_to_v3()
+                self._upgrade_to_v4()
                 self._set_meta("schema_version", str(SCHEMA_VERSION))
+
+    def _upgrade_to_v4(self) -> None:
+        """Add the per-note alarm."""
+        columns = {r["name"] for r in self.conn.execute("PRAGMA table_info(notes)")}
+        if "alarm" not in columns:
+            self.conn.execute("ALTER TABLE notes ADD COLUMN alarm TEXT NOT NULL DEFAULT ''")
+        if "alarm_fired" not in columns:
+            self.conn.execute("ALTER TABLE notes ADD COLUMN alarm_fired INTEGER NOT NULL DEFAULT 0")
 
     def _upgrade_to_v2(self) -> None:
         """Add tags.source and turn #tags already written in notes into tags."""
@@ -238,6 +281,27 @@ class Vault:
                     "WHERE note_id = ?) WHERE note_id = ?",
                     (row["id"], row["id"]),
                 )
+
+    def _upgrade_to_v3(self) -> None:
+        """Store each link type's line style and arrow tip, keeping the look it had: the
+        dash came from the type's place in the list and every arrow was open."""
+        columns = {r["name"] for r in self.conn.execute("PRAGMA table_info(link_types)")}
+        if "line_style" not in columns:
+            self.conn.execute(
+                "ALTER TABLE link_types ADD COLUMN line_style TEXT NOT NULL DEFAULT 'solid'"
+            )
+        if "arrow" not in columns:
+            self.conn.execute(
+                "ALTER TABLE link_types ADD COLUMN arrow TEXT NOT NULL DEFAULT 'triangle'"
+            )
+        rows = self.conn.execute("SELECT id FROM link_types ORDER BY position, label").fetchall()
+        self.conn.executemany(
+            "UPDATE link_types SET line_style = ?, arrow = ? WHERE id = ?",
+            [
+                (LEGACY_LINE_STYLES[i % len(LEGACY_LINE_STYLES)], LEGACY_ARROW, r["id"])
+                for i, r in enumerate(rows)
+            ],
+        )
 
     def get_meta(self, key: str) -> str | None:
         row = self.conn.execute("SELECT value FROM meta WHERE key = ?", (key,)).fetchone()
@@ -320,7 +384,7 @@ class Vault:
         created: str | None = None,
     ) -> Note:
         if note_id is not None and not is_valid_note_id(note_id):
-            raise UnsafeInputError(f"Invalid note id: {note_id!r}")
+            raise UnsafeInputError(_("Invalid note id: “{id}”").format(id=note_id))
         now = utc_now()
         note = Note(
             id=note_id or self.new_note_id(),
@@ -379,10 +443,15 @@ class Vault:
         note.tags = sorted(manual | inline)
         if touch:
             note.modified = utc_now()
-        row = self.conn.execute("SELECT title FROM notes WHERE id = ?", (note.id,)).fetchone()
+        note.alarm = _clean_alarm(note.alarm)
+        row = self.conn.execute(
+            "SELECT title, alarm, alarm_fired FROM notes WHERE id = ?", (note.id,)
+        ).fetchone()
         old_title = row["title"] if row else ""
+        fired = int(row["alarm_fired"]) if row and row["alarm"] == note.alarm else 0
         self.conn.execute(
-            "UPDATE notes SET title = ?, body = ?, url = ?, image = ?, mindmap = ?, modified = ? WHERE id = ?",
+            "UPDATE notes SET title = ?, body = ?, url = ?, image = ?, mindmap = ?, modified = ?,"
+            " alarm = ?, alarm_fired = ? WHERE id = ?",
             (
                 note.title,
                 note.body,
@@ -390,6 +459,8 @@ class Vault:
                 note.image,
                 json.dumps(note.mindmap, ensure_ascii=False) if note.mindmap else None,
                 note.modified,
+                note.alarm,
+                fired,
                 note.id,
             ),
         )
@@ -440,7 +511,30 @@ class Vault:
             created=row["created"],
             modified=row["modified"],
             deleted=bool(row["deleted"]),
+            alarm=row["alarm"],
         )
+
+    def due_alarms(self, now: str | None = None) -> list[Note]:
+        """Live notes whose alarm time has come and that haven't been announced yet."""
+        rows = self.conn.execute(
+            "SELECT id, alarm FROM notes WHERE deleted = 0 AND alarm != '' AND alarm_fired = 0 "
+            "ORDER BY alarm"
+        ).fetchall()
+        limit = _clean_alarm(now) or utc_now()
+        # Stored alarms are all UTC in one ISO format (see _clean_alarm), so they compare as
+        # text; one edited by hand into another format is cleaned (or skipped), never a crash.
+        due = [r["id"] for r in rows if "" < _clean_alarm(r["alarm"]) <= limit]
+        return [n for note_id in due if (n := self.get_note(note_id))]
+
+    def mark_alarm_fired(self, note_id: str) -> None:
+        with self.transaction():
+            self.conn.execute("UPDATE notes SET alarm_fired = 1 WHERE id = ?", (note_id,))
+
+    def pending_alarm_count(self) -> int:
+        row = self.conn.execute(
+            "SELECT COUNT(*) AS n FROM notes WHERE deleted = 0 AND alarm != '' AND alarm_fired = 0"
+        ).fetchone()
+        return int(row["n"])
 
     def manual_tags(self, note_id: str) -> list[str]:
         """The note's tags that were added by hand rather than written as #tags in its text."""
@@ -609,8 +703,8 @@ class Vault:
 
     def _insert_link_type(self, lt: LinkType, position: int) -> None:
         self.conn.execute(
-            "INSERT OR REPLACE INTO link_types (id, label, inverse_label, color, directed, builtin, position) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            "INSERT OR REPLACE INTO link_types (id, label, inverse_label, color, directed, builtin, "
+            "position, line_style, arrow) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 lt.id,
                 lt.label,
@@ -619,6 +713,8 @@ class Vault:
                 int(lt.directed),
                 int(lt.builtin),
                 position,
+                lt.line_style,
+                lt.arrow,
             ),
         )
 
@@ -631,6 +727,8 @@ class Vault:
                 r["color"],
                 bool(r["directed"]),
                 bool(r["builtin"]),
+                r["line_style"] if r["line_style"] in LINE_STYLES else "solid",
+                r["arrow"] if r["arrow"] in ARROW_TIPS else "triangle",
             )
             for r in self.conn.execute("SELECT * FROM link_types ORDER BY position, label")
         ]
@@ -641,9 +739,13 @@ class Vault:
     def save_link_type(self, lt: LinkType) -> LinkType:
         lt.id = slugify_type(lt.id or lt.label)
         if not lt.id:
-            raise UnsafeInputError("A link type needs a name.")
+            raise UnsafeInputError(_("A link type needs a name."))
         if not re.fullmatch(r"#[0-9A-Fa-f]{6}", lt.color or ""):
             lt.color = "#8A8A8A"
+        if lt.line_style not in LINE_STYLES:
+            lt.line_style = "solid"
+        if lt.arrow not in ARROW_TIPS:
+            lt.arrow = "triangle"
         lt.label = lt.label.strip()[:60] or lt.id
         lt.inverse_label = lt.inverse_label.strip()[:60] or lt.label
         existing = self.conn.execute(
@@ -663,8 +765,14 @@ class Vault:
         return lt
 
     def delete_link_type(self, type_id: str) -> None:
+        """Remove one of your own link types; its links become "related" links."""
         if type_id == "related":
-            raise VaultError("The default link type cannot be removed.")
+            raise VaultError(_("The default link type cannot be removed."))
+        row = self.conn.execute(
+            "SELECT builtin FROM link_types WHERE id = ?", (type_id,)
+        ).fetchone()
+        if row is not None and row["builtin"]:
+            raise VaultError(_("Built-in link types can be renamed and restyled but not removed."))
         with self.transaction():
             # Re-type existing links; INSERT OR IGNORE avoids clashing with an existing "related" link.
             self.conn.execute(
@@ -800,10 +908,10 @@ class Vault:
     def add_image(self, data: bytes, original_name: str = "") -> str:
         """Store image bytes content-addressed; returns the asset name."""
         if len(data) > MAX_IMAGE_BYTES:
-            raise UnsafeInputError("Images larger than 25 MB are not supported.")
+            raise UnsafeInputError(_("Images larger than 25 MB are not supported."))
         ext = sniff_image_type(data)
         if ext is None:
-            raise UnsafeInputError("Unsupported image format. Use PNG, JPEG, GIF, WebP or BMP.")
+            raise UnsafeInputError(_("Unsupported image format. Use PNG, JPEG, GIF, WebP or BMP."))
         name = hashlib.sha256(data).hexdigest()[:20] + "." + ext
         path = self.assets_dir / name
         with self.transaction():
@@ -821,7 +929,7 @@ class Vault:
     def add_image_file(self, path: str | Path) -> str:
         path = Path(path)
         if path.stat().st_size > MAX_IMAGE_BYTES:
-            raise UnsafeInputError("Images larger than 25 MB are not supported.")
+            raise UnsafeInputError(_("Images larger than 25 MB are not supported."))
         return self.add_image(path.read_bytes(), path.name)
 
     def asset_path(self, name: str) -> Path | None:

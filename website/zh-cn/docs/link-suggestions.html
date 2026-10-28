@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="在你写作时,链接建议面板会列出可能与你正在编辑的笔记相关的笔记。点击链接即可连接它们,或点击 ✕ 忽略一条建议。两种操作都会训练模型。将鼠标悬停在建议上,可查看它为何被建议。">
+<title>链接建议 – ZettelApp 文档</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">跳到内容</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">功能</a></li>
+        <li><a href="tutorial.html">教程</a></li>
+        <li><a href="./">文档</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 捐赠</a></li>
+        <li><a class="nav-cta" href="../#download">下载</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">语言</span></summary><ul class="lang-switch-panel" aria-label="语言"><li><a href="../../docs/link-suggestions.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/link-suggestions.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/link-suggestions.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/link-suggestions.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/link-suggestions.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/link-suggestions.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/link-suggestions.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/link-suggestions.html" lang="zh-CN" hreflang="zh-CN" aria-current="true">简体中文</a></li><li><a href="../../ja/docs/link-suggestions.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/link-suggestions.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/link-suggestions.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="捐赠"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">捐赠</span></a>
+      <a class="hbtn cta" href="../#download">下载</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">菜单</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">功能</a></li>
+          <li><a href="tutorial.html">教程</a></li>
+          <li><a href="./">文档</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="文档">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">文档</span><span class="docs-menu-current">链接建议</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 文档</a></li>
+      <li><a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a></li>
+      <li><a href="tutorial.html">教程:你的前 30 分钟</a></li>
+      <li><a href="getting-started.html">入门</a></li>
+      <li><a href="notes-and-links.html">笔记与链接</a></li>
+      <li><a href="link-suggestions.html" aria-current="page">链接建议</a></li>
+      <li><a href="graph-and-insights.html">图谱与 Insights</a></li>
+      <li><a href="review-and-anki.html">复习、测验与 Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">询问你的笔记(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 服务器</a></li>
+      <li><a href="export-import.html">导出与导入</a></li>
+      <li><a href="keyboard-shortcuts.html">键盘快捷键</a></li>
+      <li><a href="privacy-and-security.html">隐私与安全</a></li>
+      <li><a href="faq.html">常见问题</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>文档</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 文档</a></li>
+      <li><a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a></li>
+      <li><a href="tutorial.html">教程:你的前 30 分钟</a></li>
+      <li><a href="getting-started.html">入门</a></li>
+      <li><a href="notes-and-links.html">笔记与链接</a></li>
+      <li><a href="link-suggestions.html" aria-current="page">链接建议</a></li>
+      <li><a href="graph-and-insights.html">图谱与 Insights</a></li>
+      <li><a href="review-and-anki.html">复习、测验与 Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">询问你的笔记(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 服务器</a></li>
+      <li><a href="export-import.html">导出与导入</a></li>
+      <li><a href="keyboard-shortcuts.html">键盘快捷键</a></li>
+      <li><a href="privacy-and-security.html">隐私与安全</a></li>
+      <li><a href="faq.html">常见问题</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="链接建议">链接建议</h1>
+<p>在你写作时,<strong>链接建议</strong>面板会列出可能与你正在编辑的笔记相关的笔记。点击<strong>链接</strong>即可连接它们(旁边的箭头用于选择链接类型),或点击 <strong>✕</strong> 忽略一条建议。两种操作都会训练模型。将鼠标悬停在建议上,可查看它<em>为何</em>被建议。</p>
+<p>建议会在你停止输入大约一秒后在后台更新,因此编辑器从不需要等待它们。它们也会使用你尚未保存的文本。</p>
+<h2 id="工作原理">工作原理</h2>
+<p>ZettelApp 把“这两条笔记应该链接吗?”视为一个分类问题,并用<strong>朴素贝叶斯</strong>分类器来回答。对于一条笔记 <em>q</em> 和每条候选笔记 <em>c</em>,它会计算八个相似度特征,并将这些证据合并为一个概率。</p>
+<h3 id="特征">特征</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>特征</th>
+<th>衡量内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>语义相似度(LSA)</strong></td>
+<td>潜在语义空间中的余弦相似度:对 TF-IDF 矩阵做截断 SVD(随机化 SVD,最多 64 维)。即使共享的确切词语很少,使用相关词汇的笔记也会彼此靠近。</td>
+</tr>
+<tr>
+<td><strong>共享关键词(TF-IDF 余弦)</strong></td>
+<td>TF-IDF 向量的余弦相似度(次线性词频、平滑逆文档频率)。标题权重加倍;标签也包含在内。</td>
+</tr>
+<tr>
+<td><strong>标题相似度(Levenshtein)</strong></td>
+<td>1 − 编辑距离 ÷ 较长标题的长度。</td>
+</tr>
+<tr>
+<td><strong>标题相似度(Jaro-Winkler)</strong></td>
+<td>标题的 Jaro-Winkler 相似度,对共同的开头给予奖励。</td>
+</tr>
+<tr>
+<td><strong>文本相似度(Levenshtein)</strong></td>
+<td>两段文本前 400 个字符之间的归一化编辑距离。</td>
+</tr>
+<tr>
+<td><strong>共享标签(Jaccard)</strong></td>
+<td>共有标签数 ÷ 标签总数。</td>
+</tr>
+<tr>
+<td><strong>标题出现在文本中</strong></td>
+<td>如果任一笔记的标题以完整词语出现在另一条笔记的文本中则为 1,否则为 0。</td>
+</tr>
+<tr>
+<td><strong>共享链接(Jaccard)</strong></td>
+<td>两条笔记各自所链接笔记之间的重叠程度(在图谱中闭合三角形)。</td>
+</tr>
+</tbody>
+</table></div>
+<p>文本会转为小写,重音符号会被折叠(因此 <em>informação</em> 能匹配 <em>informacao</em>),Markdown 语法会被移除,常见的英语、葡萄牙语和西班牙语停用词会被忽略。编辑距离使用 <a href="https://github.com/rapidfuzz/RapidFuzz">RapidFuzz</a>;当它不可用时,一个纯 Python 的位并行算法会给出完全相同的结果。</p>
+<h3 id="从特征到概率">从特征到概率</h3>
+<p>每个特征值(介于 0 和 1 之间)会被放入 <strong>8 个区间</strong>之一。对于每个特征,模型会记录已链接的笔记对和未链接的笔记对落入各区间的频率,并估计</p>
+<pre><code class="language-text">P(link | f1 … f8)  ∝  P(link) × Π P(fi | link)
+</code></pre>
+<p>某个特征的<strong>证据</strong>是它的对数似然比,即 log P(bin | link) − log P(bin | no link)。显示的概率是先验对数几率加上(加权的)证据之和的逻辑函数值。</p>
+<p>**计数从何而来。**每当你的库发生明显变化时,模型都会在其上训练:</p>
+<ul>
+<li><strong>正例</strong>:每一对已链接的笔记,加上你接受过的建议(在非常大的库中最多抽样 600 对);</li>
+<li><strong>反例</strong>:随机抽取的未链接笔记对,每个正例对应三个,外加你<strong>忽略</strong>过的每条建议,后者按双倍计算。</li>
+</ul>
+<p>**先验让它从第一天起就能工作。**在没有任何数据之前,每个区间都以 Dirichlet <em>伪计数</em>开始(默认每个特征和类别为 10)。这些伪计数编码了一种较弱的信念:对于已链接的笔记对,计数随相似度上升;对于未链接的笔记对,计数急剧下降。这足以在新库中对建议进行排序。随着你链接笔记,真实计数会超过先验,模型会适应<em>你自己</em>的链接方式。由于正例与反例按一比三抽样,类别先验 P(link) 约为四分之一(并带有相应的伪计数)。</p>
+<p><strong>两项修正让估计保持可信:</strong></p>
+<ol>
+<li>**没有标签泄漏。**在计算特征之前,<code>[[Wiki links]]</code> 会从文本中移除。否则,行内链接会把目标的标题放进文本,模型就会学着识别已有的链接,而不是相关的想法。出于同样的原因,在对已链接的笔记对进行训练时,“共享链接”特征会忽略这两条笔记之间的链接。</li>
+<li>**相关的证据会被加权。**朴素贝叶斯假设各特征相互独立,但有些并非如此:TF-IDF 和 LSA 有重叠,三种字符串距离也是如此。把相关的证据当作独立的来计算,会让普通朴素贝叶斯过于自信。因此 ZettelApp 把每个特征的证据乘以 <strong>0.6</strong>(特征加权朴素贝叶斯),使概率保持现实。</li>
+</ol>
+<p>**缺失或被禁用的特征视为没有证据。**如果你关闭了某个特征,或者它无法计算,它就不起任何作用,这正是朴素贝叶斯自然处理缺失值的方式。</p>
+<h3 id="快速排序">快速排序</h3>
+<p>用 Levenshtein 距离比较长文本是最慢的一步,因此排序分两个阶段进行。首先在不使用文本相似度特征的情况下为所有候选打分,只有最好的 150 个才会获得完整得分。你已经链接过的候选,以及你忽略过的笔记对,绝不会被建议。</p>
+<h2 id="阅读为什么提示">阅读“为什么”提示</h2>
+<p>将鼠标悬停在建议上,可查看模型的估计和每个特征的证据。正数支持链接,负数反对链接。条形旁边的标签概括了概率:<strong>强</strong>(50% 或更高)、<strong>可能</strong>(25% 或更高)或<strong>或许</strong>。</p>
+<p>概率是诚实的估计,在稀疏的库中,大多数笔记对确实没有链接,因此 15–30% 也可能是一条不错的建议。最重要的是顺序。</p>
+<h2 id="调整">调整</h2>
+<p><em>工具 ▸ 选项 ▸ 链接建议</em>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>选项</th>
+<th>默认值</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>写作时建议链接</td>
+<td>开</td>
+<td>完全关闭面板中的建议。</td>
+</tr>
+<tr>
+<td>特征</td>
+<td>全部八个</td>
+<td>取消勾选你不想考虑的特征。</td>
+</tr>
+<tr>
+<td>最多显示</td>
+<td>8</td>
+<td>列出的建议数量。</td>
+</tr>
+<tr>
+<td>最低匹配度</td>
+<td>10%</td>
+<td>隐藏低于此概率的建议。</td>
+</tr>
+<tr>
+<td>先验强度</td>
+<td>10</td>
+<td>先验背后有多少伪观测。值越大,越久地信任先验;值越小,越快适应你的链接。</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li>**模型详情…**显示模型训练所用的已链接和未链接笔记对的数量,以及每个特征的信息量(其在已链接与未链接笔记对上的分布之间的对称 Kullback–Leibler 散度)。</li>
+<li><strong>忘记已忽略的建议</strong>会清除你的忽略记录,这样这些笔记对可以再次被建议,并且不再计为反例。</li>
+</ul>
+
+    <p class="doc-footer">发现错误？<a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/zh-cn/link-suggestions.md">在 GitHub 上编辑此页</a>。</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">首页</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">问题</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">捐赠</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="语言"><li><a href="../../docs/link-suggestions.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/link-suggestions.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/link-suggestions.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/link-suggestions.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/link-suggestions.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/link-suggestions.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/link-suggestions.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/link-suggestions.html" lang="zh-CN" hreflang="zh-CN" aria-current="true">简体中文</a></li><li><a href="../../ja/docs/link-suggestions.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/link-suggestions.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/link-suggestions.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

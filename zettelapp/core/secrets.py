@@ -11,6 +11,8 @@ from __future__ import annotations
 import re
 import sys
 
+from zettelapp.i18n import _
+
 PREFIX = "ZettelApp/"
 _NAME_RE = re.compile(r"^[\w./-]{1,100}$")
 _MAX_BLOB = 5 * 512  # CRED_MAX_CREDENTIAL_BLOB_SIZE
@@ -76,17 +78,17 @@ def secrets_available() -> bool:
 
 def _target(name: str) -> str:
     if not isinstance(name, str) or not _NAME_RE.match(name):
-        raise ValueError("Invalid secret name.")
+        raise ValueError(_("Invalid secret name."))
     return PREFIX + name
 
 
 def set_secret(name: str, value: str) -> None:
     target = _target(name)
     if not isinstance(value, str) or not value:
-        raise ValueError("The secret is empty.")
+        raise ValueError(_("The secret is empty."))
     blob = value.encode("utf-16-le")  # same encoding as Credential Manager's own UI
     if len(blob) > _MAX_BLOB:
-        raise ValueError("The secret is too long.")
+        raise ValueError(_("The secret is too long."))
     if not secrets_available():
         _memory[target] = value
         return
@@ -100,7 +102,9 @@ def set_secret(name: str, value: str) -> None:
         cred.Persist = CRED_PERSIST_LOCAL_MACHINE
         cred.UserName = "ZettelApp"
         if not _CredWrite(ctypes.byref(cred), 0):
-            raise OSError(ctypes.get_last_error(), "Could not save to Windows Credential Manager.")
+            raise OSError(
+                ctypes.get_last_error(), _("Could not save to Windows Credential Manager.")
+            )
     finally:
         ctypes.memset(buffer, 0, len(blob))
 
@@ -114,7 +118,7 @@ def get_secret(name: str) -> str | None:
         error = ctypes.get_last_error()
         if error == ERROR_NOT_FOUND:
             return None
-        raise OSError(error, "Could not read from Windows Credential Manager.")
+        raise OSError(error, _("Could not read from Windows Credential Manager."))
     try:
         cred = pointer.contents
         blob = ctypes.string_at(cred.CredentialBlob, cred.CredentialBlobSize)
@@ -134,7 +138,7 @@ def delete_secret(name: str) -> None:
     if not _CredDelete(target, CRED_TYPE_GENERIC, 0):
         error = ctypes.get_last_error()
         if error != ERROR_NOT_FOUND:
-            raise OSError(error, "Could not remove from Windows Credential Manager.")
+            raise OSError(error, _("Could not remove from Windows Credential Manager."))
 
 
 def delete_all() -> int:

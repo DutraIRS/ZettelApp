@@ -24,6 +24,7 @@ from PySide6.QtWidgets import (
 )
 
 from zettelapp.core.textutil import normalize_tag
+from zettelapp.i18n import _
 from zettelapp.ui import icons, theme
 
 
@@ -123,7 +124,7 @@ class Card(QFrame):
 
 
 class FlowLayout(QLayout):
-    """Lays children out left-to-right, wrapping like text."""
+    """Lays children out in reading order (right to left in Arabic), wrapping like text."""
 
     def __init__(self, parent: QWidget | None = None, spacing: int = 6):
         super().__init__(parent)
@@ -171,6 +172,8 @@ class FlowLayout(QLayout):
         return size
 
     def _layout(self, rect: QRect, dry: bool) -> int:
+        owner = self.parentWidget()
+        rtl = owner.isRightToLeft() if owner is not None else False
         x, y, line = rect.x(), rect.y(), 0
         for item in self._items:
             hint = item.sizeHint()
@@ -178,7 +181,8 @@ class FlowLayout(QLayout):
                 x, y = rect.x(), y + line + self._spacing
                 line = 0
             if not dry:
-                item.setGeometry(QRect(QPoint(x, y), hint))
+                left = rect.x() + rect.right() + 1 - x - hint.width() if rtl else x  # mirrored
+                item.setGeometry(QRect(QPoint(left, y), hint))
             x += hint.width() + self._spacing
             line = max(line, hint.height())
         return y + line - rect.y()
@@ -199,8 +203,8 @@ class TagEditor(QWidget):
         self._inline: list[str] = []
         self.flow = FlowLayout(self)
         self.input = QLineEdit()
-        self.input.setPlaceholderText("Add tag")
-        self.input.setAccessibleName("Add tag")
+        self.input.setPlaceholderText(_("Add tag"))
+        self.input.setAccessibleName(_("Add tag"))
         self.input.setFixedWidth(120)
         self.input.setStyleSheet(
             "QLineEdit { border: none; background: transparent; padding: 2px 4px; }"
@@ -210,7 +214,7 @@ class TagEditor(QWidget):
         self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
         self.completer.setFilterMode(Qt.MatchFlag.MatchContains)
         self.input.setCompleter(self.completer)
-        self.completer.activated.connect(lambda _: QTimer.singleShot(0, self._commit))
+        self.completer.activated.connect(lambda _unused: QTimer.singleShot(0, self._commit))
         self.flow.addWidget(self.input)
 
     def set_known_tags(self, tags: list[str]) -> None:
@@ -240,18 +244,22 @@ class TagEditor(QWidget):
             chip = QToolButton()
             chip.setObjectName("Chip")
             chip.setText(f"#{tag}  ✕")
-            chip.setToolTip(f"Remove tag “{tag}”")
-            chip.setAccessibleName(f"Tag {tag}, press to remove")
+            chip.setToolTip(_("Remove tag “{tag}”").format(tag=tag))
+            chip.setAccessibleName(_("Tag {tag}, press to remove").format(tag=tag))
             chip.setCursor(Qt.CursorShape.PointingHandCursor)
-            chip.clicked.connect(lambda _=False, t=tag: self._remove(t))
+            chip.clicked.connect(lambda _unused=False, t=tag: self._remove(t))
             self.flow.insertWidget(i, chip)
         for i, tag in enumerate(self._inline, start=len(self._tags)):
             chip = QToolButton()
             chip.setObjectName("Chip")
             chip.setProperty("inline", True)
             chip.setText(f"#{tag}")
-            chip.setToolTip(f"Written in the note text. Delete “#{tag}” there to remove this tag.")
-            chip.setAccessibleName(f"Tag {tag}, from the note text")
+            chip.setToolTip(
+                _("Written in the note text. Delete “#{tag}” there to remove this tag.").format(
+                    tag=tag
+                )
+            )
+            chip.setAccessibleName(_("Tag {tag}, from the note text").format(tag=tag))
             chip.setFocusPolicy(Qt.FocusPolicy.NoFocus)
             self.flow.insertWidget(i, chip)
         self.updateGeometry()
@@ -307,7 +315,7 @@ class InfoBar(QFrame):
         self.text = QLabel()
         self.text.setWordWrap(True)
         self.action = link_button("")
-        self.close_button = tool_button("cancel", "Dismiss", self.hide)
+        self.close_button = tool_button("cancel", _("Dismiss"), self.hide)
         row.addWidget(self.icon)
         row.addWidget(self.text, 1)
         row.addWidget(self.action)
@@ -357,18 +365,18 @@ class ScopePicker(QWidget):
         row = QHBoxLayout(self)
         row.setContentsMargins(0, 0, 0, 0)
         self.mode = QComboBox()
-        self.mode.setAccessibleName("Scope")
-        self.mode.addItem("Entire collection", "all")
+        self.mode.setAccessibleName(_("Scope"))
+        self.mode.addItem(_("Entire collection"), "all")
         if allow_current:
-            self.mode.addItem("Current note and linked notes", "subgraph")
-        self.mode.addItem("Notes with tag", "tag")
+            self.mode.addItem(_("Current note and linked notes"), "subgraph")
+        self.mode.addItem(_("Notes with tag"), "tag")
         self.depth_spin = QSpinBox()
         self.depth_spin.setRange(1, 6)
         self.depth_spin.setValue(2)
-        self.depth_spin.setPrefix("Depth ")
-        self.depth_spin.setToolTip("How many links away from the current note to include")
+        self.depth_spin.setPrefix(_("Depth "))
+        self.depth_spin.setToolTip(_("How many links away from the current note to include"))
         self.tag = QComboBox()
-        self.tag.setAccessibleName("Tag")
+        self.tag.setAccessibleName(_("Tag"))
         self.tag.setMinimumWidth(140)
         row.addWidget(self.mode)
         row.addWidget(self.depth_spin)

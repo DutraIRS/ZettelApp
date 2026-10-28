@@ -21,6 +21,7 @@ from zettelapp.core.models import (
     mindmap_nodes,
     new_mindmap_node,
 )
+from zettelapp.i18n import _
 from zettelapp.ui import icons, theme
 
 H_GAP = 56
@@ -47,7 +48,7 @@ class _NodeItem(QGraphicsItem):
         self.setAcceptHoverEvents(True)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setToolTip(
-            "Linked note: double-click the link icon area or use the context menu to open it"
+            _("Linked note: double-click the link icon area or use the context menu to open it")
             if node.get("note")
             else ""
         )
@@ -114,7 +115,7 @@ class MindMapView(QGraphicsView):
         self.setRenderHints(QPainter.RenderHint.Antialiasing | QPainter.RenderHint.TextAntialiasing)
         self.setDragMode(QGraphicsView.DragMode.ScrollHandDrag)
         self.setTransformationAnchor(QGraphicsView.ViewportAnchor.AnchorUnderMouse)
-        self.setAccessibleName("Mind map")
+        self.setAccessibleName(_("Mind map"))
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.root: dict | None = None
         self.selected_id: str | None = None
@@ -131,7 +132,7 @@ class MindMapView(QGraphicsView):
 
     def ensure_root(self, title: str) -> None:
         if self.root is None:
-            self.root = new_mindmap_node(title or "Central idea")
+            self.root = new_mindmap_node(title or _("Central idea"))
             self.selected_id = self.root["id"]
             self._emit()
 
@@ -153,7 +154,9 @@ class MindMapView(QGraphicsView):
         t = theme.current()
         self.setBackgroundBrush(t.q("surface"))
         if self.root is None:
-            text = scene.addText("No mind map yet. Click “Add mind map” or press Tab to start one.")
+            text = scene.addText(
+                _("No mind map yet. Click “Add mind map” or press Tab to start one.")
+            )
             text.setDefaultTextColor(t.q("text_muted"))
             text.setFont(theme.ui_font(10))
             return
@@ -193,7 +196,7 @@ class MindMapView(QGraphicsView):
         place(self.root, 0)
         branch_of: dict[str, int] = {}
         for i, child in enumerate(self.root.get("children", [])):
-            for node, _ in mindmap_nodes(child):
+            for node, _unused in mindmap_nodes(child):
                 branch_of[node["id"]] = i
 
         def draw(node: dict, depth: int) -> None:
@@ -241,20 +244,20 @@ class MindMapView(QGraphicsView):
         self.scene().update()
 
     def _count(self) -> int:
-        return sum(1 for _ in mindmap_nodes(self.root)) if self.root else 0
+        return sum(1 for _unused in mindmap_nodes(self.root)) if self.root else 0
 
     def add_child(self) -> None:
         if self.root is None:
-            self.ensure_root("Central idea")
+            self.ensure_root(_("Central idea"))
             return
         if self._count() >= MAX_MINDMAP_NODES:
             return
-        node, _ = _find(self.root, self.selected_id or self.root["id"])
+        node, _unused = _find(self.root, self.selected_id or self.root["id"])
         node = node or self.root
         depth = next(depth for candidate, depth in mindmap_nodes(self.root) if candidate is node)
         if depth >= MAX_MINDMAP_DEPTH:
             return
-        child = new_mindmap_node("New idea")
+        child = new_mindmap_node(_("New idea"))
         node.setdefault("children", []).append(child)
         self.selected_id = child["id"]
         self._emit()
@@ -269,7 +272,7 @@ class MindMapView(QGraphicsView):
         node, parent = _find(self.root, self.selected_id)
         if parent is None:
             return
-        sibling = new_mindmap_node("New idea")
+        sibling = new_mindmap_node(_("New idea"))
         parent["children"].insert(parent["children"].index(node) + 1, sibling)
         self.selected_id = sibling["id"]
         self._emit()
@@ -323,12 +326,12 @@ class MindMapView(QGraphicsView):
     def set_node_note(self, node_id: str, note_id: str | None, title: str | None = None) -> None:
         if self.root is None:
             return
-        node, _ = _find(self.root, node_id)
+        node, _unused = _find(self.root, node_id)
         if node is None:
             return
         if note_id:
             node["note"] = note_id
-            if title and (not node.get("text") or node.get("text") == "New idea"):
+            if title and (not node.get("text") or node.get("text") == _("New idea")):
                 node["text"] = title
         else:
             node.pop("note", None)
@@ -379,25 +382,27 @@ class MindMapView(QGraphicsView):
         menu = QMenu(self)
         if isinstance(item, _NodeItem):
             self.select(item.node["id"])
-            menu.addAction(icons.icon("add"), "Add child\tTab", self.add_child)
-            menu.addAction("Add sibling\tEnter", self.add_sibling)
-            menu.addAction(icons.icon("edit"), "Rename\tF2", lambda: self.edit(item.node["id"]))
+            menu.addAction(icons.icon("add"), _("Add child\tTab"), self.add_child)
+            menu.addAction(_("Add sibling\tEnter"), self.add_sibling)
+            menu.addAction(
+                icons.icon("edit"), _("Rename") + "\tF2", lambda: self.edit(item.node["id"])
+            )
             menu.addSeparator()
             menu.addAction(
                 icons.icon("link"),
-                "Link to note…",
+                _("Link to note…"),
                 lambda: self.linkNoteRequested.emit(item.node["id"]),
             )
             if item.node.get("note"):
-                menu.addAction("Open linked note", lambda: self.openNote.emit(item.node["note"]))
+                menu.addAction(_("Open linked note"), lambda: self.openNote.emit(item.node["note"]))
                 menu.addAction(
-                    "Remove note link", lambda: self.set_node_note(item.node["id"], None)
+                    _("Remove note link"), lambda: self.set_node_note(item.node["id"], None)
                 )
             menu.addSeparator()
-            menu.addAction(icons.icon("delete"), "Delete\tDel", self.delete_selected)
+            menu.addAction(icons.icon("delete"), _("Delete") + "\tDel", self.delete_selected)
         else:
-            menu.addAction(icons.icon("add"), "Add idea", self.add_child)
-            menu.addAction(icons.icon("fit"), "Fit to window", self.fit)
+            menu.addAction(icons.icon("add"), _("Add idea"), self.add_child)
+            menu.addAction(icons.icon("fit"), _("Fit to window"), self.fit)
         menu.exec(event.globalPos())
 
     # --- export -------------------------------------------------------------
@@ -424,7 +429,7 @@ class MindMapView(QGraphicsView):
         generator.setFileName(path)
         generator.setSize(rect.size().toSize())
         generator.setViewBox(QRectF(0, 0, rect.width(), rect.height()))
-        generator.setTitle("Mind map")
+        generator.setTitle(_("Mind map"))
         painter = QPainter(generator)
         self.scene().render(painter, QRectF(0, 0, rect.width(), rect.height()), rect)
         painter.end()

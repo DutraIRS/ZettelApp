@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="O Model Context Protocol  é um padrão aberto que permite que assistentes de IA usem ferramentas e dados de outros programas. O ZettelApp inclui um servidor MCP, para que assistente">
+<title>Servidor MCP – documentação do ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Ir para o conteúdo</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Recursos</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Documentação</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Doar</a></li>
+        <li><a class="nav-cta" href="../#download">Baixar</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Idiomas</span></summary><ul class="lang-switch-panel" aria-label="Idiomas"><li><a href="../../docs/mcp-server.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/mcp-server.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/mcp-server.html" lang="pt-BR" hreflang="pt-BR" aria-current="true">Português (Brasil)</a></li><li><a href="../../fr/docs/mcp-server.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/mcp-server.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/mcp-server.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/mcp-server.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/mcp-server.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/mcp-server.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/mcp-server.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/mcp-server.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Doar"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Doar</span></a>
+      <a class="hbtn cta" href="../#download">Baixar</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Recursos</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Documentação</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentação">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentação</span><span class="docs-menu-current">Servidor MCP</span></span></summary>
+      <ul>
+      <li><a href="index.html">Documentação do ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">O que é um Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: seus primeiros 30 minutos</a></li>
+      <li><a href="getting-started.html">Primeiros passos</a></li>
+      <li><a href="notes-and-links.html">Notas e links</a></li>
+      <li><a href="link-suggestions.html">Sugestões de links</a></li>
+      <li><a href="graph-and-insights.html">Grafo e Insights</a></li>
+      <li><a href="review-and-anki.html">Revisão, quizzes e Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Pergunte às suas notas (IA)</a></li>
+      <li><a href="mcp-server.html" aria-current="page">Servidor MCP</a></li>
+      <li><a href="export-import.html">Exportar e importar</a></li>
+      <li><a href="keyboard-shortcuts.html">Atalhos de teclado</a></li>
+      <li><a href="privacy-and-security.html">Privacidade e segurança</a></li>
+      <li><a href="faq.html">Perguntas frequentes</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentação</h2>
+      <ul>
+      <li><a href="index.html">Documentação do ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">O que é um Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: seus primeiros 30 minutos</a></li>
+      <li><a href="getting-started.html">Primeiros passos</a></li>
+      <li><a href="notes-and-links.html">Notas e links</a></li>
+      <li><a href="link-suggestions.html">Sugestões de links</a></li>
+      <li><a href="graph-and-insights.html">Grafo e Insights</a></li>
+      <li><a href="review-and-anki.html">Revisão, quizzes e Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Pergunte às suas notas (IA)</a></li>
+      <li><a href="mcp-server.html" aria-current="page">Servidor MCP</a></li>
+      <li><a href="export-import.html">Exportar e importar</a></li>
+      <li><a href="keyboard-shortcuts.html">Atalhos de teclado</a></li>
+      <li><a href="privacy-and-security.html">Privacidade e segurança</a></li>
+      <li><a href="faq.html">Perguntas frequentes</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="servidor-mcp">Servidor MCP</h1>
+<p>O <a href="https://modelcontextprotocol.io/">Model Context Protocol</a> (MCP) é um padrão aberto que permite que assistentes de
+IA usem ferramentas e dados de outros programas. O ZettelApp inclui um servidor MCP, para que assistentes como o
+<strong>Claude Desktop</strong> e o <strong>Claude Code</strong> possam pesquisar seu Zettelkasten, ler notas, seguir links tipados
+e pedir sugestões de links enquanto ajudam você.</p>
+<h2 id="como-ele-roda">Como ele roda</h2>
+<p>O servidor é um pequeno programa separado, o <strong><code>zettelapp-mcp.exe</code></strong>, instalado ao lado do <code>ZettelApp.exe</code>.
+A partir do código-fonte, o mesmo servidor roda com <code>python -m zettelapp.mcp_main</code>. Seu cliente MCP o inicia quando
+necessário e conversa com ele pela entrada/saída padrão. <strong>Nenhuma porta de rede é aberta.</strong></p>
+<pre><code class="language-text">zettelapp-mcp --vault &quot;C:\Users\me\Documents\ZettelApp&quot; [--allow-writes]
+</code></pre>
+<p>Sem <code>--vault</code>, ele serve o cofre que você abriu por último no ZettelApp. As alterações feitas pelo MCP aparecem no
+aplicativo em alguns segundos.</p>
+<h2 id="o-interruptor-mcp">O interruptor MCP</h2>
+<p>Os clientes MCP só alcançam suas notas enquanto o <strong>ZettelApp está aberto e o interruptor MCP na barra de status dele
+está ligado</strong>. O interruptor fica <strong>desligado toda vez que o ZettelApp inicia</strong>, então você decide, a cada sessão, se os assistentes
+podem ler suas notas. Desligue-o, ou feche o ZettelApp, e o servidor para em cerca de um segundo.
+Sem o interruptor, o servidor se recusa a iniciar e diz o motivo. Para o comportamento exato, veja a
+<a href="../../docs/mcp-reference.html">Referência da API MCP</a>.</p>
+<h2 id="conectar-o-claude-desktop">Conectar o Claude Desktop</h2>
+<p>Abra <em>Ferramentas ▸ Opções ▸ Servidor MCP</em> e clique em <strong>Adicionar ao Claude Desktop…</strong>. O ZettelApp se adiciona ao
+<code>%APPDATA%\Claude\claude_desktop_config.json</code> (mantendo um backup do arquivo antigo). Depois reinicie o Claude
+Desktop. Ligue o <strong>interruptor MCP</strong> na barra de status do ZettelApp antes de iniciar o Claude Desktop; se você o ligar
+depois, reconecte o ZettelApp no Claude Desktop ou reinicie-o. Para fazer isso à mão, copie o trecho mostrado
+nessa página para o arquivo. Ele se parece com isto:</p>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;zettelapp&quot;: {
+      &quot;command&quot;: &quot;C:\\Users\\me\\AppData\\Local\\Programs\\ZettelApp\\zettelapp-mcp.exe&quot;,
+      &quot;args&quot;: [&quot;--vault&quot;, &quot;C:\\Users\\me\\Documents\\ZettelApp&quot;]
+    }
+  }
+}
+</code></pre>
+<h2 id="conectar-o-claude-code">Conectar o Claude Code</h2>
+<p>A mesma página de Opções mostra o comando para copiar:</p>
+<pre><code class="language-powershell">claude mcp add zettelapp -- &quot;C:\Users\me\AppData\Local\Programs\ZettelApp\zettelapp-mcp.exe&quot; --vault &quot;C:\Users\me\Documents\ZettelApp&quot;
+</code></pre>
+<p>Outros clientes MCP precisam do mesmo comando e dos mesmos argumentos. Assim como no Claude Desktop, ligue o MCP no ZettelApp
+primeiro e reconecte o servidor (no Claude Code, <code>/mcp</code>) se você o ligar depois.</p>
+<h2 id="ferramentas">Ferramentas</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Ferramenta</th>
+<th>O que faz</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search_notes</code></td>
+<td>Busca de texto completo em títulos, textos e tags (filtros <code>tag:nome</code> funcionam). Uma consulta vazia lista as notas editadas recentemente.</td>
+</tr>
+<tr>
+<td><code>get_note</code></td>
+<td>O texto completo de uma nota, tags, link de fonte, datas, links tipados nos dois sentidos, flashcards e estrutura do mapa mental.</td>
+</tr>
+<tr>
+<td><code>list_tags</code></td>
+<td>Todas as tags, com o número de notas que usam cada uma.</td>
+</tr>
+<tr>
+<td><code>get_subgraph</code></td>
+<td>As notas a 1–4 links de uma nota e os links tipados entre elas (opcionalmente apenas alguns tipos de link).</td>
+</tr>
+<tr>
+<td><code>suggest_links</code></td>
+<td>Notas provavelmente relacionadas a uma nota, mas ainda não ligadas, ordenadas pelo <a href="link-suggestions.html">sugeridor Naive Bayes</a>.</td>
+</tr>
+<tr>
+<td><code>list_link_types</code></td>
+<td>Os tipos de link do cofre, como <em>apoia</em>, <em>contradiz</em> e <em>parte de</em>.</td>
+</tr>
+<tr>
+<td><code>create_note</code></td>
+<td><em>(escrita)</em> Cria uma nota. <code>[[Título]]</code> no corpo liga a notas existentes.</td>
+</tr>
+<tr>
+<td><code>add_link</code></td>
+<td><em>(escrita)</em> Adiciona um link tipado de uma nota para outra.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="somente-leitura-por-padrao">Somente leitura por padrão</h2>
+<p>O servidor abre seu cofre <strong>somente para leitura</strong>. As duas ferramentas de escrita só são oferecidas quando <strong>ambas</strong> as condições abaixo
+são verdadeiras:</p>
+<ol>
+<li><strong>Permitir que clientes MCP criem notas e links</strong> está marcado em <em>Opções ▸ Servidor MCP</em>;</li>
+<li>o servidor foi iniciado com <code>--allow-writes</code>. O trecho na página de Opções inclui essa opção assim que
+você marca a configuração.</li>
+</ol>
+<p>A configuração é verificada de novo a cada escrita, então desmarcá-la tem efeito imediato. Ativá-la
+exige que o cliente MCP reinicie o servidor.</p>
+<p>O conteúdo das notas é passado ao assistente como dados, e o servidor diz ao assistente para não tratá-lo
+como instruções. As entradas são validadas (IDs, tamanhos e limites), e o servidor nunca toca em arquivos
+fora do cofre.</p>
+<h2 id="solucao-de-problemas">Solução de problemas</h2>
+<ul>
+<li><strong>O cliente diz que o servidor falhou ao iniciar, ou as chamadas de ferramenta dizem que o interruptor está desligado.</strong> Abra o ZettelApp
+e ligue o MCP na barra de status dele, depois reconecte o servidor no seu cliente.</li>
+<li><strong>O servidor ainda falha ao iniciar.</strong> Verifique se o caminho para <code>zettelapp-mcp.exe</code> está certo.
+Execute o comando você mesmo em um terminal: ele informa o que está errado (por exemplo &quot;No ZettelApp vault
+found&quot;) na saída de erro padrão.</li>
+<li><strong>As ferramentas de escrita não aparecem.</strong> Marque a opção <em>e</em> adicione <code>--allow-writes</code>, depois reinicie o cliente.</li>
+</ul>
+
+    <p class="doc-footer">Encontrou um erro? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/pt-br/mcp-server.md">Edite esta página no GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Início</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Problemas</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Doar</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Idiomas"><li><a href="../../docs/mcp-server.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/mcp-server.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/mcp-server.html" lang="pt-BR" hreflang="pt-BR" aria-current="true">Português (Brasil)</a></li><li><a href="../../fr/docs/mcp-server.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/mcp-server.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/mcp-server.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/mcp-server.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/mcp-server.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/mcp-server.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/mcp-server.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/mcp-server.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

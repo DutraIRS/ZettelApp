@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 from datetime import datetime
+from functools import lru_cache
 
 from PySide6.QtCore import QAbstractListModel, QModelIndex, QRectF, QSize, Qt, QTimer, Signal
-from PySide6.QtGui import QFontMetrics, QPainter, QPainterPath
+from PySide6.QtGui import QFontMetrics, QImage, QPainter, QPainterPath, QPen, QPixmap
 from PySide6.QtWidgets import (
     QComboBox,
     QHBoxLayout,
@@ -19,6 +20,7 @@ from PySide6.QtWidgets import (
 
 from zettelapp.core.storage import Vault
 from zettelapp.core.textutil import fold, snippet
+from zettelapp.i18n import _, n_
 from zettelapp.ui import icons, theme
 from zettelapp.ui.widgets import SearchBox, accent_button, label, tool_button
 
@@ -72,6 +74,19 @@ class NoteDelegate(QStyledItemDelegate):
             pill.addRoundedRect(QRectF(rect.left(), rect.center().y() - 9, 3, 18), 1.5, 1.5)
             painter.fillPath(pill, t.q("accent"))
         inner = rect.adjusted(14, 9, -10, -8)
+        thumb = _thumbnail(row.get("image"))
+        if thumb is not None:
+            side = 48
+            target = QRectF(rect.left() + 14, rect.center().y() - side / 2, side, side)
+            clip = QPainterPath()
+            clip.addRoundedRect(target, 8, 8)
+            painter.save()
+            painter.setClipPath(clip)
+            painter.drawPixmap(target.toRect(), thumb)
+            painter.restore()
+            painter.setPen(QPen(t.q("border"), 1))
+            painter.drawPath(clip)
+            inner = inner.adjusted(side + 10, 0, 0, 0)
         title_font = theme.ui_font(10.5, theme.QFont.Weight.DemiBold)
         painter.setFont(title_font)
         painter.setPen(t.q("text"))
@@ -99,7 +114,7 @@ class NoteDelegate(QStyledItemDelegate):
         painter.setPen(t.q("text_secondary"))
         body_metrics = QFontMetrics(body_font)
         text = body_metrics.elidedText(
-            row["snippet"] or "No text", Qt.TextElideMode.ElideRight, int(inner.width())
+            row["snippet"] or _("No text"), Qt.TextElideMode.ElideRight, int(inner.width())
         )
         painter.drawText(
             QRectF(
@@ -115,25 +130,49 @@ class NoteDelegate(QStyledItemDelegate):
         if row["tags"]:
             extras.append("  ".join("#" + tag for tag in row["tags"][:4]))
         if row["links"]:
-            extras.append(f"{row['links']} link{'s' if row['links'] != 1 else ''}")
+            extras.append(n_("{n} link", "{n} links", row["links"]).format(n=row["links"]))
         if row["cards"]:
-            extras.append(f"{row['cards']} card{'s' if row['cards'] != 1 else ''}")
+            extras.append(n_("{n} card", "{n} cards", row["cards"]).format(n=row["cards"]))
+        foot_rect = QRectF(
+            inner.left(),
+            inner.bottom() - QFontMetrics(date_font).height(),
+            inner.width(),
+            QFontMetrics(date_font).height(),
+        )
+        if row.get("alarm"):
+            icon_size = 14
+            icons.icon("alarm", t.accent, icon_size).paint(
+                painter,
+                int(foot_rect.right() - icon_size),
+                int(foot_rect.center().y() - icon_size / 2),
+                icon_size,
+                icon_size,
+            )
+            foot_rect.setWidth(foot_rect.width() - icon_size - 4)
         painter.setFont(date_font)
         painter.setPen(t.q("text_muted"))
         foot = QFontMetrics(date_font).elidedText(
-            "  ·  ".join(extras), Qt.TextElideMode.ElideRight, int(inner.width())
+            "  ·  ".join(extras), Qt.TextElideMode.ElideRight, int(foot_rect.width())
         )
-        painter.drawText(
-            QRectF(
-                inner.left(),
-                inner.bottom() - QFontMetrics(date_font).height(),
-                inner.width(),
-                QFontMetrics(date_font).height(),
-            ),
-            Qt.AlignmentFlag.AlignLeft,
-            foot,
-        )
+        painter.drawText(foot_rect, Qt.AlignmentFlag.AlignLeft, foot)
         painter.restore()
+
+
+@lru_cache(maxsize=256)
+def _thumbnail(path: str | None) -> QPixmap | None:
+    """A square, centre-cropped 48 px preview (at 2x for sharp edges), or None."""
+    if not path:
+        return None
+    image = QImage(path)
+    if image.isNull():
+        return None
+    side = min(image.width(), image.height())
+    image = image.copy((image.width() - side) // 2, (image.height() - side) // 2, side, side)
+    return QPixmap.fromImage(
+        image.scaled(
+            96, 96, Qt.AspectRatioMode.IgnoreAspectRatio, Qt.TransformationMode.SmoothTransformation
+        )
+    )
 
 
 def _short_date(iso: str) -> str:
@@ -172,28 +211,33 @@ class NoteListPanel(QWidget):
         layout.setSpacing(8)
         head = QHBoxLayout()
         head.setContentsMargins(6, 0, 4, 0)
-        self.heading = label("Notes", "heading")
+        self.heading = label(_("Notes"), "heading")
         head.addWidget(self.heading)
         self.count = label("", "caption")
         head.addWidget(self.count, 1)
-        self.new_button = accent_button("New", self.newNoteRequested.emit, "add")
-        self.new_button.setToolTip("New note (Ctrl+N)")
+        self.new_button = accent_button(_("New"), self.newNoteRequested.emit, "add")
+        self.new_button.setToolTip(_("New note (Ctrl+N)"))
         head.addWidget(self.new_button)
         layout.addLayout(head)
-        self.search = SearchBox("Search notes (Ctrl+F) · tag:name filters")
+        self.search = SearchBox(_("Search notes (Ctrl+F) · tag:name filters"))
         layout.addWidget(self.search)
         filters = QHBoxLayout()
         self.tag_filter = QComboBox()
-        self.tag_filter.setAccessibleName("Filter by tag")
+        self.tag_filter.setAccessibleName(_("Filter by tag"))
         self.sort = QComboBox()
-        self.sort.setAccessibleName("Sort notes")
+        self.sort.setAccessibleName(_("Sort notes"))
         for text, key in (
-            ("Last edited", "modified"),
-            ("Created", "created"),
-            ("Title", "title"),
-            ("Most linked", "links"),
+            (_("Last edited"), "modified"),
+            (_("Created"), "created"),
+            (_("Title"), "title"),
+            (_("Most linked"), "links"),
         ):
             self.sort.addItem(text, key)
+        for combo in (self.tag_filter, self.sort):  # long tags or words mustn't widen the list
+            combo.setMinimumContentsLength(6)
+            combo.setSizeAdjustPolicy(
+                QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
+            )
         filters.addWidget(self.tag_filter, 1)
         filters.addWidget(self.sort)
         layout.addLayout(filters)
@@ -203,7 +247,7 @@ class NoteListPanel(QWidget):
         self.view.setItemDelegate(NoteDelegate(self.view))
         self.view.setMouseTracking(True)
         self.view.setUniformItemSizes(True)
-        self.view.setAccessibleName("Notes")
+        self.view.setAccessibleName(_("Notes"))
         self.view.setVerticalScrollMode(QListView.ScrollMode.ScrollPerPixel)
         self.view.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.view.customContextMenuRequested.connect(self._menu)
@@ -211,23 +255,23 @@ class NoteListPanel(QWidget):
         layout.addWidget(self.view, 1)
         foot = QHBoxLayout()
         self.trash_button = tool_button(
-            "trash", "Show the Trash", self.toggle_trash, checkable=True, text="Trash"
+            "trash", _("Show the Trash"), self.toggle_trash, checkable=True, text=_("Trash")
         )
         foot.addWidget(self.trash_button)
         foot.addStretch(1)
         self.empty_trash = tool_button(
             "delete",
-            "Permanently delete everything in the Trash",
+            _("Permanently delete everything in the Trash"),
             self.emptyTrashRequested.emit,
-            text="Empty Trash",
+            text=_("Empty Trash"),
         )
         self.empty_trash.setVisible(False)
         foot.addWidget(self.empty_trash)
         layout.addLayout(foot)
         self._timer = QTimer(self, singleShot=True, interval=180, timeout=self.refresh)
-        self.search.textChanged.connect(lambda _: self._timer.start())
-        self.tag_filter.currentIndexChanged.connect(lambda _: self.refresh())
-        self.sort.currentIndexChanged.connect(lambda _: self.refresh())
+        self.search.textChanged.connect(lambda _unused: self._timer.start())
+        self.tag_filter.currentIndexChanged.connect(lambda _unused: self.refresh())
+        self.sort.currentIndexChanged.connect(lambda _unused: self.refresh())
 
     def set_vault(self, vault: Vault | None) -> None:
         self.vault = vault
@@ -238,7 +282,7 @@ class NoteListPanel(QWidget):
         current = self.tag_filter.currentData()
         self.tag_filter.blockSignals(True)
         self.tag_filter.clear()
-        self.tag_filter.addItem(icons.icon("tag"), "All tags", None)
+        self.tag_filter.addItem(icons.icon("tag"), _("All tags"), None)
         if self.vault:
             for tag, n in self.vault.all_tags():
                 self.tag_filter.addItem(f"#{tag}  ({n})", tag)
@@ -247,7 +291,7 @@ class NoteListPanel(QWidget):
 
     def toggle_trash(self) -> None:
         self.trash_mode = self.trash_button.isChecked()
-        self.heading.setText("Trash" if self.trash_mode else "Notes")
+        self.heading.setText(_("Trash") if self.trash_mode else _("Notes"))
         self.new_button.setVisible(not self.trash_mode)
         self.empty_trash.setVisible(self.trash_mode)
         self.refresh()
@@ -295,6 +339,8 @@ class NoteListPanel(QWidget):
                 "tags": notes[i].tags,
                 "links": degree.get(i, 0),
                 "cards": cards.get(i, 0),
+                "alarm": bool(notes[i].alarm),
+                "image": self._image_path(notes[i].image),
             }
             for i in ids
         ]
@@ -303,6 +349,10 @@ class NoteListPanel(QWidget):
         self.count.setText(f"{len(rows)} of {total}" if len(rows) != total else f"{total}")
         if selected:
             self.select(selected, emit=False)
+
+    def _image_path(self, asset: str) -> str | None:
+        path = self.vault.asset_path(asset) if asset and self.vault else None
+        return str(path) if path else None
 
     def current_id(self) -> str | None:
         index = self.view.currentIndex()
@@ -332,28 +382,28 @@ class NoteListPanel(QWidget):
         menu = QMenu(self)
         if self.trash_mode:
             menu.addAction(
-                icons.icon("restore"), "Restore", lambda: self.restoreRequested.emit(note_id)
+                icons.icon("restore"), _("Restore"), lambda: self.restoreRequested.emit(note_id)
             )
             menu.addAction(
                 icons.icon("delete"),
-                "Delete permanently…",
+                _("Delete permanently…"),
                 lambda: self.purgeRequested.emit(note_id),
             )
         else:
-            menu.addAction(icons.icon("open"), "Open", lambda: self.noteSelected.emit(note_id))
-            link_menu = menu.addMenu(icons.icon("link"), "Link from the open note as")
+            menu.addAction(icons.icon("open"), _("Open"), lambda: self.noteSelected.emit(note_id))
+            link_menu = menu.addMenu(icons.icon("link"), _("Link from the open note as"))
             for lt in self.link_types:
                 link_menu.addAction(lt.label, lambda t=lt.id: self.linkToCurrent.emit(note_id, t))
             menu.addAction(
-                icons.icon("graph"), "Show in graph", lambda: self.showInGraph.emit(note_id)
+                icons.icon("graph"), _("Show in graph"), lambda: self.showInGraph.emit(note_id)
             )
             menu.addAction(
                 icons.icon("export"),
-                "Export with linked notes…",
+                _("Export with linked notes…"),
                 lambda: self.exportFrom.emit(note_id),
             )
             menu.addSeparator()
             menu.addAction(
-                icons.icon("delete"), "Move to Trash", lambda: self.trashRequested.emit(note_id)
+                icons.icon("delete"), _("Move to Trash"), lambda: self.trashRequested.emit(note_id)
             )
         menu.exec(self.view.viewport().mapToGlobal(pos))

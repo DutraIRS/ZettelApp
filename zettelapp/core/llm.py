@@ -25,6 +25,7 @@ import numpy as np
 from zettelapp.core.models import Note
 from zettelapp.core.similarity import SemanticIndex
 from zettelapp.core.textutil import tokenize
+from zettelapp.i18n import _, n_
 
 ANTHROPIC = "anthropic"
 OPENAI_COMPATIBLE = "openai_compatible"
@@ -104,11 +105,11 @@ def validate_base_url(url: str) -> str:
         host = None
         parts = None
     if not parts or not host or parts.username or parts.password or parts.query or parts.fragment:
-        raise LLMError("The API address is not a valid URL.")
+        raise LLMError(_("The API address is not a valid URL."))
     if parts.scheme == "https" or (parts.scheme == "http" and host in _LOCAL_HOSTS):
         return url
     raise LLMError(
-        "The API address must use https:// (plain http:// is allowed only for localhost)."
+        _("The API address must use https:// (plain http:// is allowed only for localhost).")
     )
 
 
@@ -123,7 +124,7 @@ class LLMSettings:
     def info(self) -> ProviderInfo:
         info = PROVIDERS.get(self.provider)
         if info is None:
-            raise LLMError(f"Unknown AI provider: {self.provider!r}")
+            raise LLMError(_("Unknown AI provider: {provider!r}").format(provider=self.provider))
         return info
 
     def effective_model(self) -> str:
@@ -244,7 +245,7 @@ class AnthropicAdapter:
         import anthropic
 
         if not api_key:
-            raise LLMError("Add your Anthropic API key in Tools ▸ Options ▸ AI assistant first.")
+            raise LLMError(_("Add your Anthropic API key in Tools ▸ Options ▸ AI assistant first."))
         base = settings.effective_base_url()
         return anthropic.Anthropic(
             api_key=api_key,
@@ -258,28 +259,34 @@ class AnthropicAdapter:
 
         if isinstance(exc, anthropic.AuthenticationError):
             return LLMError(
-                "Anthropic rejected the API key. Check it in Tools ▸ Options ▸ AI assistant."
+                _("Anthropic rejected the API key. Check it in Tools ▸ Options ▸ AI assistant.")
             )
         if isinstance(exc, anthropic.PermissionDeniedError):
-            return LLMError("This API key is not allowed to use the selected model.")
+            return LLMError(_("This API key is not allowed to use the selected model."))
         if isinstance(exc, anthropic.NotFoundError):
             return LLMError(
-                "The selected model was not found. Choose another model in Tools ▸ Options ▸ AI assistant."
+                _(
+                    "The selected model was not found. Choose another model in Tools ▸ Options ▸ AI assistant."
+                )
             )
         if isinstance(exc, anthropic.RateLimitError):
-            return LLMError("Rate limit or usage limit reached. Wait a moment and try again.")
+            return LLMError(_("Rate limit or usage limit reached. Wait a moment and try again."))
         if isinstance(exc, anthropic.APIStatusError):
             if exc.status_code >= 500:
                 return LLMError(
-                    f"Anthropic is having trouble right now (error {exc.status_code}). Try again later."
+                    _(
+                        "Anthropic is having trouble right now (error {status_code}). Try again later."
+                    ).format(status_code=exc.status_code)
                 )
             return LLMError(
-                f"Anthropic returned an error: {_scrub(str(getattr(exc, 'message', exc)), api_key)}"
+                _("Anthropic returned an error: {scrub}").format(
+                    scrub=_scrub(str(getattr(exc, "message", exc)), api_key)
+                )
             )
         if isinstance(exc, anthropic.APITimeoutError):
-            return LLMError("The request to Anthropic timed out. Try again.")
+            return LLMError(_("The request to Anthropic timed out. Try again."))
         if isinstance(exc, anthropic.APIConnectionError):
-            return LLMError("Could not reach Anthropic. Check your internet connection.")
+            return LLMError(_("Could not reach Anthropic. Check your internet connection."))
         return LLMError(_scrub(str(exc), api_key))
 
     def stream(
@@ -307,9 +314,9 @@ class AnthropicAdapter:
         except anthropic.APIError as exc:
             raise self._translate(exc, api_key) from None
         if final.stop_reason == "refusal":
-            raise LLMError("The model declined to answer this question.")
+            raise LLMError(_("The model declined to answer this question."))
         if final.stop_reason == "max_tokens":
-            yield "\n\n*(The answer was cut off at the length limit.)*"
+            yield "\n\n*(" + _("The answer was cut off at the length limit.") + ")*"
 
     def list_models(self, settings: LLMSettings, api_key: str | None) -> list[str]:
         import anthropic
@@ -327,7 +334,7 @@ def parse_sse(lines: Iterable[bytes]) -> Iterator[str]:
     for raw in lines:
         total += len(raw)
         if total > MAX_STREAM_BYTES:
-            raise LLMError("The response was unexpectedly large and was stopped.")
+            raise LLMError(_("The response was unexpectedly large and was stopped."))
         line = raw.decode("utf-8", errors="replace").strip()
         if not line.startswith("data:"):
             continue  # blank keep-alives, comments (":") and event names
@@ -342,7 +349,9 @@ def parse_sse(lines: Iterable[bytes]) -> Iterator[str]:
             continue
         if isinstance(event.get("error"), dict):
             raise LLMError(
-                f"The provider returned an error: {_scrub(event['error'].get('message', ''), None)}"
+                _("The provider returned an error: {scrub}").format(
+                    scrub=_scrub(event["error"].get("message", ""), None)
+                )
             )
         for choice in (event.get("choices") or [])[:1]:
             if not isinstance(choice, dict):
@@ -353,9 +362,9 @@ def parse_sse(lines: Iterable[bytes]) -> Iterator[str]:
                 yield content
             reason = choice.get("finish_reason")
             if reason == "content_filter":
-                raise LLMError("The provider declined to answer this question.")
+                raise LLMError(_("The provider declined to answer this question."))
             if reason == "length":
-                yield "\n\n*(The answer was cut off at the length limit.)*"
+                yield "\n\n*(" + _("The answer was cut off at the length limit.") + ")*"
 
 
 class OpenAICompatibleAdapter:
@@ -371,7 +380,9 @@ class OpenAICompatibleAdapter:
             and urlsplit(settings.effective_base_url()).hostname not in _LOCAL_HOSTS
         ):
             raise LLMError(
-                f"Add your {info.label} API key in Tools ▸ Options ▸ AI assistant first."
+                _("Add your {label} API key in Tools ▸ Options ▸ AI assistant first.").format(
+                    label=info.label
+                )
             )
         headers = {
             "Content-Type": "application/json",
@@ -406,20 +417,30 @@ class OpenAICompatibleAdapter:
             except (ValueError, OSError):
                 pass
             messages = {
-                401: f"{label} rejected the API key. Check it in Tools ▸ Options ▸ AI assistant.",
-                403: "This API key is not allowed to use the selected model.",
-                404: "The model or API address was not found. Check Tools ▸ Options ▸ AI assistant.",
-                429: "Rate limit or quota reached. Wait a moment and try again.",
+                401: _(
+                    "{provider} rejected the API key. Check it in Tools ▸ Options ▸ AI assistant."
+                ).format(provider=label),
+                403: _("This API key is not allowed to use the selected model."),
+                404: _(
+                    "The model or API address was not found. Check Tools ▸ Options ▸ AI assistant."
+                ),
+                429: _("Rate limit or quota reached. Wait a moment and try again."),
             }
             message = messages.get(exc.code) or (
-                f"{label} is having trouble right now (error {exc.code}). Try again later."
+                _("{provider} is having trouble right now (error {code}). Try again later.").format(
+                    provider=label, code=exc.code
+                )
                 if exc.code >= 500
-                else f"{label} returned an error ({exc.code}): {_scrub(detail, api_key)}"
+                else _("{provider} returned an error ({code}): {detail}").format(
+                    provider=label, code=exc.code, detail=_scrub(detail, api_key)
+                )
             )
             raise LLMError(message) from None
         except (urllib.error.URLError, OSError):
             raise LLMError(
-                f"Could not reach {label}. Check your internet connection and the API address."
+                _(
+                    "Could not reach {label}. Check your internet connection and the API address."
+                ).format(label=label)
             ) from None
 
     def stream(
@@ -447,7 +468,7 @@ class OpenAICompatibleAdapter:
             try:
                 payload = json.loads(response.read(MAX_STREAM_BYTES).decode("utf-8"))
             except ValueError:
-                raise LLMError("The provider sent an unexpected model list.") from None
+                raise LLMError(_("The provider sent an unexpected model list.")) from None
         items = payload.get("data", []) if isinstance(payload, dict) else []
         return sorted({str(m["id"]) for m in items if isinstance(m, dict) and m.get("id")})
 
@@ -468,9 +489,9 @@ def stream_answer(
     """Yield the answer as text chunks; raises LLMError on failure."""
     question = (question or "").strip()
     if not question:
-        raise LLMError("Type a question first.")
+        raise LLMError(_("Type a question first."))
     if len(question) > MAX_QUESTION_CHARS:
-        raise LLMError("The question is too long. Shorten it and try again.")
+        raise LLMError(_("The question is too long. Shorten it and try again."))
     system, user = build_prompt(question, notes)
     yield from _adapter(settings).stream(settings, api_key, system, user)
 
@@ -482,9 +503,11 @@ def list_models(settings: LLMSettings, api_key: str | None) -> list[str]:
 def test_connection(settings: LLMSettings, api_key: str | None) -> str:
     models = list_models(settings, api_key)
     model = settings.effective_model()
-    note = (
-        ""
-        if not models or model in models
-        else f" Note: {model} is not in the provider's model list."
-    )
-    return f"Connected to {settings.info.label}. {len(models)} models available.{note}"
+    text = n_(
+        "Connected to {provider}. {n} model available.",
+        "Connected to {provider}. {n} models available.",
+        len(models),
+    ).format(provider=settings.info.label, n=len(models))
+    if models and model not in models:
+        text += " " + _("Note: {model} is not in the provider's model list.").format(model=model)
+    return text

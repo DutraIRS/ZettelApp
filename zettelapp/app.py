@@ -13,14 +13,16 @@ import shutil
 import sys
 import traceback
 from logging.handlers import RotatingFileHandler
+from pathlib import Path
 
 from PySide6.QtCore import QByteArray, Qt, QTimer
 from PySide6.QtGui import QIcon
 from PySide6.QtNetwork import QLocalServer, QLocalSocket
 from PySide6.QtWidgets import QApplication, QMessageBox
 
-from zettelapp import APP_NAME, ORG_NAME, __version__, settings, winintegration
+from zettelapp import APP_NAME, ORG_NAME, __version__, i18n, settings, winintegration
 from zettelapp.core.security import parse_app_url
+from zettelapp.i18n import _
 from zettelapp.paths import ensure_dir, logs_dir, resource_path
 from zettelapp.ui import theme
 
@@ -107,11 +109,15 @@ def _install_excepthook() -> None:
         box = QMessageBox(
             QMessageBox.Icon.Critical,
             APP_NAME,
-            "Something went wrong. Your notes are saved automatically, so nothing should be lost.\n\n"
-            f"{exc_type.__name__}: {exc}",
+            _(
+                "Something went wrong. Your notes are saved automatically, so nothing should be lost."
+            )
+            + f"\n\n{exc_type.__name__}: {exc}",
         )
         box.setDetailedText("".join(traceback.format_exception(exc_type, exc, tb)))
-        box.setInformativeText(f"Details were written to the log in {logs_dir()}.")
+        box.setInformativeText(
+            _("Details were written to the log in {folder}.").format(folder=logs_dir())
+        )
         box.exec()
 
     sys.excepthook = hook
@@ -133,18 +139,66 @@ def _self_test(argv: list[str]) -> int:
     return 0
 
 
+def _vault_folders() -> list[Path]:
+    """Every vault the app knows about: the last opened, the recent ones, and the default."""
+    from zettelapp.core.storage import Vault
+    from zettelapp.paths import default_vault_dir
+
+    candidates = [settings.get(settings.LAST_VAULT), *settings.get_list(settings.RECENT_VAULTS)]
+    candidates.append(str(default_vault_dir()))
+    folders: list[Path] = []
+    for raw in candidates:
+        if not raw:
+            continue
+        folder = Path(raw)
+        if folder not in folders and Vault.is_vault(folder):
+            folders.append(folder)
+    return folders
+
+
+def _delete_vault(folder: Path) -> None:
+    """Delete only what ZettelApp created in a vault folder: its database and the images it
+    stored (recognised by their content-hash names), then the folders if they are empty."""
+    from zettelapp.core.security import is_valid_asset_name
+    from zettelapp.core.storage import Vault
+
+    assets = folder / Vault.ASSETS_DIR
+    doomed = [folder / f"{Vault.DB_NAME}{suffix}" for suffix in ("", "-journal", "-wal", "-shm")]
+    try:
+        doomed += [
+            p
+            for p in assets.iterdir()
+            if p.is_file() and is_valid_asset_name(p.name.removesuffix(".tmp"))
+        ]
+    except OSError:
+        pass  # no assets folder
+    for path in doomed:
+        try:
+            path.unlink(missing_ok=True)
+        except OSError:
+            log.warning("Could not delete %s", path)
+    for empty in (assets, folder):  # kept when the user has other files in them
+        try:
+            empty.rmdir()
+        except OSError:
+            pass
+
+
 def remove_user_data() -> int:
-    """Run by the uninstaller when the user ticks "Also delete my ZettelApp settings…":
-    removes settings, saved API keys, logs, cache and automatic backups. Notes are never
-    touched: vaults live in folders the user chose (Documents\\ZettelApp by default)."""
+    """Run by the uninstaller when the user ticks "Also delete my ZettelApp settings and data":
+    removes settings, saved API keys, logs, cache, automatic backups and the notes of every
+    vault the app has used (its database and images; other files in those folders are kept)."""
     from zettelapp.core import secrets
     from zettelapp.paths import local_data_dir
 
+    vaults = _vault_folders()
     store = settings.store()
     store.clear()
     store.sync()
     secrets.delete_all()
     shutil.rmtree(local_data_dir(), ignore_errors=True)
+    for folder in vaults:
+        _delete_vault(folder)
     return 0
 
 
@@ -181,6 +235,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     _install_excepthook()
+    i18n.install(app, settings.get(settings.UI_LANGUAGE))
     theme.apply_theme(app, settings.get(settings.THEME))
 
     from zettelapp.ui.main_window import MainWindow

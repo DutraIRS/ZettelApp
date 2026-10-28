@@ -18,6 +18,7 @@ from zettelapp import APP_NAME, ORG_NAME
 LAST_VAULT = "vault/last"
 RECENT_VAULTS = "vault/recent"
 THEME = "ui/theme"  # system | light | dark
+UI_LANGUAGE = "ui/language"  # system, a code from i18n.LANGUAGES, or the installer's choice
 EDITOR_FONT_SIZE = "editor/fontSize"
 AUTOSAVE_MS = "editor/autosaveMs"
 SUGGEST_ENABLED = "suggest/enabled"
@@ -39,9 +40,13 @@ LLM_PRIVACY_ACK = "llm/privacyAcknowledged"
 MCP_ALLOW_WRITES = "mcp/allowWrites"
 UPDATE_CHECK = "updates/checkAtStart"
 UPDATE_NOTIFIED = "updates/notifiedVersion"  # the newest version already announced
+QUEST_STATE = "quest/state"  # "" (never offered) | declined | active | paused | finished
+QUEST_CHAPTER = "quest/chapter"  # key of the adventure's current chapter
+QUEST_CLUES = "quest/clues"  # chapters solved by doing them (not skipped)
 
 DEFAULTS: dict[str, Any] = {
     THEME: "system",
+    UI_LANGUAGE: "system",
     EDITOR_FONT_SIZE: 11,
     AUTOSAVE_MS: 800,
     SUGGEST_ENABLED: True,
@@ -60,6 +65,8 @@ DEFAULTS: dict[str, Any] = {
     MCP_ALLOW_WRITES: False,
     UPDATE_CHECK: True,
     UPDATE_NOTIFIED: "",
+    QUEST_STATE: "",
+    QUEST_CHAPTER: "",
 }
 
 

@@ -3,19 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="color-scheme" content="light dark">
 <meta name="description" content="Notes are written in Markdown: bold, italic, # headings, lists, &gt; quotes,  code , fenced code blocks, tables and ~~strikethrough~~. The toolbar above the editor inserts the common ">
 <title>Notes and links – ZettelApp documentation</title>
 <link rel="icon" type="image/png" href="../assets/favicon.png">
 <link rel="stylesheet" href="../style.css">
+<script src="../assets/lang.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#content">Skip to content</a>
 <header class="site-header">
   <div class="wrap header-row">
-    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
-    <nav aria-label="Main">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
       <ul class="nav">
         <li><a href="../#features">Features</a></li>
         <li><a href="tutorial.html">Tutorial</a></li>
@@ -25,12 +26,27 @@
         <li><a class="nav-cta" href="../#download">Download</a></li>
       </ul>
     </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Languages</span></summary><ul class="lang-switch-panel" aria-label="Languages"><li><a href="notes-and-links.html" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/docs/notes-and-links.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/docs/notes-and-links.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Donate"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Donate</span></a>
+      <a class="hbtn cta" href="../#download">Download</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Features</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Docs</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
   </div>
 </header>
 <div class="wrap docs-layout">
   <nav class="docs-nav" aria-label="Documentation">
-    <h2>Documentation</h2>
-    <ul>
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentation</span><span class="docs-menu-current">Notes and links</span></span></summary>
+      <ul>
       <li><a href="index.html">Overview</a></li>
       <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
       <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
@@ -48,7 +64,30 @@
       <li><a href="privacy-and-security.html">Privacy and security</a></li>
       <li><a href="development.html">Development</a></li>
       <li><a href="faq.html">FAQ</a></li>
-    </ul>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentation</h2>
+      <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="mcp-reference.html">MCP API reference</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
   </nav>
   <main id="content" class="doc">
 <h1 id="notes-and-links">Notes and links</h1>
@@ -107,6 +146,8 @@ part_of:: [[Zettelkasten method]]
 <th>Name</th>
 <th>Reverse name</th>
 <th>Directed</th>
+<th>Line</th>
+<th>Arrow tip</th>
 </tr>
 </thead>
 <tbody>
@@ -115,49 +156,65 @@ part_of:: [[Zettelkasten method]]
 <td>Related to</td>
 <td>Related to</td>
 <td>no</td>
+<td>solid, grey</td>
+<td>none</td>
 </tr>
 <tr>
 <td><code>supports</code></td>
 <td>Supports</td>
 <td>Supported by</td>
 <td>yes</td>
+<td>dashed, green</td>
+<td>filled triangle</td>
 </tr>
 <tr>
 <td><code>contradicts</code></td>
 <td>Contradicts</td>
 <td>Contradicts</td>
 <td>no</td>
+<td>dotted, red</td>
+<td>none</td>
 </tr>
 <tr>
 <td><code>extends</code></td>
 <td>Extends</td>
 <td>Extended by</td>
 <td>yes</td>
+<td>dash-dot, blue</td>
+<td>filled triangle</td>
 </tr>
 <tr>
 <td><code>example</code></td>
 <td>Example of</td>
 <td>Has example</td>
 <td>yes</td>
+<td>dash-dot-dot, amber</td>
+<td>circle</td>
 </tr>
 <tr>
 <td><code>part_of</code></td>
 <td>Part of</td>
 <td>Contains</td>
 <td>yes</td>
+<td>long dash, purple</td>
+<td>diamond</td>
 </tr>
 <tr>
 <td><code>cites</code></td>
 <td>Cites</td>
 <td>Cited by</td>
 <td>yes</td>
+<td>solid, teal</td>
+<td>open arrow</td>
 </tr>
 </tbody>
 </table></div>
+<p>These are the looks of a new vault; you can change them (see below). A vault made with an earlier version
+keeps the lines it had.</p>
 <p>A plain <code>[[link]]</code> is <em>Related to</em>.</p>
 <h3 id="directed-and-undirected-links">Directed and undirected links</h3>
 <p>A <strong>directed</strong> type reads differently from each side. If note A <em>supports</em> note B, then B's backlinks
-show A as <em>Supported by</em>. Directed links get arrowheads in the graph and stay directed in exports.
+show A as <em>Supported by</em>. Directed links get arrow tips in the graph and stay directed in exports.
 <strong>Undirected</strong> types such as <em>Related to</em> and <em>Contradicts</em> read the same both ways.</p>
 <p>To flip a directed link created the wrong way round, right-click it in the side panel and choose
 <strong>Reverse direction</strong>. Links written in the text are reversed by editing the text.</p>
@@ -170,10 +227,26 @@ Links written in the text are removed by editing the text.</li>
 <li>From the note list, right-click another note and choose <strong>Link from the open note as</strong>.</li>
 </ul>
 <h3 id="your-own-link-types">Your own link types</h3>
-<p>Add, rename, recolour or remove link types in <em>Tools ▸ Options ▸ Link types</em>. Each type has a name, a
-reverse name, a colour and a <em>Directed</em> switch. In text, use the type's id (shown in the <code>type:: [[…]]</code>
-form, e.g. a type called &quot;Inspired by&quot; becomes <code>inspired_by::</code>). Removing a type turns its links into
-<em>Related to</em> links, so nothing is lost. <em>Related to</em> itself can't be removed.</p>
+<p>Add, rename, restyle or remove link types in <em>Tools ▸ Options ▸ Link types</em>. Pick a type in the list and
+change it beside the list:</p>
+<ul>
+<li><strong>Name</strong> and <strong>Reverse name</strong>: how the link reads from its source and from its target. The reverse
+name is used only by directed types.</li>
+<li><strong>Directed</strong>: whether the type reads differently from each side and gets an arrow tip.</li>
+<li><strong>Colour</strong>: click the colour button to choose any colour.</li>
+<li><strong>Line</strong>: solid, dashed, dotted, dash-dot, dash-dot-dot or long dash.</li>
+<li><strong>Arrow tip</strong>: the tip drawn where a directed link arrives: a filled triangle, an open arrow, a
+diamond, a circle or a bar.</li>
+</ul>
+<p>The preview shows two notes joined by the link, with its name and how it reads from the other side.
+The style is used wherever links appear: the graph, its legend, the side panel, the link picker and
+the website, GraphML and Graphviz exports. Give each type its own line as well as its own colour, so
+the types stay easy to tell apart for colour-blind readers and on paper. A new type starts with a
+colour and a line that few other types use.</p>
+<p>In text, use the type's id, shown under the preview (e.g. a type called &quot;Inspired by&quot; becomes
+<code>inspired_by::</code>). The id is set when the type is created, so renaming a type doesn't break links
+written in your notes. Removing one of your own types turns its links into <em>Related to</em> links, so
+nothing is lost. Built-in types can be renamed and restyled but not removed.</p>
 <h2 id="tags">Tags</h2>
 <p>Add tags in the tag field under the title (press Enter after each), or write them <strong>in the text</strong> with a
 hash sign, like <code>#welcome</code> or <code>#math/algebra</code>. Tags are lower-case and may be nested with a slash, such as
@@ -195,8 +268,23 @@ SVG is refused on purpose, because SVG files can carry scripts.</p>
 under a name derived from their content, and referenced like this:</p>
 <pre><code class="language-markdown">![Diagram](asset:3f2a9c0b1d4e5f6a7b8c.png)
 </code></pre>
-<p>The first image you add to a note becomes its <strong>note picture</strong>. The picture is shown next to the title
-and inside the note's circle in the graph. Right-click it to remove it.</p>
+<p>The first image you add to a note becomes its <strong>title image</strong>. It is shown as a small rounded thumbnail in
+the note list and inside the note's circle in the graph. Right-click any image in the editor or preview
+and choose <em>Use as title image</em> to pick another one, or <em>Remove title image</em> to have none. Deleting the
+title image from the note's text also clears it as the title image.</p>
+<h2 id="checklists">Checklists</h2>
+<p>Start a line with <code>- [ ]</code> (or press the checklist button in the toolbar) to make a task. <code>- [x]</code> is a
+completed task. In the preview, click the box to tick it; pressing Enter at the end of a task starts the
+next one, and Enter on an empty task ends the list.</p>
+<h2 id="alarms">Alarms</h2>
+<p>Press the alarm button (or <em>Insert ▸ Alarm…</em>) to set a date and, optionally, a time for a note. When it is
+due, ZettelApp shows a notification; click it to open the note. ZettelApp has to be running to notify you,
+and alarms that came due while it was closed fire shortly after you open the vault. Alarmed notes show a
+bell in the note list. Use <em>Remove alarm</em> in the same dialog to clear it.</p>
+<h2 id="formulas">Formulas</h2>
+<p>Write LaTeX between dollar signs: <code>$E = mc^2$</code> is inline and <code>$$\int_0^1 x^2\,dx$$</code> is a display formula.
+The formula button (<em>Insert ▸ Formula…</em>) opens a dialog with a live preview. Formulas are drawn in the
+preview; exports keep the LaTeX source.</p>
 <h2 id="mind-maps">Mind maps</h2>
 <p>Each note can carry a mind map (the <strong>Mind map</strong> tab, or <em>Insert ▸ Mind Map</em>). Branches are coloured
 automatically.</p>
@@ -267,14 +355,15 @@ and come back when the note is restored.</p>
 </div>
 <footer class="site-footer">
   <div class="wrap footer-row">
-    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
-      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
     <ul class="nav">
       <li><a href="../">Home</a></li>
       <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
       <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
     </ul>
   </div>
+  <ul class="nav lang-row" aria-label="Languages"><li><a href="notes-and-links.html" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/docs/notes-and-links.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/docs/notes-and-links.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul>
 </footer>
 </body>
 </html>

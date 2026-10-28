@@ -22,7 +22,8 @@ Atomic notes, typed links, mind maps, flashcards, a 2D/3D knowledge graph, and l
   (also written as `#tags` in the text), a source link, images (paste or drop), links to local files and a
   picture. Ctrl+click follows links and tags in the editor.
 - **Typed, optionally directed links**: `supports:: [[Claim]]`, *contradicts*, *extends*, *example of*,
-  *part of*, *cites*, or your own types. Backlinks read naturally (*Supported by*).
+  *part of*, *cites*, or your own types. Backlinks read naturally (*Supported by*), and every type can
+  have its own line style and arrow tip.
 - **Link suggestions that learn**: a Naive Bayes classifier combines semantic (LSA), keyword (TF-IDF),
   Levenshtein and Jaro-Winkler string similarity, shared tags and shared links. Accept or dismiss a
   suggestion and the model learns; hover to see *why* it was suggested.
@@ -37,6 +38,8 @@ Atomic notes, typed links, mind maps, flashcards, a 2D/3D knowledge graph, and l
   stored in Windows Credential Manager.
 - **MCP server**: let Claude Desktop, Claude Code and other MCP clients search and read your vault, only
   while ZettelApp is open with its status-bar MCP switch on (read-only by default).
+- **Learn by doing** with *The Lost Prince of the Archive*, an optional first-run adventure that guides
+  you through ZettelApp's main features.
 - **Export the whole collection or any subgraph**: ZettelApp archive, Markdown (Obsidian), static website,
   JSON, GraphML, Graphviz and Anki. Imports Markdown folders and Obsidian vaults.
 - **At home on Windows**: follows your light/dark theme and accent colour, with standard menus and

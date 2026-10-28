@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="La pagina Grafo  disegna le tue note come una rete: ogni cerchio è una nota, dimensionato in base a quanti collegamenti ha, e ogni linea è un collegamento.">
+<title>Grafo e Statistiche – documentazione di ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Vai al contenuto</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Funzionalità</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Documentazione</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Dona</a></li>
+        <li><a class="nav-cta" href="../#download">Scarica</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Lingue</span></summary><ul class="lang-switch-panel" aria-label="Lingue"><li><a href="../../docs/graph-and-insights.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/graph-and-insights.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/graph-and-insights.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/graph-and-insights.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/graph-and-insights.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/graph-and-insights.html" lang="it" hreflang="it" aria-current="true">Italiano</a></li><li><a href="../../ru/docs/graph-and-insights.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/graph-and-insights.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/graph-and-insights.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/graph-and-insights.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/graph-and-insights.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Dona"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Dona</span></a>
+      <a class="hbtn cta" href="../#download">Scarica</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Funzionalità</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Documentazione</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentazione">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentazione</span><span class="docs-menu-current">Grafo e Statistiche</span></span></summary>
+      <ul>
+      <li><a href="index.html">Documentazione di ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Che cos&#x27;è uno Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: i tuoi primi 30 minuti</a></li>
+      <li><a href="getting-started.html">Per iniziare</a></li>
+      <li><a href="notes-and-links.html">Note e collegamenti</a></li>
+      <li><a href="link-suggestions.html">Suggerimenti di collegamento</a></li>
+      <li><a href="graph-and-insights.html" aria-current="page">Grafo e Statistiche</a></li>
+      <li><a href="review-and-anki.html">Ripasso, quiz e Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Chiedi alle tue note (IA)</a></li>
+      <li><a href="mcp-server.html">Server MCP</a></li>
+      <li><a href="export-import.html">Esportazione e importazione</a></li>
+      <li><a href="keyboard-shortcuts.html">Scorciatoie da tastiera</a></li>
+      <li><a href="privacy-and-security.html">Privacy e sicurezza</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentazione</h2>
+      <ul>
+      <li><a href="index.html">Documentazione di ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Che cos&#x27;è uno Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: i tuoi primi 30 minuti</a></li>
+      <li><a href="getting-started.html">Per iniziare</a></li>
+      <li><a href="notes-and-links.html">Note e collegamenti</a></li>
+      <li><a href="link-suggestions.html">Suggerimenti di collegamento</a></li>
+      <li><a href="graph-and-insights.html" aria-current="page">Grafo e Statistiche</a></li>
+      <li><a href="review-and-anki.html">Ripasso, quiz e Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Chiedi alle tue note (IA)</a></li>
+      <li><a href="mcp-server.html">Server MCP</a></li>
+      <li><a href="export-import.html">Esportazione e importazione</a></li>
+      <li><a href="keyboard-shortcuts.html">Scorciatoie da tastiera</a></li>
+      <li><a href="privacy-and-security.html">Privacy e sicurezza</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="grafo-e-statistiche">Grafo e Statistiche</h1>
+<h2 id="il-grafo">Il grafo</h2>
+<p>La pagina <strong>Grafo</strong> (Ctrl+2) disegna le tue note come una rete: ogni cerchio è una nota, dimensionato in base a quanti collegamenti
+ha, e ogni linea è un collegamento.</p>
+<p><img loading="lazy" src="../../assets/screenshots/graph-light.png" alt="Il grafo, colorato per tag" /></p>
+<h3 id="controlli">Controlli</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Controllo</th>
+<th>Cosa fa</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Tutte le note / Locale</strong></td>
+<td>Mostra l'intera raccolta, oppure solo la nota aperta e le note entro <strong>Profondità</strong> collegamenti da essa (seguendo i collegamenti in entrambe le direzioni). <em>Mostra nel grafo</em> nel menu ⋯ di una nota apre il grafo locale.</td>
+</tr>
+<tr>
+<td><strong>2D / 3D</strong></td>
+<td>Passa da una disposizione piatta e trascinabile a una vista 3D intorno a cui puoi orbitare.</td>
+</tr>
+<tr>
+<td><strong>Colora per</strong></td>
+<td>Tag, <em>Cluster: k-means</em>, <em>Cluster: gerarchico</em>, oppure nulla.</td>
+</tr>
+<tr>
+<td><strong>k</strong></td>
+<td>Numero di cluster. <em>k automatico</em> lo sceglie per te (vedi sotto).</td>
+</tr>
+<tr>
+<td><strong>Raggruppa</strong></td>
+<td>Avvicina le note dello stesso gruppo e ombreggia l'area di ciascun gruppo.</td>
+</tr>
+<tr>
+<td><strong>Etichette</strong></td>
+<td>Mostra i titoli delle note. Nei grafi grandi, solo le note meglio collegate sono etichettate finché non ci passi sopra con il mouse.</td>
+</tr>
+<tr>
+<td><strong>Tipi di collegamento</strong></td>
+<td>Nascondi o mostra i singoli tipi di collegamento.</td>
+</tr>
+<tr>
+<td><strong>Trova nel grafo</strong></td>
+<td>Scrivi parte di un titolo e premi Enter per saltare alla nota.</td>
+</tr>
+</tbody>
+</table></div>
+<p>In basso a destra ci sono zoom, adatta, <strong>ricalcola disposizione</strong>, <strong>salva come immagine</strong> (PNG) ed <strong>esporta queste
+note</strong> (apre la finestra di <a href="export-import.html">esportazione</a> con le note presenti sullo schermo).</p>
+<p><strong>In 2D</strong>, trascina una nota per spostarla, trascina lo sfondo per la panoramica e usa la rotellina del mouse per lo zoom. Doppio clic
+su una nota per aprirla; clic destro per altre opzioni (apri, grafo locale, quiz su questo vicinato, esporta con
+le note collegate). L'immagine di una nota è mostrata dentro il suo cerchio.</p>
+<p>Più collegamenti tra le stesse due note sono disegnati come <strong>curve separate</strong>, ciascuna con la propria punta di freccia
+che segue la curva, così nessuna ne nasconde un'altra. Passare il mouse o selezionare una nota <strong>attenua gli altri collegamenti</strong>, mantiene i collegamenti della nota nei
+colori del loro tipo ed etichetta ogni vicina con i tipi di collegamento <strong>letti da quella nota</strong>, per esempio
+<em>Supporta · Esteso da</em>. Funziona allo stesso modo in 2D e 3D.</p>
+<p><strong>In 3D</strong>, trascina per orbitare, usa la rotellina per lo zoom e fai doppio clic su una nota per aprirla. <strong>Ruota
+automaticamente</strong> fa girare la vista. Le note più vicine sono più grandi e luminose, quindi la profondità si legge facilmente, e ogni
+gruppo appare come un morbido alone colorato.</p>
+<p>La disposizione è guidata da forze (Fruchterman–Reingold): i collegamenti avvicinano le note, tutte le note si respingono
+a vicenda e una leggera gravità mantiene sullo schermo i componenti separati. Viene eseguita in background ed è
+memorizzata nella cache per vista.</p>
+<h3 id="colorare-per-tag">Colorare per tag</h3>
+<p>Ogni nota assume il colore del suo <strong>tag più comune</strong>, quello usato dal maggior numero di note nella vista, così i
+grandi temi del tuo vault ottengono colori distinti.</p>
+<h3 id="colorare-per-cluster">Colorare per cluster</h3>
+<p>Il clustering raggruppa le note <strong>per significato</strong>, siano collegate o no. Ogni nota diventa un vettore in uno
+spazio semantico tramite l'analisi semantica latente (LSA) di titolo, testo e tag. Poi uno di due metodi
+raggruppa i vettori:</p>
+<ul>
+<li><strong>k-means</strong>: l'algoritmo di Lloyd con inizializzazione k-means++, il migliore tra diverse esecuzioni. È veloce e produce
+gruppi tondeggianti e di dimensioni simili.</li>
+<li><strong>Gerarchico</strong>: clustering agglomerativo con legame medio sulla distanza del coseno, calcolato con l'algoritmo
+della catena dei vicini più prossimi (O(n²)). Funziona meglio per argomenti irregolari e annidati. I vault con più di
+4.000 note ripiegano su k-means.</li>
+</ul>
+<p>Con <strong>k automatico</strong>, ZettelApp prova k da 2 fino a circa √(n/2) + 2 (al massimo 12) e mantiene il k con il
+miglior <strong>punteggio silhouette</strong>. Il punteggio, mostrato sotto la legenda, misura quanto sono ben separati i cluster:
+1 è perfetto, intorno a 0 indica gruppi sovrapposti. Ogni cluster prende il nome dalle sue parole più
+distintive, i termini più frequenti al suo interno che nel resto del vault.</p>
+<h3 id="gruppi-e-colori">Gruppi e colori</h3>
+<p>Con <strong>Raggruppa</strong> attivo, le note con lo stesso tag o cluster vengono attratte tra loro e ogni gruppo ottiene un'
+area leggermente ombreggiata con il suo nome. La legenda elenca i gruppi con le loro dimensioni. Cliccane uno per
+evidenziarne le note.</p>
+<p>I colori di gruppi e grafici provengono da una tavolozza <strong>validata per le deficienze della visione dei colori</strong> sia in modalità chiara
+sia scura. I colori sono assegnati in un ordine fisso e mai riutilizzati: i gruppi oltre l'ottavo condividono un
+grigio neutro «Altro». I <strong>tipi di collegamento</strong> usano un secondo indizio oltre al colore: ciascuno ha la propria linea
+(continua, tratteggiata, punteggiata e così via) e i tipi orientati disegnano una punta di freccia come un triangolo o un rombo.
+Scegli in <em>Strumenti ▸ Opzioni ▸ Tipi di collegamento</em> (vedi <a href="notes-and-links.html#your-own-link-types">I tuoi tipi di collegamento</a>).
+La legenda nomina sempre tutto, quindi nulla dipende dal solo colore.</p>
+<h2 id="statistiche">Statistiche</h2>
+<p>La pagina <strong>Statistiche</strong> (Ctrl+3) riassume il tuo vault:</p>
+<ul>
+<li><strong>Riquadri</strong>: note (e quante sono nel Cestino), collegamenti (e collegamenti per nota), tag, <em>note non collegate</em>
+(buoni candidati da collegare), flashcard e schede da ripassare oggi.</li>
+<li><strong>Note aggiunte per mese</strong> negli ultimi 12 mesi.</li>
+<li><strong>Tag principali</strong>, <strong>Collegamenti per tipo</strong> e <strong>Note più connesse</strong> (clicca una barra per aprire la nota).</li>
+<li><strong>Argomenti</strong>: cluster k-means delle tue note con le loro parole chiave e dimensioni.</li>
+</ul>
+<p>Ogni grafico ha un pulsante <strong>Mostra come tabella</strong> (l'icona a elenco) con gli stessi numeri in forma di tabella, e le barre
+mostrano il loro valore al passaggio del mouse.</p>
+
+    <p class="doc-footer">Hai trovato un errore? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/it/graph-and-insights.md">Modifica questa pagina su GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Home</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Segnalazioni</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Dona</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Lingue"><li><a href="../../docs/graph-and-insights.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/graph-and-insights.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/graph-and-insights.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/graph-and-insights.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/graph-and-insights.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/graph-and-insights.html" lang="it" hreflang="it" aria-current="true">Italiano</a></li><li><a href="../../ru/docs/graph-and-insights.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/graph-and-insights.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/graph-and-insights.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/graph-and-insights.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/graph-and-insights.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

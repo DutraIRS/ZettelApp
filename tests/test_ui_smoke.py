@@ -90,6 +90,56 @@ def test_dialogs_construct(window):
     options.close()
 
 
+def test_options_page_edits_link_types_and_their_styles(window, monkeypatch):
+    from zettelapp.ui.settings_dialog import OptionsDialog
+
+    vault = window.vault
+    dialog = OptionsDialog(window, "Link types")
+    ids = [lt.id for lt in dialog._types]
+    dialog.types_list.setCurrentRow(ids.index("supports"))
+    assert not dialog.remove_type_button.isEnabled()  # built-in: restyle, don't remove
+    dialog.type_name.setText("Backs")
+    dialog.type_name.textEdited.emit("Backs")
+    dialog.type_line.setCurrentIndex(dialog.type_line.findData("long_dash"))
+    dialog.type_arrow.setCurrentIndex(dialog.type_arrow.findData("diamond"))
+    dialog.grab()  # paints the preview and the combo pictures
+
+    dialog._add_type()
+    assert dialog.remove_type_button.isEnabled()
+    dialog.type_name.setText("Inspired by")
+    dialog.type_name.textEdited.emit("Inspired by")
+    dialog.type_directed.setChecked(False)
+    assert not dialog.type_arrow.isEnabled() and not dialog.type_reverse.isEnabled()
+    dialog.type_line.setCurrentIndex(dialog.type_line.findData("dotted"))
+    assert dialog.apply()
+
+    types = vault.link_type_map()
+    backs, inspired = types["supports"], types["inspired_by"]
+    assert (backs.label, backs.line_style, backs.arrow, backs.builtin) == (
+        "Backs",
+        "long_dash",
+        "diamond",
+        True,
+    )
+    assert (inspired.line_style, inspired.directed, inspired.tip) == ("dotted", False, None)
+    assert dialog._types[-1].id == "inspired_by"  # applying twice doesn't add it again
+    assert dialog.apply() and len(vault.link_types()) == len(ids) + 1
+
+    dialog._remove_type()  # the new type is still selected
+    warnings = []
+    monkeypatch.setattr(
+        "zettelapp.ui.settings_dialog.QMessageBox.warning", lambda *a: warnings.append(a[2])
+    )
+    dialog._add_type()
+    dialog.type_name.setText("")
+    dialog.type_name.textEdited.emit("")
+    assert not dialog.apply() and warnings  # a new type needs a name
+    dialog._remove_type()
+    assert dialog.apply()
+    assert "inspired_by" not in vault.link_type_map()
+    dialog.close()
+
+
 def test_mindmap_editor_blocks_children_beyond_the_storage_limit(window):
     from zettelapp.core.models import MAX_MINDMAP_DEPTH, mindmap_nodes, new_mindmap_node
     from zettelapp.ui.mindmap import MindMapView
@@ -253,16 +303,47 @@ def test_hashtags_typed_in_the_text_show_as_tag_chips(window):
     assert window.vault.manual_tags(note.id) == ["manual"]
 
 
-def test_welcome_note_demonstrates_links_and_tags(window):
+def test_a_new_vault_opens_on_the_start_here_hub(window):
     window._create_welcome_notes()
     note = window.editor.note
     assert note.title == "Welcome to ZettelApp"
-    assert "welcome" in note.tags  # the #welcome example in the text is a real tag
-    assert window.vault.resolve_title("How link suggestions work")
-    assert {l.dst for l in window.vault.links_from(note.id)} == {
-        window.vault.resolve_title("How link suggestions work"),
-        window.vault.resolve_title("Writing atomic notes"),
-    }
+    assert window.list.current_id() == note.id
+    assert len(window.vault.links_from(note.id)) == 10  # the hub lists every starter note
+    assert (
+        "Welcome to ZettelApp" in window.editor.body.titles_model.stringList()
+    )  # [[ completes titles
+
+
+@pytest.mark.parametrize("dialog", ["new_vault_dialog", "open_vault_dialog"])
+def test_dialog_created_vaults_start_with_the_tour(window, tmp_path, monkeypatch, dialog):
+    from PySide6.QtWidgets import QFileDialog, QMessageBox
+
+    folder = tmp_path / dialog
+    folder.mkdir()
+    monkeypatch.setattr(QFileDialog, "getExistingDirectory", lambda *_args: str(folder))
+    monkeypatch.setattr(QMessageBox, "question", lambda *_args: QMessageBox.StandardButton.Yes)
+    starts = []
+    monkeypatch.setattr(window.quest, "start_up", lambda *a: starts.append(a))
+
+    getattr(window, dialog)()
+
+    assert window.vault.count_notes() == 11
+    assert window.editor.note.title == "Welcome to ZettelApp"
+    assert len(starts) == 1
+
+
+def test_failed_default_vault_open_does_not_start_the_quest(window, tmp_path, monkeypatch):
+    from zettelapp.ui import main_window
+
+    monkeypatch.setattr(main_window, "default_vault_dir", lambda: tmp_path / "unopenable")
+    monkeypatch.setattr(main_window.settings, "get", lambda *_args: "")
+    monkeypatch.setattr(window, "open_vault", lambda _folder: False)
+    starts = []
+    monkeypatch.setattr(window.quest, "start_up", lambda *a: starts.append(a))
+
+    window.open_default_vault()
+
+    assert starts == []
 
 
 def test_mcp_switch_starts_off_and_closing_the_app_turns_it_off(window, monkeypatch, tmp_path):

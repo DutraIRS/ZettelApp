@@ -26,15 +26,21 @@ from zettelapp.core.security import (
     is_zotero_url,
     local_file_path,
 )
-from zettelapp.core.textutil import CLOZE_RE, WIKILINK_RE
+from zettelapp.core.textutil import CLOZE_RE, MATH_RE, WIKILINK_RE, find_tasks
 
 NOTE_SCHEME = "zettel:"
 NEW_NOTE_SCHEME = "zettel-new:"
 ASSET_SCHEME = "asset:"
+TASK_SCHEME = "zettel-task:"
+MATH_SCHEME = "math:"
+MATH_DISPLAY_SCHEME = "math-display:"
+CHECKED_BOX, UNCHECKED_BOX = "\u2611", "\u2610"
 
 _CODE_SPLIT = re.compile(r"(```[\s\S]*?(?:```|$)|`[^`\n]*`)")
 _MD_ESCAPE = re.compile(r"([\\`*_\[\]<>()#!|])")
 _QA_PREFIX = re.compile(r"^(\s*)(Q|A|Question|Answer)\s*:", re.I | re.M)
+_DISPLAY_ALONE = re.compile(r'<p>\s*<span class="math-display">(<img [^>]*>)</span>\s*</p>')
+_DISPLAY_SPAN = re.compile(r'<span class="math-display">(<img [^>]*>)</span>')
 
 
 def _escape_md(text: str) -> str:
@@ -48,7 +54,9 @@ class NoteRenderer:
     and *asset_href* produce the final URLs, which lets the same renderer serve
     the in-app preview (zettel:/asset: URLs) and exported web pages. Links to local
     files are only made clickable with *allow_file_links* (the app's own preview);
-    exports and Anki cards show them as plain text.
+    exports and Anki cards show them as plain text. Checklist boxes only become clickable
+    (*task_links*) in the app's preview, and LaTeX formulas become pictures only where
+    *math_href* turns a formula into an image address; elsewhere the formula stays as text.
     """
 
     def __init__(
@@ -61,6 +69,8 @@ class NoteRenderer:
         allow_new_note_links: bool = True,
         keep_cloze: bool = False,
         allow_file_links: bool = False,
+        task_links: bool = False,
+        math_href: Callable[[str, bool], str | None] | None = None,
     ):
         self.resolve = resolve
         self.keep_cloze = keep_cloze
@@ -70,6 +80,8 @@ class NoteRenderer:
         self.link_types = link_types or {}
         self.allow_new_note_links = allow_new_note_links
         self.allow_file_links = allow_file_links
+        self.task_links = task_links
+        self.math_href = math_href
         self.md = MarkdownIt("commonmark", {"html": False, "breaks": True, "typographer": False})
         self.md.enable(["table", "strikethrough"])
         # markdown-it drops file: links outright; let them through to _target_href,
@@ -96,10 +108,33 @@ class NoteRenderer:
             return f"{prefix}[{_escape_md(text)}]({NEW_NOTE_SCHEME}{quote(target, safe='')})"
         return prefix + _escape_md(text)
 
+    def _tasks(self, text: str) -> str:
+        """Turn "- [ ] item" boxes into ballot boxes, clickable in the app's preview."""
+        tasks = find_tasks(text)
+        if not tasks:
+            return text
+        out, last = [], 0
+        for index, (start, end, checked) in enumerate(tasks):
+            box = CHECKED_BOX if checked else UNCHECKED_BOX
+            out += [text[last:start], f"[{box}]({TASK_SCHEME}{index})" if self.task_links else box]
+            last = end
+        return "".join(out) + text[last:]
+
+    def _math(self, m: re.Match) -> str:
+        display = m.group("display") is not None
+        latex = (m.group("display") if display else m.group("inline")).strip()
+        if not latex:
+            return m.group(0)
+        if self.math_href is None:  # shown as the source, which MathJax or LaTeX readers know
+            return "`" + m.group(0).replace("`", "'") + "`"
+        scheme = MATH_DISPLAY_SCHEME if display else MATH_SCHEME
+        return f"![math]({scheme}{quote(latex, safe='')})"
+
     def _prepare(self, text: str) -> str:
-        parts = _CODE_SPLIT.split(text or "")
+        parts = _CODE_SPLIT.split(self._tasks(text or ""))
         for i in range(0, len(parts), 2):  # even indexes are outside code
-            segment = WIKILINK_RE.sub(self._wikilink, parts[i])
+            segment = MATH_RE.sub(self._math, parts[i])
+            segment = WIKILINK_RE.sub(self._wikilink, segment)
             if not self.keep_cloze:
                 segment = CLOZE_RE.sub(lambda m: f"**{m.group(2)}**", segment)
             parts[i] = _QA_PREFIX.sub(lambda m: f"{m.group(1)}**{m.group(2)}:**", segment)
@@ -108,6 +143,8 @@ class NoteRenderer:
     # --- render rules ---------------------------------------------------------
 
     def _target_href(self, href: str) -> str | None:
+        if href.startswith(TASK_SCHEME):
+            return href if self.task_links and href[len(TASK_SCHEME) :].isdigit() else None
         if href.startswith(NOTE_SCHEME):
             note_id = href[len(NOTE_SCHEME) :]
             return self.note_href(note_id) if is_valid_note_id(note_id) else None
@@ -136,6 +173,8 @@ class NoteRenderer:
                 token.attrSet("class", "file")
             elif href.startswith(NEW_NOTE_SCHEME):
                 token.attrSet("class", "new-note")
+            elif href.startswith(TASK_SCHEME):
+                token.attrSet("class", "task")
             else:
                 token.attrSet("class", "internal")
         return renderer.renderToken(tokens, idx, options, env)
@@ -144,14 +183,31 @@ class NoteRenderer:
         token = tokens[idx]
         alt = renderer.renderInlineAsText(token.children or [], options, env)
         src = token.attrGet("src") or ""
+        if src.startswith((MATH_SCHEME, MATH_DISPLAY_SCHEME)):
+            return self._render_math(src)
         name = src[len(ASSET_SCHEME) :] if src.startswith(ASSET_SCHEME) else ""
         url = self.asset_href(name) if is_valid_asset_name(name) else None
         if url is None:
             return f'<span class="missing-image">[{html.escape(alt or "image")}]</span>'
         return f'<img src="{html.escape(url, quote=True)}" alt="{html.escape(alt, quote=True)}">'
 
+    def _render_math(self, src: str) -> str:
+        display = src.startswith(MATH_DISPLAY_SCHEME)
+        latex = unquote(src[len(MATH_DISPLAY_SCHEME if display else MATH_SCHEME) :])
+        url = self.math_href(latex, display) if self.math_href else None
+        if url is None:
+            return f"<code>{html.escape(latex)}</code>"
+        image = (
+            f'<img src="{html.escape(url, quote=True)}" alt="{html.escape(latex, quote=True)}" '
+            'style="vertical-align: middle;">'
+        )
+        return f'<span class="math-display">{image}</span>' if display else image
+
     def render(self, text: str) -> str:
-        return self.md.render(self._prepare(text))
+        out = self.md.render(self._prepare(text))
+        # A formula alone in its paragraph is centred; one inside a sentence stays inline.
+        out = _DISPLAY_ALONE.sub(r'<p align="center">\1</p>', out)
+        return _DISPLAY_SPAN.sub(r"\1", out)
 
 
 def new_note_title(href: str) -> str | None:

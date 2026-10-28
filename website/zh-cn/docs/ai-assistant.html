@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="提问页面会根据你的笔记回答问题,并附带可点击的引用。它使用你选择的 AI 服务商和你自己的 API 密钥。它完全是可选的:在你提问之前,不会向任何地方发送任何内容。">
+<title>询问你的笔记(AI) – ZettelApp 文档</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">跳到内容</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">功能</a></li>
+        <li><a href="tutorial.html">教程</a></li>
+        <li><a href="./">文档</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 捐赠</a></li>
+        <li><a class="nav-cta" href="../#download">下载</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">语言</span></summary><ul class="lang-switch-panel" aria-label="语言"><li><a href="../../docs/ai-assistant.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/ai-assistant.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/ai-assistant.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/ai-assistant.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/ai-assistant.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/ai-assistant.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/ai-assistant.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/ai-assistant.html" lang="zh-CN" hreflang="zh-CN" aria-current="true">简体中文</a></li><li><a href="../../ja/docs/ai-assistant.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/ai-assistant.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/ai-assistant.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="捐赠"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">捐赠</span></a>
+      <a class="hbtn cta" href="../#download">下载</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">菜单</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">功能</a></li>
+          <li><a href="tutorial.html">教程</a></li>
+          <li><a href="./">文档</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="文档">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">文档</span><span class="docs-menu-current">询问你的笔记(AI)</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 文档</a></li>
+      <li><a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a></li>
+      <li><a href="tutorial.html">教程:你的前 30 分钟</a></li>
+      <li><a href="getting-started.html">入门</a></li>
+      <li><a href="notes-and-links.html">笔记与链接</a></li>
+      <li><a href="link-suggestions.html">链接建议</a></li>
+      <li><a href="graph-and-insights.html">图谱与 Insights</a></li>
+      <li><a href="review-and-anki.html">复习、测验与 Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html" aria-current="page">询问你的笔记(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 服务器</a></li>
+      <li><a href="export-import.html">导出与导入</a></li>
+      <li><a href="keyboard-shortcuts.html">键盘快捷键</a></li>
+      <li><a href="privacy-and-security.html">隐私与安全</a></li>
+      <li><a href="faq.html">常见问题</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>文档</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 文档</a></li>
+      <li><a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a></li>
+      <li><a href="tutorial.html">教程:你的前 30 分钟</a></li>
+      <li><a href="getting-started.html">入门</a></li>
+      <li><a href="notes-and-links.html">笔记与链接</a></li>
+      <li><a href="link-suggestions.html">链接建议</a></li>
+      <li><a href="graph-and-insights.html">图谱与 Insights</a></li>
+      <li><a href="review-and-anki.html">复习、测验与 Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html" aria-current="page">询问你的笔记(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 服务器</a></li>
+      <li><a href="export-import.html">导出与导入</a></li>
+      <li><a href="keyboard-shortcuts.html">键盘快捷键</a></li>
+      <li><a href="privacy-and-security.html">隐私与安全</a></li>
+      <li><a href="faq.html">常见问题</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="询问你的笔记ai">询问你的笔记(AI)</h1>
+<p><strong>提问</strong>页面(Ctrl+5)会<strong>根据你的笔记</strong>回答问题,并附带可点击的引用。它使用你选择的 AI 服务商和你自己的 API 密钥。它完全是可选的:在你提问之前,不会向任何地方发送任何内容。</p>
+<p><img loading="lazy" src="../../assets/screenshots/ask-light.png" alt="询问你的笔记" /></p>
+<h2 id="设置">设置</h2>
+<ol>
+<li>
+<p>从受支持的服务商之一获取 API 密钥。</p>
+</li>
+<li>
+<p>打开<em>工具 ▸ 选项 ▸ AI 助手</em>。选择<strong>服务商</strong>,粘贴 <strong>API 密钥</strong>,并选择<strong>模型</strong>(<em>刷新列表</em>会向服务商查询你的密钥可使用哪些模型)。</p>
+</li>
+<li>
+<p>按<strong>测试连接</strong>,然后按<strong>确定</strong>。</p>
+<p>你可以为每个服务商保存多个密钥(例如个人和工作用的)。使用密钥列表旁边的<em>添加密钥…</em>、<em>重命名</em>和<em>删除</em>;选中的密钥就是“提问”所使用的密钥。</p>
+</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>服务商</th>
+<th>默认模型</th>
+<th>其他推荐模型</th>
+<th>端点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Anthropic Claude</strong>(默认)</td>
+<td><code>claude-opus-5-5</code></td>
+<td><code>claude-sonnet-5-5</code>、<code>claude-haiku-5-5</code></td>
+<td><code>https://api.anthropic.com</code></td>
+</tr>
+<tr>
+<td><strong>OpenAI</strong></td>
+<td><code>gpt-6.1-sol</code></td>
+<td><code>gpt-6-astra</code>、<code>gpt-6-luna</code></td>
+<td><code>https://api.openai.com/v1</code></td>
+</tr>
+<tr>
+<td><strong>Z.ai (GLM)</strong></td>
+<td><code>glm-5.3</code></td>
+<td><code>glm-5.3-flash</code>、<code>glm-4.7-flash</code></td>
+<td><code>https://api.z.ai/api/paas/v4</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>你可以输入你的密钥有权访问的任何模型 ID。**端点(可选)**可覆盖默认地址,例如使用 Z.ai 的编程套餐端点、兼容 OpenAI 的代理,或运行在你自己电脑上的模型(<code>http://localhost:…</code>)。地址必须使用 <code>https://</code>;仅 <code>localhost</code> 接受普通的 <code>http://</code>。</p>
+<p>使用 Claude 时,你还可以设置<strong>思考强度</strong>(从低到最高):强度越高,回答前思考得越多,费用也越高。默认值为<em>中</em>。</p>
+<h2 id="使用你自己的-llm">使用你自己的 LLM</h2>
+<p>“提问”使用的是你所选服务商处的<strong>你自己的账户</strong>,因此任何用量都由该服务商向你计费。ZettelApp 自己没有任何 AI 服务。你的 API 密钥保存在 <strong>Windows 凭据管理器</strong>中,绝不会保存在设置文件里。</p>
+<ul>
+<li><strong>服务商</strong>:Anthropic Claude、OpenAI 和 Z.ai (GLM),位于<em>工具 ▸ 选项 ▸ AI 助手 ▸ 服务商</em>。从列表中选择一个<strong>模型</strong>(<em>刷新列表</em>会向服务商查询你的密钥可使用哪些模型),或输入你的密钥有权访问的任何模型 ID。</li>
+<li><strong>你自己的服务器</strong>:任何提供<strong>OpenAI 风格聊天补全</strong>API 的服务都可以使用。选择 <strong>OpenAI</strong>,并把**端点(可选)**设置为其基础地址,例如 <code>https://my-proxy.example.com/v1</code>、<code>http://localhost:11434/v1</code>(Ollama)或 <code>http://localhost:1234/v1</code>(LM Studio)。仅 <code>localhost</code>、<code>127.0.0.1</code> 和 <code>::1</code> 接受普通的 <code>http://</code>;其他地址都必须使用 <code>https://</code>。对于这些本地地址,<strong>API 密钥</strong>可以留空。</li>
+<li><strong>检查</strong>:按<strong>测试连接</strong>。对于本地模型,你的问题和笔记绝不会离开你的电脑。</li>
+<li><strong>发送的内容</strong>:只有你的问题和最相关的笔记,这些笔记是在你的电脑上找出的。笔记数量由“提问”页面上的<strong>笔记数量</strong>框决定(默认 8),<em>已发送的来源</em>列表会准确显示发送了哪些笔记。</li>
+</ul>
+<h2 id="提出问题">提出问题</h2>
+<p>输入问题并按<strong>提问</strong>(Ctrl+Enter)。用<strong>搜索范围</strong>选择查找位置:整个集合、当前笔记及其链接笔记,或带有某个标签的笔记。选择要发送的<strong>笔记数量</strong>。</p>
+<p>过程如下:</p>
+<ol>
+<li>ZettelApp 在<strong>你的电脑上</strong>找出最相关的笔记,使用与<a href="link-suggestions.html">链接建议器</a>相同的 TF-IDF 和 LSA 相似度。选择<em>当前笔记及其链接笔记</em>时,当前笔记总是排在最前。</li>
+<li>你的问题和这些笔记会被发送给服务商,笔记最多 120,000 个字符。为适应长度而被截断的笔记会以醒目的“[note truncated]”标记结尾。<strong>已发送的来源</strong>列表会准确显示发送了哪些笔记。</li>
+<li>答案会在撰写的同时以流式显示。形如 <code>[[20261027153012]]</code> 的引用会显示为指向这些笔记的链接。<strong>停止</strong>可取消。</li>
+</ol>
+<p>模型被告知只能根据你的笔记作答,并在笔记中不包含答案时说明这一点。<strong>复制</strong>会把答案复制为 Markdown。<strong>另存为笔记</strong>会把它保存为带有标签 <code>ai-answer</code> 的新笔记,并带有指向其来源的 <code>cites::</code> 链接。</p>
+<h2 id="隐私与安全">隐私与安全</h2>
+<ul>
+<li><strong>只发送你所问的内容</strong>:你的问题和<em>已发送的来源</em>下列出的笔记。提问之前会有一条通知提醒你这一点(勾选<em>不再显示</em>可跳过)。</li>
+<li><strong>你的 API 密钥</strong>存储在 <strong>Windows 凭据管理器</strong>中(名为 <code>ZettelApp/llm/&lt;provider&gt;</code>,其他密钥为 <code>ZettelApp/llm/&lt;provider&gt;/&lt;密钥 ID&gt;</code>),绝不会存入设置文件或日志,并且会从向你显示的任何错误消息中移除。<em>删除</em>会将其从这台电脑上删除。</li>
+<li>**模型没有任何工具。**它无法搜索网络、运行代码或更改你的笔记,因此隐藏在笔记(或导入文件)中的指令无法让它执行任何操作。答案通过与笔记相同的安全渲染器显示,不含 HTML 或脚本。</li>
+<li>使用 Claude 时,ZettelApp 采用 Anthropic 的官方 SDK,并选择启用<strong>服务端拒绝回退</strong>:如果某个请求被安全分类器拒绝,Anthropic 会在其推荐的回退模型上重试。这适用于 Claude Opus 5.5、Opus 5、Sonnet 5.5 和 Fable 5.1。</li>
+<li>每个服务商自己的条款和数据政策适用于你发送的内容。</li>
+</ul>
+<h2 id="添加其他服务商">添加其他服务商</h2>
+<p>服务商位于一个小型注册表中(<code>zettelapp/core/llm.py</code> 里的 <code>PROVIDERS</code>)。使用现有协议(Anthropic 的 Messages API,或许多服务商都提供的 OpenAI 风格聊天补全)的服务只需<strong>一个条目</strong>:它的名称、端点、默认模型,以及用户获取密钥的页面。新的协议则需要一个小的适配器类。参见<a href="../../docs/development.html">开发</a>。</p>
+
+    <p class="doc-footer">发现错误？<a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/zh-cn/ai-assistant.md">在 GitHub 上编辑此页</a>。</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">首页</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">问题</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">捐赠</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="语言"><li><a href="../../docs/ai-assistant.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/ai-assistant.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/ai-assistant.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/ai-assistant.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/ai-assistant.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/ai-assistant.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/ai-assistant.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/ai-assistant.html" lang="zh-CN" hreflang="zh-CN" aria-current="true">简体中文</a></li><li><a href="../../ja/docs/ai-assistant.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/ai-assistant.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/ai-assistant.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

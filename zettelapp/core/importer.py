@@ -19,11 +19,12 @@ from pathlib import Path
 import yaml
 
 from zettelapp.core.models import (
-    MAX_MINDMAP_DEPTH,
-    MAX_MINDMAP_NODES,
+    ARROW_TIPS,
+    LINE_STYLES,
     Flashcard,
     LinkType,
     Note,
+    least_used_line_style,
     sanitize_mindmap,
 )
 from zettelapp.core.security import (
@@ -37,6 +38,7 @@ from zettelapp.core.security import (
 )
 from zettelapp.core.storage import MAX_BODY, MAX_TITLE, Vault
 from zettelapp.core.textutil import WIKILINK_RE, fold, normalize_tag
+from zettelapp.i18n import _
 
 MAX_JSON_BYTES = 300 * 1024 * 1024
 MAX_MARKDOWN_FILES = 20_000
@@ -70,7 +72,7 @@ def import_path(vault: Vault, path: str | Path) -> ImportResult:
     suffix = path.suffix.lower()
     if suffix == ".json":
         if path.stat().st_size > MAX_JSON_BYTES:
-            raise UnsafeInputError("The file is too large to import.")
+            raise UnsafeInputError(_("The file is too large to import."))
         return import_data(vault, json.loads(path.read_text(encoding="utf-8")))
     if suffix == ".md":
         result = ImportResult()
@@ -88,9 +90,9 @@ def import_path(vault: Vault, path: str | Path) -> ImportResult:
                     _extract(zf, Path(tmp))
                     return import_markdown_folder(vault, Path(tmp))
         raise UnsafeInputError(
-            "This archive contains neither a ZettelApp export nor Markdown files."
+            _("This archive contains neither a ZettelApp export nor Markdown files.")
         )
-    raise UnsafeInputError(f"Unsupported file type: {suffix or path.name}")
+    raise UnsafeInputError(_("Unsupported file type: {name}").format(name=suffix or path.name))
 
 
 def _extract(zf: zipfile.ZipFile, dest: Path) -> None:
@@ -110,7 +112,7 @@ def _extract(zf: zipfile.ZipFile, dest: Path) -> None:
 def _import_archive(vault: Vault, zf: zipfile.ZipFile) -> ImportResult:
     info = zf.getinfo("manifest.json")
     if info.file_size > MAX_JSON_BYTES:
-        raise UnsafeInputError("The archive manifest is too large.")
+        raise UnsafeInputError(_("The archive manifest is too large."))
     data = json.loads(zf.read(info).decode("utf-8"))
     _validate_import_data(data)
     asset_map: dict[str, str] = {}
@@ -122,16 +124,16 @@ def _import_archive(vault: Vault, zf: zipfile.ZipFile) -> ImportResult:
             try:
                 member = zf.getinfo(f"assets/{name}")
             except KeyError:
-                result.warn(f"Missing image {name}")
+                result.warn(_("Missing image {name}").format(name=name))
                 continue
             if member.file_size > MAX_IMAGE_BYTES:
-                result.warn(f"Skipped oversized image {name}")
+                result.warn(_("Skipped oversized image {name}").format(name=name))
                 continue
             try:
                 asset_map[name] = vault.add_image(zf.read(member), name)
                 result.images += 1
             except UnsafeInputError as exc:
-                result.warn(f"Skipped image {name}: {exc}")
+                result.warn(_("Skipped image {name}: {error}").format(name=name, error=exc))
         return _import_data(vault, data, asset_map, result)
 
 
@@ -154,43 +156,39 @@ def _timestamp(value) -> str | None:
         return None
 
 
-def _validate_mindmap(data) -> None:
-    count = 0
-    stack = [(data, 0)]
-    while stack:
-        node, depth = stack.pop()
-        if not isinstance(node, dict):
-            raise UnsafeInputError("A mind map node must be an object.")
-        if depth > MAX_MINDMAP_DEPTH:
-            raise UnsafeInputError(f"A mind map cannot be deeper than {MAX_MINDMAP_DEPTH} levels.")
-        count += 1
-        if count > MAX_MINDMAP_NODES:
-            raise UnsafeInputError(
-                f"A mind map cannot contain more than {MAX_MINDMAP_NODES} nodes."
-            )
-        children = node.get("children", [])
-        if children is None:
-            children = []
-        if not isinstance(children, list):
-            raise UnsafeInputError("A mind map node's children must be a list.")
-        stack.extend((child, depth + 1) for child in children)
+def _validate_link_style(raw: dict) -> None:
+    """A link type's line style and arrow tip may be missing (older exports) but not
+    unknown."""
+    name = str(raw.get("id"))[:40]
+    for key, allowed, message in (
+        ("line_style", LINE_STYLES, _("Link type “{name}” has an unknown line style: {value}")),
+        ("arrow", ARROW_TIPS, _("Link type “{name}” has an unknown arrow tip: {value}")),
+    ):
+        value = raw.get(key)
+        if value is not None and (not isinstance(value, str) or value not in allowed):
+            raise UnsafeInputError(message.format(name=name, value=str(value)[:40]))
 
 
 def _validate_import_data(data) -> None:
     if not isinstance(data, dict) or data.get("format") != "zettelapp":
-        raise UnsafeInputError("This is not a ZettelApp export.")
+        raise UnsafeInputError(_("This is not a ZettelApp export."))
     if not isinstance(data.get("version"), int) or data["version"] > 1:
-        raise UnsafeInputError("This export was made by a newer version of ZettelApp.")
+        raise UnsafeInputError(_("This export was made by a newer version of ZettelApp."))
     for field_name in ("link_types", "notes", "links", "flashcards", "assets"):
         value = data.get(field_name)
         if value is not None and not isinstance(value, list):
-            raise UnsafeInputError(f"The export field {field_name!r} must be a list.")
+            raise UnsafeInputError(
+                _("The export field “{field}” must be a list.").format(field=field_name)
+            )
+    for raw in data.get("link_types") or []:
+        if isinstance(raw, dict):
+            _validate_link_style(raw)
     for raw in data.get("notes") or []:
         if not isinstance(raw, dict):
             continue
         mindmap = raw.get("mindmap")
         if mindmap is not None:
-            _validate_mindmap(mindmap)
+            sanitize_mindmap(mindmap, strict=True)  # raises if it is unusable
 
 
 def import_data(
@@ -209,20 +207,26 @@ def _import_data(
 
     existing_types = vault.link_type_map()
     for raw in data.get("link_types") or []:
-        if (
-            isinstance(raw, dict)
-            and isinstance(raw.get("id"), str)
-            and raw["id"] not in existing_types
-        ):
-            vault.save_link_type(
-                LinkType(
-                    raw["id"],
-                    _str(raw.get("label"), 60),
-                    _str(raw.get("inverse_label"), 60),
-                    _str(raw.get("color"), 7),
-                    bool(raw.get("directed", True)),
-                )
+        if not isinstance(raw, dict) or not isinstance(raw.get("id"), str):
+            continue
+        existing = existing_types.get(raw["id"])
+        # Old exports have no style fields. Preserve an existing type's style; give a
+        # genuinely new type the least-used line so adjacent types remain distinct.
+        line_style = raw.get("line_style") or (
+            existing.line_style if existing else least_used_line_style(vault.link_types())
+        )
+        imported = vault.save_link_type(
+            LinkType(
+                raw["id"],
+                _str(raw.get("label"), 60),
+                _str(raw.get("inverse_label"), 60),
+                _str(raw.get("color"), 7),
+                bool(raw.get("directed", True)),
+                line_style=line_style,
+                arrow=raw.get("arrow") or (existing.arrow if existing else "triangle"),
             )
+        )
+        existing_types[imported.id] = imported
 
     raw_notes = [n for n in (data.get("notes") or []) if isinstance(n, dict)]
     id_map: dict[str, str] = {}
@@ -264,6 +268,7 @@ def _import_data(
         note.image = asset_map.get(image, image) if isinstance(image, str) else ""
         note.tags = [t for t in (raw.get("tags") or []) if isinstance(t, str)][:200]
         note.mindmap = sanitize_mindmap(raw.get("mindmap")) if raw.get("mindmap") else None
+        note.alarm = _str(raw.get("alarm"), 40)
         vault.save_note(note, touch=False)
         result.notes += 1
 
@@ -311,7 +316,7 @@ def import_markdown_folder(vault: Vault, folder: Path) -> ImportResult:
             continue  # skip .obsidian, .trash and other hidden folders
         files.append(path)
         if len(files) > MAX_MARKDOWN_FILES:
-            raise UnsafeInputError("The folder contains too many Markdown files.")
+            raise UnsafeInputError(_("The folder contains too many Markdown files."))
     with vault.transaction():
         _import_markdown_files(vault, folder, files, result)
     return result
@@ -339,7 +344,7 @@ def _import_markdown_files(
     parsed = []
     for path in files:
         if path.stat().st_size > MAX_MARKDOWN_BYTES:
-            result.warn(f"Skipped {path.name}: file too large")
+            result.warn(_("Skipped {name}: file too large").format(name=path.name))
             continue
         text = path.read_text(encoding="utf-8", errors="replace")
         meta, body = _parse_front_matter(text)
@@ -386,7 +391,7 @@ def _import_markdown_files(
                     result.images += 1
                     return name
                 except (UnsafeInputError, OSError) as exc:
-                    result.warn(f"Skipped image {c.name}: {exc}")
+                    result.warn(_("Skipped image {name}: {error}").format(name=c.name, error=exc))
                     return None
         return None
 

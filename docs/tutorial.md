@@ -12,8 +12,9 @@ minutes.
    and run it, or unzip **ZettelApp-Portable.zip** and run `ZettelApp.exe`.
 2. Start ZettelApp.
 
-**You should see** the Notes page with three welcome notes in a new vault in *Documents\ZettelApp*.
-*Welcome to ZettelApp* is open in the editor.
+**You should see** the Notes page with eleven linked starter notes in a new vault in
+*Documents\ZettelApp*. "Welcome to ZettelApp" is open in the editor. After a moment, ZettelApp also offers the
+optional *Lost Prince of the Archive* adventure; choose **Not now** if you prefer this written tour.
 
 ## 2. Create a note
 
@@ -78,7 +79,8 @@ Copy any picture (for example with *Win+Shift+S*), click in the note's text and 
 also drag an image file in, or use *Insert ▸ Image…*.
 
 **You should see** `![…](asset:…)` in the text and the image in the preview. Because it's the note's
-first image, it also becomes the **note picture**, shown next to the title and inside the note's circle
+first image, it also becomes the **title image**, shown as a thumbnail in the note list and inside the
+note's circle
 in the graph.
 
 ## 8. Sketch a mind map

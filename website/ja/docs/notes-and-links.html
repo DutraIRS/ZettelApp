@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="ノートは Markdown で書きます: 太字、斜体、# 見出し、リスト、&gt; 引用、 コード 、フェンス付きコードブロック、表、~~取り消し線~~。エディター上部のツールバーで、よく使うものを挿入できます。Ctrl+B / Ctrl+I も通常どおり使えます。Enter を押すとリストが続きます。">
+<title>ノートとリンク – ZettelApp ドキュメント</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">本文へスキップ</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">機能</a></li>
+        <li><a href="tutorial.html">チュートリアル</a></li>
+        <li><a href="./">ドキュメント</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 寄付</a></li>
+        <li><a class="nav-cta" href="../#download">ダウンロード</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">言語</span></summary><ul class="lang-switch-panel" aria-label="言語"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja" aria-current="true">日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="寄付"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">寄付</span></a>
+      <a class="hbtn cta" href="../#download">ダウンロード</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">メニュー</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">機能</a></li>
+          <li><a href="tutorial.html">チュートリアル</a></li>
+          <li><a href="./">ドキュメント</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="ドキュメント">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">ドキュメント</span><span class="docs-menu-current">ノートとリンク</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp ドキュメント</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten とは?</a></li>
+      <li><a href="tutorial.html">チュートリアル: 最初の 30 分</a></li>
+      <li><a href="getting-started.html">はじめに</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">ノートとリンク</a></li>
+      <li><a href="link-suggestions.html">リンク候補</a></li>
+      <li><a href="graph-and-insights.html">グラフとインサイト</a></li>
+      <li><a href="review-and-anki.html">復習、クイズ、Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">ノートに質問 (AI)</a></li>
+      <li><a href="mcp-server.html">MCP サーバー</a></li>
+      <li><a href="export-import.html">エクスポートとインポート</a></li>
+      <li><a href="keyboard-shortcuts.html">キーボード ショートカット</a></li>
+      <li><a href="privacy-and-security.html">プライバシーとセキュリティ</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>ドキュメント</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp ドキュメント</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten とは?</a></li>
+      <li><a href="tutorial.html">チュートリアル: 最初の 30 分</a></li>
+      <li><a href="getting-started.html">はじめに</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">ノートとリンク</a></li>
+      <li><a href="link-suggestions.html">リンク候補</a></li>
+      <li><a href="graph-and-insights.html">グラフとインサイト</a></li>
+      <li><a href="review-and-anki.html">復習、クイズ、Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">ノートに質問 (AI)</a></li>
+      <li><a href="mcp-server.html">MCP サーバー</a></li>
+      <li><a href="export-import.html">エクスポートとインポート</a></li>
+      <li><a href="keyboard-shortcuts.html">キーボード ショートカット</a></li>
+      <li><a href="privacy-and-security.html">プライバシーとセキュリティ</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="ノートとリンク">ノートとリンク</h1>
+<h2 id="ノートを書く">ノートを書く</h2>
+<p>ノートは <strong>Markdown</strong> で書きます: <code>**太字**</code>、<code>*斜体*</code>、<code># 見出し</code>、リスト、<code>&gt; 引用</code>、<code>`コード`</code>、フェンス付きコードブロック、表、<code>~~取り消し線~~</code>。エディター上部のツールバーで、よく使うものを挿入できます。Ctrl+B / Ctrl+I も通常どおり使えます。Enter を押すとリストが続きます。</p>
+<p>エディターには 3 つのモードがあります (Ctrl+E で順に切り替わります): <strong>編集</strong>、<strong>分割表示</strong> (テキストとプレビューを並べて表示)、<strong>プレビュー</strong>。</p>
+<p>安全のため、ノート内の生の HTML はテキストとして表示され、レンダリングされることはありません。プレビュー内のリンクで開けるのは、Web ページ (<code>http</code>、<code>https</code>)、メール (<code>mailto</code>)、ノート、Zotero アイテム、ローカルファイル (エクスプローラーで表示。<a href="#links-to-local-files">ローカルファイルへのリンク</a>を参照) だけです。<a href="privacy-and-security.html">プライバシーとセキュリティ</a>も参照してください。</p>
+<h3 id="リンクをたとる">リンクをたどる</h3>
+<ul>
+<li><strong>エディターでは</strong>、<strong>Ctrl+クリック</strong>で <code>[[ノートリンク]]</code> (ノートがまだ存在しなければ作成されます)、Web、メール、Zotero のリンク、ローカルファイルのリンク、<code>#tag</code> (そのタグが付いたノートを一覧表示) をたどります。テキストにマウスを重ねると、クリックしたときの動作がツールチップで表示されます。通常のクリックではカーソルが置かれるだけなので、リンクのテキストを編集することもできます。</li>
+<li><strong>プレビューでは</strong>、通常のクリックでリンクをたどります。</li>
+</ul>
+<h3 id="ローカルファイルへのリンク">ローカルファイルへのリンク</h3>
+<p><em>挿入 ▸ ファイルへのリンク…</em> (またはツールバーのフォルダーボタン) でファイルを選ぶと、<code>[report.pdf](file:///C:/Users/me/Documents/report.pdf)</code> のようなリンクが挿入されます。画像ではないファイルをノートのテキストにドラッグしても同じ結果になります。ファイルは元の場所のままリンクされ、保管庫にコピーされることはありません。</p>
+<p>プレビューでリンクをクリックするか、エディターで Ctrl+クリックすると、<strong>ファイルを選択した状態のエクスプローラー</strong>が開きます。ファイル自体が開かれたり実行されたりすることはありません。許可されるのはローカルドライブ上のパスだけです。<code>\\server\share\file.pdf</code> のようなネットワーク (UNC) パスは拒否されます。参照するだけで Windows の資格情報がそのサーバーに送信される可能性があるためです。</p>
+<p>すべてのノートには次のものがあります。</p>
+<ul>
+<li><strong>タイトル</strong> (上部の大きなフィールド)</li>
+<li><strong>ID</strong>: <code>20261027153012</code> のようなタイムスタンプで、タイトルの下に表示されます (<em>その他 ▸ ノート ID をコピー</em>)</li>
+<li>任意の<strong>タグ</strong>、<strong>情報源リンク</strong>、<strong>タイトル画像</strong>、<strong>マインドマップ</strong>、<strong>フラッシュカード</strong></li>
+</ul>
+<h2 id="ノート間のリンク">ノート間のリンク</h2>
+<h3 id="wiki-リンク">wiki リンク</h3>
+<p><code>[[</code> と入力してタイトルを入力し始めると、ZettelApp がノートから補完します。ノート内では、次のどれもリンクになります。</p>
+<pre><code class="language-markdown">See [[Forgetting curve]].
+See [[20261027153012]].              (by ID)
+See [[Forgetting curve|the curve]].  (custom link text)
+</code></pre>
+<p>Ctrl+K (<em>挿入 ▸ ノートへのリンク…</em>) でピッカーが開き、タイトルと本文を検索してリンクの種類を選べます。まだ存在しないタイトルへのリンクはプレビューで灰色に表示されます。クリックするとそのノートが作成されます。後でノートを作成または名前変更すると、そのタイトルに言及しているリンクが更新されます。</p>
+<h3 id="種類付きリンク">種類付きリンク</h3>
+<p>リンクで 2 つのノートが<strong>どのように</strong>関係するかを示せます。リンクの前にリンクの種類を置き、<code>::</code> を続けます。</p>
+<pre><code class="language-markdown">supports:: [[Forgetting curve]]
+contradicts:: [[Rereading notes]]
+part_of:: [[Zettelkasten method]]
+</code></pre>
+<p>組み込みのリンクの種類は次のとおりです。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>種類</th>
+<th>名前</th>
+<th>逆方向の名前</th>
+<th>有向</th>
+<th>線</th>
+<th>矢印の先端</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>related</code></td>
+<td>関連</td>
+<td>関連</td>
+<td>いいえ</td>
+<td>実線、灰色</td>
+<td>なし</td>
+</tr>
+<tr>
+<td><code>supports</code></td>
+<td>サポート対象</td>
+<td>提供元</td>
+<td>はい</td>
+<td>破線、緑</td>
+<td>塗りつぶし三角</td>
+</tr>
+<tr>
+<td><code>contradicts</code></td>
+<td>矛盾する</td>
+<td>矛盾する</td>
+<td>いいえ</td>
+<td>点線、赤</td>
+<td>なし</td>
+</tr>
+<tr>
+<td><code>extends</code></td>
+<td>拡張する</td>
+<td>拡張元</td>
+<td>はい</td>
+<td>一点鎖線、青</td>
+<td>塗りつぶし三角</td>
+</tr>
+<tr>
+<td><code>example</code></td>
+<td>の例</td>
+<td>例がある</td>
+<td>はい</td>
+<td>二点鎖線、琥珀色</td>
+<td>円</td>
+</tr>
+<tr>
+<td><code>part_of</code></td>
+<td>の一部</td>
+<td>含む</td>
+<td>はい</td>
+<td>長破線、紫</td>
+<td>ひし形</td>
+</tr>
+<tr>
+<td><code>cites</code></td>
+<td>引用</td>
+<td>被引用</td>
+<td>はい</td>
+<td>実線、ティール</td>
+<td>開いた矢印</td>
+</tr>
+</tbody>
+</table></div>
+<p>これらは新しい保管庫での見た目です。変更することもできます (後述)。以前のバージョンで作成した保管庫は、そのときの線のスタイルを保持します。</p>
+<p>通常の <code>[[リンク]]</code> は<em>関連</em>です。</p>
+<h3 id="有向リンクと無向リンク">有向リンクと無向リンク</h3>
+<p><strong>有向</strong>の種類は、見る側によって意味が変わります。ノート A がノート B を<em>サポート</em>している場合、B のバックリンクには A が<em>提供元</em>として表示されます。有向リンクはグラフで矢印の先端が付き、エクスポートでも有向のままです。<em>関連</em>や<em>矛盾する</em>のような<strong>無向</strong>の種類は、どちらから見ても同じように読めます。</p>
+<p>向きを間違えて作った有向リンクを反転するには、サイドパネルでそのリンクを右クリックして<strong>方向を反転</strong>を選びます。テキスト内に書かれたリンクは、テキストを編集して反転します。</p>
+<h3 id="サイトハネルのリンク">サイドパネルのリンク</h3>
+<p>サイドパネルには、ノートの<strong>リンク</strong> (発信) と<strong>バックリンク</strong> (着信) が、それぞれの種類とともに一覧表示されます。</p>
+<ul>
+<li>**リンクを追加…**で、テキストに書かずにリンクを作成します。</li>
+<li>リンクを右クリックすると、相手のノートを開く、リンクの種類を変更する、方向を反転する、削除する、といった操作ができます。テキスト内に書かれたリンクは、テキストを編集して削除します。</li>
+<li>ノート一覧で別のノートを右クリックし、<strong>開いているノートからのリンクの種類</strong>を選びます。</li>
+</ul>
+<h3 id="独自のリンクの種類">独自のリンクの種類</h3>
+<p>リンクの種類は、<em>ツール ▸ オプション ▸ リンクの種類</em>で追加、名前変更、スタイル変更、削除ができます。一覧から種類を選び、一覧の横で変更します。</p>
+<ul>
+<li><strong>名前</strong>と<strong>逆方向の名前</strong>: リンク元とリンク先からそれぞれどう読めるか。逆方向の名前は有向の種類でのみ使われます。</li>
+<li><strong>有向</strong>: 見る側によって意味が変わり、矢印の先端が付くかどうか。</li>
+<li><strong>色</strong>: 色ボタンをクリックして任意の色を選びます。</li>
+<li><strong>線</strong>: 実線、破線、点線、一点鎖線、二点鎖線、長破線。</li>
+<li><strong>矢印の先端</strong>: 有向リンクが到達する場所に描かれる先端。塗りつぶし三角、開いた矢印、ひし形、円、棒。</li>
+</ul>
+<p>プレビューには、そのリンクでつながれた 2 つのノートと、リンクの名前、相手側からの読み方が表示されます。このスタイルは、グラフ、その凡例、サイドパネル、リンクピッカー、Web サイト / GraphML / Graphviz へのエクスポートなど、リンクが現れるあらゆる場所で使われます。色覚に特性のある方や紙に印刷する場合にも種類を区別しやすいよう、種類ごとに色だけでなく線も別にしてください。新しい種類は、他の種類があまり使っていない色と線で始まります。</p>
+<p>テキストでは、プレビューの下に表示される種類の id を使います (たとえば「Inspired by」という種類は <code>inspired_by::</code> になります)。id は種類の作成時に決まるので、種類の名前を変更しても、ノートに書かれたリンクが壊れることはありません。独自の種類を削除すると、そのリンクは<em>関連</em>リンクになるので、何も失われません。組み込みの種類は名前変更とスタイル変更はできますが、削除はできません。</p>
+<h2 id="タク">タグ</h2>
+<p>タイトルの下のタグ欄にタグを追加します (各タグの後に Enter を押します)。または、<code>#welcome</code> や <code>#math/algebra</code> のように、ハッシュ記号を付けて<strong>テキスト内</strong>に書きます。タグは小文字で、<code>math/algebra</code> のようにスラッシュで階層化できます。<code>math</code> で絞り込むと、<code>math/algebra</code> のタグが付いたノートも見つかります。ノート一覧の上のタグフィルターを使うか、検索ボックスに <code>tag:名前</code> と入力します。</p>
+<p>テキスト内に書いたタグは本物のタグで、<em>タグを追加</em>ボックスの横に<strong>輪郭だけのチップ</strong>として表示されます。テキストから <code>#tag</code> を削除すると消えます。<code>#tag</code> は、コード内、リンク先内、<code>[[#見出し]]</code> 内では無視されます。<em>タグを追加</em>ボックスに入力したタグは別扱いで、✕ で削除するまで残ります。エディターで <code>#tag</code> を Ctrl+クリックすると、そのタグが付いたノートが一覧表示されます。</p>
+<h2 id="情報源リンク">情報源リンク</h2>
+<p>地球儀アイコンのフィールドには、ノートの<strong>情報源</strong>を入力します。Web ページ (<code>https://…</code>)、メールアドレス、Zotero アイテム (<code>zotero://select/library/items/…</code>) が使えます。横のボタンでそのリンクを開きます。それ以外の種類のリンクは拒否されます。Zotero ライブラリから直接ノートを作成する方法は <a href="zotero.html">Zotero</a> を参照してください。</p>
+<h2 id="画像">画像</h2>
+<p>画像は、<em>挿入 ▸ 画像…</em> (Ctrl+Shift+I)、クリップボードからの<strong>貼り付け</strong>、画像ファイルのエディターへの<strong>ドラッグ</strong>で挿入します。対応形式は PNG、JPEG、GIF、WebP、BMP で、最大 25 MB です。SVG はスクリプトを含められるため、意図的に拒否されます。</p>
+<p>画像はファイル名ではなく内容で検査され、内容から導かれた名前で保管庫の <code>assets</code> フォルダーに 1 度だけ保存され、次のように参照されます。</p>
+<pre><code class="language-markdown">![Diagram](asset:3f2a9c0b1d4e5f6a7b8c.png)
+</code></pre>
+<p>ノートに最初に追加した画像が、<strong>タイトル画像</strong>になります。これは、ノート一覧では小さな角丸のサムネイルとして、グラフではノートの円の中に表示されます。エディターまたはプレビュー内の任意の画像を右クリックして<em>タイトル画像として使用</em>を選ぶと別の画像に変更でき、<em>タイトル画像を削除</em>を選ぶと画像なしにできます。ノート本文からタイトル画像を削除すると、タイトル画像としての指定も解除されます。</p>
+<h2 id="チェックリスト">チェックリスト</h2>
+<p>行頭に <code>- [ ]</code> を書く (またはツールバーのチェックリストボタンを押す) とタスクになります。<code>- [x]</code> は完了したタスクです。プレビューではボックスをクリックしてチェックを付けられます。タスクの末尾で Enter を押すと次のタスクが始まり、空のタスクで Enter を押すとリストが終了します。</p>
+<h2 id="アラーム">アラーム</h2>
+<p>アラームボタン (または<em>挿入 ▸ アラーム…</em>) を押して、ノートの日付と、必要に応じて時刻を設定します。期限が来ると、ZettelApp が通知を表示します。クリックするとノートが開きます。通知するには ZettelApp が起動している必要があり、閉じている間に期限が来たアラームは、保管庫を開いた直後に通知されます。アラームのあるノートには、ノート一覧にベルが表示されます。同じダイアログの<em>アラームを削除</em>で解除できます。</p>
+<h2 id="数式">数式</h2>
+<p>ドル記号の間に LaTeX を書きます。<code>$E = mc^2$</code> はインライン数式、<code>$$\int_0^1 x^2\,dx$$</code> は独立した行の数式です。数式ボタン (<em>挿入 ▸ 数式…</em>) で、ライブプレビュー付きのダイアログが開きます。数式はプレビューに描画され、エクスポートでは LaTeX のソースが保持されます。</p>
+<h2 id="マイントマッフ">マインドマップ</h2>
+<p>各ノートにマインドマップを持たせることができます (<strong>マインドマップ</strong>タブ、または<em>挿入 ▸ マインドマップ</em>)。枝は自動で色分けされます。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>キー</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tab</td>
+<td>子アイデアを追加</td>
+</tr>
+<tr>
+<td>Enter</td>
+<td>兄弟アイデアを追加</td>
+</tr>
+<tr>
+<td>F2 またはダブルクリック</td>
+<td>名前を変更</td>
+</tr>
+<tr>
+<td>Del</td>
+<td>選択したアイデアを削除</td>
+</tr>
+<tr>
+<td>方向キー</td>
+<td>選択を移動</td>
+</tr>
+<tr>
+<td>マウスホイール / ドラッグ</td>
+<td>ズーム / パン</td>
+</tr>
+</tbody>
+</table></div>
+<p>アイデアを右クリックして<strong>ノートにリンク</strong>します。リンクされたアイデアにはリンクアイコンが表示され、そのノートが開きます。<strong>リンクから</strong>は、ノートのリンクからマインドマップを作成します。リンクの種類ごとにグループ化され、リンク先ノート自身のリンクが 1 階層下に並びます。<strong>エクスポート</strong>では、マップを PNG または SVG 画像、あるいは FreeMind ファイル (<code>.mm</code>) として保存できます。<code>.mm</code> は FreeMind、Freeplane、XMind で開けます。</p>
+<h2 id="フラッシュカート">フラッシュカード</h2>
+<p>フラッシュカードは、ノートを復習用の素材に変えます (<a href="review-and-anki.html">復習、クイズ、Anki</a>を参照)。作り方は 2 通りあります。</p>
+<p><strong>ノートのテキスト内で。</strong> 次のものは自動でカードになり、編集に合わせて更新されます。</p>
+<pre><code class="language-markdown">Q: Who described the forgetting curve?
+A: Hermann Ebbinghaus
+
+{{c1::Retrieval practice}} is also called active recall.
+</code></pre>
+<p>質問は <code>A:</code> 行まで複数行にわたって書けます。<code>{{c1::…}}</code> を含む段落は<strong>穴埋め</strong>カードになり、削除箇所を順に隠します。<code>{{c1::text::hint}}</code> は、<code>[…]</code> の代わりにヒントを表示します。</p>
+<p><strong>フラッシュカードタブで。</strong> ノートに表示したくないカードには、<em>挿入 ▸ フラッシュカード…</em> (Ctrl+Shift+F) を使います。テキストから作られたカードには<em>ノート本文から</em>と表示され、テキストで編集します。</p>
+<h2 id="検索">検索</h2>
+<p>検索ボックス (Ctrl+F) は、タイトル、本文、タグを対象とした全文検索を使い、アクセントを無視し、単語の先頭一致で検索するので、<code>forget</code> で <em>forgetting</em> が見つかります。<code>tag:名前</code> を付けるとタグで絞り込めます (たとえば <code>memory tag:psychology</code>)。結果は関連度順です。クエリがない場合、ノートは選択した並べ替え順 (<em>最終編集</em>、<em>作成日時</em>、<em>タイトル</em>、<em>最もリンクされたノート</em>) になります。</p>
+<h2 id="こみ箱">ごみ箱</h2>
+<p><em>ごみ箱に移動</em> (Ctrl+Delete) は、ノートを削除せずに非表示にします。すぐに元に戻すボタンが表示され、ノート一覧の下の<strong>ごみ箱</strong>ボタンでごみ箱に入ったノートが表示されます。右クリックで<strong>復元</strong>または<strong>完全に削除</strong>ができます。<strong>ごみ箱を空にする</strong>は、確認の後に中のすべてを削除します。ごみ箱にあるノートへのリンクは非表示になり、ノートが復元されると元に戻ります。</p>
+
+    <p class="doc-footer">誤りを見つけたら：<a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ja/notes-and-links.md">GitHub でこのページを編集</a>。</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">ホーム</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">寄付</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="言語"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja" aria-current="true">日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

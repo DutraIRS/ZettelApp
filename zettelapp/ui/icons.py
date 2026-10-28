@@ -84,6 +84,9 @@ GLYPHS = {
     "chevron_up": 0xE70E,
     "heart": 0xEB51,
     "heart_fill": 0xEB52,
+    "checklist": 0xE73A,
+    "alarm": 0xE121,
+    "formula": 0xE8EF,
 }
 
 

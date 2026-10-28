@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Ничего, если вы сами этого не попросите, кроме одной небольшой проверки обновлений. В ZettelApp нет учётных записей, телеметрии и рекламы, и она ничего не загружает из интернета, п">
+<title>Конфиденциальность и безопасность – документация ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">К содержимому</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Возможности</a></li>
+        <li><a href="tutorial.html">Руководство</a></li>
+        <li><a href="./">Документация</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Поддержать</a></li>
+        <li><a class="nav-cta" href="../#download">Скачать</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Языки</span></summary><ul class="lang-switch-panel" aria-label="Языки"><li><a href="../../docs/privacy-and-security.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/privacy-and-security.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/privacy-and-security.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/privacy-and-security.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/privacy-and-security.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/privacy-and-security.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/privacy-and-security.html" lang="ru" hreflang="ru" aria-current="true">Русский</a></li><li><a href="../../zh-cn/docs/privacy-and-security.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/privacy-and-security.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/privacy-and-security.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/privacy-and-security.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Поддержать"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Поддержать</span></a>
+      <a class="hbtn cta" href="../#download">Скачать</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Меню</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Возможности</a></li>
+          <li><a href="tutorial.html">Руководство</a></li>
+          <li><a href="./">Документация</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Документация">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Документация</span><span class="docs-menu-current">Конфиденциальность и безопасность</span></span></summary>
+      <ul>
+      <li><a href="index.html">Документация ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Руководство: ваши первые 30 минут</a></li>
+      <li><a href="getting-started.html">Начало работы</a></li>
+      <li><a href="notes-and-links.html">Заметки и связи</a></li>
+      <li><a href="link-suggestions.html">Подсказки ссылок</a></li>
+      <li><a href="graph-and-insights.html">Граф и статистика</a></li>
+      <li><a href="review-and-anki.html">Повторение, викторины и Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Спросите свои заметки (ИИ)</a></li>
+      <li><a href="mcp-server.html">MCP-сервер</a></li>
+      <li><a href="export-import.html">Экспорт и импорт</a></li>
+      <li><a href="keyboard-shortcuts.html">Горячие клавиши</a></li>
+      <li><a href="privacy-and-security.html" aria-current="page">Конфиденциальность и безопасность</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Документация</h2>
+      <ul>
+      <li><a href="index.html">Документация ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Руководство: ваши первые 30 минут</a></li>
+      <li><a href="getting-started.html">Начало работы</a></li>
+      <li><a href="notes-and-links.html">Заметки и связи</a></li>
+      <li><a href="link-suggestions.html">Подсказки ссылок</a></li>
+      <li><a href="graph-and-insights.html">Граф и статистика</a></li>
+      <li><a href="review-and-anki.html">Повторение, викторины и Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Спросите свои заметки (ИИ)</a></li>
+      <li><a href="mcp-server.html">MCP-сервер</a></li>
+      <li><a href="export-import.html">Экспорт и импорт</a></li>
+      <li><a href="keyboard-shortcuts.html">Горячие клавиши</a></li>
+      <li><a href="privacy-and-security.html" aria-current="page">Конфиденциальность и безопасность</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="конфиденциальность-и-безопасность">Конфиденциальность и безопасность</h1>
+<h2 id="что-покидает-ваш-компьютер">Что покидает ваш компьютер</h2>
+<p><strong>Ничего, если вы сами этого не попросите, кроме одной небольшой проверки обновлений.</strong> В ZettelApp нет учётных записей,
+телеметрии и рекламы, и она ничего не загружает из интернета, пока вы работаете. Вот все сетевые
+запросы, которые она может делать:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Когда…</th>
+<th>ZettelApp обращается к</th>
+<th>Что отправляется</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Примерно через 4 секунды после запуска ZettelApp (можно отключить)</td>
+<td><code>https://dutrairs.github.io/ZettelApp/version.json</code></td>
+<td>Один HTTPS-запрос за этим файлом с заголовком <code>User-Agent: ZettelApp/&lt;version&gt;</code>. Больше ничего: ни заметок, ни настроек, ни идентификаторов. Любой сбой происходит молча. См. <a href="getting-started.html#updates">Обновления</a>.</td>
+</tr>
+<tr>
+<td>Вы задаёте вопрос на странице <strong>Спросить</strong></td>
+<td>ИИ-провайдеру, которого вы настроили (Anthropic, OpenAI, Z.ai или ваш собственный адрес)</td>
+<td>Ваш вопрос и заметки из списка <em>Отправленные источники</em></td>
+</tr>
+<tr>
+<td>Вы проверяете соединение с ИИ или обновляете список моделей</td>
+<td>Тому же провайдеру</td>
+<td>Ваш API-ключ для аутентификации</td>
+</tr>
+<tr>
+<td>Вы нажимаете <strong>Синхронизировать с Anki</strong></td>
+<td>AnkiConnect на <strong>этом компьютере</strong> (<code>127.0.0.1</code>)</td>
+<td>Карточки из выбранной области</td>
+</tr>
+<tr>
+<td>Вы используете <strong>Вставка ▸ Ссылка Zotero</strong> или <em>Проверить соединение</em> в параметрах Zotero</td>
+<td>Zotero на <strong>этом компьютере</strong> (<code>127.0.0.1</code>)</td>
+<td>Ваши слова для поиска (только чтение)</td>
+</tr>
+<tr>
+<td>Вы щёлкаете по веб-ссылке, используете <em>Справка ▸ Сайт ZettelApp / Документация / Проверить обновления</em> или кнопку <strong>Скачать</strong> в уведомлении об обновлении</td>
+<td>Ваш веб-браузер открывает страницу</td>
+<td>Ничего от ZettelApp</td>
+</tr>
+</tbody>
+</table></div>
+<p>Чтобы остановить проверку обновлений, снимите отметку с <em>Сервис ▸ Параметры ▸ Общие ▸ Проверять обновления при запуске ZettelApp</em>;
+после этого ZettelApp не делает никаких запросов, пока вы не зададите вопрос или не воспользуетесь одной из других перечисленных выше функций.</p>
+<p>Локальные соединения с Anki и Zotero никогда не используют прокси, поэтому их нельзя перенаправить за пределы вашего компьютера.
+MCP-сервер вообще не делает сетевых запросов.</p>
+<h2 id="где-хранятся-ваши-данные">Где хранятся ваши данные</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Что</th>
+<th>Где</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Заметки, связи, карточки, история повторений</td>
+<td>Папка вашего хранилища: <code>zettel.db</code> (SQLite). По умолчанию <strong>Documents\ZettelApp</strong>.</td>
+</tr>
+<tr>
+<td>Изображения</td>
+<td>Папка <code>assets</code> хранилища.</td>
+</tr>
+<tr>
+<td>Настройки</td>
+<td>Реестр, в <code>HKEY_CURRENT_USER\Software\ZettelApp\ZettelApp</code>.</td>
+</tr>
+<tr>
+<td>API-ключи</td>
+<td><strong>Диспетчер учётных данных Windows</strong> (<code>ZettelApp/llm/…</code>), никогда не в файлах или реестре.</td>
+</tr>
+<tr>
+<td>Журналы</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Logs</code> (ротируются, не более нескольких МБ). Они записывают ошибки, а не ваши заметки, и никогда не содержат API-ключей.</td>
+</tr>
+<tr>
+<td>Автоматические резервные копии</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Backups</code></td>
+</tr>
+<tr>
+<td>Небольшой кэш интерфейса</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Cache</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Хранилище — обычная папка: её можно копировать, резервировать или держать в OneDrive. ZettelApp записывает
+базу данных с полной синхронизацией — настройкой, подходящей для синхронизируемых папок. Избегайте открытия одного и того же хранилища на двух
+компьютерах одновременно.</p>
+<h2 id="резервные-копии-и-отмена">Резервные копии и отмена</h2>
+<ul>
+<li><strong>Ежедневные резервные копии:</strong> при первом открытии хранилища в течение дня сохраняется согласованная копия его базы данных.
+Хранятся 10 новейших (<em>Параметры ▸ Резервные копии</em>). <em>Файл ▸ Создать резервную копию хранилища</em> создаёт копию в любой момент.
+Изображения хранятся по содержимому и никогда не удаляются автоматически.</li>
+<li><strong>Корзина:</strong> удалённые заметки сначала попадают в корзину и могут быть восстановлены, пока вы её не очистите.</li>
+<li><strong>Автосохранение:</strong> заметки сохраняются по мере набора. Диалог сбоя сообщает о неожиданных ошибках и записывает подробности в
+журнал.</li>
+</ul>
+<h2 id="как-zettelapp-вас-защищает">Как ZettelApp вас защищает</h2>
+<p>Заметки могут поступать из импорта, интернета или ответов ИИ, поэтому ZettelApp считает их содержимое недоверенным:</p>
+<ul>
+<li><strong>Никакого активного содержимого.</strong> Сырой HTML в заметках показывается как текст и никогда не отображается; ничто в заметке не может запускать
+скрипты. Просмотр заметки загружает изображения <strong>только из собственной папки <code>assets</code> хранилища</strong>, никогда не из
+интернета или других мест на диске.</li>
+<li><strong>Белый список ссылок.</strong> Щелчок по ссылке открывает только веб-страницы (<code>http</code>/<code>https</code>), электронную почту (<code>mailto</code>), заметки,
+ссылки Zotero <em>выбрать элемент</em> / <em>открыть PDF</em> и ссылки на локальные файлы (ниже). <code>javascript:</code> и другие
+схемы отклоняются.</li>
+<li><strong>Ссылки на локальные файлы только показывают файл.</strong> Ссылка <code>file:///</code> открывает <strong>Проводник с выделенным
+файлом</strong>; сам файл никогда не открывается и не запускается. Разрешены только пути на локальном диске. Сетевые
+(UNC) пути вроде <code>\\server\share</code> отклоняются, потому что обращение к ним может отправить ваши учётные данные Windows
+на этот сервер.</li>
+<li><strong>Изображения проверяются по содержимому</strong>, а не по имени файла. Принимаются только PNG, JPEG, GIF, WebP и BMP до 25 МБ;
+SVG отклоняется, потому что может содержать скрипты. Проверка охватывает сигнатуру файла и
+сжатый размер; размеры в пикселях проверяются при первом отображении изображения.</li>
+<li><strong>Безопасный импорт.</strong> Архивы проверяются на уловки с путями («zip-slip») и бомбы распаковки. Каждое поле
+проверяется и ограничивается по размеру, импорт Markdown не может выходить за пределы импортируемой папки, а неудавшийся
+импорт оставляет хранилище неизменным: импорт выполняется в одной транзакции базы данных, которая откатывается при
+любой ошибке.</li>
+<li><strong>Безопасный экспорт.</strong> Экспортированные сайты не содержат скриптов и несут строгую Content-Security-Policy. Файлы
+записываются атомарно.</li>
+<li><strong>Безопасность базы данных.</strong> Все запросы к базе данных используют связанные параметры, а текст поиска никогда не интерпретируется как
+синтаксис запроса.</li>
+<li><strong>Ссылки <code>zettelapp://</code></strong> (используемые карточками Anki) могут только <em>открыть заметку по её ID</em>. Любой другой запрос
+игнорируется.</li>
+<li><strong>Один экземпляр на пользователя.</strong> Второй запуск передаёт свой запрос работающему приложению через именованный канал
+Windows, доступный только вашей учётной записи.</li>
+<li><strong>Безопасность ИИ.</strong> У модели ИИ нет инструментов, поэтому инструкции, спрятанные в заметке, не могут заставить её действовать, а её
+ответ отображается тем же безопасным обработчиком. API-ключи остаются в Диспетчере учётных данных и удаляются из
+сообщений об ошибках.</li>
+<li><strong>MCP-сервер и его переключатель.</strong> MCP-клиенты могут получить доступ к вашим заметкам, только пока ZettelApp открыта <strong>и</strong>
+переключатель MCP в её строке состояния включён. Переключатель выключен при каждом запуске ZettelApp и никогда не сохраняется.
+Сервер по умолчанию только для чтения, работает только когда его запускает ваш MCP-клиент и использует стандартный
+ввод/вывод без сетевого порта. См. <a href="mcp-server.html">MCP-сервер</a>.</li>
+</ul>
+<h2 id="удаление">Удаление</h2>
+<p>Удаляйте через <em>Параметры Windows ▸ Приложения ▸ Установленные приложения ▸ ZettelApp ▸ Удалить</em>. Деинсталлятор предлагает
+неотмеченный параметр <strong>Также удалить мои настройки и данные ZettelApp</strong>. Если вы его отметите, он удалит ваши
+настройки, API-ключи, сохранённые в Диспетчере учётных данных, журналы, кэш и автоматические резервные копии
+(<code>%LOCALAPPDATA%\ZettelApp</code>) <strong>и все ваши заметки</strong> (базу данных и вложения ваших хранилищ). Если не отмечен,
+ваши заметки остаются на месте.</p>
+<p>Нашли проблему с безопасностью? Пожалуйста, сообщите о ней в частном порядке; см.
+<a href="https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md">SECURITY.md</a>.</p>
+
+    <p class="doc-footer">Нашли ошибку? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ru/privacy-and-security.md">Править страницу на GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Главная</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Проблемы</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Поддержать</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Языки"><li><a href="../../docs/privacy-and-security.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/privacy-and-security.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/privacy-and-security.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/privacy-and-security.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/privacy-and-security.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/privacy-and-security.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/privacy-and-security.html" lang="ru" hreflang="ru" aria-current="true">Русский</a></li><li><a href="../../zh-cn/docs/privacy-and-security.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/privacy-and-security.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/privacy-and-security.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/privacy-and-security.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

@@ -16,6 +16,7 @@ from typing import TypeGuard
 from urllib.parse import quote, unquote, urlsplit
 
 from zettelapp import URL_SCHEME
+from zettelapp.i18n import _
 
 WEB_SCHEMES = frozenset({"http", "https", "mailto"})
 MAX_URL_LENGTH = 2048
@@ -205,26 +206,28 @@ def check_zip(zf: zipfile.ZipFile) -> None:
     """Reject archives with unsafe paths or decompression-bomb proportions."""
     members = zf.infolist()
     if len(members) > MAX_ARCHIVE_MEMBERS:
-        raise UnsafeInputError("The archive contains too many files.")
+        raise UnsafeInputError(_("The archive contains too many files."))
     total = 0
     for info in members:
         safe_member_path(info.filename)
         total += info.file_size
         if info.compress_size and info.file_size / info.compress_size > MAX_COMPRESSION_RATIO:
-            raise UnsafeInputError(f"Suspicious compression ratio in {info.filename!r}.")
+            raise UnsafeInputError(
+                _("Suspicious compression ratio in {filename!r}.").format(filename=info.filename)
+            )
     if total > MAX_ARCHIVE_TOTAL_BYTES:
-        raise UnsafeInputError("The archive is too large to import.")
+        raise UnsafeInputError(_("The archive is too large to import."))
 
 
 def safe_member_path(name: str) -> PurePosixPath:
     """Validate a relative archive path (no absolute paths, drives or '..')."""
     if not name or "\x00" in name:
-        raise UnsafeInputError("Empty or invalid path in archive.")
+        raise UnsafeInputError(_("Empty or invalid path in archive."))
     path = PurePosixPath(name.replace("\\", "/"))
     if path.is_absolute() or ".." in path.parts or not path.parts:
-        raise UnsafeInputError(f"Unsafe path in archive: {name!r}")
+        raise UnsafeInputError(_("Unsafe path in archive: {name!r}").format(name=name))
     if ":" in path.parts[0]:
-        raise UnsafeInputError(f"Unsafe path in archive: {name!r}")
+        raise UnsafeInputError(_("Unsafe path in archive: {name!r}").format(name=name))
     return path
 
 
@@ -233,5 +236,5 @@ def resolve_inside(base: Path, relative: str) -> Path:
     base = base.resolve()
     target = (base / relative).resolve()
     if target != base and base not in target.parents:
-        raise UnsafeInputError(f"Path escapes its folder: {relative!r}")
+        raise UnsafeInputError(_("Path escapes its folder: {relative!r}").format(relative=relative))
     return target

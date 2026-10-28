@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Заметки существуют, чтобы думать с их помощью, а помнить их полезно. ZettelApp превращает заметки в карточки и позволяет повторять их в самом приложении или в Anki.">
+<title>Повторение, викторины и Anki – документация ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">К содержимому</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Возможности</a></li>
+        <li><a href="tutorial.html">Руководство</a></li>
+        <li><a href="./">Документация</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Поддержать</a></li>
+        <li><a class="nav-cta" href="../#download">Скачать</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Языки</span></summary><ul class="lang-switch-panel" aria-label="Языки"><li><a href="../../docs/review-and-anki.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/review-and-anki.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/review-and-anki.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/review-and-anki.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/review-and-anki.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/review-and-anki.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/review-and-anki.html" lang="ru" hreflang="ru" aria-current="true">Русский</a></li><li><a href="../../zh-cn/docs/review-and-anki.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/review-and-anki.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/review-and-anki.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/review-and-anki.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Поддержать"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Поддержать</span></a>
+      <a class="hbtn cta" href="../#download">Скачать</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Меню</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Возможности</a></li>
+          <li><a href="tutorial.html">Руководство</a></li>
+          <li><a href="./">Документация</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Документация">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Документация</span><span class="docs-menu-current">Повторение, викторины и Anki</span></span></summary>
+      <ul>
+      <li><a href="index.html">Документация ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Руководство: ваши первые 30 минут</a></li>
+      <li><a href="getting-started.html">Начало работы</a></li>
+      <li><a href="notes-and-links.html">Заметки и связи</a></li>
+      <li><a href="link-suggestions.html">Подсказки ссылок</a></li>
+      <li><a href="graph-and-insights.html">Граф и статистика</a></li>
+      <li><a href="review-and-anki.html" aria-current="page">Повторение, викторины и Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Спросите свои заметки (ИИ)</a></li>
+      <li><a href="mcp-server.html">MCP-сервер</a></li>
+      <li><a href="export-import.html">Экспорт и импорт</a></li>
+      <li><a href="keyboard-shortcuts.html">Горячие клавиши</a></li>
+      <li><a href="privacy-and-security.html">Конфиденциальность и безопасность</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Документация</h2>
+      <ul>
+      <li><a href="index.html">Документация ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Руководство: ваши первые 30 минут</a></li>
+      <li><a href="getting-started.html">Начало работы</a></li>
+      <li><a href="notes-and-links.html">Заметки и связи</a></li>
+      <li><a href="link-suggestions.html">Подсказки ссылок</a></li>
+      <li><a href="graph-and-insights.html">Граф и статистика</a></li>
+      <li><a href="review-and-anki.html" aria-current="page">Повторение, викторины и Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Спросите свои заметки (ИИ)</a></li>
+      <li><a href="mcp-server.html">MCP-сервер</a></li>
+      <li><a href="export-import.html">Экспорт и импорт</a></li>
+      <li><a href="keyboard-shortcuts.html">Горячие клавиши</a></li>
+      <li><a href="privacy-and-security.html">Конфиденциальность и безопасность</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="повторение-викторины-и-anki">Повторение, викторины и Anki</h1>
+<p>Заметки существуют, чтобы думать с их помощью, а помнить их полезно. ZettelApp превращает заметки в
+<a href="notes-and-links.html#flashcards">карточки</a> и позволяет повторять их в самом приложении или в Anki.</p>
+<h2 id="интервальное-повторение">Интервальное повторение</h2>
+<p>Страница <strong>Повторение</strong> (Ctrl+4) показывает, сколько карточек <strong>на сегодня</strong>. <strong>Начать повторение</strong> проходит по ним:</p>
+<ol>
+<li>Прочитайте вопрос и попробуйте вспомнить ответ.</li>
+<li>Нажмите <strong>Пробел</strong> (или <em>Показать ответ</em>).</li>
+<li>Оцените себя: <strong>Снова (1)</strong>, <strong>Трудно (2)</strong>, <strong>Хорошо (3)</strong> или <strong>Легко (4)</strong>. Наведите курсор на кнопку, чтобы увидеть, когда
+карточка вернётся.</li>
+</ol>
+<p>Планирование использует алгоритм <strong>SM-2</strong> (алгоритм SuperMemo, из которого вырос Anki):</p>
+<ul>
+<li>Новые карточки возвращаются через 1 день, затем через 6 дней, а потом с интервалами, растущими на <em>коэффициент лёгкости</em> карточки
+(сначала 2,5).</li>
+<li><em>Снова</em> сбрасывает карточку на 1 день и снижает её лёгкость. <em>Трудно</em> сокращает следующий интервал, а <em>Легко</em>
+удлиняет его.</li>
+</ul>
+<p>Карточки с пропусками дают по одному повторению на каждый пропуск (<code>{{c1::…}}</code>, <code>{{c2::…}}</code>, …). Каждый вопрос показывает
+ссылку <strong>От:</strong> на свою заметку.</p>
+<h2 id="викторины">Викторины</h2>
+<p><strong>Пробная викторина</strong> строится из выбранной области: вся коллекция, открытая заметка и связанные с ней заметки
+(с глубиной) или заметки с тегом. Выберите вид и число вопросов:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Вид</th>
+<th>Как работает</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Карточки (интервальное повторение)</strong></td>
+<td>Как повторение, а ваши оценки обновляют расписание.</td>
+</tr>
+<tr>
+<td><strong>Выбор ответа</strong></td>
+<td>Выберите правильный ответ из четырёх. Неправильные ответы — это ответы других карточек схожей длины, поэтому они правдоподобны. Клавиши 1–4 выбирают вариант.</td>
+</tr>
+<tr>
+<td><strong>Введите ответ</strong></td>
+<td>Введите ответ и нажмите Enter. Он оценивается по сходству редактирования (Левенштейн) без учёта регистра, диакритики и форматирования: 85% и выше засчитывается как верный, а 60% и выше — как <em>почти</em>, так что мелкие опечатки вам не вредят.</td>
+</tr>
+<tr>
+<td><strong>Угадай заметку</strong></td>
+<td>Показывает текст заметки со стёртыми словами её заголовка; выберите правильный заголовок. Неправильные варианты — <strong>наиболее похожие заметки</strong> (по TF-IDF), так что вы учитесь различать родственные идеи. Карточки не нужны.</td>
+</tr>
+</tbody>
+</table></div>
+<p><em>Сервис ▸ Викторина по связям этой заметки</em> запускает викторину по открытой заметке и заметкам в пределах двух связей
+от неё. То же доступно по правому щелчку на заметке в графе.</p>
+<h2 id="anki">Anki</h2>
+<p>ZettelApp работает с <a href="https://apps.ankiweb.net/">Anki</a> двумя способами. Оба используют два типа заметок: <strong>ZettelApp
+Basic</strong> и <strong>ZettelApp Cloze</strong> со следующими полями:</p>
+<ul>
+<li><em>Front</em> и <em>Back</em> (или <em>Text</em> и <em>Extra</em> для карточек с пропусками), отрисованные из Markdown;</li>
+<li><em>Source</em> — ссылка обратно на заметку;</li>
+<li><em>ZettelID</em> и <em>CardKey</em>.</li>
+</ul>
+<p>Теги вашей заметки становятся тегами Anki (вложенные теги превращаются в <code>parent::child</code>) плюс <code>zettelapp</code>. Изображения в карточках
+включаются как медиафайлы.</p>
+<h3 id="синхронизация-через-ankiconnect">Синхронизация через AnkiConnect</h3>
+<ol>
+<li>В Anki установите дополнение <strong>AnkiConnect</strong> (<em>Инструменты ▸ Дополнения ▸ Загрузить дополнения…</em>, код <strong>2055492159</strong>)
+и перезапустите Anki.</li>
+<li>При запущенном Anki откройте <strong>Повторение</strong> в ZettelApp, выберите название колоды (<strong>Колода по умолчанию</strong> в
+<em>Параметры ▸ Anki</em>, сначала <code>ZettelApp</code>) и область и нажмите
+<strong>Синхронизировать с Anki</strong> (или <em>Сервис ▸ Синхронизировать с Anki</em>). <em>Проверить соединение</em> проверяет связь.</li>
+</ol>
+<p>ZettelApp запоминает, какая заметка Anki соответствует каждой карточке. Повторная синхронизация <strong>обновляет</strong> карточки, а не
+добавляет дубликаты, и карточку можно снова найти по её <em>CardKey</em>, даже если эта память утрачена. Карточки,
+которые вы удаляете в ZettelApp, из Anki не удаляются.</p>
+<p>ZettelApp общается с AnkiConnect только на этом компьютере (<code>127.0.0.1</code>, по умолчанию порт 8765, можно изменить в
+<em>Параметры ▸ Anki</em>).</p>
+<h3 id="экспорт-колоды-apkg">Экспорт колоды (.apkg)</h3>
+<p><strong>Экспорт колоды (.apkg)…</strong> (или <em>Файл ▸ Экспорт…</em> с форматом <em>Колода Anki</em>) записывает пакет, который вы
+импортируете через <em>Файл ▸ Импорт</em> в Anki. Дополнение не требуется. Типы заметок, колода и идентичность каждой карточки
+стабильны, поэтому импорт более нового экспорта <strong>обновляет</strong> ранее импортированные карточки.</p>
+<h3 id="из-anki-обратно-в-ваши-заметки">Из Anki обратно в ваши заметки</h3>
+<p><strong>Source</strong> каждой карточки — это ссылка <code>zettelapp://note/&lt;id&gt;</code>. Щёлкните по ней в Anki, и заметка откроется
+в ZettelApp. Установщик настраивает это. В портативной версии используйте <em>Параметры ▸ Интеграция с Windows ▸
+Зарегистрировать ссылки</em>. Обработчик ссылок принимает только ссылки «открыть заметку»; см.
+<a href="privacy-and-security.html">Конфиденциальность и безопасность</a>.</p>
+
+    <p class="doc-footer">Нашли ошибку? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ru/review-and-anki.md">Править страницу на GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Главная</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Проблемы</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Поддержать</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Языки"><li><a href="../../docs/review-and-anki.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/review-and-anki.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/review-and-anki.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/review-and-anki.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/review-and-anki.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/review-and-anki.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/review-and-anki.html" lang="ru" hreflang="ru" aria-current="true">Русский</a></li><li><a href="../../zh-cn/docs/review-and-anki.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/review-and-anki.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/review-and-anki.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/review-and-anki.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

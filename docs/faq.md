@@ -85,15 +85,15 @@ Not yet. Linux packages (.deb, AppImage) and macOS are on the
 
 ### Is the app available in other languages?
 
-The installer is. It offers many languages and suggests your Windows language. The app's own text is in
-English for now; translating it is on the
-[roadmap](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
+Yes. The installer and the app are translated into Spanish, Portuguese (Brazil), French, German, Italian,
+Russian, Simplified Chinese, Japanese, Korean and Arabic. The app follows your Windows language by default;
+change it in *Options*. Missing text falls back to English.
 
 ### How do I uninstall, and what happens to my data?
 
 *Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall*. The uninstaller offers an unticked **Also
 delete my ZettelApp settings and data** option that removes preferences, saved API keys, logs, cache and
-automatic backups. **Your notes are never deleted**: vaults such as Documents\ZettelApp are kept. For the
+automatic backups, **and all your notes** (vault databases and attachments). Unticked, your notes are kept. For the
 portable version, delete its folder; its preferences live in the registry under
 `HKEY_CURRENT_USER\Software\ZettelApp`, and logs and backups in `%LOCALAPPDATA%\ZettelApp`.
 

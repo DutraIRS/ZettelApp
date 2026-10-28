@@ -4,6 +4,54 @@ All notable changes to ZettelApp are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] - 2026-10-28
+
+### Added
+
+- **The Lost Prince of the Archive**, an optional first-run adventure that teaches notes, links, tags,
+  suggestions, the graph, mind maps, attachments, review and Insights through real actions.
+- Line styles and arrow-tip choices for built-in and custom link types, including a live preview.
+- Checklists (`- [ ]`) in note bodies, toggled from the preview.
+- Alarm notes: set a date and optional time and get a notification (ZettelApp must be running).
+- LaTeX formulas (`$…$` and `$$…$$`) with a formula dialog and live preview.
+- A title image per note (right-click an image), shown as a rounded thumbnail in the note list.
+- Insert file links, and manage several saved AI API keys.
+- Interface, documentation and website translations: Spanish, Portuguese (Brazil), French, German,
+  Italian, Russian, Simplified Chinese, Japanese, Korean and Arabic. Change the app's language in
+  *Options ▸ General*; the website suggests your browser's language once and has a language menu
+  (the globe) on every page. The installer is also offered in Korean and Arabic.
+
+### Changed
+
+- Split view is the default; the delete button moved to the editor toolbar.
+- Menu and option check marks now show a tick.
+- The 3D graph labels are clearer, its group areas are bounded hulls that follow depth, and 2D
+  arrows follow nodes while dragging.
+- Link styles now travel through archive and JSON export, import and MCP responses.
+- New vaults start with a small linked tour of ZettelApp.
+- The website, documentation navigation and footer now adapt to narrow phone screens.
+- Installing an update keeps the interface language picked in *Options*.
+- The main window can be made much narrower (about 1,000 px in every language): the editor and
+  graph toolbars wrap onto a second line instead of setting the window's minimum width.
+- Deleting a note's title image from its text also clears it as the title image.
+
+### Fixed
+
+- Dragging and dropping images into a note now works.
+- Ticking "delete my data" when uninstalling now also removes your notes, and only the files
+  ZettelApp created: other files in a vault's folders (even in its `assets` folder) are kept.
+- Close the database connection when opening or upgrading a vault fails.
+- *Options* showed "Use Windows setting" when the language had been chosen in the installer.
+- Options, the graph page, the link panel and many messages were still in English in the other
+  languages, and counts used English plurals.
+- An alarm time edited by hand into the database no longer breaks the alarm check.
+- Background tasks (link suggestions, the graph layout, Insights) were never freed, so memory grew
+  with every note opened (about 85 MB per 60 notes in a 2,000-note vault). Graph layouts kept for
+  quick switching are now also limited to the latest few.
+- Website: the first-visit language redirect opened the documentation index instead of the same
+  page, Arabic pages scrolled sideways, and between 720 and 900 px the header wrapped so the
+  language list opened off-screen.
+
 ## [1.0.0] - 2026-10-28
 
 First release.

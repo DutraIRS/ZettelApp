@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Mit Datei ▸ Exportieren…  exportieren Sie die gesamte Sammlung oder einen beliebigen Teil davon:">
+<title>Export und Import – ZettelApp-Dokumentation</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Zum Inhalt springen</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Funktionen</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Doku</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Spenden</a></li>
+        <li><a class="nav-cta" href="../#download">Herunterladen</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Sprachen</span></summary><ul class="lang-switch-panel" aria-label="Sprachen"><li><a href="../../docs/export-import.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/export-import.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/export-import.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/export-import.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/export-import.html" lang="de" hreflang="de" aria-current="true">Deutsch</a></li><li><a href="../../it/docs/export-import.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/export-import.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/export-import.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/export-import.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/export-import.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/export-import.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Spenden"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Spenden</span></a>
+      <a class="hbtn cta" href="../#download">Herunterladen</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menü</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Funktionen</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Doku</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Dokumentation">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Dokumentation</span><span class="docs-menu-current">Export und Import</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp-Dokumentation</a></li>
+      <li><a href="what-is-zettelkasten.html">Was ist ein Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: Ihre ersten 30 Minuten</a></li>
+      <li><a href="getting-started.html">Erste Schritte</a></li>
+      <li><a href="notes-and-links.html">Notizen und Links</a></li>
+      <li><a href="link-suggestions.html">Linkvorschläge</a></li>
+      <li><a href="graph-and-insights.html">Graph und Einblicke</a></li>
+      <li><a href="review-and-anki.html">Wiederholung, Quizfragen und Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ihre Notizen befragen (KI)</a></li>
+      <li><a href="mcp-server.html">MCP-Server</a></li>
+      <li><a href="export-import.html" aria-current="page">Export und Import</a></li>
+      <li><a href="keyboard-shortcuts.html">Tastenkombinationen</a></li>
+      <li><a href="privacy-and-security.html">Datenschutz und Sicherheit</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Dokumentation</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp-Dokumentation</a></li>
+      <li><a href="what-is-zettelkasten.html">Was ist ein Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: Ihre ersten 30 Minuten</a></li>
+      <li><a href="getting-started.html">Erste Schritte</a></li>
+      <li><a href="notes-and-links.html">Notizen und Links</a></li>
+      <li><a href="link-suggestions.html">Linkvorschläge</a></li>
+      <li><a href="graph-and-insights.html">Graph und Einblicke</a></li>
+      <li><a href="review-and-anki.html">Wiederholung, Quizfragen und Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ihre Notizen befragen (KI)</a></li>
+      <li><a href="mcp-server.html">MCP-Server</a></li>
+      <li><a href="export-import.html" aria-current="page">Export und Import</a></li>
+      <li><a href="keyboard-shortcuts.html">Tastenkombinationen</a></li>
+      <li><a href="privacy-and-security.html">Datenschutz und Sicherheit</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="export-und-import">Export und Import</h1>
+<h2 id="exportieren">Exportieren</h2>
+<p>Mit <em>Datei ▸ Exportieren…</em> (Ctrl+Shift+E) exportieren Sie <strong>die gesamte Sammlung oder einen beliebigen Teil davon</strong>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Bereich</th>
+<th>Exportierter Inhalt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Gesamte Sammlung</strong></td>
+<td>Jede Notiz (außer dem Papierkorb).</td>
+</tr>
+<tr>
+<td><strong>Aktuelle Notiz und verknüpfte Notizen</strong></td>
+<td>Die geöffnete Notiz und alle Notizen innerhalb von <strong>Tiefe</strong> Links, wobei Links in beide Richtungen verfolgt werden: ein <em>Teilgraph</em>.</td>
+</tr>
+<tr>
+<td><strong>Notizen mit Tag</strong></td>
+<td>Notizen mit dem angegebenen Tag, einschließlich verschachtelter Tags (<code>math</code> umfasst <code>math/algebra</code>).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Der Dialog zeigt, wie viele Notizen, Links und Lernkarten der ausgewählte Bereich enthält. Sie können auch
+über die Notizliste exportieren (Rechtsklick ▸ <em>Mit verknüpften Notizen exportieren…</em>), über das ⋯-Menü
+einer Notiz, über den Graph (die Export-Schaltfläche exportiert die sichtbaren Notizen) und über das Menü
+eines Graphknotens.</p>
+<h3 id="formate">Formate</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Format</th>
+<th>Datei</th>
+<th>Inhalt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ZettelApp-Archiv</strong></td>
+<td><code>.zip</code></td>
+<td>Alles, einschließlich Bildern: Notizen, typisierte Links, Linktypen (mit Farben, Linienstilen und Pfeilspitzen), Lernkarten und Mindmaps. Importieren Sie das Archiv auf einem beliebigen Computer wieder in ZettelApp. Am besten für Sicherungen und zum Verschieben von Tresoren.</td>
+</tr>
+<tr>
+<td><strong>Markdown-Dateien</strong></td>
+<td><code>.zip</code></td>
+<td>Eine <code>.md</code>-Datei pro Notiz mit YAML-Frontmatter (ID, Titel, Tags, Quellenlink, Daten, typisierte Links, Mindmap) und <code>[[Wiki-Links]]</code> zwischen den Dateien. Links, die nicht im Text stehen, sind unter <em>Links</em> im Format <code>type:: [[Note]]</code> aufgeführt; manuelle Lernkarten unter <em>Lernkarten</em> im Format <code>Q:</code>/<code>A:</code>. Bilder liegen in <code>assets/</code>. Lässt sich in Obsidian und anderen Markdown-Editoren öffnen.</td>
+</tr>
+<tr>
+<td><strong>Website</strong></td>
+<td><code>.zip</code></td>
+<td>Eine eigenständige statische Website: ein Index mit Graphübersicht, ein Tagindex und eine Seite pro Notiz. Links sind in den Farben und Linienstilen ihrer Typen dargestellt; hinzu kommen Mindmaps und Lernkarten (Antworten werden per Klick eingeblendet). Keine Skripte; funktioniert offline, indem Sie <code>index.html</code> öffnen. Helle und dunkle Designs.</td>
+</tr>
+<tr>
+<td><strong>JSON</strong></td>
+<td><code>.json</code></td>
+<td>Strukturierte Daten für Skripte und andere Tools (Bilder werden referenziert, aber nicht mitgeliefert).</td>
+</tr>
+<tr>
+<td><strong>GraphML</strong></td>
+<td><code>.graphml</code></td>
+<td>Der Linkgraph für Gephi, yEd, Cytoscape oder NetworkX, mit Titeln, Tags und Daten auf den Knoten und Linktypen auf den Kanten (gerichtet oder ungerichtet), einschließlich Farbe, Linienstil und Pfeilspitze jedes Typs.</td>
+</tr>
+<tr>
+<td><strong>Graphviz DOT</strong></td>
+<td><code>.dot</code></td>
+<td>Der Graph als Graphviz-Diagramm mit farblich gekennzeichneten, beschrifteten und gestalteten Linktypen: durchgezogene, gestrichelte oder gepunktete Linien (Graphviz stellt Strich-Punkt und lange Striche gestrichelt dar) und Pfeilspitzen je Typ; ungerichtete Typen haben keine Pfeile.</td>
+</tr>
+<tr>
+<td><strong>Anki-Deck</strong></td>
+<td><code>.apkg</code></td>
+<td>Die Lernkarten der exportierten Notizen. Siehe <a href="review-and-anki.html#anki">Anki</a>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Exporte werden in eine temporäre Datei geschrieben und erst nach vollständiger Erstellung an den
+Zielspeicherort verschoben. Ein abgebrochener Export hinterlässt daher nie eine unvollständige Datei. Der
+Export läuft im Hintergrund; <strong>Im Ordner anzeigen</strong> öffnet das Ergebnis im Datei-Explorer.</p>
+<p>Mindmaps können außerdem in der Registerkarte <strong>Mindmap</strong> als PNG, SVG oder FreeMind-Datei (<code>.mm</code>)
+exportiert werden. Der Graph lässt sich als PNG-Bild speichern.</p>
+<h2 id="importieren">Importieren</h2>
+<p><em>Datei ▸ Importieren…</em> akzeptiert:</p>
+<ul>
+<li><strong>ZettelApp-Archive</strong> (<code>.zip</code>) und <strong>JSON</strong>-Exporte;</li>
+<li><strong>Markdown-Dateien</strong> (<code>.md</code>) oder ein <strong><code>.zip</code>-Archiv mit Markdown-Dateien</strong>;</li>
+<li><em>Datei ▸ Markdown-Ordner importieren…</em> für einen Ordner mit Markdown-Dateien, zum Beispiel einen <strong>Obsidian-Tresor</strong>.</li>
+</ul>
+<p>Was erhalten bleibt:</p>
+<ul>
+<li><strong>Aus ZettelApp-Archiven und JSON</strong>: Notizen behalten ihre IDs, typisierten Links, Lernkarten, Mindmaps und Bilder. Linktypen, die im Tresor noch nicht vorhanden sind, werden samt Farben und Stilen hinzugefügt; vorhandene Typen behalten ihre Einstellungen. Beim erneuten Import desselben Archivs werden unveränderte Notizen übersprungen. Wird eine ID bereits von einer anderen Notiz verwendet, erhält der Import eine neue ID und aktualisiert die Links entsprechend.</li>
+<li><strong>Aus Markdown</strong>:
+<ul>
+<li>Der Titel stammt aus dem Frontmatter-Feld <code>title</code>, der ersten <code># Überschrift</code> oder dem Dateinamen.</li>
+<li>Tags stammen aus dem Frontmatter-Feld <code>tags</code> und Inline-<code>#hashtags</code>.</li>
+<li>Der Quellenlink stammt aus <code>url</code> oder <code>source</code>, das Erstellungsdatum aus <code>created</code>.</li>
+<li><code>[[Wiki-Links]]</code> (einschließlich Obsidian-Links mit Dateinamen) und <code>type:: [[Links]]</code> werden zu Links.</li>
+<li>Bilder, die mit <code>![](path)</code> oder Obsidian-<code>![[image.png]]</code> referenziert werden, werden in den Tresor kopiert.</li>
+<li>Versteckte Ordner wie <code>.obsidian</code> und <code>.trash</code> werden übersprungen.</li>
+<li>ZettelApps eigener Markdown-Export wird mit typisierten Links, Lernkarten und Mindmaps wieder importiert.</li>
+</ul>
+</li>
+</ul>
+<h3 id="sicherheit">Sicherheit</h3>
+<p>Importierte Dateien werden als nicht vertrauenswürdig behandelt:</p>
+<ul>
+<li>Archivpfade werden geprüft, damit keine Dateien außerhalb des Importziels geschrieben werden können (kein „Zip Slip“).</li>
+<li>Archive mit zu vielen Dateien, zu großen Datenmengen oder verdächtigen Kompressionsverhältnissen („Dekompressionsbomben“) werden abgelehnt.</li>
+<li>Jedes Feld wird auf den richtigen Typ geprüft und in der Größe begrenzt.</li>
+<li>Bilder werden anhand ihres Inhalts erneut geprüft.</li>
+<li>Entfernte Bilder und Links zu anderen Orten auf der Festplatte werden nicht importiert.</li>
+</ul>
+<p>Beim Öffnen eines Tresors wird täglich eine Sicherung erstellt. Sie können jederzeit über <em>Datei ▸ Tresor
+jetzt sichern</em> eine erstellen. Siehe <a href="privacy-and-security.html">Datenschutz und Sicherheit</a>.</p>
+
+    <p class="doc-footer">Fehler gefunden? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/de/export-import.md">Diese Seite auf GitHub bearbeiten</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Start</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Spenden</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Sprachen"><li><a href="../../docs/export-import.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/export-import.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/export-import.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/export-import.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/export-import.html" lang="de" hreflang="de" aria-current="true">Deutsch</a></li><li><a href="../../it/docs/export-import.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/export-import.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/export-import.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/export-import.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/export-import.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/export-import.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

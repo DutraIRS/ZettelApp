@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="笔记使用 Markdown 撰写:bold、italic、# headings、列表、&gt; quotes、 code 、围栏代码块、表格和 ~~strikethrough~~。编辑器上方的工具栏可插入常用格式,Ctrl+B / Ctrl+I 与平常一样可用。按 Enter 时列表会自动延续。">
+<title>笔记与链接 – ZettelApp 文档</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">跳到内容</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">功能</a></li>
+        <li><a href="tutorial.html">教程</a></li>
+        <li><a href="./">文档</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 捐赠</a></li>
+        <li><a class="nav-cta" href="../#download">下载</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">语言</span></summary><ul class="lang-switch-panel" aria-label="语言"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN" aria-current="true">简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="捐赠"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">捐赠</span></a>
+      <a class="hbtn cta" href="../#download">下载</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">菜单</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">功能</a></li>
+          <li><a href="tutorial.html">教程</a></li>
+          <li><a href="./">文档</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="文档">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">文档</span><span class="docs-menu-current">笔记与链接</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 文档</a></li>
+      <li><a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a></li>
+      <li><a href="tutorial.html">教程:你的前 30 分钟</a></li>
+      <li><a href="getting-started.html">入门</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">笔记与链接</a></li>
+      <li><a href="link-suggestions.html">链接建议</a></li>
+      <li><a href="graph-and-insights.html">图谱与 Insights</a></li>
+      <li><a href="review-and-anki.html">复习、测验与 Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">询问你的笔记(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 服务器</a></li>
+      <li><a href="export-import.html">导出与导入</a></li>
+      <li><a href="keyboard-shortcuts.html">键盘快捷键</a></li>
+      <li><a href="privacy-and-security.html">隐私与安全</a></li>
+      <li><a href="faq.html">常见问题</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>文档</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 文档</a></li>
+      <li><a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a></li>
+      <li><a href="tutorial.html">教程:你的前 30 分钟</a></li>
+      <li><a href="getting-started.html">入门</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">笔记与链接</a></li>
+      <li><a href="link-suggestions.html">链接建议</a></li>
+      <li><a href="graph-and-insights.html">图谱与 Insights</a></li>
+      <li><a href="review-and-anki.html">复习、测验与 Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">询问你的笔记(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 服务器</a></li>
+      <li><a href="export-import.html">导出与导入</a></li>
+      <li><a href="keyboard-shortcuts.html">键盘快捷键</a></li>
+      <li><a href="privacy-and-security.html">隐私与安全</a></li>
+      <li><a href="faq.html">常见问题</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="笔记与链接">笔记与链接</h1>
+<h2 id="撰写笔记">撰写笔记</h2>
+<p>笔记使用 <strong>Markdown</strong> 撰写:<code>**bold**</code>、<code>*italic*</code>、<code># headings</code>、列表、<code>&gt; quotes</code>、<code>`code`</code>、围栏代码块、表格和 <code>~~strikethrough~~</code>。编辑器上方的工具栏可插入常用格式,Ctrl+B / Ctrl+I 与平常一样可用。按 Enter 时列表会自动延续。</p>
+<p>编辑器有三种模式(Ctrl+E 循环切换):<strong>编辑</strong>、<strong>分屏</strong>(文本与预览并排)和<strong>预览</strong>。</p>
+<p>出于安全考虑,笔记中的原始 HTML 会显示为文本,绝不会被渲染。预览中的链接只会打开网页(<code>http</code>、<code>https</code>)、电子邮件(<code>mailto</code>)、笔记、Zotero 条目和本地文件(在文件资源管理器中显示,参见<a href="#links-to-local-files">本地文件链接</a>)。参见<a href="privacy-and-security.html">隐私与安全</a>。</p>
+<h3 id="跟随链接">跟随链接</h3>
+<ul>
+<li><strong>在编辑器中</strong>,<strong>Ctrl+点击</strong>可跟随 <code>[[note link]]</code>(如果笔记尚不存在则创建它)、网页、电子邮件或 Zotero 链接、本地文件链接,或 <code>#tag</code>(列出带有该标签的笔记)。将鼠标悬停在文本上,提示会说明点击后会发生什么。普通点击只会放置插入点,因此你仍然可以编辑链接文字。</li>
+<li><strong>在预览中</strong>,普通点击即可跟随链接。</li>
+</ul>
+<h3 id="本地文件链接">本地文件链接</h3>
+<p><em>插入 ▸ 链接到文件…</em>(或工具栏上的文件夹按钮)可让你选择一个文件,并插入类似 <code>[report.pdf](file:///C:/Users/me/Documents/report.pdf)</code> 的链接。把不是图片的文件拖进笔记正文也会得到同样的效果。文件保持在原处被链接;不会有任何内容复制到库中。</p>
+<p>在预览中点击该链接,或在编辑器中 Ctrl+点击它,会<strong>打开文件资源管理器并选中该文件</strong>。文件本身绝不会被打开或运行。只允许本地驱动器上的路径:网络(UNC)路径(例如 <code>\\server\share\file.pdf</code>)会被拒绝,因为查找它们可能会把你的 Windows 凭据发送给该服务器。</p>
+<p>每条笔记都有:</p>
+<ul>
+<li>一个<strong>标题</strong>(顶部的大字段);</li>
+<li>一个 <strong>ID</strong>,即类似 <code>20261027153012</code> 的时间戳,显示在标题下方(<em>更多 ▸ 复制笔记 ID</em>);</li>
+<li>可选的<strong>标签</strong>、<strong>来源链接</strong>、<strong>图片</strong>、<strong>思维导图</strong>和<strong>闪卡</strong>。</li>
+</ul>
+<h2 id="笔记之间的链接">笔记之间的链接</h2>
+<h3 id="维基链接">维基链接</h3>
+<p>输入 <code>[[</code> 并开始输入标题:ZettelApp 会根据你的笔记补全它。在笔记中,以下写法都可以建立链接:</p>
+<pre><code class="language-markdown">See [[Forgetting curve]].
+See [[20261027153012]].              (by ID)
+See [[Forgetting curve|the curve]].  (custom link text)
+</code></pre>
+<p>Ctrl+K(<em>插入 ▸ 链接到笔记…</em>)会打开一个选择器,可搜索标题和文本,并让你选择链接类型。指向尚不存在的标题的链接在预览中显示为灰色;点击它即可创建该笔记。之后当你创建笔记或重命名笔记时,提到其标题的链接会随之更新。</p>
+<h3 id="类型链接">类型链接</h3>
+<p>链接可以说明两条笔记<strong>如何</strong>关联。把链接类型放在链接前面,后跟 <code>::</code>:</p>
+<pre><code class="language-markdown">supports:: [[Forgetting curve]]
+contradicts:: [[Rereading notes]]
+part_of:: [[Zettelkasten method]]
+</code></pre>
+<p>内置的链接类型如下:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>名称</th>
+<th>反向名称</th>
+<th>有向</th>
+<th>线条</th>
+<th>箭头</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>related</code></td>
+<td>相关于</td>
+<td>相关于</td>
+<td>否</td>
+<td>实线,灰色</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>supports</code></td>
+<td>支持</td>
+<td>支持者</td>
+<td>是</td>
+<td>虚线,绿色</td>
+<td>实心三角形</td>
+</tr>
+<tr>
+<td><code>contradicts</code></td>
+<td>与之矛盾</td>
+<td>与之矛盾</td>
+<td>否</td>
+<td>点线,红色</td>
+<td>无</td>
+</tr>
+<tr>
+<td><code>extends</code></td>
+<td>扩展</td>
+<td>被扩展于</td>
+<td>是</td>
+<td>点划线,蓝色</td>
+<td>实心三角形</td>
+</tr>
+<tr>
+<td><code>example</code></td>
+<td>示例</td>
+<td>有示例</td>
+<td>是</td>
+<td>双点划线,琥珀色</td>
+<td>圆形</td>
+</tr>
+<tr>
+<td><code>part_of</code></td>
+<td>属于</td>
+<td>包含</td>
+<td>是</td>
+<td>长划线,紫色</td>
+<td>菱形</td>
+</tr>
+<tr>
+<td><code>cites</code></td>
+<td>引用</td>
+<td>被引用于</td>
+<td>是</td>
+<td>实线,青色</td>
+<td>开放箭头</td>
+</tr>
+</tbody>
+</table></div>
+<p>这是新库的外观;你可以更改它们(见下文)。用早期版本创建的库会保留它原有的线条。</p>
+<p>普通的 <code>[[link]]</code> 表示<em>相关于</em>。</p>
+<h3 id="有向链接与无向链接">有向链接与无向链接</h3>
+<p><strong>有向</strong>类型从两侧读起来不同。如果笔记 A <em>支持</em>笔记 B,那么 B 的反向链接会把 A 显示为<em>支持者</em>。有向链接在图谱中带有箭头,并在导出时保持有向。<em>相关于</em>和<em>与之矛盾</em>这类<strong>无向</strong>类型,从两个方向读起来都一样。</p>
+<p>如果有向链接建反了方向,请在侧边栏中右键点击它并选择<strong>反转方向</strong>。写在正文中的链接,则通过编辑正文来反转。</p>
+<h3 id="侧边栏中的链接">侧边栏中的链接</h3>
+<p>侧边栏会列出该笔记的<strong>链接</strong>(出链)和<strong>反向链接</strong>(入链),并标明各自的类型。</p>
+<ul>
+<li>**添加链接…**可在不写入正文的情况下创建链接。</li>
+<li>右键点击链接,可打开另一条笔记、更改链接类型、反转其方向或移除它。写在正文中的链接,通过编辑正文来移除。</li>
+<li>在笔记列表中,右键点击另一条笔记并选择<strong>从当前笔记链接为</strong>。</li>
+</ul>
+<h3 id="你自己的链接类型">你自己的链接类型</h3>
+<p>在<em>工具 ▸ 选项 ▸ 链接类型</em>中添加、重命名、重新设置样式或移除链接类型。在列表中选择一个类型,然后在列表旁边更改它:</p>
+<ul>
+<li><strong>名称</strong>和<strong>反向名称</strong>:该链接从源端和目标端读起来的样子。反向名称只用于有向类型。</li>
+<li><strong>有向</strong>:该类型从两侧读起来是否不同,并带有箭头。</li>
+<li><strong>颜色</strong>:点击颜色按钮可选择任意颜色。</li>
+<li><strong>线条</strong>:实线、虚线、点线、点划线、双点划线或长划线。</li>
+<li><strong>箭头</strong>:有向链接抵达处绘制的箭头:实心三角形、开放箭头、菱形、圆形或竖线。</li>
+</ul>
+<p>预览会显示由该链接连接的两条笔记,以及它的名称和从另一侧读起来的样子。该样式会用在链接出现的所有地方:图谱、图例、侧边栏、链接选择器,以及网站、GraphML 和 Graphviz 导出。请给每种类型分配独立的线条以及独立的颜色,这样色盲读者和纸质打印时也能轻松区分各类型。新类型会从很少有其他类型使用的颜色和线条开始。</p>
+<p>在正文中,请使用类型的 id,它显示在预览下方(例如名为“Inspired by”的类型会变成 <code>inspired_by::</code>)。id 在创建类型时确定,因此重命名类型不会破坏写在你笔记中的链接。移除你自己的某个类型会把它的链接变成<em>相关于</em>链接,因此不会丢失任何内容。内置类型可以重命名和重新设置样式,但不能移除。</p>
+<h2 id="标签">标签</h2>
+<p>在标题下方的标签字段中添加标签(每个之后按 Enter),或者用井号<strong>在正文中</strong>书写,例如 <code>#welcome</code> 或 <code>#math/algebra</code>。标签为小写,可用斜杠嵌套,例如 <code>math/algebra</code>。按 <code>math</code> 筛选时也会找到带有 <code>math/algebra</code> 标签的笔记。使用笔记列表上方的标签筛选器,或在搜索框中输入 <code>tag:name</code>。</p>
+<p>写在正文中的标签是真正的标签,显示为<em>添加标签</em>框旁边的<strong>描边标签块</strong>。当你从正文中删除该 <code>#tag</code> 时,它们会随之消失。<code>#tag</code> 在代码内、链接目标内以及 <code>[[#headings]]</code> 中会被忽略。在<em>添加标签</em>框中输入的标签是独立的:它们会一直保留,直到你用其 ✕ 移除。在编辑器中 Ctrl+点击某个 <code>#tag</code>,可列出带有它的笔记。</p>
+<h2 id="来源链接">来源链接</h2>
+<p>带有地球图标的字段保存笔记的<strong>来源</strong>:一个网页(<code>https://…</code>)、一个电子邮件地址,或一个 Zotero 条目(<code>zotero://select/library/items/…</code>)。它旁边的按钮可打开该链接。其他类型的链接会被拒绝。参见 <a href="zotero.html">Zotero</a>,了解如何直接从你的 Zotero 文献库创建笔记。</p>
+<h2 id="图片">图片</h2>
+<p>通过<em>插入 ▸ 图片…</em>(Ctrl+Shift+I)、从剪贴板<strong>粘贴</strong>,或将图片文件<strong>拖</strong>到编辑器上来插入图片。支持的格式:PNG、JPEG、GIF、WebP 和 BMP,最大 25 MB。SVG 被有意拒绝,因为 SVG 文件可能携带脚本。</p>
+<p>图片会按其内容(而不是文件名)进行检查,以根据内容派生的名称仅存储一次于库的 <code>assets</code> 文件夹中,并按如下方式引用:</p>
+<pre><code class="language-markdown">![Diagram](asset:3f2a9c0b1d4e5f6a7b8c.png)
+</code></pre>
+<p>你添加到笔记的第一张图片会成为它的<strong>标题图片</strong>。它在笔记列表中显示为圆角小缩略图,也显示在图谱中该笔记的圆圈内。右键点击编辑器或预览中的任意图片,选择<em>用作标题图片</em>可改选另一张,或选择<em>移除标题图片</em>使其没有标题图片。从笔记正文中删除标题图片,也会同时取消它的标题图片身份。</p>
+<h2 id="清单">清单</h2>
+<p>以 <code>- [ ]</code> 开头的行(或按工具栏中的清单按钮)即可创建一个任务。<code>- [x]</code> 表示已完成的任务。在预览中,点击方框即可勾选;在任务末尾按 Enter 会开始下一个任务,在空任务上按 Enter 则结束清单。</p>
+<h2 id="闹钟">闹钟</h2>
+<p>按闹钟按钮(或<em>插入 ▸ 闹钟…</em>),可为笔记设置日期,以及可选的时间。到期时,ZettelApp 会显示通知;点击它即可打开该笔记。ZettelApp 必须处于运行状态才能通知你,在它关闭期间到期的闹钟会在你打开库后不久触发。设有闹钟的笔记会在笔记列表中显示一个铃铛。在同一对话框中使用<em>移除闹钟</em>可将其清除。</p>
+<h2 id="公式">公式</h2>
+<p>在美元符号之间书写 LaTeX:<code>$E = mc^2$</code> 是行内公式,<code>$$\int_0^1 x^2\,dx$$</code> 是独立成行的公式。公式按钮(<em>插入 ▸ 公式…</em>)会打开一个带实时预览的对话框。公式会在预览中绘制;导出时保留 LaTeX 源码。</p>
+<h2 id="思维导图">思维导图</h2>
+<p>每条笔记都可以带有一张思维导图(<strong>思维导图</strong>标签页,或<em>插入 ▸ 思维导图</em>)。分支会自动着色。</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>按键</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tab</td>
+<td>添加子想法</td>
+</tr>
+<tr>
+<td>Enter</td>
+<td>添加同级想法</td>
+</tr>
+<tr>
+<td>F2 或双击</td>
+<td>重命名</td>
+</tr>
+<tr>
+<td>Del</td>
+<td>删除所选想法</td>
+</tr>
+<tr>
+<td>方向键</td>
+<td>移动选择</td>
+</tr>
+<tr>
+<td>鼠标滚轮 / 拖动</td>
+<td>缩放 / 平移</td>
+</tr>
+</tbody>
+</table></div>
+<p>右键点击某个想法可<strong>将它链接到笔记</strong>;被链接的想法会显示链接图标,并可打开该笔记。<strong>从链接生成</strong>会根据笔记的链接生成思维导图,按链接类型分组,被链接笔记自己的链接则深入一层。<strong>导出</strong>可将导图保存为 PNG 或 SVG 图像,或 FreeMind 文件(<code>.mm</code>),FreeMind、Freeplane 和 XMind 都能打开。</p>
+<h2 id="闪卡">闪卡</h2>
+<p>闪卡把笔记变成复习材料(参见<a href="review-and-anki.html">复习、测验与 Anki</a>)。制作闪卡有两种方式:</p>
+<p>**在笔记正文中。**这些内容会自动变成卡片,并在你编辑时更新:</p>
+<pre><code class="language-markdown">Q: Who described the forgetting curve?
+A: Hermann Ebbinghaus
+
+{{c1::Retrieval practice}} is also called active recall.
+</code></pre>
+<p>问题可以跨越多行,直到 <code>A:</code> 行为止。任何带有 <code>{{c1::…}}</code> 的段落都会变成<strong>填空</strong>卡片,依次隐藏每处挖空。<code>{{c1::text::hint}}</code> 会显示提示而不是 <code>[…]</code>。</p>
+<p>**在闪卡标签页中。**对于不应出现在笔记中的卡片,使用<em>插入 ▸ 闪卡…</em>(Ctrl+Shift+F)。来自正文的卡片标记为<em>来自笔记文本</em>,需在正文中编辑。</p>
+<h2 id="搜索">搜索</h2>
+<p>搜索框(Ctrl+F)对标题、正文和标签使用全文搜索,忽略重音符号,并匹配单词前缀,因此 <code>forget</code> 能找到 <em>forgetting</em>。添加 <code>tag:name</code> 可按标签筛选,例如 <code>memory tag:psychology</code>。结果按相关性排序;没有查询词时,笔记按所选排序方式排列(<em>最后编辑</em>、<em>创建于</em>、<em>标题</em>或<em>被链接最多</em>)。</p>
+<h2 id="回收站">回收站</h2>
+<p><em>移到回收站</em>(Ctrl+Delete)会隐藏笔记而不删除它。撤销按钮会立即出现,笔记列表下方的<strong>回收站</strong>按钮会显示被丢弃的笔记:右键点击可<strong>还原</strong>或<strong>永久删除</strong>。<strong>清空回收站</strong>会在询问后删除其中的所有内容。指向回收站中笔记的链接会被隐藏,并在笔记还原后恢复。</p>
+
+    <p class="doc-footer">发现错误？<a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/zh-cn/notes-and-links.md">在 GitHub 上编辑此页</a>。</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">首页</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">问题</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">捐赠</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="语言"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN" aria-current="true">简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

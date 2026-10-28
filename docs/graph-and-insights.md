@@ -25,10 +25,10 @@ notes** (opens the [export](export-import.md) dialog with the notes on screen).
 
 **In 2D**, drag a note to move it, drag the background to pan, and use the mouse wheel to zoom. Double-click
 a note to open it; right-click it for more (open, local graph, quiz on this neighbourhood, export with
-linked notes). A note's picture is shown inside its circle.
+linked notes). A note's title image is shown inside its circle.
 
-Several links between the same two notes are drawn as **separate curves**, each with an arrowhead, so none
-hides another. Hovering or selecting a note **dims the other links**, keeps the note's own links in their
+Several links between the same two notes are drawn as **separate curves**, each with its own arrow tip
+following the curve, so none hides another. Hovering or selecting a note **dims the other links**, keeps the note's own links in their
 link-type colours, and labels each neighbour with the link types **as read from that note**, for example
 *Supports · Extended by*. This works the same in 2D and 3D.
 
@@ -70,9 +70,10 @@ highlight its notes.
 
 Group and chart colours come from a palette **validated for colour-vision deficiencies** in both light
 and dark mode. Colours are assigned in a fixed order and never reused: groups beyond the eighth share a
-neutral grey "Other" colour. **Link types** use a second cue besides colour, a distinct dash pattern each,
-and directed types draw arrowheads. The legend always names everything, so nothing depends on colour
-alone.
+neutral grey "Other" colour. **Link types** use a second cue besides colour: each has its own line
+(solid, dashed, dotted and so on), and directed types draw an arrow tip such as a triangle or a diamond.
+Choose them in *Tools ▸ Options ▸ Link types* (see [Your own link types](notes-and-links.md#your-own-link-types)).
+The legend always names everything, so nothing depends on colour alone.
 
 ## Insights
 

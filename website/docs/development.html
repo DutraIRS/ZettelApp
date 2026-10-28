@@ -3,19 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="color-scheme" content="light dark">
 <meta name="description" content="ZettelApp is written in Python with Qt for Python .">
 <title>Development – ZettelApp documentation</title>
 <link rel="icon" type="image/png" href="../assets/favicon.png">
 <link rel="stylesheet" href="../style.css">
+<script src="../assets/lang.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#content">Skip to content</a>
 <header class="site-header">
   <div class="wrap header-row">
-    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
-    <nav aria-label="Main">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
       <ul class="nav">
         <li><a href="../#features">Features</a></li>
         <li><a href="tutorial.html">Tutorial</a></li>
@@ -25,12 +26,27 @@
         <li><a class="nav-cta" href="../#download">Download</a></li>
       </ul>
     </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Languages</span></summary><ul class="lang-switch-panel" aria-label="Languages"><li><a href="development.html" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="../es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/docs/" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/docs/" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Donate"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Donate</span></a>
+      <a class="hbtn cta" href="../#download">Download</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Features</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Docs</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
   </div>
 </header>
 <div class="wrap docs-layout">
   <nav class="docs-nav" aria-label="Documentation">
-    <h2>Documentation</h2>
-    <ul>
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentation</span><span class="docs-menu-current">Development</span></span></summary>
+      <ul>
       <li><a href="index.html">Overview</a></li>
       <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
       <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
@@ -48,7 +64,30 @@
       <li><a href="privacy-and-security.html">Privacy and security</a></li>
       <li><a href="development.html" aria-current="page">Development</a></li>
       <li><a href="faq.html">FAQ</a></li>
-    </ul>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentation</h2>
+      <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="notes-and-links.html">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="mcp-reference.html">MCP API reference</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html" aria-current="page">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
   </nav>
   <main id="content" class="doc">
 <h1 id="development">Development</h1>
@@ -92,7 +131,15 @@ import, Anki, quizzes, Zotero, the LLM providers (no network) and the MCP server
 </tr>
 <tr>
 <td><code>python tools/build_site.py</code></td>
-<td>Builds the documentation pages of the website (<code>website/docs/</code>) from <code>docs/*.md</code>, and <code>website/version.json</code> from the app version.</td>
+<td>Builds the documentation pages of the website (<code>website/docs/</code>, and <code>website/&lt;language&gt;/</code> from <code>docs/&lt;language&gt;/</code>) from Markdown, the language script and <code>website/version.json</code> from the app version.</td>
+</tr>
+<tr>
+<td><code>python tools/i18n.py extract</code></td>
+<td>Collects every interface string passed to <code>_()</code>, <code>n_()</code> and <code>N_()</code> into <code>zettelapp/resources/locales/messages.json</code> (a test fails when it is out of date).</td>
+</tr>
+<tr>
+<td><code>python tools/i18n.py check</code></td>
+<td>Reports missing, stale and broken entries in each translation catalogue.</td>
 </tr>
 </tbody>
 </table></div>
@@ -153,12 +200,14 @@ hand from <code>#tags</code> written in the text). Older vaults are upgraded aut
     secrets.py     Windows Credential Manager
     security.py    validation of URLs, file names, images, archives
   ui/              PySide6 widgets: main window, editor, graph views, pages, dialogs, theme
+  resources/       icon, adventure illustrations, translation catalogues (locales/)
+  i18n.py          interface languages: _(), n_(), plural rules, loading catalogues
   mcp_server.py    MCP server; mcp_main.py: its entry point (zettelapp-mcp.exe)
   app.py           startup, single instance, logging
   settings.py      preferences (QSettings)
   winintegration.py  taskbar identity, dark title bars, zettelapp:// protocol
 tests/             pytest suite
-tools/             icon, screenshots, demo vault, website builder
+tools/             icon, screenshots, demo vault, website builder, translation tools
 packaging/         PyInstaller spec, version info, Inno Setup script, build script
 docs/              this documentation (also published on the website)
 website/           the GitHub Pages site
@@ -178,14 +227,15 @@ adapter class with <code>stream()</code> and <code>list_models()</code> and regi
 </div>
 <footer class="site-footer">
   <div class="wrap footer-row">
-    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
-      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
     <ul class="nav">
       <li><a href="../">Home</a></li>
       <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
       <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
     </ul>
   </div>
+  <ul class="nav lang-row" aria-label="Languages"><li><a href="development.html" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="../es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/docs/" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/docs/" lang="ar" hreflang="ar">العربية</a></li></ul>
 </footer>
 </body>
 </html>

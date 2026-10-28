@@ -47,6 +47,7 @@ from zettelapp.core.textutil import (
     strip_markdown,
     tokenize,
 )
+from zettelapp.i18n import N_
 
 
 @dataclass(frozen=True)
@@ -56,15 +57,16 @@ class Feature:
     binary: bool = False
 
 
+# Labels are translated where they are shown.
 FEATURES: tuple[Feature, ...] = (
-    Feature("semantic", "Semantic similarity (LSA)"),
-    Feature("tfidf", "Shared keywords (TF-IDF cosine)"),
-    Feature("title_lev", "Title similarity (Levenshtein)"),
-    Feature("title_jw", "Title similarity (Jaro-Winkler)"),
-    Feature("body_lev", "Text similarity (Levenshtein)"),
-    Feature("tags", "Shared tags (Jaccard)"),
-    Feature("mention", "Title mentioned in the text", binary=True),
-    Feature("neighbors", "Shared links (Jaccard)"),
+    Feature("semantic", N_("Semantic similarity (LSA)")),
+    Feature("tfidf", N_("Shared keywords (TF-IDF cosine)")),
+    Feature("title_lev", N_("Title similarity (Levenshtein)")),
+    Feature("title_jw", N_("Title similarity (Jaro-Winkler)")),
+    Feature("body_lev", N_("Text similarity (Levenshtein)")),
+    Feature("tags", N_("Shared tags (Jaccard)")),
+    Feature("mention", N_("Title mentioned in the text"), binary=True),
+    Feature("neighbors", N_("Shared links (Jaccard)")),
 )
 FEATURE_KEYS = tuple(f.key for f in FEATURES)
 _IDX = {k: i for i, k in enumerate(FEATURE_KEYS)}

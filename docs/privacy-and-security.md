@@ -88,8 +88,8 @@ Notes can come from imports, the web or AI answers, so ZettelApp treats their co
 Uninstall from *Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall*. The uninstaller offers
 an unticked option, **Also delete my ZettelApp settings and data**. If you tick it, it removes your
 settings, the API keys saved in Credential Manager, logs, the cache and automatic backups
-(`%LOCALAPPDATA%\ZettelApp`). **Your notes are never deleted**: vault folders such as `Documents\ZettelApp`
-stay where they are.
+(`%LOCALAPPDATA%\ZettelApp`) **and all your notes** (the database and attachments of your vaults). Unticked,
+your notes stay where they are.
 
 Found a security problem? Please report it privately; see
 [SECURITY.md](https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md).

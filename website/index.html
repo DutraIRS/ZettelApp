@@ -3,20 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="description" content="ZettelApp is a free Zettelkasten app for Windows: atomic notes, typed links, mind maps, flashcards, a 2D/3D knowledge graph and link suggestions that learn from you.">
 <meta name="color-scheme" content="light dark">
 <title>ZettelApp – a Zettelkasten for Windows</title>
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="stylesheet" href="style.css">
+<script src="assets/lang.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="wrap header-row">
-    <a class="brand" href="./"><img src="assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
-    <nav aria-label="Main">
+    <a class="brand" href="./"><img src="assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
       <ul class="nav">
         <li><a href="#features">Features</a></li>
         <li><a href="docs/tutorial.html">Tutorial</a></li>
@@ -26,6 +27,20 @@
         <li><a class="nav-cta" href="#download">Download</a></li>
       </ul>
     </nav>
+    <!--langswitch--><details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Languages</span></summary><ul class="lang-switch-panel" aria-label="Languages"><li><a href="./" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="es/" lang="es" hreflang="es">Español</a></li><li><a href="pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="it/" lang="it" hreflang="it">Italiano</a></li><li><a href="ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="zh-cn/" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="ar/" lang="ar" hreflang="ar">العربية</a></li></ul></details><!--/langswitch-->
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Donate"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Donate</span></a>
+      <a class="hbtn cta" href="#download">Download</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="#features">Features</a></li>
+          <li><a href="docs/tutorial.html">Tutorial</a></li>
+          <li><a href="docs/">Docs</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
   </div>
 </header>
 
@@ -331,8 +346,8 @@
     <div class="wrap">
       <h2 class="section-title">Coming next</h2>
       <ul class="cards compact">
-        <li class="card"><h3>More languages</h3><p>The installer is already multilingual; the app's translations are
-          next.</p></li>
+        <li class="card"><h3>More languages</h3><p>The app and these pages are available in 11 languages; more
+          are welcome.</p></li>
         <li class="card"><h3>Linux</h3><p>.deb and AppImage packages.</p></li>
         <li class="card"><h3>Signed builds</h3><p>No more SmartScreen warnings.</p></li>
         <li class="card"><h3>Offline AI</h3><p>Local embedding models for even better suggestions.</p></li>
@@ -359,8 +374,8 @@
 
 <footer class="site-footer">
   <div class="wrap footer-row">
-    <p><img src="assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
-      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <p><img src="assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
     <ul class="nav">
       <li><a href="docs/">Documentation</a></li>
       <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
@@ -370,6 +385,7 @@
       <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
     </ul>
   </div>
+  <!--langs--><ul class="nav lang-row" aria-label="Languages"><li><a href="./" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="es/" lang="es" hreflang="es">Español</a></li><li><a href="pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="it/" lang="it" hreflang="it">Italiano</a></li><li><a href="ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="zh-cn/" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="ar/" lang="ar" hreflang="ar">العربية</a></li></ul><!--/langs-->
 </footer>
 </body>
 </html>

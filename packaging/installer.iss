@@ -1,15 +1,17 @@
 ﻿; Inno Setup 6 script for the ZettelApp installer.
-; Build with packaging/build.ps1, or: ISCC.exe /DAppVersion=1.0.0 packaging\installer.iss
+; Build with packaging/build.ps1, or: ISCC.exe /DAppVersion=1.1.0 packaging\installer.iss
 ;
 ; - Installs per user by default (no administrator rights; %LOCALAPPDATA%\Programs\ZettelApp),
 ;   with the standard option to install for all users instead.
-; - Shows a language picker preselected with the Windows display language and stores the
-;   choice in HKCU\Software\ZettelApp\ZettelApp\ui\language for the app.
-; - Notes (vault folders such as Documents\ZettelApp) are never removed on uninstall. The
-;   uninstaller offers, unticked, to delete settings, saved API keys, logs, cache and backups.
+; - Shows a language picker preselected with the Windows display language and, on the first
+;   install, stores the choice in HKCU\Software\ZettelApp\ZettelApp\ui\language for the app.
+;   Updates keep the language picked in the app's Options.
+; - The uninstaller offers, unticked, to delete settings, saved API keys, logs, cache, backups
+;   and the notes of every vault the app has used (only the files ZettelApp created). Unticked,
+;   notes are never removed.
 
 #ifndef AppVersion
-  #define AppVersion "1.0.0"
+  #define AppVersion "1.1.0"
 #endif
 
 [Setup]
@@ -59,6 +61,8 @@ Name: "danish"; MessagesFile: "compiler:Languages\Danish.isl"
 Name: "finnish"; MessagesFile: "compiler:Languages\Finnish.isl"
 Name: "hebrew"; MessagesFile: "compiler:Languages\Hebrew.isl"
 Name: "japanese"; MessagesFile: "compiler:Languages\Japanese.isl"
+Name: "korean"; MessagesFile: "compiler:Languages\Korean.isl"
+Name: "arabic"; MessagesFile: "compiler:Languages\Arabic.isl"
 Name: "norwegian"; MessagesFile: "compiler:Languages\Norwegian.isl"
 Name: "polish"; MessagesFile: "compiler:Languages\Polish.isl"
 Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
@@ -76,6 +80,10 @@ french.RegisterLinks=Ouvrir les liens zettelapp:// (utilisés sur les cartes Ank
 german.RegisterLinks=zettelapp://-Links (auf Anki-Karten) mit ZettelApp öffnen
 italian.RegisterLinks=Apri i link zettelapp:// (usati nelle schede di Anki) con ZettelApp
 dutch.RegisterLinks=zettelapp://-koppelingen (op Anki-kaarten) openen met ZettelApp
+russian.RegisterLinks=Открывать ссылки zettelapp:// (используются в карточках Anki) в ZettelApp
+japanese.RegisterLinks=zettelapp:// リンク (Anki のカードで使用) を ZettelApp で開く
+korean.RegisterLinks=zettelapp:// 링크(Anki 카드에서 사용)를 ZettelApp으로 열기
+arabic.RegisterLinks=فتح روابط zettelapp:// (المستخدمة في بطاقات Anki) باستخدام ZettelApp
 Integration=Integration:
 brazilianportuguese.Integration=Integração:
 portuguese.Integration=Integração:
@@ -84,6 +92,10 @@ french.Integration=Intégration :
 german.Integration=Integration:
 italian.Integration=Integrazione:
 dutch.Integration=Integratie:
+russian.Integration=Интеграция:
+japanese.Integration=連携:
+korean.Integration=통합:
+arabic.Integration=التكامل:
 ; The uninstaller's "delete my data" question (other languages use the English text).
 DeleteDataTitle=Uninstall ZettelApp
 brazilianportuguese.DeleteDataTitle=Desinstalar o ZettelApp
@@ -93,6 +105,10 @@ french.DeleteDataTitle=Désinstaller ZettelApp
 german.DeleteDataTitle=ZettelApp deinstallieren
 italian.DeleteDataTitle=Disinstalla ZettelApp
 dutch.DeleteDataTitle=ZettelApp verwijderen
+russian.DeleteDataTitle=Удаление ZettelApp
+japanese.DeleteDataTitle=ZettelApp のアンインストール
+korean.DeleteDataTitle=ZettelApp 제거
+arabic.DeleteDataTitle=إلغاء تثبيت ZettelApp
 DeleteDataCheck=Also &delete my ZettelApp settings and data
 brazilianportuguese.DeleteDataCheck=&Apagar também minhas configurações e dados do ZettelApp
 portuguese.DeleteDataCheck=&Eliminar também as minhas definições e dados do ZettelApp
@@ -101,14 +117,22 @@ french.DeleteDataCheck=&Supprimer aussi mes paramètres et données ZettelApp
 german.DeleteDataCheck=Auch meine ZettelApp-Einstellungen und -Daten &löschen
 italian.DeleteDataCheck=&Elimina anche le mie impostazioni e i miei dati di ZettelApp
 dutch.DeleteDataCheck=Ook mijn ZettelApp-instellingen en -gegevens &verwijderen
-DeleteDataNote=Removes settings, saved API keys, logs and automatic backups. Your notes are never deleted: vault folders such as Documents\ZettelApp stay where they are.
-brazilianportuguese.DeleteDataNote=Remove configurações, chaves de API salvas, registros e backups automáticos. Suas notas nunca são apagadas: pastas de cofre como Documentos\ZettelApp continuam onde estão.
-portuguese.DeleteDataNote=Remove definições, chaves de API guardadas, registos e cópias de segurança automáticas. As suas notas nunca são eliminadas: pastas de cofre como Documentos\ZettelApp ficam onde estão.
-spanish.DeleteDataNote=Elimina la configuración, las claves de API guardadas, los registros y las copias de seguridad automáticas. Tus notas nunca se eliminan: las carpetas de bóveda como Documentos\ZettelApp se quedan donde están.
-french.DeleteDataNote=Supprime les paramètres, les clés d'API enregistrées, les journaux et les sauvegardes automatiques. Vos notes ne sont jamais supprimées : les dossiers de coffre comme Documents\ZettelApp restent en place.
-german.DeleteDataNote=Entfernt Einstellungen, gespeicherte API-Schlüssel, Protokolle und automatische Sicherungen. Ihre Notizen werden nie gelöscht: Tresorordner wie Dokumente\ZettelApp bleiben erhalten.
-italian.DeleteDataNote=Rimuove impostazioni, chiavi API salvate, log e backup automatici. Le tue note non vengono mai eliminate: le cartelle dei vault come Documenti\ZettelApp restano dove sono.
-dutch.DeleteDataNote=Verwijdert instellingen, opgeslagen API-sleutels, logboeken en automatische back-ups. Je notities worden nooit verwijderd: kluismappen zoals Documenten\ZettelApp blijven staan.
+russian.DeleteDataCheck=Также &удалить мои настройки и данные ZettelApp
+japanese.DeleteDataCheck=ZettelApp の設定とデータも削除する(&D)
+korean.DeleteDataCheck=ZettelApp 설정과 데이터도 삭제(&D)
+arabic.DeleteDataCheck=حذف إعداداتي وبياناتي في ZettelApp أيضًا
+DeleteDataNote=Removes settings, saved API keys, logs, automatic backups and ALL your notes (the database and images of your vaults, such as Documents\ZettelApp). This cannot be undone.
+brazilianportuguese.DeleteDataNote=Remove configurações, chaves de API salvas, registros, backups automáticos e TODAS as suas notas (o banco de dados e as imagens dos seus cofres, como Documentos\ZettelApp). Isso não pode ser desfeito.
+portuguese.DeleteDataNote=Remove definições, chaves de API guardadas, registos, cópias de segurança automáticas e TODAS as suas notas (a base de dados e as imagens dos seus cofres, como Documentos\ZettelApp). Não pode ser anulado.
+spanish.DeleteDataNote=Elimina la configuración, las claves de API guardadas, los registros, las copias de seguridad automáticas y TODAS tus notas (la base de datos y las imágenes de tus bóvedas, como Documentos\ZettelApp). No se puede deshacer.
+french.DeleteDataNote=Supprime les paramètres, les clés d'API enregistrées, les journaux, les sauvegardes automatiques et TOUTES vos notes (la base de données et les images de vos coffres, comme Documents\ZettelApp). Cette action est irréversible.
+german.DeleteDataNote=Entfernt Einstellungen, gespeicherte API-Schlüssel, Protokolle, automatische Sicherungen und ALLE Ihre Notizen (Datenbank und Bilder Ihrer Tresore, z. B. Dokumente\ZettelApp). Das lässt sich nicht rückgängig machen.
+italian.DeleteDataNote=Rimuove impostazioni, chiavi API salvate, log, backup automatici e TUTTE le tue note (database e immagini dei tuoi vault, come Documenti\ZettelApp). L'operazione non può essere annullata.
+dutch.DeleteDataNote=Verwijdert instellingen, opgeslagen API-sleutels, logboeken, automatische back-ups en AL je notities (de database en afbeeldingen van je kluizen, zoals Documenten\ZettelApp). Dit kan niet ongedaan worden gemaakt.
+russian.DeleteDataNote=Удаляет настройки, сохранённые ключи API, журналы, автоматические резервные копии и ВСЕ ваши заметки (базу данных и изображения ваших хранилищ, например Документы\ZettelApp). Это нельзя отменить.
+japanese.DeleteDataNote=設定、保存した API キー、ログ、自動バックアップに加えて、すべてのノート (ドキュメント\ZettelApp などの保管庫のデータベースと画像) を削除します。元に戻すことはできません。
+korean.DeleteDataNote=설정, 저장된 API 키, 로그, 자동 백업과 함께 모든 노트(문서\ZettelApp 같은 볼트의 데이터베이스와 이미지)를 삭제합니다. 되돌릴 수 없습니다.
+arabic.DeleteDataNote=يزيل الإعدادات ومفاتيح API المحفوظة والسجلات والنسخ الاحتياطية التلقائية وجميع ملاحظاتك (قاعدة بيانات مستودعاتك وصورها، مثل المستندات\ZettelApp). لا يمكن التراجع عن ذلك.
 DeleteDataContinue=&Continue
 brazilianportuguese.DeleteDataContinue=&Continuar
 portuguese.DeleteDataContinue=&Continuar
@@ -117,6 +141,10 @@ french.DeleteDataContinue=&Continuer
 german.DeleteDataContinue=&Weiter
 italian.DeleteDataContinue=&Continua
 dutch.DeleteDataContinue=&Doorgaan
+russian.DeleteDataContinue=&Продолжить
+japanese.DeleteDataContinue=続行(&C)
+korean.DeleteDataContinue=계속(&C)
+arabic.DeleteDataContinue=متابعة
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
@@ -137,8 +165,9 @@ Root: HKA; Subkey: "Software\Classes\zettelapp"; ValueType: string; ValueName: "
 Root: HKA; Subkey: "Software\Classes\zettelapp"; ValueType: string; ValueName: "URL Protocol"; ValueData: ""; Tasks: urlprotocol
 Root: HKA; Subkey: "Software\Classes\zettelapp\DefaultIcon"; ValueType: string; ValueName: ""; ValueData: """{app}\ZettelApp.exe"",0"; Tasks: urlprotocol
 Root: HKA; Subkey: "Software\Classes\zettelapp\shell\open\command"; ValueType: string; ValueName: ""; ValueData: """{app}\ZettelApp.exe"" ""%1"""; Tasks: urlprotocol
-; The language chosen in this installer, for the app's interface language.
-Root: HKCU; Subkey: "Software\ZettelApp\ZettelApp\ui"; ValueType: string; ValueName: "language"; ValueData: "{language}"; Flags: uninsdeletevalue
+; The language chosen in this installer, for the app's interface language. Only written when
+; there is none yet, so an update doesn't undo a language picked later in Options.
+Root: HKCU; Subkey: "Software\ZettelApp\ZettelApp\ui"; ValueType: string; ValueName: "language"; ValueData: "{code:AppLanguage}"; Flags: uninsdeletevalue createvalueifdoesntexist
 
 [Run]
 Filename: "{app}\ZettelApp.exe"; Description: "{cm:LaunchProgram,ZettelApp}"; Flags: nowait postinstall skipifsilent
@@ -146,6 +175,16 @@ Filename: "{app}\ZettelApp.exe"; Description: "{cm:LaunchProgram,ZettelApp}"; Fl
 [Code]
 var
   DeleteUserData: Boolean;
+
+{ The app's interface language: the one picked in this installer. The installer has no
+  Chinese, so English on a Chinese Windows was not really a choice: the app then follows
+  Windows, which it can show in Chinese. }
+function AppLanguage(Param: String): String;
+begin
+  Result := ActiveLanguage();
+  if (Result = 'english') and ((GetUILanguage() and $3FF) = $04) then
+    Result := 'system';
+end;
 
 { Asked after the user confirmed the uninstall. Unticked by default; closing the window
   with its X button keeps the data too. }
@@ -156,7 +195,7 @@ var
   Note: TNewStaticText;
   ContinueButton: TNewButton;
 begin
-  Form := CreateCustomForm(ScaleX(460), ScaleY(150), False, True);
+  Form := CreateCustomForm(ScaleX(460), ScaleY(178), False, True);
   try
     Form.Caption := CustomMessage('DeleteDataTitle');
 
@@ -176,7 +215,7 @@ begin
     Note.Left := ScaleX(34);
     Note.Top := Check.Top + Check.Height + ScaleY(6);
     Note.Width := Form.ClientWidth - Note.Left - ScaleX(16);
-    Note.Height := ScaleY(52);
+    Note.Height := ScaleY(80);
     Note.Caption := CustomMessage('DeleteDataNote');
 
     ContinueButton := TNewButton.Create(Form);
@@ -226,7 +265,7 @@ begin
         RemoveOwnLinkHandler();
         if DeleteUserData then
         begin
-          { Whatever the app could not remove itself. Notes are never touched. }
+          { Whatever the app could not remove itself. Vaults were removed by the app above. }
           DelTree(ExpandConstant('{localappdata}\ZettelApp'), True, True, True);
           RegDeleteKeyIncludingSubkeys(HKCU, 'Software\ZettelApp');
         end;

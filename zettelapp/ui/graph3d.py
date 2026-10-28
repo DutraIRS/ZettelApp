@@ -6,9 +6,10 @@ import math
 
 import numpy as np
 from PySide6.QtCore import QPointF, QRectF, Qt, QTimer, Signal
-from PySide6.QtGui import QColor, QFontMetricsF, QPainter, QPen, QRadialGradient
+from PySide6.QtGui import QColor, QFontMetricsF, QPainter, QPainterPath, QPen
 from PySide6.QtWidgets import QWidget
 
+from zettelapp.i18n import _
 from zettelapp.ui import theme
 from zettelapp.ui.graph2d import LANE_SPREAD, node_radius
 from zettelapp.ui.graph_common import (
@@ -16,9 +17,10 @@ from zettelapp.ui.graph_common import (
     draw_edge_label,
     edge_shape,
     label_point,
+    padded_hull,
     parallel_lanes,
 )
-from zettelapp.ui.side_panel import type_dash
+from zettelapp.ui.link_style import draw_tip, link_pen
 
 
 class Graph3DView(QWidget):
@@ -28,7 +30,7 @@ class Graph3DView(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setAccessibleName("Knowledge graph in 3D")
+        self.setAccessibleName(_("Knowledge graph in 3D"))
         self.setMouseTracking(True)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.data = GraphData([], {}, [], {})
@@ -125,31 +127,45 @@ class Graph3DView(QWidget):
         painter.fillRect(self.rect(), t.q("surface"))
         if not len(self.points):
             painter.setPen(t.q("text_muted"))
-            painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, "No notes to show")
+            painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, _("No notes to show"))
             return
         screen, _scale, depth = self._project()
         self._screen = screen
         base = min(self.width(), self.height()) * 0.36 * self.zoom_level
 
-        if self.show_groups:  # soft halos behind each group
+        if self.show_groups:  # solid, clearly bounded hulls; only their size follows depth
+            label_font = theme.ui_font(9, theme.QFont.Weight.DemiBold)
+            label_metrics = QFontMetricsF(label_font)
+            groups = []
             for group, members in self.data.members().items():
                 idx = [self._index[m] for m in members if m in self._index]
-                if not idx:
-                    continue
-                centre = screen[idx].mean(axis=0)
-                spread = (
-                    float(np.sqrt(((screen[idx] - centre) ** 2).sum(axis=1).mean())) + base * 0.06
+                if idx:
+                    groups.append((group, idx, float(np.mean(depth[idx]))))
+            groups.sort(key=lambda g: g[2])  # farthest first, so nearer hulls paint over them
+            for group, idx, d in groups:
+                pts = [tuple(screen[i]) for i in idx]
+                node_r = max(
+                    node_radius(self.data.degree.get(self.data.ids[i], 0)) * (0.55 + 0.6 * depth[i])
+                    for i in idx
                 )
-                color = QColor(self.data.group_color(group))
-                gradient = QRadialGradient(QPointF(*centre), spread * 1.25)
-                inner, outer = QColor(color), QColor(color)
-                inner.setAlphaF(0.13)
-                outer.setAlphaF(0.0)
-                gradient.setColorAt(0, inner)
-                gradient.setColorAt(1, outer)
-                painter.setPen(Qt.PenStyle.NoPen)
-                painter.setBrush(gradient)
-                painter.drawEllipse(QPointF(*centre), spread * 1.25, spread * 1.25)
+                region = padded_hull(pts, (node_r + base * 0.16) * (0.55 + 0.6 * d))
+                fill = QColor(self.data.group_color(group))
+                fill.setAlphaF(0.18)
+                stroke = QColor(self.data.group_color(group))
+                stroke.setAlphaF(0.55)
+                painter.setPen(QPen(stroke, 1.4))
+                painter.setBrush(fill)
+                painter.drawPath(region)
+                top = region.boundingRect()
+                label = self.data.group_label(group)
+                painter.setFont(label_font)
+                painter.setPen(t.q("text_secondary"))
+                painter.drawText(
+                    QPointF(
+                        top.center().x() - label_metrics.horizontalAdvance(label) / 2, top.top() - 8
+                    ),
+                    label,
+                )
 
         focus = self.hovered or self.selected
         neighbors = self._neighbors.get(focus, set()) if focus else set()
@@ -168,23 +184,22 @@ class Graph3DView(QWidget):
             color = QColor(self.data.link_color(link))
             alpha = 0.95 if highlighted else 0.12 + 0.45 * d
             color.setAlphaF(alpha * (0.35 if focus is not None and not highlighted else 1.0))
-            entry = self.data.types.get(link.type)
             radius = node_radius(self.data.degree.get(link.dst, 0)) * (0.55 + 0.6 * depth[b])
+            tip = self.data.link_tip(link) if highlighted else None
             shape = edge_shape(
                 link,
                 QPointF(*screen[a]),
                 QPointF(*screen[b]),
                 self._lanes[i] * spread,
                 radius,
-                highlighted and self.data.link_directed(link),
+                tip is not None,
+                tip or "triangle",
             )
-            painter.setPen(
-                QPen(color, 2.4 if highlighted else 1.0 + d, type_dash(entry[0] if entry else 0))
-            )
+            width = 2.4 if highlighted else 1.0 + d
+            painter.setPen(link_pen(color, width, self.data.link_style(link)))
             painter.drawPath(shape.path)
             if shape.arrow is not None:
-                painter.setPen(QPen(color, 2.4, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
-                painter.drawPath(shape.arrow)
+                draw_tip(painter, shape.arrow, color, width, shape.filled)
 
         order = np.argsort(depth)
         by_degree = sorted(self.data.ids, key=lambda i: -self.data.degree.get(i, 0))
@@ -192,6 +207,7 @@ class Graph3DView(QWidget):
         font = theme.ui_font(8.5)
         metrics = QFontMetricsF(font)
         painter.setFont(font)
+        candidates: list[tuple[bool, float, str, QPointF, float]] = []
         for i in order:
             node = self.data.ids[i]
             d = depth[i]
@@ -216,15 +232,40 @@ class Graph3DView(QWidget):
                 or node in neighbors
                 or (self.show_labels and node in labelled and d > 0.45)
             ):
-                painter.setPen(t.q("text") if node == focus else t.q("text_secondary"))
-                text = metrics.elidedText(
-                    self.data.titles.get(node) or "Untitled", Qt.TextElideMode.ElideRight, 150
+                candidates.append((node == focus, d, node, p, r))
+        # Labels are drawn after every node, nearest first, so no node covers a label and
+        # a label that would overlap one already placed is skipped.
+        placed: list[QRectF] = []
+        surface = t.q("surface")
+        for is_focus, d, node, p, r in sorted(candidates, key=lambda c: (not c[0], -c[1])):
+            text = metrics.elidedText(
+                self.data.titles.get(node) or "Untitled", Qt.TextElideMode.ElideRight, 150
+            )
+            width = metrics.horizontalAdvance(text) + 8
+            box = QRectF(p.x() - width / 2, p.y() + r + 3, width, metrics.height())
+            if not is_focus and any(box.intersects(other) for other in placed):
+                continue
+            placed.append(box)
+            path = QPainterPath()
+            path.addText(box.left() + 4, box.top() + metrics.ascent(), font, text)
+            halo = QColor(surface)
+            halo.setAlphaF(0.9)
+            painter.setBrush(Qt.BrushStyle.NoBrush)
+            painter.setPen(
+                QPen(
+                    halo,
+                    3.2,
+                    Qt.PenStyle.SolidLine,
+                    Qt.PenCapStyle.RoundCap,
+                    Qt.PenJoinStyle.RoundJoin,
                 )
-                painter.drawText(
-                    QRectF(p.x() - 80, p.y() + r + 2, 160, metrics.height()),
-                    Qt.AlignmentFlag.AlignHCenter,
-                    text,
-                )
+            )
+            painter.drawPath(path)
+            fill = QColor(t.q("text") if is_focus else t.q("text_secondary"))
+            fill.setAlphaF(1.0 if is_focus else 0.55 + 0.45 * d)
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.setBrush(fill)
+            painter.drawPath(path)
         if focus is not None and focus in self._index:
             label_font = theme.ui_font(8)
             here = QPointF(*screen[self._index[focus]])
@@ -237,7 +278,7 @@ class Graph3DView(QWidget):
         painter.drawText(
             QRectF(10, self.height() - 24, self.width() - 20, 18),
             Qt.AlignmentFlag.AlignLeft,
-            "Drag to orbit · wheel to zoom · double-click a note to open it",
+            _("Drag to orbit · wheel to zoom · double-click a note to open it"),
         )
 
     # --- interaction ----------------------------------------------------------

@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
     QGraphicsView,
 )
 
+from zettelapp.i18n import _
 from zettelapp.ui import theme
 from zettelapp.ui.graph_common import (
     MAX_GROUP_COLORS,
@@ -25,7 +26,7 @@ from zettelapp.ui.graph_common import (
     padded_hull,
     parallel_lanes,
 )
-from zettelapp.ui.side_panel import type_dash
+from zettelapp.ui.link_style import link_pen, tip_pen
 
 LANE_SPREAD = 20.0  # scene units between links that join the same two notes
 
@@ -172,7 +173,7 @@ class Graph2DView(QGraphicsView):
         self.setDragMode(QGraphicsView.DragMode.ScrollHandDrag)
         self.setTransformationAnchor(QGraphicsView.ViewportAnchor.AnchorUnderMouse)
         self.setViewportUpdateMode(QGraphicsView.ViewportUpdateMode.BoundingRectViewportUpdate)
-        self.setAccessibleName("Knowledge graph")
+        self.setAccessibleName(_("Knowledge graph"))
         self.data = GraphData([], {}, [], {})
         self.positions: dict[str, tuple[float, float]] = {}
         self.node_items: dict[str, NodeItem] = {}
@@ -224,7 +225,9 @@ class Graph2DView(QGraphicsView):
         self.fit()
 
     def schedule_edges(self) -> None:
-        self._edge_timer.start()
+        # Restarting the timer on every move would postpone the redraw until the drop.
+        if not self._edge_timer.isActive():
+            self._edge_timer.start()
 
     def _rebuild_edges(self) -> None:
         scene = self.scene()
@@ -232,21 +235,23 @@ class Graph2DView(QGraphicsView):
             scene.removeItem(item)
         self.edge_items, self.hull_items = [], []
         t = theme.current()
-        paths: dict[str, QPainterPath] = {}
+        # One item for the lines of each link type and one for their tips, which are
+        # drawn solid (and filled) whatever the line style.
+        lines: dict[str, QPainterPath] = {}
+        tips: dict[str, QPainterPath] = {}
+        filled: dict[str, bool] = {}
         for i, link in enumerate(self.data.links):
             shape = self._edge(i)
             if shape is None:
                 continue
-            path = paths.setdefault(link.type, QPainterPath())
-            path.addPath(shape.path)
+            lines.setdefault(link.type, QPainterPath()).addPath(shape.path)
             if shape.arrow is not None:
-                path.addPath(shape.arrow)
-        for type_id, path in paths.items():
-            item = QGraphicsPathItem(path)
-            item.setPen(self._edge_pen(type_id, 1.6, 0.55))
-            item.setZValue(1)
-            scene.addItem(item)
-            self.edge_items.append(item)
+                tips.setdefault(link.type, QPainterPath()).addPath(shape.arrow)
+                filled[link.type] = shape.filled
+        for type_id, path in lines.items():
+            self.edge_items += self._edge_items(
+                type_id, path, tips.get(type_id), filled.get(type_id, False), 1.6, 0.55, 1
+            )
         if self.show_groups:
             for group, members in self.data.members().items():
                 pts = [self.positions[m] for m in members if m in self.positions]
@@ -277,27 +282,44 @@ class Graph2DView(QGraphicsView):
         link = self.data.links[i]
         if link.src not in self.positions or link.dst not in self.positions:
             return None
+        tip = self.data.link_tip(link)
         return edge_shape(
             link,
             QPointF(*self.positions[link.src]),
             QPointF(*self.positions[link.dst]),
             self._lanes[i] * LANE_SPREAD,
             node_radius(self.data.degree.get(link.dst, 0)),
-            self.data.link_directed(link),
+            tip is not None,
+            tip or "triangle",
         )
 
-    def _edge_pen(self, type_id: str, width: float, alpha: float) -> QPen:
-        entry = self.data.types.get(type_id)
+    def _edge_items(
+        self,
+        type_id: str,
+        lines: QPainterPath,
+        tips: QPainterPath | None,
+        filled: bool,
+        width: float,
+        alpha: float,
+        z: float,
+    ) -> list[QGraphicsPathItem]:
+        """Scene items drawing *lines* (and their *tips*) in the link type's style."""
+        lt = self.data.types.get(type_id)
         t = theme.current()
-        color = QColor(t.entity(entry[1].color) if entry else t.q("text_muted"))
+        color = QColor(t.entity(lt.color) if lt else t.q("text_muted"))
         color.setAlphaF(alpha)
-        return QPen(
-            color,
-            width,
-            type_dash(entry[0] if entry else 0),
-            Qt.PenCapStyle.RoundCap,
-            Qt.PenJoinStyle.RoundJoin,
-        )
+        line = QGraphicsPathItem(lines)
+        line.setPen(link_pen(color, width, lt.line_style if lt else "solid"))
+        items = [line]
+        if tips is not None:
+            tip = QGraphicsPathItem(tips)
+            tip.setPen(tip_pen(color, width, filled))
+            tip.setBrush(color if filled else Qt.BrushStyle.NoBrush)
+            items.append(tip)
+        for item in items:
+            item.setZValue(z)
+            self.scene().addItem(item)
+        return items
 
     def set_hover(self, note_id: str | None) -> None:
         self.hovered = note_id
@@ -326,14 +348,9 @@ class Graph2DView(QGraphicsView):
             shape = self._edge(i)
             if shape is None:
                 continue
-            path = QPainterPath(shape.path)
-            if shape.arrow is not None:
-                path.addPath(shape.arrow)
-            line = QGraphicsPathItem(path)
-            line.setPen(self._edge_pen(link.type, 2.6, 1.0))
-            line.setZValue(1.5)
-            scene.addItem(line)
-            self.overlay_items.append(line)
+            self.overlay_items += self._edge_items(
+                link.type, shape.path, shape.arrow, shape.filled, 2.6, 1.0, 1.5
+            )
         font = theme.ui_font(8)
         here = QPointF(*self.positions[focus])
         for other, text in self.data.neighbour_labels(focus).items():

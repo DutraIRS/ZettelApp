@@ -60,6 +60,113 @@ def test_archive_roundtrip(vault, sample, tmp_path):
     other.close()
 
 
+def _styled_type(vault):
+    from zettelapp.core.models import LinkType
+
+    return vault.save_link_type(
+        LinkType("", "Inspired by", "Inspires", "#123456", line_style="long_dash", arrow="bar")
+    )
+
+
+def test_link_styles_survive_an_archive_roundtrip(vault, sample, tmp_path):
+    _styled_type(vault)
+    types = vault.link_type_map()
+    contradicts = types["contradicts"]
+    supports = types["supports"]
+    supports.color = "#112233"
+    supports.line_style = "long_dash"
+    supports.arrow = "bar"
+    vault.save_link_type(supports)
+    vault.add_link(sample["a"].id, sample["b"].id, "inspired_by")
+    dest = tmp_path / "archive.zip"
+    ex.export(vault, "archive", {n.id for n in vault.all_notes()}, dest)
+    with zipfile.ZipFile(dest) as zf:
+        manifest = json.loads(zf.read("manifest.json"))
+    saved = {t["id"]: t for t in manifest["link_types"]}
+    assert (
+        saved["inspired_by"]["line_style"] == "long_dash" and saved["inspired_by"]["arrow"] == "bar"
+    )
+
+    other = Vault.open(tmp_path / "other")
+    import_path(other, dest)
+    copy = other.link_type_map()
+    assert (copy["inspired_by"].line_style, copy["inspired_by"].arrow) == ("long_dash", "bar")
+    assert (copy["supports"].color, copy["supports"].line_style, copy["supports"].arrow) == (
+        "#112233",
+        "long_dash",
+        "bar",
+    )
+    assert copy["contradicts"].line_style == contradicts.line_style
+    assert {l.type for l in other.links_from(sample["a"].id)} >= {"inspired_by"}
+    other.close()
+
+
+def test_old_exports_without_link_styles_still_import(vault):
+    data = {
+        "format": "zettelapp",
+        "version": 1,
+        "link_types": [
+            {
+                "id": "inspired_by",
+                "label": "Inspired by",
+                "inverse_label": "Inspires",
+                "color": "#123456",
+                "directed": True,
+            },
+            {
+                "id": "see_also",
+                "label": "See also",
+                "inverse_label": "See also",
+                "color": "#654321",
+                "directed": False,
+            },
+        ],
+    }
+    import_data(vault, data)
+    types = vault.link_type_map()
+    assert types["inspired_by"].arrow == "triangle"
+    # Missing line styles are filled in with the least used ones, so the types differ.
+    assert types["inspired_by"].line_style != types["see_also"].line_style
+
+
+@pytest.mark.parametrize(
+    "field, value",
+    [("line_style", "wavy"), ("line_style", 3), ("arrow", "star"), ("arrow", ["bar"])],
+)
+def test_unknown_link_styles_are_rejected(vault, field, value):
+    lt = {"id": "odd", "label": "Odd", "inverse_label": "Odd", "color": "#123456", field: value}
+    data = {"format": "zettelapp", "version": 1, "link_types": [lt], "notes": [{"title": "N"}]}
+    before = vault.count_notes()
+    with pytest.raises(UnsafeInputError, match="Odd|odd"):
+        import_data(vault, data)
+    assert "odd" not in vault.link_type_map() and vault.count_notes() == before
+
+
+def test_graph_exports_carry_link_styles(vault, sample, tmp_path):
+    _styled_type(vault)
+    vault.add_link(sample["a"].id, sample["b"].id, "inspired_by")
+    vault.add_link(sample["a"].id, sample["d"].id, "contradicts")
+    ids = {n.id for n in vault.all_notes()}
+    dot = ex._dot(ex.collect(vault, ids), "Test")
+    assert "style=dashed, arrowhead=tee" in dot  # long dash: Graphviz only has dashed
+    assert "style=dotted, dir=none" in dot  # contradicts is undirected
+    assert "style=dashed, arrowhead=normal" in dot  # supports
+    dest = tmp_path / "graph.graphml"
+    ex.export(vault, "graphml", ids, dest)
+    xml = dest.read_text(encoding="utf-8")
+    assert 'attr.name="line_style"' in xml and 'attr.name="arrow"' in xml
+    assert '<data key="edge_line_style">long_dash</data>' in xml
+    assert '<data key="edge_arrow">bar</data>' in xml
+    assert '<data key="edge_arrow">none</data>' in xml
+    site = tmp_path / "site.zip"
+    ex.export(vault, "html", ids, site)
+    with zipfile.ZipFile(site) as zf:
+        index = zf.read("index.html").decode("utf-8")
+        page = zf.read(f"notes/{sample['a'].id}.html").decode("utf-8")
+    assert "stroke-dasharray" in index and 'class="link"' in index
+    assert '<svg class="style"' in page and "#123456" in page
+
+
 def test_markdown_roundtrip(vault, sample, tmp_path):
     dest = tmp_path / "md.zip"
     ex.export(vault, "markdown", {n.id for n in vault.all_notes()}, dest)

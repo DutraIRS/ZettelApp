@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Страница Спросить  отвечает на вопросы по вашим заметкам с цитатами, по которым можно щёлкнуть. Она использует ИИ-провайдера по вашему выбору с вашим собственным API-ключом. Это по">
+<title>Спросите свои заметки (ИИ) – документация ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">К содержимому</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Возможности</a></li>
+        <li><a href="tutorial.html">Руководство</a></li>
+        <li><a href="./">Документация</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Поддержать</a></li>
+        <li><a class="nav-cta" href="../#download">Скачать</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Языки</span></summary><ul class="lang-switch-panel" aria-label="Языки"><li><a href="../../docs/ai-assistant.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/ai-assistant.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/ai-assistant.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/ai-assistant.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/ai-assistant.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/ai-assistant.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/ai-assistant.html" lang="ru" hreflang="ru" aria-current="true">Русский</a></li><li><a href="../../zh-cn/docs/ai-assistant.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/ai-assistant.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/ai-assistant.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/ai-assistant.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Поддержать"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Поддержать</span></a>
+      <a class="hbtn cta" href="../#download">Скачать</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Меню</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Возможности</a></li>
+          <li><a href="tutorial.html">Руководство</a></li>
+          <li><a href="./">Документация</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Документация">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Документация</span><span class="docs-menu-current">Спросите свои заметки (ИИ)</span></span></summary>
+      <ul>
+      <li><a href="index.html">Документация ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Руководство: ваши первые 30 минут</a></li>
+      <li><a href="getting-started.html">Начало работы</a></li>
+      <li><a href="notes-and-links.html">Заметки и связи</a></li>
+      <li><a href="link-suggestions.html">Подсказки ссылок</a></li>
+      <li><a href="graph-and-insights.html">Граф и статистика</a></li>
+      <li><a href="review-and-anki.html">Повторение, викторины и Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html" aria-current="page">Спросите свои заметки (ИИ)</a></li>
+      <li><a href="mcp-server.html">MCP-сервер</a></li>
+      <li><a href="export-import.html">Экспорт и импорт</a></li>
+      <li><a href="keyboard-shortcuts.html">Горячие клавиши</a></li>
+      <li><a href="privacy-and-security.html">Конфиденциальность и безопасность</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Документация</h2>
+      <ul>
+      <li><a href="index.html">Документация ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Руководство: ваши первые 30 минут</a></li>
+      <li><a href="getting-started.html">Начало работы</a></li>
+      <li><a href="notes-and-links.html">Заметки и связи</a></li>
+      <li><a href="link-suggestions.html">Подсказки ссылок</a></li>
+      <li><a href="graph-and-insights.html">Граф и статистика</a></li>
+      <li><a href="review-and-anki.html">Повторение, викторины и Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html" aria-current="page">Спросите свои заметки (ИИ)</a></li>
+      <li><a href="mcp-server.html">MCP-сервер</a></li>
+      <li><a href="export-import.html">Экспорт и импорт</a></li>
+      <li><a href="keyboard-shortcuts.html">Горячие клавиши</a></li>
+      <li><a href="privacy-and-security.html">Конфиденциальность и безопасность</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="спросите-свои-заметки-ии">Спросите свои заметки (ИИ)</h1>
+<p>Страница <strong>Спросить</strong> (Ctrl+5) отвечает на вопросы <strong>по вашим заметкам</strong> с цитатами, по которым можно щёлкнуть. Она использует
+ИИ-провайдера по вашему выбору с вашим собственным API-ключом. Это полностью необязательно: ничего никуда не отправляется, пока
+вы не зададите вопрос.</p>
+<p><img loading="lazy" src="../../assets/screenshots/ask-light.png" alt="Спросите свои заметки" /></p>
+<h2 id="настроика">Настройка</h2>
+<ol>
+<li>
+<p>Получите API-ключ у одного из поддерживаемых провайдеров.</p>
+</li>
+<li>
+<p>Откройте <em>Сервис ▸ Параметры ▸ Ассистент ИИ</em>. Выберите <strong>провайдера</strong>, вставьте <strong>API-ключ</strong> и выберите
+<strong>модель</strong> (<em>Обновить список</em> спрашивает у провайдера, какие модели доступны вашему ключу).</p>
+<p>Для каждого провайдера можно сохранить несколько ключей (например, личный и рабочий). Используйте <em>Добавить ключ…</em>, <em>Переименовать</em> и
+<em>Удалить</em> рядом со списком ключей; выбранный ключ используется на странице «Спросить».</p>
+</li>
+<li>
+<p>Нажмите <strong>Проверить соединение</strong>, затем <strong>OK</strong>.</p>
+</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Провайдер</th>
+<th>Модель по умолчанию</th>
+<th>Другие предлагаемые модели</th>
+<th>Адрес</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Anthropic Claude</strong> (по умолчанию)</td>
+<td><code>claude-opus-5-5</code></td>
+<td><code>claude-sonnet-5-5</code>, <code>claude-haiku-5-5</code></td>
+<td><code>https://api.anthropic.com</code></td>
+</tr>
+<tr>
+<td><strong>OpenAI</strong></td>
+<td><code>gpt-6.1-sol</code></td>
+<td><code>gpt-6-astra</code>, <code>gpt-6-luna</code></td>
+<td><code>https://api.openai.com/v1</code></td>
+</tr>
+<tr>
+<td><strong>Z.ai (GLM)</strong></td>
+<td><code>glm-5.3</code></td>
+<td><code>glm-5.3-flash</code>, <code>glm-4.7-flash</code></td>
+<td><code>https://api.z.ai/api/paas/v4</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>Можно ввести любой ID модели, к которой у вашего ключа есть доступ. <strong>Адрес (необязательно)</strong> переопределяет адрес,
+например чтобы использовать адрес тарифа Z.ai для программирования, OpenAI-совместимый прокси или модель, запущенную на вашем собственном
+компьютере (<code>http://localhost:…</code>). Адреса должны использовать <code>https://</code>; простой <code>http://</code> принимается только для
+<code>localhost</code>.</p>
+<p>С Claude можно также задать <strong>усилие</strong> (от низкого до максимального): более высокое усилие дольше «думает» перед ответом и
+стоит дороже. По умолчанию — <em>среднее</em>.</p>
+<h2 id="используите-свою-llm">Используйте свою LLM</h2>
+<p>«Спросить» использует <strong>вашу собственную учётную запись</strong> у выбранного провайдера, поэтому любое использование оплачивается этим провайдером вам.
+У ZettelApp нет собственного ИИ-сервиса. Ваш API-ключ хранится в <strong>Диспетчере учётных данных Windows</strong>, а не в
+файлах настроек.</p>
+<ul>
+<li><strong>Провайдеры</strong>: Anthropic Claude, OpenAI и Z.ai (GLM) в <em>Сервис ▸ Параметры ▸ Ассистент ИИ ▸ Провайдер</em>.
+Выберите <strong>Модель</strong> из списка (<em>Обновить список</em> спрашивает у провайдера, какие модели доступны вашему ключу) или введите
+любой ID модели, к которой у вашего ключа есть доступ.</li>
+<li><strong>Ваш собственный сервер</strong>: подойдёт любой сервис, предлагающий API в стиле <strong>OpenAI chat completions</strong>. Выберите
+<strong>OpenAI</strong> и укажите в поле <strong>Адрес (необязательно)</strong> его базовый адрес, например
+<code>https://my-proxy.example.com/v1</code>, <code>http://localhost:11434/v1</code> (Ollama) или <code>http://localhost:1234/v1</code>
+(LM Studio). Простой <code>http://</code> принимается только для <code>localhost</code>, <code>127.0.0.1</code> и <code>::1</code>; все остальные адреса
+должны использовать <code>https://</code>. Для этих локальных адресов <strong>API-ключ</strong> может оставаться пустым.</li>
+<li><strong>Проверьте</strong>: нажмите <strong>Проверить соединение</strong>. При использовании локальной модели ваш вопрос и заметки никогда не покидают
+ваш компьютер.</li>
+<li><strong>Что отправляется</strong>: только ваш вопрос и наиболее релевантные заметки, найденные на вашем компьютере. Количество
+заметок задаётся полем <strong>сколько заметок</strong> на странице «Спросить» (по умолчанию 8), а список <em>Отправленные источники</em> показывает
+точно, какие именно были отправлены.</li>
+</ul>
+<h2 id="задаите-вопрос">Задайте вопрос</h2>
+<p>Введите вопрос и нажмите <strong>Спросить</strong> (Ctrl+Enter). Выберите, где искать, в поле <strong>Искать в</strong>: вся
+коллекция, открытая заметка и связанные с ней заметки или заметки с тегом. Выберите, <strong>сколько заметок</strong> отправлять.</p>
+<p>Что происходит:</p>
+<ol>
+<li>ZettelApp находит наиболее релевантные заметки <strong>на вашем компьютере</strong>, используя то же сходство TF-IDF и LSA,
+что и <a href="link-suggestions.html">подсказчик ссылок</a>. При выборе <em>Текущая заметка и связанные заметки</em> открытая
+заметка всегда идёт первой.</li>
+<li>Ваш вопрос и эти заметки отправляются провайдеру — не более 120 000 символов заметок. Заметка,
+обрезанная по размеру, заканчивается видимой пометкой «[note truncated]». Список <strong>Отправленные источники</strong> показывает точно, какие
+заметки были отправлены.</li>
+<li>Ответ поступает потоком по мере написания. Цитаты вида <code>[[20261027153012]]</code> появляются как ссылки на
+заметки. <strong>Стоп</strong> отменяет ответ.</li>
+</ol>
+<p>Модели велено отвечать только по вашим заметкам и сообщать, когда в них нет ответа. <strong>Копировать</strong>
+копирует ответ как Markdown. <strong>Сохранить как заметку</strong> сохраняет его как новую заметку с тегом <code>ai-answer</code> и связями <code>cites::</code>
+с источниками.</p>
+<h2 id="конфиденциальность-и-безопасность">Конфиденциальность и безопасность</h2>
+<ul>
+<li><strong>Отправляется только то, о чём вы спрашиваете</strong>: ваш вопрос и заметки из списка <em>Отправленные источники</em>. Уведомление
+напоминает об этом перед вопросом (отметьте <em>Больше не показывать</em>, чтобы пропускать его).</li>
+<li><strong>Ваш API-ключ</strong> хранится в <strong>Диспетчере учётных данных Windows</strong> (как <code>ZettelApp/llm/&lt;provider&gt;</code>, а следующие ключи — как <code>ZettelApp/llm/&lt;provider&gt;/&lt;id ключа&gt;</code>), никогда не попадает в
+файлы настроек или журналы и удаляется из любого сообщения об ошибке, которое вам показывают. Кнопка <em>Удалить</em> стирает его с этого компьютера.</li>
+<li><strong>У модели нет инструментов.</strong> Она не может искать в интернете, запускать код или изменять ваши заметки, поэтому инструкции,
+спрятанные в заметке (или импортированном файле), не заставят её что-либо сделать. Ответ показывается через тот же
+безопасный обработчик, что и заметки, без HTML и скриптов.</li>
+<li>С Claude ZettelApp использует официальный SDK Anthropic и включает <strong>резервный переход при отказе на стороне сервера</strong>: если
+запрос отклонён классификатором безопасности, Anthropic повторяет его на рекомендованной резервной модели.
+Это относится к Claude Opus 5.5, Opus 5, Sonnet 5.5 и Fable 5.1.</li>
+<li>К тому, что вы отправляете, применяются собственные условия и политики данных каждого провайдера.</li>
+</ul>
+<h2 id="добавление-другого-проваидера">Добавление другого провайдера</h2>
+<p>Провайдеры хранятся в небольшом реестре (<code>PROVIDERS</code> в <code>zettelapp/core/llm.py</code>). Сервис, говорящий на
+существующем протоколе (Messages API Anthropic или chat completions в стиле OpenAI, которые предлагают многие провайдеры),
+— это <strong>одна запись</strong>: его название, адрес, модель по умолчанию и страница, где пользователи получают ключ. Для нового
+протокола нужен небольшой класс-адаптер. См. <a href="../../docs/development.html">Разработка</a>.</p>
+
+    <p class="doc-footer">Нашли ошибку? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ru/ai-assistant.md">Править страницу на GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Главная</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Проблемы</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Поддержать</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Языки"><li><a href="../../docs/ai-assistant.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/ai-assistant.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/ai-assistant.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/ai-assistant.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/ai-assistant.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/ai-assistant.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/ai-assistant.html" lang="ru" hreflang="ru" aria-current="true">Русский</a></li><li><a href="../../zh-cn/docs/ai-assistant.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/ai-assistant.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/ai-assistant.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/ai-assistant.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

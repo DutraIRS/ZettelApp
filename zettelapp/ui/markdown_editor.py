@@ -28,10 +28,19 @@ from PySide6.QtGui import (
 from PySide6.QtWidgets import QCompleter, QPlainTextEdit, QToolTip
 
 from zettelapp.core.security import file_url, local_file_path
-from zettelapp.core.textutil import HASHTAG_RE, find_wikilinks, normalize_tag
+from zettelapp.core.textutil import HASHTAG_RE, MATH_RE, find_wikilinks, normalize_tag
+from zettelapp.i18n import _
 from zettelapp.ui import theme
 
 _IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp")
+_ASSET_IMAGE_RE = re.compile(r"!\[[^\]\n]*\]\(asset:([^)\s]+)\)")
+
+
+def referenced_assets(text: str) -> set[str]:
+    """Every asset name a ![image](asset:…) in *text* points at."""
+    return set(_ASSET_IMAGE_RE.findall(text))
+
+
 _MD_LINK_RE = re.compile(r"(?<!!)\[[^\]\n]*\]\((?:<([^>\n]+)>|([^)\s]+))(?:\s+\"[^\"\n]*\")?\)")
 _URL_RE = re.compile(r"\b(?:https?://|mailto:|file:///)[^\s<>()\[\]]*[^\s<>()\[\].,;:!?'\"]")
 _PATH_RE = re.compile(r"(?<![\w/\\])[A-Za-z]:\\[^\s<>\"|?*]*[^\s<>\"|?*.,;:!']")  # C:\no\spaces
@@ -73,7 +82,8 @@ class MarkdownHighlighter(QSyntaxHighlighter):
             (re.compile(r"^#{1}\s.*$"), _fmt("text", bold=True, size=s * 1.6)),
             (re.compile(r"^#{2}\s.*$"), _fmt("text", bold=True, size=s * 1.35)),
             (re.compile(r"^#{3,6}\s.*$"), _fmt("text", bold=True, size=s * 1.15)),
-            (re.compile(r"^\s*(?:[-*+]|\d+[.)])\s"), _fmt("accent", bold=True)),
+            (re.compile(r"^\s*(?:[-*+]|\d+[.)])\s(?:\[[ xX]\]\s)?"), _fmt("accent", bold=True)),
+            (MATH_RE, _fmt("accent")),
             (re.compile(r"^>.*$"), _fmt("text_secondary", italic=True)),
             (re.compile(r"\*\*[^*\n]+\*\*|__[^_\n]+__"), _fmt(bold=True)),
             (
@@ -130,11 +140,13 @@ class MarkdownEditor(QPlainTextEdit):
         self.setObjectName("BodyEdit")
         self.store_image = store_image
         self.resolve_note: Callable[[str], str | None] | None = None
+        # Given an asset name, the (text, callback) actions to offer when right-clicking an image.
+        self.image_actions: Callable[[str], list[tuple[str, Callable[[], None]]]] | None = None
         self._pressed_link: tuple[str, str] | None = None
         self.viewport().setMouseTracking(True)
-        self.setAccessibleName("Note text")
+        self.setAccessibleName(_("Note text"))
         self.setPlaceholderText(
-            "Start writing… Use [[ to link a note, #tags, Q:/A: or {{c1::cloze}} for flashcards."
+            _("Start writing… Use [[ to link a note, #tags, Q:/A: or {{c1::cloze}} for flashcards.")
         )
         self.setTabChangesFocus(False)
         self.setLineWrapMode(QPlainTextEdit.LineWrapMode.WidgetWidth)
@@ -255,14 +267,18 @@ class MarkdownEditor(QPlainTextEdit):
     def _link_tip(self, kind: str, target: str) -> str:
         if kind == "note":
             if self.resolve_note is not None and self.resolve_note(target) is None:
-                return f"No note called “{target}” yet. Ctrl+click to create it."
-            return f"Ctrl+click to open “{target}”"
+                return _("No note called “{title}” yet. Ctrl+click to create it.").format(
+                    title=target
+                )
+            return _("Ctrl+click to open “{title}”").format(title=target)
         if kind == "tag":
-            return f"Ctrl+click to list the notes tagged #{target}"
+            return _("Ctrl+click to list the notes tagged #{tag}").format(tag=target)
         path = local_file_path(target)
         if path:
-            return f"Ctrl+click to show {ntpath.basename(path) or path} in File Explorer"
-        return f"Ctrl+click to open {target}"
+            return _("Ctrl+click to show {name} in File Explorer").format(
+                name=ntpath.basename(path) or path
+            )
+        return _("Ctrl+click to open {link}").format(link=target)
 
     def _update_link_cursor(self, modifiers) -> None:
         pos = self.viewport().mapFromGlobal(QCursor.pos())
@@ -313,11 +329,11 @@ class MarkdownEditor(QPlainTextEdit):
     def _continue_list(self) -> None:
         cursor = self.textCursor()
         line = cursor.block().text()
-        m = re.match(r"^(\s*)([-*+]|\d+[.)])\s+(.*)$", line)
+        m = re.match(r"^(\s*)([-*+]|\d+[.)])\s+(\[[ xX]\]\s+)?(.*)$", line)
         if not m:
             cursor.insertText("\n")
             return
-        if not m.group(3).strip():  # empty item ends the list
+        if not m.group(4).strip():  # empty item ends the list
             cursor.movePosition(
                 QTextCursor.MoveOperation.StartOfBlock, QTextCursor.MoveMode.KeepAnchor
             )
@@ -327,7 +343,28 @@ class MarkdownEditor(QPlainTextEdit):
         marker = m.group(2)
         if marker[0].isdigit():
             marker = f"{int(marker[:-1]) + 1}{marker[-1]}"
-        cursor.insertText(f"\n{m.group(1)}{marker} ")
+        box = "[ ] " if m.group(3) else ""  # a new checklist item starts unchecked
+        cursor.insertText(f"\n{m.group(1)}{marker} {box}")
+
+    # --- images in the text -----------------------------------------------------
+
+    def asset_at(self, pos: QPoint) -> str | None:
+        """The asset name of the ![image](asset:…) under a viewport position, if any."""
+        cursor = self.cursorForPosition(pos)
+        text, col = cursor.block().text(), cursor.positionInBlock()
+        for m in _ASSET_IMAGE_RE.finditer(text):
+            if m.start() <= col <= m.end():
+                return m.group(1)
+        return None
+
+    def contextMenuEvent(self, event) -> None:  # noqa: N802
+        menu = self.createStandardContextMenu(event.pos())
+        asset = self.asset_at(event.pos())
+        if asset and self.image_actions:
+            menu.addSeparator()
+            for text, callback in self.image_actions(asset):
+                menu.addAction(text, callback)
+        menu.exec(event.globalPos())
 
     # --- formatting helpers ---------------------------------------------------
 
@@ -367,7 +404,8 @@ class MarkdownEditor(QPlainTextEdit):
     # --- images -----------------------------------------------------------------
 
     def canInsertFromMimeData(self, source) -> bool:  # noqa: N802
-        return (
+        # Must be a real bool: handing Qt a list makes it reject every dropped file.
+        return bool(
             source.hasImage() or self._local_files(source) or super().canInsertFromMimeData(source)
         )
 
@@ -400,7 +438,7 @@ class MarkdownEditor(QPlainTextEdit):
         """Insert [name](file:///…) for a file on a local drive; False if it can't be linked."""
         local = local_file_path(path)
         if local is None:
-            self.fileLinkError.emit("Only files on this computer's drives can be linked.")
+            self.fileLinkError.emit(_("Only files on this computer's drives can be linked."))
             return False
         name = re.sub(r"[\[\]]", "", ntpath.basename(local))[:120] or local
         self.textCursor().insertText(f"[{name}]({file_url(local)})")

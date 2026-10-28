@@ -1,0 +1,365 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="description" content="ZettelApp は Windows 向けの無料の Zettelkasten アプリです。アトミックなノート、種類付きリンク、マインドマップ、フラッシュカード、2D/3D の知識グラフ、あなたから学習するリンク候補を備えています。">
+<meta name="color-scheme" content="light dark">
+<title>ZettelApp – Windows 向けの Zettelkasten</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="stylesheet" href="../style.css">
+<script src="../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">本文へスキップ</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="./"><img src="../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="メイン">
+      <ul class="nav">
+        <li><a href="#features">機能</a></li>
+        <li><a href="docs/tutorial.html">チュートリアル</a></li>
+        <li><a href="docs/">ドキュメント</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 寄付</a></li>
+        <li><a class="nav-cta" href="#download">ダウンロード</a></li>
+      </ul>
+    </nav>
+    <!--langswitch--><details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">言語</span></summary><ul class="lang-switch-panel" aria-label="言語"><li><a href="../" lang="en" hreflang="en">English</a></li><li><a href="../es/" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/" lang="ja" hreflang="ja" aria-current="true">日本語</a></li><li><a href="../ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/" lang="ar" hreflang="ar">العربية</a></li></ul></details><!--/langswitch-->
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="寄付"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">寄付</span></a>
+      <a class="hbtn cta" href="#download">ダウンロード</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">メニュー</span></summary>
+        <ul class="menu-panel">
+          <li><a href="#features">機能</a></li>
+          <li><a href="docs/tutorial.html">チュートリアル</a></li>
+          <li><a href="docs/">ドキュメント</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <img class="hero-icon" src="../assets/icon-512.png" alt="" width="96" height="96">
+      <h1>アイデアをつなげよう。</h1>
+      <p class="lead">ZettelApp は Windows 向けの Zettelkasten です。小さなノートを書き、意味を持たせてリンクし、見逃したつながりは
+        ZettelApp に提案してもらいましょう。知識を 2D または 3D のグラフとして探索し、フラッシュカードに変えられます。</p>
+      <div class="actions">
+        <a class="button primary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe">Windows 版をダウンロード</a>
+        <a class="button secondary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Portable.zip">ポータブル .zip</a>
+      </div>
+      <p class="fine">無料・オープンソース · Windows 10 &amp; 11、64 ビット ·
+        <a href="https://github.com/DutraIRS/ZettelApp/releases/latest">すべてのリリースとチェックサム</a></p>
+    </div>
+    <div class="wrap">
+      <figure class="shot hero-shot">
+        <picture>
+          <source srcset="../assets/screenshots/notes-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/notes-light.png" width="1440" height="900"
+               alt="ZettelApp のノートページ。左にノート一覧、中央に間隔反復についてのノート (Markdown のテキストとプレビュー)、右に一致スコア付きのリンク候補が表示されています。">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section id="start" class="section">
+    <div class="wrap">
+      <h2 class="section-title">Zettelkasten は初めてですか?</h2>
+      <p class="section-lead">5 分でこの手法を学び、そのあと実際に試してみましょう。</p>
+      <ul class="cards duo">
+        <li class="card feature-link">
+          <p class="eyebrow">その方法</p>
+          <h3><a href="docs/what-is-zettelkasten.html">Zettelkasten とは?</a></h3>
+          <p>スリップボックスの由来、その原則 (アトミックなノート、理由付きのリンク、自然に現れる構造)、3 種類のノート、よくある落とし穴を解説します。</p>
+        </li>
+        <li class="card feature-link">
+          <p class="eyebrow">実践</p>
+          <h3><a href="docs/tutorial.html">チュートリアルを始める</a></h3>
+          <p>最初の 30 分: ノートを書いてリンクし、種類付きリンク、リンク候補、マインドマップ、フラッシュカード、2D / 3D グラフを体験します。</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="features" class="section">
+    <div class="wrap">
+      <h2 class="section-title">Zettelkasten に必要なものがすべて</h2>
+      <p class="section-lead">1 ノートに 1 アイデア。アイデア同士の関係を示すリンクでつなぎます。ZettelApp はこの手法はそのままに、手間を取り除きます。</p>
+      <ul class="cards">
+        <li class="card">
+          <h3>アトミックなノート</h3>
+          <p>自動のタイムスタンプ ID を持つ Markdown ノート。タグ (タグ欄、またはテキスト内の #タグ)、情報源リンク、貼り付けやドロップができる画像、PC 上のファイルへのリンク、自動保存を備えています。</p>
+        </li>
+        <li class="card">
+          <h3>種類付きの有向リンク</h3>
+          <p><code>supports:: [[Claim]]</code> のように書きます。<em>矛盾</em>、<em>拡張</em>、
+            <em>の例</em>、<em>の一部</em>、<em>引用</em>、または独自の種類も使えます。バックリンクは自然に読めます:
+            <em>提供元</em>。</p>
+        </li>
+        <li class="card">
+          <h3>学習するリンク候補</h3>
+          <p>ナイーブベイズモデルが、意味、キーワード、文字列の類似度、共通タグ、共通リンクを重み付けし、承認または非表示にした候補ごとに学習します。</p>
+        </li>
+        <li class="card">
+          <h3>2D と 3D のグラフ</h3>
+          <p>タグ、または k-means や階層的な意味のクラスターでノートを色分けし、網掛けの背景の上にグループをまとめます。</p>
+        </li>
+        <li class="card">
+          <h3>マインドマップ</h3>
+          <p>ノートのアイデアを、キーボード操作でマインドマップとして描き、アイデアをノートにリンクし、PNG、SVG、FreeMind としてエクスポートできます。</p>
+        </li>
+        <li class="card">
+          <h3>復習とクイズ</h3>
+          <p><code>Q:</code>/<code>A:</code> や <code>{{c1::cloze}}</code> のテキストからのフラッシュカード、SM-2 間隔反復、多肢選択、答えの入力、<em>そのノートに名前を付けましょう</em>。</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split">
+      <div class="split-text">
+        <p class="eyebrow">リンク候補</p>
+        <h2>見逃したつながりが見える</h2>
+        <p>書いている間、ZettelApp はそのノートを保管庫の他のノートと、8 つの指標で比較します。</p>
+        <ul class="ticks">
+          <li>意味 (潜在意味解析)</li>
+          <li>共通キーワード (TF-IDF)</li>
+          <li>タイトルと本文の Levenshtein および Jaro-Winkler 類似度</li>
+          <li>共通タグ、共通リンク、本文中で言及されたタイトル</li>
+        </ul>
+        <p>ナイーブベイズ分類器がその根拠を確率に変え、各候補の理由を説明します。</p>
+        <p>ワンクリックで候補をリンクしてリンクの種類を選ぶか、非表示にします。どちらの場合も、モデルは<em>あなた</em>がアイデアをどうつなげるかを学習します。</p>
+        <p><a class="more" href="docs/link-suggestions.html">リンク候補の仕組み</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/graph-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/graph-light.png" width="1440" height="900" loading="lazy"
+               alt="2D の知識グラフ。ノートがタグごとに色付きの背景でグループ化され、種類付きリンクが色付き、破線、または矢印付きの線で描かれ、凡例が表示されています。">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split reverse">
+      <div class="split-text">
+        <p class="eyebrow">グラフ</p>
+        <h2>あなたの知識を 2D と 3D で</h2>
+        <p>コレクション全体や、1 つのノートの周辺を探索できます。ノートをタグで色分けするか、クラスタリングにトピックを見つけてもらいましょう。</p>
+        <ul class="ticks">
+          <li>ノートの意味の <b>k-means</b> または<b>階層的</b>クラスタリング</li>
+          <li>シルエットスコアで選ばれるクラスター数</li>
+          <li>キーワードで名付けられるクラスター</li>
+        </ul>
+        <p><b>グループ</b>をオンにすると、関連するノートが網掛けの背景の上にまとまります。色は、色覚特性があっても区別しやすいように選ばれています。</p>
+        <p><a class="more" href="docs/graph-and-insights.html">グラフとインサイト</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/graph-3d-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/graph-3d-light.png" width="1440" height="900" loading="lazy"
+               alt="3D グラフ。ノートが k-means クラスターごとに色分けされて柔らかなハローで囲まれ、各クラスターをキーワードで名付けた凡例が表示されています。">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split">
+      <div class="split-text">
+        <p class="eyebrow">マインドマップ</p>
+        <h2>枝で考える</h2>
+        <p>どのノートにもマインドマップを持たせられます。</p>
+        <ul class="ticks">
+          <li><kbd>Tab</kbd> で子を、<kbd>Enter</kbd> で兄弟を追加し、<kbd>F2</kbd> で名前を変更</li>
+          <li>任意のアイデアをノートにリンク</li>
+          <li>ワンクリックでノートのリンクからマップを作成</li>
+          <li>PNG、SVG、FreeMind としてエクスポート</li>
+        </ul>
+        <p><a class="more" href="docs/notes-and-links.html#mind-maps">マインドマップ</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/mindmap-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/mindmap-light.png" width="1440" height="900" loading="lazy"
+               alt="「長続きする学習」というタイトルのマインドマップ。間隔、想起、難しさ、意味の枝が、それぞれ別の色で描かれています。">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split reverse">
+      <div class="split-text">
+        <p class="eyebrow">復習</p>
+        <h2>書いたことを覚える</h2>
+        <p>ノートをフラッシュカードに変え、SM-2 間隔反復で復習します。クイズで自分を試すこともできます。</p>
+        <ul class="ticks">
+          <li>多肢選択</li>
+          <li>誤字に寛容な答えの入力</li>
+          <li><em>そのノートに名前を付けましょう</em>。誤った選択肢は最も似ているノートです。</li>
+        </ul>
+        <p>Anki がお好みですか? AnkiConnect で同期するか、デッキをエクスポートできます。すべてのカードは元のノートにリンクしています。</p>
+        <p><a class="more" href="docs/review-and-anki.html">復習、クイズ、Anki</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/insights-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/insights-light.png" width="1440" height="900" loading="lazy"
+               alt="インサイトページ。ノート、リンク、タグ、リンクのないノート、フラッシュカードの数のタイル、月ごとの追加ノート数のチャート、上位のタグと種類別リンクの棒グラフが表示されています。">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split">
+      <div class="split-text">
+        <p class="eyebrow">ノートに質問</p>
+        <h2>あなた自身のノートに基づいた回答</h2>
+        <p><b>Anthropic Claude</b>、<b>OpenAI</b>、<b>Z.ai</b> のご自身のキーを接続して、質問できます。</p>
+        <ul class="ticks">
+          <li>最も関連性の高いノートは、お使いのコンピューター上で見つけます。</li>
+          <li>送信されるのはそれらのノートだけで、どれかが正確にわかります。</li>
+          <li>回答は、クリックできるリンクでノートを引用します。</li>
+          <li>キーは Windows 資格情報マネージャーに保管されます。</li>
+        </ul>
+        <p><a class="more" href="docs/ai-assistant.html">ノートに質問</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/ask-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/ask-light.png" width="1440" height="900" loading="lazy"
+               alt="質問ページ。間隔と想起についての質問と、ノートをリンクとして引用した回答が表示されています。">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="section-title">お使いのツールと連携</h2>
+      <ul class="cards">
+        <li class="card">
+          <h3>Zotero</h3>
+          <p>ライブラリを検索し、アイテムを開く引用を挿入し、PDF へのリンク付きで文献ノートを作り始められます。</p>
+          <a class="more" href="docs/zotero.html">Zotero</a>
+        </li>
+        <li class="card">
+          <h3>Anki</h3>
+          <p>AnkiConnect でフラッシュカードを同期するか、<code>.apkg</code> デッキをエクスポートします。再同期しても、カードは重複せずに更新されます。</p>
+          <a class="more" href="docs/review-and-anki.html#anki">Anki</a>
+        </li>
+        <li class="card">
+          <h3>MCP サーバー</h3>
+          <p>ZettelApp が開いていて MCP スイッチがオンの間だけ、Claude Desktop、Claude Code などの MCP クライアントが保管庫を検索して読み取れます。変更を許可しない限り、読み取り専用です。</p>
+          <a class="more" href="docs/mcp-server.html">MCP サーバー</a>
+        </li>
+        <li class="card">
+          <h3>Obsidian と Markdown</h3>
+          <p>Markdown フォルダーや Obsidian の保管庫をインポートしたり、ノートをフロントマターと
+            <code>[[links]]</code> 付きの Markdown ファイルとしてエクスポートしたりできます。</p>
+          <a class="more" href="docs/export-import.html">インポート</a>
+        </li>
+        <li class="card">
+          <h3>何でもエクスポート</h3>
+          <p>コレクション全体や任意のサブグラフを、アーカイブ、静的な Web サイト、JSON、GraphML、Graphviz、Anki デッキとしてエクスポートできます。</p>
+          <a class="more" href="docs/export-import.html">エクスポート</a>
+        </li>
+        <li class="card">
+          <h3>Windows になじむ</h3>
+          <p>ライトまたはダークのテーマとアクセントカラーに従います。標準的なメニューとショートカット、ユーザーごとのインストーラー、毎日のバックアップを備えています。</p>
+          <a class="more" href="docs/getting-started.html">はじめに</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="privacy" class="section tinted">
+    <div class="wrap">
+      <h2 class="section-title">設計から、プライベートで安全</h2>
+      <p class="section-lead">ノートはあなたのものです。ZettelApp はオフラインで動作します。起動時の新しいバージョンの静かな確認 (オフにできます) を除き、ネットワークを使うのは、あなたが依頼したときだけです。</p>
+      <ul class="cards compact">
+        <li class="card"><h3>オフライン優先</h3><p>アカウントなし、テレメトリなし、トラッキングなし。ノートは、あなたが選んだフォルダーに保存されます。</p></li>
+        <li class="card"><h3>アクティブコンテンツなし</h3><p>ノートがスクリプトを実行したり、Web から何かを読み込んだりすることはありません。
+          インポートは、パスを悪用した手口と解凍爆弾について検査されます。</p></li>
+        <li class="card"><h3>キーは秘密のまま</h3><p>API キーは Windows 資格情報マネージャーに保存され、ファイルやログに書き込まれることはありません。</p></li>
+        <li class="card"><h3>セーフティネット</h3><p>自動保存、復元できるごみ箱、開いたすべての保管庫の毎日のバックアップ。</p></li>
+      </ul>
+      <p class="center"><a class="more" href="docs/privacy-and-security.html">プライバシーとセキュリティの詳細</a></p>
+    </div>
+  </section>
+
+  <section id="download" class="section">
+    <div class="wrap download">
+      <div>
+        <h2>ZettelApp をダウンロード</h2>
+        <p>無料のオープンソースで、パブリックドメインとして公開されています。</p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe">インストーラーをダウンロード</a>
+          <a class="button secondary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Portable.zip">ポータブル .zip</a>
+        </div>
+        <p class="fine"><a href="https://github.com/DutraIRS/ZettelApp/releases/latest">すべてのリリース、リリースノート、
+          SHA-256 チェックサム</a></p>
+      </div>
+      <dl class="specs">
+        <dt>システム</dt><dd>Windows 10 (21H2 以降) または Windows 11、64 ビット</dd>
+        <dt>インストール</dt><dd>ユーザーごと。管理者権限は不要です。最初にインストーラーの言語を選べます。</dd>
+        <dt>SmartScreen</dt><dd>ビルドにはまだコード署名がありません。Windows が警告を表示した場合は、チェックサムを確認してから<i>詳細情報 ▸ 実行</i>を選んでください。</dd>
+        <dt>ソース</dt><dd><a href="https://github.com/DutraIRS/ZettelApp">github.com/DutraIRS/ZettelApp</a></dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section tinted">
+    <div class="wrap">
+      <h2 class="section-title">今後の予定</h2>
+      <ul class="cards compact">
+        <li class="card"><h3>さらに多くの言語</h3><p>アプリとこれらのページは 11 言語で利用できます。さらなる言語も歓迎します。</p></li>
+        <li class="card"><h3>Linux</h3><p>.deb と AppImage のパッケージ。</p></li>
+        <li class="card"><h3>署名付きビルド</h3><p>SmartScreen の警告がなくなります。</p></li>
+        <li class="card"><h3>オフライン AI</h3><p>さらに優れた候補のための、ローカルの埋め込みモデル。</p></li>
+      </ul>
+      <p class="center"><a class="more" href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">ロードマップを読む</a></p>
+    </div>
+  </section>
+
+  <section id="support" class="section">
+    <div class="wrap support">
+      <h2>ZettelApp を支援する</h2>
+      <p>ZettelApp は、オープンに開発されている無料のパブリックドメインのソフトウェアです。時間の節約になったとき、またはロードマップをより早く実現したいときは、ぜひスポンサーをご検討ください。</p>
+      <div class="actions">
+        <a class="button donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Ko-fi で寄付</a>
+      </div>
+      <p class="fine">企業の方へ: スポンサーシップで、特定のロードマップ項目の開発を支援できます。
+        <a href="https://github.com/DutraIRS/ZettelApp">GitHub からご連絡ください</a>。スポンサーの方には、リリースノートで感謝を表します。</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · パブリックドメイン (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="docs/">ドキュメント</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md">セキュリティ</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/blob/main/THIRD_PARTY_NOTICES.md">通知</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">寄付</a></li>
+    </ul>
+  </div>
+  <!--langs--><ul class="nav lang-row" aria-label="言語"><li><a href="../" lang="en" hreflang="en">English</a></li><li><a href="../es/" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/" lang="ja" hreflang="ja" aria-current="true">日本語</a></li><li><a href="../ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/" lang="ar" hreflang="ar">العربية</a></li></ul><!--/langs-->
+</footer>
+</body>
+</html>

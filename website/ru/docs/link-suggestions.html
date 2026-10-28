@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Пока вы пишете, панель Подсказки ссылок перечисляет заметки, которые, вероятно, относятся к редактируемой вами. Нажмите Связать, чтобы соединить их , или ✕, чтобы отклонить подсказ">
+<title>Подсказки ссылок – документация ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">К содержимому</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Возможности</a></li>
+        <li><a href="tutorial.html">Руководство</a></li>
+        <li><a href="./">Документация</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Поддержать</a></li>
+        <li><a class="nav-cta" href="../#download">Скачать</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Языки</span></summary><ul class="lang-switch-panel" aria-label="Языки"><li><a href="../../docs/link-suggestions.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/link-suggestions.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/link-suggestions.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/link-suggestions.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/link-suggestions.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/link-suggestions.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/link-suggestions.html" lang="ru" hreflang="ru" aria-current="true">Русский</a></li><li><a href="../../zh-cn/docs/link-suggestions.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/link-suggestions.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/link-suggestions.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/link-suggestions.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Поддержать"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Поддержать</span></a>
+      <a class="hbtn cta" href="../#download">Скачать</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Меню</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Возможности</a></li>
+          <li><a href="tutorial.html">Руководство</a></li>
+          <li><a href="./">Документация</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Документация">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Документация</span><span class="docs-menu-current">Подсказки ссылок</span></span></summary>
+      <ul>
+      <li><a href="index.html">Документация ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Руководство: ваши первые 30 минут</a></li>
+      <li><a href="getting-started.html">Начало работы</a></li>
+      <li><a href="notes-and-links.html">Заметки и связи</a></li>
+      <li><a href="link-suggestions.html" aria-current="page">Подсказки ссылок</a></li>
+      <li><a href="graph-and-insights.html">Граф и статистика</a></li>
+      <li><a href="review-and-anki.html">Повторение, викторины и Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Спросите свои заметки (ИИ)</a></li>
+      <li><a href="mcp-server.html">MCP-сервер</a></li>
+      <li><a href="export-import.html">Экспорт и импорт</a></li>
+      <li><a href="keyboard-shortcuts.html">Горячие клавиши</a></li>
+      <li><a href="privacy-and-security.html">Конфиденциальность и безопасность</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Документация</h2>
+      <ul>
+      <li><a href="index.html">Документация ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Руководство: ваши первые 30 минут</a></li>
+      <li><a href="getting-started.html">Начало работы</a></li>
+      <li><a href="notes-and-links.html">Заметки и связи</a></li>
+      <li><a href="link-suggestions.html" aria-current="page">Подсказки ссылок</a></li>
+      <li><a href="graph-and-insights.html">Граф и статистика</a></li>
+      <li><a href="review-and-anki.html">Повторение, викторины и Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Спросите свои заметки (ИИ)</a></li>
+      <li><a href="mcp-server.html">MCP-сервер</a></li>
+      <li><a href="export-import.html">Экспорт и импорт</a></li>
+      <li><a href="keyboard-shortcuts.html">Горячие клавиши</a></li>
+      <li><a href="privacy-and-security.html">Конфиденциальность и безопасность</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="подсказки-ссылок">Подсказки ссылок</h1>
+<p>Пока вы пишете, панель <strong>Подсказки ссылок</strong> перечисляет заметки, которые, вероятно, относятся к редактируемой вами.
+Нажмите <strong>Связать</strong>, чтобы соединить их (стрелка рядом выбирает тип связи), или <strong>✕</strong>, чтобы отклонить
+подсказку. Оба действия обучают модель. Наведите курсор на подсказку, чтобы увидеть, <em>почему</em> она предложена.</p>
+<p>Подсказки обновляются примерно через секунду после того, как вы перестали печатать, в фоновом режиме, так что редактор никогда не ждёт
+их. Они учитывают и ваш несохранённый текст.</p>
+<h2 id="как-это-работает">Как это работает</h2>
+<p>ZettelApp рассматривает вопрос «нужно ли связать эти две заметки?» как задачу классификации и отвечает на него с помощью
+классификатора <strong>наивного Байеса</strong>. Для заметки <em>q</em> и каждой заметки-кандидата <em>c</em> вычисляются восемь признаков сходства,
+а свидетельства объединяются в вероятность.</p>
+<h3 id="признаки">Признаки</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Признак</th>
+<th>Что измеряет</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Семантическое сходство (LSA)</strong></td>
+<td>Косинусное сходство в латентном семантическом пространстве: усечённое SVD матрицы TF-IDF (рандомизированное SVD, до 64 измерений). Заметки с родственной лексикой оказываются рядом, даже если у них мало общих точных слов.</td>
+</tr>
+<tr>
+<td><strong>Общие ключевые слова (косинус TF-IDF)</strong></td>
+<td>Косинусное сходство векторов TF-IDF (сублинейная частота термина, сглаженная обратная частота документа). Заголовки считаются дважды; теги включаются.</td>
+</tr>
+<tr>
+<td><strong>Сходство заголовков (Левенштейн)</strong></td>
+<td>1 − расстояние редактирования ÷ длина более длинного заголовка.</td>
+</tr>
+<tr>
+<td><strong>Сходство заголовков (Джаро — Винклер)</strong></td>
+<td>Сходство заголовков по Джаро — Винклеру, поощряющее общее начало.</td>
+</tr>
+<tr>
+<td><strong>Сходство текстов (Левенштейн)</strong></td>
+<td>Нормализованное расстояние редактирования между первыми 400 символами двух текстов.</td>
+</tr>
+<tr>
+<td><strong>Общие теги (Жаккар)</strong></td>
+<td>Общие теги ÷ все теги.</td>
+</tr>
+<tr>
+<td><strong>Заголовок упомянут в тексте</strong></td>
+<td>1, если заголовок любой из заметок встречается целыми словами в тексте другой, иначе 0.</td>
+</tr>
+<tr>
+<td><strong>Общие ссылки (Жаккар)</strong></td>
+<td>Пересечение множеств заметок, с которыми связаны две заметки (замыкающиеся треугольники на графе).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Текст приводится к нижнему регистру, диакритика сворачивается (так что <em>informação</em> совпадает с <em>informacao</em>), синтаксис Markdown
+удаляется, а распространённые английские, португальские и испанские стоп-слова игнорируются. Расстояния редактирования используют
+<a href="https://github.com/rapidfuzz/RapidFuzz">RapidFuzz</a>; чисто питоновский битово-параллельный алгоритм даёт
+идентичные результаты, когда он недоступен.</p>
+<h3 id="от-признаков-к-вероятности">От признаков к вероятности</h3>
+<p>Значение каждого признака (от 0 до 1) помещается в одну из <strong>8 корзин</strong>. Для каждого признака модель хранит,
+как часто связанные и несвязанные пары попадают в каждую корзину, и оценивает</p>
+<pre><code class="language-text">P(link | f1 … f8)  ∝  P(link) × Π P(fi | link)
+</code></pre>
+<p><strong>Свидетельство</strong> признака — это его логарифмическое отношение правдоподобия, log P(bin | link) − log P(bin | no link).
+Показанная вероятность — это логистическая функция от априорных логарифмических шансов плюс (взвешенная) сумма
+свидетельств.</p>
+<p><strong>Откуда берутся счётчики.</strong> Модель обучается на вашем хранилище каждый раз, когда оно заметно меняется:</p>
+<ul>
+<li><strong>положительные примеры</strong>: каждая пара связанных заметок плюс принятые вами подсказки (в очень больших хранилищах
+берётся выборка до 600 пар);</li>
+<li><strong>отрицательные примеры</strong>: случайные пары несвязанных заметок, по три на каждый положительный пример, плюс каждая
+<strong>отклонённая</strong> вами подсказка, которая считается дважды.</li>
+</ul>
+<p><strong>Априорное распределение, чтобы всё работало с первого дня.</strong> До появления данных каждая корзина начинается с дирихлевских <em>псевдосчётчиков</em>
+(по умолчанию 10 на признак и класс). Они кодируют слабое убеждение: для связанных пар счётчики растут
+с ростом сходства, а для несвязанных резко падают. Этого достаточно, чтобы ранжировать подсказки в новом
+хранилище. По мере того как вы связываете заметки, реальные счётчики начинают перевешивать априорное распределение, и модель подстраивается под <em>ваш</em> способ связывания.
+Поскольку положительные и отрицательные примеры берутся в пропорции один к трём, априорная вероятность класса P(link) составляет примерно одну четвёртую
+(с соответствующими псевдосчётчиками).</p>
+<p><strong>Две поправки сохраняют честность оценок:</strong></p>
+<ol>
+<li><strong>Нет утечки меток.</strong> <code>[[Вики-ссылки]]</code> удаляются из текста до вычисления признаков.
+Иначе встроенная ссылка поместила бы заголовок цели в текст, и модель научилась бы
+распознавать существующие связи, а не родственные идеи. По той же причине при обучении на связанной
+паре признак «общие ссылки» игнорирует связь между этими двумя заметками.</li>
+<li><strong>Коррелированные свидетельства взвешиваются.</strong> Наивный Байес предполагает независимость признаков, но некоторые
+зависимы: TF-IDF и LSA пересекаются, как и три строковых расстояния. Учёт коррелированных свидетельств как
+независимых делает обычный наивный Байес излишне самоуверенным. Поэтому ZettelApp умножает свидетельство каждого признака
+на <strong>0,6</strong> (наивный Байес с весами признаков), что сохраняет реалистичность вероятностей.</li>
+</ol>
+<p><strong>Отсутствующие или отключённые признаки считаются отсутствием свидетельств.</strong> Если вы отключаете признак или его нельзя
+вычислить, он ничего не добавляет — именно так наивный Байес естественно обрабатывает пропущенные значения.</p>
+<h3 id="быстрое-ранжирование">Быстрое ранжирование</h3>
+<p>Сравнение длинных текстов расстоянием Левенштейна — самый медленный шаг, поэтому ранжирование идёт в два этапа.
+Сначала все кандидаты оцениваются без признака сходства текстов, и только лучшие 150 получают полную
+оценку. Заметки, с которыми вы уже связали, и пары, которые вы отклонили, никогда не предлагаются.</p>
+<h2 id="как-читать-всплывающую-подсказку-почему">Как читать всплывающую подсказку «почему»</h2>
+<p>Наведите курсор на подсказку, чтобы увидеть оценку модели и свидетельство каждого признака. Положительные числа говорят в пользу
+связи, отрицательные — против. Метка рядом с полосой обобщает вероятность: <strong>сильная</strong>
+(50% и выше), <strong>вероятная</strong> (25% и выше) или <strong>возможная</strong>.</p>
+<p>Вероятности — честные оценки, и в разреженном хранилище большинство пар действительно не связаны, так что 15–30% могут
+быть хорошей подсказкой. Важнее всего порядок.</p>
+<h2 id="настроика">Настройка</h2>
+<p><em>Сервис ▸ Параметры ▸ Подсказки ссылок</em>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Параметр</th>
+<th>По умолчанию</th>
+<th>Эффект</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Предлагать ссылки, пока я пишу</td>
+<td>вкл.</td>
+<td>Полностью отключает подсказки панели.</td>
+</tr>
+<tr>
+<td>Признаки</td>
+<td>все восемь</td>
+<td>Снимите отметку с признаков, которые не нужно учитывать.</td>
+</tr>
+<tr>
+<td>Показывать не более</td>
+<td>8</td>
+<td>Количество перечисляемых подсказок.</td>
+</tr>
+<tr>
+<td>Минимальное совпадение</td>
+<td>10%</td>
+<td>Скрывать подсказки с вероятностью ниже этой.</td>
+</tr>
+<tr>
+<td>Сила априорного распределения</td>
+<td>10</td>
+<td>Сколько псевдонаблюдений стоит за априорным распределением. Большие значения дольше доверяют априорному распределению; меньшие быстрее подстраиваются под ваши связи.</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Сведения о модели…</strong> показывает, на скольких связанных и несвязанных парах обучалась модель и насколько информативен
+каждый признак (симметричная дивергенция Кульбака — Лейблера между его распределениями для связанных и
+несвязанных пар).</li>
+<li><strong>Забыть отклонённые подсказки</strong> очищает ваши отклонения, так что эти пары могут быть предложены снова и
+перестают считаться отрицательными примерами.</li>
+</ul>
+
+    <p class="doc-footer">Нашли ошибку? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ru/link-suggestions.md">Править страницу на GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Главная</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Проблемы</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Поддержать</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Языки"><li><a href="../../docs/link-suggestions.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/link-suggestions.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/link-suggestions.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/link-suggestions.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/link-suggestions.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/link-suggestions.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/link-suggestions.html" lang="ru" hreflang="ru" aria-current="true">Русский</a></li><li><a href="../../zh-cn/docs/link-suggestions.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/link-suggestions.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/link-suggestions.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/link-suggestions.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

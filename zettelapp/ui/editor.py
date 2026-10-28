@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from datetime import UTC, datetime
 
-from PySide6.QtCore import QSize, Qt, QTimer, QUrl, Signal
-from PySide6.QtGui import QDesktopServices, QGuiApplication, QPixmap
+from PySide6.QtCore import QLocale, QSize, Qt, QTimer, QUrl, Signal
+from PySide6.QtGui import QDesktopServices, QGuiApplication, QPixmap, QTextCursor
 from PySide6.QtWidgets import (
     QButtonGroup,
     QFileDialog,
@@ -32,13 +33,14 @@ from zettelapp.core.security import (
     normalize_source_url,
     normalize_web_url,
 )
-from zettelapp.core.textutil import extract_hashtags, strip_markdown
+from zettelapp.core.textutil import extract_hashtags, find_tasks, strip_markdown
+from zettelapp.i18n import _, n_
 from zettelapp.ui import icons, theme
-from zettelapp.ui.dialogs import CardDialog, TextPromptDialog
-from zettelapp.ui.markdown_editor import MarkdownEditor
+from zettelapp.ui.dialogs import AlarmDialog, CardDialog, FormulaDialog, TextPromptDialog
+from zettelapp.ui.markdown_editor import MarkdownEditor, referenced_assets
 from zettelapp.ui.mindmap import MindMapView
 from zettelapp.ui.preview import NotePreview
-from zettelapp.ui.widgets import TagEditor, accent_button, label, tool_button
+from zettelapp.ui.widgets import FlowLayout, TagEditor, accent_button, label, tool_button
 
 
 def friendly_time(iso: str) -> str:
@@ -49,12 +51,14 @@ def friendly_time(iso: str) -> str:
     delta = datetime.now(UTC) - when
     seconds = delta.total_seconds()
     if seconds < 60:
-        return "just now"
+        return _("just now")
     if seconds < 3600:
-        return f"{int(seconds // 60)} min ago"
+        minutes = int(seconds // 60)
+        return n_("{n} min ago", "{n} min ago", minutes).format(n=minutes)
     if seconds < 86400:
-        return f"{int(seconds // 3600)} h ago"
-    return when.astimezone().strftime("%d %b %Y")
+        hours = int(seconds // 3600)
+        return n_("{n} h ago", "{n} h ago", hours).format(n=hours)
+    return QLocale().toString(when.astimezone().date(), "d MMM yyyy")
 
 
 class NoteEditor(QWidget):
@@ -91,15 +95,19 @@ class NoteEditor(QWidget):
         icon.setPixmap(icons.icon("notes", theme.current().text_muted, 48).pixmap(48, 48))
         icon.setAlignment(Qt.AlignmentFlag.AlignCenter)
         empty_layout.addWidget(icon)
-        msg = label("Select a note or create a new one", "heading")
+        msg = label(_("Select a note or create a new one"), "heading", wrap=True)
         msg.setAlignment(Qt.AlignmentFlag.AlignCenter)
         empty_layout.addWidget(msg)
-        hint = label("One idea per note. Link it to others to grow your Zettelkasten.", "secondary")
+        hint = label(
+            _("One idea per note. Link it to others to grow your Zettelkasten."),
+            "secondary",
+            wrap=True,
+        )
         hint.setAlignment(Qt.AlignmentFlag.AlignCenter)
         empty_layout.addWidget(hint)
         button_row = QHBoxLayout()
         button_row.addStretch(1)
-        button_row.addWidget(accent_button("New note", lambda: self.window.new_note(), "add"))
+        button_row.addWidget(accent_button(_("New note"), lambda: self.window.new_note(), "add"))
         button_row.addStretch(1)
         empty_layout.addLayout(button_row)
         empty_layout.addStretch(2)
@@ -114,48 +122,63 @@ class NoteEditor(QWidget):
         outer.addWidget(self.stack)
 
         # Toolbar --------------------------------------------------------
+        # The tools wrap onto another line in a narrow window instead of setting the whole
+        # window's minimum width; the view modes stay at the end of the first line.
+        tools = QWidget()
+        flow = FlowLayout(tools, spacing=10)
+
+        def group(*buttons: QWidget) -> None:
+            box = QWidget()
+            row = QHBoxLayout(box)
+            row.setContentsMargins(0, 0, 0, 0)
+            row.setSpacing(2)
+            for button in buttons:
+                row.addWidget(button)
+            flow.addWidget(box)
+
+        group(tool_button("trash", _("Move note to Trash"), lambda: self.window.trash_current()))
+        self.fmt_buttons = [
+            tool_button("bold", _("Bold (Ctrl+B)"), lambda: self.body.wrap_selection("**")),
+            tool_button("italic", _("Italic (Ctrl+I)"), lambda: self.body.wrap_selection("*")),
+            tool_button("heading", _("Heading"), lambda: self.body.prefix_lines("## ")),
+            tool_button("bullets", _("Bulleted list"), lambda: self.body.prefix_lines("- ")),
+            tool_button("checklist", _("Checklist"), lambda: self.body.prefix_lines("- [ ] ")),
+            tool_button("code", _("Code"), lambda: self.body.wrap_selection("`")),
+            tool_button("formula", _("Insert formula (LaTeX)"), self.insert_formula),
+        ]
+        group(*self.fmt_buttons)
+        group(
+            tool_button("relationship", _("Link to note (Ctrl+K)"), self.linkNoteRequested.emit),
+            tool_button("folder", _("Link to a file"), self.insert_file_link),
+            tool_button("globe", _("Insert web link"), self.insert_web_link),
+            tool_button("image", _("Insert image (Ctrl+Shift+I)"), self.insert_image),
+            tool_button(
+                "library", _("Cite a Zotero reference"), lambda: self.window.zotero_reference()
+            ),
+            tool_button("mindmap", _("Add mind map"), self.show_mindmap),
+            tool_button("cards", _("Add flashcard (Ctrl+Shift+F)"), self.add_card),
+            tool_button("alarm", _("Set an alarm for this note"), self.set_alarm),
+        )
         bar = QHBoxLayout()
         bar.setSpacing(2)
-        self.fmt_buttons = [
-            tool_button("bold", "Bold (Ctrl+B)", lambda: self.body.wrap_selection("**")),
-            tool_button("italic", "Italic (Ctrl+I)", lambda: self.body.wrap_selection("*")),
-            tool_button("heading", "Heading", lambda: self.body.prefix_lines("## ")),
-            tool_button("bullets", "Bulleted list", lambda: self.body.prefix_lines("- ")),
-            tool_button("code", "Code", lambda: self.body.wrap_selection("`")),
-        ]
-        for b in self.fmt_buttons:
-            bar.addWidget(b)
-        bar.addSpacing(10)
-        bar.addWidget(
-            tool_button("relationship", "Link to note (Ctrl+K)", self.linkNoteRequested.emit)
-        )
-        bar.addWidget(tool_button("globe", "Insert web link", self.insert_web_link))
-        bar.addWidget(tool_button("folder", "Link to a file", self.insert_file_link))
-        bar.addWidget(tool_button("image", "Insert image (Ctrl+Shift+I)", self.insert_image))
-        bar.addWidget(
-            tool_button(
-                "library", "Cite a Zotero reference", lambda: self.window.zotero_reference()
-            )
-        )
-        bar.addWidget(tool_button("mindmap", "Add mind map", self.show_mindmap))
-        bar.addWidget(tool_button("cards", "Add flashcard (Ctrl+Shift+F)", self.add_card))
-        bar.addStretch(1)
+        bar.addWidget(tools, 1)
+        top = Qt.AlignmentFlag.AlignTop
         self.mode_group = QButtonGroup(self)
         for i, (name, tip) in enumerate(
-            (("edit", "Edit"), ("view", "Split view"), ("document", "Preview"))
+            (("edit", _("Edit")), ("view", _("Split view")), ("document", _("Preview")))
         ):
-            b = tool_button(name, f"{tip} (Ctrl+E cycles)", checkable=True)
+            b = tool_button(name, _("{tip} (Ctrl+E cycles)").format(tip=tip), checkable=True)
             self.mode_group.addButton(b, i)
-            bar.addWidget(b)
+            bar.addWidget(b, 0, top)
         self.mode_group.idClicked.connect(self.set_view_mode)
         more = QToolButton()
         more.setIcon(icons.icon("more"))
-        more.setToolTip("More")
+        more.setToolTip(_("More"))
         more.setProperty("noindicator", True)
         more.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
         self.more_menu = QMenu(more)
         more.setMenu(self.more_menu)
-        bar.addWidget(more)
+        bar.addWidget(more, 0, top)
         layout.addLayout(bar)
 
         # Title, metadata and picture ------------------------------------
@@ -164,12 +187,12 @@ class NoteEditor(QWidget):
         titles.setSpacing(2)
         self.title = QLineEdit()
         self.title.setObjectName("TitleEdit")
-        self.title.setPlaceholderText("Untitled")
-        self.title.setAccessibleName("Title")
+        self.title.setPlaceholderText(_("Untitled"))
+        self.title.setAccessibleName(_("Title"))
         self.title.textEdited.connect(self._edited)
         self.title.returnPressed.connect(lambda: self.body.setFocus())
         titles.addWidget(self.title)
-        self.meta = label("", "caption")
+        self.meta = label("", "caption", wrap=True)
         self.meta.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         titles.addWidget(self.meta)
         head.addLayout(titles, 1)
@@ -177,20 +200,20 @@ class NoteEditor(QWidget):
         self.picture.setFixedSize(QSize(120, 80))
         self.picture.setScaledContents(False)
         self.picture.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.picture.setToolTip("Note picture (shown in the graph). Right-click to remove.")
+        self.picture.setToolTip(_("Note picture (shown in the graph). Right-click to remove."))
         self.picture.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.picture.customContextMenuRequested.connect(self._picture_menu)
         head.addWidget(self.picture)
         layout.addLayout(head)
 
         self.tags = TagEditor()
-        self.tags.tagsChanged.connect(lambda _: self._edited())
+        self.tags.tagsChanged.connect(lambda _unused: self._edited())
         layout.addWidget(self.tags)
 
         url_row = QHBoxLayout()
         self.url = QLineEdit()
-        self.url.setPlaceholderText("Source link (optional): https://… or a zotero:// item link")
-        self.url.setAccessibleName("Source link")
+        self.url.setPlaceholderText(_("Source link (optional): https://… or a zotero:// item link"))
+        self.url.setAccessibleName(_("Source link"))
         self.url.addAction(
             icons.icon("globe", theme.current().text_muted, 16),
             QLineEdit.ActionPosition.LeadingPosition,
@@ -198,7 +221,7 @@ class NoteEditor(QWidget):
         self.url.editingFinished.connect(self._url_finished)
         self.url.textEdited.connect(self._edited)
         url_row.addWidget(self.url, 1)
-        self.open_url = tool_button("open_external", "Open the source link", self._open_url)
+        self.open_url = tool_button("open_external", _("Open the source link"), self._open_url)
         url_row.addWidget(self.open_url)
         layout.addLayout(url_row)
 
@@ -210,7 +233,9 @@ class NoteEditor(QWidget):
         self.body.linkActivated.connect(self._follow_link)
         self.body.textChanged.connect(self._edited)
         self.body.textChanged.connect(self.inline_tag_timer.start)
-        self.body.imageError.connect(lambda msg: QMessageBox.warning(self, "Image not added", msg))
+        self.body.imageError.connect(
+            lambda msg: QMessageBox.warning(self, _("Image not added"), msg)
+        )
         self.body.fileLinkError.connect(self.statusMessage)
         self.preview = NotePreview(
             lambda name: self.window.vault.asset_path(name) if self.window.vault else None
@@ -219,11 +244,14 @@ class NoteEditor(QWidget):
         self.preview.newNoteRequested.connect(self.newNoteRequested)
         self.preview.fileRequested.connect(lambda path: self.window.reveal_file(path))
         self.preview.hovered.connect(self.statusMessage)
+        self.preview.taskToggled.connect(self._toggle_task)
+        self.preview.image_actions = self._image_actions
+        self.body.image_actions = self._image_actions
         self.split = QSplitter(Qt.Orientation.Horizontal)
         self.split.addWidget(self.body)
         self.split.addWidget(self.preview)
         self.split.setChildrenCollapsible(False)
-        self.tabs.addTab(self.split, icons.icon("notes"), "Note")
+        self.tabs.addTab(self.split, icons.icon("notes"), _("Note"))
 
         mind = QWidget()
         mind_layout = QVBoxLayout(mind)
@@ -234,72 +262,78 @@ class NoteEditor(QWidget):
         self.mindmap.openNote.connect(self.openNote)
         self.mindmap.linkNoteRequested.connect(self.mindmapLinkRequested)
         mind_bar.addWidget(
-            tool_button("add", "Add child idea (Tab)", self.mindmap.add_child, text="Add idea")
+            tool_button(
+                "add", _("Add child idea (Tab)"), self.mindmap.add_child, text=_("Add idea")
+            )
         )
         mind_bar.addWidget(
             tool_button(
                 "relationship",
-                "Build a mind map from this note's links",
+                _("Build a mind map from this note's links"),
                 self.mindmap_from_links,
-                text="From links",
+                text=_("From links"),
             )
         )
         mind_bar.addWidget(
-            tool_button("delete", "Delete selected idea (Del)", self.mindmap.delete_selected)
+            tool_button("delete", _("Delete selected idea (Del)"), self.mindmap.delete_selected)
         )
         mind_bar.addStretch(1)
-        mind_bar.addWidget(tool_button("fit", "Fit to window", self.mindmap.fit))
+        mind_bar.addWidget(tool_button("fit", _("Fit to window"), self.mindmap.fit))
         export = QToolButton()
         export.setIcon(icons.icon("export"))
-        export.setToolTip("Export mind map")
+        export.setToolTip(_("Export mind map"))
         export.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
         export_menu = QMenu(export)
-        export_menu.addAction("PNG image…", lambda: self._export_mindmap("png"))
-        export_menu.addAction("SVG image…", lambda: self._export_mindmap("svg"))
-        export_menu.addAction("FreeMind / XMind (.mm)…", lambda: self._export_mindmap("mm"))
+        export_menu.addAction(_("PNG image…"), lambda: self._export_mindmap("png"))
+        export_menu.addAction(_("SVG image…"), lambda: self._export_mindmap("svg"))
+        export_menu.addAction(_("FreeMind / XMind (.mm)…"), lambda: self._export_mindmap("mm"))
         export.setMenu(export_menu)
         mind_bar.addWidget(export)
         mind_layout.addLayout(mind_bar)
         mind_layout.addWidget(self.mindmap, 1)
         mind_layout.addWidget(
             label(
-                "Tab adds a child, Enter a sibling, F2 renames, Del removes. "
-                "Right-click an idea to link it to a note.",
+                _(
+                    "Tab adds a child, Enter a sibling, F2 renames, Del removes. "
+                    "Right-click an idea to link it to a note."
+                ),
                 "caption",
+                wrap=True,
             )
         )
-        self.tabs.addTab(mind, icons.icon("mindmap"), "Mind map")
+        self.tabs.addTab(mind, icons.icon("mindmap"), _("Mind map"))
 
         cards = QWidget()
         cards_layout = QVBoxLayout(cards)
         cards_layout.setContentsMargins(0, 8, 0, 0)
         cards_bar = QHBoxLayout()
         cards_bar.addWidget(
-            tool_button("add", "Add flashcard", self.add_card, text="Add flashcard")
+            tool_button("add", _("Add flashcard"), self.add_card, text=_("Add flashcard"))
         )
-        cards_bar.addWidget(tool_button("edit", "Edit flashcard", self.edit_card))
-        cards_bar.addWidget(tool_button("delete", "Delete flashcard", self.delete_card))
+        cards_bar.addWidget(tool_button("edit", _("Edit flashcard"), self.edit_card))
+        cards_bar.addWidget(tool_button("delete", _("Delete flashcard"), self.delete_card))
         cards_bar.addStretch(1)
         cards_layout.addLayout(cards_bar)
         self.cards = QListWidget()
-        self.cards.setAccessibleName("Flashcards")
+        self.cards.setAccessibleName(_("Flashcards"))
         self.cards.setWordWrap(True)
-        self.cards.itemDoubleClicked.connect(lambda _: self.edit_card())
+        self.cards.itemDoubleClicked.connect(lambda _unused: self.edit_card())
         cards_layout.addWidget(self.cards, 1)
         cards_layout.addWidget(
             label(
-                "Cards also come from the note text: write “Q: …” then “A: …”, or "
-                "hide words with {{c1::cloze}}.",
+                _(
+                    "Cards also come from the note text: write “Q: …” then “A: …”, or "
+                    "hide words with {{c1::cloze}}."
+                ),
                 "caption",
                 wrap=True,
             )
         )
-        self.tabs.addTab(cards, icons.icon("cards"), "Flashcards")
+        self.tabs.addTab(cards, icons.icon("cards"), _("Flashcards"))
         layout.addWidget(self.tabs, 1)
 
         self._build_more_menu()
-        self.set_view_mode(0)
-        self.load(None)
+        self.set_view_mode(1)
 
     # --- loading and saving -------------------------------------------------
 
@@ -315,7 +349,7 @@ class NoteEditor(QWidget):
         self.body.setPlainText(note.body)
         self.url.setText(note.url)
         self.tags.set_tags(self.window.vault.manual_tags(note.id), extract_hashtags(note.body))
-        self.tags.set_known_tags([t for t, _ in self.window.vault.all_tags()])
+        self.tags.set_known_tags([t for t, _unused in self.window.vault.all_tags()])
         self.mindmap.set_mindmap(note.mindmap)
         self._loading = False
         self._dirty = False
@@ -344,6 +378,9 @@ class NoteEditor(QWidget):
         self.note.tags = sorted(set(self.tags.tags()) | set(extract_hashtags(self.note.body)))
         url = self.url.text().strip()
         self.note.url = (normalize_source_url(url) or "") if url else ""
+        if self.note.image and self.note.image not in referenced_assets(self.note.body):
+            self.note.image = ""
+            self._refresh_picture()
         return self.note
 
     def flush(self) -> None:
@@ -360,9 +397,27 @@ class NoteEditor(QWidget):
     def _refresh_meta(self) -> None:
         n = self.note
         words = len(strip_markdown(n.body).split())
+        alarm = ""
+        if n.alarm:
+            try:
+                when = datetime.fromisoformat(n.alarm).astimezone()
+                alarm = "  ·  " + _("Alarm {when}").format(
+                    when=QLocale().toString(
+                        when.replace(tzinfo=None), QLocale.FormatType.ShortFormat
+                    )
+                )
+            except ValueError:
+                alarm = ""
         self.meta.setText(
-            f"Created {friendly_time(n.created)}  ·  Edited {friendly_time(n.modified)}  ·  "
-            f"{words} words  ·  ID {n.id}"
+            _(
+                "Created {friendly_time}  ·  Edited {friendly_time2}  ·  {words} words  ·  ID {id}"
+            ).format(
+                friendly_time=friendly_time(n.created),
+                friendly_time2=friendly_time(n.modified),
+                words=words,
+                id=n.id,
+            )
+            + alarm
         )
 
     def _refresh_preview(self) -> None:
@@ -397,7 +452,9 @@ class NoteEditor(QWidget):
         elif is_openable_url(target):  # web pages, e-mail and Zotero items only
             QDesktopServices.openUrl(QUrl(target))
         else:
-            self.statusMessage.emit("Only web, e-mail, Zotero and local file links can be opened.")
+            self.statusMessage.emit(
+                _("Only web, e-mail, Zotero and local file links can be opened.")
+            )
 
     # --- view modes -----------------------------------------------------
 
@@ -428,15 +485,15 @@ class NoteEditor(QWidget):
     def insert_image(self) -> None:
         if self.note is None:
             return
-        path, _ = QFileDialog.getOpenFileName(
-            self, "Insert image", "", "Images (*.png *.jpg *.jpeg *.gif *.webp *.bmp)"
+        path, _unused = QFileDialog.getOpenFileName(
+            self, _("Insert image"), "", _("Images (*.png *.jpg *.jpeg *.gif *.webp *.bmp)")
         )
         if not path:
             return
         try:
             asset = self.window.vault.add_image_file(path)
         except (UnsafeInputError, OSError) as exc:
-            QMessageBox.warning(self, "Image not added", str(exc))
+            QMessageBox.warning(self, _("Image not added"), str(exc))
             return
         if not self.note.image:
             self.note.image = asset
@@ -444,30 +501,81 @@ class NoteEditor(QWidget):
         name = path.replace("\\", "/").rsplit("/", 1)[-1].rsplit(".", 1)[0]
         self.body.insert_block(f"![{name}](asset:{asset})\n")
 
+    # --- checklists, formulas, alarms, title image --------------------------------
+
+    def _toggle_task(self, index: int) -> None:
+        text = self.body.toPlainText()
+        tasks = find_tasks(text)
+        if not 0 <= index < len(tasks):
+            return
+        start, end, checked = tasks[index]
+        utf16 = lambda s: len(s.encode("utf-16-le")) // 2  # noqa: E731 - Qt positions
+        cursor = QTextCursor(self.body.document())
+        cursor.setPosition(utf16(text[:start]))
+        cursor.setPosition(utf16(text[:end]), QTextCursor.MoveMode.KeepAnchor)
+        cursor.insertText("[ ]" if checked else "[x]")
+
+    def insert_formula(self) -> None:
+        if self.note is None:
+            return
+        selected = self.body.textCursor().selectedText().strip("$ ")
+        dialog = FormulaDialog(self, selected)
+        if dialog.exec():
+            _latex, display = dialog.value()
+            if display:
+                self.body.insert_block(dialog.markdown() + "\n")
+            else:
+                self.body.textCursor().insertText(dialog.markdown())
+            self.body.setFocus()
+
+    def set_alarm(self) -> None:
+        if self.note is None:
+            return
+        dialog = AlarmDialog(self, self.note.alarm)
+        if not dialog.exec():
+            return
+        self.note.alarm = "" if dialog.removed else dialog.iso()
+        self._dirty = True
+        self.flush()
+        self.window.alarms_changed()
+
+    def _image_actions(self, asset: str) -> list[tuple[str, Callable[[], None]]]:
+        if self.note is None:
+            return []
+        if self.note.image == asset:
+            return [(_("Remove title image"), self._remove_picture)]
+        return [(_("Use as title image"), lambda: self._set_picture(asset))]
+
+    def _set_picture(self, asset: str) -> None:
+        if self.note:
+            self.note.image = asset
+            self._refresh_picture()
+            self._edited()
+
     def insert_file_link(self) -> None:
         """Link a file where it is (nothing is copied); clicking shows it in File Explorer."""
         if self.note is None:
             return
-        path, _ = QFileDialog.getOpenFileName(self, "Link to a file")
+        path, _unused = QFileDialog.getOpenFileName(self, _("Link to a file"))
         if path:
             self.body.insert_file_link(path)
 
     def insert_web_link(self) -> None:
         selected = self.body.textCursor().selectedText()
         dialog = TextPromptDialog(
-            "Insert web link", "Address (http, https or mailto):", "", self, "Insert"
+            _("Insert web link"), _("Address (http, https or mailto):"), "", self, _("Insert")
         )
         if dialog.exec():
             url = normalize_web_url(dialog.value())
             if url is None:
                 QMessageBox.warning(
-                    self, "Link not inserted", "Only http(s) and mailto links are allowed."
+                    self, _("Link not inserted"), _("Only http(s) and mailto links are allowed.")
                 )
                 return
             self.body.textCursor().insertText(f"[{selected or url}]({url})")
 
     def insert_note_link(self, title: str, link_type: str = "related") -> None:
-        prefix = "" if link_type == "related" else f"{link_type}:: "
+        prefix = "" if link_type == "related" else f"{link_type}::"
         self.body.textCursor().insertText(f"{prefix}[[{title}]]")
         self.body.setFocus()
 
@@ -486,7 +594,7 @@ class NoteEditor(QWidget):
         vault = self.window.vault
         links = vault.links_from(self.note.id) + vault.links_to(self.note.id)
         if not links:
-            self.statusMessage.emit("This note has no links yet. Link it to other notes first.")
+            self.statusMessage.emit(_("This note has no links yet. Link it to other notes first."))
             return
         types = vault.link_type_map()
         titles = vault.titles()
@@ -525,8 +633,8 @@ class NoteEditor(QWidget):
             self.note.mindmap
             and QMessageBox.question(
                 self,
-                "Replace mind map",
-                "Replace the current mind map with one built from this note's links?",
+                _("Replace mind map"),
+                _("Replace the current mind map with one built from this note's links?"),
             )
             != QMessageBox.StandardButton.Yes
         ):
@@ -536,8 +644,11 @@ class NoteEditor(QWidget):
         self.tabs.setCurrentIndex(1)
         if left_out:
             self.statusMessage.emit(
-                f"Left out {left_out} link{'s' if left_out != 1 else ''}: "
-                f"a mind map holds at most {MAX_MINDMAP_NODES} ideas."
+                n_(
+                    "Left out {n} link: a mind map holds at most {limit} ideas.",
+                    "Left out {n} links: a mind map holds at most {limit} ideas.",
+                    left_out,
+                ).format(n=left_out, limit=MAX_MINDMAP_NODES)
             )
 
     def _mindmap_changed(self, data) -> None:
@@ -548,18 +659,18 @@ class NoteEditor(QWidget):
 
     def _export_mindmap(self, kind: str) -> None:
         if self.note is None or not self.note.mindmap:
-            self.statusMessage.emit("This note has no mind map to export.")
+            self.statusMessage.emit(_("This note has no mind map to export."))
             return
         from zettelapp.core.export import export_mindmap
         from zettelapp.core.security import safe_filename
 
         filters = {
-            "png": "PNG image (*.png)",
-            "svg": "SVG image (*.svg)",
-            "mm": "FreeMind mind map (*.mm)",
+            "png": _("PNG image (*.png)"),
+            "svg": _("SVG image (*.svg)"),
+            "mm": _("FreeMind mind map (*.mm)"),
         }
-        name = safe_filename(self.title.text() or "Mind map") + "." + kind
-        path, _ = QFileDialog.getSaveFileName(self, "Export mind map", name, filters[kind])
+        name = safe_filename(self.title.text() or _("Mind map")) + "." + kind
+        path, _unused = QFileDialog.getSaveFileName(self, _("Export mind map"), name, filters[kind])
         if not path:
             return
         if kind == "png":
@@ -568,7 +679,7 @@ class NoteEditor(QWidget):
             self.mindmap.render_svg(path)
         else:
             export_mindmap(self.note.mindmap, path)
-        self.window.notify_file(path, "Mind map exported")
+        self.window.notify_file(path, _("Mind map exported"))
 
     # --- picture ------------------------------------------------------------
 
@@ -587,7 +698,7 @@ class NoteEditor(QWidget):
 
     def _picture_menu(self, pos) -> None:
         menu = QMenu(self)
-        menu.addAction("Remove note picture", self._remove_picture)
+        menu.addAction(_("Remove note picture"), self._remove_picture)
         menu.exec(self.picture.mapToGlobal(pos))
 
     def _remove_picture(self) -> None:
@@ -602,7 +713,7 @@ class NoteEditor(QWidget):
         text = self.url.text().strip()
         if text and normalize_source_url(text) is None:
             self.statusMessage.emit(
-                "Use an http(s), mailto or zotero:// item link as the source link."
+                _("Use an http(s), mailto or zotero:// item link as the source link.")
             )
             self.url.setStyleSheet(
                 f"QLineEdit {{ border-bottom: 2px solid {theme.current().danger}; }}"
@@ -627,14 +738,16 @@ class NoteEditor(QWidget):
         for card in cards:
             front = card.front if card.kind == "basic" else card.front.replace("\n", " ")
             text = f"{front}\n→ {card.back}" if card.kind == "basic" else f"{front}"
-            badge = "  ·  from note text" if card.source == "inline" else ""
+            badge = "  ·  " + _("from note text") if card.source == "inline" else ""
             item = QListWidgetItem(
                 icons.icon("cards"),
-                text + ("\n" + ("Cloze" if card.kind == "cloze" else "Q&A") + badge),
+                text + ("\n" + (_("Cloze") if card.kind == "cloze" else _("Q&A")) + badge),
             )
             item.setData(Qt.ItemDataRole.UserRole, card)
             self.cards.addItem(item)
-        self.tabs.setTabText(2, f"Flashcards ({len(cards)})" if cards else "Flashcards")
+        self.tabs.setTabText(
+            2, _("Flashcards ({len})").format(len=len(cards)) if cards else _("Flashcards")
+        )
 
     def _selected_card(self) -> Flashcard | None:
         item = self.cards.currentItem()
@@ -657,8 +770,8 @@ class NoteEditor(QWidget):
         if card.source == "inline":
             QMessageBox.information(
                 self,
-                "Flashcard from text",
-                "This card comes from the note text (Q:/A: or {{c1::…}}). Edit it there.",
+                _("Flashcard from text"),
+                _("This card comes from the note text (Q:/A: or {{c1::…}}). Edit it there."),
             )
             return
         if CardDialog(card, self).exec():
@@ -670,7 +783,7 @@ class NoteEditor(QWidget):
         if card is None or card.source == "inline":
             return
         if (
-            QMessageBox.question(self, "Delete flashcard", "Delete this flashcard?")
+            QMessageBox.question(self, _("Delete flashcard"), _("Delete this flashcard?"))
             == QMessageBox.StandardButton.Yes
         ):
             self.window.vault.delete_card(card.id)
@@ -680,35 +793,33 @@ class NoteEditor(QWidget):
 
     def _build_more_menu(self) -> None:
         m = self.more_menu
-        m.addAction(icons.icon("copy"), "Copy note link", self._copy_link)
+        m.addAction(icons.icon("copy"), _("Copy note link"), self._copy_link)
         m.addAction(
             icons.icon("copy"),
-            "Copy note ID",
+            _("Copy note ID"),
             lambda: QGuiApplication.clipboard().setText(self.note.id if self.note else ""),
         )
         m.addSeparator()
         m.addAction(
             icons.icon("graph"),
-            "Show in graph",
+            _("Show in graph"),
             lambda: self.window.show_local_graph(self.note.id if self.note else None),
         )
         m.addAction(
             icons.icon("export"),
-            "Export this note and its links…",
+            _("Export this note and its links…"),
             lambda: self.window.export_dialog("subgraph"),
         )
         m.addAction(
             icons.icon("review"),
-            "Quiz on this note's neighbourhood",
+            _("Quiz on this note's neighbourhood"),
             lambda: self.window.quiz_current(),
         )
         m.addAction(
-            icons.icon("chat"), "Ask about this note…", lambda: self.window.ask_about_current()
+            icons.icon("chat"), _("Ask about this note…"), lambda: self.window.ask_about_current()
         )
-        m.addSeparator()
-        m.addAction(icons.icon("delete"), "Move to Trash", lambda: self.window.trash_current())
 
     def _copy_link(self) -> None:
         if self.note:
             QGuiApplication.clipboard().setText(f"[[{self.note.title or self.note.id}]]")
-            self.statusMessage.emit("Copied a [[link]] to this note.")
+            self.statusMessage.emit(_("Copied a [[link]] to this note."))

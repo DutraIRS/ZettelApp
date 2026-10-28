@@ -22,6 +22,7 @@ from pathlib import Path
 from zettelapp.core.models import Flashcard, Note
 from zettelapp.core.render import NoteRenderer
 from zettelapp.core.security import app_url, is_valid_asset_name
+from zettelapp.i18n import _
 
 BASIC_MODEL_ID = 1_733_870_101
 CLOZE_MODEL_ID = 1_733_870_102
@@ -204,12 +205,14 @@ class AnkiConnect:
                 data = json.loads(response.read(20_000_000).decode("utf-8"))
         except (urllib.error.URLError, OSError) as exc:
             raise AnkiConnectError(
-                "Could not reach Anki. Make sure Anki is running with the AnkiConnect add-on installed."
+                _(
+                    "Could not reach Anki. Make sure Anki is running with the AnkiConnect add-on installed."
+                )
             ) from exc
         except ValueError as exc:
-            raise AnkiConnectError("Anki sent an unexpected response.") from exc
+            raise AnkiConnectError(_("Anki sent an unexpected response.")) from exc
         if not isinstance(data, dict) or "result" not in data or "error" not in data:
-            raise AnkiConnectError("Anki sent an unexpected response.")
+            raise AnkiConnectError(_("Anki sent an unexpected response."))
         if data["error"]:
             raise AnkiConnectError(str(data["error"]))
         return data["result"]

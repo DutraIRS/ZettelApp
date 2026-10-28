@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="노트는 Markdown으로 써요. bold, italic, # headings, 목록, &gt; quotes,  code , 펜스 코드 블록, 표, ~~strikethrough~~를 쓸 수 있어요. 편집기 위의 도구 모음에서 자주 쓰는 서식을 삽입할 수 있고, Ctrl+B / Ctrl+I도 평소처럼 동작해요. Enter를 누르">
+<title>노트와 링크 – ZettelApp 문서</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">본문으로 건너뛰기</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">기능</a></li>
+        <li><a href="tutorial.html">튜토리얼</a></li>
+        <li><a href="./">문서</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 후원</a></li>
+        <li><a class="nav-cta" href="../#download">다운로드</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">언어</span></summary><ul class="lang-switch-panel" aria-label="언어"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko" aria-current="true">한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="후원"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">후원</span></a>
+      <a class="hbtn cta" href="../#download">다운로드</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">메뉴</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">기능</a></li>
+          <li><a href="tutorial.html">튜토리얼</a></li>
+          <li><a href="./">문서</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="문서">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">문서</span><span class="docs-menu-current">노트와 링크</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>문서</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="노트와-링크">노트와 링크</h1>
+<h2 id="노트-쓰기">노트 쓰기</h2>
+<p>노트는 <strong>Markdown</strong>으로 써요. <code>**bold**</code>, <code>*italic*</code>, <code># headings</code>, 목록, <code>&gt; quotes</code>,
+<code>`code`</code>, 펜스 코드 블록, 표, <code>~~strikethrough~~</code>를 쓸 수 있어요. 편집기 위의 도구 모음에서 자주 쓰는
+서식을 삽입할 수 있고, Ctrl+B / Ctrl+I도 평소처럼 동작해요. Enter를 누르면 목록이 이어져요.</p>
+<p>편집기에는 세 가지 모드가 있어요(Ctrl+E로 순서대로 전환). <strong>편집</strong>, <strong>분할</strong>(텍스트와 미리 보기를 나란히),
+<strong>미리 보기</strong>예요.</p>
+<p>안전을 위해 노트 안의 원시 HTML은 텍스트로 표시되고 렌더링되지 않아요. 미리 보기의 링크는 웹 페이지(<code>http</code>, <code>https</code>),
+이메일(<code>mailto</code>), 노트, Zotero 항목, 로컬 파일(파일 탐색기에 표시, <a href="#links-to-local-files">로컬 파일 링크</a> 참고)만
+열어요. <a href="privacy-and-security.html">개인정보 보호와 보안</a>을 참고하세요.</p>
+<h3 id="링크-따라가기">링크 따라가기</h3>
+<ul>
+<li><strong>편집기에서</strong>는 <strong>Ctrl+클릭</strong>으로 <code>[[note link]]</code>(노트가 아직 없으면 새로 만들어요), 웹·이메일·Zotero 링크,
+로컬 파일 링크, <code>#tag</code>(해당 태그가 있는 노트를 나열해요)를 따라가요. 텍스트에 마우스를 올리면 클릭 시 어떻게
+되는지 툴팁으로 알려 줘요. 그냥 클릭하면 커서만 놓이므로 링크 텍스트를 계속 편집할 수 있어요.</li>
+<li><strong>미리 보기에서</strong>는 일반 클릭으로 링크를 따라가요.</li>
+</ul>
+<h3 id="로컬-파일-링크">로컬 파일 링크</h3>
+<p><em>삽입 ▸ 파일 링크…</em>(또는 도구 모음의 폴더 버튼)로 파일을 고르면 <code>[report.pdf](file:///C:/Users/me/Documents/report.pdf)</code>
+같은 링크가 삽입돼요. 이미지가 아닌 파일을 노트 본문에 끌어다 놓아도 같아요. 파일은 있는 자리에서 링크될 뿐
+볼트로 복사되지 않아요.</p>
+<p>미리 보기에서 링크를 클릭하거나 편집기에서 Ctrl+클릭하면 <strong>해당 파일이 선택된 파일 탐색기</strong>가 열려요. 파일 자체는
+열리거나 실행되지 않아요. 로컬 드라이브의 경로만 허용돼요. <code>\\server\share\file.pdf</code> 같은 네트워크(UNC) 경로는
+조회하는 과정에서 Windows 자격 증명이 해당 서버로 전송될 수 있어서 거부돼요.</p>
+<p>모든 노트에는 다음이 있어요.</p>
+<ul>
+<li><strong>제목</strong>(맨 위의 큰 입력란)</li>
+<li><strong>ID</strong>: <code>20261027153012</code> 같은 타임스탬프이며 제목 아래에 표시돼요(<em>더 보기 ▸ 노트 ID 복사</em>)</li>
+<li>선택 사항인 <strong>태그</strong>, <strong>출처 링크</strong>, <strong>그림</strong>, <strong>마인드맵</strong>, <strong>플래시카드</strong></li>
+</ul>
+<h2 id="노트-간-링크">노트 간 링크</h2>
+<h3 id="위키-링크">위키 링크</h3>
+<p><code>[[</code>를 입력하고 제목을 입력하기 시작하면 ZettelApp이 노트에서 자동으로 완성해 줘요. 노트 안에서 다음은 모두 링크예요.</p>
+<pre><code class="language-markdown">See [[Forgetting curve]].
+See [[20261027153012]].              (by ID)
+See [[Forgetting curve|the curve]].  (custom link text)
+</code></pre>
+<p>Ctrl+K(<em>삽입 ▸ 노트에 링크…</em>)는 제목과 텍스트를 검색하고 링크 유형을 고를 수 있는 선택기를 열어요. 아직 없는 제목으로의
+링크는 미리 보기에서 회색으로 표시돼요. 클릭하면 그 노트가 만들어져요. 나중에 노트를 만들거나 이름을 바꾸면 그
+제목을 언급한 링크가 업데이트돼요.</p>
+<h3 id="유형이-있는-링크">유형이 있는 링크</h3>
+<p>링크로 두 노트가 <strong>어떻게</strong> 관련되는지 표현할 수 있어요. 링크 앞에 링크 유형과 <code>::</code>를 붙이세요.</p>
+<pre><code class="language-markdown">supports:: [[Forgetting curve]]
+contradicts:: [[Rereading notes]]
+part_of:: [[Zettelkasten method]]
+</code></pre>
+<p>기본 제공 링크 유형은 다음과 같아요.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>유형</th>
+<th>이름</th>
+<th>역방향 이름</th>
+<th>방향 있음</th>
+<th>선</th>
+<th>화살표 끝</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>related</code></td>
+<td>관련</td>
+<td>관련</td>
+<td>아니요</td>
+<td>실선, 회색</td>
+<td>없음</td>
+</tr>
+<tr>
+<td><code>supports</code></td>
+<td>뒷받침</td>
+<td>뒷받침하는 노트</td>
+<td>예</td>
+<td>파선, 녹색</td>
+<td>채워진 삼각형</td>
+</tr>
+<tr>
+<td><code>contradicts</code></td>
+<td>반박</td>
+<td>반박</td>
+<td>아니요</td>
+<td>점선, 빨강</td>
+<td>없음</td>
+</tr>
+<tr>
+<td><code>extends</code></td>
+<td>확장</td>
+<td>확장한 노트</td>
+<td>예</td>
+<td>파선-점선, 파랑</td>
+<td>채워진 삼각형</td>
+</tr>
+<tr>
+<td><code>example</code></td>
+<td>예시</td>
+<td>예시 있음</td>
+<td>예</td>
+<td>파선-점-점선, 호박색</td>
+<td>원</td>
+</tr>
+<tr>
+<td><code>part_of</code></td>
+<td>상위 항목</td>
+<td>포함</td>
+<td>예</td>
+<td>긴 파선, 보라</td>
+<td>마름모</td>
+</tr>
+<tr>
+<td><code>cites</code></td>
+<td>인용</td>
+<td>인용한 노트</td>
+<td>예</td>
+<td>실선, 청록</td>
+<td>열린 화살표</td>
+</tr>
+</tbody>
+</table></div>
+<p>이것은 새 볼트의 모양이며 바꿀 수 있어요(아래 참고). 이전 버전으로 만든 볼트는 기존 선 모양을 유지해요.</p>
+<p>일반 <code>[[link]]</code>는 <em>관련</em>이에요.</p>
+<h3 id="방향-있는-링크와-방향-없는-링크">방향 있는 링크와 방향 없는 링크</h3>
+<p><strong>방향이 있는</strong> 유형은 양쪽에서 다르게 읽혀요. 노트 A가 노트 B를 <em>뒷받침</em>하면, B의 백링크에는 A가
+<em>뒷받침하는 노트</em>로 나와요. 방향 있는 링크는 그래프에서 화살표 끝이 붙고 내보내기에서도 방향이 유지돼요.
+<em>관련</em>이나 <em>반박</em> 같은 <strong>방향 없는</strong> 유형은 양쪽에서 똑같이 읽혀요.</p>
+<p>방향 있는 링크를 반대로 만들었다면 사이드 패널에서 마우스 오른쪽 버튼으로 클릭하고 <strong>방향 반대로</strong>를 선택하세요.
+본문에 쓴 링크는 텍스트를 편집해서 뒤집어요.</p>
+<h3 id="사이드-패널의-링크">사이드 패널의 링크</h3>
+<p>사이드 패널에는 노트의 <strong>링크</strong>(나가는 링크)와 <strong>백링크</strong>(들어오는 링크)가 각각의 유형과 함께 나열돼요.</p>
+<ul>
+<li>**링크 추가…**는 본문에 쓰지 않고 링크를 만들어요.</li>
+<li>링크를 마우스 오른쪽 버튼으로 클릭하면 상대 노트를 열거나, 링크 유형을 바꾸거나, 방향을 반대로 하거나, 제거할 수
+있어요. 본문에 쓴 링크는 텍스트를 편집해서 제거해요.</li>
+<li>노트 목록에서 다른 노트를 마우스 오른쪽 버튼으로 클릭하고 <strong>열린 노트에서 링크 유형</strong>을 선택하세요.</li>
+</ul>
+<h3 id="나만의-링크-유형">나만의 링크 유형</h3>
+<p><em>도구 ▸ 옵션 ▸ 링크 유형</em>에서 링크 유형을 추가하고, 이름을 바꾸고, 스타일을 바꾸고, 제거할 수 있어요. 목록에서 유형을
+고르고 목록 옆에서 바꾸세요.</p>
+<ul>
+<li><strong>이름</strong>과 <strong>역방향 이름</strong>: 출발 노트와 도착 노트에서 링크가 어떻게 읽히는지예요. 역방향 이름은 방향 있는 유형에서만
+쓰여요.</li>
+<li><strong>방향 있음</strong>: 유형이 양쪽에서 다르게 읽히고 화살표 끝이 붙는지 여부예요.</li>
+<li><strong>색상</strong>: 색상 버튼을 클릭해 원하는 색을 고르세요.</li>
+<li><strong>선</strong>: 실선, 파선, 점선, 파선-점선, 파선-점-점선, 긴 파선 중에서 고르세요.</li>
+<li><strong>화살표 끝</strong>: 방향 있는 링크가 도착하는 곳에 그려지는 끝 모양이에요. 채워진 삼각형, 열린 화살표, 마름모, 원, 막대가 있어요.</li>
+</ul>
+<p>미리 보기에는 링크로 이어진 두 노트와 링크 이름, 반대편에서 읽히는 모습이 표시돼요. 이 스타일은 링크가 나타나는
+모든 곳에서 쓰여요. 그래프와 범례, 사이드 패널, 링크 선택기, 웹사이트·GraphML·Graphviz 내보내기예요. 색맹인
+분들과 종이 출력에서도 유형을 쉽게 구분할 수 있도록 각 유형에 색뿐 아니라 고유한 선 모양도 지정하세요. 새 유형은
+다른 유형이 거의 쓰지 않는 색과 선으로 시작해요.</p>
+<p>본문에서는 미리 보기 아래에 표시되는 유형의 id를 사용하세요(예: &quot;Inspired by&quot;라는 유형은 <code>inspired_by::</code>가 돼요).
+id는 유형을 만들 때 정해지므로, 유형의 이름을 바꿔도 노트에 쓴 링크는 깨지지 않아요. 직접 만든 유형을 제거하면 그
+링크는 <em>관련</em> 링크로 바뀌므로 아무것도 잃지 않아요. 기본 제공 유형은 이름과 스타일을 바꿀 수 있지만 제거할 수 없어요.</p>
+<h2 id="태그">태그</h2>
+<p>제목 아래의 태그 입력란에 태그를 추가하거나(각각 입력 후 Enter), <strong>본문에서</strong> <code>#welcome</code>이나 <code>#math/algebra</code>처럼
+해시 기호로 쓰세요. 태그는 소문자이며 <code>math/algebra</code>처럼 슬래시로 중첩할 수 있어요. <code>math</code>로 필터링하면
+<code>math/algebra</code> 태그가 달린 노트도 찾아요.
+노트 목록 위의 태그 필터를 사용하거나 검색창에 <code>tag:name</code>을 입력하세요.</p>
+<p>본문에 쓴 태그는 진짜 태그이며 <em>태그 추가</em> 상자 옆에 <strong>윤곽선 칩</strong>으로 표시돼요. 본문에서 <code>#tag</code>를 지우면 사라져요.
+<code>#tag</code>는 코드 안, 링크 대상 안, <code>[[#headings]]</code>에서는 무시돼요. <em>태그 추가</em> 상자에 입력한 태그는 별개예요. ✕로 제거할
+때까지 남아 있어요. 편집기에서 <code>#tag</code>를 Ctrl+클릭하면 그 태그가 있는 노트가 나열돼요.</p>
+<h2 id="출처-링크">출처 링크</h2>
+<p>지구본 아이콘이 있는 입력란에는 노트의 <strong>출처</strong>를 넣어요. 웹 페이지(<code>https://…</code>), 이메일 주소, 또는 Zotero 항목
+(<code>zotero://select/library/items/…</code>)이에요. 옆의 버튼이 링크를 열어요. 다른 종류의 링크는 거부돼요. Zotero 라이브러리에서
+바로 노트를 만들려면 <a href="zotero.html">Zotero</a>를 참고하세요.</p>
+<h2 id="이미지">이미지</h2>
+<p><em>삽입 ▸ 이미지…</em>(Ctrl+Shift+I)로, 클립보드에서 <strong>붙여넣기</strong>로, 또는 이미지 파일을 편집기에 <strong>끌어다 놓기</strong>로
+이미지를 삽입해요. 지원 형식은 PNG, JPEG, GIF, WebP, BMP이며 최대 25 MB예요. SVG는 스크립트를 담을 수 있어서
+의도적으로 거부돼요.</p>
+<p>이미지는 파일 이름이 아니라 내용으로 검사되고, 내용에서 얻은 이름으로 볼트의 <code>assets</code> 폴더에 한 번만 저장되며, 다음처럼
+참조돼요.</p>
+<pre><code class="language-markdown">![Diagram](asset:3f2a9c0b1d4e5f6a7b8c.png)
+</code></pre>
+<p>노트에 처음 추가한 이미지가 <strong>제목 이미지</strong>가 돼요. 노트 목록에서는 작은 둥근 썸네일로, 그래프에서는 노트의 원 안에
+표시돼요. 편집기나 미리 보기에서 이미지를 마우스 오른쪽 버튼으로 클릭하고 <em>제목 이미지로 사용</em>을 선택해 다른 이미지를
+고르거나, <em>제목 이미지 제거</em>를 선택해 제목 이미지를 없앨 수 있어요. 노트 본문에서 제목 이미지를 지우면 제목
+이미지 지정도 함께 해제돼요.</p>
+<h2 id="체크리스트">체크리스트</h2>
+<p>줄을 <code>- [ ]</code>로 시작하거나(또는 도구 모음의 체크리스트 버튼을 누르면) 할 일이 만들어져요. <code>- [x]</code>는 완료된 할 일이에요.
+미리 보기에서 상자를 클릭하면 체크돼요. 할 일의 끝에서 Enter를 누르면 다음 할 일이 시작되고, 빈 할 일에서 Enter를 누르면
+목록이 끝나요.</p>
+<h2 id="알람">알람</h2>
+<p>알람 버튼(또는 <em>삽입 ▸ 알람…</em>)을 눌러 노트에 날짜와 선택적으로 시간을 설정하세요. 시간이 되면 ZettelApp이 알림을
+표시하며, 클릭하면 노트가 열려요. 알림을 받으려면 ZettelApp이 실행 중이어야 하고, 앱이 닫혀 있는 동안 시간이 된
+알람은 볼트를 연 직후에 울려요. 알람이 있는 노트는 노트 목록에 종 모양이 표시돼요. 같은 대화 상자의 <em>알람 제거</em>로
+지울 수 있어요.</p>
+<h2 id="수식">수식</h2>
+<p>달러 기호 사이에 LaTeX를 쓰세요. <code>$E = mc^2$</code>는 인라인 수식이고 <code>$$\int_0^1 x^2\,dx$$</code>는 별도 줄의 수식이에요.
+수식 버튼(<em>삽입 ▸ 수식…</em>)은 실시간 미리 보기가 있는 대화 상자를 열어요. 수식은 미리 보기에서 그려지며, 내보내기에서는
+LaTeX 소스가 유지돼요.</p>
+<h2 id="마인드맵">마인드맵</h2>
+<p>각 노트에는 마인드맵을 담을 수 있어요(<strong>마인드맵</strong> 탭 또는 <em>삽입 ▸ 마인드맵</em>). 가지는 자동으로 색이 입혀져요.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>키</th>
+<th>동작</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tab</td>
+<td>하위 아이디어 추가</td>
+</tr>
+<tr>
+<td>Enter</td>
+<td>같은 단계 아이디어 추가</td>
+</tr>
+<tr>
+<td>F2 또는 더블 클릭</td>
+<td>이름 바꾸기</td>
+</tr>
+<tr>
+<td>Del</td>
+<td>선택한 아이디어 삭제</td>
+</tr>
+<tr>
+<td>화살표 키</td>
+<td>선택 항목 이동</td>
+</tr>
+<tr>
+<td>마우스 휠 / 끌기</td>
+<td>확대/축소 / 이동</td>
+</tr>
+</tbody>
+</table></div>
+<p>아이디어를 마우스 오른쪽 버튼으로 클릭해 <strong>노트에 연결</strong>하세요. 연결된 아이디어에는 링크 아이콘이 표시되고 클릭하면 그
+노트가 열려요. <strong>링크로 만들기</strong>는 노트의 링크로 마인드맵을 만들어요. 링크 유형별로 묶이고, 링크된 노트의 링크는 한 단계
+더 깊이 표시돼요. <strong>내보내기</strong>는 마인드맵을 PNG 또는 SVG 이미지나 FreeMind 파일(<code>.mm</code>)로 저장해요. FreeMind,
+Freeplane, XMind에서 열 수 있어요.</p>
+<h2 id="플래시카드">플래시카드</h2>
+<p>플래시카드는 노트를 복습 자료로 바꿔 줘요(<a href="review-and-anki.html">복습, 퀴즈, Anki</a> 참고). 만드는 방법은 두 가지예요.</p>
+<p><strong>노트 본문에서.</strong> 이렇게 쓰면 자동으로 카드가 되고 편집하는 대로 업데이트돼요.</p>
+<pre><code class="language-markdown">Q: Who described the forgetting curve?
+A: Hermann Ebbinghaus
+
+{{c1::Retrieval practice}} is also called active recall.
+</code></pre>
+<p>질문은 <code>A:</code> 줄이 나올 때까지 여러 줄에 걸칠 수 있어요. <code>{{c1::…}}</code>가 있는 단락은 모두 <strong>빈칸</strong> 카드가 되며, 빈칸을 하나씩
+차례로 가려요. <code>{{c1::text::hint}}</code>는 <code>[…]</code> 대신 힌트를 보여 줘요.</p>
+<p><strong>플래시카드 탭에서.</strong> 노트에 나타나지 않아야 하는 카드는 <em>삽입 ▸ 플래시카드…</em>(Ctrl+Shift+F)를 사용하세요.
+본문에서 만든 카드는 <em>노트 텍스트에서</em>로 표시되며 본문에서 편집해요.</p>
+<h2 id="검색">검색</h2>
+<p>검색창(Ctrl+F)은 제목, 본문, 태그를 전문 검색하고, 악센트를 무시하며, 단어 접두사와 일치하므로 <code>forget</code>으로
+<em>forgetting</em>을 찾을 수 있어요. <code>tag:name</code>을 추가하면 태그로 필터링돼요. 예: <code>memory tag:psychology</code>. 결과는
+관련도순으로 정렬돼요. 검색어가 없으면 선택한 정렬 순서(<em>마지막 편집</em>, <em>생성됨</em>, <em>제목</em>, <em>링크가 가장 많은 노트</em>)를 따라요.</p>
+<h2 id="휴지통">휴지통</h2>
+<p><em>휴지통으로 이동</em>(Ctrl+Delete)은 노트를 삭제하지 않고 숨겨요. 실행 취소 버튼이 바로 나타나고, 노트 목록 아래의
+<strong>휴지통</strong> 버튼에서 휴지통에 넣은 노트를 볼 수 있어요. 마우스 오른쪽 버튼으로 <strong>복원</strong>하거나 <strong>영구 삭제</strong>할 수 있어요.
+<strong>휴지통 비우기</strong>는 확인 후 안의 모든 것을 삭제해요. 휴지통에 있는 노트로의 링크는 숨겨지고, 노트를 복원하면 다시 나타나요.</p>
+
+    <p class="doc-footer">오류를 발견하셨나요? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ko/notes-and-links.md">GitHub에서 이 페이지 편집</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">홈</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">이슈</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">후원</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="언어"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko" aria-current="true">한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

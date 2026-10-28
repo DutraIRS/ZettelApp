@@ -3,19 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="color-scheme" content="light dark">
 <meta name="description" content="ZettelApp runs on Windows 10  and Windows 11, 64-bit. Download it from the latest release:">
 <title>Getting started – ZettelApp documentation</title>
 <link rel="icon" type="image/png" href="../assets/favicon.png">
 <link rel="stylesheet" href="../style.css">
+<script src="../assets/lang.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#content">Skip to content</a>
 <header class="site-header">
   <div class="wrap header-row">
-    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
-    <nav aria-label="Main">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
       <ul class="nav">
         <li><a href="../#features">Features</a></li>
         <li><a href="tutorial.html">Tutorial</a></li>
@@ -25,12 +26,27 @@
         <li><a class="nav-cta" href="../#download">Download</a></li>
       </ul>
     </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Languages</span></summary><ul class="lang-switch-panel" aria-label="Languages"><li><a href="getting-started.html" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="../es/docs/getting-started.html" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/docs/getting-started.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/docs/getting-started.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/docs/getting-started.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/docs/getting-started.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/docs/getting-started.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/docs/getting-started.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/docs/getting-started.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/docs/getting-started.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/docs/getting-started.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Donate"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Donate</span></a>
+      <a class="hbtn cta" href="../#download">Download</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Features</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Docs</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
   </div>
 </header>
 <div class="wrap docs-layout">
   <nav class="docs-nav" aria-label="Documentation">
-    <h2>Documentation</h2>
-    <ul>
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentation</span><span class="docs-menu-current">Getting started</span></span></summary>
+      <ul>
       <li><a href="index.html">Overview</a></li>
       <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
       <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
@@ -48,7 +64,30 @@
       <li><a href="privacy-and-security.html">Privacy and security</a></li>
       <li><a href="development.html">Development</a></li>
       <li><a href="faq.html">FAQ</a></li>
-    </ul>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentation</h2>
+      <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html" aria-current="page">Getting started</a></li>
+      <li><a href="notes-and-links.html">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="mcp-reference.html">MCP API reference</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
   </nav>
   <main id="content" class="doc">
 <h1 id="getting-started">Getting started</h1>
@@ -74,7 +113,7 @@
 </tbody>
 </table></div>
 <p>The installer asks which language to use and suggests your Windows display language. The installer
-itself is translated; the app is in English for now (see the <a href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">roadmap</a>).</p>
+and the app are translated into 11 languages; change the app's language in <em>Options</em>.</p>
 <p>Each release lists SHA-256 checksums (<code>SHA256SUMS.txt</code>). To check a download in PowerShell:</p>
 <pre><code class="language-powershell">Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 </code></pre>
@@ -84,8 +123,11 @@ installer. If you downloaded it from the official release page and the checksum 
 <strong>More info ▸ Run anyway</strong>. Code signing is on the <a href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">roadmap</a>.</p>
 <h2 id="your-first-vault">Your first vault</h2>
 <p>A <strong>vault</strong> is a folder holding your notes: a database file (<code>zettel.db</code>) and an <code>assets</code> folder for images.
-On first start ZettelApp creates one in <strong>Documents\ZettelApp</strong> with three short notes. The welcome note
-explains links, tags, images, mind maps and flashcards. Use <em>File ▸ New Vault…</em> or <em>File ▸ Open Vault…</em> to work elsewhere, for example in a OneDrive folder.
+On first start ZettelApp creates one in <strong>Documents\ZettelApp</strong> with eleven linked starter notes. The
+<em>Welcome to ZettelApp</em> note leads through links, tags, images, mind maps, flashcards and the rest of the app. An
+optional ten-minute adventure offers the same tour through real actions. New vaults created with
+<em>File ▸ New Vault…</em> or <em>File ▸ Open Vault…</em> receive the same starter material, so you can work elsewhere,
+for example in a OneDrive folder.
 <em>File ▸ Open Recent</em> lists the vaults you used last.</p>
 <p>Notes save automatically as you type. There is no Save button.</p>
 <h2 id="a-tour-of-the-window">A tour of the window</h2>
@@ -121,8 +163,8 @@ anything by itself.</p>
 <h2 id="uninstalling">Uninstalling</h2>
 <p>Use <em>Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall</em>. After you confirm, a dialog offers
 an unticked <strong>Also delete my ZettelApp settings and data</strong> option. It removes your settings, saved API
-keys, logs, cache and automatic backups (<code>%LOCALAPPDATA%\ZettelApp</code>). Your notes are never deleted:
-vault folders such as <code>Documents\ZettelApp</code> stay. For the portable version, delete its folder.</p>
+keys, logs, cache and automatic backups (<code>%LOCALAPPDATA%\ZettelApp</code>) <strong>and all your notes</strong> (the database
+and attachments of your vaults). Leave it unticked to keep your notes. For the portable version, delete its folder.</p>
 <h2 id="next-steps">Next steps</h2>
 <ul>
 <li>Learn the note syntax in <a href="notes-and-links.html">Notes and links</a>.</li>
@@ -135,14 +177,15 @@ vault folders such as <code>Documents\ZettelApp</code> stay. For the portable ve
 </div>
 <footer class="site-footer">
   <div class="wrap footer-row">
-    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
-      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
     <ul class="nav">
       <li><a href="../">Home</a></li>
       <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
       <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
     </ul>
   </div>
+  <ul class="nav lang-row" aria-label="Languages"><li><a href="getting-started.html" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="../es/docs/getting-started.html" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/docs/getting-started.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/docs/getting-started.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/docs/getting-started.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/docs/getting-started.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/docs/getting-started.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/docs/getting-started.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/docs/getting-started.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/docs/getting-started.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/docs/getting-started.html" lang="ar" hreflang="ar">العربية</a></li></ul>
 </footer>
 </body>
 </html>

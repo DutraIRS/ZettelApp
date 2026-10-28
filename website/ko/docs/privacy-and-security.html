@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="요청하지 않는 한, 작은 업데이트 확인 한 번을 제외하면 아무것도 나가지 않아요. ZettelApp에는 계정, 원격 측정, 광고가 없고, 작업하는 동안 인터넷에서 아무것도 불러오지 않아요. 다음이 ZettelApp이 보낼 수 있는 네트워크 요청의 전부예요.">
+<title>개인정보 보호와 보안 – ZettelApp 문서</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">본문으로 건너뛰기</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">기능</a></li>
+        <li><a href="tutorial.html">튜토리얼</a></li>
+        <li><a href="./">문서</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 후원</a></li>
+        <li><a class="nav-cta" href="../#download">다운로드</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">언어</span></summary><ul class="lang-switch-panel" aria-label="언어"><li><a href="../../docs/privacy-and-security.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/privacy-and-security.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/privacy-and-security.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/privacy-and-security.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/privacy-and-security.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/privacy-and-security.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/privacy-and-security.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/privacy-and-security.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/privacy-and-security.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/privacy-and-security.html" lang="ko" hreflang="ko" aria-current="true">한국어</a></li><li><a href="../../ar/docs/privacy-and-security.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="후원"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">후원</span></a>
+      <a class="hbtn cta" href="../#download">다운로드</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">메뉴</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">기능</a></li>
+          <li><a href="tutorial.html">튜토리얼</a></li>
+          <li><a href="./">문서</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="문서">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">문서</span><span class="docs-menu-current">개인정보 보호와 보안</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html" aria-current="page">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>문서</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 설명서</a></li>
+      <li><a href="what-is-zettelkasten.html">Zettelkasten이란?</a></li>
+      <li><a href="tutorial.html">튜토리얼: 첫 30분</a></li>
+      <li><a href="getting-started.html">시작하기</a></li>
+      <li><a href="notes-and-links.html">노트와 링크</a></li>
+      <li><a href="link-suggestions.html">링크 제안</a></li>
+      <li><a href="graph-and-insights.html">그래프와 인사이트</a></li>
+      <li><a href="review-and-anki.html">복습, 퀴즈, Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">노트에 질문하기(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 서버</a></li>
+      <li><a href="export-import.html">내보내기와 가져오기</a></li>
+      <li><a href="keyboard-shortcuts.html">키보드 단축키</a></li>
+      <li><a href="privacy-and-security.html" aria-current="page">개인정보 보호와 보안</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="개인정보-보호와-보안">개인정보 보호와 보안</h1>
+<h2 id="컴퓨터-밖으로-나가는-것">컴퓨터 밖으로 나가는 것</h2>
+<p><strong>요청하지 않는 한, 작은 업데이트 확인 한 번을 제외하면 아무것도 나가지 않아요.</strong> ZettelApp에는 계정, 원격 측정, 광고가
+없고, 작업하는 동안 인터넷에서 아무것도 불러오지 않아요. 다음이 ZettelApp이 보낼 수 있는 네트워크 요청의 전부예요.</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>언제…</th>
+<th>ZettelApp이 연결하는 곳</th>
+<th>전송되는 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ZettelApp을 시작하고 약 4초 뒤(끌 수 있어요)</td>
+<td><code>https://dutrairs.github.io/ZettelApp/version.json</code></td>
+<td>해당 파일에 대한 HTTPS 요청 한 번과 <code>User-Agent: ZettelApp/&lt;version&gt;</code> 헤더. 그 밖에는 아무것도 없어요. 노트, 설정, 식별자는 전송되지 않아요. 실패해도 알림이 없어요. <a href="getting-started.html#updates">업데이트</a>를 참고하세요.</td>
+</tr>
+<tr>
+<td><strong>질문</strong> 페이지에서 질문할 때</td>
+<td>설정한 AI 공급자(Anthropic, OpenAI, Z.ai 또는 내 엔드포인트)</td>
+<td>질문과 <em>전송된 출처</em>에 나열된 노트</td>
+</tr>
+<tr>
+<td>AI 연결을 테스트하거나 모델 목록을 새로 고칠 때</td>
+<td>같은 공급자</td>
+<td>인증을 위한 API 키</td>
+</tr>
+<tr>
+<td><strong>Anki와 동기화</strong>할 때</td>
+<td><strong>이 컴퓨터</strong>의 AnkiConnect(<code>127.0.0.1</code>)</td>
+<td>선택한 범위의 플래시카드</td>
+</tr>
+<tr>
+<td><strong>삽입 ▸ Zotero 참조</strong>를 쓰거나 Zotero 옵션에서 <em>연결 테스트</em>를 할 때</td>
+<td><strong>이 컴퓨터</strong>의 Zotero(<code>127.0.0.1</code>)</td>
+<td>검색어(읽기 전용)</td>
+</tr>
+<tr>
+<td>웹 링크를 클릭하거나, <em>도움말 ▸ 웹사이트 / 설명서 / 업데이트 확인</em>을 쓰거나, 업데이트 알림의 <strong>다운로드</strong> 버튼을 누를 때</td>
+<td>웹 브라우저가 페이지를 열어요</td>
+<td>ZettelApp에서 보내는 것은 없어요</td>
+</tr>
+</tbody>
+</table></div>
+<p>업데이트 확인을 멈추려면 <em>도구 ▸ 옵션 ▸ 일반 ▸ ZettelApp을 시작할 때 업데이트 확인</em>의 체크를 해제하세요. 그러면 질문을
+하거나 위의 다른 기능을 쓰기 전까지 ZettelApp은 어떤 요청도 보내지 않아요.</p>
+<p>Anki와 Zotero로의 로컬 연결은 프록시를 쓰지 않으므로 컴퓨터 밖으로 우회될 수 없어요. MCP 서버는 네트워크 요청을 전혀
+하지 않아요.</p>
+<h2 id="데이터가-있는-곳">데이터가 있는 곳</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>위치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>노트, 링크, 플래시카드, 복습 기록</td>
+<td>볼트 폴더의 <code>zettel.db</code>(SQLite). 기본값은 <strong>Documents\ZettelApp</strong>이에요.</td>
+</tr>
+<tr>
+<td>이미지</td>
+<td>볼트의 <code>assets</code> 폴더.</td>
+</tr>
+<tr>
+<td>환경설정</td>
+<td>레지스트리의 <code>HKEY_CURRENT_USER\Software\ZettelApp\ZettelApp</code>.</td>
+</tr>
+<tr>
+<td>API 키</td>
+<td><strong>Windows 자격 증명 관리자</strong>(<code>ZettelApp/llm/…</code>). 파일이나 레지스트리에는 절대 저장되지 않아요.</td>
+</tr>
+<tr>
+<td>로그</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Logs</code>(순환되며 최대 몇 MB). 노트가 아니라 오류를 기록하며 API 키는 절대 포함하지 않아요.</td>
+</tr>
+<tr>
+<td>자동 백업</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Backups</code></td>
+</tr>
+<tr>
+<td>작은 UI 캐시</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Cache</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>볼트는 평범한 폴더라서 복사하거나, 백업하거나, OneDrive에 둘 수 있어요. ZettelApp은 동기화되는 폴더에 맞게 선택한 전체
+동기화 설정으로 데이터베이스를 써요. 같은 볼트를 두 컴퓨터에서 동시에 열지 마세요.</p>
+<h2 id="백업과-실행-취소">백업과 실행 취소</h2>
+<ul>
+<li><strong>매일 백업:</strong> 매일 볼트를 처음 열 때 데이터베이스의 일관된 사본이 저장돼요. 최신 10개가 보관돼요(<em>옵션 ▸ 백업</em>).
+<em>파일 ▸ 지금 볼트 백업</em>으로 언제든 만들 수 있어요. 이미지는 내용별로 저장되며 자동으로 삭제되지 않아요.</li>
+<li><strong>휴지통:</strong> 삭제한 노트는 먼저 휴지통으로 가며, 휴지통을 비우기 전까지 복원할 수 있어요.</li>
+<li><strong>자동 저장:</strong> 노트는 입력하는 대로 저장돼요. 충돌 대화 상자가 예기치 않은 오류를 알리고 세부 정보를 로그에 기록해요.</li>
+</ul>
+<h2 id="zettelapp은-어떻게-나를-보호하나요">ZettelApp은 어떻게 나를 보호하나요</h2>
+<p>노트는 가져오기, 웹, AI 답변에서 올 수 있으므로 ZettelApp은 그 내용을 신뢰할 수 없는 것으로 취급해요.</p>
+<ul>
+<li><strong>활성 콘텐츠 없음.</strong> 노트의 원시 HTML은 텍스트로 표시되고 렌더링되지 않으며, 노트의 어떤 것도 스크립트를 실행할 수
+없어요. 노트 미리 보기는 <strong>볼트 자체의 <code>assets</code> 폴더에서만</strong> 이미지를 불러오고, 웹이나 디스크의 다른 곳에서는 절대
+불러오지 않아요.</li>
+<li><strong>링크 허용 목록.</strong> 링크를 클릭하면 웹 페이지(<code>http</code>/<code>https</code>), 이메일(<code>mailto</code>), 노트, Zotero <em>항목 선택</em> / <em>PDF 열기</em>
+링크, 로컬 파일 링크(아래)만 열려요. <code>javascript:</code>와 다른 스킴은 거부돼요.</li>
+<li><strong>로컬 파일 링크는 파일 위치만 보여 줘요.</strong> <code>file:///</code> 링크는 <strong>파일이 선택된 파일 탐색기</strong>를 열며, 파일 자체는 열리거나
+실행되지 않아요. 로컬 드라이브의 경로만 허용돼요. <code>\\server\share</code> 같은 네트워크(UNC) 경로는 조회하는 과정에서 Windows
+자격 증명이 해당 서버로 전송될 수 있어서 거부돼요.</li>
+<li><strong>이미지는 파일 이름이 아니라 내용으로 검증돼요.</strong> 최대 25 MB의 PNG, JPEG, GIF, WebP, BMP만 허용되고, SVG는 스크립트를
+담을 수 있어서 거부돼요. 검증은 파일 시그니처와 압축된 크기를 다루며, 픽셀 크기는 이미지를 처음 표시할 때 확인돼요.</li>
+<li><strong>안전한 가져오기.</strong> 보관 파일은 경로 조작(&quot;zip-slip&quot;)과 압축 해제 폭탄을 검사해요. 모든 필드는 검증되고 크기가
+제한되며, Markdown 가져오기는 가져온 폴더 밖에 접근할 수 없고, 실패한 가져오기는 볼트를 그대로 둬요. 가져오기는 하나의
+데이터베이스 트랜잭션으로 실행되며 오류가 나면 롤백돼요.</li>
+<li><strong>안전한 내보내기.</strong> 내보낸 웹사이트에는 스크립트가 없고 엄격한 Content-Security-Policy가 적용돼요. 파일은 원자적으로
+써요.</li>
+<li><strong>데이터베이스 안전.</strong> 모든 데이터베이스 쿼리는 바인딩된 매개변수를 사용하며, 검색 텍스트는 쿼리 문법으로 해석되지 않아요.</li>
+<li><strong><code>zettelapp://</code> 링크</strong>(Anki 카드에서 사용)는 <em>ID로 노트를 여는 것</em>만 할 수 있어요. 다른 요청은 모두 무시돼요.</li>
+<li><strong>사용자당 단일 인스턴스.</strong> 두 번째 실행은 내 사용자 계정만 접근할 수 있는 Windows 이름 있는 파이프를 통해 실행 중인
+앱에 요청을 넘겨요.</li>
+<li><strong>AI 안전.</strong> AI 모델에는 도구가 없어서 노트에 숨겨진 지시로 모델을 움직일 수 없고, 답변은 같은 안전한 렌더러로 표시돼요.
+API 키는 자격 증명 관리자에 남고 오류 메시지에서는 제거돼요.</li>
+<li><strong>MCP 서버와 그 스위치.</strong> MCP 클라이언트는 ZettelApp이 열려 있고 <strong>동시에</strong> 상태 표시줄의 MCP 스위치가 켜져 있는
+동안에만 노트에 접근할 수 있어요. 스위치는 ZettelApp을 시작할 때마다 꺼져 있고 저장되지 않아요. 서버는 기본적으로 읽기
+전용이며, MCP 클라이언트가 시작할 때만 실행되고, 네트워크 포트 없이 표준 입출력을 사용해요. <a href="mcp-server.html">MCP 서버</a>를
+참고하세요.</li>
+</ul>
+<h2 id="제거">제거</h2>
+<p><em>Windows 설정 ▸ 앱 ▸ 설치된 앱 ▸ ZettelApp ▸ 제거</em>에서 제거하세요. 제거 프로그램에는 선택되지 않은 옵션인 <strong>내 ZettelApp
+설정과 데이터도 삭제</strong>가 있어요. 이를 선택하면 설정, 자격 증명 관리자에 저장된 API 키, 로그, 캐시, 자동 백업
+(<code>%LOCALAPPDATA%\ZettelApp</code>)과 <strong>모든 노트</strong>(볼트의 데이터베이스와 첨부 파일)가 삭제돼요. 선택하지 않으면 노트는 그대로
+남아요.</p>
+<p>보안 문제를 발견하셨나요? 비공개로 알려 주세요.
+<a href="https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md">SECURITY.md</a>를 참고하세요.</p>
+
+    <p class="doc-footer">오류를 발견하셨나요? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ko/privacy-and-security.md">GitHub에서 이 페이지 편집</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">홈</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">이슈</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">후원</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="언어"><li><a href="../../docs/privacy-and-security.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/privacy-and-security.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/privacy-and-security.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/privacy-and-security.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/privacy-and-security.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/privacy-and-security.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/privacy-and-security.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/privacy-and-security.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/privacy-and-security.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/privacy-and-security.html" lang="ko" hreflang="ko" aria-current="true">한국어</a></li><li><a href="../../ar/docs/privacy-and-security.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

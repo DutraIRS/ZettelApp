@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="تجيب صفحة اسأل  عن الأسئلة استنادًا إلى ملاحظاتك، مع استشهادات يمكنك النقر عليها. تستخدم مزود ذكاء اصطناعي تختاره ومفتاح API خاصًا بك. وهي ميزة اختيارية بالكامل؛ فلا يُرسل أي شيء ح">
+<title>اسأل ملاحظاتك (الذكاء الاصطناعي) – توثيق ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">انتقل إلى المحتوى</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">الميزات</a></li>
+        <li><a href="tutorial.html">الدرس</a></li>
+        <li><a href="./">التوثيق</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> تبرّع</a></li>
+        <li><a class="nav-cta" href="../#download">تنزيل</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">اللغات</span></summary><ul class="lang-switch-panel" aria-label="اللغات"><li><a href="../../docs/ai-assistant.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/ai-assistant.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/ai-assistant.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/ai-assistant.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/ai-assistant.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/ai-assistant.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/ai-assistant.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/ai-assistant.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/ai-assistant.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/ai-assistant.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/ai-assistant.html" lang="ar" hreflang="ar" aria-current="true">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="تبرّع"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">تبرّع</span></a>
+      <a class="hbtn cta" href="../#download">تنزيل</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">القائمة</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">الميزات</a></li>
+          <li><a href="tutorial.html">الدرس</a></li>
+          <li><a href="./">التوثيق</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="التوثيق">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">التوثيق</span><span class="docs-menu-current">اسأل ملاحظاتك (الذكاء الاصطناعي)</span></span></summary>
+      <ul>
+      <li><a href="index.html">توثيق ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">ما هو Zettelkasten؟</a></li>
+      <li><a href="tutorial.html">دليل عملي: أول 30 دقيقة لك</a></li>
+      <li><a href="getting-started.html">البدء</a></li>
+      <li><a href="notes-and-links.html">الملاحظات والروابط</a></li>
+      <li><a href="link-suggestions.html">اقتراحات الروابط</a></li>
+      <li><a href="graph-and-insights.html">الرسم البياني والإحصاءات</a></li>
+      <li><a href="review-and-anki.html">المراجعة والاختبارات وAnki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html" aria-current="page">اسأل ملاحظاتك (الذكاء الاصطناعي)</a></li>
+      <li><a href="mcp-server.html">خادم MCP</a></li>
+      <li><a href="export-import.html">التصدير والاستيراد</a></li>
+      <li><a href="keyboard-shortcuts.html">اختصارات لوحة المفاتيح</a></li>
+      <li><a href="privacy-and-security.html">الخصوصية والأمان</a></li>
+      <li><a href="faq.html">الأسئلة الشائعة</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>التوثيق</h2>
+      <ul>
+      <li><a href="index.html">توثيق ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">ما هو Zettelkasten؟</a></li>
+      <li><a href="tutorial.html">دليل عملي: أول 30 دقيقة لك</a></li>
+      <li><a href="getting-started.html">البدء</a></li>
+      <li><a href="notes-and-links.html">الملاحظات والروابط</a></li>
+      <li><a href="link-suggestions.html">اقتراحات الروابط</a></li>
+      <li><a href="graph-and-insights.html">الرسم البياني والإحصاءات</a></li>
+      <li><a href="review-and-anki.html">المراجعة والاختبارات وAnki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html" aria-current="page">اسأل ملاحظاتك (الذكاء الاصطناعي)</a></li>
+      <li><a href="mcp-server.html">خادم MCP</a></li>
+      <li><a href="export-import.html">التصدير والاستيراد</a></li>
+      <li><a href="keyboard-shortcuts.html">اختصارات لوحة المفاتيح</a></li>
+      <li><a href="privacy-and-security.html">الخصوصية والأمان</a></li>
+      <li><a href="faq.html">الأسئلة الشائعة</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="اسال-ملاحظاتك-الذكاء-الاصطناعي">اسأل ملاحظاتك (الذكاء الاصطناعي)</h1>
+<p>تجيب صفحة <strong>اسأل</strong> (Ctrl+5) عن الأسئلة <strong>استنادًا إلى ملاحظاتك</strong>، مع استشهادات يمكنك
+النقر عليها. تستخدم مزود ذكاء اصطناعي تختاره ومفتاح API خاصًا بك.
+وهي ميزة اختيارية بالكامل؛ فلا يُرسل أي شيء حتى تطرح سؤالًا.</p>
+<p><img loading="lazy" src="../../assets/screenshots/ask-light.png" alt="اسأل ملاحظاتك" /></p>
+<h2 id="الاعداد">الإعداد</h2>
+<ol>
+<li>
+<p>احصل على مفتاح API من أحد المزودين المدعومين.</p>
+</li>
+<li>
+<p>افتح <em>الأدوات ▸ خيارات ▸ مساعد الذكاء الاصطناعي</em>. اختر <strong>المزود</strong>، والصق <strong>مفتاح
+API</strong>، واختر <strong>نموذجًا</strong> (يطلب <em>تحديث القائمة</em> من المزود قائمة النماذج المتاحة لمفتاحك).</p>
+<p>يمكنك حفظ عدة مفاتيح لكل مزود (مثل مفتاح شخصي وآخر للعمل). استخدم <em>إضافة مفتاح…</em> و<em>إعادة تسمية</em> و
+<em>حذف</em> بجوار قائمة المفاتيح؛ فالمفتاح المحدد هو المستخدم عند استخدام «اسأل».</p>
+</li>
+<li>
+<p>اضغط <strong>اختبار الاتصال</strong> ثم <strong>موافق</strong>.</p>
+</li>
+</ol>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>المزود</th>
+<th>النموذج الافتراضي</th>
+<th>نماذج أخرى مقترحة</th>
+<th>نقطة النهاية</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Anthropic Claude</strong> (الافتراضي)</td>
+<td><code>claude-opus-5-5</code></td>
+<td><code>claude-sonnet-5-5</code>, <code>claude-haiku-5-5</code></td>
+<td><code>https://api.anthropic.com</code></td>
+</tr>
+<tr>
+<td><strong>OpenAI</strong></td>
+<td><code>gpt-6.1-sol</code></td>
+<td><code>gpt-6-astra</code>, <code>gpt-6-luna</code></td>
+<td><code>https://api.openai.com/v1</code></td>
+</tr>
+<tr>
+<td><strong>Z.ai (GLM)</strong></td>
+<td><code>glm-5.3</code></td>
+<td><code>glm-5.3-flash</code>, <code>glm-4.7-flash</code></td>
+<td><code>https://api.z.ai/api/paas/v4</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>يمكنك كتابة أي معرّف نموذج يتيح مفتاحك الوصول إليه. يتيح <strong>نقطة النهاية
+(اختياري)</strong> تغيير العنوان، مثل استخدام نقطة نهاية لخطة البرمجة لدى Z.ai أو
+وسيط متوافق مع OpenAI أو نموذج يعمل على جهازك (<code>http://localhost:…</code>). يجب
+أن تستخدم العناوين <code>https://</code>؛ ولا يُقبل <code>http://</code> العادي إلا مع <code>localhost</code>.</p>
+<p>مع Claude، يمكنك أيضًا تحديد <strong>مستوى الجهد</strong> (من منخفض إلى أقصى): فكلما
+ارتفع زاد التفكير قبل الإجابة وارتفعت التكلفة. الإعداد الافتراضي هو <em>متوسط</em>.</p>
+<h2 id="استخدم-نموذج-اللغة-الكبير-الخاص-بك">استخدم نموذج اللغة الكبير الخاص بك</h2>
+<p>تستخدم ميزة «اسأل» <strong>حسابك الخاص</strong> لدى المزود الذي تختاره، وبالتالي يحاسبك المزود
+على الاستخدام. لا يمتلك ZettelApp خدمة ذكاء اصطناعي خاصة به. يُحفظ مفتاح
+API في <strong>مدير بيانات الاعتماد في Windows</strong>، وليس في ملفات الإعدادات.</p>
+<ul>
+<li><strong>المزودون</strong>: Anthropic Claude وOpenAI وZ.ai (GLM)، من <em>الأدوات ▸ خيارات ▸ مساعد
+الذكاء الاصطناعي ▸ المزود</em>. اختر <strong>نموذجًا</strong> من القائمة (يطلب <em>تحديث القائمة</em> من
+المزود النماذج التي يتيحها مفتاحك) أو اكتب أي معرّف نموذج متاح لمفتاحك.</li>
+<li><strong>خادمك الخاص</strong>: تعمل أي خدمة توفر واجهة <strong>إكمال محادثة بأسلوب OpenAI</strong>.
+اختر <strong>OpenAI</strong> واضبط <strong>نقطة النهاية (اختياري)</strong> على عنوانها الأساسي، مثل <code>https://my-proxy.example.com/v1</code>
+أو <code>http://localhost:11434/v1</code> (Ollama) أو <code>http://localhost:1234/v1</code> (LM Studio). لا يُقبل <code>http://</code> العادي
+إلا مع <code>localhost</code> و<code>127.0.0.1</code> و<code>::1</code>؛ ويجب أن تستخدم جميع العناوين
+الأخرى <code>https://</code>. ويمكن ترك <strong>مفتاح API</strong> فارغًا لهذه العناوين المحلية.</li>
+<li><strong>اختبر الاتصال</strong>: اضغط <strong>اختبار الاتصال</strong>. عند استخدام
+نموذج محلي، لا يغادر سؤالك وملاحظاتك جهازك.</li>
+<li><strong>ما يُرسل</strong>: سؤالك والملاحظات الأكثر صلة، ويعثر عليها جهازك.
+يحدد مربع <strong>عدد الملاحظات</strong> في صفحة «اسأل» عددها (8
+افتراضيًا)، وتعرض قائمة <em>المصادر المرسلة</em> الملاحظات التي أُرسلت بالضبط.</li>
+</ul>
+<h2 id="اطرح-سوالا">اطرح سؤالًا</h2>
+<p>اكتب سؤالًا واضغط <strong>اسأل</strong> (Ctrl+Enter). اختر نطاق البحث من <strong>البحث في</strong>: المجموعة بأكملها أو
+الملاحظة المفتوحة وملاحظاتها المرتبطة أو الملاحظات التي تحمل وسمًا. وحدد <strong>عدد الملاحظات</strong> المراد إرسالها.</p>
+<p>ما يحدث:</p>
+<ol>
+<li>يعثر ZettelApp على الملاحظات الأكثر صلة <strong>على جهازك</strong> باستخدام
+تشابه TF-IDF وLSA نفسه الذي يستخدمه <a href="link-suggestions.html">مقترح الروابط</a>. ومع
+<em>الملاحظة الحالية والملاحظات المرتبطة</em>، تأتي الملاحظة المفتوحة أولًا دائمًا.</li>
+<li>يُرسل سؤالك وتلك الملاحظات إلى المزود، بحد أقصى 120,000 حرف
+من الملاحظات. تنتهي الملاحظة التي تُقص لتناسب الحد بعبارة ظاهرة
+<code>[note truncated]</code>. وتعرض قائمة <strong>المصادر المرسلة</strong> الملاحظات التي أُرسلت بالضبط.</li>
+<li>تتدفق الإجابة أثناء كتابتها. وتظهر الاستشهادات مثل <code>[[20261027153012]]</code>
+روابط إلى الملاحظات. يلغي <strong>إيقاف</strong> عملية الإجابة.</li>
+</ol>
+<p>يُطلب من النموذج أن يجيب استنادًا إلى ملاحظاتك وحدها وأن يوضح إن
+لم تتضمن الإجابة. ينسخ <strong>نسخ</strong> الإجابة بتنسيق Markdown. ويحفظ <strong>حفظ كملاحظة</strong>
+الإجابة ملاحظةً جديدة موسومة بـ <code>ai-answer</code> وبها روابط <code>cites::</code> إلى مصادرها.</p>
+<h2 id="الخصوصية-والامان">الخصوصية والأمان</h2>
+<ul>
+<li><strong>لا يُرسل إلا ما تطلبه</strong>: سؤالك والملاحظات المدرجة ضمن <em>المصادر المرسلة</em>. ويذكّرك
+إشعار بذلك قبل طرح السؤال (فعّل <em>عدم إظهار هذا مجددًا</em> لتخطيه).</li>
+<li>يُخزّن <strong>مفتاح API</strong> في <strong>مدير بيانات الاعتماد في Windows</strong> (باسم <code>ZettelApp/llm/&lt;provider&gt;</code>، والمفاتيح الإضافية باسم <code>ZettelApp/llm/&lt;provider&gt;/&lt;معرّف المفتاح&gt;</code>)، ولا يُحفظ مطلقًا في ملفات
+الإعدادات أو السجلات، كما يُحذف من أي رسالة خطأ تظهر لك. يمسحه زر <em>حذف</em> من هذا الحاسوب.</li>
+<li><strong>لا تتوفر للنموذج أدوات.</strong> فلا يستطيع البحث في الويب أو تشغيل التعليمات البرمجية أو تغيير
+ملاحظاتك، لذلك لا يمكن لتعليمات مخفية في ملاحظة (أو ملف مستورد) أن تجعله ينفذ
+إجراءً. وتُعرض الإجابة باستخدام العارض الآمن نفسه للملاحظات، من دون HTML أو نصوص برمجية.</li>
+<li>يستخدم ZettelApp مع Claude حزمة Anthropic الرسمية ويفعّل <strong>الاحتياط بالرفض من جهة الخادم</strong>:
+إذا رفض مصنّف السلامة الطلب، تعيد Anthropic المحاولة باستخدام النموذج الاحتياطي الذي توصي
+به. ينطبق ذلك على Claude Opus 5.5 وOpus 5 وSonnet 5.5 وFable 5.1.</li>
+<li>تسري شروط وسياسات بيانات كل مزود على ما ترسله.</li>
+</ul>
+<h2 id="اضافة-مزود-اخر">إضافة مزود آخر</h2>
+<p>توجد المزودات في سجل صغير (<code>PROVIDERS</code> في <code>zettelapp/core/llm.py</code>). وتحتاج الخدمة التي تتبع بروتوكولًا
+موجودًا (واجهة Anthropic Messages API أو إكمال المحادثة بأسلوب OpenAI، الذي توفره خدمات
+كثيرة) إلى <strong>مدخل واحد</strong>: اسمها ونقطة نهايتها ونموذجها الافتراضي والصفحة التي يحصل المستخدمون
+منها على مفتاح. أما البروتوكول الجديد فيحتاج إلى فئة محوّل صغيرة. راجع <a href="../../docs/development.html">التطوير</a>.</p>
+
+    <p class="doc-footer">وجدت خطأ؟ <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ar/ai-assistant.md">حرّر هذه الصفحة على GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">الرئيسية</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">المشكلات</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">تبرّع</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="اللغات"><li><a href="../../docs/ai-assistant.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/ai-assistant.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/ai-assistant.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/ai-assistant.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/ai-assistant.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/ai-assistant.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/ai-assistant.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/ai-assistant.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/ai-assistant.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/ai-assistant.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/ai-assistant.html" lang="ar" hreflang="ar" aria-current="true">العربية</a></li></ul>
+</footer>
+</body>
+</html>

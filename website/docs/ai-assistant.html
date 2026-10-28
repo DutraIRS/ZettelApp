@@ -3,19 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="color-scheme" content="light dark">
 <meta name="description" content="The Ask page  answers questions from your notes, with citations you can click. It uses an AI provider of your choice with your own API key. It is entirely optional: nothing is sent">
 <title>Ask your notes (AI) – ZettelApp documentation</title>
 <link rel="icon" type="image/png" href="../assets/favicon.png">
 <link rel="stylesheet" href="../style.css">
+<script src="../assets/lang.js" defer></script>
 </head>
 <body>
 <a class="skip" href="#content">Skip to content</a>
 <header class="site-header">
   <div class="wrap header-row">
-    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
-    <nav aria-label="Main">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
       <ul class="nav">
         <li><a href="../#features">Features</a></li>
         <li><a href="tutorial.html">Tutorial</a></li>
@@ -25,12 +26,27 @@
         <li><a class="nav-cta" href="../#download">Download</a></li>
       </ul>
     </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Languages</span></summary><ul class="lang-switch-panel" aria-label="Languages"><li><a href="ai-assistant.html" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="../es/docs/ai-assistant.html" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/docs/ai-assistant.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/docs/ai-assistant.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/docs/ai-assistant.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/docs/ai-assistant.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/docs/ai-assistant.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/docs/ai-assistant.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/docs/ai-assistant.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/docs/ai-assistant.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/docs/ai-assistant.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Donate"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Donate</span></a>
+      <a class="hbtn cta" href="../#download">Download</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Features</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Docs</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
   </div>
 </header>
 <div class="wrap docs-layout">
   <nav class="docs-nav" aria-label="Documentation">
-    <h2>Documentation</h2>
-    <ul>
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentation</span><span class="docs-menu-current">Ask your notes (AI)</span></span></summary>
+      <ul>
       <li><a href="index.html">Overview</a></li>
       <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
       <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
@@ -48,7 +64,30 @@
       <li><a href="privacy-and-security.html">Privacy and security</a></li>
       <li><a href="development.html">Development</a></li>
       <li><a href="faq.html">FAQ</a></li>
-    </ul>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentation</h2>
+      <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="notes-and-links.html">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html" aria-current="page">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="mcp-reference.html">MCP API reference</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
   </nav>
   <main id="content" class="doc">
 <h1 id="ask-your-notes-ai">Ask your notes (AI)</h1>
@@ -58,10 +97,18 @@ you ask a question.</p>
 <p><img loading="lazy" src="../assets/screenshots/ask-light.png" alt="Ask your notes" /></p>
 <h2 id="set-up">Set up</h2>
 <ol>
-<li>Get an API key from one of the supported providers.</li>
-<li>Open <em>Tools ▸ Options ▸ AI assistant</em>. Choose the <strong>provider</strong>, paste the <strong>API key</strong>, and choose a
-<strong>model</strong> (<em>Refresh list</em> asks the provider which models your key can use).</li>
-<li>Press <strong>Test connection</strong>, then <strong>OK</strong>.</li>
+<li>
+<p>Get an API key from one of the supported providers.</p>
+</li>
+<li>
+<p>Open <em>Tools ▸ Options ▸ AI assistant</em>. Choose the <strong>provider</strong>, paste the <strong>API key</strong>, and choose a
+<strong>model</strong> (<em>Refresh list</em> asks the provider which models your key can use).</p>
+<p>You can save several keys per provider (for example personal and work). Use <em>Add key…</em>, <em>Rename</em> and
+<em>Delete</em> next to the key list; the selected key is the one used by Ask.</p>
+</li>
+<li>
+<p>Press <strong>Test connection</strong>, then <strong>OK</strong>.</p>
+</li>
 </ol>
 <div class="table-wrap"><table>
 <thead>
@@ -139,8 +186,8 @@ links to its sources.</p>
 <ul>
 <li><strong>Only what you ask is sent</strong>: your question and the notes listed under <em>Sources sent</em>. A notice
 reminds you of this before you ask (tick <em>Don't show this again</em> to skip it).</li>
-<li><strong>Your API key</strong> is stored in <strong>Windows Credential Manager</strong> (as <code>ZettelApp/llm/&lt;provider&gt;</code>), never in
-settings files or logs, and it is removed from any error message shown to you. <em>Remove key</em> deletes it.</li>
+<li><strong>Your API key</strong> is stored in <strong>Windows Credential Manager</strong> (as <code>ZettelApp/llm/&lt;provider&gt;</code>, or <code>ZettelApp/llm/&lt;provider&gt;/&lt;key id&gt;</code> for further keys), never in
+settings files or logs, and it is removed from any error message shown to you. <em>Delete</em> removes it from this computer.</li>
 <li><strong>The model has no tools.</strong> It can't search the web, run code or change your notes, so instructions
 hidden in a note (or an imported file) can't make it do anything. The answer is shown through the same
 safe renderer as notes, with no HTML or scripts.</li>
@@ -160,14 +207,15 @@ protocol needs a small adapter class. See <a href="development.html">Development
 </div>
 <footer class="site-footer">
   <div class="wrap footer-row">
-    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
-      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
     <ul class="nav">
       <li><a href="../">Home</a></li>
       <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
       <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
     </ul>
   </div>
+  <ul class="nav lang-row" aria-label="Languages"><li><a href="ai-assistant.html" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="../es/docs/ai-assistant.html" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/docs/ai-assistant.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/docs/ai-assistant.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/docs/ai-assistant.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/docs/ai-assistant.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/docs/ai-assistant.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/docs/ai-assistant.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/docs/ai-assistant.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/docs/ai-assistant.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/docs/ai-assistant.html" lang="ar" hreflang="ar">العربية</a></li></ul>
 </footer>
 </body>
 </html>

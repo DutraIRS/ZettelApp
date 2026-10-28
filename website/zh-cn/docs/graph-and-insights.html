@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="图谱页面把你的笔记绘制成一张网络:每个圆圈是一条笔记,大小取决于它拥有的链接数量,每条线是一个链接。">
+<title>图谱与 Insights – ZettelApp 文档</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">跳到内容</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">功能</a></li>
+        <li><a href="tutorial.html">教程</a></li>
+        <li><a href="./">文档</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> 捐赠</a></li>
+        <li><a class="nav-cta" href="../#download">下载</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">语言</span></summary><ul class="lang-switch-panel" aria-label="语言"><li><a href="../../docs/graph-and-insights.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/graph-and-insights.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/graph-and-insights.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/graph-and-insights.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/graph-and-insights.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/graph-and-insights.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/graph-and-insights.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/graph-and-insights.html" lang="zh-CN" hreflang="zh-CN" aria-current="true">简体中文</a></li><li><a href="../../ja/docs/graph-and-insights.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/graph-and-insights.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/graph-and-insights.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="捐赠"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">捐赠</span></a>
+      <a class="hbtn cta" href="../#download">下载</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">菜单</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">功能</a></li>
+          <li><a href="tutorial.html">教程</a></li>
+          <li><a href="./">文档</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="文档">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">文档</span><span class="docs-menu-current">图谱与 Insights</span></span></summary>
+      <ul>
+      <li><a href="index.html">ZettelApp 文档</a></li>
+      <li><a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a></li>
+      <li><a href="tutorial.html">教程:你的前 30 分钟</a></li>
+      <li><a href="getting-started.html">入门</a></li>
+      <li><a href="notes-and-links.html">笔记与链接</a></li>
+      <li><a href="link-suggestions.html">链接建议</a></li>
+      <li><a href="graph-and-insights.html" aria-current="page">图谱与 Insights</a></li>
+      <li><a href="review-and-anki.html">复习、测验与 Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">询问你的笔记(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 服务器</a></li>
+      <li><a href="export-import.html">导出与导入</a></li>
+      <li><a href="keyboard-shortcuts.html">键盘快捷键</a></li>
+      <li><a href="privacy-and-security.html">隐私与安全</a></li>
+      <li><a href="faq.html">常见问题</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>文档</h2>
+      <ul>
+      <li><a href="index.html">ZettelApp 文档</a></li>
+      <li><a href="what-is-zettelkasten.html">什么是 Zettelkasten?</a></li>
+      <li><a href="tutorial.html">教程:你的前 30 分钟</a></li>
+      <li><a href="getting-started.html">入门</a></li>
+      <li><a href="notes-and-links.html">笔记与链接</a></li>
+      <li><a href="link-suggestions.html">链接建议</a></li>
+      <li><a href="graph-and-insights.html" aria-current="page">图谱与 Insights</a></li>
+      <li><a href="review-and-anki.html">复习、测验与 Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">询问你的笔记(AI)</a></li>
+      <li><a href="mcp-server.html">MCP 服务器</a></li>
+      <li><a href="export-import.html">导出与导入</a></li>
+      <li><a href="keyboard-shortcuts.html">键盘快捷键</a></li>
+      <li><a href="privacy-and-security.html">隐私与安全</a></li>
+      <li><a href="faq.html">常见问题</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="图谱与-insights">图谱与 Insights</h1>
+<h2 id="图谱">图谱</h2>
+<p><strong>图谱</strong>页面(Ctrl+2)把你的笔记绘制成一张网络:每个圆圈是一条笔记,大小取决于它拥有的链接数量,每条线是一个链接。</p>
+<p><img loading="lazy" src="../../assets/screenshots/graph-light.png" alt="按标签着色的图谱" /></p>
+<h3 id="控件">控件</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>控件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>All notes / Local</strong></td>
+<td>显示整个集合,或仅显示当前笔记以及与其相距在 <strong>Depth</strong> 个链接以内的笔记(沿两个方向跟随链接)。笔记 ⋯ 菜单中的<em>在图谱中显示</em>会打开局部图谱。</td>
+</tr>
+<tr>
+<td><strong>2D / 3D</strong></td>
+<td>在平面、可拖动的布局和可环绕查看的 3D 视图之间切换。</td>
+</tr>
+<tr>
+<td><strong>Colour by</strong></td>
+<td>标签、<em>Clusters: k-means</em>、<em>Clusters: hierarchical</em>,或不着色。</td>
+</tr>
+<tr>
+<td><strong>k</strong></td>
+<td>聚类的数量。<em>Auto k</em> 会为你选择(见下文)。</td>
+</tr>
+<tr>
+<td><strong>Group</strong></td>
+<td>把同一组的笔记拉到一起,并为每组的区域添加阴影。</td>
+</tr>
+<tr>
+<td><strong>Labels</strong></td>
+<td>显示笔记标题。在大型图谱中,在你悬停之前只会标注连接最多的笔记。</td>
+</tr>
+<tr>
+<td><strong>Link types</strong></td>
+<td>隐藏或显示单个链接类型。</td>
+</tr>
+<tr>
+<td><strong>Find in graph</strong></td>
+<td>输入标题的一部分并按 Enter,即可跳转到该笔记。</td>
+</tr>
+</tbody>
+</table></div>
+<p>右下角有缩放、适应窗口、<strong>重新计算布局</strong>、<strong>另存为图片</strong>(PNG)和<strong>导出这些笔记</strong>(打开<a href="export-import.html">导出</a>对话框,并带上屏幕上的笔记)。</p>
+<p><strong>在 2D 中</strong>,拖动笔记可移动它,拖动背景可平移,使用鼠标滚轮可缩放。双击笔记可打开它;右键点击可获得更多选项(打开、局部图谱、测验此相邻笔记、连同链接笔记一起导出)。笔记的图片显示在其圆圈内。</p>
+<p>同样两条笔记之间的多个链接会被绘制为<strong>独立的曲线</strong>,每条都有自己沿曲线的箭头,因此没有哪条会遮住另一条。悬停或选中一条笔记会<strong>淡化其他链接</strong>,让该笔记自己的链接保持其链接类型的颜色,并用<strong>从该笔记读起来的</strong>链接类型来标注每个相邻笔记,例如 <em>支持 · 被扩展于</em>。这在 2D 和 3D 中的表现相同。</p>
+<p><strong>在 3D 中</strong>,拖动可环绕查看,使用滚轮缩放,双击笔记可打开它。<strong>Rotate automatically</strong> 会让视图自动旋转。更近的笔记更大更亮,因此深度很容易辨认,每个分组都显示为一圈柔和的彩色光晕。</p>
+<p>布局采用力导向算法(Fruchterman–Reingold):链接把笔记拉到一起,所有笔记相互排斥,轻微的重力让彼此分离的部分留在屏幕上。它在后台运行,并按视图缓存。</p>
+<h3 id="按标签着色">按标签着色</h3>
+<p>每条笔记取其<strong>最常见标签</strong>的颜色,即在当前视图中被最多笔记使用的那个标签,这样你库中的大主题会获得不同的颜色。</p>
+<h3 id="按聚类着色">按聚类着色</h3>
+<p>聚类按<strong>语义</strong>对笔记分组,无论它们是否相互链接。每条笔记通过对其标题、正文和标签进行潜在语义分析(LSA),变成语义空间中的一个向量。然后用两种方法之一对这些向量分组:</p>
+<ul>
+<li><strong>k-means</strong>:使用 k-means++ 初始化的 Lloyd 算法,取多次运行中的最优结果。它速度快,产生圆形、大小均匀的分组。</li>
+<li><strong>层次聚类</strong>:基于余弦距离、采用平均连接的凝聚聚类,使用最近邻链算法计算(O(n²))。它更适合不均匀、嵌套的主题。超过 4,000 条笔记的库会回退到 k-means。</li>
+</ul>
+<p>启用 <strong>Auto k</strong> 时,ZettelApp 会尝试从 2 到约 √(n/2) + 2(最多 12)的 k 值,并保留<strong>轮廓系数</strong>最佳的 k。图例下方显示的该得分衡量各聚类的分离程度:1 为完美,约 0 表示分组重叠。每个聚类以其最具辨识度的词命名,即在聚类内部比在库的其余部分更频繁出现的词语。</p>
+<h3 id="分组与颜色">分组与颜色</h3>
+<p>开启 <strong>Group</strong> 后,同一标签或同一聚类的笔记会相互靠拢,每个分组都会得到一块带有其名称的浅色阴影区域。图例列出各分组及其大小。点击其中一个可高亮其笔记。</p>
+<p>分组和图表的颜色来自一个在浅色和深色模式下都经过<strong>色觉缺陷验证</strong>的调色板。颜色按固定顺序分配且从不重复使用:第八个之后的分组共用一种中性灰色的“其他”颜色。<strong>链接类型</strong>在颜色之外使用第二种提示:每种类型都有自己的线条(实线、虚线、点线等),有向类型还会绘制三角形或菱形之类的箭头。可在<em>工具 ▸ 选项 ▸ 链接类型</em>中选择它们(参见<a href="notes-and-links.html#your-own-link-types">你自己的链接类型</a>)。图例始终会标明所有内容,因此没有任何信息只依赖颜色。</p>
+<h2 id="insights">Insights</h2>
+<p><strong>Insights</strong> 页面(Ctrl+3)概括了你的库:</p>
+<ul>
+<li><strong>磁贴</strong>:笔记(以及回收站中有多少条)、链接(以及每条笔记的链接数)、标签、<em>未链接的笔记</em>(适合用来建立链接)、闪卡,以及今日到期的卡片。</li>
+<li>最近 12 个月的<strong>每月新增笔记</strong>。</li>
+<li><strong>热门标签</strong>、<strong>按类型的链接</strong>和<strong>连接最多的笔记</strong>(点击条形可打开笔记)。</li>
+<li><strong>主题</strong>:你笔记的 k-means 聚类及其关键词和大小。</li>
+</ul>
+<p>每个图表都有一个<strong>以表格显示</strong>按钮(列表图标),以表格形式显示相同的数字,悬停时条形会显示其数值。</p>
+
+    <p class="doc-footer">发现错误？<a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/zh-cn/graph-and-insights.md">在 GitHub 上编辑此页</a>。</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">首页</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">问题</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">捐赠</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="语言"><li><a href="../../docs/graph-and-insights.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/graph-and-insights.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/graph-and-insights.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/graph-and-insights.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/graph-and-insights.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/graph-and-insights.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/graph-and-insights.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/graph-and-insights.html" lang="zh-CN" hreflang="zh-CN" aria-current="true">简体中文</a></li><li><a href="../../ja/docs/graph-and-insights.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/graph-and-insights.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/graph-and-insights.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>

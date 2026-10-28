@@ -1,6 +1,6 @@
 name: Release
 
-# Push a tag such as v1.0.0 to build the installer and portable zip and publish a GitHub release.
+# Push a tag such as v1.1.0 to build the installer and portable zip and publish a GitHub release.
 # The website's download buttons point at /releases/latest/download/<file>, so they update automatically.
 
 on:

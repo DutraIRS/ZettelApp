@@ -1,0 +1,391 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta name="description" content="ZettelApp è un'app Zettelkasten gratuita per Windows: note atomiche, collegamenti tipizzati, mappe mentali, flashcard, un grafo della conoscenza 2D/3D e suggerimenti di collegamento che imparano da te.">
+<meta name="color-scheme" content="light dark">
+<title>ZettelApp – uno Zettelkasten per Windows</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="stylesheet" href="../style.css">
+<script src="../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#main">Vai al contenuto</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="./"><img src="../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Principale">
+      <ul class="nav">
+        <li><a href="#features">Funzionalità</a></li>
+        <li><a href="docs/tutorial.html">Tutorial</a></li>
+        <li><a href="docs/">Documentazione</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Dona</a></li>
+        <li><a class="nav-cta" href="#download">Scarica</a></li>
+      </ul>
+    </nav>
+    <!--langswitch--><details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Lingue</span></summary><ul class="lang-switch-panel" aria-label="Lingue"><li><a href="../" lang="en" hreflang="en">English</a></li><li><a href="../es/" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/" lang="it" hreflang="it" aria-current="true">Italiano</a></li><li><a href="../ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/" lang="ar" hreflang="ar">العربية</a></li></ul></details><!--/langswitch-->
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Dona"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Dona</span></a>
+      <a class="hbtn cta" href="#download">Scarica</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="#features">Funzionalità</a></li>
+          <li><a href="docs/tutorial.html">Tutorial</a></li>
+          <li><a href="docs/">Documentazione</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <img class="hero-icon" src="../assets/icon-512.png" alt="" width="96" height="96">
+      <h1>Connetti le tue idee.</h1>
+      <p class="lead">ZettelApp è uno Zettelkasten per Windows. Scrivi piccole note, collegale dando loro un significato e lascia che
+        ti suggerisca le connessioni che ti sono sfuggite. Esplora la tua conoscenza come un grafo 2D o 3D e trasformala in
+        flashcard.</p>
+      <div class="actions">
+        <a class="button primary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe">Scarica per Windows</a>
+        <a class="button secondary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Portable.zip">.zip portatile</a>
+      </div>
+      <p class="fine">Gratuito e open source · Windows 10 &amp; 11, 64 bit ·
+        <a href="https://github.com/DutraIRS/ZettelApp/releases/latest">Tutte le versioni e i checksum</a></p>
+    </div>
+    <div class="wrap">
+      <figure class="shot hero-shot">
+        <picture>
+          <source srcset="../assets/screenshots/notes-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/notes-light.png" width="1440" height="900"
+               alt="La pagina Note di ZettelApp: a sinistra un elenco di note, al centro una nota sulla ripetizione dilazionata con testo Markdown e anteprima, a destra i collegamenti suggeriti con i punteggi di corrispondenza.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section id="start" class="section">
+    <div class="wrap">
+      <h2 class="section-title">Nuovo con lo Zettelkasten?</h2>
+      <p class="section-lead">Impara il metodo in cinque minuti, poi provalo con mano.</p>
+      <ul class="cards duo">
+        <li class="card feature-link">
+          <p class="eyebrow">Il metodo</p>
+          <h3><a href="docs/what-is-zettelkasten.html">Che cos'è uno Zettelkasten?</a></h3>
+          <p>Da dove nasce lo schedario, i suoi principi (note atomiche, collegare con un motivo, struttura che
+            emerge), i tre tipi di note e gli errori più comuni.</p>
+        </li>
+        <li class="card feature-link">
+          <p class="eyebrow">Pratica</p>
+          <h3><a href="docs/tutorial.html">Inizia il tutorial</a></h3>
+          <p>I tuoi primi 30 minuti: scrivere e collegare note, collegamenti tipizzati, suggerimenti, mappe mentali, flashcard e il
+            grafo 2D e 3D.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="features" class="section">
+    <div class="wrap">
+      <h2 class="section-title">Tutto ciò che serve a uno Zettelkasten</h2>
+      <p class="section-lead">Un'idea per nota, collegate da link che dicono come le idee sono in relazione. ZettelApp mantiene il metodo ed
+        elimina l'attrito.</p>
+      <ul class="cards">
+        <li class="card">
+          <h3>Note atomiche</h3>
+          <p>Note in Markdown con ID automatici basati su data e ora, tag (nella casella dei tag o come #tag nel testo), un collegamento
+            alla fonte, immagini che puoi incollare o trascinare, collegamenti a file sul tuo PC e salvataggio automatico.</p>
+        </li>
+        <li class="card">
+          <h3>Collegamenti tipizzati e orientati</h3>
+          <p>Scrivi <code>supports:: [[Claim]]</code>. <em>Contraddice</em>, <em>estende</em>,
+            <em>esempio di</em>, <em>parte di</em>, <em>cita</em>, o tipi tuoi. I collegamenti entranti si leggono in modo naturale:
+            <em>Supportata da</em>.</p>
+        </li>
+        <li class="card">
+          <h3>Suggerimenti che imparano</h3>
+          <p>Un modello Naive Bayes pesa la similarità semantica, di parole chiave e di stringhe, i tag condivisi e i collegamenti condivisi
+            e impara da ogni suggerimento che accetti o scarti.</p>
+        </li>
+        <li class="card">
+          <h3>Grafo in 2D e 3D</h3>
+          <p>Colora le note per tag o per cluster di significato k-means e gerarchici e avvicina i gruppi
+            su sfondi ombreggiati.</p>
+        </li>
+        <li class="card">
+          <h3>Mappe mentali</h3>
+          <p>Abbozza le idee di una nota come mappa mentale con la tastiera, collega le idee alle note ed esporta in PNG, SVG o
+            FreeMind.</p>
+        </li>
+        <li class="card">
+          <h3>Ripasso e quiz</h3>
+          <p>Flashcard dal testo <code>Q:</code>/<code>A:</code> e <code>{{c1::cloze}}</code>, ripetizione dilazionata
+            SM-2, scelta multipla, risposte scritte e <em>Dai un nome a quella nota</em>.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split">
+      <div class="split-text">
+        <p class="eyebrow">Suggerimenti di collegamento</p>
+        <h2>Scopri le connessioni che ti sono sfuggite</h2>
+        <p>Mentre scrivi, ZettelApp confronta la nota con il resto del tuo vault su otto misure:</p>
+        <ul class="ticks">
+          <li>significato (analisi semantica latente);</li>
+          <li>parole chiave condivise (TF-IDF);</li>
+          <li>similarità di Levenshtein e Jaro-Winkler di titoli e testi;</li>
+          <li>tag condivisi, collegamenti condivisi e titoli citati nel testo.</li>
+        </ul>
+        <p>Un classificatore Naive Bayes trasforma queste evidenze in una probabilità e spiega ogni suggerimento.</p>
+        <p>Collega un suggerimento con un clic e scegli il tipo di collegamento, oppure scartalo. In entrambi i casi, il modello impara come
+          <em>tu</em> colleghi le idee.</p>
+        <p><a class="more" href="docs/link-suggestions.html">Come funzionano i suggerimenti di collegamento</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/graph-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/graph-light.png" width="1440" height="900" loading="lazy"
+               alt="Il grafo della conoscenza in 2D: note raggruppate per tag su sfondi colorati, con collegamenti tipizzati disegnati come linee colorate, tratteggiate o con frecce e una legenda.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split reverse">
+      <div class="split-text">
+        <p class="eyebrow">Grafo</p>
+        <h2>La tua conoscenza, in 2D e 3D</h2>
+        <p>Esplora l'intera raccolta o il vicinato di una singola nota. Colora le note per tag, oppure lascia che il
+          clustering trovi i tuoi argomenti:</p>
+        <ul class="ticks">
+          <li>clustering <b>k-means</b> o <b>gerarchico</b> dei significati delle note;</li>
+          <li>il numero di cluster scelto in base al punteggio silhouette;</li>
+          <li>cluster chiamati con le loro parole chiave.</li>
+        </ul>
+        <p>Attiva <b>Raggruppa</b> per avvicinare le note correlate su sfondi ombreggiati. I colori sono scelti per restare
+          distinguibili anche con deficienze della visione dei colori.</p>
+        <p><a class="more" href="docs/graph-and-insights.html">Grafo e Statistiche</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/graph-3d-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/graph-3d-light.png" width="1440" height="900" loading="lazy"
+               alt="Il grafo 3D: note colorate per cluster k-means con aloni morbidi e una legenda che dà un nome a ogni cluster con le sue parole chiave.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split">
+      <div class="split-text">
+        <p class="eyebrow">Mappe mentali</p>
+        <h2>Pensa per rami</h2>
+        <p>Ogni nota può contenere una mappa mentale:</p>
+        <ul class="ticks">
+          <li><kbd>Tab</kbd> aggiunge un figlio, <kbd>Enter</kbd> una sorella, <kbd>F2</kbd> rinomina;</li>
+          <li>collega qualsiasi idea a una nota;</li>
+          <li>crea una mappa dai collegamenti di una nota con un clic;</li>
+          <li>esporta in PNG, SVG o FreeMind.</li>
+        </ul>
+        <p><a class="more" href="docs/notes-and-links.html#mind-maps">Mappe mentali</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/mindmap-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/mindmap-light.png" width="1440" height="900" loading="lazy"
+               alt="Una mappa mentale intitolata Imparare in modo duraturo con rami per distanziamento, richiamo, difficoltà e significato, ciascuno del suo colore.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split reverse">
+      <div class="split-text">
+        <p class="eyebrow">Ripasso</p>
+        <h2>Ricorda ciò che scrivi</h2>
+        <p>Trasforma le note in flashcard e ripassale con la ripetizione dilazionata SM-2. Puoi anche metterti alla prova con dei quiz:</p>
+        <ul class="ticks">
+          <li>scelta multipla;</li>
+          <li>risposte scritte, tolleranti con i refusi;</li>
+          <li><em>Dai un nome a quella nota</em>, dove le opzioni sbagliate sono le note più simili.</li>
+        </ul>
+        <p>Preferisci Anki? Sincronizza tramite AnkiConnect o esporta un mazzo. Ogni scheda rimanda alla sua nota.</p>
+        <p><a class="more" href="docs/review-and-anki.html">Ripasso, quiz e Anki</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/insights-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/insights-light.png" width="1440" height="900" loading="lazy"
+               alt="La pagina Statistiche: riquadri con i conteggi di note, collegamenti, tag, note non collegate e flashcard, un grafico delle note aggiunte per mese e grafici a barre dei tag principali e dei collegamenti per tipo.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split">
+      <div class="split-text">
+        <p class="eyebrow">Chiedi alle tue note</p>
+        <h2>Risposte basate sulle tue note</h2>
+        <p>Collega la tua chiave per <b>Anthropic Claude</b>, <b>OpenAI</b> o <b>Z.ai</b> e fai domande.</p>
+        <ul class="ticks">
+          <li>Le note più pertinenti vengono trovate sul tuo computer.</li>
+          <li>Vengono inviate solo quelle note e vedi esattamente quali.</li>
+          <li>Le risposte le citano con collegamenti cliccabili.</li>
+          <li>Le chiavi restano in Gestione credenziali di Windows.</li>
+        </ul>
+        <p><a class="more" href="docs/ai-assistant.html">Chiedi alle tue note</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/ask-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/ask-light.png" width="1440" height="900" loading="lazy"
+               alt="La pagina Chiedi con una domanda su distanziamento e richiamo e una risposta che cita le note come collegamenti.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="section-title">Funziona con i tuoi strumenti</h2>
+      <ul class="cards">
+        <li class="card">
+          <h3>Zotero</h3>
+          <p>Cerca nella tua libreria, inserisci citazioni che aprono l'elemento e avvia note bibliografiche con collegamenti al
+            PDF.</p>
+          <a class="more" href="docs/zotero.html">Zotero</a>
+        </li>
+        <li class="card">
+          <h3>Anki</h3>
+          <p>Sincronizza le flashcard tramite AnkiConnect o esporta mazzi <code>.apkg</code>. Risincronizzare aggiorna le schede
+            invece di duplicarle.</p>
+          <a class="more" href="docs/review-and-anki.html#anki">Anki</a>
+        </li>
+        <li class="card">
+          <h3>Server MCP</h3>
+          <p>Lascia che Claude Desktop, Claude Code e altri client MCP cerchino e leggano il tuo vault, solo mentre
+            ZettelApp è aperto e il suo interruttore MCP è attivo. È in sola lettura a meno che tu non consenta le modifiche.</p>
+          <a class="more" href="docs/mcp-server.html">Server MCP</a>
+        </li>
+        <li class="card">
+          <h3>Obsidian e Markdown</h3>
+          <p>Importa cartelle Markdown e vault di Obsidian, oppure esporta le note come file Markdown con front matter e
+            <code>[[collegamenti]]</code>.</p>
+          <a class="more" href="docs/export-import.html">Importa</a>
+        </li>
+        <li class="card">
+          <h3>Esporta tutto</h3>
+          <p>Esporta l'intera raccolta o qualsiasi sottografo come archivio, sito web statico, JSON, GraphML,
+            Graphviz o mazzo Anki.</p>
+          <a class="more" href="docs/export-import.html">Esporta</a>
+        </li>
+        <li class="card">
+          <h3>A casa su Windows</h3>
+          <p>Segue il tuo tema chiaro o scuro e il colore di accento. Menu e scorciatoie standard, un programma di installazione per singolo utente
+            e backup giornalieri.</p>
+          <a class="more" href="docs/getting-started.html">Per iniziare</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="privacy" class="section tinted">
+    <div class="wrap">
+      <h2 class="section-title">Privato e sicuro per progetto</h2>
+      <p class="section-lead">Le tue note sono tue. ZettelApp funziona offline. A parte un discreto controllo della disponibilità di una nuova
+        versione all'avvio, che puoi disattivare, usa la rete solo quando glielo chiedi.</p>
+      <ul class="cards compact">
+        <li class="card"><h3>Offline per prima cosa</h3><p>Nessun account, nessuna telemetria, nessun tracciamento. Le note risiedono in una cartella che
+          scegli tu.</p></li>
+        <li class="card"><h3>Nessun contenuto attivo</h3><p>Le note non possono eseguire script né caricare nulla dal web.
+          Le importazioni sono controllate per trucchi sui percorsi e bombe di decompressione.</p></li>
+        <li class="card"><h3>Le chiavi restano segrete</h3><p>Le chiavi API risiedono in Gestione credenziali di Windows e non vengono mai
+          scritte in file o log.</p></li>
+        <li class="card"><h3>Reti di sicurezza</h3><p>Salvataggio automatico, un Cestino con ripristino e un backup giornaliero di ogni vault che
+          apri.</p></li>
+      </ul>
+      <p class="center"><a class="more" href="docs/privacy-and-security.html">Privacy e sicurezza in dettaglio</a></p>
+    </div>
+  </section>
+
+  <section id="download" class="section">
+    <div class="wrap download">
+      <div>
+        <h2>Scarica ZettelApp</h2>
+        <p>Gratuito e open source, rilasciato nel pubblico dominio.</p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe">Scarica il programma di installazione</a>
+          <a class="button secondary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Portable.zip">.zip portatile</a>
+        </div>
+        <p class="fine"><a href="https://github.com/DutraIRS/ZettelApp/releases/latest">Tutte le versioni, le note di rilascio e i
+          checksum SHA-256</a></p>
+      </div>
+      <dl class="specs">
+        <dt>Sistema</dt><dd>Windows 10 (21H2 o successivo) o Windows 11, 64 bit</dd>
+        <dt>Installazione</dt><dd>Per singolo utente, non servono privilegi di amministratore. Scegli la lingua del programma di installazione all'inizio.</dd>
+        <dt>SmartScreen</dt><dd>Le build non sono ancora firmate digitalmente. Se Windows ti avvisa, scegli <i>Ulteriori informazioni ▸ Esegui comunque</i>
+          dopo aver verificato il checksum.</dd>
+        <dt>Sorgenti</dt><dd><a href="https://github.com/DutraIRS/ZettelApp">github.com/DutraIRS/ZettelApp</a></dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section tinted">
+    <div class="wrap">
+      <h2 class="section-title">Prossimamente</h2>
+      <ul class="cards compact">
+        <li class="card">        <h3>Più lingue</h3><p>L'app e queste pagine sono disponibili in 11 lingue; altre
+                  sono benvenute.</p></li>
+        <li class="card"><h3>Linux</h3><p>Pacchetti .deb e AppImage.</p></li>
+        <li class="card"><h3>Build firmate</h3><p>Niente più avvisi di SmartScreen.</p></li>
+        <li class="card"><h3>IA offline</h3><p>Modelli di embedding locali per suggerimenti ancora migliori.</p></li>
+      </ul>
+      <p class="center"><a class="more" href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">Leggi la
+        roadmap</a></p>
+    </div>
+  </section>
+
+  <section id="support" class="section">
+    <div class="wrap support">
+      <h2>Sostieni ZettelApp</h2>
+      <p>ZettelApp è un software gratuito, di pubblico dominio, sviluppato in modo aperto. Se ti fa risparmiare tempo, o vuoi vedere la
+        roadmap realizzarsi prima, considera di sostenerlo.</p>
+      <div class="actions">
+        <a class="button donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Dona su Ko-fi</a>
+      </div>
+      <p class="fine">Aziende: una sponsorizzazione può finanziare una specifica voce della roadmap.
+        <a href="https://github.com/DutraIRS/ZettelApp">Mettiti in contatto tramite GitHub</a>. Gli sponsor vengono ringraziati nelle
+        note di rilascio.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · pubblico dominio (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="docs/">Documentazione</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Problemi</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md">Sicurezza</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/blob/main/THIRD_PARTY_NOTICES.md">Avvisi</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Dona</a></li>
+    </ul>
+  </div>
+  <!--langs--><ul class="nav lang-row" aria-label="Lingue"><li><a href="../" lang="en" hreflang="en">English</a></li><li><a href="../es/" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/" lang="it" hreflang="it" aria-current="true">Italiano</a></li><li><a href="../ru/" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/" lang="ar" hreflang="ar">العربية</a></li></ul><!--/langs-->
+</footer>
+</body>
+</html>

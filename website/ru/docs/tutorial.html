@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Практический обзор. Каждый шаг говорит, что делать и что вы должны увидеть. Шаги с пометкой необязательно требуют Zotero, ключа ИИ или Anki; пропустите их, если вы ими не пользуете">
+<title>Руководство: ваши первые 30 минут – документация ZettelApp</title>
+<link rel="icon" type="image/png" href="../../assets/favicon.png">
+<link rel="stylesheet" href="../../style.css">
+<script src="../../assets/lang.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">К содержимому</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Возможности</a></li>
+        <li><a href="tutorial.html">Руководство</a></li>
+        <li><a href="./">Документация</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Поддержать</a></li>
+        <li><a class="nav-cta" href="../#download">Скачать</a></li>
+      </ul>
+    </nav>
+    <details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Языки</span></summary><ul class="lang-switch-panel" aria-label="Языки"><li><a href="../../docs/tutorial.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/tutorial.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/tutorial.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/tutorial.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/tutorial.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/tutorial.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/tutorial.html" lang="ru" hreflang="ru" aria-current="true">Русский</a></li><li><a href="../../zh-cn/docs/tutorial.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/tutorial.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/tutorial.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/tutorial.html" lang="ar" hreflang="ar">العربية</a></li></ul></details>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Поддержать"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Поддержать</span></a>
+      <a class="hbtn cta" href="../#download">Скачать</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Меню</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Возможности</a></li>
+          <li><a href="tutorial.html">Руководство</a></li>
+          <li><a href="./">Документация</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Документация">
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Документация</span><span class="docs-menu-current">Руководство: ваши первые 30 минут</span></span></summary>
+      <ul>
+      <li><a href="index.html">Документация ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a></li>
+      <li><a href="tutorial.html" aria-current="page">Руководство: ваши первые 30 минут</a></li>
+      <li><a href="getting-started.html">Начало работы</a></li>
+      <li><a href="notes-and-links.html">Заметки и связи</a></li>
+      <li><a href="link-suggestions.html">Подсказки ссылок</a></li>
+      <li><a href="graph-and-insights.html">Граф и статистика</a></li>
+      <li><a href="review-and-anki.html">Повторение, викторины и Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Спросите свои заметки (ИИ)</a></li>
+      <li><a href="mcp-server.html">MCP-сервер</a></li>
+      <li><a href="export-import.html">Экспорт и импорт</a></li>
+      <li><a href="keyboard-shortcuts.html">Горячие клавиши</a></li>
+      <li><a href="privacy-and-security.html">Конфиденциальность и безопасность</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Документация</h2>
+      <ul>
+      <li><a href="index.html">Документация ZettelApp</a></li>
+      <li><a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a></li>
+      <li><a href="tutorial.html" aria-current="page">Руководство: ваши первые 30 минут</a></li>
+      <li><a href="getting-started.html">Начало работы</a></li>
+      <li><a href="notes-and-links.html">Заметки и связи</a></li>
+      <li><a href="link-suggestions.html">Подсказки ссылок</a></li>
+      <li><a href="graph-and-insights.html">Граф и статистика</a></li>
+      <li><a href="review-and-anki.html">Повторение, викторины и Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Спросите свои заметки (ИИ)</a></li>
+      <li><a href="mcp-server.html">MCP-сервер</a></li>
+      <li><a href="export-import.html">Экспорт и импорт</a></li>
+      <li><a href="keyboard-shortcuts.html">Горячие клавиши</a></li>
+      <li><a href="privacy-and-security.html">Конфиденциальность и безопасность</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="руководство-ваши-первые-30-минут">Руководство: ваши первые 30 минут</h1>
+<p>Практический обзор. Каждый шаг говорит, что делать и что вы должны увидеть. Шаги с пометкой <em>необязательно</em> требуют Zotero,
+ключа ИИ или Anki; пропустите их, если вы ими не пользуетесь.</p>
+<p>Впервые знакомитесь с самим методом? Сначала прочитайте <a href="what-is-zettelkasten.html">Что такое Zettelkasten?</a>. Это займёт пять
+минут.</p>
+<h2 id="1-установите-и-откроите-приветственное-хранилище">1. Установите и откройте приветственное хранилище</h2>
+<ol>
+<li>Скачайте <strong>ZettelApp-Setup.exe</strong> из <a href="https://github.com/DutraIRS/ZettelApp/releases/latest">последнего релиза</a>
+и запустите его либо распакуйте <strong>ZettelApp-Portable.zip</strong> и запустите <code>ZettelApp.exe</code>.</li>
+<li>Запустите ZettelApp.</li>
+</ol>
+<p><strong>Вы должны увидеть</strong> страницу «Заметки» (Notes) с одиннадцатью связанными стартовыми заметками в новом хранилище в
+<em>Documents\ZettelApp</em>. В редакторе открыта заметка «Добро пожаловать в ZettelApp». Через мгновение ZettelApp также предложит
+необязательное приключение «Потерянный принц Архива»; выберите <strong>Не сейчас</strong>, если предпочитаете этот письменный обзор.</p>
+<h2 id="2-создаите-заметку">2. Создайте заметку</h2>
+<ol>
+<li>Нажмите <strong>Ctrl+N</strong>.</li>
+<li>Введите заголовок, например <em>Интервальное повторение</em>, и нажмите <strong>Enter</strong>, чтобы перейти к тексту.</li>
+<li>Запишите одну идею своими словами в двух-трёх предложениях:
+<em>Повторение материала с возрастающими интервалами помогает долговременной памяти, потому что каждое повторение происходит
+незадолго до забывания.</em></li>
+</ol>
+<p><strong>Вы должны увидеть</strong>, как заметка появится в начале списка. Кнопки «Сохранить» нет: заметки сохраняются по мере
+набора. ID под заголовком (например, <code>20261027153012</code>) — это постоянный адрес заметки.</p>
+<h2 id="3-добавьте-теги">3. Добавьте теги</h2>
+<p>Нажмите <strong>Добавить тег</strong> под заголовком, введите <code>обучение</code> и нажмите <strong>Enter</strong>. Добавьте также <code>память</code>.</p>
+<p><strong>Вы должны увидеть</strong> два «чипа»: <em>#обучение</em> и <em>#память</em>. Фильтр по тегам над списком теперь предлагает их,
+а ввод <code>tag:память</code> в поле поиска находит заметку.</p>
+<h2 id="4-свяжите-с-другои-заметкои">4. Свяжите с другой заметкой</h2>
+<ol>
+<li>Создайте вторую заметку (<strong>Ctrl+N</strong>) с заголовком <em>Кривая забывания</em> и одним предложением: <em>Память быстро
+ослабевает, если информацию не повторять.</em></li>
+<li>Вернитесь к <em>Интервальному повторению</em> (щёлкните по ней в списке). В тексте введите <code>[[</code>, а затем <code>Кри</code>.</li>
+<li>Выберите <strong>Кривая забывания</strong> в списке автодополнения и нажмите <strong>Enter</strong>.</li>
+</ol>
+<p><strong>Вы должны увидеть</strong> <code>[[Кривая забывания]]</code> с подчёркиванием в тексте. На боковой панели <em>Кривая забывания</em>
+появится в разделе <strong>Связи</strong>. Нажмите кнопку с глазом (<strong>Разделённый вид</strong>) на панели инструментов: в просмотре будет кликабельная
+ссылка.</p>
+<h2 id="5-скажите-как-заметки-связаны">5. Скажите, <em>как</em> заметки связаны</h2>
+<p>Превратите ссылку в типизированную связь, поставив перед ней <code>supports::</code>:</p>
+<pre><code class="language-markdown">supports:: [[Кривая забывания]]
+</code></pre>
+<p><strong>Вы должны увидеть</strong> связь в списке как <em>Подтверждает</em> на боковой панели. Откройте <em>Кривую забывания</em>: её
+<strong>Обратные ссылки</strong> читаются как <em>Интервальное повторение: <strong>Подтверждается</strong></em>, потому что <em>supports</em> — направленный тип связи.
+Простые <code>[[ссылки]]</code> означают <em>Связано с</em>.</p>
+<h2 id="6-используите-подсказанную-ссылку">6. Используйте подсказанную ссылку</h2>
+<p>Напишите ещё несколько заметок о родственных идеях, например <em>Активное воспроизведение</em> и <em>Чередование</em>, в каждой — по
+одному-два предложения и тег <code>обучение</code>. Затем откройте одну из них и посмотрите на <strong>Подсказки ссылок</strong> на
+боковой панели.</p>
+<ul>
+<li>Нажмите <strong>Связать</strong>, чтобы принять подсказку. Маленькая стрелка рядом выбирает тип связи.</li>
+<li>Нажмите <strong>✕</strong>, чтобы отклонить неподходящую.</li>
+<li>Наведите курсор на подсказку, чтобы увидеть, <strong>почему</strong> она предложена: свидетельства каждой меры за или против.</li>
+</ul>
+<p><strong>Чему учится модель:</strong> принятые подсказки становятся связями, которые обучают классификатор как положительные
+примеры. Отклонённые запоминаются как отрицательные примеры и больше никогда не предлагаются для этой пары.
+Подсказки становятся лучше по мере использования. См. <a href="link-suggestions.html">Подсказки ссылок</a>.</p>
+<p><img loading="lazy" src="../../assets/screenshots/notes-light.png" alt="Заметки с подсказанными ссылками" /></p>
+<h2 id="7-добавьте-изображение">7. Добавьте изображение</h2>
+<p>Скопируйте любую картинку (например, клавишами <em>Win+Shift+S</em>), щёлкните в тексте заметки и нажмите <strong>Ctrl+V</strong>. Можно
+также перетащить файл изображения или использовать <em>Вставка ▸ Изображение…</em>.</p>
+<p><strong>Вы должны увидеть</strong> <code>![…](asset:…)</code> в тексте и изображение в просмотре. Поскольку это первое
+изображение заметки, оно также становится <strong>картинкой заметки</strong>, которая показывается рядом с заголовком и внутри круга заметки
+на графе.</p>
+<h2 id="8-набросаите-ментальную-карту">8. Набросайте ментальную карту</h2>
+<ol>
+<li>Откройте вкладку <strong>Ментальная карта</strong> и нажмите <strong>Добавить идею</strong>.</li>
+<li>Нажмите <strong>Tab</strong>, чтобы добавить дочернюю идею, <strong>Enter</strong> — соседнюю, <strong>F2</strong> — переименовать, <strong>Del</strong> — удалить.
+Клавиши со стрелками перемещают между идеями.</li>
+<li>Теперь нажмите <strong>По ссылкам</strong> и подтвердите, что она может заменить только что нарисованную карту.</li>
+</ol>
+<p><strong>Вы должны увидеть</strong> ментальную карту, построенную по связям заметки, сгруппированным по типу связи, где связи
+каждой связанной заметки идут на уровень глубже. Щёлкните любую идею правой кнопкой, чтобы связать её с заметкой. Кнопка экспорта сохраняет PNG, SVG
+или FreeMind.</p>
+<p><img loading="lazy" src="../../assets/screenshots/mindmap-light.png" alt="Ментальная карта" /></p>
+<h2 id="9-создаите-карточки-и-повторите-их">9. Создайте карточки и повторите их</h2>
+<p>Добавьте эти строки в текст заметки <em>Интервальное повторение</em>:</p>
+<pre><code class="language-markdown">Q: Почему повторения разносят во времени?
+A: Каждое усилие вспомнить незадолго до забывания укрепляет память.
+
+{{c1::Герман Эббингауз}} описал кривую забывания.
+</code></pre>
+<p><strong>Вы должны увидеть</strong> <strong>Карточки (2)</strong> на вкладке: карточку «вопрос–ответ» и карточку с пропуском. Теперь откройте <strong>Повторение</strong>
+(<strong>Ctrl+4</strong>) и нажмите <strong>Начать повторение</strong>.</p>
+<ul>
+<li>Нажмите <strong>Пробел</strong>, чтобы показать ответ.</li>
+<li>Оцените себя клавишами <strong>1–4</strong> (<em>Снова, Трудно, Хорошо, Легко</em>).</li>
+</ul>
+<p>Алгоритм SM-2 решает, когда каждая карточка вернётся. Попробуйте также <strong>Пробная викторина ▸ Выбор ответа</strong> или <strong>Угадай
+заметку</strong>.</p>
+<p><img loading="lazy" src="../../assets/screenshots/quiz-light.png" alt="Викторина с выбором ответа" /></p>
+<h2 id="10-исследуите-граф">10. Исследуйте граф</h2>
+<p>Откройте <strong>Граф</strong> (<strong>Ctrl+2</strong>).</p>
+<ol>
+<li>Перетаскивайте заметки, масштабируйте колесом и наводите курсор на заметку, чтобы подсветить её соседей.</li>
+<li>Выберите заметку на странице «Заметки», вернитесь и нажмите <strong>Локальный</strong>, затем измените <strong>Глубину</strong> на 1, 2 или 3.</li>
+<li>Установите <strong>Цвет по</strong> на <strong>Кластеры: k-средних</strong>. Заметки группируются по смыслу, а легенда называет каждый
+кластер по его ключевым словам.</li>
+<li>Включите <strong>Группы</strong>, чтобы стянуть каждую группу вместе на затенённом фоне.</li>
+<li>Нажмите <strong>3D</strong>, перетаскивайте, чтобы вращать, и попробуйте <strong>Вращать автоматически</strong>.</li>
+</ol>
+<p><img loading="lazy" src="../../assets/screenshots/graph-light.png" alt="Граф, раскрашенный по тегам и сгруппированный" /></p>
+<h2 id="11-проверьте-статистику">11. Проверьте статистику</h2>
+<p>Откройте <strong>Статистику</strong> (Insights, <strong>Ctrl+3</strong>): счётчики, заметки по месяцам, популярные теги, связи по типам и самые
+связанные заметки. <strong>Несвязанные заметки</strong> — ваш список дел: свяжите их с чем-нибудь. У каждой диаграммы есть
+табличный вид.</p>
+<h2 id="12-процитируите-элемент-zotero-и-напишите-литературную-заметку-необязательно">12. Процитируйте элемент Zotero и напишите литературную заметку (необязательно)</h2>
+<p>При запущенном Zotero 7+ и включённой в его <em>Настройки ▸ Дополнительно</em> опции <em>Разрешить другим приложениям на этом компьютере обращаться к Zotero</em>:</p>
+<ol>
+<li>Выберите <em>Вставка ▸ Ссылка Zotero…</em>, найдите элемент и нажмите <strong>Вставить цитату</strong>: появится ссылка вида
+<em>Ebbinghaus (1885)</em>, открывающая элемент в Zotero.</li>
+<li>Сделайте это снова и нажмите <strong>Новая литературная заметка</strong>.</li>
+</ol>
+<p><strong>Вы должны увидеть</strong> новую заметку со ссылкой, ссылками <em>Открыть в Zotero</em> и <em>Открыть PDF</em>, аннотацией и
+разделами <em>Ключевые идеи</em> / <em>Мои мысли</em> с тегом <code>literature</code>. См. <a href="zotero.html">Zotero</a>.</p>
+<h2 id="13-спросите-свои-заметки-необязательно">13. Спросите свои заметки (необязательно)</h2>
+<ol>
+<li>В <em>Сервис ▸ Параметры ▸ Ассистент ИИ</em> выберите провайдера (Anthropic, OpenAI или Z.ai), вставьте свой API-ключ
+и нажмите <strong>Проверить соединение</strong>.</li>
+<li>Откройте <strong>Спросить</strong> (<strong>Ctrl+5</strong>) и задайте вопрос: <em>Как интервалы и воспроизведение работают вместе?</em></li>
+</ol>
+<p><strong>Вы должны увидеть</strong> ответ, цитирующий ваши заметки в виде ссылок, и точный список <strong>отправленных источников</strong>. Ваш компьютер покидают только
+эти заметки и ваш вопрос. См. <a href="ai-assistant.html">Спросите свои заметки</a>.</p>
+<h2 id="14-экспортируите-подграф-и-синхронизируите-с-anki-необязательно">14. Экспортируйте подграф и синхронизируйте с Anki (необязательно)</h2>
+<ol>
+<li>Откройте заметку, выберите <em>Файл ▸ Экспорт…</em> (<strong>Ctrl+Shift+E</strong>), укажите <strong>Текущая заметка и связанные заметки</strong>,
+глубину 2 и формат <strong>Сайт</strong>.</li>
+<li>Откройте <code>index.html</code> из zip-архива в браузере: небольшой сайт с этой частью вашего Zettelkasten.</li>
+<li>При запущенном Anki и установленном дополнении AnkiConnect (код <code>2055492159</code>) откройте <strong>Повторение</strong> и нажмите
+<strong>Синхронизировать с Anki</strong>. Ссылка на источник каждой карточки открывает заметку в ZettelApp.</li>
+</ol>
+<p>См. <a href="export-import.html">Экспорт и импорт</a> и <a href="review-and-anki.html#anki">Anki</a>.</p>
+<h2 id="15-узнаите-где-хранятся-ваши-данные">15. Узнайте, где хранятся ваши данные</h2>
+<ul>
+<li>Ваши заметки лежат в папке хранилища (<em>Файл ▸ Показать хранилище в Проводнике</em>): <code>zettel.db</code> и <code>assets</code>.</li>
+<li>Резервная копия создаётся автоматически раз в день, а <em>Файл ▸ Создать резервную копию хранилища</em> создаёт её в любой момент.</li>
+<li>Удалённые заметки попадают в <strong>Корзину</strong> под списком заметок, откуда их можно восстановить.</li>
+</ul>
+<p>Подробности — в <a href="privacy-and-security.html">Конфиденциальность и безопасность</a>.</p>
+<p><strong>Вот и всё.</strong> Продолжайте писать по одной идее в заметке, связывайте каждую новую заметку с указанием причины и позвольте подсказкам и
+графу показать, что у вас есть. Горячие клавиши описаны в <a href="keyboard-shortcuts.html">Горячие клавиши</a>.</p>
+
+    <p class="doc-footer">Нашли ошибку? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ru/tutorial.md">Править страницу на GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
+    <ul class="nav">
+      <li><a href="../">Главная</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Проблемы</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Поддержать</a></li>
+    </ul>
+  </div>
+  <ul class="nav lang-row" aria-label="Языки"><li><a href="../../docs/tutorial.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/tutorial.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/tutorial.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/tutorial.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/tutorial.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/tutorial.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/tutorial.html" lang="ru" hreflang="ru" aria-current="true">Русский</a></li><li><a href="../../zh-cn/docs/tutorial.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/tutorial.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/tutorial.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/tutorial.html" lang="ar" hreflang="ar">العربية</a></li></ul>
+</footer>
+</body>
+</html>
