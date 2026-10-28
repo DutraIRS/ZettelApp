@@ -27,7 +27,8 @@ _alive: set = set()
 class _Task(QRunnable):
     def __init__(self, fn: Callable, args: tuple, kwargs: dict):
         super().__init__()
-        self.setAutoDelete(False)  # Python owns the task (see run_task)
+        # The pool deletes the task after run() (Qt's default). With autoDelete off, PySide's
+        # pool keeps a reference to every task it ever ran, so none of them was ever freed.
         self.fn, self.args, self.kwargs = fn, args, kwargs
         self.signals = _Signals()
 
@@ -54,10 +55,22 @@ def run_task(
         task.signals.done.connect(on_done)
     if on_error:
         task.signals.failed.connect(on_error)
-    # Release the task only after its (queued) result reached the GUI thread;
-    # releasing it earlier would drop the result.
-    task.signals.done.connect(lambda *_: _alive.discard(task))
-    task.signals.failed.connect(lambda *_: _alive.discard(task))
+
+    def release(*_args) -> None:
+        # Runs after on_done/on_error, once the (queued) result reached the GUI thread;
+        # releasing the task earlier would drop the result. The signal connections hold
+        # this function, which holds the task: a cycle through Qt that Python's garbage
+        # collector can't see. Disconnecting breaks it, freeing the task (whose C++ part
+        # the pool has already deleted) and everything its function captured.
+        _alive.discard(task)
+        task.fn = task.args = task.kwargs = None
+        signals = task.signals
+        signals.done.disconnect()
+        signals.failed.disconnect()
+        signals.deleteLater()
+
+    task.signals.done.connect(release)
+    task.signals.failed.connect(release)
     _alive.add(task)
     (pool or QThreadPool.globalInstance()).start(task)
 
