@@ -40,6 +40,9 @@ LLM_PRIVACY_ACK = "llm/privacyAcknowledged"
 MCP_ALLOW_WRITES = "mcp/allowWrites"
 UPDATE_CHECK = "updates/checkAtStart"
 UPDATE_NOTIFIED = "updates/notifiedVersion"  # the newest version already announced
+QUEST_STATE = "quest/state"  # "" (never offered) | declined | active | paused | finished
+QUEST_CHAPTER = "quest/chapter"  # key of the adventure's current chapter
+QUEST_CLUES = "quest/clues"  # chapters solved by doing them (not skipped)
 
 DEFAULTS: dict[str, Any] = {
     THEME: "system",
@@ -62,6 +65,8 @@ DEFAULTS: dict[str, Any] = {
     MCP_ALLOW_WRITES: False,
     UPDATE_CHECK: True,
     UPDATE_NOTIFIED: "",
+    QUEST_STATE: "",
+    QUEST_CHAPTER: "",
 }
 
 

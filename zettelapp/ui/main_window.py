@@ -41,6 +41,8 @@ from zettelapp.core.security import (
     local_file_path,
     safe_filename,
 )
+from zettelapp.core.starter import HUB as STARTER_HUB
+from zettelapp.core.starter import create_starter_notes
 from zettelapp.core.storage import Vault, VaultError
 from zettelapp.core.suggest import FEATURES, NoteData
 from zettelapp.core.updates import available_update
@@ -53,6 +55,7 @@ from zettelapp.ui.editor import NoteEditor
 from zettelapp.ui.graph_page import GraphPage
 from zettelapp.ui.insights import InsightsPage
 from zettelapp.ui.note_list import NoteListPanel
+from zettelapp.ui.quest import Quest
 from zettelapp.ui.review_page import ReviewPage
 from zettelapp.ui.settings_dialog import OptionsDialog
 from zettelapp.ui.side_panel import SidePanel
@@ -61,39 +64,6 @@ from zettelapp.ui.widgets import InfoBar, ToggleSwitch, label
 from zettelapp.ui.workers import SuggestionService, run_task
 
 log = logging.getLogger(__name__)
-
-WELCOME_TEXT = """\
-A Zettelkasten is a network of small, atomic notes. Each note holds **one idea** and links to \
-related ideas, so knowledge grows by connection rather than by folder.
-
-## Link notes
-- Type two square brackets and start typing a title, then pick a note from the list. \
-This makes a link like [[How link suggestions work]].
-- **Ctrl+click** a link to open that note. In the preview (switch views with Ctrl+E), \
-a normal click is enough.
-- Say *how* two notes relate by writing a type before the link: supports:: [[Writing atomic notes]]
-
-## Tags
-Type a tag in the **Add tag** box under the title and press Enter. You can also write a tag \
-anywhere in the text with a hash sign in front, like #welcome. Tags written in the text \
-appear next to the box, and disappear when you delete them from the text.
-
-## Source link and images
-- Paste a web address or a Zotero item link into the **Source link** box under the tags.
-- To add an image, copy it and press **Ctrl+V** in the text, drag an image file into the \
-text, or click **Insert image** on the toolbar (Ctrl+Shift+I). The first image also becomes \
-the note's picture in the graph.
-
-## Mind maps and flashcards
-- Click the **Mind map** tab above the text to sketch ideas around this note.
-- For a flashcard, write a question on a line that starts with Q: and the answer on the next \
-line, starting with A: — like the card below. Practise your cards on the **Review** page.
-
-Open the **Graph** to see your notes in 2D or 3D, coloured by tag or by topic cluster.
-
-Q: What should a single note contain?
-A: One idea, in your own words.
-"""
 
 NAV = [
     ("notes", "Notes"),
@@ -211,6 +181,7 @@ class MainWindow(QMainWindow):
         self.watch_timer = QTimer(self, interval=3000, timeout=self._check_external_changes)
         self.watch_timer.start()
         self._wire()
+        self.quest = Quest(self)
         self._build_menus()
         self.status_vault = label("", "caption")
         self.status_counts = label("", "caption")
@@ -384,6 +355,8 @@ class MainWindow(QMainWindow):
         )
         self._action(h, "&Keyboard Shortcuts", lambda: ShortcutsDialog(self).exec(), None)
         h.addSeparator()
+        self.quest.add_menu_actions(h)
+        h.addSeparator()
         self._action(
             h,
             "ZettelApp &Website",
@@ -470,6 +443,7 @@ class MainWindow(QMainWindow):
             return False
         self.close_vault()
         self.vault = vault
+        self.quest.attach(vault)
         self._data_version = self._read_data_version()
         self._maybe_backup()
         settings.put(settings.LAST_VAULT, str(vault.folder))
@@ -532,44 +506,22 @@ class MainWindow(QMainWindow):
     def open_default_vault(self) -> None:
         last = settings.get(settings.LAST_VAULT, "")
         if last and Vault.is_vault(last) and self.open_vault(last):
+            self.quest.start_up(first_run=False)
             return
         folder = default_vault_dir()
         fresh = not Vault.is_vault(folder)
         if self.open_vault(folder) and fresh:
             self._create_welcome_notes()
+        self.quest.start_up(first_run=fresh)  # the adventure is offered on the very first run
 
     def _create_welcome_notes(self) -> None:
-        v = self.vault
-        start = v.create_note(
-            "Welcome to ZettelApp",
-            WELCOME_TEXT,
-            tags=["zettelkasten", "start"],
-        )
-        atomic = v.create_note(
-            "Writing atomic notes",
-            (
-                "Keep every note focused on a single idea. Atomic notes are easier to link, reuse and "
-                "review, and they make the {{c1::graph}} of your knowledge meaningful.\n\n"
-                "Write in your own words; a note is a thought, not a quote."
-            ),
-            tags=["zettelkasten", "writing"],
-        )
-        v.create_note(
-            "How link suggestions work",
-            (
-                "When you write, ZettelApp compares the note with every other note using several measures: "
-                "semantic similarity (LSA), shared keywords (TF-IDF), Levenshtein and Jaro-Winkler distance on titles "
-                "and text, shared tags and shared links. A Naive Bayes classifier turns this evidence into the "
-                "probability that two notes should be linked. It learns from the links you create and from the "
-                "suggestions you dismiss."
-            ),
-            tags=["zettelkasten", "features"],
-        )
-        v.add_link(atomic.id, start.id, "supports")
+        """Fill a new vault with the starter notes (in the interface language) and open the hub."""
+        ids = create_starter_notes(self.vault)
         self.list.refresh()
         self.list.refresh_tags()
         self._update_counts()
-        self.open_note(start.id)
+        self.editor.body.set_titles(list(self.vault.titles().values()))
+        self.open_note(ids[STARTER_HUB])
 
     def _maybe_backup(self) -> None:
         if not settings.get(settings.BACKUP_ENABLED):
