@@ -57,6 +57,7 @@ def main() -> None:
         window.resize(1440, 900)
         window.show()
         window.open_vault(vault_dir)
+        window.status_vault.setText(r"C:\Users\you\Documents\ZettelApp")  # never publish a real local path
         window.open_note(ids["Spaced repetition"])
         window.editor.set_view_mode(1)
         settle(app, 900, window)
