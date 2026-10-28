@@ -273,6 +273,7 @@ QPushButton[accent="true"]:hover {{ background: {t.accent_hover}; border-color: 
 QPushButton[accent="true"]:disabled {{ background: {t.border}; border-color: {t.border}; color: {t.text_muted}; }}
 QPushButton[flat="true"] {{ background: transparent; border: none; color: {t.accent}; padding: 4px 6px; }}
 QPushButton[flat="true"]:hover {{ background: {t.hover}; }}
+QPushButton[flat="true"]:disabled {{ color: {t.text_muted}; background: transparent; }}
 QToolButton {{ background: transparent; border: none; border-radius: 4px; padding: 5px; }}
 QToolButton:hover {{ background: {t.hover}; }}
 QToolButton:pressed {{ background: {t.pressed}; }}
