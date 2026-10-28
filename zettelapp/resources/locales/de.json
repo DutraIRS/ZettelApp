@@ -279,7 +279,6 @@
  "Import a ZettelApp archive, JSON or Markdown files": "Ein ZettelApp-Archiv, JSON- oder Markdown-Dateien importieren",
  "Import Markdown &Folder…": "Markdown-&Ordner importieren…",
  "In a note, write {example}.": "Schreiben Sie in einer Notiz {example}.",
- "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — A.”": "Tinte breitet sich über Ihre Notiz aus und bildet Worte, die nicht Ihre sind: „Folge den silbernen Fäden. — A.“",
  "Inline, inside a sentence": "Im Text, innerhalb eines Satzes",
  "Insert": "Einfügen",
  "Insert citation": "Zitat einfügen",
@@ -703,5 +702,6 @@
  "✗ Not quite. The correct answer is highlighted.": "✗ Nicht ganz. Die richtige Antwort ist hervorgehoben.",
  "Use Windows setting": "Windows-Einstellung verwenden",
  "Language": "Sprache",
- "Restart ZettelApp to apply the new language.": "Starten Sie ZettelApp neu, um die neue Sprache zu übernehmen."
+ "Restart ZettelApp to apply the new language.": "Starten Sie ZettelApp neu, um die neue Sprache zu übernehmen.",
+ "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — Z.”": "Tinte breitet sich über Ihre Notiz aus und bildet Worte, die nicht Ihre sind: „Folge den silbernen Fäden. — Z.“"
 }

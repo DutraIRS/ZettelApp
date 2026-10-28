@@ -278,7 +278,6 @@
  "Import a ZettelApp archive, JSON or Markdown files": "ZettelApp 보관 파일, JSON 또는 Markdown 파일 가져오기",
  "Import Markdown &Folder…": "Markdown 폴더 가져오기(&F)…",
  "In a note, write {example}.": "노트에 {example}처럼 쓰세요.",
- "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — A.”": "잉크가 노트 위로 번지며 당신이 쓰지 않은 글을 만들어요. “은빛 실을 따라가세요. — A.”",
  "Inline, inside a sentence": "문장 안에 인라인으로",
  "Insert": "삽입",
  "Insert citation": "인용 삽입",
@@ -689,5 +688,6 @@
  "✗ Not quite. The correct answer is highlighted.": "✗ 아쉬워요. 정답이 강조 표시되어 있어요.",
  "Use Windows setting": "Windows 설정 사용",
  "Language": "언어",
- "Restart ZettelApp to apply the new language.": "새 언어를 적용하려면 ZettelApp을 다시 시작하세요."
+ "Restart ZettelApp to apply the new language.": "새 언어를 적용하려면 ZettelApp을 다시 시작하세요.",
+ "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — Z.”": "잉크가 노트 위로 번지며 당신이 쓰지 않은 글을 만들어요. “은빛 실을 따라가세요. — Z.”"
 }

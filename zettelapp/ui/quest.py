@@ -186,7 +186,7 @@ CHAPTERS: list[Chapter] = [
         ),
         (
             N_(
-                "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — A.”"
+                "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — Z.”"
             ),
         ),
         _titled_notes,

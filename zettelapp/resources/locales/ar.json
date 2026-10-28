@@ -283,7 +283,6 @@
  "Import a ZettelApp archive, JSON or Markdown files": "استيراد أرشيف ZettelApp أو ملفات JSON أو Markdown",
  "Import Markdown &Folder…": "استيراد &مجلد Markdown… (&F)",
  "In a note, write {example}.": "في ملاحظة، اكتب {example}.",
- "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — A.”": "ينتشر الحبر على ملاحظتك ويكوّن كلمات ليست لك: «اتبع الخيوط الفضية. — A.»",
  "Inline, inside a sentence": "ضمن السطر، داخل جملة",
  "Insert": "إدراج",
  "Insert citation": "إدراج استشهاد",
@@ -759,5 +758,6 @@
  "✗ Not quite. The correct answer is highlighted.": "✗ ليس تمامًا. الإجابة الصحيحة مظلّلة.",
  "Use Windows setting": "استخدام إعداد Windows",
  "Language": "اللغة",
- "Restart ZettelApp to apply the new language.": "أعد تشغيل ZettelApp لتطبيق اللغة الجديدة."
+ "Restart ZettelApp to apply the new language.": "أعد تشغيل ZettelApp لتطبيق اللغة الجديدة.",
+ "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — Z.”": "ينتشر الحبر على ملاحظتك ويكوّن كلمات ليست لك: «اتبع الخيوط الفضية. — Z.»"
 }

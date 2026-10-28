@@ -280,7 +280,6 @@
  "Import a ZettelApp archive, JSON or Markdown files": "Импорт архива ZettelApp, файлов JSON или Markdown",
  "Import Markdown &Folder…": "Импорт &папки Markdown…",
  "In a note, write {example}.": "Напишите в заметке {example}.",
- "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — A.”": "Чернила расползаются по вашей заметке и складываются в чужие слова: «Следуй за серебряными нитями. — А.»",
  "Inline, inside a sentence": "В строке, внутри предложения",
  "Insert": "Вставка",
  "Insert citation": "Вставить цитату",
@@ -717,5 +716,6 @@
  "✗ Not quite. The correct answer is highlighted.": "✗ Не совсем. Правильный ответ выделен.",
  "Use Windows setting": "Как в Windows",
  "Language": "Язык",
- "Restart ZettelApp to apply the new language.": "Перезапустите ZettelApp, чтобы применить новый язык."
+ "Restart ZettelApp to apply the new language.": "Перезапустите ZettelApp, чтобы применить новый язык.",
+ "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — Z.”": "Чернила расползаются по вашей заметке и складываются в чужие слова: «Следуй за серебряными нитями. — З.»"
 }

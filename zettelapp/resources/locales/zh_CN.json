@@ -278,7 +278,6 @@
  "Import a ZettelApp archive, JSON or Markdown files": "导入 ZettelApp 归档、JSON 或 Markdown 文件",
  "Import Markdown &Folder…": "导入 Markdown 文件夹(&F)…",
  "In a note, write {example}.": "在笔记中写下 {example}。",
- "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — A.”": "墨水在你的笔记上蔓延,形成不属于你的字句:“沿着银线走。——A.”",
  "Inline, inside a sentence": "行内,位于句子中",
  "Insert": "插入",
  "Insert citation": "插入引用",
@@ -689,5 +688,6 @@
  "✗ Not quite. The correct answer is highlighted.": "✗ 不太对。正确答案已高亮显示。",
  "Use Windows setting": "使用 Windows 设置",
  "Language": "语言",
- "Restart ZettelApp to apply the new language.": "重新启动 ZettelApp 以应用新语言。"
+ "Restart ZettelApp to apply the new language.": "重新启动 ZettelApp 以应用新语言。",
+ "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — Z.”": "墨水在你的笔记上蔓延,形成不属于你的字句:“沿着银线走。——Z.”"
 }

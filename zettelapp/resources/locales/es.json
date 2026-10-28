@@ -279,7 +279,6 @@
  "Import a ZettelApp archive, JSON or Markdown files": "Importar un archivo de ZettelApp, o archivos JSON o Markdown",
  "Import Markdown &Folder…": "Importar &carpeta de Markdown…",
  "In a note, write {example}.": "En una nota, escribe {example}.",
- "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — A.”": "La tinta se extiende por tu nota y forma palabras que no son tuyas: «Sigue los hilos de plata. — A.»",
  "Inline, inside a sentence": "En línea, dentro de una frase",
  "Insert": "Insertar",
  "Insert citation": "Insertar cita",
@@ -703,5 +702,6 @@
  "✗ Not quite. The correct answer is highlighted.": "✗ No exactamente. La respuesta correcta está resaltada.",
  "Use Windows setting": "Usar la configuración de Windows",
  "Language": "Idioma",
- "Restart ZettelApp to apply the new language.": "Reinicia ZettelApp para aplicar el nuevo idioma."
+ "Restart ZettelApp to apply the new language.": "Reinicia ZettelApp para aplicar el nuevo idioma.",
+ "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — Z.”": "La tinta se extiende por tu nota y forma palabras que no son tuyas: «Sigue los hilos de plata. — Z.»"
 }
