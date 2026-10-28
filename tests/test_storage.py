@@ -173,9 +173,26 @@ def test_failed_upgrade_leaves_the_vault_at_schema_2(tmp_path, monkeypatch):
     def fail(self, key, value):
         raise sqlite3.OperationalError("disk full")
 
+    connections = []
+    connect = sqlite3.connect
+
+    class TrackedConnection(sqlite3.Connection):
+        was_closed = False
+
+        def close(self):
+            self.was_closed = True
+            super().close()
+
+    def tracked_connect(*args, **kwargs):
+        connection = connect(*args, factory=TrackedConnection, **kwargs)
+        connections.append(connection)
+        return connection
+
+    monkeypatch.setattr(sqlite3, "connect", tracked_connect)
     monkeypatch.setattr(Vault, "_set_meta", fail)
     with pytest.raises(sqlite3.OperationalError):
         Vault.open(folder)
+    assert connections[-1].was_closed
     monkeypatch.undo()
     conn = sqlite3.connect(folder / Vault.DB_NAME)
     columns = {r[1] for r in conn.execute("PRAGMA table_info(link_types)")}

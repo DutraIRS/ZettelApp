@@ -175,18 +175,22 @@ class Vault:
             conn = sqlite3.connect(f"{db_path.as_uri()}?mode=ro", uri=True)
         else:
             conn = sqlite3.connect(db_path)
-        conn.row_factory = sqlite3.Row
-        conn.execute("PRAGMA foreign_keys = ON")
-        vault = cls(folder, conn, readonly)
-        if not readonly:
-            # Rollback journal + full sync: safest choice for folders that are
-            # synchronised by OneDrive or similar tools.
-            conn.execute("PRAGMA journal_mode = DELETE")
-            conn.execute("PRAGMA synchronous = FULL")
-            vault._migrate()
-            (folder / cls.ASSETS_DIR).mkdir(exist_ok=True)
-        vault.has_fts = vault._table_exists("notes_fts")
-        return vault
+        try:
+            conn.row_factory = sqlite3.Row
+            conn.execute("PRAGMA foreign_keys = ON")
+            vault = cls(folder, conn, readonly)
+            if not readonly:
+                # Rollback journal + full sync: safest choice for folders that are
+                # synchronised by OneDrive or similar tools.
+                conn.execute("PRAGMA journal_mode = DELETE")
+                conn.execute("PRAGMA synchronous = FULL")
+                vault._migrate()
+                (folder / cls.ASSETS_DIR).mkdir(exist_ok=True)
+            vault.has_fts = vault._table_exists("notes_fts")
+            return vault
+        except BaseException:
+            conn.close()
+            raise
 
     @staticmethod
     def is_vault(folder: str | Path) -> bool:
