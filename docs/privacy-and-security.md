@@ -51,9 +51,12 @@ Notes can come from imports, the web or AI answers, so ZettelApp treats their co
 - **Link allowlist.** Clicking a link opens only web pages (`http`/`https`), e-mail (`mailto`), notes, and
   Zotero *select item* / *open PDF* links. `javascript:`, `file:` and other schemes are refused.
 - **Images are verified by content**, not by file name. Only PNG, JPEG, GIF, WebP and BMP up to 25 MB are
-  accepted; SVG is refused because it can carry scripts.
+  accepted; SVG is refused because it can carry scripts. Verification covers the file signature and
+  compressed size; pixel dimensions are checked when the image is first displayed.
 - **Safe imports.** Archives are checked for path tricks ("zip-slip") and decompression bombs. Every field
-  is validated and size-limited, and Markdown imports can't reach outside the imported folder.
+  is validated and size-limited, Markdown imports can't reach outside the imported folder, and a failed
+  import leaves the vault unchanged: imports run in a single database transaction that is rolled back on
+  any error.
 - **Safe exports.** Exported websites contain no scripts and carry a strict Content-Security-Policy. Files
   are written atomically.
 - **Database safety.** All database queries use bound parameters, and search text is never interpreted as
