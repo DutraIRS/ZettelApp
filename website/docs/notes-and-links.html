@@ -144,6 +144,8 @@ part_of:: [[Zettelkasten method]]
 <th>Name</th>
 <th>Reverse name</th>
 <th>Directed</th>
+<th>Line</th>
+<th>Arrow tip</th>
 </tr>
 </thead>
 <tbody>
@@ -152,49 +154,65 @@ part_of:: [[Zettelkasten method]]
 <td>Related to</td>
 <td>Related to</td>
 <td>no</td>
+<td>solid, grey</td>
+<td>none</td>
 </tr>
 <tr>
 <td><code>supports</code></td>
 <td>Supports</td>
 <td>Supported by</td>
 <td>yes</td>
+<td>dashed, green</td>
+<td>filled triangle</td>
 </tr>
 <tr>
 <td><code>contradicts</code></td>
 <td>Contradicts</td>
 <td>Contradicts</td>
 <td>no</td>
+<td>dotted, red</td>
+<td>none</td>
 </tr>
 <tr>
 <td><code>extends</code></td>
 <td>Extends</td>
 <td>Extended by</td>
 <td>yes</td>
+<td>dash-dot, blue</td>
+<td>filled triangle</td>
 </tr>
 <tr>
 <td><code>example</code></td>
 <td>Example of</td>
 <td>Has example</td>
 <td>yes</td>
+<td>dash-dot-dot, amber</td>
+<td>circle</td>
 </tr>
 <tr>
 <td><code>part_of</code></td>
 <td>Part of</td>
 <td>Contains</td>
 <td>yes</td>
+<td>long dash, purple</td>
+<td>diamond</td>
 </tr>
 <tr>
 <td><code>cites</code></td>
 <td>Cites</td>
 <td>Cited by</td>
 <td>yes</td>
+<td>solid, teal</td>
+<td>open arrow</td>
 </tr>
 </tbody>
 </table></div>
+<p>These are the looks of a new vault; you can change them (see below). A vault made with an earlier version
+keeps the lines it had.</p>
 <p>A plain <code>[[link]]</code> is <em>Related to</em>.</p>
 <h3 id="directed-and-undirected-links">Directed and undirected links</h3>
 <p>A <strong>directed</strong> type reads differently from each side. If note A <em>supports</em> note B, then B's backlinks
-show A as <em>Supported by</em>. Directed links get arrowheads in the graph and stay directed in exports.
+show A as <em>Supported by</em>. Directed links get arrow tips in the graph and stay directed in exports.
 <strong>Undirected</strong> types such as <em>Related to</em> and <em>Contradicts</em> read the same both ways.</p>
 <p>To flip a directed link created the wrong way round, right-click it in the side panel and choose
 <strong>Reverse direction</strong>. Links written in the text are reversed by editing the text.</p>
@@ -207,10 +225,26 @@ Links written in the text are removed by editing the text.</li>
 <li>From the note list, right-click another note and choose <strong>Link from the open note as</strong>.</li>
 </ul>
 <h3 id="your-own-link-types">Your own link types</h3>
-<p>Add, rename, recolour or remove link types in <em>Tools ▸ Options ▸ Link types</em>. Each type has a name, a
-reverse name, a colour and a <em>Directed</em> switch. In text, use the type's id (shown in the <code>type:: [[…]]</code>
-form, e.g. a type called &quot;Inspired by&quot; becomes <code>inspired_by::</code>). Removing a type turns its links into
-<em>Related to</em> links, so nothing is lost. <em>Related to</em> itself can't be removed.</p>
+<p>Add, rename, restyle or remove link types in <em>Tools ▸ Options ▸ Link types</em>. Pick a type in the list and
+change it beside the list:</p>
+<ul>
+<li><strong>Name</strong> and <strong>Reverse name</strong>: how the link reads from its source and from its target. The reverse
+name is used only by directed types.</li>
+<li><strong>Directed</strong>: whether the type reads differently from each side and gets an arrow tip.</li>
+<li><strong>Colour</strong>: click the colour button to choose any colour.</li>
+<li><strong>Line</strong>: solid, dashed, dotted, dash-dot, dash-dot-dot or long dash.</li>
+<li><strong>Arrow tip</strong>: the tip drawn where a directed link arrives: a filled triangle, an open arrow, a
+diamond, a circle or a bar.</li>
+</ul>
+<p>The preview shows two notes joined by the link, with its name and how it reads from the other side.
+The style is used wherever links appear: the graph, its legend, the side panel, the link picker and
+the website, GraphML and Graphviz exports. Give each type its own line as well as its own colour, so
+the types stay easy to tell apart for colour-blind readers and on paper. A new type starts with a
+colour and a line that few other types use.</p>
+<p>In text, use the type's id, shown under the preview (e.g. a type called &quot;Inspired by&quot; becomes
+<code>inspired_by::</code>). The id is set when the type is created, so renaming a type doesn't break links
+written in your notes. Removing one of your own types turns its links into <em>Related to</em> links, so
+nothing is lost. Built-in types can be renamed and restyled but not removed.</p>
 <h2 id="tags">Tags</h2>
 <p>Add tags in the tag field under the title (press Enter after each), or write them <strong>in the text</strong> with a
 hash sign, like <code>#welcome</code> or <code>#math/algebra</code>. Tags are lower-case and may be nested with a slash, such as

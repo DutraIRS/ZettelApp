@@ -526,7 +526,11 @@ types</em>. No arguments.</p>
 <li><code>id</code>: what <code>type::</code> links in note text and the <code>add_link</code> tool use, such as <code>part_of</code>;</li>
 <li><code>label</code> and <code>inverse_label</code>: how the link reads from its source and from its target, such as <em>Part of</em>
 and <em>Contains</em>;</li>
-<li><code>directed</code>: <code>false</code> for types that read the same both ways, such as <em>Related to</em>.</li>
+<li><code>directed</code>: <code>false</code> for types that read the same both ways, such as <em>Related to</em>;</li>
+<li><code>color</code>, <code>line_style</code> and <code>arrow</code>: how ZettelApp draws links of this type. <code>color</code> is a hex colour such
+as <code>#008300</code>; <code>line_style</code> is <code>solid</code>, <code>dashed</code>, <code>dotted</code>, <code>dash_dot</code>, <code>dash_dot_dot</code> or <code>long_dash</code>;
+<code>arrow</code> is the tip at the target end, <code>triangle</code>, <code>open</code>, <code>diamond</code>, <code>circle</code> or <code>bar</code>, and <code>none</code>
+for undirected types.</li>
 </ul>
 <h3 id="create_note"><code>create_note</code></h3>
 <p><strong>Create a note.</strong> <em>Write tool, see <a href="#write-tools">Write tools</a>.</em> Creates a note with a new timestamp id.
