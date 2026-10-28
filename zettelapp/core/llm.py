@@ -219,7 +219,7 @@ class AnthropicAdapter:
         import anthropic
 
         if not api_key:
-            raise LLMError("Add your Anthropic API key in Tools ▸ Options ▸ AI first.")
+            raise LLMError("Add your Anthropic API key in Tools ▸ Options ▸ AI assistant first.")
         base = settings.effective_base_url()
         return anthropic.Anthropic(
             api_key=api_key,
@@ -232,11 +232,11 @@ class AnthropicAdapter:
         import anthropic
 
         if isinstance(exc, anthropic.AuthenticationError):
-            return LLMError("Anthropic rejected the API key. Check it in Tools ▸ Options ▸ AI.")
+            return LLMError("Anthropic rejected the API key. Check it in Tools ▸ Options ▸ AI assistant.")
         if isinstance(exc, anthropic.PermissionDeniedError):
             return LLMError("This API key is not allowed to use the selected model.")
         if isinstance(exc, anthropic.NotFoundError):
-            return LLMError("The selected model was not found. Choose another model in Tools ▸ Options ▸ AI.")
+            return LLMError("The selected model was not found. Choose another model in Tools ▸ Options ▸ AI assistant.")
         if isinstance(exc, anthropic.RateLimitError):
             return LLMError("Rate limit or usage limit reached. Wait a moment and try again.")
         if isinstance(exc, anthropic.APIStatusError):
@@ -329,7 +329,7 @@ class OpenAICompatibleAdapter:
                  body: dict | None = None) -> urllib.request.Request:
         info = settings.info
         if info.requires_key and not api_key and urlsplit(settings.effective_base_url()).hostname not in _LOCAL_HOSTS:
-            raise LLMError(f"Add your {info.label} API key in Tools ▸ Options ▸ AI first.")
+            raise LLMError(f"Add your {info.label} API key in Tools ▸ Options ▸ AI assistant first.")
         headers = {"Content-Type": "application/json", "Accept": "application/json, text/event-stream"}
         if api_key:
             headers["Authorization"] = f"Bearer {api_key}"
@@ -350,9 +350,9 @@ class OpenAICompatibleAdapter:
             except (ValueError, OSError):
                 pass
             messages = {
-                401: f"{label} rejected the API key. Check it in Tools ▸ Options ▸ AI.",
+                401: f"{label} rejected the API key. Check it in Tools ▸ Options ▸ AI assistant.",
                 403: "This API key is not allowed to use the selected model.",
-                404: "The model or API address was not found. Check Tools ▸ Options ▸ AI.",
+                404: "The model or API address was not found. Check Tools ▸ Options ▸ AI assistant.",
                 429: "Rate limit or quota reached. Wait a moment and try again.",
             }
             message = messages.get(exc.code) or (
