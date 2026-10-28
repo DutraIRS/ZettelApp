@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (
 
 from zettelapp import settings
 from zettelapp.core.zotero import ZoteroClient, ZoteroItem
+from zettelapp.i18n import _, n_
 from zettelapp.ui import icons
 from zettelapp.ui.widgets import SearchBox, label
 from zettelapp.ui.workers import run_task
@@ -29,7 +30,7 @@ class ZoteroDialog(QDialog):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Zotero reference")
+        self.setWindowTitle(_("Zotero reference"))
         self.resize(780, 520)
         self.client = ZoteroClient(settings.get(settings.ZOTERO_PORT))
         self.result_item: ZoteroItem | None = None
@@ -37,13 +38,13 @@ class ZoteroDialog(QDialog):
         self.pdf_key: str | None = None
         self._request = 0
         layout = QVBoxLayout(self)
-        self.search = SearchBox("Search Zotero by title, author or year")
+        self.search = SearchBox(_("Search Zotero by title, author or year"))
         layout.addWidget(self.search)
         self.state = label("", "caption", wrap=True)
         layout.addWidget(self.state)
         split = QSplitter(Qt.Orientation.Horizontal)
         self.results = QListWidget()
-        self.results.setAccessibleName("Zotero items")
+        self.results.setAccessibleName(_("Zotero items"))
         self.results.setWordWrap(True)
         self.details = QTextBrowser()
         self.details.setOpenLinks(False)
@@ -52,10 +53,10 @@ class ZoteroDialog(QDialog):
         split.setSizes([420, 340])
         layout.addWidget(split, 1)
         buttons = QDialogButtonBox()
-        self.cite_button = QPushButton("Insert citation")
+        self.cite_button = QPushButton(_("Insert citation"))
         self.cite_button.setIcon(icons.icon("link"))
         self.cite_button.setProperty("accent", True)
-        self.note_button = QPushButton("New literature note")
+        self.note_button = QPushButton(_("New literature note"))
         self.note_button.setIcon(icons.icon("add"))
         buttons.addButton(self.cite_button, QDialogButtonBox.ButtonRole.AcceptRole)
         buttons.addButton(self.note_button, QDialogButtonBox.ButtonRole.ActionRole)
@@ -66,8 +67,10 @@ class ZoteroDialog(QDialog):
         row = QHBoxLayout()
         row.addWidget(
             label(
-                "Needs Zotero 7+ running, with Settings ▸ Advanced ▸ “Allow other applications on this "
-                "computer to communicate with Zotero” turned on.",
+                _(
+                    "Needs Zotero 7+ running, with Settings ▸ Advanced ▸ “Allow other applications on this "
+                    "computer to communicate with Zotero” turned on."
+                ),
                 "caption",
                 wrap=True,
             ),
@@ -76,9 +79,9 @@ class ZoteroDialog(QDialog):
         row.addWidget(buttons)
         layout.addLayout(row)
         self._timer = QTimer(self, singleShot=True, interval=300, timeout=self._run_search)
-        self.search.textChanged.connect(lambda _: self._timer.start())
+        self.search.textChanged.connect(lambda _unused: self._timer.start())
         self.results.currentItemChanged.connect(self._show_details)
-        self.results.itemDoubleClicked.connect(lambda _: self._finish("cite"))
+        self.results.itemDoubleClicked.connect(lambda _unused: self._finish("cite"))
         self._enable(False)
         self._run_search()
 
@@ -90,7 +93,7 @@ class ZoteroDialog(QDialog):
         self._request += 1
         request = self._request
         query = self.search.text()
-        self.state.setText("Searching Zotero…")
+        self.state.setText(_("Searching Zotero…"))
 
         def done(items: list[ZoteroItem]) -> None:
             if request != self._request:
@@ -103,7 +106,15 @@ class ZoteroDialog(QDialog):
                 entry.setData(Qt.ItemDataRole.UserRole, item)
                 self.results.addItem(entry)
             self.state.setText(
-                f"{len(items)} items" + (" (most recently modified)" if not query.strip() else "")
+                (
+                    n_("{n} item", "{n} items", len(items))
+                    if query.strip()
+                    else n_(
+                        "{n} item (most recently modified)",
+                        "{n} items (most recently modified)",
+                        len(items),
+                    )
+                ).format(n=len(items))
             )
             if items:
                 self.results.setCurrentRow(0)
@@ -127,8 +138,8 @@ class ZoteroDialog(QDialog):
         esc = html.escape
         rows = [
             f"<h3>{esc(item.title)}</h3>",
-            f"<p>{esc('; '.join(item.creators) or 'Unknown author')}"
-            f" · {esc(item.year or 'n.d.')}</p>",
+            f"<p>{esc('; '.join(item.creators) or _('Unknown author'))}"
+            f" · {esc(item.year or _('n.d.'))}</p>",
         ]
         if item.publication:
             rows.append(f"<p><i>{esc(item.publication)}</i></p>")
@@ -153,7 +164,7 @@ class ZoteroDialog(QDialog):
             return
 
         self._enable(False)
-        self.state.setText("Finding a PDF attachment…")
+        self.state.setText(_("Finding a PDF attachment…"))
 
         def done(pdf_key: str | None) -> None:
             self.pdf_key = pdf_key

@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 
 log = logging.getLogger(__name__)
 
@@ -136,13 +137,40 @@ def load(language: str) -> str:
     except (OSError, ValueError):
         log.warning("No usable translation for %s; using English", language)
         return _language
-    _catalog = (
-        {k: v for k, v in data.items() if isinstance(k, str) and v}
-        if isinstance(data, dict)
-        else {}
-    )
+    try:
+        template = json.loads(resource_path("locales", "messages.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        template = {}
+    _catalog = {}
+    for key, value in data.items() if isinstance(data, dict) else ():
+        plural = template.get(key, {}).get("plural") if isinstance(key, str) else None
+        if isinstance(key, str) and _usable(value, placeholders(key) | placeholders(plural or "")):
+            _catalog[key] = value
+        else:
+            log.warning("Ignoring a broken %s translation of %r", language, key)
     _language = language
     return _language
+
+
+PLACEHOLDER_RE = re.compile(r"(?<!\{)\{(\w*)(?:![rsa])?(?::[^{}]*)?\}(?!\})")
+
+
+def placeholders(text: str) -> set[str]:
+    """The str.format field names in *text*."""
+    return set(PLACEHOLDER_RE.findall(text))
+
+
+def _usable(value: object, allowed: set[str]) -> bool:
+    """A translation that can't crash .format(): only known placeholders, valid braces."""
+    forms = value if isinstance(value, list) else [value]
+    for form in forms:
+        if not isinstance(form, str) or not form or not placeholders(form) <= allowed:
+            return False
+        try:
+            form.format(**{name: "" for name in allowed})
+        except (IndexError, KeyError, ValueError):
+            return False
+    return bool(forms)
 
 
 def install(app, setting: str | None) -> str:

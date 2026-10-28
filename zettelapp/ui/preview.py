@@ -22,6 +22,7 @@ from zettelapp.core.security import (
     is_valid_note_id,
     local_file_path,
 )
+from zettelapp.i18n import _
 from zettelapp.ui import theme
 
 
@@ -93,7 +94,7 @@ class NotePreview(QTextBrowser):
     def _on_hover(self, url: QUrl) -> None:
         href = url.toString()
         path = local_file_path(href)
-        self.hovered.emit(f"Show in File Explorer: {path}" if path else href)
+        self.hovered.emit(_("Show in File Explorer: {path}").format(path=path) if path else href)
 
     def _on_anchor(self, url: QUrl) -> None:
         href = url.toString()

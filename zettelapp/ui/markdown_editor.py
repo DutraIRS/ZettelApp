@@ -29,6 +29,7 @@ from PySide6.QtWidgets import QCompleter, QPlainTextEdit, QToolTip
 
 from zettelapp.core.security import file_url, local_file_path
 from zettelapp.core.textutil import HASHTAG_RE, find_wikilinks, normalize_tag
+from zettelapp.i18n import _
 from zettelapp.ui import theme
 
 _IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp")
@@ -132,9 +133,9 @@ class MarkdownEditor(QPlainTextEdit):
         self.resolve_note: Callable[[str], str | None] | None = None
         self._pressed_link: tuple[str, str] | None = None
         self.viewport().setMouseTracking(True)
-        self.setAccessibleName("Note text")
+        self.setAccessibleName(_("Note text"))
         self.setPlaceholderText(
-            "Start writing… Use [[ to link a note, #tags, Q:/A: or {{c1::cloze}} for flashcards."
+            _("Start writing… Use [[ to link a note, #tags, Q:/A: or {{c1::cloze}} for flashcards.")
         )
         self.setTabChangesFocus(False)
         self.setLineWrapMode(QPlainTextEdit.LineWrapMode.WidgetWidth)
@@ -255,14 +256,18 @@ class MarkdownEditor(QPlainTextEdit):
     def _link_tip(self, kind: str, target: str) -> str:
         if kind == "note":
             if self.resolve_note is not None and self.resolve_note(target) is None:
-                return f"No note called “{target}” yet. Ctrl+click to create it."
-            return f"Ctrl+click to open “{target}”"
+                return _("No note called “{title}” yet. Ctrl+click to create it.").format(
+                    title=target
+                )
+            return _("Ctrl+click to open “{title}”").format(title=target)
         if kind == "tag":
-            return f"Ctrl+click to list the notes tagged #{target}"
+            return _("Ctrl+click to list the notes tagged #{tag}").format(tag=target)
         path = local_file_path(target)
         if path:
-            return f"Ctrl+click to show {ntpath.basename(path) or path} in File Explorer"
-        return f"Ctrl+click to open {target}"
+            return _("Ctrl+click to show {name} in File Explorer").format(
+                name=ntpath.basename(path) or path
+            )
+        return _("Ctrl+click to open {link}").format(link=target)
 
     def _update_link_cursor(self, modifiers) -> None:
         pos = self.viewport().mapFromGlobal(QCursor.pos())
@@ -400,7 +405,7 @@ class MarkdownEditor(QPlainTextEdit):
         """Insert [name](file:///…) for a file on a local drive; False if it can't be linked."""
         local = local_file_path(path)
         if local is None:
-            self.fileLinkError.emit("Only files on this computer's drives can be linked.")
+            self.fileLinkError.emit(_("Only files on this computer's drives can be linked."))
             return False
         name = re.sub(r"[\[\]]", "", ntpath.basename(local))[:120] or local
         self.textCursor().insertText(f"[{name}]({file_url(local)})")

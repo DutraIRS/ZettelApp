@@ -27,6 +27,7 @@ from PySide6.QtWidgets import (
 )
 
 from zettelapp.core.cluster import cluster_notes
+from zettelapp.i18n import _, n_
 from zettelapp.ui import theme
 from zettelapp.ui.widgets import Card, label, tool_button
 from zettelapp.ui.workers import run_task
@@ -72,6 +73,16 @@ def _rounded_bar(rect: QRectF, horizontal: bool, radius: float = 4.0) -> QPainte
     return path
 
 
+def _counted(unit: str, value: float) -> str:
+    """ "5 notes" / "1 link" in the interface language."""
+    shown = _compact(value)
+    if unit == "notes":
+        return n_("{n} note", "{n} notes", int(value)).format(n=shown)
+    if unit == "links":
+        return n_("{n} link", "{n} links", int(value)).format(n=shown)
+    return shown
+
+
 class BarChart(QWidget):
     """Horizontal bars; each row is (label, value, colour or None, payload)."""
 
@@ -106,14 +117,14 @@ class BarChart(QWidget):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         if not self.rows:
             painter.setPen(t.q("text_muted"))
-            painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, "Nothing to show yet")
+            painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, _("Nothing to show yet"))
             return
         metrics, label_w, left, width = self._geometry()
         top_value = max(max(r[1] for r in self.rows), 1)
         painter.setFont(theme.ui_font(9))
         painter.setPen(QPen(t.q("axis"), 1))
         painter.drawLine(QPointF(left, 4), QPointF(left, len(self.rows) * (BAR + 12) + 4))
-        for i, (text, value, color, _) in enumerate(self.rows):
+        for i, (text, value, color, _unused) in enumerate(self.rows):
             y = 8 + i * (BAR + 12)
             painter.setPen(t.q("text_secondary"))
             painter.drawText(
@@ -141,9 +152,9 @@ class BarChart(QWidget):
         if i is None:
             QToolTip.hideText()
             return
-        text, value, _, payload = self.rows[i]
+        text, value, _unused, payload = self.rows[i]
         QToolTip.showText(
-            event.globalPosition().toPoint(), f"{text}: {_compact(value)} {self.unit}".strip(), self
+            event.globalPosition().toPoint(), f"{text}: {_counted(self.unit, value)}", self
         )
         self.setCursor(Qt.CursorShape.PointingHandCursor if payload else Qt.CursorShape.ArrowCursor)
 
@@ -176,7 +187,7 @@ class ColumnChart(QWidget):
         plot = self._plot()
         if not self.rows:
             return
-        top_value, step = _ticks(max(v for _, v in self.rows))
+        top_value, step = _ticks(max(v for _unused, v in self.rows))
         painter.setFont(theme.ui_font(8.5))
         for k in range(int(round(top_value / step)) + 1):  # hairline grid with clean ticks
             v = step * k
@@ -206,7 +217,7 @@ class ColumnChart(QWidget):
                     Qt.AlignmentFlag.AlignHCenter,
                     name,
                 )
-        _, last = self.rows[-1]  # label the most recent value only
+        _unused, last = self.rows[-1]  # label the most recent value only
         x = plot.left() + slot * (len(self.rows) - 1) + slot / 2
         painter.setPen(t.q("text"))
         painter.drawText(
@@ -235,7 +246,7 @@ class ChartCard(Card):
         super().__init__()
         head = QHBoxLayout()
         head.addWidget(label(title, "section"), 1)
-        self.toggle = tool_button("bullets", "Show as table", self._toggle, checkable=True)
+        self.toggle = tool_button("bullets", _("Show as table"), self._toggle, checkable=True)
         head.addWidget(self.toggle)
         self.body.addLayout(head)
         if subtitle:
@@ -298,20 +309,20 @@ class InsightsPage(QWidget):
         layout.setContentsMargins(24, 18, 24, 24)
         layout.setSpacing(14)
         head = QHBoxLayout()
-        head.addWidget(label("Insights", "title"), 1)
-        head.addWidget(tool_button("refresh", "Refresh", self.refresh, text="Refresh"))
+        head.addWidget(label(_("Insights"), "title"), 1)
+        head.addWidget(tool_button("refresh", _("Refresh"), self.refresh, text=_("Refresh")))
         layout.addLayout(head)
         tiles = QHBoxLayout()
         tiles.setSpacing(12)
         self.tiles = {
             key: StatTile(text)
             for key, text in (
-                ("notes", "Notes"),
-                ("links", "Links"),
-                ("tags", "Tags"),
-                ("orphans", "Unlinked notes"),
-                ("cards", "Flashcards"),
-                ("due", "Due for review"),
+                ("notes", _("Notes")),
+                ("links", _("Links")),
+                ("tags", _("Tags")),
+                ("orphans", _("Unlinked notes")),
+                ("cards", _("Flashcards")),
+                ("due", _("Due for review")),
             )
         }
         for tile in self.tiles.values():
@@ -320,21 +331,23 @@ class InsightsPage(QWidget):
         grid = QGridLayout()
         grid.setSpacing(12)
         self.timeline = ColumnChart()
-        self.timeline_card = ChartCard("Notes added per month", self.timeline, "The last 12 months")
+        self.timeline_card = ChartCard(
+            _("Notes added per month"), self.timeline, _("The last 12 months")
+        )
         self.tags_chart = BarChart("notes")
-        self.tags_card = ChartCard("Top tags", self.tags_chart)
+        self.tags_card = ChartCard(_("Top tags"), self.tags_chart)
         self.types_chart = BarChart("links")
-        self.types_card = ChartCard("Links by type", self.types_chart)
+        self.types_card = ChartCard(_("Links by type"), self.types_chart)
         self.hubs_chart = BarChart("links")
         self.hubs_chart.rowClicked.connect(lambda note_id: self.openNote.emit(str(note_id)))
         self.hubs_card = ChartCard(
-            "Most connected notes", self.hubs_chart, "Click a bar to open the note"
+            _("Most connected notes"), self.hubs_chart, _("Click a bar to open the note")
         )
         self.clusters_chart = BarChart("notes")
         self.clusters_card = ChartCard(
-            "Topics (k-means clusters)",
+            _("Topics (k-means clusters)"),
             self.clusters_chart,
-            "Notes grouped by meaning (LSA embeddings); k chosen by silhouette score",
+            _("Notes grouped by meaning (LSA embeddings); k chosen by silhouette score"),
         )
         grid.addWidget(self.timeline_card, 0, 0, 1, 2)
         grid.addWidget(self.tags_card, 1, 0)
@@ -365,22 +378,25 @@ class InsightsPage(QWidget):
         cards = vault.cards_for_notes()
         due = vault.due_cards()
         orphans = [n for n in notes if not degree.get(n.id)]
-        self.tiles["notes"].set(f"{len(notes):,}", f"{vault.count_notes(deleted=True)} in Trash")
+        self.tiles["notes"].set(
+            f"{len(notes):,}", _("{n} in Trash").format(n=vault.count_notes(deleted=True))
+        )
         self.tiles["links"].set(
-            f"{len(links):,}", f"{(2 * len(links) / len(notes)):.1f} per note" if notes else ""
+            f"{len(links):,}",
+            _("{n} per note").format(n=f"{2 * len(links) / len(notes):.1f}") if notes else "",
         )
         self.tiles["tags"].set(f"{len(tags):,}")
         self.tiles["orphans"].set(
             f"{len(orphans):,}",
-            "Link them to grow your network" if orphans else "Every note is linked",
+            _("Link them to grow your network") if orphans else _("Every note is linked"),
         )
         self.tiles["cards"].set(f"{len(cards):,}")
-        self.tiles["due"].set(f"{len(due):,}", "cards today")
+        self.tiles["due"].set(f"{len(due):,}", _("cards today"))
 
         today = date.today()
         months = []
         y, m = today.year, today.month
-        for _ in range(12):
+        for _unused in range(12):
             months.append((y, m))
             y, m = (y, m - 1) if m > 1 else (y - 1, 12)
         months.reverse()
@@ -400,7 +416,7 @@ class InsightsPage(QWidget):
 
         top_tags = sorted(tags, key=lambda x: -x[1])[:10]
         self.tags_chart.set_rows([(f"#{name}", n, None, None) for name, n in top_tags])
-        self.tags_card.set_table(["Tag", "Notes"], [(f"#{name}", n) for name, n in top_tags])
+        self.tags_card.set_table([_("Tag"), _("Notes")], [(f"#{name}", n) for name, n in top_tags])
 
         types = vault.link_type_map()
         by_type = Counter(l.type for l in links)
@@ -416,14 +432,14 @@ class InsightsPage(QWidget):
             ]
         )
         self.types_card.set_table(
-            ["Link type", "Links"],
+            [_("Link type"), _("Links")],
             [(types[k].label if k in types else k, v) for k, v in by_type.most_common()],
         )
 
         titles = {n.id: n.display_title for n in notes}
         hubs = degree.most_common(10)
         self.hubs_chart.set_rows([(titles.get(i, i), d, None, i) for i, d in hubs])
-        self.hubs_card.set_table(["Note", "Links"], [(titles.get(i, i), d) for i, d in hubs])
+        self.hubs_card.set_table([_("Note"), _("Links")], [(titles.get(i, i), d) for i, d in hubs])
 
         def done(result) -> None:
             if request != self._request:
@@ -442,6 +458,6 @@ class InsightsPage(QWidget):
                 for c in sorted(sizes)
             ]
             self.clusters_chart.set_rows(rows)
-            self.clusters_card.set_table(["Cluster", "Notes"], [(r[0], r[1]) for r in rows])
+            self.clusters_card.set_table([_("Cluster"), _("Notes")], [(r[0], r[1]) for r in rows])
 
         run_task(cluster_notes, notes, "kmeans", None, on_done=done)

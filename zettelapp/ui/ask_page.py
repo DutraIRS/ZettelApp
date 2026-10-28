@@ -21,6 +21,7 @@ from zettelapp import settings
 from zettelapp.core.llm import LLMSettings, retrieve_context, stream_answer
 from zettelapp.core.render import NoteRenderer
 from zettelapp.core.secrets import get_secret
+from zettelapp.i18n import _
 from zettelapp.ui import icons
 from zettelapp.ui.preview import NotePreview
 from zettelapp.ui.widgets import Card, ScopePicker, accent_button, label, link_button
@@ -53,37 +54,39 @@ class AskPage(QWidget):
         layout.setContentsMargins(24, 18, 24, 18)
         layout.setSpacing(12)
         head = QHBoxLayout()
-        head.addWidget(label("Ask your notes", "title"), 1)
+        head.addWidget(label(_("Ask your notes"), "title"), 1)
         self.provider_label = label("", "secondary")
         head.addWidget(self.provider_label)
-        head.addWidget(link_button("Change…", self.configureRequested.emit))
+        head.addWidget(link_button(_("Change…"), self.configureRequested.emit))
         layout.addLayout(head)
 
         ask = Card()
         self.question = QPlainTextEdit()
         self.question.setPlaceholderText(
-            "Ask a question about your notes, e.g. “How does spaced repetition relate "
-            "to active recall?”  (Ctrl+Enter to ask)"
+            _(
+                "Ask a question about your notes, e.g. “How does spaced repetition relate "
+                "to active recall?”  (Ctrl+Enter to ask)"
+            )
         )
-        self.question.setAccessibleName("Question")
+        self.question.setAccessibleName(_("Question"))
         self.question.setFixedHeight(84)
         ask.body.addWidget(self.question)
         row = QHBoxLayout()
-        row.addWidget(label("Search in", "secondary"))
+        row.addWidget(label(_("Search in"), "secondary"))
         self.scope = ScopePicker()
         row.addWidget(self.scope, 1)
         self.limit = QSpinBox()
         self.limit.setRange(1, 40)
         self.limit.setValue(settings.get(settings.LLM_CONTEXT_NOTES))
         self.limit.setSuffix(" notes")
-        self.limit.setToolTip("How many of the most relevant notes to send with the question")
+        self.limit.setToolTip(_("How many of the most relevant notes to send with the question"))
         row.addWidget(self.limit)
-        self.stop_button = QPushButton("Stop")
+        self.stop_button = QPushButton(_("Stop"))
         self.stop_button.setIcon(icons.icon("stop"))
         self.stop_button.clicked.connect(self.stop)
         self.stop_button.setVisible(False)
         row.addWidget(self.stop_button)
-        self.ask_button = accent_button("Ask", self.ask, "send")
+        self.ask_button = accent_button(_("Ask"), self.ask, "send")
         row.addWidget(self.ask_button)
         ask.body.addLayout(row)
         layout.addWidget(ask)
@@ -92,9 +95,9 @@ class AskPage(QWidget):
         body.setSpacing(12)
         answer_card = Card()
         answer_head = QHBoxLayout()
-        answer_head.addWidget(label("Answer", "section"), 1)
-        self.copy_button = link_button("Copy", self.copy_answer)
-        self.save_button = link_button("Save as note", self.save_as_note)
+        answer_head.addWidget(label(_("Answer"), "section"), 1)
+        self.copy_button = link_button(_("Copy"), self.copy_answer)
+        self.save_button = link_button(_("Save as note"), self.save_as_note)
         answer_head.addWidget(self.copy_button)
         answer_head.addWidget(self.save_button)
         answer_card.body.addLayout(answer_head)
@@ -106,9 +109,9 @@ class AskPage(QWidget):
         body.addWidget(answer_card, 3)
         sources_card = Card()
         sources_card.setFixedWidth(300)
-        sources_card.body.addWidget(label("Sources sent", "section"))
+        sources_card.body.addWidget(label(_("Sources sent"), "section"))
         self.sources_list = QListWidget()
-        self.sources_list.setAccessibleName("Notes sent with the question")
+        self.sources_list.setAccessibleName(_("Notes sent with the question"))
         self.sources_list.setWordWrap(True)
         self.sources_list.itemClicked.connect(
             lambda item: self.openNote.emit(item.data(Qt.ItemDataRole.UserRole))
@@ -136,12 +139,12 @@ class AskPage(QWidget):
         has_key = not info.requires_key or bool(get_secret(info.secret_name))
         model = cfg.effective_model()
         self.provider_label.setText(
-            f"{info.label} · {model}" + ("" if has_key else " · no API key")
+            f"{info.label} · {model}" + ("" if has_key else " · " + _("no API key"))
         )
         self.privacy.setText(
-            f"Only your question and the notes listed above are sent to {info.label}. "
-            f"The model gets no tools and cannot change your notes. Your API key is kept in "
-            f"Windows Credential Manager."
+            _(
+                "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes. Your API key is kept in Windows Credential Manager."
+            ).format(label=info.label)
         )
         if self.window.vault:
             self.scope.set_tags(self.window.vault.all_tags())
@@ -177,9 +180,10 @@ class AskPage(QWidget):
             if (
                 QMessageBox.question(
                     self,
-                    "Connect an AI provider",
-                    f"Add your {info.label} API key in Options to ask questions about your notes. "
-                    "Open Options now?",
+                    _("Connect an AI provider"),
+                    _(
+                        "Add your {label} API key in Options to ask questions about your notes. Open Options now?"
+                    ).format(label=info.label),
                 )
                 == QMessageBox.StandardButton.Yes
             ):
@@ -188,13 +192,15 @@ class AskPage(QWidget):
         if not settings.get(settings.LLM_PRIVACY_ACK):
             box = QMessageBox(
                 QMessageBox.Icon.Information,
-                "Before you ask",
-                f"Your question and the most relevant notes (up to {self.limit.value()}) will be sent to "
-                f"{info.label} using your API key. Nothing else leaves this computer.",
+                _("Before you ask"),
+                _(
+                    "Your question and the most relevant notes (up to {limit}) will be sent to "
+                    "{provider} using your API key. Nothing else leaves this computer."
+                ).format(limit=self.limit.value(), provider=info.label),
                 QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel,
                 self,
             )
-            dont = QCheckBox("Don't show this again")
+            dont = QCheckBox(_("Don't show this again"))
             box.setCheckBox(dont)
             if box.exec() != QMessageBox.StandardButton.Ok:
                 return
@@ -223,7 +229,9 @@ class AskPage(QWidget):
         self.copy_button.setEnabled(False)
         self.save_button.setEnabled(False)
         self._set_idle(False)
-        self.status.emit(f"Asking {info.label} ({len(context)} notes sent)…")
+        self.status.emit(
+            _("Asking {label} ({len} notes sent)…").format(label=info.label, len=len(context))
+        )
         thread = StreamThread(lambda: stream_answer(cfg, key, question, context), self)
         thread.chunk.connect(self._chunk)
         thread.failed.connect(self._failed)
@@ -243,17 +251,17 @@ class AskPage(QWidget):
 
     def _done(self) -> None:
         self._render()
-        self.status.emit("Answer complete.")
+        self.status.emit(_("Answer complete."))
         self.copy_button.setEnabled(bool(self.answer_text))
         self.save_button.setEnabled(bool(self.answer_text))
 
     def _failed(self, message: str) -> None:
-        self.answer.show_markdown(f"**Could not get an answer.**\n\n{message}")
+        self.answer.show_markdown("**" + _("Could not get an answer.") + f"**\n\n{message}")
         self.status.emit("")
 
     def _cancelled(self) -> None:
         self._render()
-        self.status.emit("Stopped.")
+        self.status.emit(_("Stopped."))
         self.copy_button.setEnabled(bool(self.answer_text))
         self.save_button.setEnabled(bool(self.answer_text))
 
@@ -264,11 +272,11 @@ class AskPage(QWidget):
     def stop(self) -> None:
         if self.stream_thread is not None:
             self.stream_thread.cancel()
-            self.status.emit("Stopped.")
+            self.status.emit(_("Stopped."))
 
     def copy_answer(self) -> None:
         QGuiApplication.clipboard().setText(self.answer_text)
-        self.status.emit("Answer copied.")
+        self.status.emit(_("Answer copied."))
 
     def save_as_note(self) -> None:
         vault = self.window.vault
@@ -276,9 +284,9 @@ class AskPage(QWidget):
             return
 
         def alias(title: str) -> str:
-            return "".join(c for c in (title or "Untitled") if c not in "[]|")
+            return "".join(c for c in (title or _("Untitled")) if c not in "[]|")
 
         sources = "\n".join(f"- cites:: [[{n.id}|{alias(n.title)}]]" for n in self.sources)
-        body = f"{self.answer_text.strip()}\n\n## Sources\n\n{sources}\n"
+        body = f"{self.answer_text.strip()}\n\n## {_('Sources')}\n\n{sources}\n"
         note = vault.create_note(title=self.question_text[:120], body=body, tags=["ai-answer"])
         self.window.open_note(note.id)

@@ -20,6 +20,7 @@ from zettelapp import settings
 from zettelapp.core.anki import AnkiConnect, anki_renderer, build_payloads
 from zettelapp.core.quiz import MODES, Question, build_quiz, grade_typed, schedule
 from zettelapp.core.render import NoteRenderer
+from zettelapp.i18n import _, n_
 from zettelapp.ui import icons, theme
 from zettelapp.ui.preview import NotePreview
 from zettelapp.ui.widgets import Card, ScopePicker, accent_button, label, link_button
@@ -53,28 +54,28 @@ class ReviewPage(QWidget):
         layout = QVBoxLayout(page)
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(14)
-        layout.addWidget(label("Review", "title"))
+        layout.addWidget(label(_("Review"), "title"))
         row = QHBoxLayout()
         row.setSpacing(14)
 
         due = Card()
-        due.body.addWidget(label("Due today", "secondary"))
+        due.body.addWidget(label(_("Due today"), "secondary"))
         self.due_count = label("0", "hero")
         due.body.addWidget(self.due_count)
         self.due_detail = label("", "caption")
         due.body.addWidget(self.due_detail)
         due.body.addStretch(1)
-        due.body.addWidget(accent_button("Start review", lambda: self.start_due(), "play"))
+        due.body.addWidget(accent_button(_("Start review"), lambda: self.start_due(), "play"))
         row.addWidget(due, 1)
 
         quiz = Card()
-        quiz.body.addWidget(label("Practice quiz", "section"))
-        quiz.body.addWidget(label("Choose notes and a question style.", "caption"))
+        quiz.body.addWidget(label(_("Practice quiz"), "section"))
+        quiz.body.addWidget(label(_("Choose notes and a question style."), "caption"))
         self.scope = ScopePicker()
         quiz.body.addWidget(self.scope)
         line = QHBoxLayout()
         self.mode_combo = QComboBox()
-        self.mode_combo.setAccessibleName("Quiz type")
+        self.mode_combo.setAccessibleName(_("Quiz type"))
         for key, text in MODES.items():
             self.mode_combo.addItem(text, key)
         self.count = QSpinBox()
@@ -85,36 +86,38 @@ class ReviewPage(QWidget):
         line.addWidget(self.count)
         quiz.body.addLayout(line)
         quiz.body.addStretch(1)
-        quiz.body.addWidget(accent_button("Start quiz", self.start_quiz, "review"))
+        quiz.body.addWidget(accent_button(_("Start quiz"), self.start_quiz, "review"))
         row.addWidget(quiz, 2)
         layout.addLayout(row)
 
         anki = Card()
         head = QHBoxLayout()
-        head.addWidget(label("Anki", "section"), 1)
+        head.addWidget(label(_("Anki"), "section"), 1)
         self.anki_state = label("", "caption")
         head.addWidget(self.anki_state)
-        head.addWidget(link_button("Check connection", self.check_anki))
+        head.addWidget(link_button(_("Check connection"), self.check_anki))
         anki.body.addLayout(head)
         anki.body.addWidget(
             label(
-                "Sync the flashcards in the chosen scope to Anki through the AnkiConnect add-on (code 2055492159), or "
-                "export a deck file. Each card links back to its note with a zettelapp:// link, and syncing again "
-                "updates cards instead of duplicating them.",
+                _(
+                    "Sync the flashcards in the chosen scope to Anki through the AnkiConnect add-on (code 2055492159), or "
+                    "export a deck file. Each card links back to its note with a zettelapp:// link, and syncing again "
+                    "updates cards instead of duplicating them."
+                ),
                 "caption",
                 wrap=True,
             )
         )
         deck_row = QHBoxLayout()
-        deck_row.addWidget(label("Deck", "secondary"))
+        deck_row.addWidget(label(_("Deck"), "secondary"))
         self.deck = QLineEdit(settings.get(settings.ANKI_DECK))
-        self.deck.setAccessibleName("Anki deck name")
+        self.deck.setAccessibleName(_("Anki deck name"))
         deck_row.addWidget(self.deck, 1)
-        sync = QPushButton("Sync to Anki")
+        sync = QPushButton(_("Sync to Anki"))
         sync.setIcon(icons.icon("sync"))
         sync.clicked.connect(self.sync_anki)
         deck_row.addWidget(sync)
-        export = QPushButton("Export deck (.apkg)…")
+        export = QPushButton(_("Export deck (.apkg)…"))
         export.setIcon(icons.icon("export"))
         export.clicked.connect(lambda: self.window.export_dialog("all", fmt="anki"))
         deck_row.addWidget(export)
@@ -131,9 +134,11 @@ class ReviewPage(QWidget):
         total = len(vault.cards_for_notes())
         self.due_count.setText(str(len(due)))
         self.due_detail.setText(
-            f"of {total} flashcards"
+            n_("of {n} flashcard", "of {n} flashcards", total).format(n=total)
             if total
-            else "No flashcards yet. Add some from a note's Flashcards tab, or write Q:/A: in a note."
+            else _(
+                "No flashcards yet. Add some from a note's Flashcards tab, or write Q:/A: in a note."
+            )
         )
         self.scope.set_tags(vault.all_tags())
 
@@ -149,7 +154,7 @@ class ReviewPage(QWidget):
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(12)
         top = QHBoxLayout()
-        top.addWidget(link_button("‹ End session", self.finish))
+        top.addWidget(link_button(_("‹ End session"), self.finish))
         top.addStretch(1)
         self.progress = label("", "secondary")
         top.addWidget(self.progress)
@@ -174,7 +179,7 @@ class ReviewPage(QWidget):
         self.feedback = label("", "section")
         card.body.addWidget(self.feedback)
         self.typed = QLineEdit()
-        self.typed.setPlaceholderText("Type your answer and press Enter")
+        self.typed.setPlaceholderText(_("Type your answer and press Enter"))
         self.typed.returnPressed.connect(self._check_typed)
         card.body.addWidget(self.typed)
         self.choices_row = QVBoxLayout()
@@ -183,19 +188,19 @@ class ReviewPage(QWidget):
         layout.addWidget(card, 1)
         buttons = QHBoxLayout()
         buttons.addStretch(1)
-        self.show_button = accent_button("Show answer  (Space)", self._reveal)
+        self.show_button = accent_button(_("Show answer  (Space)"), self._reveal)
         buttons.addWidget(self.show_button)
         self.grade_buttons = []
         for i, (grade, text) in enumerate(
             (("again", "Again"), ("hard", "Hard"), ("good", "Good"), ("easy", "Easy")), 1
         ):
             b = QPushButton(f"{text}  ({i})")
-            b.clicked.connect(lambda _=False, g=grade: self._grade(g))
+            b.clicked.connect(lambda _unused=False, g=grade: self._grade(g))
             if grade == "good":
                 b.setProperty("accent", True)
             self.grade_buttons.append(b)
             buttons.addWidget(b)
-        self.next_button = accent_button("Next  (Enter)", self._next)
+        self.next_button = accent_button(_("Next  (Enter)"), self._next)
         buttons.addWidget(self.next_button)
         buttons.addStretch(1)
         layout.addLayout(buttons)
@@ -217,7 +222,9 @@ class ReviewPage(QWidget):
         row = QHBoxLayout()
         row.addStretch(1)
         row.addWidget(
-            accent_button("Back to Review", lambda: (self.stack.setCurrentIndex(0), self.refresh()))
+            accent_button(
+                _("Back to Review"), lambda: (self.stack.setCurrentIndex(0), self.refresh())
+            )
         )
         row.addStretch(1)
         layout.addLayout(row)
@@ -263,14 +270,20 @@ class ReviewPage(QWidget):
         if not questions:
             QMessageBox.information(
                 self,
-                "Nothing to review",
+                _("Nothing to review"),
                 {
-                    "flashcards": "No flashcards are due. Great job! Add more from a note's Flashcards tab.",
-                    "notes": "“Name that note” needs at least two notes with a title and some text.",
+                    "flashcards": _(
+                        "No flashcards are due. Great job! Add more from a note's Flashcards tab."
+                    ),
+                    "notes": _(
+                        "“Name that note” needs at least two notes with a title and some text."
+                    ),
                 }.get(
                     mode,
-                    "There are no flashcards in this selection. Add flashcards to notes first, "
-                    "or choose “Name that note”.",
+                    _(
+                        "There are no flashcards in this selection. Add flashcards to notes "
+                        "first, or choose “Name that note”."
+                    ),
                 ),
             )
             return
@@ -287,7 +300,7 @@ class ReviewPage(QWidget):
         self.prompt.show_markdown(q.prompt)
         self.answer.setVisible(False)
         self.feedback.setText("")
-        self.source.setText(f"From: {q.note_title}")
+        self.source.setText(_("From: {note_title}").format(note_title=q.note_title))
         self.source.setVisible(False)
         self.typed.setVisible(q.kind == "typed")
         self.typed.clear()
@@ -302,7 +315,7 @@ class ReviewPage(QWidget):
         for i, choice in enumerate(q.choices):
             b = QPushButton(f"{i + 1}.  {choice}")
             b.setStyleSheet("QPushButton { text-align: left; padding: 9px 14px; }")
-            b.clicked.connect(lambda _=False, n=i: self._choose(n))
+            b.clicked.connect(lambda _unused=False, n=i: self._choose(n))
             self.choices_row.addWidget(b)
             self.choice_buttons.append(b)
         self.show_button.setVisible(q.kind == "flashcard")
@@ -320,7 +333,9 @@ class ReviewPage(QWidget):
             state = self.window.vault.review_state(q.card_id)
             for b, grade in zip(self.grade_buttons, ("again", "hard", "good", "easy")):
                 days = schedule(state, grade).interval
-                b.setToolTip(f"Next review in {days} day{'s' if days != 1 else ''}")
+                b.setToolTip(
+                    n_("Next review in {n} day", "Next review in {n} days", days).format(n=days)
+                )
                 b.setVisible(True)
         else:
             self.next_button.setVisible(True)
@@ -350,7 +365,7 @@ class ReviewPage(QWidget):
                     f"QPushButton {{ text-align: left; padding: 9px 14px; border: 2px solid {t.danger}; }}"
                 )
         self.feedback.setText(
-            "✓ Correct" if correct else "✗ Not quite. The correct answer is highlighted."
+            _("✓ Correct") if correct else _("✗ Not quite. The correct answer is highlighted.")
         )
         self._reveal()
 
@@ -364,11 +379,10 @@ class ReviewPage(QWidget):
         self.score += verdict == "correct"
         self.feedback.setText(
             {
-                "correct": "✓ Correct",
-                "close": f"≈ Almost ({similarity:.0%} similar)",
-                "wrong": "✗ Not quite",
-            }[verdict]
-            + f". Answer: {q.answer}"
+                "correct": _("✓ Correct. Answer: {answer}"),
+                "close": _("≈ Almost ({similarity} similar). Answer: {answer}"),
+                "wrong": _("✗ Not quite. Answer: {answer}"),
+            }[verdict].format(answer=q.answer, similarity=f"{similarity:.0%}")
         )
         self._reveal()
 
@@ -382,12 +396,15 @@ class ReviewPage(QWidget):
     def finish(self) -> None:
         answered = min(self.position, len(self.questions))
         self.summary_title.setText(
-            "Session complete" if answered >= len(self.questions) else "Session ended"
+            _("Session complete") if answered >= len(self.questions) else _("Session ended")
         )
-        noun = "remembered" if self.mode == "flashcards" else "correct"
-        self.summary_text.setText(
-            f"{self.score} of {answered} {noun}" if answered else "No questions answered."
-        )
+        if not answered:
+            summary = _("No questions answered.")
+        elif self.mode == "flashcards":
+            summary = n_("{score} of {n} remembered", "{score} of {n} remembered", answered)
+        else:
+            summary = n_("{score} of {n} correct", "{score} of {n} correct", answered)
+        self.summary_text.setText(summary.format(score=self.score, n=answered))
         self.stack.setCurrentIndex(2)
 
     def _space(self) -> None:
@@ -412,14 +429,14 @@ class ReviewPage(QWidget):
 
     def check_anki(self) -> None:
         port = settings.get(settings.ANKI_PORT)
-        self.anki_state.setText("Checking…")
+        self.anki_state.setText(_("Checking…"))
 
         def done(version) -> None:
-            self.anki_state.setText(f"Connected (AnkiConnect v{version})")
+            self.anki_state.setText(_("Connected (AnkiConnect v{version})").format(version=version))
 
         def failed(message: str) -> None:
-            self.anki_state.setText("Not connected")
-            QMessageBox.information(self, "Anki", message)
+            self.anki_state.setText(_("Not connected"))
+            QMessageBox.information(self, _("Anki"), message)
 
         run_task(lambda: AnkiConnect(port).version(), on_done=done, on_error=failed)
 
@@ -428,7 +445,9 @@ class ReviewPage(QWidget):
         ids = self.window.resolve_scope(*self.scope.value())
         cards = vault.cards_for_notes(ids)
         if not cards:
-            QMessageBox.information(self, "Anki", "There are no flashcards in the chosen scope.")
+            QMessageBox.information(
+                self, _("Anki"), _("There are no flashcards in the chosen scope.")
+            )
             return
         deck = self.deck.text().strip() or "ZettelApp"
         settings.put(settings.ANKI_DECK, deck)
@@ -440,7 +459,7 @@ class ReviewPage(QWidget):
         media = {name: vault.asset_path(name) for p in payloads for name in p.media}
         remembered: list[tuple[int, int | None]] = []
         port = settings.get(settings.ANKI_PORT)
-        self.status.emit(f"Syncing {len(payloads)} cards to Anki…")
+        self.status.emit(_("Syncing {len} cards to Anki…").format(len=len(payloads)))
 
         def work():
             return AnkiConnect(port).sync(
@@ -450,15 +469,17 @@ class ReviewPage(QWidget):
         def done(report) -> None:
             for card_id, anki_id in remembered:
                 vault.set_anki_note_id(card_id, anki_id)
-            text = f"Anki sync finished: {report.added} added, {report.updated} updated"
+            text = _("Anki sync finished: {added} added, {updated} updated").format(
+                added=report.added, updated=report.updated
+            )
             if report.failed:
-                text += f", {report.failed} failed"
-                QMessageBox.warning(self, "Anki", text + ".\n\n" + "\n".join(report.errors[:8]))
+                text += _(", {failed} failed").format(failed=report.failed)
+                QMessageBox.warning(self, _("Anki"), text + ".\n\n" + "\n".join(report.errors[:8]))
             self.status.emit(text + ".")
-            self.anki_state.setText("Connected")
+            self.anki_state.setText(_("Connected"))
 
         def failed(message: str) -> None:
             self.status.emit("")
-            QMessageBox.warning(self, "Anki", message)
+            QMessageBox.warning(self, _("Anki"), message)
 
         run_task(work, on_done=done, on_error=failed)

@@ -19,6 +19,7 @@ from PySide6.QtWidgets import (
 )
 
 from zettelapp import RELEASES_URL, settings
+from zettelapp.i18n import _
 from zettelapp.ui import icons, theme
 from zettelapp.ui.widgets import accent_button, label, link_button, tool_button
 
@@ -33,7 +34,7 @@ class UpdateNotice(QFrame):
         self.setObjectName("Toast")
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.setAccessibleName(f"ZettelApp {version} is available")
+        self.setAccessibleName(_("ZettelApp {version} is available").format(version=version))
         shadow = QGraphicsDropShadowEffect(self)
         shadow.setBlurRadius(28)
         shadow.setOffset(0, 6)
@@ -48,17 +49,21 @@ class UpdateNotice(QFrame):
         row.addWidget(glyph, 0, Qt.AlignmentFlag.AlignTop)
         text = QVBoxLayout()
         text.setSpacing(4)
-        text.addWidget(label("Update available", "section"))
-        text.addWidget(label(f"ZettelApp {version} is ready to download.", "secondary"))
+        text.addWidget(label(_("Update available"), "section"))
+        text.addWidget(
+            label(
+                _("ZettelApp {version} is ready to download.").format(version=version), "secondary"
+            )
+        )
         buttons = QHBoxLayout()
         buttons.setSpacing(4)
-        buttons.addWidget(accent_button("Download", self._download))
-        buttons.addWidget(link_button("Don't check for updates", self._silence))
+        buttons.addWidget(accent_button(_("Download"), self._download))
+        buttons.addWidget(link_button(_("Don't check for updates"), self._silence))
         buttons.addStretch(1)
         text.addSpacing(4)
         text.addLayout(buttons)
         row.addLayout(text, 1)
-        row.addWidget(tool_button("cancel", "Close", self.close), 0, Qt.AlignmentFlag.AlignTop)
+        row.addWidget(tool_button("cancel", _("Close"), self.close), 0, Qt.AlignmentFlag.AlignTop)
         for button in self.findChildren(QAbstractButton):
             button.setFocusPolicy(Qt.FocusPolicy.TabFocus)  # clicking never steals focus
         self.setFixedWidth(360)
@@ -84,7 +89,7 @@ class UpdateNotice(QFrame):
     def _silence(self) -> None:
         settings.put(settings.UPDATE_CHECK, False)
         self.window.statusBar().showMessage(
-            "ZettelApp won't check for updates. Turn it back on in Tools ▸ Options ▸ General.",
+            _("ZettelApp won't check for updates. Turn it back on in Tools ▸ Options ▸ General."),
             8000,
         )
         self.close()
