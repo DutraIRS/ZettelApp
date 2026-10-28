@@ -51,11 +51,16 @@ Write-Host "Self-tests passed ($mcpVersion)"
 Invoke-Sign @("dist\ZettelApp\ZettelApp.exe", "dist\ZettelApp\zettelapp-mcp.exe")
 Compress-Archive -Path "dist\ZettelApp" -DestinationPath "dist\ZettelApp-Portable.zip" -Force
 
-$iscc = Get-Command iscc.exe -ErrorAction SilentlyContinue
-$isccPath = if ($iscc) { $iscc.Source } else { "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" }
+# Inno Setup on PATH, installed for the current user (its default since 6.3) or for everyone.
+$isccPath = @(
+    (Get-Command iscc.exe -ErrorAction SilentlyContinue).Source,
+    "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe",
+    "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe",
+    "$env:ProgramFiles\Inno Setup 6\ISCC.exe"
+) | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
 if ($SkipInstaller) {
     Write-Host "Skipping the installer (-SkipInstaller)."
-} elseif (Test-Path $isccPath) {
+} elseif ($isccPath) {
     & $isccPath "/DAppVersion=$version" "packaging\installer.iss"
     if ($LASTEXITCODE -ne 0) { throw "Inno Setup failed." }
     Invoke-Sign @("dist\ZettelApp-Setup.exe")
