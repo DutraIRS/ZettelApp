@@ -49,7 +49,7 @@ NAV = [("notes", "Notes"), ("graph", "Graph"), ("insights", "Insights"), ("revie
 
 
 class NavRail(QWidget):
-    def __init__(self, on_change, on_settings):
+    def __init__(self, on_change, on_settings, on_donate):
         super().__init__()
         self.setObjectName("NavRail")
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
@@ -67,6 +67,11 @@ class NavRail(QWidget):
             self.buttons.append(b)
             layout.addWidget(b)
         layout.addStretch(1)
+        donate = self._button("heart", "Donate")
+        donate.setIcon(icons.icon("heart", theme.current().categorical[4], size=22))
+        donate.setToolTip("ZettelApp is free. Donate on Ko-fi to support it")
+        donate.clicked.connect(on_donate)
+        layout.addWidget(donate)
         settings_button = self._button("settings", "Options")
         settings_button.setToolTip("Options (Ctrl+,)")
         settings_button.clicked.connect(on_settings)
@@ -105,7 +110,7 @@ class MainWindow(QMainWindow):
         root = QHBoxLayout(central)
         root.setContentsMargins(0, 0, 0, 0)
         root.setSpacing(0)
-        self.nav = NavRail(self.show_page, lambda: self.open_options())
+        self.nav = NavRail(self.show_page, lambda: self.open_options(), self.donate)
         root.addWidget(self.nav)
         right = QWidget()
         right.setObjectName("Page")
@@ -278,10 +283,13 @@ class MainWindow(QMainWindow):
         self._action(h, "ZettelApp &Website", lambda: QDesktopServices.openUrl(QUrl(HOMEPAGE_URL)), None, "globe")
         self._action(h, "Check for &Updates", lambda: QDesktopServices.openUrl(QUrl(RELEASES_URL)), None, "sync")
         self._action(h, "Report an &Issue", lambda: QDesktopServices.openUrl(QUrl(ISSUES_URL)), None)
-        self._action(h, "&Support ZettelApp (Ko-fi)…", lambda: QDesktopServices.openUrl(QUrl(SPONSOR_URL)), None, "star",
-                     "ZettelApp is free; sponsoring helps the roadmap happen sooner")
+        self._action(h, "&Donate (Ko-fi)…", self.donate, None, "heart",
+                     "ZettelApp is free; donations help the roadmap happen sooner")
         h.addSeparator()
         self._action(h, f"&About {APP_NAME}", lambda: AboutDialog(self).exec(), None, "info")
+
+    def donate(self) -> None:
+        QDesktopServices.openUrl(QUrl(SPONSOR_URL))
 
     def _edit_command(self, method: str) -> None:
         widget = QApplication.focusWidget()

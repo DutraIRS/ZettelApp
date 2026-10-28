@@ -27,7 +27,7 @@ GLYPHS = {
     "graph": 0xF22C, "cluster": 0xF0B9, "cards": 0xEADF, "server": 0xE968, "star": 0xE734,
     "flag": 0xE7C1, "archive": 0xE7B8, "trash": 0xE74D, "restore": 0xE777, "play": 0xE768,
     "stop": 0xE71A, "mindmap": 0xEBD2, "library": 0xE8F1, "open_external": 0xE8A7,
-    "chevron_down": 0xE70D, "chevron_up": 0xE70E,
+    "chevron_down": 0xE70D, "chevron_up": 0xE70E, "heart": 0xEB51, "heart_fill": 0xEB52,
 }
 
 

@@ -7,7 +7,8 @@ from collections.abc import Callable
 from datetime import date
 from pathlib import Path
 
-from PySide6.QtCore import QSize, Qt
+from PySide6.QtCore import QSize, Qt, QUrl
+from PySide6.QtGui import QDesktopServices
 from PySide6.QtWidgets import (
     QButtonGroup,
     QComboBox,
@@ -21,6 +22,7 @@ from PySide6.QtWidgets import (
     QListWidget,
     QListWidgetItem,
     QPlainTextEdit,
+    QPushButton,
     QRadioButton,
     QTableWidget,
     QTableWidgetItem,
@@ -242,7 +244,8 @@ class AboutDialog(QDialog):
             f"A Zettelkasten for Windows: atomic notes, typed links, mind maps, flashcards and a "
             f"knowledge graph, with link suggestions that learn from you.<br><br>"
             f'<a href="{HOMEPAGE_URL}">Website</a> · <a href="{DOCS_URL}">Documentation</a> · '
-            f'<a href="{REPO_URL}">Source code</a> · <a href="{SPONSOR_URL}">Support ZettelApp on Ko-fi</a><br><br>'
+            f'<a href="{REPO_URL}">Source code</a><br><br>'
+            f"ZettelApp is free. If it helps you, please consider a donation.<br><br>"
             f"Released into the public domain (The Unlicense). Built with Qt for Python (LGPLv3), "
             f"NumPy, RapidFuzz, genanki, markdown-it-py, PyYAML and the Anthropic SDK; see "
             f"THIRD_PARTY_NOTICES.md for licences.<br><br>"
@@ -252,6 +255,11 @@ class AboutDialog(QDialog):
         text.setTextInteractionFlags(Qt.TextInteractionFlag.TextBrowserInteraction)
         layout.addWidget(text)
         box = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        donate = QPushButton("Donate on Ko-fi")
+        donate.setIcon(icons.icon("heart", theme.current().on_accent))
+        donate.setProperty("accent", True)
+        donate.clicked.connect(lambda: QDesktopServices.openUrl(QUrl(SPONSOR_URL)))
+        box.addButton(donate, QDialogButtonBox.ButtonRole.ActionRole)
         box.rejected.connect(self.reject)
         box.accepted.connect(self.accept)
         layout.addWidget(box)
