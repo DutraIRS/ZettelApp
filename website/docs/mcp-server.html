@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="The Model Context Protocol  is an open standard that lets AI assistants use tools and data from other programs. ZettelApp includes an MCP server, so assistants such as Claude Deskt">
+<title>MCP server – ZettelApp documentation</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Features</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Docs</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Donate</a></li>
+        <li><a class="nav-cta" href="../#download">Download</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <h2>Documentation</h2>
+    <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="notes-and-links.html">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html" aria-current="page">MCP server</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="mcp-server">MCP server</h1>
+<p>The <a href="https://modelcontextprotocol.io/">Model Context Protocol</a> (MCP) is an open standard that lets AI
+assistants use tools and data from other programs. ZettelApp includes an MCP server, so assistants such
+as <strong>Claude Desktop</strong> and <strong>Claude Code</strong> can search your Zettelkasten, read notes, follow typed links
+and ask for link suggestions while they help you.</p>
+<h2 id="how-it-runs">How it runs</h2>
+<p>The server is a separate small program, <strong><code>zettelapp-mcp.exe</code></strong>, installed next to <code>ZettelApp.exe</code>.
+From source, the same server runs with <code>python -m zettelapp.mcp_main</code>. Your MCP client starts it when
+needed and talks to it over standard input/output. <strong>No network port is opened.</strong></p>
+<pre><code class="language-text">zettelapp-mcp --vault &quot;C:\Users\me\Documents\ZettelApp&quot; [--allow-writes]
+</code></pre>
+<p>Without <code>--vault</code>, it serves the vault you last opened in ZettelApp. It works whether or not ZettelApp is
+open; if the app is open, changes made through MCP appear in it within a few seconds.</p>
+<h2 id="connect-claude-desktop">Connect Claude Desktop</h2>
+<p>Open <em>Tools ▸ Options ▸ MCP server</em> and click <strong>Add to Claude Desktop…</strong>. ZettelApp adds itself to
+<code>%APPDATA%\Claude\claude_desktop_config.json</code> (keeping a backup of the old file). Then restart Claude
+Desktop. To do it by hand, copy the snippet shown on that page into the file. It looks like this:</p>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;zettelapp&quot;: {
+      &quot;command&quot;: &quot;C:\\Users\\me\\AppData\\Local\\Programs\\ZettelApp\\zettelapp-mcp.exe&quot;,
+      &quot;args&quot;: [&quot;--vault&quot;, &quot;C:\\Users\\me\\Documents\\ZettelApp&quot;]
+    }
+  }
+}
+</code></pre>
+<h2 id="connect-claude-code">Connect Claude Code</h2>
+<p>The same Options page shows the command to copy:</p>
+<pre><code class="language-powershell">claude mcp add zettelapp -- &quot;C:\Users\me\AppData\Local\Programs\ZettelApp\zettelapp-mcp.exe&quot; --vault &quot;C:\Users\me\Documents\ZettelApp&quot;
+</code></pre>
+<p>Other MCP clients need the same command and arguments.</p>
+<h2 id="tools">Tools</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>search_notes</code></td>
+<td>Full-text search over titles, text and tags (<code>tag:name</code> filters work). An empty query lists recently edited notes.</td>
+</tr>
+<tr>
+<td><code>get_note</code></td>
+<td>A note's full text, tags, source link, dates, typed links in both directions, flashcards and mind map outline.</td>
+</tr>
+<tr>
+<td><code>list_tags</code></td>
+<td>All tags, with the number of notes using each.</td>
+</tr>
+<tr>
+<td><code>get_subgraph</code></td>
+<td>The notes within 1–4 links of a note, and the typed links between them (optionally only some link types).</td>
+</tr>
+<tr>
+<td><code>suggest_links</code></td>
+<td>Notes likely related to a note but not yet linked, ranked by the <a href="link-suggestions.html">Naive Bayes suggester</a>.</td>
+</tr>
+<tr>
+<td><code>list_link_types</code></td>
+<td>The link types in the vault, such as <em>supports</em>, <em>contradicts</em> and <em>part of</em>.</td>
+</tr>
+<tr>
+<td><code>create_note</code></td>
+<td><em>(write)</em> Create a note. <code>[[Title]]</code> in the body links to existing notes.</td>
+</tr>
+<tr>
+<td><code>add_link</code></td>
+<td><em>(write)</em> Add a typed link from one note to another.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="read-only-by-default">Read-only by default</h2>
+<p>The server opens your vault <strong>read-only</strong>. The two write tools are offered only when <strong>both</strong> of these
+are true:</p>
+<ol>
+<li><strong>Allow MCP clients to create notes and links</strong> is ticked in <em>Options ▸ MCP server</em>;</li>
+<li>the server was started with <code>--allow-writes</code>. The snippet on the Options page includes this flag once
+you tick the option.</li>
+</ol>
+<p>The setting is checked again on every write, so unticking it takes effect immediately. Turning it on
+needs the MCP client to restart the server.</p>
+<p>Note contents are passed to the assistant as data, and the server tells the assistant not to treat them
+as instructions. Inputs are validated (IDs, sizes and limits), and the server never touches files
+outside the vault.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<ul>
+<li><strong>The client says the server failed to start.</strong> Check that the path to <code>zettelapp-mcp.exe</code> is right.
+Run the command yourself in a terminal: it reports what's wrong (for example &quot;No ZettelApp vault
+found&quot;) on standard error.</li>
+<li><strong>Write tools are missing.</strong> Tick the option <em>and</em> add <code>--allow-writes</code>, then restart the client.</li>
+</ul>
+
+    <p class="doc-footer">Found a mistake? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/mcp-server.md">Edit this page on GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
+      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <ul class="nav">
+      <li><a href="../">Home</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

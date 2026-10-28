@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="A hands-on tour. Each step says what to do and what you should see. Steps marked optional need Zotero, an AI key or Anki; skip them if you don&#x27;t use those.">
+<title>Tutorial: your first 30 minutes – ZettelApp documentation</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Features</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Docs</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Donate</a></li>
+        <li><a class="nav-cta" href="../#download">Download</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <h2>Documentation</h2>
+    <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html" aria-current="page">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="notes-and-links.html">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="tutorial-your-first-30-minutes">Tutorial: your first 30 minutes</h1>
+<p>A hands-on tour. Each step says what to do and what you should see. Steps marked <em>optional</em> need Zotero,
+an AI key or Anki; skip them if you don't use those.</p>
+<p>New to the method itself? Read <a href="what-is-zettelkasten.html">What is a Zettelkasten?</a> first. It takes five
+minutes.</p>
+<h2 id="1-install-and-open-the-welcome-vault">1. Install and open the welcome vault</h2>
+<ol>
+<li>Download <strong>ZettelApp-Setup.exe</strong> from the <a href="https://github.com/DutraIRS/ZettelApp/releases/latest">latest release</a>
+and run it, or unzip <strong>ZettelApp-Portable.zip</strong> and run <code>ZettelApp.exe</code>.</li>
+<li>Start ZettelApp.</li>
+</ol>
+<p><strong>You should see</strong> the Notes page with three welcome notes in a new vault in <em>Documents\ZettelApp</em>.
+<em>Welcome to ZettelApp</em> is open in the editor.</p>
+<h2 id="2-create-a-note">2. Create a note</h2>
+<ol>
+<li>Press <strong>Ctrl+N</strong>.</li>
+<li>Type a title, for example <em>Spaced repetition</em>, and press <strong>Enter</strong> to move to the text.</li>
+<li>Write one idea in your own words, in two or three sentences:
+<em>Reviewing material at increasing intervals helps long-term memory, because each review happens just
+before forgetting.</em></li>
+</ol>
+<p><strong>You should see</strong> the note appear at the top of the list. There is no Save button: notes save as you
+type. The ID under the title (for example <code>20261027153012</code>) is the note's permanent address.</p>
+<h2 id="3-add-tags">3. Add tags</h2>
+<p>Click <strong>Add tag</strong> under the title, type <code>learning</code>, and press <strong>Enter</strong>. Add <code>memory</code> too.</p>
+<p><strong>You should see</strong> two chips, <em>#learning</em> and <em>#memory</em>. The tag filter above the list now offers them,
+and typing <code>tag:memory</code> in the search box finds the note.</p>
+<h2 id="4-link-to-another-note">4. Link to another note</h2>
+<ol>
+<li>Create a second note (<strong>Ctrl+N</strong>) titled <em>Forgetting curve</em>, with one sentence: <em>Memory fades
+quickly unless information is reviewed.</em></li>
+<li>Go back to <em>Spaced repetition</em> (click it in the list). In the text, type <code>[[</code> and then <code>Forg</code>.</li>
+<li>Pick <strong>Forgetting curve</strong> from the completion list and press <strong>Enter</strong>.</li>
+</ol>
+<p><strong>You should see</strong> <code>[[Forgetting curve]]</code> underlined in the text. In the side panel, <em>Forgetting curve</em>
+appears under <strong>Links</strong>. Click the eye button (<strong>Split</strong>) in the toolbar: the preview shows a clickable
+link.</p>
+<h2 id="5-say-how-the-notes-relate">5. Say <em>how</em> the notes relate</h2>
+<p>Change the link to a typed link by putting <code>supports::</code> in front:</p>
+<pre><code class="language-markdown">supports:: [[Forgetting curve]]
+</code></pre>
+<p><strong>You should see</strong> the link listed as <em>Supports</em> in the side panel. Open <em>Forgetting curve</em>: its
+<strong>Backlinks</strong> read <em>Spaced repetition: <strong>Supported by</strong></em>, because <em>supports</em> is a directed link type.
+Plain <code>[[links]]</code> mean <em>Related to</em>.</p>
+<h2 id="6-use-a-suggested-link">6. Use a suggested link</h2>
+<p>Write a few more notes on related ideas, for example <em>Active recall</em> and <em>Interleaving</em>, each with a
+sentence or two and the tag <code>learning</code>. Then open one of them and look at <strong>Suggested links</strong> in the
+side panel.</p>
+<ul>
+<li>Click <strong>Link</strong> to accept a suggestion. The small arrow next to it picks a link type.</li>
+<li>Click <strong>✕</strong> to dismiss one that doesn't fit.</li>
+<li>Hover a suggestion to see <strong>why</strong> it was suggested: each measure's evidence for or against.</li>
+</ul>
+<p><strong>What the model learns:</strong> accepted suggestions become links, which train the classifier as positive
+examples. Dismissed ones are remembered as negative examples and never suggested again for that pair.
+Suggestions get better the more you use them. See <a href="link-suggestions.html">Link suggestions</a>.</p>
+<p><img loading="lazy" src="../assets/screenshots/notes-light.png" alt="Notes with suggested links" /></p>
+<h2 id="7-add-an-image">7. Add an image</h2>
+<p>Copy any picture (for example with <em>Win+Shift+S</em>), click in the note's text and press <strong>Ctrl+V</strong>. You can
+also drag an image file in, or use <em>Insert ▸ Image…</em>.</p>
+<p><strong>You should see</strong> <code>![…](asset:…)</code> in the text and the image in the preview. Because it's the note's
+first image, it also becomes the <strong>note picture</strong>, shown next to the title and inside the note's circle
+in the graph.</p>
+<h2 id="8-sketch-a-mind-map">8. Sketch a mind map</h2>
+<ol>
+<li>Open the <strong>Mind map</strong> tab and click <strong>Add idea</strong>.</li>
+<li>Press <strong>Tab</strong> to add a child idea, <strong>Enter</strong> for a sibling, <strong>F2</strong> to rename and <strong>Del</strong> to delete.
+Arrow keys move between ideas.</li>
+<li>Now click <strong>From links</strong>, and confirm that it may replace the map you just drew.</li>
+</ol>
+<p><strong>You should see</strong> a mind map built from the note's links, grouped by link type, with each linked note's
+own links one level deeper. Right-click any idea to link it to a note. The export button saves PNG, SVG
+or FreeMind.</p>
+<p><img loading="lazy" src="../assets/screenshots/mindmap-light.png" alt="A mind map" /></p>
+<h2 id="9-make-flashcards-and-review-them">9. Make flashcards and review them</h2>
+<p>Add these lines to the text of <em>Spaced repetition</em>:</p>
+<pre><code class="language-markdown">Q: Why space reviews out?
+A: Each effortful retrieval just before forgetting strengthens the memory.
+
+{{c1::Hermann Ebbinghaus}} described the forgetting curve.
+</code></pre>
+<p><strong>You should see</strong> <strong>Flashcards (2)</strong> on the tab: a question card and a cloze card. Now open <strong>Review</strong>
+(<strong>Ctrl+4</strong>) and click <strong>Start review</strong>.</p>
+<ul>
+<li>Press <strong>Space</strong> to show the answer.</li>
+<li>Grade yourself with <strong>1–4</strong> (<em>Again, Hard, Good, Easy</em>).</li>
+</ul>
+<p>The SM-2 schedule decides when each card comes back. Try <strong>Practice quiz ▸ Multiple choice</strong> or <strong>Name
+that note</strong> as well.</p>
+<p><img loading="lazy" src="../assets/screenshots/quiz-light.png" alt="A multiple-choice quiz" /></p>
+<h2 id="10-explore-the-graph">10. Explore the graph</h2>
+<p>Open <strong>Graph</strong> (<strong>Ctrl+2</strong>).</p>
+<ol>
+<li>Drag notes around, use the wheel to zoom, and hover a note to highlight its neighbours.</li>
+<li>Select a note in the Notes page, come back and click <strong>Local</strong>, then change <strong>Depth</strong> to 1, 2 or 3.</li>
+<li>Set <strong>Colour by</strong> to <strong>Clusters: k-means</strong>. Notes are grouped by meaning, and the legend names each
+cluster by its keywords.</li>
+<li>Toggle <strong>Group</strong> to pull each group together on a shaded background.</li>
+<li>Click <strong>3D</strong>, drag to orbit and try <strong>Rotate automatically</strong>.</li>
+</ol>
+<p><img loading="lazy" src="../assets/screenshots/graph-light.png" alt="The graph, coloured by tag and grouped" /></p>
+<h2 id="11-check-your-insights">11. Check your Insights</h2>
+<p>Open <strong>Insights</strong> (<strong>Ctrl+3</strong>) for counts, notes per month, top tags, links by type and the most
+connected notes. <strong>Unlinked notes</strong> is your to-do list: link them to something. Every chart has a table
+view.</p>
+<h2 id="12-cite-a-zotero-item-and-write-a-literature-note-optional">12. Cite a Zotero item and write a literature note (optional)</h2>
+<p>With Zotero 7+ running, and <em>Allow other applications on this computer to communicate with Zotero</em> turned
+on in its <em>Settings ▸ Advanced</em>:</p>
+<ol>
+<li>Choose <em>Insert ▸ Zotero Reference…</em>, search for an item and click <strong>Insert citation</strong>: a link like
+<em>Ebbinghaus (1885)</em> that opens the item in Zotero.</li>
+<li>Do it again and click <strong>New literature note</strong>.</li>
+</ol>
+<p><strong>You should see</strong> a new note with the reference, <em>Open in Zotero</em> and <em>Open PDF</em> links, the abstract and
+<em>Key ideas</em> / <em>My thoughts</em> sections, tagged <code>literature</code>. See <a href="zotero.html">Zotero</a>.</p>
+<h2 id="13-ask-your-notes-optional">13. Ask your notes (optional)</h2>
+<ol>
+<li>In <em>Tools ▸ Options ▸ AI assistant</em>, choose a provider (Anthropic, OpenAI or Z.ai), paste your API key
+and click <strong>Test connection</strong>.</li>
+<li>Open <strong>Ask</strong> (<strong>Ctrl+5</strong>) and ask: <em>How do spacing and retrieval work together?</em></li>
+</ol>
+<p><strong>You should see</strong> an answer that cites your notes as links, and the exact list of <strong>sources sent</strong>. Only
+those notes and your question leave your computer. See <a href="ai-assistant.html">Ask your notes</a>.</p>
+<h2 id="14-export-a-subgraph-and-sync-to-anki-optional">14. Export a subgraph and sync to Anki (optional)</h2>
+<ol>
+<li>Open a note, choose <em>File ▸ Export…</em> (<strong>Ctrl+Shift+E</strong>), pick <strong>Current note and linked notes</strong>,
+depth 2, and the <strong>Website</strong> format.</li>
+<li>Open the zip's <code>index.html</code> in your browser: a small website of that part of your Zettelkasten.</li>
+<li>With Anki running and the AnkiConnect add-on (code <code>2055492159</code>) installed, open <strong>Review</strong> and click
+<strong>Sync to Anki</strong>. Each card's source link opens the note in ZettelApp.</li>
+</ol>
+<p>See <a href="export-import.html">Export and import</a> and <a href="review-and-anki.html#anki">Anki</a>.</p>
+<h2 id="15-know-where-your-data-lives">15. Know where your data lives</h2>
+<ul>
+<li>Your notes live in the vault folder (<em>File ▸ Show Vault in File Explorer</em>): <code>zettel.db</code> plus <code>assets</code>.</li>
+<li>A backup is made automatically once a day, and <em>File ▸ Back Up Vault Now</em> makes one any time.</li>
+<li>Deleted notes go to the <strong>Trash</strong> under the note list, where you can restore them.</li>
+</ul>
+<p>Details in <a href="privacy-and-security.html">Privacy and security</a>.</p>
+<p><strong>That's it.</strong> Keep writing one idea per note, link each new note with a reason, and let suggestions and
+the graph show you what you have. Shortcuts are in <a href="keyboard-shortcuts.html">Keyboard shortcuts</a>.</p>
+
+    <p class="doc-footer">Found a mistake? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/tutorial.md">Edit this page on GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
+      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <ul class="nav">
+      <li><a href="../">Home</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

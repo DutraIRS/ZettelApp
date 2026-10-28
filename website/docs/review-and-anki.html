@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Notes are meant to be thought with, and remembering them helps. ZettelApp turns notes into flashcards and lets you review them inside the app or in Anki.">
+<title>Review, quizzes and Anki – ZettelApp documentation</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Features</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Docs</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Donate</a></li>
+        <li><a class="nav-cta" href="../#download">Download</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <h2>Documentation</h2>
+    <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="notes-and-links.html">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html" aria-current="page">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="review-quizzes-and-anki">Review, quizzes and Anki</h1>
+<p>Notes are meant to be thought with, and remembering them helps. ZettelApp turns notes into
+<a href="notes-and-links.html#flashcards">flashcards</a> and lets you review them inside the app or in Anki.</p>
+<h2 id="spaced-repetition">Spaced repetition</h2>
+<p>The <strong>Review</strong> page (Ctrl+4) shows how many cards are <strong>due today</strong>. <strong>Start review</strong> goes through them:</p>
+<ol>
+<li>Read the question and try to recall the answer.</li>
+<li>Press <strong>Space</strong> (or <em>Show answer</em>).</li>
+<li>Grade yourself: <strong>Again (1)</strong>, <strong>Hard (2)</strong>, <strong>Good (3)</strong> or <strong>Easy (4)</strong>. Hover a button to see when
+the card would come back.</li>
+</ol>
+<p>Scheduling uses the <strong>SM-2</strong> algorithm (the SuperMemo algorithm Anki grew from):</p>
+<ul>
+<li>New cards come back after 1 day, then 6 days, then at intervals that grow by the card's <em>ease factor</em>
+(2.5 at first).</li>
+<li><em>Again</em> resets the card to 1 day and lowers its ease. <em>Hard</em> shortens the next interval, and <em>Easy</em>
+lengthens it.</li>
+</ul>
+<p>Cloze cards produce one review per deletion (<code>{{c1::…}}</code>, <code>{{c2::…}}</code>, …). Each question shows a
+<strong>From:</strong> link to its note.</p>
+<h2 id="quizzes">Quizzes</h2>
+<p><strong>Practice quiz</strong> builds a quiz from a scope: the entire collection, the open note and its linked notes
+(with a depth), or the notes with a tag. Choose a style and the number of questions:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Style</th>
+<th>How it works</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Flashcards (spaced repetition)</strong></td>
+<td>Like a review, and your grades update the schedule.</td>
+</tr>
+<tr>
+<td><strong>Multiple choice</strong></td>
+<td>Pick the right answer among four. The wrong answers are other cards' answers of similar length, so they're plausible. Keys 1–4 choose.</td>
+</tr>
+<tr>
+<td><strong>Type the answer</strong></td>
+<td>Type the answer and press Enter. It is graded by edit (Levenshtein) similarity, ignoring case, accents and formatting: 85% or more counts as correct, and 60% or more as <em>almost</em>, so small typos don't cost you.</td>
+</tr>
+<tr>
+<td><strong>Name that note</strong></td>
+<td>Shows a note's text with the words of its title blanked out; pick the right title. The wrong options are the <strong>most similar notes</strong> (by TF-IDF), so you learn to tell related ideas apart. No flashcards needed.</td>
+</tr>
+</tbody>
+</table></div>
+<p><em>Tools ▸ Quiz on This Note's Neighbourhood</em> starts a quiz on the open note and the notes within two links
+of it. Right-click a note in the graph for the same.</p>
+<h2 id="anki">Anki</h2>
+<p>ZettelApp works with <a href="https://apps.ankiweb.net/">Anki</a> in two ways. Both use two note types, <strong>ZettelApp
+Basic</strong> and <strong>ZettelApp Cloze</strong>, with these fields:</p>
+<ul>
+<li><em>Front</em> and <em>Back</em> (or <em>Text</em> and <em>Extra</em> for cloze cards), rendered from Markdown;</li>
+<li><em>Source</em>, a link back to the note;</li>
+<li><em>ZettelID</em> and <em>CardKey</em>.</li>
+</ul>
+<p>Your note's tags become Anki tags (nested tags become <code>parent::child</code>), plus <code>zettelapp</code>. Images in cards
+are included as media.</p>
+<h3 id="sync-with-ankiconnect">Sync with AnkiConnect</h3>
+<ol>
+<li>In Anki, install the <strong>AnkiConnect</strong> add-on (<em>Tools ▸ Add-ons ▸ Get Add-ons…</em>, code <strong>2055492159</strong>)
+and restart Anki.</li>
+<li>With Anki running, open <strong>Review</strong> in ZettelApp, choose the deck name and scope, and press
+<strong>Sync to Anki</strong> (or <em>Tools ▸ Sync with Anki</em>). <em>Check connection</em> tests the link.</li>
+</ol>
+<p>ZettelApp remembers which Anki note belongs to each card. Syncing again <strong>updates</strong> cards instead of
+adding duplicates, and a card can be found again by its <em>CardKey</em> even if that memory was lost. Cards
+you delete in ZettelApp are not deleted from Anki.</p>
+<p>ZettelApp only ever talks to AnkiConnect on this computer (<code>127.0.0.1</code>, port 8765 by default, changeable in
+<em>Options ▸ Anki</em>).</p>
+<h3 id="export-a-deck-apkg">Export a deck (.apkg)</h3>
+<p><strong>Export deck (.apkg)…</strong> (or <em>File ▸ Export…</em> with the <em>Anki deck</em> format) writes a package that you
+import with <em>File ▸ Import</em> in Anki. No add-on is needed. Note types, the deck and each card's identity are
+stable, so importing a newer export <strong>updates</strong> the cards you imported before.</p>
+<h3 id="from-anki-back-to-your-notes">From Anki back to your notes</h3>
+<p>Every card's <strong>Source</strong> is a <code>zettelapp://note/&lt;id&gt;</code> link. Click it in Anki and the note opens in
+ZettelApp. The installer sets this up. With the portable version, use <em>Options ▸ Windows integration ▸
+Register links</em>. The link handler only accepts <em>open note</em> links; see
+<a href="privacy-and-security.html">Privacy and security</a>.</p>
+
+    <p class="doc-footer">Found a mistake? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/review-and-anki.md">Edit this page on GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
+      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <ul class="nav">
+      <li><a href="../">Home</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

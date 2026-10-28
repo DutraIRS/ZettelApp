@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="While you write, the Suggested links panel lists notes that probably belong with the one you are editing. Click Link to connect them , or ✕ to dismiss a suggestion. Both teach the ">
+<title>Link suggestions – ZettelApp documentation</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Features</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Docs</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Donate</a></li>
+        <li><a class="nav-cta" href="../#download">Download</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <h2>Documentation</h2>
+    <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="notes-and-links.html">Notes and links</a></li>
+      <li><a href="link-suggestions.html" aria-current="page">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="link-suggestions">Link suggestions</h1>
+<p>While you write, the <strong>Suggested links</strong> panel lists notes that probably belong with the one you are
+editing. Click <strong>Link</strong> to connect them (the arrow next to it chooses the link type), or <strong>✕</strong> to dismiss a
+suggestion. Both teach the model. Hover a suggestion to see <em>why</em> it was suggested.</p>
+<p>Suggestions update about a second after you stop typing, in the background, so the editor never waits for
+them. They use your unsaved text too.</p>
+<h2 id="how-it-works">How it works</h2>
+<p>ZettelApp treats &quot;should these two notes be linked?&quot; as a classification problem and answers it with a
+<strong>Naive Bayes</strong> classifier. For a note <em>q</em> and every candidate note <em>c</em>, it computes eight similarity
+features and combines the evidence into a probability.</p>
+<h3 id="the-features">The features</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>What it measures</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Semantic similarity (LSA)</strong></td>
+<td>Cosine similarity in a latent semantic space: a truncated SVD of the TF-IDF matrix (randomised SVD, up to 64 dimensions). Notes that use related vocabulary end up close even when they share few exact words.</td>
+</tr>
+<tr>
+<td><strong>Shared keywords (TF-IDF cosine)</strong></td>
+<td>Cosine similarity of TF-IDF vectors (sublinear term frequency, smoothed inverse document frequency). Titles count double; tags are included.</td>
+</tr>
+<tr>
+<td><strong>Title similarity (Levenshtein)</strong></td>
+<td>1 − edit distance ÷ length of the longer title.</td>
+</tr>
+<tr>
+<td><strong>Title similarity (Jaro-Winkler)</strong></td>
+<td>Jaro-Winkler similarity of the titles, which rewards a shared beginning.</td>
+</tr>
+<tr>
+<td><strong>Text similarity (Levenshtein)</strong></td>
+<td>Normalised edit distance between the first 400 characters of the two texts.</td>
+</tr>
+<tr>
+<td><strong>Shared tags (Jaccard)</strong></td>
+<td>Tags in common ÷ tags in total.</td>
+</tr>
+<tr>
+<td><strong>Title mentioned in the text</strong></td>
+<td>1 if either note's title appears as whole words in the other's text, else 0.</td>
+</tr>
+<tr>
+<td><strong>Shared links (Jaccard)</strong></td>
+<td>Overlap between the two notes' linked notes (closing triangles in the graph).</td>
+</tr>
+</tbody>
+</table></div>
+<p>Text is lower-cased, accents are folded (so <em>informação</em> matches <em>informacao</em>), Markdown syntax is
+removed, and common English, Portuguese and Spanish stop words are ignored. Edit distances use
+<a href="https://github.com/rapidfuzz/RapidFuzz">RapidFuzz</a>; a pure-Python bit-parallel algorithm gives
+identical results when it isn't available.</p>
+<h3 id="from-features-to-a-probability">From features to a probability</h3>
+<p>Each feature value (between 0 and 1) is placed into one of <strong>8 bins</strong>. For each feature, the model keeps
+how often linked pairs and unlinked pairs fall into each bin, and estimates</p>
+<pre><code class="language-text">P(link | f1 … f8)  ∝  P(link) × Π P(fi | link)
+</code></pre>
+<p>The <strong>evidence</strong> of a feature is its log-likelihood ratio, log P(bin | link) − log P(bin | no link).
+The probability shown is the logistic function of the prior log-odds plus the (weighted) sum of the
+evidence.</p>
+<p><strong>Where the counts come from.</strong> The model trains on your vault every time it changes noticeably:</p>
+<ul>
+<li><strong>positive examples</strong>: every pair of linked notes, plus suggestions you accepted (up to 600 pairs are
+sampled in very large vaults);</li>
+<li><strong>negative examples</strong>: random pairs of unlinked notes, three for every positive example, plus every
+suggestion you <strong>dismissed</strong>, which counts double.</li>
+</ul>
+<p><strong>A prior so it works from day one.</strong> Before any data, each bin starts with Dirichlet <em>pseudo-counts</em>
+(10 per feature and class, by default). These encode a weak belief: for linked pairs the counts rise
+with similarity, and for unlinked pairs they fall steeply. That is enough to rank suggestions in a new
+vault. As you link notes, real counts outweigh the prior and the model adapts to <em>your</em> way of linking.
+Because positives and negatives are sampled one to three, the class prior P(link) is about one in four
+(with matching pseudo-counts).</p>
+<p><strong>Two corrections keep the estimates honest:</strong></p>
+<ol>
+<li><strong>No label leakage.</strong> <code>[[Wiki links]]</code> are removed from the text before features are computed.
+Otherwise an inline link would put the target's title into the text, and the model would learn to
+recognise existing links rather than related ideas. For the same reason, when training on a linked
+pair, the &quot;shared links&quot; feature ignores the link between the two notes.</li>
+<li><strong>Correlated evidence is weighted.</strong> Naive Bayes assumes the features are independent, but some are
+not: TF-IDF and LSA overlap, and so do the three string distances. Counting correlated evidence as
+independent makes plain Naive Bayes overconfident. ZettelApp therefore multiplies each feature's
+evidence by <strong>0.6</strong> (feature-weighted Naive Bayes), which keeps probabilities realistic.</li>
+</ol>
+<p><strong>Missing or disabled features count as no evidence.</strong> If you switch a feature off, or it can't be
+computed, it adds nothing, which is how Naive Bayes naturally handles missing values.</p>
+<h3 id="ranking-quickly">Ranking quickly</h3>
+<p>Comparing long texts with Levenshtein distance is the slowest step, so ranking happens in two stages.
+All candidates are first scored without the text-similarity feature, and only the best 150 get the full
+score. Candidates you already link to, and pairs you dismissed, are never suggested.</p>
+<h2 id="reading-the-why-tooltip">Reading the &quot;why&quot; tooltip</h2>
+<p>Hover a suggestion to see the model's estimate and each feature's evidence. Positive numbers argue for a
+link and negative numbers against. The label next to the bar summarises the probability: <strong>strong</strong>
+(50% or more), <strong>likely</strong> (25% or more) or <strong>possible</strong>.</p>
+<p>Probabilities are honest estimates, and in a sparse vault most pairs really are unlinked, so 15–30% can
+be a good suggestion. What matters most is the order.</p>
+<h2 id="tuning">Tuning</h2>
+<p><em>Tools ▸ Options ▸ Link suggestions</em>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Suggest links while I write</td>
+<td>on</td>
+<td>Turn the panel's suggestions off entirely.</td>
+</tr>
+<tr>
+<td>Features</td>
+<td>all eight</td>
+<td>Untick features you don't want considered.</td>
+</tr>
+<tr>
+<td>Show at most</td>
+<td>8</td>
+<td>Number of suggestions listed.</td>
+</tr>
+<tr>
+<td>Minimum match</td>
+<td>10%</td>
+<td>Hide suggestions below this probability.</td>
+</tr>
+<tr>
+<td>Prior strength</td>
+<td>10</td>
+<td>How many pseudo-observations back the prior. Higher values trust the prior longer; lower values adapt to your links faster.</td>
+</tr>
+</tbody>
+</table></div>
+<ul>
+<li><strong>Model details…</strong> shows how many linked and unlinked pairs the model trained on, and how informative
+each feature is (the symmetric Kullback–Leibler divergence between its distributions for linked and
+unlinked pairs).</li>
+<li><strong>Forget dismissed suggestions</strong> clears your dismissals, so those pairs can be suggested again and
+stop counting as negative examples.</li>
+</ul>
+
+    <p class="doc-footer">Found a mistake? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/link-suggestions.md">Edit this page on GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
+      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <ul class="nav">
+      <li><a href="../">Home</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

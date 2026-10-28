@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="The Graph page  draws your notes as a network: each circle is a note, sized by how many links it has, and each line is a link.">
+<title>Graph and Insights – ZettelApp documentation</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Features</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Docs</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Donate</a></li>
+        <li><a class="nav-cta" href="../#download">Download</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <h2>Documentation</h2>
+    <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="notes-and-links.html">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html" aria-current="page">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="graph-and-insights">Graph and Insights</h1>
+<h2 id="the-graph">The graph</h2>
+<p>The <strong>Graph</strong> page (Ctrl+2) draws your notes as a network: each circle is a note, sized by how many links
+it has, and each line is a link.</p>
+<p><img loading="lazy" src="../assets/screenshots/graph-light.png" alt="The graph, coloured by tag" /></p>
+<h3 id="controls">Controls</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Control</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>All notes / Local</strong></td>
+<td>Show the whole collection, or only the open note and the notes within <strong>Depth</strong> links of it (following links in both directions). <em>Show in graph</em> in a note's ⋯ menu opens the local graph.</td>
+</tr>
+<tr>
+<td><strong>2D / 3D</strong></td>
+<td>Switch between a flat, draggable layout and a 3D view you can orbit.</td>
+</tr>
+<tr>
+<td><strong>Colour by</strong></td>
+<td>Tags, <em>Clusters: k-means</em>, <em>Clusters: hierarchical</em>, or nothing.</td>
+</tr>
+<tr>
+<td><strong>k</strong></td>
+<td>Number of clusters. <em>Auto k</em> picks it for you (see below).</td>
+</tr>
+<tr>
+<td><strong>Group</strong></td>
+<td>Pull notes of the same group together and shade each group's area.</td>
+</tr>
+<tr>
+<td><strong>Labels</strong></td>
+<td>Show note titles. In large graphs, only the best-connected notes are labelled until you hover.</td>
+</tr>
+<tr>
+<td><strong>Link types</strong></td>
+<td>Hide or show individual link types.</td>
+</tr>
+<tr>
+<td><strong>Find in graph</strong></td>
+<td>Type part of a title and press Enter to jump to the note.</td>
+</tr>
+</tbody>
+</table></div>
+<p>At the bottom right are zoom, fit, <strong>recompute layout</strong>, <strong>save as image</strong> (PNG) and <strong>export these
+notes</strong> (opens the <a href="export-import.html">export</a> dialog with the notes on screen).</p>
+<p><strong>In 2D</strong>, drag a note to move it, drag the background to pan, and use the mouse wheel to zoom. Hovering
+a note highlights it and its neighbours. Double-click a note to open it; right-click it for more (open,
+local graph, quiz on this neighbourhood, export with linked notes). A note's picture is shown inside its
+circle.</p>
+<p><strong>In 3D</strong>, drag to orbit, use the wheel to zoom, and double-click a note to open it. <strong>Rotate
+automatically</strong> spins the view. Nearer notes are larger and brighter, so depth is easy to read, and each
+group appears as a soft coloured halo.</p>
+<p>The layout is force-directed (Fruchterman–Reingold): links pull notes together, all notes push each
+other apart, and gentle gravity keeps separate components on screen. It runs in the background and is
+cached per view.</p>
+<h3 id="colouring-by-tag">Colouring by tag</h3>
+<p>Each note takes the colour of its <strong>most common tag</strong>, the one used by the most notes in view, so the
+big themes of your vault get distinct colours.</p>
+<h3 id="colouring-by-cluster">Colouring by cluster</h3>
+<p>Clustering groups notes <strong>by meaning</strong>, whether or not they are linked. Each note becomes a vector in a
+semantic space using latent semantic analysis (LSA) of its title, text and tags. Then one of two methods
+groups the vectors:</p>
+<ul>
+<li><strong>k-means</strong>: Lloyd's algorithm with k-means++ seeding, best of several runs. It is fast and gives
+round, even-sized groups.</li>
+<li><strong>Hierarchical</strong>: agglomerative clustering with average linkage on cosine distance, computed with the
+nearest-neighbour-chain algorithm (O(n²)). It works better for uneven, nested topics. Vaults above
+4,000 notes fall back to k-means.</li>
+</ul>
+<p>With <strong>Auto k</strong>, ZettelApp tries k from 2 up to about √(n/2) + 2 (at most 12) and keeps the k with the
+best <strong>silhouette score</strong>. The score, shown under the legend, measures how well separated the clusters
+are: 1 is perfect, around 0 means overlapping groups. Each cluster is named by its most distinctive
+words, the terms more frequent inside it than in the rest of the vault.</p>
+<h3 id="groups-and-colours">Groups and colours</h3>
+<p>With <strong>Group</strong> on, notes of the same tag or cluster are pulled towards each other, and each group gets a
+lightly shaded region with its name. The legend lists the groups with their sizes. Click one to
+highlight its notes.</p>
+<p>Group and chart colours come from a palette <strong>validated for colour-vision deficiencies</strong> in both light
+and dark mode. Colours are assigned in a fixed order and never reused: groups beyond the eighth share a
+neutral grey &quot;Other&quot; colour. <strong>Link types</strong> use a second cue besides colour, a distinct dash pattern each,
+and directed types draw arrowheads. The legend always names everything, so nothing depends on colour
+alone.</p>
+<h2 id="insights">Insights</h2>
+<p>The <strong>Insights</strong> page (Ctrl+3) summarises your vault:</p>
+<ul>
+<li><strong>Tiles</strong>: notes (and how many are in the Trash), links (and links per note), tags, <em>unlinked notes</em>
+(good candidates for linking), flashcards, and cards due today.</li>
+<li><strong>Notes added per month</strong> over the last 12 months.</li>
+<li><strong>Top tags</strong>, <strong>Links by type</strong> and the <strong>Most connected notes</strong> (click a bar to open the note).</li>
+<li><strong>Topics</strong>: k-means clusters of your notes with their keywords and sizes.</li>
+</ul>
+<p>Every chart has a <strong>Show as table</strong> button (the list icon) with the same numbers as a table, and bars
+show their value on hover.</p>
+
+    <p class="doc-footer">Found a mistake? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/graph-and-insights.md">Edit this page on GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
+      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <ul class="nav">
+      <li><a href="../">Home</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="ZettelApp is written in Python with Qt for Python .">
+<title>Development – ZettelApp documentation</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Features</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Docs</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Donate</a></li>
+        <li><a class="nav-cta" href="../#download">Download</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <h2>Documentation</h2>
+    <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="notes-and-links.html">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html" aria-current="page">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="development">Development</h1>
+<p>ZettelApp is written in Python with <a href="https://doc.qt.io/qtforpython-6/">Qt for Python (PySide6)</a>.</p>
+<h2 id="set-up">Set up</h2>
+<p>You need Python 3.12 or later on Windows, and Git.</p>
+<pre><code class="language-powershell">git clone https://github.com/DutraIRS/ZettelApp.git
+cd ZettelApp
+py -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements-dev.txt
+python -m zettelapp
+</code></pre>
+<h2 id="tests">Tests</h2>
+<pre><code class="language-powershell">pytest
+</code></pre>
+<p>The tests cover:</p>
+<ul>
+<li>the core library: storage, similarity measures, the Naive Bayes suggester, clustering, export and
+import, Anki, quizzes, Zotero, the LLM providers (no network) and the MCP server;</li>
+<li>the security checks;</li>
+<li>a smoke test of the main window, run offscreen.</li>
+</ul>
+<p>They never touch your real preferences or Credential Manager entries beyond a throwaway test key.</p>
+<h2 id="useful-tools">Useful tools</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Command</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>python tools/make_icon.py</code></td>
+<td>Redraws the app icon (<code>zettelapp/resources/icon.ico</code>, PNGs) and the website icons.</td>
+</tr>
+<tr>
+<td><code>python tools/screenshots.py</code></td>
+<td>Renders screenshots of the real app (light and dark) into <code>website/assets/screenshots/</code>, using a demo vault (<code>tools/demo_vault.py</code>) and temporary settings.</td>
+</tr>
+<tr>
+<td><code>python tools/build_site.py</code></td>
+<td>Builds the documentation pages of the website (<code>website/docs/</code>) from <code>docs/*.md</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<h2 id="build-the-windows-app">Build the Windows app</h2>
+<pre><code class="language-powershell">pwsh packaging/build.ps1
+</code></pre>
+<p>This produces:</p>
+<ul>
+<li><code>dist/ZettelApp/</code>: the app folder (PyInstaller, one-folder mode) with <code>ZettelApp.exe</code> and the console
+MCP server <code>zettelapp-mcp.exe</code>;</li>
+<li><code>dist/ZettelApp-Portable.zip</code>;</li>
+<li><code>dist/ZettelApp-Setup.exe</code>, when <a href="https://jrsoftware.org/isinfo.php">Inno Setup 6</a> is installed: a
+per-user installer (no administrator rights) with a language picker, Start menu shortcut, uninstaller
+and <code>zettelapp://</code> link registration;</li>
+<li><code>dist/SHA256SUMS.txt</code>.</li>
+</ul>
+<p>The executables carry Windows version information and the app icon. One-folder builds start faster and
+trigger fewer antivirus false positives than single-file builds.</p>
+<h2 id="release">Release</h2>
+<ol>
+<li>Update <code>__version__</code> in <code>zettelapp/__init__.py</code> and <code>CHANGELOG.md</code>.</li>
+<li>Commit, then tag and push: <code>git tag v1.0.1; git push origin v1.0.1</code>.</li>
+<li>GitHub Actions builds the app on Windows, runs the tests and publishes a GitHub release with
+<code>ZettelApp-Setup.exe</code>, <code>ZettelApp-Portable.zip</code> and <code>SHA256SUMS.txt</code>. The website's download buttons
+always point to the latest release.</li>
+</ol>
+<p>The website (<code>website/</code>) is deployed to GitHub Pages by <code>.github/workflows/pages.yml</code> whenever <code>docs/</code> or
+<code>website/</code> change on <code>main</code>.</p>
+<h2 id="project-layout">Project layout</h2>
+<pre><code class="language-text">zettelapp/
+  core/            Qt-free logic (tested without a GUI)
+    storage.py     the vault: SQLite schema, notes, typed links, tags, assets, cards, backups
+    similarity.py  Levenshtein, Jaro-Winkler, Jaccard, TF-IDF and LSA
+    suggest.py     Naive Bayes link suggester
+    cluster.py     k-means, hierarchical clustering, silhouette, cluster keywords
+    graph.py       subgraphs and force-directed layout (2D/3D)
+    render.py      safe Markdown rendering (notes, exports, Anki)
+    export.py      export formats; importer.py: imports
+    anki.py        .apkg export and AnkiConnect sync
+    quiz.py        SM-2 scheduling and quiz generation
+    zotero.py      Zotero local API client
+    llm.py         AI providers (registry + adapters) and retrieval
+    secrets.py     Windows Credential Manager
+    security.py    validation of URLs, file names, images, archives
+  ui/              PySide6 widgets: main window, editor, graph views, pages, dialogs, theme
+  mcp_server.py    MCP server; mcp_main.py: its entry point (zettelapp-mcp.exe)
+  app.py           startup, single instance, logging
+  settings.py      preferences (QSettings)
+  winintegration.py  taskbar identity, dark title bars, zettelapp:// protocol
+tests/             pytest suite
+tools/             icon, screenshots, demo vault, website builder
+packaging/         PyInstaller spec, version info, Inno Setup script, build script
+docs/              this documentation (also published on the website)
+website/           the GitHub Pages site
+</code></pre>
+<h2 id="adding-an-ai-provider">Adding an AI provider</h2>
+<p>Add an entry to <code>PROVIDERS</code> in <code>zettelapp/core/llm.py</code>:</p>
+<pre><code class="language-python">&quot;mistral&quot;: ProviderInfo(
+    &quot;mistral&quot;, &quot;Mistral&quot;, OPENAI_COMPATIBLE, &quot;https://api.mistral.ai/v1&quot;, &quot;mistral-large-latest&quot;,
+    (&quot;mistral-large-latest&quot;,), &quot;https://console.mistral.ai/api-keys&quot;),
+</code></pre>
+<p>Providers that speak the OpenAI chat-completions protocol need nothing else. For a new protocol, write an
+adapter class with <code>stream()</code> and <code>list_models()</code> and register it in <code>_ADAPTERS</code>. Keys are stored under
+<code>ZettelApp/llm/&lt;id&gt;</code> automatically, and the Options page lists the new provider.</p>
+
+    <p class="doc-footer">Found a mistake? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/development.md">Edit this page on GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
+      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <ul class="nav">
+      <li><a href="../">Home</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

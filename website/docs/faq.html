@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Yes. It is free and open source, released into the public domain under The Unlicense. The optional AI feature uses your own API key, so the provider bills you directly.">
+<title>FAQ – ZettelApp documentation</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Features</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Docs</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Donate</a></li>
+        <li><a class="nav-cta" href="../#download">Download</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <h2>Documentation</h2>
+    <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="notes-and-links.html">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html">Development</a></li>
+      <li><a href="faq.html" aria-current="page">FAQ</a></li>
+    </ul>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="faq">FAQ</h1>
+<h3 id="is-zettelapp-free">Is ZettelApp free?</h3>
+<p>Yes. It is free and open source, released into the public domain under
+<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>. The optional AI feature uses
+your own API key, so the provider bills you directly.</p>
+<h3 id="how-can-i-support-zettelapp">How can I support ZettelApp?</h3>
+<p>Thank you for asking! You can support development on <a href="https://ko-fi.com/dutrairs">Ko-fi</a>. Companies can
+sponsor a specific <a href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">roadmap</a> item; get in
+touch through <a href="https://github.com/DutraIRS/ZettelApp">GitHub</a>. Sponsors are thanked in the release notes.
+Reporting bugs, improving the docs and sharing ZettelApp help too.</p>
+<h3 id="does-it-need-the-internet">Does it need the internet?</h3>
+<p>No. Everything works offline. The internet is used only when you ask a question on the <strong>Ask</strong> page or
+open a link. See <a href="privacy-and-security.html">Privacy and security</a>.</p>
+<h3 id="where-are-my-notes">Where are my notes?</h3>
+<p>In your vault folder, by default <strong>Documents\ZettelApp</strong>: a <code>zettel.db</code> database and an <code>assets</code> folder.
+<em>File ▸ Show Vault in File Explorer</em> opens it.</p>
+<h3 id="can-i-use-it-with-onedrive-dropbox-or-google-drive">Can I use it with OneDrive, Dropbox or Google Drive?</h3>
+<p>Yes. Put the vault in a synced folder (<em>File ▸ New Vault…</em>). Close ZettelApp on one computer before
+opening the same vault on another, because two computers writing at once can conflict.</p>
+<h3 id="how-do-i-move-to-another-computer">How do I move to another computer?</h3>
+<p>Copy the vault folder, or use <em>File ▸ Export…</em> ▸ <strong>ZettelApp archive</strong> and import it on the other
+computer.</p>
+<h3 id="can-i-use-my-obsidian-vault">Can I use my Obsidian vault?</h3>
+<p>Yes. <em>File ▸ Import Markdown Folder…</em> imports Markdown files with their front matter, <code>#tags</code>,
+<code>[[links]]</code> and images. Your Obsidian files are not changed. Going the other way, export to <strong>Markdown
+files</strong> and open the folder in Obsidian.</p>
+<h3 id="why-zettel-ids-like-20261027153012">Why &quot;Zettel&quot; IDs like 20261027153012?</h3>
+<p>Each note gets a permanent ID from the time it was created (year, month, day, hour, minute, second).
+Titles can change; IDs don't, so links by ID never break. You rarely need to see them.</p>
+<h3 id="whats-the-difference-between-a-link-in-the-text-and-a-link-in-the-side-panel">What's the difference between a link in the text and a link in the side panel?</h3>
+<p>Both are real links. <code>[[Links]]</code> in the text are part of your writing and are removed by deleting them
+from the text. Links added with <strong>Add link…</strong> or by accepting a suggestion aren't in the text. You can
+change their type, reverse their direction or remove them in the side panel.</p>
+<h3 id="why-does-a-suggestion-say-only-18--possible">Why does a suggestion say only &quot;18% · possible&quot;?</h3>
+<p>The number is the model's honest estimate that you would link the two notes. In a young or sparse vault,
+most pairs of notes are unrelated, so even good suggestions start modest. The order of suggestions
+matters most, and the estimates improve as you link and dismiss. See
+<a href="link-suggestions.html">Link suggestions</a>.</p>
+<h3 id="does-it-work-on-macos-or-linux">Does it work on macOS or Linux?</h3>
+<p>Not yet. Linux packages (.deb, AppImage) and macOS are on the
+<a href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">roadmap</a>.</p>
+<h3 id="is-the-app-available-in-other-languages">Is the app available in other languages?</h3>
+<p>The installer is. It offers many languages and suggests your Windows language. The app's own text is in
+English for now; translating it is on the
+<a href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">roadmap</a>.</p>
+<h3 id="how-do-i-uninstall">How do I uninstall?</h3>
+<p><em>Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall</em>. Your vaults in Documents are kept. For the
+portable version, delete its folder. Preferences live in the registry under
+<code>HKEY_CURRENT_USER\Software\ZettelApp</code>, and logs and backups in <code>%LOCALAPPDATA%\ZettelApp</code>. You can
+delete both if you no longer need them.</p>
+<h3 id="something-went-wrong-where-are-the-logs">Something went wrong. Where are the logs?</h3>
+<p>In <code>%LOCALAPPDATA%\ZettelApp\Logs</code>. Please include the relevant part when you
+<a href="https://github.com/DutraIRS/ZettelApp/issues">report an issue</a>. Check that it contains nothing private
+first.</p>
+
+    <p class="doc-footer">Found a mistake? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/faq.md">Edit this page on GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
+      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <ul class="nav">
+      <li><a href="../">Home</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

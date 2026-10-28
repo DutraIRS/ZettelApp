@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Nothing, unless you ask for it. ZettelApp has no accounts, telemetry, ads or automatic updates, and it doesn&#x27;t load anything from the internet while you work. Network use happens o">
+<title>Privacy and security – ZettelApp documentation</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Features</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Docs</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Donate</a></li>
+        <li><a class="nav-cta" href="../#download">Download</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <h2>Documentation</h2>
+    <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="notes-and-links.html">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html" aria-current="page">Privacy and security</a></li>
+      <li><a href="development.html">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="privacy-and-security">Privacy and security</h1>
+<h2 id="what-leaves-your-computer">What leaves your computer</h2>
+<p><strong>Nothing, unless you ask for it.</strong> ZettelApp has no accounts, telemetry, ads or automatic updates, and it
+doesn't load anything from the internet while you work. Network use happens only when you trigger
+it:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>When you…</th>
+<th>ZettelApp contacts</th>
+<th>What is sent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ask a question on the <strong>Ask</strong> page</td>
+<td>The AI provider you configured (Anthropic, OpenAI, Z.ai or your own endpoint)</td>
+<td>Your question and the notes listed under <em>Sources sent</em></td>
+</tr>
+<tr>
+<td>Test the AI connection or refresh the model list</td>
+<td>The same provider</td>
+<td>Your API key, to authenticate</td>
+</tr>
+<tr>
+<td><strong>Sync to Anki</strong></td>
+<td>AnkiConnect on <strong>this computer</strong> (<code>127.0.0.1</code>)</td>
+<td>The flashcards in the chosen scope</td>
+</tr>
+<tr>
+<td>Use <strong>Insert ▸ Zotero Reference</strong></td>
+<td>Zotero on <strong>this computer</strong> (<code>127.0.0.1</code>)</td>
+<td>Your search words (read-only)</td>
+</tr>
+<tr>
+<td>Click a web link, or use <em>Help ▸ Website / Documentation / Check for Updates</em></td>
+<td>Your web browser opens the page</td>
+<td>Nothing from ZettelApp</td>
+</tr>
+</tbody>
+</table></div>
+<p>Local connections to Anki and Zotero never use a proxy, so they can't be redirected off your computer.</p>
+<h2 id="where-your-data-lives">Where your data lives</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>What</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Notes, links, flashcards, review history</td>
+<td>Your vault folder: <code>zettel.db</code> (SQLite). By default <strong>Documents\ZettelApp</strong>.</td>
+</tr>
+<tr>
+<td>Images</td>
+<td>The vault's <code>assets</code> folder.</td>
+</tr>
+<tr>
+<td>Preferences</td>
+<td>The registry, under <code>HKEY_CURRENT_USER\Software\ZettelApp\ZettelApp</code>.</td>
+</tr>
+<tr>
+<td>API keys</td>
+<td><strong>Windows Credential Manager</strong> (<code>ZettelApp/llm/…</code>), never in files or the registry.</td>
+</tr>
+<tr>
+<td>Logs</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Logs</code> (rotated, at most a few MB). They record errors, not your notes, and never include API keys.</td>
+</tr>
+<tr>
+<td>Automatic backups</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Backups</code></td>
+</tr>
+<tr>
+<td>Small UI cache</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Cache</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>The vault is an ordinary folder: you can copy it, back it up or keep it in OneDrive. ZettelApp writes the
+database with full synchronisation, a setting chosen to suit synced folders. Avoid opening the same vault on two
+computers at the same time.</p>
+<h2 id="backups-and-undo">Backups and undo</h2>
+<ul>
+<li><strong>Daily backups:</strong> the first time a vault is opened each day, a consistent copy of its database is
+saved. The newest 10 are kept (<em>Options ▸ Backups</em>). <em>File ▸ Back Up Vault Now</em> makes one any time.
+Images are stored by content and never deleted automatically.</li>
+<li><strong>Trash:</strong> deleted notes go to the Trash first, and can be restored until you empty it.</li>
+<li><strong>Autosave:</strong> notes save as you type. A crash dialog reports unexpected errors and writes details to the
+log.</li>
+</ul>
+<h2 id="how-zettelapp-protects-you">How ZettelApp protects you</h2>
+<p>Notes can come from imports, the web or AI answers, so ZettelApp treats their contents as untrusted:</p>
+<ul>
+<li><strong>No active content.</strong> Raw HTML in notes is shown as text, never rendered; nothing in a note can run
+scripts. The note preview loads images <strong>only from the vault's own <code>assets</code> folder</strong>, never from the
+web or elsewhere on disk.</li>
+<li><strong>Link allowlist.</strong> Clicking a link opens only web pages (<code>http</code>/<code>https</code>), e-mail (<code>mailto</code>), notes, and
+Zotero <em>select item</em> / <em>open PDF</em> links. <code>javascript:</code>, <code>file:</code> and other schemes are refused.</li>
+<li><strong>Images are verified by content</strong>, not by file name. Only PNG, JPEG, GIF, WebP and BMP up to 25 MB are
+accepted; SVG is refused because it can carry scripts.</li>
+<li><strong>Safe imports.</strong> Archives are checked for path tricks (&quot;zip-slip&quot;) and decompression bombs. Every field
+is validated and size-limited, and Markdown imports can't reach outside the imported folder.</li>
+<li><strong>Safe exports.</strong> Exported websites contain no scripts and carry a strict Content-Security-Policy. Files
+are written atomically.</li>
+<li><strong>Database safety.</strong> All database queries use bound parameters, and search text is never interpreted as
+query syntax.</li>
+<li><strong><code>zettelapp://</code> links</strong> (used by Anki cards) can only <em>open a note by its ID</em>. Any other request is
+ignored.</li>
+<li><strong>Single instance per user.</strong> A second launch hands its request to the running app through a Windows
+named pipe that only your user account can access.</li>
+<li><strong>AI safety.</strong> The AI model gets no tools, so instructions hidden in a note can't make it act, and its
+answer is rendered with the same safe renderer. API keys stay in Credential Manager and are removed from
+error messages.</li>
+<li><strong>MCP server.</strong> It is read-only by default and runs only when your MCP client starts it, over standard
+input/output with no network port. See <a href="mcp-server.html">MCP server</a>.</li>
+</ul>
+<p>Found a security problem? Please report it privately; see
+<a href="https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md">SECURITY.md</a>.</p>
+
+    <p class="doc-footer">Found a mistake? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/privacy-and-security.md">Edit this page on GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
+      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <ul class="nav">
+      <li><a href="../">Home</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

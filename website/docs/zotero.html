@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="ZettelApp connects to Zotero, the free reference manager, so you can cite references in your notes and write literature notes linked to the item, and its PDF, in your library.">
+<title>Zotero – ZettelApp documentation</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Features</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Docs</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Donate</a></li>
+        <li><a class="nav-cta" href="../#download">Download</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <h2>Documentation</h2>
+    <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="notes-and-links.html">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html" aria-current="page">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="zotero">Zotero</h1>
+<p>ZettelApp connects to <a href="https://www.zotero.org/">Zotero</a>, the free reference manager, so you can cite
+references in your notes and write <strong>literature notes</strong> linked to the item, and its PDF, in your library.</p>
+<h2 id="set-up">Set up</h2>
+<ol>
+<li>Use <strong>Zotero 7 or later</strong> and keep it running.</li>
+<li>In Zotero, open <em>Settings ▸ Advanced</em> and turn on <strong>&quot;Allow other applications on this computer to
+communicate with Zotero&quot;</strong>.</li>
+<li>In ZettelApp, <em>Tools ▸ Options ▸ Zotero ▸ Test connection</em> should say <em>Connected to Zotero</em>.</li>
+</ol>
+<p>ZettelApp reads your library through Zotero's <strong>local API</strong> on this computer (<code>127.0.0.1</code>, port 23119 by
+default). It only reads: it never changes your Zotero library, and nothing goes over the internet.
+Your personal library (<em>My Library</em>) is searched; group libraries are not, yet.</p>
+<h2 id="cite-a-reference">Cite a reference</h2>
+<p><em>Insert ▸ Zotero Reference…</em>, or the books button in the editor toolbar, opens a search box. Type part of
+a title, an author or a year. With an empty search, your most recently modified items are listed. Select
+an item to see its details, then:</p>
+<ul>
+<li>
+<p><strong>Insert citation</strong> (or double-click) adds an author–year citation that opens the item in Zotero:</p>
+<pre><code class="language-markdown">[Ebbinghaus (1885)](zotero://select/library/items/ABCD2345)
+</code></pre>
+</li>
+<li>
+<p><strong>New literature note</strong> creates a note for the item, with:</p>
+<ul>
+<li>the item's title;</li>
+<li>a reference line (authors, year, title, publication, DOI);</li>
+<li>links to <em>Open in Zotero</em>, <em>Open PDF</em> (when the item has a PDF attachment) and the DOI;</li>
+<li>the abstract;</li>
+<li><em>Key ideas</em> and <em>My thoughts</em> sections to fill in;</li>
+<li>the tag <code>literature</code> plus the item's Zotero tags;</li>
+<li>the Zotero item as the note's <strong>source link</strong>.</li>
+</ul>
+</li>
+</ul>
+<p>Literature notes are the classic Zettelkasten bridge between reading and your own permanent notes: write
+the key ideas in your own words, then link them to the notes they support, extend or contradict.</p>
+<h2 id="zotero-links">Zotero links</h2>
+<p>Clicking a Zotero link in a note opens Zotero at the item, or opens the PDF in Zotero's reader. For safety,
+ZettelApp only follows two kinds of Zotero link and refuses any other <code>zotero://</code> address:</p>
+<pre><code class="language-text">zotero://select/library/items/&lt;KEY&gt;
+zotero://open-pdf/library/items/&lt;KEY&gt;?page=&lt;N&gt;
+</code></pre>
+<p>Group-library links (<code>zotero://select/groups/&lt;ID&gt;/items/&lt;KEY&gt;</code>) are accepted too. You can also paste a
+Zotero link into a note's <strong>source link</strong> field. In Zotero, right-click an item and copy its link (or use
+an add-on such as Zutilo), then paste it.</p>
+<h2 id="troubleshooting">Troubleshooting</h2>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Message</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>Could not reach Zotero</em></td>
+<td>Start Zotero 7 or later. Check the port in <em>Options ▸ Zotero</em> (default 23119).</td>
+</tr>
+<tr>
+<td><em>Zotero refused the request</em></td>
+<td>Turn on the <em>Allow other applications…</em> setting (step 2 above).</td>
+</tr>
+<tr>
+<td><em>This Zotero version has no local API</em></td>
+<td>Update Zotero to version 7 or later.</td>
+</tr>
+</tbody>
+</table></div>
+
+    <p class="doc-footer">Found a mistake? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/zotero.md">Edit this page on GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
+      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <ul class="nav">
+      <li><a href="../">Home</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

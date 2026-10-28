@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="File ▸ Export…  exports the whole collection or any part of it:">
+<title>Export and import – ZettelApp documentation</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Features</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Docs</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Donate</a></li>
+        <li><a class="nav-cta" href="../#download">Download</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <h2>Documentation</h2>
+    <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="notes-and-links.html">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="export-import.html" aria-current="page">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="export-and-import">Export and import</h1>
+<h2 id="export">Export</h2>
+<p><em>File ▸ Export…</em> (Ctrl+Shift+E) exports <strong>the whole collection or any part of it</strong>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Scope</th>
+<th>What is exported</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Entire collection</strong></td>
+<td>Every note (not the Trash).</td>
+</tr>
+<tr>
+<td><strong>Current note and linked notes</strong></td>
+<td>The open note and the notes within <strong>Depth</strong> links of it, following links in both directions: a <em>subgraph</em>.</td>
+</tr>
+<tr>
+<td><strong>Notes with tag</strong></td>
+<td>Notes with the tag, including nested tags (<code>math</code> includes <code>math/algebra</code>).</td>
+</tr>
+</tbody>
+</table></div>
+<p>The dialog shows how many notes, links and flashcards the scope contains. You can also export from the
+note list (right-click ▸ <em>Export with linked notes…</em>), from a note's ⋯ menu, from the graph (the export
+button exports the notes on screen) and from a graph node's menu.</p>
+<h3 id="formats">Formats</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Format</th>
+<th>File</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>ZettelApp archive</strong></td>
+<td><code>.zip</code></td>
+<td>Everything, including images: notes, typed links, link types, flashcards, mind maps. Re-import it into ZettelApp on any computer. Best for backups and moving vaults.</td>
+</tr>
+<tr>
+<td><strong>Markdown files</strong></td>
+<td><code>.zip</code></td>
+<td>One <code>.md</code> file per note with YAML front matter (id, title, tags, source link, dates, typed links, mind map) and <code>[[wiki links]]</code> between files. Links not written in the text are listed under <em>Links</em> as <code>type:: [[Note]]</code>, and manual flashcards under <em>Flashcards</em> as <code>Q:</code>/<code>A:</code>. Images are in <code>assets/</code>. Opens in Obsidian and other Markdown editors.</td>
+</tr>
+<tr>
+<td><strong>Website</strong></td>
+<td><code>.zip</code></td>
+<td>A self-contained static website: an index with a graph overview, a tag index and one page per note, with links, mind maps and flashcards (answers revealed on click). No scripts; it works offline by opening <code>index.html</code>. Light and dark themes.</td>
+</tr>
+<tr>
+<td><strong>JSON</strong></td>
+<td><code>.json</code></td>
+<td>Structured data for scripts and other tools (images referenced, not included).</td>
+</tr>
+<tr>
+<td><strong>GraphML</strong></td>
+<td><code>.graphml</code></td>
+<td>The link graph for Gephi, yEd, Cytoscape or NetworkX, with titles, tags and dates on nodes and link types on edges (directed or not).</td>
+</tr>
+<tr>
+<td><strong>Graphviz DOT</strong></td>
+<td><code>.dot</code></td>
+<td>The graph as a Graphviz diagram, with link types coloured and labelled; undirected types have no arrows.</td>
+</tr>
+<tr>
+<td><strong>Anki deck</strong></td>
+<td><code>.apkg</code></td>
+<td>The flashcards of the exported notes. See <a href="review-and-anki.html#anki">Anki</a>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Exports are written to a temporary file and moved into place only when complete, so an interrupted
+export never leaves a half-written file. They run in the background, and <strong>Show in folder</strong> reveals the
+result in File Explorer.</p>
+<p>Mind maps also have their own export (PNG, SVG or FreeMind <code>.mm</code>) in the <strong>Mind map</strong> tab, and the graph
+can be saved as a PNG image.</p>
+<h2 id="import">Import</h2>
+<p><em>File ▸ Import…</em> accepts:</p>
+<ul>
+<li><strong>ZettelApp archives</strong> (<code>.zip</code>) and <strong>JSON</strong> exports;</li>
+<li><strong>Markdown files</strong> (<code>.md</code>) or a <strong><code>.zip</code> of Markdown files</strong>;</li>
+<li><em>File ▸ Import Markdown Folder…</em> for a folder of Markdown files, such as an <strong>Obsidian vault</strong>.</li>
+</ul>
+<p>What is kept:</p>
+<ul>
+<li><strong>From ZettelApp archives and JSON:</strong> notes keep their IDs, typed links, flashcards, mind maps and
+images. Importing the same archive twice skips notes that haven't changed. If an ID is already used by
+a different note, the import gets a new ID and the links are updated.</li>
+<li><strong>From Markdown:</strong>
+<ul>
+<li>the title comes from the front matter <code>title</code>, the first <code># heading</code> or the file name;</li>
+<li>tags come from front matter <code>tags</code> and inline <code>#hashtags</code>;</li>
+<li>the source link comes from <code>url</code> or <code>source</code>, and the creation date from <code>created</code>;</li>
+<li><code>[[wiki links]]</code> (including Obsidian's file-name links) and <code>type:: [[links]]</code> become links;</li>
+<li>images referenced with <code>![](path)</code> or Obsidian's <code>![[image.png]]</code> are copied into the vault;</li>
+<li>hidden folders such as <code>.obsidian</code> and <code>.trash</code> are skipped;</li>
+<li>ZettelApp's own Markdown export imports back with its typed links, flashcards and mind maps.</li>
+</ul>
+</li>
+</ul>
+<h3 id="safety">Safety</h3>
+<p>Imported files are treated as untrusted:</p>
+<ul>
+<li>archive paths are checked, so files can't be written outside the import (no &quot;zip-slip&quot;);</li>
+<li>archives with too many files, too much data or suspicious compression ratios (decompression &quot;bombs&quot;)
+are refused;</li>
+<li>every field is type-checked and size-limited;</li>
+<li>images are re-verified by content;</li>
+<li>remote images and links to other places on disk are not imported.</li>
+</ul>
+<p>A daily backup is made when a vault is opened, and you can make one any time with <em>File ▸ Back Up Vault
+Now</em>. See <a href="privacy-and-security.html">Privacy and security</a>.</p>
+
+    <p class="doc-footer">Found a mistake? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/export-import.md">Edit this page on GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
+      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <ul class="nav">
+      <li><a href="../">Home</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>

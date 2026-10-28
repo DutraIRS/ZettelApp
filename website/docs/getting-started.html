@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="ZettelApp runs on Windows 10  and Windows 11, 64-bit. Download it from the latest release:">
+<title>Getting started – ZettelApp documentation</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-row">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
+    <nav aria-label="Main">
+      <ul class="nav">
+        <li><a href="../#features">Features</a></li>
+        <li><a href="tutorial.html">Tutorial</a></li>
+        <li><a href="./">Docs</a></li>
+        <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        <li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Donate</a></li>
+        <li><a class="nav-cta" href="../#download">Download</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+<div class="wrap docs-layout">
+  <nav class="docs-nav" aria-label="Documentation">
+    <h2>Documentation</h2>
+    <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html" aria-current="page">Getting started</a></li>
+      <li><a href="notes-and-links.html">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+  </nav>
+  <main id="content" class="doc">
+<h1 id="getting-started">Getting started</h1>
+<h2 id="install">Install</h2>
+<p>ZettelApp runs on <strong>Windows 10 (21H2 or later) and Windows 11, 64-bit</strong>. Download it from the
+<a href="https://github.com/DutraIRS/ZettelApp/releases/latest">latest release</a>:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Download</th>
+<th>Use it when</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ZettelApp-Setup.exe</code></td>
+<td>You want a normal installation with a Start menu entry, an uninstaller in <em>Settings ▸ Apps</em>, and <code>zettelapp://</code> links that open notes from Anki. No administrator rights are needed: it installs for your account only.</td>
+</tr>
+<tr>
+<td><code>ZettelApp-Portable.zip</code></td>
+<td>You can't install software, or you want to run it from a USB drive. Unzip it anywhere and run <code>ZettelApp.exe</code>.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The installer asks which language to use and suggests your Windows display language. The installer
+itself is translated; the app is in English for now (see the <a href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">roadmap</a>).</p>
+<p>Each release lists SHA-256 checksums (<code>SHA256SUMS.txt</code>). To check a download in PowerShell:</p>
+<pre><code class="language-powershell">Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
+</code></pre>
+<h3 id="windows-protected-your-pc">&quot;Windows protected your PC&quot;</h3>
+<p>Builds are not code-signed yet, so Microsoft Defender SmartScreen may warn the first time you run the
+installer. If you downloaded it from the official release page and the checksum matches, choose
+<strong>More info ▸ Run anyway</strong>. Code signing is on the <a href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">roadmap</a>.</p>
+<h2 id="your-first-vault">Your first vault</h2>
+<p>A <strong>vault</strong> is a folder holding your notes: a database file (<code>zettel.db</code>) and an <code>assets</code> folder for images.
+On first start ZettelApp creates one in <strong>Documents\ZettelApp</strong> with three short notes that show the main
+ideas. Use <em>File ▸ New Vault…</em> or <em>File ▸ Open Vault…</em> to work elsewhere, for example in a OneDrive folder.
+<em>File ▸ Open Recent</em> lists the vaults you used last.</p>
+<p>Notes save automatically as you type. There is no Save button.</p>
+<h2 id="a-tour-of-the-window">A tour of the window</h2>
+<p><img loading="lazy" src="../assets/screenshots/notes-light.png" alt="The Notes page" /></p>
+<p>The <strong>navigation rail</strong> on the left switches between pages (Ctrl+1 to Ctrl+5):</p>
+<ul>
+<li><strong>Notes</strong>: the note list, the editor and a side panel.
+<ul>
+<li>The <em>list</em> has search (<code>tag:name</code> filters work too), a tag filter, sorting and the Trash.</li>
+<li>The <em>editor</em> has the title, tags, an optional source link, and tabs for the <strong>Note</strong> (Markdown, with
+Edit, Split and Preview modes), its <strong>Mind map</strong> and its <strong>Flashcards</strong>.</li>
+<li>The <em>side panel</em> shows <strong>Suggested links</strong>, the note's <strong>Links</strong> and its <strong>Backlinks</strong>.</li>
+</ul>
+</li>
+<li><strong>Graph</strong>: your notes as a network in 2D or 3D, coloured by tag or by topic cluster.</li>
+<li><strong>Insights</strong>: statistics and charts about your vault.</li>
+<li><strong>Review</strong>: spaced-repetition reviews, quizzes and Anki.</li>
+<li><strong>Ask</strong>: ask questions about your notes using an AI provider of your choice (optional).</li>
+</ul>
+<p><strong>Options</strong> (bottom of the rail, or <em>Tools ▸ Options…</em>, Ctrl+,) holds the preferences: theme, editor text
+size, link suggestions, link types, AI, MCP server, Anki, Zotero, Windows integration and backups.</p>
+<p>The app follows your Windows <strong>light/dark</strong> setting and <strong>accent colour</strong>. You can force a theme in
+<em>View ▸ Theme</em>.</p>
+<h2 id="next-steps">Next steps</h2>
+<ul>
+<li>Learn the note syntax in <a href="notes-and-links.html">Notes and links</a>.</li>
+<li>Read how <a href="link-suggestions.html">link suggestions</a> work.</li>
+<li>Press <strong>F1</strong> at any time to open this documentation, or see the <a href="keyboard-shortcuts.html">keyboard shortcuts</a>.</li>
+</ul>
+
+    <p class="doc-footer">Found a mistake? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/getting-started.md">Edit this page on GitHub</a>.</p>
+  </main>
+</div>
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
+      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <ul class="nav">
+      <li><a href="../">Home</a></li>
+      <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
+      <li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li>
+    </ul>
+  </div>
+</footer>
+</body>
+</html>
