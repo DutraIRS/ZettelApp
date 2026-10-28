@@ -53,6 +53,7 @@ from zettelapp.i18n import _
 
 # 2: tags.source tells tags added by hand from #tags written in the text
 # 3: link_types.line_style and link_types.arrow store how each link type is drawn
+# 4: notes.alarm and notes.alarm_fired remind the user of a note at a chosen time
 SCHEMA_VERSION = 4
 MAX_TITLE = 500
 MAX_BODY = 5_000_000
@@ -516,12 +517,14 @@ class Vault:
     def due_alarms(self, now: str | None = None) -> list[Note]:
         """Live notes whose alarm time has come and that haven't been announced yet."""
         rows = self.conn.execute(
-            "SELECT * FROM notes WHERE deleted = 0 AND alarm != '' AND alarm_fired = 0 "
+            "SELECT id, alarm FROM notes WHERE deleted = 0 AND alarm != '' AND alarm_fired = 0 "
             "ORDER BY alarm"
         ).fetchall()
-        limit = datetime.fromisoformat(now or utc_now())
-        due = [r for r in rows if datetime.fromisoformat(r["alarm"]) <= limit]
-        return [n for r in due if (n := self.get_note(r["id"]))]
+        limit = _clean_alarm(now) or utc_now()
+        # Stored alarms are all UTC in one ISO format (see _clean_alarm), so they compare as
+        # text; one edited by hand into another format is cleaned (or skipped), never a crash.
+        due = [r["id"] for r in rows if "" < _clean_alarm(r["alarm"]) <= limit]
+        return [n for note_id in due if (n := self.get_note(note_id))]
 
     def mark_alarm_fired(self, note_id: str) -> None:
         with self.transaction():

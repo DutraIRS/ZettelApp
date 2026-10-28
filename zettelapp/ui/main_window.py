@@ -456,9 +456,11 @@ class MainWindow(QMainWindow):
         """Pop up a notification for every alarm note whose time has come."""
         if self.vault is None:
             return
-        for note in self.vault.due_alarms():
+        due = self.vault.due_alarms()
+        for note in due:
             self.vault.mark_alarm_fired(note.id)
             self._notify_alarm(note)
+        if due:
             self.list.refresh()
 
     def _notify_alarm(self, note) -> None:

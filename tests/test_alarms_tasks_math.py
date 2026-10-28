@@ -82,3 +82,15 @@ def test_math_detection_ignores_prices_and_code():
 def test_math_without_image_support_stays_text():
     html = NoteRenderer(lambda t: None).render("$a_b$")
     assert "<img" not in html and "$a_b$" in html
+
+
+def test_an_alarm_edited_into_the_database_by_hand_never_breaks_the_check(vault):
+    odd = vault.create_note("odd")
+    local = vault.create_note("local")
+    with vault.transaction():
+        vault.conn.execute("UPDATE notes SET alarm = 'not a time' WHERE id = ?", (odd.id,))
+        vault.conn.execute(
+            "UPDATE notes SET alarm = ? WHERE id = ?",
+            ((datetime.now() - timedelta(minutes=5)).isoformat(), local.id),  # naive, local
+        )
+    assert [n.id for n in vault.due_alarms()] == [local.id]
