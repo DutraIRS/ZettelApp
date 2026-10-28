@@ -8,7 +8,7 @@ import shutil
 import sys
 from pathlib import Path
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QColor, QGuiApplication
 from PySide6.QtWidgets import (
     QCheckBox,
@@ -73,6 +73,18 @@ PAGES = [
     "Windows integration",
     "Backups",
 ]
+PAGE_ICONS = {
+    "General": "settings",
+    "Link suggestions": "lightbulb",
+    "Link types": "relationship",
+    "AI assistant": "chat",
+    "MCP server": "server",
+    "Anki": "cards",
+    "Zotero": "library",
+    "Windows integration": "link",
+    "Backups": "history",
+}
+NAV_ROW_HEIGHT = 34
 
 
 def mcp_command(vault: Path | None, allow_writes: bool) -> tuple[str, list[str], dict]:
@@ -103,8 +115,10 @@ class OptionsDialog(QDialog):
         outer = QVBoxLayout(self)
         body = QHBoxLayout()
         self.nav = QListWidget()
-        self.nav.setFixedWidth(190)
+        self.nav.setFixedWidth(200)
         self.nav.setAccessibleName("Option pages")
+        self.nav.setIconSize(QSize(16, 16))
+        self.nav.setSpacing(1)
         self.pages = QStackedWidget()
         builders = [
             self._general,
@@ -117,8 +131,12 @@ class OptionsDialog(QDialog):
             self._integration,
             self._backups,
         ]
-        for name, build in zip(PAGES, builders):
-            self.nav.addItem(QListWidgetItem(name))
+        for name, build in zip(PAGES, builders, strict=True):
+            item = QListWidgetItem(icons.icon(PAGE_ICONS[name]), name)
+            # A fixed row height: setCurrentRow() below lays the list out before the
+            # stylesheet's item padding applies, which made rows overlap on hover.
+            item.setSizeHint(QSize(0, NAV_ROW_HEIGHT))
+            self.nav.addItem(item)
             holder = QWidget()
             lay = QVBoxLayout(holder)
             lay.setContentsMargins(18, 4, 8, 4)
