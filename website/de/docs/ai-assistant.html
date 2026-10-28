@@ -96,7 +96,7 @@ optional: Erst wenn Sie eine Frage stellen, werden Daten gesendet.</p>
 <li>Besorgen Sie sich einen API-Schlüssel bei einem der unterstützten Anbieter.</li>
 <li>Öffnen Sie <em>Werkzeuge ▸ Optionen ▸ KI-Assistent</em>. Wählen Sie den <strong>Anbieter</strong>, fügen Sie den <strong>API-Schlüssel</strong> ein und wählen Sie ein <strong>Modell</strong> aus (<em>Liste aktualisieren</em> fragt beim Anbieter ab, welche Modelle Ihr Schlüssel verwenden darf).
 Sie können mehrere Schlüssel pro Anbieter speichern (zum Beispiel einen privaten und einen beruflichen).
-Verwenden Sie <em>Hinzufügen…</em>, <em>Umbenennen…</em> und <em>Entfernen</em> neben der Schlüsselliste. Der ausgewählte
+Verwenden Sie <em>Schlüssel hinzufügen…</em>, <em>Umbenennen</em> und <em>Löschen</em> neben der Schlüsselliste. Der ausgewählte
 Schlüssel wird für „Fragen“ verwendet.</li>
 <li>Klicken Sie auf <strong>Verbindung testen</strong> und dann auf <strong>OK</strong>.</li>
 </ol>
@@ -163,7 +163,7 @@ Notiz mit dem Tag <code>ai-answer</code> und <code>cites::</code>-Links zu ihren
 <h2 id="datenschutz-und-sicherheit">Datenschutz und Sicherheit</h2>
 <ul>
 <li><strong>Nur Ihre Anfrage wird gesendet</strong>: Ihre Frage und die Notizen unter <em>Gesendete Quellen</em>. Vor dem Senden erinnert Sie ein Hinweis daran (aktivieren Sie <em>Nicht erneut anzeigen</em>, um ihn zu überspringen).</li>
-<li>Ihr <strong>API-Schlüssel</strong> wird im <strong>Windows-Anmeldeinformations-Manager</strong> (<code>ZettelApp/llm/&lt;provider&gt;</code>) gespeichert, niemals in Einstellungsdateien oder Protokollen. Er wird aus jeder angezeigten Fehlermeldung entfernt. Mit <em>Schlüssel entfernen</em> löschen Sie ihn.</li>
+<li>Ihr <strong>API-Schlüssel</strong> wird im <strong>Windows-Anmeldeinformations-Manager</strong> (<code>ZettelApp/llm/&lt;provider&gt;</code>, weitere Schlüssel als <code>ZettelApp/llm/&lt;provider&gt;/&lt;Schlüssel-ID&gt;</code>) gespeichert, niemals in Einstellungsdateien oder Protokollen. Er wird aus jeder angezeigten Fehlermeldung entfernt. Mit <em>Löschen</em> entfernen Sie ihn von diesem Computer.</li>
 <li><strong>Das Modell hat keine Tools.</strong> Es kann weder im Web suchen noch Code ausführen oder Ihre Notizen ändern. In einer Notiz (oder importierten Datei) versteckte Anweisungen können deshalb nichts auslösen. Die Antwort wird mit demselben sicheren Renderer wie Notizen angezeigt, ohne HTML oder Skripte.</li>
 <li>Bei Claude verwendet ZettelApp das offizielle Anthropic-SDK und aktiviert <strong>serverseitigen Ausweichmechanismus bei Ablehnung</strong>: Lehnt ein Sicherheitsklassifikator eine Anfrage ab, wiederholt Anthropic sie mit dem empfohlenen Ausweichmodell. Dies gilt für Claude Opus 5.5, Opus 5, Sonnet 5.5 und Fable 5.1.</li>
 <li>Für die von Ihnen gesendeten Daten gelten die Nutzungsbedingungen und Datenschutzrichtlinien des jeweiligen Anbieters.</li>

@@ -99,7 +99,7 @@
 </li>
 <li>
 <p>按<strong>测试连接</strong>,然后按<strong>确定</strong>。</p>
-<p>你可以为每个服务商保存多个密钥(例如个人和工作用的)。使用密钥列表旁边的<em>添加…</em>、<em>重命名…<em>和</em>移除</em>;选中的密钥就是“提问”所使用的密钥。</p>
+<p>你可以为每个服务商保存多个密钥(例如个人和工作用的)。使用密钥列表旁边的<em>添加密钥…</em>、<em>重命名</em>和<em>删除</em>;选中的密钥就是“提问”所使用的密钥。</p>
 </li>
 </ol>
 <div class="table-wrap"><table>
@@ -154,7 +154,7 @@
 <h2 id="隐私与安全">隐私与安全</h2>
 <ul>
 <li><strong>只发送你所问的内容</strong>:你的问题和<em>已发送的来源</em>下列出的笔记。提问之前会有一条通知提醒你这一点(勾选<em>不再显示</em>可跳过)。</li>
-<li><strong>你的 API 密钥</strong>存储在 <strong>Windows 凭据管理器</strong>中(名为 <code>ZettelApp/llm/&lt;provider&gt;</code>),绝不会存入设置文件或日志,并且会从向你显示的任何错误消息中移除。<em>移除密钥</em>会将其删除。</li>
+<li><strong>你的 API 密钥</strong>存储在 <strong>Windows 凭据管理器</strong>中(名为 <code>ZettelApp/llm/&lt;provider&gt;</code>,其他密钥为 <code>ZettelApp/llm/&lt;provider&gt;/&lt;密钥 ID&gt;</code>),绝不会存入设置文件或日志,并且会从向你显示的任何错误消息中移除。<em>删除</em>会将其从这台电脑上删除。</li>
 <li>**模型没有任何工具。**它无法搜索网络、运行代码或更改你的笔记,因此隐藏在笔记(或导入文件)中的指令无法让它执行任何操作。答案通过与笔记相同的安全渲染器显示,不含 HTML 或脚本。</li>
 <li>使用 Claude 时,ZettelApp 采用 Anthropic 的官方 SDK,并选择启用<strong>服务端拒绝回退</strong>:如果某个请求被安全分类器拒绝,Anthropic 会在其推荐的回退模型上重试。这适用于 Claude Opus 5.5、Opus 5、Sonnet 5.5 和 Fable 5.1。</li>
 <li>每个服务商自己的条款和数据政策适用于你发送的内容。</li>

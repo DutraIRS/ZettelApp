@@ -103,8 +103,8 @@ you ask a question.</p>
 <li>
 <p>Open <em>Tools ▸ Options ▸ AI assistant</em>. Choose the <strong>provider</strong>, paste the <strong>API key</strong>, and choose a
 <strong>model</strong> (<em>Refresh list</em> asks the provider which models your key can use).</p>
-<p>You can save several keys per provider (for example personal and work). Use <em>Add…</em>, <em>Rename…</em> and
-<em>Remove</em> next to the key list; the selected key is the one used by Ask.</p>
+<p>You can save several keys per provider (for example personal and work). Use <em>Add key…</em>, <em>Rename</em> and
+<em>Delete</em> next to the key list; the selected key is the one used by Ask.</p>
 </li>
 <li>
 <p>Press <strong>Test connection</strong>, then <strong>OK</strong>.</p>
@@ -186,8 +186,8 @@ links to its sources.</p>
 <ul>
 <li><strong>Only what you ask is sent</strong>: your question and the notes listed under <em>Sources sent</em>. A notice
 reminds you of this before you ask (tick <em>Don't show this again</em> to skip it).</li>
-<li><strong>Your API key</strong> is stored in <strong>Windows Credential Manager</strong> (as <code>ZettelApp/llm/&lt;provider&gt;</code>), never in
-settings files or logs, and it is removed from any error message shown to you. <em>Remove key</em> deletes it.</li>
+<li><strong>Your API key</strong> is stored in <strong>Windows Credential Manager</strong> (as <code>ZettelApp/llm/&lt;provider&gt;</code>, or <code>ZettelApp/llm/&lt;provider&gt;/&lt;key id&gt;</code> for further keys), never in
+settings files or logs, and it is removed from any error message shown to you. <em>Delete</em> removes it from this computer.</li>
 <li><strong>The model has no tools.</strong> It can't search the web, run code or change your notes, so instructions
 hidden in a note (or an imported file) can't make it do anything. The answer is shown through the same
 safe renderer as notes, with no HTML or scripts.</li>

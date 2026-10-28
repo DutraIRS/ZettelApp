@@ -11,7 +11,7 @@ optional: Erst wenn Sie eine Frage stellen, werden Daten gesendet.
 1. Besorgen Sie sich einen API-Schlüssel bei einem der unterstützten Anbieter.
 2. Öffnen Sie *Werkzeuge ▸ Optionen ▸ KI-Assistent*. Wählen Sie den **Anbieter**, fügen Sie den **API-Schlüssel** ein und wählen Sie ein **Modell** aus (*Liste aktualisieren* fragt beim Anbieter ab, welche Modelle Ihr Schlüssel verwenden darf).
    Sie können mehrere Schlüssel pro Anbieter speichern (zum Beispiel einen privaten und einen beruflichen).
-   Verwenden Sie *Hinzufügen…*, *Umbenennen…* und *Entfernen* neben der Schlüsselliste. Der ausgewählte
+   Verwenden Sie *Schlüssel hinzufügen…*, *Umbenennen* und *Löschen* neben der Schlüsselliste. Der ausgewählte
    Schlüssel wird für „Fragen“ verwendet.
 3. Klicken Sie auf **Verbindung testen** und dann auf **OK**.
 
@@ -60,7 +60,7 @@ Notiz mit dem Tag `ai-answer` und `cites::`-Links zu ihren Quellen ab.
 ## Datenschutz und Sicherheit
 
 - **Nur Ihre Anfrage wird gesendet**: Ihre Frage und die Notizen unter *Gesendete Quellen*. Vor dem Senden erinnert Sie ein Hinweis daran (aktivieren Sie *Nicht erneut anzeigen*, um ihn zu überspringen).
-- Ihr **API-Schlüssel** wird im **Windows-Anmeldeinformations-Manager** (`ZettelApp/llm/<provider>`) gespeichert, niemals in Einstellungsdateien oder Protokollen. Er wird aus jeder angezeigten Fehlermeldung entfernt. Mit *Schlüssel entfernen* löschen Sie ihn.
+- Ihr **API-Schlüssel** wird im **Windows-Anmeldeinformations-Manager** (`ZettelApp/llm/<provider>`, weitere Schlüssel als `ZettelApp/llm/<provider>/<Schlüssel-ID>`) gespeichert, niemals in Einstellungsdateien oder Protokollen. Er wird aus jeder angezeigten Fehlermeldung entfernt. Mit *Löschen* entfernen Sie ihn von diesem Computer.
 - **Das Modell hat keine Tools.** Es kann weder im Web suchen noch Code ausführen oder Ihre Notizen ändern. In einer Notiz (oder importierten Datei) versteckte Anweisungen können deshalb nichts auslösen. Die Antwort wird mit demselben sicheren Renderer wie Notizen angezeigt, ohne HTML oder Skripte.
 - Bei Claude verwendet ZettelApp das offizielle Anthropic-SDK und aktiviert **serverseitigen Ausweichmechanismus bei Ablehnung**: Lehnt ein Sicherheitsklassifikator eine Anfrage ab, wiederholt Anthropic sie mit dem empfohlenen Ausweichmodell. Dies gilt für Claude Opus 5.5, Opus 5, Sonnet 5.5 und Fable 5.1.
 - Für die von Ihnen gesendeten Daten gelten die Nutzungsbedingungen und Datenschutzrichtlinien des jeweiligen Anbieters.

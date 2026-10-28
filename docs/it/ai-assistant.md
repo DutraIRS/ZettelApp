@@ -12,8 +12,8 @@ fai una domanda.
 2. Apri *Strumenti ▸ Opzioni ▸ Assistente IA*. Scegli il **provider**, incolla la **chiave API** e scegli un
    **modello** (*Aggiorna elenco* chiede al provider quali modelli la tua chiave può usare).
 
-   Puoi salvare più chiavi per provider (per esempio personale e di lavoro). Usa *Aggiungi chiave…*, *Rinomina…* e
-   *Rimuovi* accanto all'elenco delle chiavi; la chiave selezionata è quella usata da Chiedi.
+   Puoi salvare più chiavi per provider (per esempio personale e di lavoro). Usa *Aggiungi chiave…*, *Rinomina* e
+   *Elimina* accanto all'elenco delle chiavi; la chiave selezionata è quella usata da Chiedi.
 3. Premi **Prova connessione**, poi **OK**.
 
 | Provider | Modello predefinito | Altri modelli suggeriti | Endpoint |
@@ -74,8 +74,8 @@ alle sue fonti.
 
 - **Viene inviato solo ciò che chiedi**: la tua domanda e le note elencate sotto *Fonti inviate*. Un avviso
   te lo ricorda prima di chiedere (seleziona *Non mostrare più* per saltarlo).
-- **La tua chiave API** è conservata in **Gestione credenziali di Windows** (come `ZettelApp/llm/<provider>`), mai nei
-  file di impostazioni o nei log, ed è rimossa da qualsiasi messaggio di errore che ti viene mostrato. *Elimina chiave* la cancella.
+- **La tua chiave API** è conservata in **Gestione credenziali di Windows** (come `ZettelApp/llm/<provider>`, o `ZettelApp/llm/<provider>/<id della chiave>` per le chiavi successive), mai nei
+  file di impostazioni o nei log, ed è rimossa da qualsiasi messaggio di errore che ti viene mostrato. *Elimina* la cancella da questo computer.
 - **Il modello non ha strumenti.** Non può cercare sul web, eseguire codice o modificare le tue note, quindi le istruzioni
   nascoste in una nota (o in un file importato) non possono fargli fare nulla. La risposta viene mostrata con lo stesso
   renderer sicuro delle note, senza HTML né script.

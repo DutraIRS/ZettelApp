@@ -12,8 +12,8 @@ hagas una pregunta.
 2. Abre *Herramientas ▸ Opciones ▸ Asistente de IA*. Elige el **proveedor**, pega la **clave de API** y elige un
    **modelo** (*Actualizar lista* pregunta al proveedor qué modelos puede usar tu clave).
 
-   Puedes guardar varias claves por proveedor (por ejemplo, personal y de trabajo). Usa *Añadir…*, *Renombrar…* y
-   *Quitar* junto a la lista de claves; la clave seleccionada es la que usa Preguntar.
+   Puedes guardar varias claves por proveedor (por ejemplo, personal y de trabajo). Usa *Añadir clave…*, *Renombrar* y
+   *Eliminar* junto a la lista de claves; la clave seleccionada es la que usa Preguntar.
 3. Pulsa **Probar conexión** y luego **Aceptar**.
 
 | Proveedor | Modelo predeterminado | Otros modelos sugeridos | Punto de acceso |
@@ -74,8 +74,8 @@ a sus fuentes.
 
 - **Solo se envía lo que preguntas**: tu pregunta y las notas indicadas en *Fuentes enviadas*. Un aviso
   te lo recuerda antes de preguntar (marca *No volver a mostrar* para omitirlo).
-- **Tu clave de API** se guarda en el **Administrador de credenciales de Windows** (como `ZettelApp/llm/<provider>`), nunca en
-  archivos de configuración ni registros, y se elimina de cualquier mensaje de error que se te muestre. *Quitar clave* la elimina.
+- **Tu clave de API** se guarda en el **Administrador de credenciales de Windows** (como `ZettelApp/llm/<provider>`, o `ZettelApp/llm/<provider>/<id de la clave>` para las demás claves), nunca en
+  archivos de configuración ni registros, y se elimina de cualquier mensaje de error que se te muestre. *Eliminar* la borra de este equipo.
 - **El modelo no tiene herramientas.** No puede buscar en la web, ejecutar código ni modificar tus notas, así que las instrucciones
   ocultas en una nota (o en un archivo importado) no pueden hacer que haga nada. La respuesta se muestra con el mismo
   renderizador seguro que las notas, sin HTML ni scripts.

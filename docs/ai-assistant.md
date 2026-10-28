@@ -12,8 +12,8 @@ you ask a question.
 2. Open *Tools ▸ Options ▸ AI assistant*. Choose the **provider**, paste the **API key**, and choose a
    **model** (*Refresh list* asks the provider which models your key can use).
 
-   You can save several keys per provider (for example personal and work). Use *Add…*, *Rename…* and
-   *Remove* next to the key list; the selected key is the one used by Ask.
+   You can save several keys per provider (for example personal and work). Use *Add key…*, *Rename* and
+   *Delete* next to the key list; the selected key is the one used by Ask.
 3. Press **Test connection**, then **OK**.
 
 | Provider | Default model | Other suggested models | Endpoint |
@@ -74,8 +74,8 @@ links to its sources.
 
 - **Only what you ask is sent**: your question and the notes listed under *Sources sent*. A notice
   reminds you of this before you ask (tick *Don't show this again* to skip it).
-- **Your API key** is stored in **Windows Credential Manager** (as `ZettelApp/llm/<provider>`), never in
-  settings files or logs, and it is removed from any error message shown to you. *Remove key* deletes it.
+- **Your API key** is stored in **Windows Credential Manager** (as `ZettelApp/llm/<provider>`, or `ZettelApp/llm/<provider>/<key id>` for further keys), never in
+  settings files or logs, and it is removed from any error message shown to you. *Delete* removes it from this computer.
 - **The model has no tools.** It can't search the web, run code or change your notes, so instructions
   hidden in a note (or an imported file) can't make it do anything. The answer is shown through the same
   safe renderer as notes, with no HTML or scripts.

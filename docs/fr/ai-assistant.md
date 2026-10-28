@@ -9,7 +9,7 @@ La page **Ask** (Ctrl+5) répond à vos questions **à partir de vos notes**, av
 1. Obtenez une clé API auprès de l’un des fournisseurs pris en charge.
 2. Ouvrez *Outils ▸ Options ▸ Assistant IA*. Choisissez le **fournisseur**, collez la **clé API** et sélectionnez un **modèle** (*Actualiser la liste* demande au fournisseur quels modèles sont accessibles avec votre clé).
 
-   Vous pouvez enregistrer plusieurs clés par fournisseur (par exemple, une clé personnelle et une clé professionnelle). Utilisez *Ajouter…*, *Renommer…* et *Retirer* à côté de la liste des clés ; Ask utilise la clé sélectionnée.
+   Vous pouvez enregistrer plusieurs clés par fournisseur (par exemple, une clé personnelle et une clé professionnelle). Utilisez *Ajouter une clé…*, *Renommer* et *Supprimer* à côté de la liste des clés ; Ask utilise la clé sélectionnée.
 3. Cliquez sur **Tester la connexion**, puis sur **OK**.
 
 | Fournisseur | Modèle par défaut | Autres modèles suggérés | Point de terminaison |
@@ -46,7 +46,7 @@ Le modèle reçoit pour instruction de répondre uniquement à partir de vos not
 ## Confidentialité et sécurité
 
 - **Seules les données nécessaires à votre demande sont envoyées** : votre question et les notes figurant sous *Sources envoyées*. Un avis vous le rappelle avant la question (cochez *Ne plus afficher* pour ne plus l’afficher).
-- **Votre clé API** est stockée dans le **Gestionnaire d’identifiants Windows** (sous `ZettelApp/llm/<provider>`), jamais dans les fichiers de paramètres ou les journaux ; elle est supprimée des messages d’erreur affichés. *Retirer key* la supprime.
+- **Votre clé API** est stockée dans le **Gestionnaire d’identifiants Windows** (sous `ZettelApp/llm/<provider>`, ou `ZettelApp/llm/<provider>/<id de la clé>` pour les clés suivantes), jamais dans les fichiers de paramètres ou les journaux ; elle est supprimée des messages d’erreur affichés. *Supprimer* l’efface de cet ordinateur.
 - **Le modèle ne dispose d’aucun outil.** Il ne peut ni chercher sur le Web, ni exécuter de code, ni modifier vos notes. Des instructions cachées dans une note (ou un fichier importé) ne peuvent donc pas lui faire effectuer d’action. La réponse utilise le même affichage sécurisé que les notes, sans HTML ni scripts.
 - Avec Claude, ZettelApp utilise le SDK officiel d’Anthropic et active le **repli de refus côté serveur** : si un classificateur de sécurité refuse une requête, Anthropic la réessaie avec son modèle de repli recommandé. Cela concerne Claude Opus 5.5, Opus 5, Sonnet 5.5 et Fable 5.1.
 - Les conditions et politiques de données de chaque fournisseur s’appliquent aux données que vous lui envoyez.

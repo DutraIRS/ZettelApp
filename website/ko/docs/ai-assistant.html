@@ -98,7 +98,7 @@
 <li>
 <p><em>도구 ▸ 옵션 ▸ AI 어시스턴트</em>를 여세요. <strong>공급자</strong>를 고르고, <strong>API 키</strong>를 붙여넣고, <strong>모델</strong>을 고르세요(<em>목록 새로
 고침</em>은 내 키로 사용할 수 있는 모델을 공급자에게 물어봐요).</p>
-<p>공급자마다 키를 여러 개 저장할 수 있어요(예: 개인용과 업무용). 키 목록 옆의 <em>추가…</em>, <em>이름 바꾸기…</em>, <em>제거</em>를 사용하세요.
+<p>공급자마다 키를 여러 개 저장할 수 있어요(예: 개인용과 업무용). 키 목록 옆의 <em>키 추가…</em>, <em>이름 바꾸기</em>, <em>삭제</em>를 사용하세요.
 선택된 키가 질문에 사용돼요.</p>
 </li>
 <li>
@@ -173,8 +173,8 @@ Z.ai 코딩 플랜 엔드포인트, OpenAI 호환 프록시, 내 컴퓨터에서
 <ul>
 <li><strong>질문한 것만 전송돼요</strong>: 질문과 <em>전송된 출처</em>에 나열된 노트예요. 질문하기 전에 알림이 이를 상기시켜 줘요(건너뛰려면
 <em>다시 표시하지 않음</em>을 체크하세요).</li>
-<li><strong>API 키</strong>는 <strong>Windows 자격 증명 관리자</strong>(<code>ZettelApp/llm/&lt;provider&gt;</code>)에 저장되며 설정 파일이나 로그에는 절대
-저장되지 않고, 표시되는 오류 메시지에서도 제거돼요. <em>키 제거</em>는 키를 삭제해요.</li>
+<li><strong>API 키</strong>는 <strong>Windows 자격 증명 관리자</strong>(<code>ZettelApp/llm/&lt;provider&gt;</code>, 추가 키는 <code>ZettelApp/llm/&lt;provider&gt;/&lt;키 ID&gt;</code>)에 저장되며 설정 파일이나 로그에는 절대
+저장되지 않고, 표시되는 오류 메시지에서도 제거돼요. <em>삭제</em>를 누르면 이 컴퓨터에서 키가 지워져요.</li>
 <li><strong>모델에는 도구가 없어요.</strong> 웹 검색, 코드 실행, 노트 변경을 할 수 없으므로 노트(또는 가져온 파일)에 숨겨진 지시로
 모델이 무언가를 하게 만들 수 없어요. 답변은 노트와 같은 안전한 렌더러로 표시되며 HTML이나 스크립트는 없어요.</li>
 <li>Claude에서 ZettelApp은 Anthropic의 공식 SDK를 사용하며 <strong>서버 측 거부 대체</strong>를 사용해요. 안전 분류기가 요청을 거부하면
