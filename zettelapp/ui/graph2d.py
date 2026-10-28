@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
     QGraphicsView,
 )
 
+from zettelapp.i18n import _
 from zettelapp.ui import theme
 from zettelapp.ui.graph_common import (
     MAX_GROUP_COLORS,
@@ -172,7 +173,7 @@ class Graph2DView(QGraphicsView):
         self.setDragMode(QGraphicsView.DragMode.ScrollHandDrag)
         self.setTransformationAnchor(QGraphicsView.ViewportAnchor.AnchorUnderMouse)
         self.setViewportUpdateMode(QGraphicsView.ViewportUpdateMode.BoundingRectViewportUpdate)
-        self.setAccessibleName("Knowledge graph")
+        self.setAccessibleName(_("Knowledge graph"))
         self.data = GraphData([], {}, [], {})
         self.positions: dict[str, tuple[float, float]] = {}
         self.node_items: dict[str, NodeItem] = {}

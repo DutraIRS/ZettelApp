@@ -24,12 +24,13 @@ from PySide6.QtWidgets import (
 
 from zettelapp.core.cluster import cluster_notes
 from zettelapp.core.graph import force_layout, subgraph
+from zettelapp.i18n import _, n_
 from zettelapp.ui import icons, theme
 from zettelapp.ui.graph2d import Graph2DView
 from zettelapp.ui.graph3d import Graph3DView
 from zettelapp.ui.graph_common import MAX_GROUP_COLORS, GraphData
 from zettelapp.ui.link_style import LIST_ICON, MENU_ICON, type_icon
-from zettelapp.ui.widgets import SearchBox, label, tool_button
+from zettelapp.ui.widgets import FlowLayout, SearchBox, label, tool_button
 from zettelapp.ui.workers import run_task
 
 
@@ -65,15 +66,25 @@ class GraphPage(QWidget):
         layout.setContentsMargins(16, 12, 16, 12)
         layout.setSpacing(10)
 
-        bar = QHBoxLayout()
-        bar.setSpacing(6)
-        bar.addWidget(label("Graph", "heading"))
-        bar.addSpacing(12)
+        # The controls wrap onto a second line in a narrow window or a wordy language, rather
+        # than making the whole main window that wide.
+        bar = FlowLayout(spacing=14)
+
+        def group(*widgets: QWidget) -> None:
+            box = QWidget()
+            row = QHBoxLayout(box)
+            row.setContentsMargins(0, 0, 0, 0)
+            row.setSpacing(6)
+            for widget in widgets:
+                row.addWidget(widget)
+            bar.addWidget(box)
+
+        group(label(_("Graph"), "heading"))
         self.scope_group = QButtonGroup(self)
         for i, (text, tip) in enumerate(
             (
-                ("All notes", "Show the whole collection"),
-                ("Local", "Show the open note and its neighbourhood"),
+                (_("All notes"), _("Show the whole collection")),
+                (_("Local"), _("Show the open note and its neighbourhood")),
             )
         ):
             b = QToolButton()
@@ -81,61 +92,53 @@ class GraphPage(QWidget):
             b.setToolTip(tip)
             b.setCheckable(True)
             self.scope_group.addButton(b, i)
-            bar.addWidget(b)
         self.scope_group.button(0).setChecked(True)
         self.depth_spin = QSpinBox()
         self.depth_spin.setRange(1, 5)
         self.depth_spin.setValue(2)
-        self.depth_spin.setPrefix("Depth ")
-        self.depth_spin.setToolTip("Links away from the open note")
-        bar.addWidget(self.depth_spin)
-        bar.addSpacing(12)
+        self.depth_spin.setPrefix(_("Depth "))
+        self.depth_spin.setToolTip(_("Links away from the open note"))
+        group(*self.scope_group.buttons(), self.depth_spin)
         self.dim_group = QButtonGroup(self)
-        for i, text in enumerate(("2D", "3D")):
+        for i, (text, tip) in enumerate((("2D", _("2D view")), ("3D", _("3D view")))):
             b = QToolButton()
             b.setText(text)
             b.setCheckable(True)
-            b.setToolTip(f"{text} view")
+            b.setToolTip(tip)
             self.dim_group.addButton(b, i)
-            bar.addWidget(b)
         self.dim_group.button(0).setChecked(True)
-        bar.addSpacing(12)
-        bar.addWidget(label("Colour by", "secondary"))
+        group(*self.dim_group.buttons())
         self.color_by = QComboBox()
-        self.color_by.setAccessibleName("Colour by")
-        self.color_by.addItem(icons.icon("tag"), "Tags", "tag")
-        self.color_by.addItem(icons.icon("cluster"), "Clusters: k-means", "kmeans")
-        self.color_by.addItem(icons.icon("cluster"), "Clusters: hierarchical", "hierarchical")
-        self.color_by.addItem("Nothing", "none")
-        bar.addWidget(self.color_by)
+        self.color_by.setAccessibleName(_("Colour by"))
+        self.color_by.addItem(icons.icon("tag"), _("Tags"), "tag")
+        self.color_by.addItem(icons.icon("cluster"), _("Clusters: k-means"), "kmeans")
+        self.color_by.addItem(icons.icon("cluster"), _("Clusters: hierarchical"), "hierarchical")
+        self.color_by.addItem(_("Nothing"), "none")
         self.k = QSpinBox()
         self.k.setRange(0, 20)
-        self.k.setSpecialValueText("Auto k")
+        self.k.setSpecialValueText(_("Auto k"))
         self.k.setPrefix("k = ")
-        self.k.setToolTip("Number of clusters. Auto picks k with the best silhouette score.")
-        bar.addWidget(self.k)
-        self.group_box = QCheckBox("Group")
+        self.k.setToolTip(_("Number of clusters. Auto picks k with the best silhouette score."))
+        group(label(_("Colour by"), "secondary"), self.color_by, self.k)
+        self.group_box = QCheckBox(_("Group"))
         self.group_box.setChecked(True)
         self.group_box.setToolTip(
-            "Pull notes of the same group together and shade each group's area"
+            _("Pull notes of the same group together and shade each group's area")
         )
-        bar.addWidget(self.group_box)
-        self.labels_box = QCheckBox("Labels")
+        self.labels_box = QCheckBox(_("Labels"))
         self.labels_box.setChecked(True)
-        bar.addWidget(self.labels_box)
         self.types_button = QToolButton()
         self.types_button.setIcon(icons.icon("filter"))
-        self.types_button.setText("Link types")
+        self.types_button.setText(_("Link types"))
         self.types_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
         self.types_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
         self.types_menu = QMenu(self.types_button)
         self.types_button.setMenu(self.types_menu)
-        bar.addWidget(self.types_button)
-        bar.addStretch(1)
-        self.search = SearchBox("Find in graph")
+        group(self.group_box, self.labels_box, self.types_button)
+        self.search = SearchBox(_("Find in graph"))
         self.search.setFixedWidth(200)
         self.search.returnPressed.connect(self._find)
-        bar.addWidget(self.search)
+        group(self.search)
         layout.addLayout(bar)
 
         body = QHBoxLayout()
@@ -158,17 +161,19 @@ class GraphPage(QWidget):
         tools.setContentsMargins(8, 4, 8, 6)
         self.info = label("", "caption")
         tools.addWidget(self.info, 1)
-        self.spin = tool_button("rotate", "Rotate automatically (3D)", checkable=True)
+        self.spin = tool_button("rotate", _("Rotate automatically (3D)"), checkable=True)
         self.spin.toggled.connect(self.view3d.set_auto_rotate)
         tools.addWidget(self.spin)
-        tools.addWidget(tool_button("zoom_out", "Zoom out", lambda: self._view().zoom(1 / 1.25)))
-        tools.addWidget(tool_button("zoom_in", "Zoom in", lambda: self._view().zoom(1.25)))
-        tools.addWidget(tool_button("fit", "Fit to window", lambda: self._view().fit()))
-        tools.addWidget(tool_button("refresh", "Recompute layout", self.relayout))
-        tools.addWidget(tool_button("image", "Save as image…", self.save_image))
+        tools.addWidget(tool_button("zoom_out", _("Zoom out"), lambda: self._view().zoom(1 / 1.25)))
+        tools.addWidget(tool_button("zoom_in", _("Zoom in"), lambda: self._view().zoom(1.25)))
+        tools.addWidget(tool_button("fit", _("Fit to window"), lambda: self._view().fit()))
+        tools.addWidget(tool_button("refresh", _("Recompute layout"), self.relayout))
+        tools.addWidget(tool_button("image", _("Save as image…"), self.save_image))
         tools.addWidget(
             tool_button(
-                "export", "Export these notes…", lambda: self.exportRequested.emit(set(self._ids))
+                "export",
+                _("Export these notes…"),
+                lambda: self.exportRequested.emit(set(self._ids)),
             )
         )
         canvas_layout.addLayout(tools)
@@ -179,17 +184,17 @@ class GraphPage(QWidget):
         legend.setFixedWidth(250)
         legend_layout = QVBoxLayout(legend)
         legend_layout.setContentsMargins(12, 12, 12, 12)
-        self.legend_title = label("Groups", "section")
+        self.legend_title = label(_("Groups"), "section")
         legend_layout.addWidget(self.legend_title)
         self.legend = QListWidget()
-        self.legend.setAccessibleName("Groups legend")
+        self.legend.setAccessibleName(_("Groups legend"))
         self.legend.setWordWrap(True)
         self.legend.setIconSize(QSize(14, 14))
         self.legend.itemClicked.connect(self._legend_clicked)
         legend_layout.addWidget(self.legend, 2)
-        legend_layout.addWidget(label("Link types", "section"))
+        legend_layout.addWidget(label(_("Link types"), "section"))
         self.type_legend = QListWidget()
-        self.type_legend.setAccessibleName("Link types legend")
+        self.type_legend.setAccessibleName(_("Link types legend"))
         self.type_legend.setIconSize(LIST_ICON)
         legend_layout.addWidget(self.type_legend, 1)
         self.quality = label("", "caption", wrap=True)
@@ -197,15 +202,17 @@ class GraphPage(QWidget):
         body.addWidget(legend)
         layout.addLayout(body, 1)
 
-        self.scope_group.idClicked.connect(lambda _: self.refresh())
+        self.scope_group.idClicked.connect(lambda _unused: self.refresh())
         self.dim_group.idClicked.connect(self._dims_changed)
         self.depth_spin.valueChanged.connect(
-            lambda _: self.refresh() if self.scope_group.checkedId() == 1 else None
+            lambda _unused: self.refresh() if self.scope_group.checkedId() == 1 else None
         )
-        self.color_by.currentIndexChanged.connect(lambda _: self.refresh())
-        self.k.valueChanged.connect(lambda _: self.refresh())
-        self.group_box.toggled.connect(lambda _: self.refresh())
-        self.labels_box.toggled.connect(lambda _: self.refresh())  # layout comes from the cache
+        self.color_by.currentIndexChanged.connect(lambda _unused: self.refresh())
+        self.k.valueChanged.connect(lambda _unused: self.refresh())
+        self.group_box.toggled.connect(lambda _unused: self.refresh())
+        self.labels_box.toggled.connect(
+            lambda _unused: self.refresh()
+        )  # layout comes from the cache
         self._ids: list[str] = []
         self._dims_changed(0)
 
@@ -295,8 +302,8 @@ class GraphPage(QWidget):
         grouping = self.group_box.isChecked() and mode != "none"
         self._request += 1
         request = self._request
-        self.info.setText("Computing layout…")
-        self.status.emit("Computing graph layout…")
+        self.info.setText(_("Computing layout…"))
+        self.status.emit(_("Computing graph layout…"))
 
         tag_counts = Counter(t for i in ids for t in notes[i].tags)
         note_payload = [notes[i] for i in ids]
@@ -320,13 +327,13 @@ class GraphPage(QWidget):
             quality = ""
             cluster_result = None
             if mode == "tag":
-                top = [t for t, _ in tag_counts.most_common()]
+                top = [t for t, _unused in tag_counts.most_common()]
                 rank = {t: r for r, t in enumerate(top)}
                 for i in ids:
                     tags = notes[i].tags
                     group_of[i] = min((rank[t] for t in tags), default=None) if tags else None
                 names = [f"#{t}" for t in top]
-                quality = "Each note takes the colour of its most common tag."
+                quality = _("Each note takes the colour of its most common tag.")
             elif mode in ("kmeans", "hierarchical"):
                 cluster_result = cached_clusters or cluster_notes(
                     note_payload, mode, self.k.value() or None
@@ -335,19 +342,29 @@ class GraphPage(QWidget):
                     label_of = cluster_result.label_of()
                     group_of = {i: label_of.get(i) for i in ids}
                     names = [
-                        f"Cluster {c + 1}: {', '.join(cluster_result.keywords.get(c, [])[:3])}"
+                        _("Cluster {n}: {keywords}").format(
+                            n=c + 1, keywords=", ".join(cluster_result.keywords.get(c, [])[:3])
+                        )
                         for c in range(cluster_result.k)
                     ]
-                    method = (
-                        "k-means"
-                        if cluster_result.method == "kmeans"
-                        else "average-linkage hierarchical"
-                    )
+                    k = cluster_result.k
                     quality = (
-                        f"{cluster_result.k} clusters by {method} clustering of LSA embeddings."
-                    )
+                        n_(
+                            "{n} cluster by k-means clustering of LSA embeddings.",
+                            "{n} clusters by k-means clustering of LSA embeddings.",
+                            k,
+                        )
+                        if cluster_result.method == "kmeans"
+                        else n_(
+                            "{n} cluster by average-linkage hierarchical clustering of LSA embeddings.",
+                            "{n} clusters by average-linkage hierarchical clustering of LSA embeddings.",
+                            k,
+                        )
+                    ).format(n=k)
                     if cluster_result.silhouette is not None:
-                        quality += f" Silhouette score {cluster_result.silhouette:.2f} (higher is better, max 1)."
+                        quality += " " + _(
+                            "Silhouette score {score} (higher is better, max 1)."
+                        ).format(score=f"{cluster_result.silhouette:.2f}")
             positions = cached_layout or force_layout(
                 ids,
                 [(l.src, l.dst) for l in links],
@@ -371,22 +388,28 @@ class GraphPage(QWidget):
             self._view().set_graph(data, positions, grouping, self.labels_box.isChecked())
             self._fill_legend(data, types)
             self.quality.setText(quality)
-            self.info.setText(
-                f"{len(ids)} notes · {len(links)} links" + (" · local graph" if local else "")
-            )
+            info = [
+                n_("{n} note", "{n} notes", len(ids)).format(n=len(ids)),
+                n_("{n} link", "{n} links", len(links)).format(n=len(links)),
+            ]
+            if local:
+                info.append(_("local graph"))
+            self.info.setText(" · ".join(info))
             self.status.emit("")
 
         run_task(
             work,
             on_done=done,
-            on_error=lambda msg: self.info.setText(f"Could not draw the graph: {msg}"),
+            on_error=lambda msg: self.info.setText(
+                _("Could not draw the graph: {error}").format(error=msg)
+            ),
         )
 
     def _fill_legend(self, data: GraphData, types) -> None:
         self.legend.clear()
         counts = Counter(g for g in data.group_of.values())
         mode = self.color_by.currentData()
-        self.legend_title.setText({"tag": "Tags", "none": "Groups"}.get(mode, "Clusters"))
+        self.legend_title.setText({"tag": _("Tags"), "none": _("Groups")}.get(mode, _("Clusters")))
         other = 0
         for g in sorted(k for k in counts if k is not None):
             if g >= MAX_GROUP_COLORS:
@@ -400,7 +423,7 @@ class GraphPage(QWidget):
         if other or counts.get(None):
             item = QListWidgetItem(
                 _dot(theme.current().q("text_muted")),
-                f"Other / untagged  ({other + counts.get(None, 0)})",
+                _("Other / untagged ({n})").format(n=other + counts.get(None, 0)),
             )
             item.setData(Qt.ItemDataRole.UserRole, -1)
             self.legend.addItem(item)
@@ -420,7 +443,11 @@ class GraphPage(QWidget):
             view.hover_set = set(members) or None
             view.scene().update()
         else:
-            self.status.emit(f"{len(members)} notes in this group")
+            self.status.emit(
+                n_("{n} note in this group", "{n} notes in this group", len(members)).format(
+                    n=len(members)
+                )
+            )
 
     def _selected(self, note_id: str) -> None:
         self.status.emit(self._view().data.titles.get(note_id, ""))
@@ -433,15 +460,15 @@ class GraphPage(QWidget):
             if text in (title or "").casefold():
                 self._view().focus_node(note_id)
                 return
-        self.status.emit("No note in the graph matches that title.")
+        self.status.emit(_("No note in the graph matches that title."))
 
     def save_image(self) -> None:
-        path, _ = QFileDialog.getSaveFileName(
-            self, "Save graph as image", "Graph.png", "PNG image (*.png)"
+        path, _unused = QFileDialog.getSaveFileName(
+            self, _("Save graph as image"), "Graph.png", _("PNG image (*.png)")
         )
         if path:
             self._view().render_image().save(path, "PNG")
-            self.window.notify_file(path, "Graph image saved")
+            self.window.notify_file(path, _("Graph image saved"))
 
     def showEvent(self, event) -> None:  # noqa: N802
         super().showEvent(event)

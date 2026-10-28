@@ -47,7 +47,7 @@ from zettelapp.core.llm import (
 from zettelapp.core.models import LinkType, least_used_line_style
 from zettelapp.core.suggest import FEATURES
 from zettelapp.core.textutil import slugify_type
-from zettelapp.i18n import _
+from zettelapp.i18n import N_, _, n_
 from zettelapp.paths import backups_dir
 from zettelapp.ui import icons, theme
 from zettelapp.ui.graph_common import draw_edge_label
@@ -68,22 +68,23 @@ def _merge_mcp_entry(config: dict, entry: dict) -> dict:
     """Return a copy with the ZettelApp server after validating the nested shape."""
     servers = config.get("mcpServers", {})
     if not isinstance(servers, dict):
-        raise ValueError("The existing 'mcpServers' configuration is not a JSON object.")
+        raise ValueError(_("The existing 'mcpServers' configuration is not a JSON object."))
     merged = dict(config)
     merged["mcpServers"] = {**servers, "zettelapp": entry}
     return merged
 
 
+# Page names are also their keys (open_options("AI assistant")); they are translated where shown.
 PAGES = [
-    "General",
-    "Link suggestions",
-    "Link types",
-    "AI assistant",
-    "MCP server",
-    "Anki",
-    "Zotero",
-    "Windows integration",
-    "Backups",
+    N_("General"),
+    N_("Link suggestions"),
+    N_("Link types"),
+    N_("AI assistant"),
+    N_("MCP server"),
+    N_("Anki"),
+    N_("Zotero"),
+    N_("Windows integration"),
+    N_("Backups"),
 ]
 PAGE_ICONS = {
     "General": "settings",
@@ -189,13 +190,13 @@ class OptionsDialog(QDialog):
     def __init__(self, window, page: str = "General"):
         super().__init__(window)
         self.window = window
-        self.setWindowTitle("Options")
+        self.setWindowTitle(_("Options"))
         self.resize(820, 600)
         outer = QVBoxLayout(self)
         body = QHBoxLayout()
         self.nav = QListWidget()
         self.nav.setFixedWidth(200)
-        self.nav.setAccessibleName("Option pages")
+        self.nav.setAccessibleName(_("Option pages"))
         self.nav.setIconSize(QSize(16, 16))
         self.nav.setSpacing(1)
         self.pages = QStackedWidget()
@@ -211,7 +212,7 @@ class OptionsDialog(QDialog):
             self._backups,
         ]
         for name, build in zip(PAGES, builders, strict=True):
-            item = QListWidgetItem(icons.icon(PAGE_ICONS[name]), name)
+            item = QListWidgetItem(icons.icon(PAGE_ICONS[name]), _(name))
             # A fixed row height: setCurrentRow() below lays the list out before the
             # stylesheet's item padding applies, which made rows overlap on hover.
             item.setSizeHint(QSize(0, NAV_ROW_HEIGHT))
@@ -219,7 +220,7 @@ class OptionsDialog(QDialog):
             holder = QWidget()
             lay = QVBoxLayout(holder)
             lay.setContentsMargins(18, 4, 8, 4)
-            lay.addWidget(label(name, "heading"))
+            lay.addWidget(label(_(name), "heading"))
             build(lay)
             lay.addStretch(1)
             self.pages.addWidget(holder)
@@ -244,10 +245,14 @@ class OptionsDialog(QDialog):
     def _general(self, lay: QVBoxLayout) -> None:
         form = QFormLayout()
         self.theme = QComboBox()
-        for text, key in (("Use Windows setting", "system"), ("Light", "light"), ("Dark", "dark")):
+        for text, key in (
+            (_("Use Windows setting"), "system"),
+            (_("Light"), "light"),
+            (_("Dark"), "dark"),
+        ):
             self.theme.addItem(text, key)
         self.theme.setCurrentIndex(max(0, self.theme.findData(settings.get(settings.THEME))))
-        form.addRow("App theme", self.theme)
+        form.addRow(_("App theme"), self.theme)
         self.language = QComboBox()
         self.language.addItem(_("Use Windows setting"), "system")
         for code, name in i18n.LANGUAGES.items():
@@ -260,39 +265,43 @@ class OptionsDialog(QDialog):
         self.font_size.setRange(9, 20)
         self.font_size.setValue(settings.get(settings.EDITOR_FONT_SIZE))
         self.font_size.setSuffix(" pt")
-        form.addRow("Editor text size", self.font_size)
+        form.addRow(_("Editor text size"), self.font_size)
         self.autosave = QSpinBox()
         self.autosave.setRange(300, 10000)
         self.autosave.setSingleStep(100)
         self.autosave.setSuffix(" ms")
         self.autosave.setValue(settings.get(settings.AUTOSAVE_MS))
-        form.addRow("Save after typing stops for", self.autosave)
+        form.addRow(_("Save after typing stops for"), self.autosave)
         lay.addLayout(form)
-        self.update_check = QCheckBox("Check for updates when ZettelApp starts")
+        self.update_check = QCheckBox(_("Check for updates when ZettelApp starts"))
         self.update_check.setToolTip(
-            "Downloads a small version file from the ZettelApp website. Nothing about you "
-            "or your notes is sent, and a new version is announced only once."
+            _(
+                "Downloads a small version file from the ZettelApp website. Nothing about you "
+                "or your notes is sent, and a new version is announced only once."
+            )
         )
         self.update_check.setChecked(settings.get(settings.UPDATE_CHECK))
         lay.addWidget(self.update_check)
         lay.addWidget(
             label(
-                "Notes are saved automatically. Your vault is a folder with a SQLite database "
-                "and an assets folder; open another one from File ▸ Open Vault.",
+                _(
+                    "Notes are saved automatically. Your vault is a folder with a SQLite database "
+                    "and an assets folder; open another one from File ▸ Open Vault."
+                ),
                 "caption",
                 wrap=True,
             )
         )
 
     def _suggestions(self, lay: QVBoxLayout) -> None:
-        self.suggest_on = QCheckBox("Suggest links while I write")
+        self.suggest_on = QCheckBox(_("Suggest links while I write"))
         self.suggest_on.setChecked(settings.get(settings.SUGGEST_ENABLED))
         lay.addWidget(self.suggest_on)
-        lay.addWidget(label("Features used by the Naive Bayes classifier", "section"))
+        lay.addWidget(label(_("Features used by the Naive Bayes classifier"), "section"))
         enabled = settings.get_list(settings.SUGGEST_FEATURES) or [f.key for f in FEATURES]
         self.feature_boxes = {}
         for f in FEATURES:
-            box = QCheckBox(f.label)
+            box = QCheckBox(_(f.label))
             box.setChecked(f.key in enabled)
             self.feature_boxes[f.key] = box
             lay.addWidget(box)
@@ -300,7 +309,7 @@ class OptionsDialog(QDialog):
         self.suggest_limit = QSpinBox()
         self.suggest_limit.setRange(1, 25)
         self.suggest_limit.setValue(settings.get(settings.SUGGEST_LIMIT))
-        form.addRow("Show at most", self.suggest_limit)
+        form.addRow(_("Show at most"), self.suggest_limit)
         self.min_prob = QSlider(Qt.Orientation.Horizontal)
         self.min_prob.setRange(5, 95)
         self.min_prob.setValue(round(settings.get(settings.SUGGEST_MIN_PROB) * 100))
@@ -310,18 +319,18 @@ class OptionsDialog(QDialog):
         row = QHBoxLayout()
         row.addWidget(self.min_prob, 1)
         row.addWidget(self.min_prob_label)
-        form.addRow("Minimum match", row)
+        form.addRow(_("Minimum match"), row)
         self.prior = QDoubleSpinBox()
         self.prior.setRange(0.5, 100)
         self.prior.setValue(settings.get(settings.SUGGEST_PRIOR))
         self.prior.setToolTip(
-            "Pseudo-observations behind the prior belief. Higher = trust the prior longer."
+            _("Pseudo-observations behind the prior belief. Higher = trust the prior longer.")
         )
-        form.addRow("Prior strength", self.prior)
+        form.addRow(_("Prior strength"), self.prior)
         lay.addLayout(form)
         buttons = QHBoxLayout()
-        buttons.addWidget(link_button("Model details…", self._model_details))
-        buttons.addWidget(link_button("Forget dismissed suggestions", self._reset_feedback))
+        buttons.addWidget(link_button(_("Model details…"), self._model_details))
+        buttons.addWidget(link_button(_("Forget dismissed suggestions"), self._reset_feedback))
         buttons.addStretch(1)
         lay.addLayout(buttons)
 
@@ -330,25 +339,34 @@ class OptionsDialog(QDialog):
         importance = report["importance"]
         top = max(importance.values()) or 1
         lines = [
-            f"Trained on {report['positives']:.0f} linked and {report['negatives']:.0f} unlinked note pairs "
-            f"from {report['notes']} notes.",
+            n_(
+                "Trained on {linked} linked and {unlinked} unlinked note pairs from {n} note.",
+                "Trained on {linked} linked and {unlinked} unlinked note pairs from {n} notes.",
+                report["notes"],
+            ).format(
+                linked=f"{report['positives']:.0f}",
+                unlinked=f"{report['negatives']:.0f}",
+                n=report["notes"],
+            ),
             "",
-            "How informative each feature is (symmetric KL divergence):",
+            _("How informative each feature is (symmetric KL divergence):"),
         ]
         for f in FEATURES:
             v = importance.get(f.key, 0.0)
             lines.append(
-                f"{'█' * max(1, round(20 * v / top)) if v else '·':<21} {v:5.2f}  {f.label}"
+                f"{'█' * max(1, round(20 * v / top)) if v else '·':<21} {v:5.2f}  {_(f.label)}"
             )
-        QMessageBox.information(self, "Link suggestion model", "\n".join(lines))
+        QMessageBox.information(self, _("Link suggestion model"), "\n".join(lines))
 
     def _reset_feedback(self) -> None:
         if (
             self.window.vault
             and QMessageBox.question(
                 self,
-                "Forget dismissed suggestions",
-                "Dismissed suggestions will be suggested again and stop counting as negative examples. Continue?",
+                _("Forget dismissed suggestions"),
+                _(
+                    "Dismissed suggestions will be suggested again and stop counting as negative examples. Continue?"
+                ),
             )
             == QMessageBox.StandardButton.Yes
         ):
@@ -764,13 +782,13 @@ class OptionsDialog(QDialog):
 
     def _test(self) -> None:
         cfg, key = self._llm_settings(), self._key_for_test()
-        self.ai_status.setText("Testing…")
+        self.ai_status.setText(_("Testing…"))
         run_task(
             test_connection,
             cfg,
             key,
             on_done=self.ai_status.setText,
-            on_error=lambda msg: self.ai_status.setText(f"Failed: {msg}"),
+            on_error=lambda msg: self.ai_status.setText(_("Failed: {error}").format(error=msg)),
         )
 
     def _refresh_models(self) -> None:
@@ -781,31 +799,37 @@ class OptionsDialog(QDialog):
             self.model.clear()
             self.model.addItems(models)
             self.model.setCurrentText(current)
-            self.ai_status.setText(f"{len(models)} models available.")
+            self.ai_status.setText(
+                n_("{n} model available.", "{n} models available.", len(models)).format(
+                    n=len(models)
+                )
+            )
 
         run_task(
             list_models,
             cfg,
             key,
             on_done=done,
-            on_error=lambda msg: self.ai_status.setText(f"Failed: {msg}"),
+            on_error=lambda msg: self.ai_status.setText(_("Failed: {error}").format(error=msg)),
         )
 
     def _mcp(self, lay: QVBoxLayout) -> None:
         lay.addWidget(
             label(
-                "ZettelApp includes a Model Context Protocol (MCP) server, so assistants such as "
-                "Claude Desktop or Claude Code can search and read your vault. It works only while "
-                "ZettelApp is open and the MCP switch in the status bar is on. The switch is off "
-                "whenever ZettelApp starts, and the server stops as soon as you switch it off or "
-                "close ZettelApp. Turn the switch on before you start your MCP client, or reconnect "
-                "ZettelApp in the client afterwards. The server talks over standard input/output "
-                "(no network port) and is read-only unless you allow changes below.",
+                _(
+                    "ZettelApp includes a Model Context Protocol (MCP) server, so assistants such as "
+                    "Claude Desktop or Claude Code can search and read your vault. It works only while "
+                    "ZettelApp is open and the MCP switch in the status bar is on. The switch is off "
+                    "whenever ZettelApp starts, and the server stops as soon as you switch it off or "
+                    "close ZettelApp. Turn the switch on before you start your MCP client, or reconnect "
+                    "ZettelApp in the client afterwards. The server talks over standard input/output "
+                    "(no network port) and is read-only unless you allow changes below."
+                ),
                 "caption",
                 wrap=True,
             )
         )
-        self.mcp_writes = QCheckBox("Allow MCP clients to create notes and links")
+        self.mcp_writes = QCheckBox(_("Allow MCP clients to create notes and links"))
         self.mcp_writes.setChecked(settings.get(settings.MCP_ALLOW_WRITES))
         self.mcp_writes.toggled.connect(self._update_mcp_snippets)
         lay.addWidget(self.mcp_writes)
@@ -817,10 +841,10 @@ class OptionsDialog(QDialog):
         row = QHBoxLayout()
         row.addWidget(
             link_button(
-                "Copy", lambda: QGuiApplication.clipboard().setText(self.mcp_json.toPlainText())
+                _("Copy"), lambda: QGuiApplication.clipboard().setText(self.mcp_json.toPlainText())
             )
         )
-        row.addWidget(link_button("Add to Claude Desktop…", self._install_claude_desktop))
+        row.addWidget(link_button(_("Add to Claude Desktop…"), self._install_claude_desktop))
         row.addStretch(1)
         lay.addLayout(row)
         lay.addWidget(label("Claude Code", "section"))
@@ -828,7 +852,9 @@ class OptionsDialog(QDialog):
         self.mcp_cli.setReadOnly(True)
         lay.addWidget(self.mcp_cli)
         lay.addWidget(
-            link_button("Copy", lambda: QGuiApplication.clipboard().setText(self.mcp_cli.text())),
+            link_button(
+                _("Copy"), lambda: QGuiApplication.clipboard().setText(self.mcp_cli.text())
+            ),
             0,
             Qt.AlignmentFlag.AlignLeft,
         )
@@ -855,9 +881,10 @@ class OptionsDialog(QDialog):
         if (
             QMessageBox.question(
                 self,
-                "Add to Claude Desktop",
-                f"Add the ZettelApp MCP server to\n{path}?\n\nA backup of the current file is "
-                "saved next to it. Restart Claude Desktop afterwards.",
+                _("Add to Claude Desktop"),
+                _(
+                    "Add the ZettelApp MCP server to\n{path}?\n\nA backup of the current file is saved next to it. Restart Claude Desktop afterwards."
+                ).format(path=path),
             )
             != QMessageBox.StandardButton.Yes
         ):
@@ -865,7 +892,7 @@ class OptionsDialog(QDialog):
         try:
             config = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
             if not isinstance(config, dict):
-                raise ValueError("The existing configuration is not a JSON object.")
+                raise ValueError(_("The existing configuration is not a JSON object."))
             config = _merge_mcp_entry(config, self._mcp_entry())
             if path.exists():
                 shutil.copy2(path, path.with_suffix(".json.bak"))
@@ -875,11 +902,13 @@ class OptionsDialog(QDialog):
             os.replace(tmp, path)
         except (OSError, ValueError) as exc:
             QMessageBox.warning(
-                self, "Add to Claude Desktop", f"Could not update the configuration: {exc}"
+                self,
+                _("Add to Claude Desktop"),
+                _("Could not update the configuration: {error}").format(error=exc),
             )
             return
         QMessageBox.information(
-            self, "Add to Claude Desktop", "Done. Restart Claude Desktop to load ZettelApp."
+            self, _("Add to Claude Desktop"), _("Done. Restart Claude Desktop to load ZettelApp.")
         )
 
     def _anki(self, lay: QVBoxLayout) -> None:
@@ -887,13 +916,13 @@ class OptionsDialog(QDialog):
         self.anki_port = QSpinBox()
         self.anki_port.setRange(1024, 65535)
         self.anki_port.setValue(settings.get(settings.ANKI_PORT))
-        form.addRow("AnkiConnect port", self.anki_port)
+        form.addRow(_("AnkiConnect port"), self.anki_port)
         self.anki_deck = QLineEdit(settings.get(settings.ANKI_DECK))
-        form.addRow("Default deck", self.anki_deck)
+        form.addRow(_("Default deck"), self.anki_deck)
         lay.addLayout(form)
         lay.addWidget(
             label(
-                "ZettelApp only connects to AnkiConnect on this computer (127.0.0.1).",
+                _("ZettelApp only connects to AnkiConnect on this computer (127.0.0.1)."),
                 "caption",
                 wrap=True,
             )
@@ -902,10 +931,12 @@ class OptionsDialog(QDialog):
     def _zotero(self, lay: QVBoxLayout) -> None:
         lay.addWidget(
             label(
-                "Cite Zotero items in notes (Insert ▸ Zotero Reference) and create literature notes linked to them. "
-                "ZettelApp reads your library through Zotero's local API, which never leaves this computer and is "
-                "read-only. Turn it on in Zotero 7 or later: Settings ▸ Advanced ▸ “Allow other applications on this "
-                "computer to communicate with Zotero”. Clicking a zotero:// link opens the item or PDF in Zotero.",
+                _(
+                    "Cite Zotero items in notes (Insert ▸ Zotero Reference) and create literature notes linked to them. "
+                    "ZettelApp reads your library through Zotero's local API, which never leaves this computer and is "
+                    "read-only. Turn it on in Zotero 7 or later: Settings ▸ Advanced ▸ “Allow other applications on this "
+                    "computer to communicate with Zotero”. Clicking a zotero:// link opens the item or PDF in Zotero."
+                ),
                 "caption",
                 wrap=True,
             )
@@ -914,9 +945,9 @@ class OptionsDialog(QDialog):
         self.zotero_port = QSpinBox()
         self.zotero_port.setRange(1024, 65535)
         self.zotero_port.setValue(settings.get(settings.ZOTERO_PORT))
-        form.addRow("Zotero port", self.zotero_port)
+        form.addRow(_("Zotero port"), self.zotero_port)
         lay.addLayout(form)
-        test = QPushButton("Test connection")
+        test = QPushButton(_("Test connection"))
         test.setIcon(icons.icon("check"))
         self.zotero_status = label("", "secondary", wrap=True)
         test.clicked.connect(self._test_zotero)
@@ -928,19 +959,21 @@ class OptionsDialog(QDialog):
     def _test_zotero(self) -> None:
         from zettelapp.core.zotero import ZoteroClient
 
-        self.zotero_status.setText("Testing…")
+        self.zotero_status.setText(_("Testing…"))
         run_task(
             lambda: ZoteroClient(self.zotero_port.value()).search("", limit=1),
-            on_done=lambda items: self.zotero_status.setText("Connected to Zotero."),
+            on_done=lambda items: self.zotero_status.setText(_("Connected to Zotero.")),
             on_error=lambda msg: self.zotero_status.setText(msg),
         )
 
     def _integration(self, lay: QVBoxLayout) -> None:
         lay.addWidget(
             label(
-                "Register zettelapp:// links so that links on Anki cards (and elsewhere) open the "
-                "matching note. The installer does this for you; use this for the portable version. "
-                "Only “open note” links are accepted.",
+                _(
+                    "Register zettelapp:// links so that links on Anki cards (and elsewhere) open the "
+                    "matching note. The installer does this for you; use this for the portable version. "
+                    "Only “open note” links are accepted."
+                ),
                 "caption",
                 wrap=True,
             )
@@ -948,11 +981,11 @@ class OptionsDialog(QDialog):
         self.protocol_status = label("", "secondary")
         lay.addWidget(self.protocol_status)
         row = QHBoxLayout()
-        register = QPushButton("Register links")
+        register = QPushButton(_("Register links"))
         register.clicked.connect(
             lambda: (winintegration.register_url_protocol(), self._update_protocol())
         )
-        unregister = QPushButton("Remove registration")
+        unregister = QPushButton(_("Remove registration"))
         unregister.clicked.connect(
             lambda: (winintegration.unregister_url_protocol(), self._update_protocol())
         )
@@ -964,30 +997,33 @@ class OptionsDialog(QDialog):
 
     def _update_protocol(self) -> None:
         command = winintegration.registered_command()
-        self.protocol_status.setText(f"Registered: {command}" if command else "Not registered.")
+        self.protocol_status.setText(
+            _("Registered: {command}").format(command=command) if command else _("Not registered.")
+        )
 
     def _backups(self, lay: QVBoxLayout) -> None:
-        self.backup_on = QCheckBox("Back up the vault database once a day when it is opened")
+        self.backup_on = QCheckBox(_("Back up the vault database once a day when it is opened"))
         self.backup_on.setChecked(settings.get(settings.BACKUP_ENABLED))
         lay.addWidget(self.backup_on)
         form = QFormLayout()
         self.backup_keep = QSpinBox()
         self.backup_keep.setRange(1, 100)
         self.backup_keep.setValue(settings.get(settings.BACKUP_KEEP))
-        form.addRow("Keep the newest", self.backup_keep)
+        form.addRow(_("Keep the newest"), self.backup_keep)
         lay.addLayout(form)
         lay.addWidget(
             label(
-                f"Backups are stored in {backups_dir()}. Images are content-addressed and are "
-                "never deleted automatically.",
+                _(
+                    "Backups are stored in {folder}. Images are content-addressed and are never deleted automatically."
+                ).format(folder=backups_dir()),
                 "caption",
                 wrap=True,
             )
         )
         row = QHBoxLayout()
-        now = QPushButton("Back up now")
+        now = QPushButton(_("Back up now"))
         now.clicked.connect(self.window.backup_now)
-        folder = QPushButton("Open backups folder")
+        folder = QPushButton(_("Open backups folder"))
         folder.clicked.connect(lambda: winintegration.reveal_in_explorer(backups_dir()))
         row.addWidget(now)
         row.addWidget(folder)
@@ -1032,7 +1068,7 @@ class OptionsDialog(QDialog):
             try:
                 validate_base_url(base_url)
             except LLMError as exc:
-                QMessageBox.warning(self, "Endpoint", str(exc))
+                QMessageBox.warning(self, _("Endpoint"), str(exc))
                 return False
         settings.put(settings.LLM_BASE_URL, base_url)
         key_id = self.key_choice.currentData()

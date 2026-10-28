@@ -9,6 +9,7 @@ from PySide6.QtCore import QPointF, QRectF, Qt, QTimer, Signal
 from PySide6.QtGui import QColor, QFontMetricsF, QPainter, QPainterPath, QPen
 from PySide6.QtWidgets import QWidget
 
+from zettelapp.i18n import _
 from zettelapp.ui import theme
 from zettelapp.ui.graph2d import LANE_SPREAD, node_radius
 from zettelapp.ui.graph_common import (
@@ -29,7 +30,7 @@ class Graph3DView(QWidget):
 
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.setAccessibleName("Knowledge graph in 3D")
+        self.setAccessibleName(_("Knowledge graph in 3D"))
         self.setMouseTracking(True)
         self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
         self.data = GraphData([], {}, [], {})
@@ -126,7 +127,7 @@ class Graph3DView(QWidget):
         painter.fillRect(self.rect(), t.q("surface"))
         if not len(self.points):
             painter.setPen(t.q("text_muted"))
-            painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, "No notes to show")
+            painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, _("No notes to show"))
             return
         screen, _scale, depth = self._project()
         self._screen = screen
@@ -277,7 +278,7 @@ class Graph3DView(QWidget):
         painter.drawText(
             QRectF(10, self.height() - 24, self.width() - 20, 18),
             Qt.AlignmentFlag.AlignLeft,
-            "Drag to orbit · wheel to zoom · double-click a note to open it",
+            _("Drag to orbit · wheel to zoom · double-click a note to open it"),
         )
 
     # --- interaction ----------------------------------------------------------

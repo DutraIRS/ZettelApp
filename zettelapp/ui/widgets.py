@@ -124,7 +124,7 @@ class Card(QFrame):
 
 
 class FlowLayout(QLayout):
-    """Lays children out left-to-right, wrapping like text."""
+    """Lays children out in reading order (right to left in Arabic), wrapping like text."""
 
     def __init__(self, parent: QWidget | None = None, spacing: int = 6):
         super().__init__(parent)
@@ -172,6 +172,8 @@ class FlowLayout(QLayout):
         return size
 
     def _layout(self, rect: QRect, dry: bool) -> int:
+        owner = self.parentWidget()
+        rtl = owner.isRightToLeft() if owner is not None else False
         x, y, line = rect.x(), rect.y(), 0
         for item in self._items:
             hint = item.sizeHint()
@@ -179,7 +181,8 @@ class FlowLayout(QLayout):
                 x, y = rect.x(), y + line + self._spacing
                 line = 0
             if not dry:
-                item.setGeometry(QRect(QPoint(x, y), hint))
+                left = rect.x() + rect.right() + 1 - x - hint.width() if rtl else x  # mirrored
+                item.setGeometry(QRect(QPoint(left, y), hint))
             x += hint.width() + self._spacing
             line = max(line, hint.height())
         return y + line - rect.y()

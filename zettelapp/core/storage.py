@@ -185,7 +185,7 @@ class Vault:
         db_path = folder / cls.DB_NAME
         if not db_path.exists():
             if readonly or not create:
-                raise VaultError(f"No vault found in {folder}")
+                raise VaultError(_("No vault found in {folder}").format(folder=folder))
             folder.mkdir(parents=True, exist_ok=True)
         if readonly:
             conn = sqlite3.connect(f"{db_path.as_uri()}?mode=ro", uri=True)
@@ -247,7 +247,7 @@ class Vault:
                     names = {"label": _(lt.label), "inverse_label": _(lt.inverse_label)}
                     self._insert_link_type(replace(lt, **names), pos)
             elif int(version) > SCHEMA_VERSION:
-                raise VaultError("This vault was created by a newer version of ZettelApp.")
+                raise VaultError(_("This vault was created by a newer version of ZettelApp."))
             elif int(version) < SCHEMA_VERSION:
                 if int(version) < 2:
                     self._upgrade_to_v2()
@@ -384,7 +384,7 @@ class Vault:
         created: str | None = None,
     ) -> Note:
         if note_id is not None and not is_valid_note_id(note_id):
-            raise UnsafeInputError(f"Invalid note id: {note_id!r}")
+            raise UnsafeInputError(_("Invalid note id: “{id}”").format(id=note_id))
         now = utc_now()
         note = Note(
             id=note_id or self.new_note_id(),
@@ -739,7 +739,7 @@ class Vault:
     def save_link_type(self, lt: LinkType) -> LinkType:
         lt.id = slugify_type(lt.id or lt.label)
         if not lt.id:
-            raise UnsafeInputError("A link type needs a name.")
+            raise UnsafeInputError(_("A link type needs a name."))
         if not re.fullmatch(r"#[0-9A-Fa-f]{6}", lt.color or ""):
             lt.color = "#8A8A8A"
         if lt.line_style not in LINE_STYLES:
@@ -908,10 +908,10 @@ class Vault:
     def add_image(self, data: bytes, original_name: str = "") -> str:
         """Store image bytes content-addressed; returns the asset name."""
         if len(data) > MAX_IMAGE_BYTES:
-            raise UnsafeInputError("Images larger than 25 MB are not supported.")
+            raise UnsafeInputError(_("Images larger than 25 MB are not supported."))
         ext = sniff_image_type(data)
         if ext is None:
-            raise UnsafeInputError("Unsupported image format. Use PNG, JPEG, GIF, WebP or BMP.")
+            raise UnsafeInputError(_("Unsupported image format. Use PNG, JPEG, GIF, WebP or BMP."))
         name = hashlib.sha256(data).hexdigest()[:20] + "." + ext
         path = self.assets_dir / name
         with self.transaction():
@@ -929,7 +929,7 @@ class Vault:
     def add_image_file(self, path: str | Path) -> str:
         path = Path(path)
         if path.stat().st_size > MAX_IMAGE_BYTES:
-            raise UnsafeInputError("Images larger than 25 MB are not supported.")
+            raise UnsafeInputError(_("Images larger than 25 MB are not supported."))
         return self.add_image(path.read_bytes(), path.name)
 
     def asset_path(self, name: str) -> Path | None:

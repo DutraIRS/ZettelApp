@@ -48,7 +48,7 @@ from zettelapp.core.storage import Vault, VaultError
 from zettelapp.core.suggest import FEATURES, NoteData
 from zettelapp.core.textutil import strip_markdown
 from zettelapp.core.updates import available_update
-from zettelapp.i18n import N_, _
+from zettelapp.i18n import N_, _, n_
 from zettelapp.mcp_switch import McpSwitch
 from zettelapp.paths import backups_dir, default_vault_dir, documents_dir
 from zettelapp.ui import icons, theme
@@ -301,7 +301,9 @@ class MainWindow(QMainWindow):
             if text is None:
                 e.addSeparator()
                 continue
-            action = self._action(e, text, lambda _=False, m=method: self._edit_command(m), key)
+            action = self._action(
+                e, text, lambda _unused=False, m=method: self._edit_command(m), key
+            )
             action.setShortcutContext(
                 Qt.ShortcutContext.WidgetShortcut
             )  # let editors handle the keys
@@ -313,7 +315,11 @@ class MainWindow(QMainWindow):
         v = bar.addMenu(_("&View"))
         for i, (glyph, text) in enumerate(NAV):
             self._action(
-                v, f"&{_(text)}", lambda _=False, n=i: self.show_page(n), f"Ctrl+{i + 1}", glyph
+                v,
+                f"&{_(text)}",
+                lambda _unused=False, n=i: self.show_page(n),
+                f"Ctrl+{i + 1}",
+                glyph,
             )
         v.addSeparator()
         self._action(v, "Toggle &Preview", self.editor.cycle_view_mode, "Ctrl+E", "view")
@@ -327,7 +333,7 @@ class MainWindow(QMainWindow):
         ):
             action = QAction(_(text), self, checkable=True)
             action.setChecked(settings.get(settings.THEME) == key)
-            action.triggered.connect(lambda _=False, k=key: self._set_theme(k))
+            action.triggered.connect(lambda _unused=False, k=key: self._set_theme(k))
             group.addAction(action)
             theme_menu.addAction(action)
 
@@ -494,11 +500,11 @@ class MainWindow(QMainWindow):
             vault = Vault.open(folder)
         except (VaultError, OSError) as exc:
             log.exception("Could not open vault")
-            QMessageBox.critical(self, "Could not open vault", f"{folder}\n\n{exc}")
+            QMessageBox.critical(self, _("Could not open vault"), f"{folder}\n\n{exc}")
             return False
         except Exception as exc:  # noqa: BLE001 - last-resort boundary, never crash the UI
             log.exception("Unexpected error opening vault")
-            QMessageBox.critical(self, "Could not open vault", f"{folder}\n\n{exc}")
+            QMessageBox.critical(self, _("Could not open vault"), f"{folder}\n\n{exc}")
             return False
         self.close_vault()
         self.vault = vault
@@ -541,15 +547,17 @@ class MainWindow(QMainWindow):
         self.recent_menu.setEnabled(not self.recent_menu.isEmpty())
 
     def open_vault_dialog(self) -> None:
-        folder = QFileDialog.getExistingDirectory(self, "Open vault", str(documents_dir()))
+        folder = QFileDialog.getExistingDirectory(self, _("Open vault"), str(documents_dir()))
         if not folder:
             return
         if (
             not Vault.is_vault(folder)
             and QMessageBox.question(
                 self,
-                "Create vault",
-                f"{folder} is not a ZettelApp vault yet. Create a new vault there?",
+                _("Create vault"),
+                _("{folder} is not a ZettelApp vault yet. Create a new vault there?").format(
+                    folder=folder
+                ),
             )
             != QMessageBox.StandardButton.Yes
         ):
@@ -558,7 +566,7 @@ class MainWindow(QMainWindow):
 
     def new_vault_dialog(self) -> None:
         folder = QFileDialog.getExistingDirectory(
-            self, "Choose or create an empty folder for the new vault", str(documents_dir())
+            self, _("Choose or create an empty folder for the new vault"), str(documents_dir())
         )
         if folder:
             self._open_vault_with_onboarding(folder)
@@ -608,9 +616,9 @@ class MainWindow(QMainWindow):
         try:
             path = self.vault.backup(self._backup_folder(), settings.get(settings.BACKUP_KEEP))
         except OSError as exc:
-            QMessageBox.warning(self, "Backup", str(exc))
+            QMessageBox.warning(self, _("Backup"), str(exc))
             return
-        self.notify_file(path, "Backup saved")
+        self.notify_file(path, _("Backup saved"))
 
     def _read_data_version(self) -> int | None:
         try:
@@ -669,9 +677,11 @@ class MainWindow(QMainWindow):
             winintegration.reveal_in_explorer(target)
         elif target.parent.is_dir():
             winintegration.reveal_in_explorer(target.parent)
-            self.statusBar().showMessage(f"{target.name} is no longer in that folder.", 6000)
+            self.statusBar().showMessage(
+                _("{name} is no longer in that folder.").format(name=target.name), 6000
+            )
         else:
-            self.statusBar().showMessage(f"File not found: {local}", 6000)
+            self.statusBar().showMessage(_("File not found: {path}").format(path=local), 6000)
 
     def current_note_id(self) -> str | None:
         return self.editor.note.id if self.editor.note else None
@@ -695,7 +705,7 @@ class MainWindow(QMainWindow):
             return
         note = self.vault.get_note(note_id)
         if note is None:
-            self.statusBar().showMessage("That note no longer exists.", 5000)
+            self.statusBar().showMessage(_("That note no longer exists."), 5000)
             return
         if self.pages.currentIndex() != 0:
             self.show_page(0)
@@ -717,7 +727,7 @@ class MainWindow(QMainWindow):
         self.list.refresh_tags()
         index = self.list.tag_filter.findData(tag)
         if index < 0:
-            self.statusBar().showMessage(f"No notes are tagged #{tag} yet.", 5000)
+            self.statusBar().showMessage(_("No notes are tagged #{tag} yet.").format(tag=tag), 5000)
             return
         self.show_page(0)
         self.list.tag_filter.setCurrentIndex(index)
@@ -729,7 +739,7 @@ class MainWindow(QMainWindow):
         self._refresh_side()
         if self.vault:
             self.editor.body.set_titles(list(self.vault.titles().values()))
-            self.editor.tags.set_known_tags([t for t, _ in self.vault.all_tags()])
+            self.editor.tags.set_known_tags([t for t, _unused in self.vault.all_tags()])
 
     def _refresh_side(self) -> None:
         note = self.editor.note
@@ -743,8 +753,11 @@ class MainWindow(QMainWindow):
 
     def _update_counts(self) -> None:
         if self.vault:
+            notes, links = self.vault.count_notes(), len(self.vault.all_links())
             self.status_counts.setText(
-                f"{self.vault.count_notes()} notes  ·  {len(self.vault.all_links())} links"
+                n_("{n} note", "{n} notes", notes).format(n=notes)
+                + "  ·  "
+                + n_("{n} link", "{n} links", links).format(n=links)
             )
 
     def trash_current(self) -> None:
@@ -761,22 +774,27 @@ class MainWindow(QMainWindow):
         self.list.refresh()
         self._update_counts()
         self.info.show_message(
-            f"“{title}” moved to the Trash.", "info", "Undo", lambda: self.restore_note(note_id)
+            _("“{title}” moved to the Trash.").format(title=title),
+            "info",
+            _("Undo"),
+            lambda: self.restore_note(note_id),
         )
 
     def restore_note(self, note_id: str) -> None:
         self.vault.restore_note(note_id)
         self.list.refresh()
         self._update_counts()
-        self.statusBar().showMessage("Note restored.", 4000)
+        self.statusBar().showMessage(_("Note restored."), 4000)
 
     def purge_note(self, note_id: str) -> None:
         note = self.vault.get_note(note_id)
         if (
             QMessageBox.warning(
                 self,
-                "Delete permanently",
-                f"Permanently delete “{note.display_title}”? This can't be undone.",
+                _("Delete permanently"),
+                _("Permanently delete “{title}”? This can't be undone.").format(
+                    title=note.display_title
+                ),
                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
                 QMessageBox.StandardButton.No,
             )
@@ -793,8 +811,12 @@ class MainWindow(QMainWindow):
             n
             and QMessageBox.warning(
                 self,
-                "Empty Trash",
-                f"Permanently delete {n} note{'s' if n != 1 else ''}? This can't be undone.",
+                _("Empty Trash"),
+                n_(
+                    "Permanently delete {n} note? This can't be undone.",
+                    "Permanently delete {n} notes? This can't be undone.",
+                    n,
+                ).format(n=n),
                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
                 QMessageBox.StandardButton.No,
             )
@@ -810,7 +832,7 @@ class MainWindow(QMainWindow):
         note = self.editor.note
         if note is None:
             return
-        dialog = LinkPickerDialog(self.vault, {note.id}, self, "Link to note")
+        dialog = LinkPickerDialog(self.vault, {note.id}, self, _("Link to note"))
         if dialog.exec() and dialog.selected():
             dst, link_type = dialog.selected()
             target = self.vault.get_note(dst)
@@ -826,7 +848,7 @@ class MainWindow(QMainWindow):
         if note is None:
             return
         exclude = {note.id}
-        dialog = LinkPickerDialog(self.vault, exclude, self, "Add link")
+        dialog = LinkPickerDialog(self.vault, exclude, self, _("Add link"))
         if dialog.exec() and dialog.selected():
             dst, link_type = dialog.selected()
             self._add_manual_link(dst, link_type)
@@ -858,9 +880,9 @@ class MainWindow(QMainWindow):
         self.graph.invalidate()
 
     def _mindmap_link(self, node_id: str) -> None:
-        dialog = LinkPickerDialog(self.vault, set(), self, "Link idea to note", show_types=False)
+        dialog = LinkPickerDialog(self.vault, set(), self, _("Link idea to note"), show_types=False)
         if dialog.exec() and dialog.selected():
-            dst, _ = dialog.selected()
+            dst, _unused = dialog.selected()
             note = self.vault.get_note(dst)
             self.editor.mindmap.set_node_note(node_id, dst, note.display_title if note else None)
 
@@ -883,9 +905,9 @@ class MainWindow(QMainWindow):
             return
         note = self.editor.note
         empty = (
-            "Write a little more to get suggestions."
+            _("Write a little more to get suggestions.")
             if len((note.body or "").split()) < 5
-            else "No strong matches yet. Suggestions improve as your vault grows."
+            else _("No strong matches yet. Suggestions improve as your vault grows.")
         )
         self.side.set_suggestions(items, empty)
 
@@ -895,7 +917,7 @@ class MainWindow(QMainWindow):
             return
         self.vault.record_feedback(note_id, dst, 1)
         self._add_manual_link(dst, link_type, origin="suggestion")
-        self.statusBar().showMessage("Linked. The model will learn from this choice.", 4000)
+        self.statusBar().showMessage(_("Linked. The model will learn from this choice."), 4000)
         self.request_suggestions()
 
     def reject_suggestion(self, dst: str) -> None:
@@ -903,25 +925,25 @@ class MainWindow(QMainWindow):
         if note_id is None:
             return
         self.vault.record_feedback(note_id, dst, 0)
-        self.statusBar().showMessage("Dismissed. The model will learn from this choice.", 4000)
+        self.statusBar().showMessage(_("Dismissed. The model will learn from this choice."), 4000)
         self.request_suggestions()
 
     def _graph_menu(self, note_id: str, global_pos) -> None:
         from PySide6.QtWidgets import QMenu
 
         menu = QMenu(self)
-        menu.addAction(icons.icon("open"), "Open note", lambda: self.open_note(note_id))
+        menu.addAction(icons.icon("open"), _("Open note"), lambda: self.open_note(note_id))
         menu.addAction(
-            icons.icon("graph"), "Show local graph", lambda: self.graph.show_local(note_id)
+            icons.icon("graph"), _("Show local graph"), lambda: self.graph.show_local(note_id)
         )
         menu.addAction(
             icons.icon("review"),
-            "Quiz on this neighbourhood",
+            _("Quiz on this neighbourhood"),
             lambda: (self.open_note(note_id), self.quiz_current()),
         )
         menu.addAction(
             icons.icon("export"),
-            "Export with linked notes…",
+            _("Export with linked notes…"),
             lambda: (self.open_note(note_id), self.export_dialog("subgraph")),
         )
         menu.exec(global_pos.toPoint() if hasattr(global_pos, "toPoint") else global_pos)
@@ -947,7 +969,7 @@ class MainWindow(QMainWindow):
         self.list.refresh()
         self.list.refresh_tags()
         self.open_note(note.id)
-        self.statusBar().showMessage("Literature note created from Zotero.", 5000)
+        self.statusBar().showMessage(_("Literature note created from Zotero."), 5000)
 
     # --- scope, export and import -----------------------------------------------
 
@@ -966,7 +988,7 @@ class MainWindow(QMainWindow):
         if self.vault is None:
             return
         self.editor.flush()
-        resolve = (lambda *_: set(preset)) if preset else self.resolve_scope
+        resolve = (lambda *_unused: set(preset)) if preset else self.resolve_scope
         dialog = ExportDialog(
             self.vault,
             self.current_note_id(),
@@ -987,7 +1009,7 @@ class MainWindow(QMainWindow):
             return
         ids, kind, folder = dialog.note_ids(), dialog.fmt(), self.vault.folder
         deck = settings.get(settings.ANKI_DECK)
-        self.statusBar().showMessage("Exporting…")
+        self.statusBar().showMessage(_("Exporting…"))
 
         def work():
             reader = Vault.open(folder, readonly=True)  # own connection for this thread
@@ -997,29 +1019,37 @@ class MainWindow(QMainWindow):
                 reader.close()
 
         def done(result) -> None:
-            self.notify_file(
-                result.path,
-                f"Exported {result.notes} notes, {result.links} links"
-                + (f" and {result.cards} flashcards" if result.cards else ""),
-            )
+            items = [
+                n_("{n} note", "{n} notes", result.notes).format(n=result.notes),
+                n_("{n} link", "{n} links", result.links).format(n=result.links),
+            ]
+            if result.cards:
+                items.append(
+                    n_("{n} flashcard", "{n} flashcards", result.cards).format(n=result.cards)
+                )
+            self.notify_file(result.path, _("Exported {items}").format(items=", ".join(items)))
 
         run_task(
-            work, on_done=done, on_error=lambda msg: QMessageBox.warning(self, "Export failed", msg)
+            work,
+            on_done=done,
+            on_error=lambda msg: QMessageBox.warning(self, _("Export failed"), msg),
         )
 
     def import_dialog(self) -> None:
-        path, _ = QFileDialog.getOpenFileName(
+        path, _unused = QFileDialog.getOpenFileName(
             self,
-            "Import",
+            _("Import"),
             str(documents_dir()),
-            "Supported files (*.zip *.json *.md);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md)",
+            _(
+                "Supported files (*.zip *.json *.md);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md)"
+            ),
         )
         if path:
             self._import(path)
 
     def import_folder_dialog(self) -> None:
         folder = QFileDialog.getExistingDirectory(
-            self, "Import a folder of Markdown files", str(documents_dir())
+            self, _("Import a folder of Markdown files"), str(documents_dir())
         )
         if folder:
             self._import(folder)
@@ -1033,7 +1063,7 @@ class MainWindow(QMainWindow):
             result = import_path(self.vault, path)
         except (UnsafeInputError, ValueError, OSError) as exc:
             QApplication.restoreOverrideCursor()
-            QMessageBox.warning(self, "Import failed", str(exc))
+            QMessageBox.warning(self, _("Import failed"), str(exc))
             return
         QApplication.restoreOverrideCursor()
         self.list.refresh()
@@ -1041,16 +1071,25 @@ class MainWindow(QMainWindow):
         self._update_counts()
         self.suggestions.invalidate()
         self.graph.invalidate()
-        text = (
-            f"Imported {result.notes} notes, {result.links} links, {result.cards} flashcards and "
-            f"{result.images} images."
-            + (f" {result.skipped} unchanged notes were skipped." if result.skipped else "")
-        )
+        items = [
+            n_("{n} note", "{n} notes", result.notes).format(n=result.notes),
+            n_("{n} link", "{n} links", result.links).format(n=result.links),
+            n_("{n} flashcard", "{n} flashcards", result.cards).format(n=result.cards),
+            n_("{n} image", "{n} images", result.images).format(n=result.images),
+        ]
+        text = _("Imported {items}.").format(items=", ".join(items))
+        if result.skipped:
+            text += " " + n_(
+                "{n} unchanged note was skipped.",
+                "{n} unchanged notes were skipped.",
+                result.skipped,
+            ).format(n=result.skipped)
         if result.warnings:
+            skipped = "\n• ".join(result.warnings[:15])
             QMessageBox.information(
                 self,
-                "Import finished",
-                text + "\n\nSome items were skipped:\n• " + "\n• ".join(result.warnings[:15]),
+                _("Import finished"),
+                f"{text}\n\n" + _("Some items were skipped:") + f"\n• {skipped}",
             )
         else:
             self.info.show_message(text, "success")
@@ -1060,7 +1099,7 @@ class MainWindow(QMainWindow):
         self.info.show_message(
             f"{text}: {Path(path).name}",
             "success",
-            "Show in folder",
+            _("Show in folder"),
             lambda: winintegration.reveal_in_explorer(path),
         )
 
@@ -1130,7 +1169,9 @@ class MainWindow(QMainWindow):
     def check_for_updates(self) -> None:
         """Quietly ask the website for the latest version; failures never show anything."""
         if settings.get(settings.UPDATE_CHECK):
-            run_task(available_update, on_done=self._show_update_notice, on_error=lambda *_: None)
+            run_task(
+                available_update, on_done=self._show_update_notice, on_error=lambda *_unused: None
+            )
 
     def _show_update_notice(self, version: str | None) -> None:
         if (
@@ -1151,9 +1192,9 @@ class MainWindow(QMainWindow):
         Always off when ZettelApp starts; the state is never saved."""
         self.mcp_switch = McpSwitch()
         self.mcp_toggle = ToggleSwitch()
-        self.mcp_toggle.setAccessibleName("Let AI agents use ZettelApp through MCP")
+        self.mcp_toggle.setAccessibleName(_("Let AI agents use ZettelApp through MCP"))
         self.mcp_toggle.toggled.connect(self._set_mcp)
-        self.mcp_label = label("MCP off", "caption")
+        self.mcp_label = label(_("MCP off"), "caption")
         box = QWidget()
         row = QHBoxLayout(box)
         row.setContentsMargins(0, 0, 10, 0)
@@ -1161,10 +1202,12 @@ class MainWindow(QMainWindow):
         row.addWidget(self.mcp_toggle)
         row.addWidget(self.mcp_label)
         box.setToolTip(
-            "MCP lets AI agents such as Claude Desktop or Claude Code search and read your notes.\n"
-            "It works only while ZettelApp is open and this switch is on. The switch is off\n"
-            "whenever ZettelApp starts, and the agent's connection stops when you switch it\n"
-            "off or close ZettelApp. Set it up in Tools ▸ Options ▸ MCP server."
+            _(
+                "MCP lets AI agents such as Claude Desktop or Claude Code search and read your notes.\n"
+                "It works only while ZettelApp is open and this switch is on. The switch is off\n"
+                "whenever ZettelApp starts, and the agent's connection stops when you switch it\n"
+                "off or close ZettelApp. Set it up in Tools ▸ Options ▸ MCP server."
+            )
         )
         return box
 
@@ -1179,19 +1222,25 @@ class MainWindow(QMainWindow):
             self.mcp_toggle.blockSignals(True)
             self.mcp_toggle.setChecked(self.mcp_switch.is_on)
             self.mcp_toggle.blockSignals(False)
-            self.statusBar().showMessage("Could not switch MCP on.", 6000)
+            self.statusBar().showMessage(_("Could not switch MCP on."), 6000)
             return
-        self.mcp_label.setText("MCP on" if on else "MCP off")
+        self.mcp_label.setText(_("MCP on") if on else _("MCP off"))
         if on:
-            what = "read and add to" if settings.get(settings.MCP_ALLOW_WRITES) else "read"
             self.statusBar().showMessage(
-                f"MCP is on: AI agents connected to ZettelApp can {what} your notes "
-                "until you switch it off or close ZettelApp.",
+                _(
+                    "MCP is on: AI agents connected to ZettelApp can read and add to your notes "
+                    "until you switch it off or close ZettelApp."
+                )
+                if settings.get(settings.MCP_ALLOW_WRITES)
+                else _(
+                    "MCP is on: AI agents connected to ZettelApp can read your notes until you "
+                    "switch it off or close ZettelApp."
+                ),
                 8000,
             )
         else:
             self.statusBar().showMessage(
-                "MCP is off: AI agents can no longer reach your notes.", 5000
+                _("MCP is off: AI agents can no longer reach your notes."), 5000
             )
 
     def closeEvent(self, event) -> None:  # noqa: N802

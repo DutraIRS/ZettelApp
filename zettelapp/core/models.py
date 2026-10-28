@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
-from zettelapp.i18n import N_
+from zettelapp.i18n import N_, _
 
 
 def utc_now() -> str:
@@ -195,13 +195,13 @@ def sanitize_mindmap(data: Any, *, strict: bool = False) -> dict[str, Any] | Non
     def clean(node: Any, depth: int) -> dict[str, Any] | None:
         nonlocal count
         if not isinstance(node, dict):
-            invalid("A mind map node must be an object.")
+            invalid(_("A mind map node must be an object."))
             return None
         if depth > MAX_MINDMAP_DEPTH:
-            invalid(f"A mind map cannot be deeper than {MAX_MINDMAP_DEPTH} levels.")
+            invalid(_("A mind map cannot be deeper than {n} levels.").format(n=MAX_MINDMAP_DEPTH))
             return None
         if count >= MAX_MINDMAP_NODES:
-            invalid(f"A mind map cannot contain more than {MAX_MINDMAP_NODES} nodes.")
+            invalid(_("A mind map cannot contain more than {n} nodes.").format(n=MAX_MINDMAP_NODES))
             return None
         count += 1
         out = new_mindmap_node(str(node.get("text", ""))[:500])
@@ -211,7 +211,7 @@ def sanitize_mindmap(data: Any, *, strict: bool = False) -> dict[str, Any] | Non
             out["note"] = node["note"]
         children = node.get("children") or []
         if not isinstance(children, list):
-            invalid("A mind map node's children must be a list.")
+            invalid(_("A mind map node's children must be a list."))
             return None
         for child in children:
             c = clean(child, depth + 1)
