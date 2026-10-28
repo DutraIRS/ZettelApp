@@ -137,3 +137,61 @@ def test_backup(vault, tmp_path, sample):
     assert 1 <= len(copies) <= 2
     restored = Vault.open(tmp_path / "check", create=True)
     restored.close()
+
+
+def test_hashtags_in_the_text_become_tags(vault):
+    note = vault.create_note("Tags", "About #learning and #Memory/long-term.", tags=["manual"])
+    assert note.tags == ["learning", "manual", "memory/long-term"]
+    assert vault.manual_tags(note.id) == ["manual"]
+    assert vault.search("tag:learning") == [note.id]
+    # Deleting the #tag from the text removes it, even when a caller passes every tag back.
+    loaded = vault.get_note(note.id)
+    loaded.body = "Only #learning now."
+    vault.save_note(loaded)
+    assert vault.get_note(note.id).tags == ["learning", "manual"]
+    assert vault.manual_tags(note.id) == ["manual"]
+
+
+def test_hashtags_ignore_code_links_and_headings():
+    from zettelapp.core.textutil import extract_hashtags
+
+    text = (
+        "# Heading\n#real tag, `#code`, [[Note#Section]], [[#Heading]], [x](#anchor), "
+        "https://example.com/#frag, &#123; and\n```\n#fenced\n```\n#trailing- #a/b/ #1st"
+    )
+    assert extract_hashtags(text) == ["a/b", "real", "trailing"]
+
+
+def test_upgrade_from_schema_1_derives_tags_from_text(tmp_path):
+    import sqlite3
+
+    folder = tmp_path / "old"
+    v = Vault.open(folder)
+    note = v.create_note("Old", "An old note about #history.", tags=["kept"])
+    v.close()
+    conn = sqlite3.connect(folder / Vault.DB_NAME)  # rewind to schema 1: no tags.source
+    conn.execute("DELETE FROM tags WHERE source = 'inline'")
+    conn.execute("ALTER TABLE tags DROP COLUMN source")
+    conn.execute("UPDATE meta SET value = '1' WHERE key = 'schema_version'")
+    conn.commit()
+    conn.close()
+    v = Vault.open(folder)
+    try:
+        assert v.get_meta("schema_version") == "2"
+        assert v.get_note(note.id).tags == ["history", "kept"]
+        assert v.manual_tags(note.id) == ["kept"]
+        assert v.search("tag:history") == [note.id]
+    finally:
+        v.close()
+
+
+def test_editor_says_which_tags_were_added_by_hand(vault):
+    note = vault.create_note("Both", "Text with #idea", tags=["idea"])
+    assert vault.manual_tags(note.id) == []  # given and written in the text: derived
+    vault.save_note(note, manual_tags=["idea"])  # pinned in the tag box
+    assert vault.manual_tags(note.id) == ["idea"]
+    note.body = "No tag in the text any more"
+    vault.save_note(note, manual_tags=["idea"])
+    assert vault.get_note(note.id).tags == ["idea"]  # a pinned tag outlives the text
+    vault.save_note(note, manual_tags=[])
+    assert vault.get_note(note.id).tags == []

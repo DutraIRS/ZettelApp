@@ -151,13 +151,18 @@ class FlowLayout(QLayout):
 
 
 class TagEditor(QWidget):
-    """Tag chips plus an inline field with completion. Emits the new tag list."""
+    """Tag chips plus an inline field with completion. Emits the new tag list.
+
+    Tags written as #tag in the note text are shown as outlined chips that can't be
+    removed here: they come and go with the text.
+    """
 
     tagsChanged = Signal(list)
 
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
         self._tags: list[str] = []
+        self._inline: list[str] = []
         self.flow = FlowLayout(self)
         self.input = QLineEdit()
         self.input.setPlaceholderText("Add tag")
@@ -177,11 +182,19 @@ class TagEditor(QWidget):
     def set_known_tags(self, tags: list[str]) -> None:
         self.completer.model().setStringList(tags)  # QCompleter(list) owns a QStringListModel
 
-    def set_tags(self, tags: list[str]) -> None:
+    def set_tags(self, tags: list[str], inline: list[str] | None = None) -> None:
         self._tags = list(tags)
+        self._inline = [t for t in inline or [] if t not in self._tags]
         self._rebuild()
 
+    def set_inline_tags(self, inline: list[str]) -> None:
+        inline = [t for t in inline if t not in self._tags]
+        if inline != self._inline:
+            self._inline = inline
+            self._rebuild()
+
     def tags(self) -> list[str]:
+        """The tags added here (not the ones written in the text)."""
         return list(self._tags)
 
     def _rebuild(self) -> None:
@@ -198,6 +211,15 @@ class TagEditor(QWidget):
             chip.setCursor(Qt.CursorShape.PointingHandCursor)
             chip.clicked.connect(lambda _=False, t=tag: self._remove(t))
             self.flow.insertWidget(i, chip)
+        for i, tag in enumerate(self._inline, start=len(self._tags)):
+            chip = QToolButton()
+            chip.setObjectName("Chip")
+            chip.setProperty("inline", True)
+            chip.setText(f"#{tag}")
+            chip.setToolTip(f"Written in the note text. Delete “#{tag}” there to remove this tag.")
+            chip.setAccessibleName(f"Tag {tag}, from the note text")
+            chip.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+            self.flow.insertWidget(i, chip)
         self.updateGeometry()
 
     def _commit(self) -> None:
@@ -205,6 +227,7 @@ class TagEditor(QWidget):
         self.input.clear()
         if tag and tag not in self._tags:
             self._tags.append(tag)
+            self._inline = [t for t in self._inline if t != tag]
             self._rebuild()
             self.tagsChanged.emit(self.tags())
 

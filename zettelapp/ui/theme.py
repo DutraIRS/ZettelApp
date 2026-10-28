@@ -281,6 +281,8 @@ QToolButton#NavButton {{ border-radius: 6px; padding: 6px 2px; font-size: 8pt; c
 QToolButton#NavButton:checked {{ background: {t.surface}; color: {t.text}; }}
 QToolButton#Chip {{ background: {t.accent_subtle}; border-radius: 11px; padding: 2px 10px; }}
 QToolButton#Chip:hover {{ background: {t.hover}; }}
+QToolButton#Chip[inline="true"], QToolButton#Chip[inline="true"]:hover {{ background: transparent;
+    border: 1px dashed {t.border_strong}; color: {t.text_secondary}; padding: 1px 9px; }}
 QListView, QListWidget, QTreeView, QTreeWidget, QTableView, QTableWidget {{ background: transparent; border: none;
     outline: 0; alternate-background-color: {t.surface_alt}; }}
 QListWidget::item, QTreeWidget::item {{ border-radius: 4px; padding: 5px 6px; }}

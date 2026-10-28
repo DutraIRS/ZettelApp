@@ -43,7 +43,6 @@ MAX_MARKDOWN_BYTES = 5 * 1024 * 1024
 
 _FRONT_MATTER_RE = re.compile(r"\A---[ \t]*\r?\n(.*?)\r?\n---[ \t]*(?:\r?\n|\Z)", re.S)
 _HEADING_RE = re.compile(r"^#\s+(.+)$", re.M)
-_HASHTAG_RE = re.compile(r"(?<![\w#&/])#([^\W\d_][\w/-]{0,60})")
 _MD_IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(<?([^)>\s]+)>?(?:\s+\"[^\"]*\")?\)")
 _EMBED_RE = re.compile(r"!\[\[([^\]|]+?\.(?:png|jpe?g|gif|webp|bmp))(?:\|[^\]]*)?\]\]", re.I)
 _ASSET_REF_RE = re.compile(r"asset:([0-9a-f]{20}\.(?:png|jpg|gif|webp|bmp))")
@@ -418,8 +417,7 @@ def _import_markdown_files(
         if isinstance(tags, str):
             tags = re.split(r"[,\s]+", tags)
         tags = [normalize_tag(str(t)) for t in tags if isinstance(t, (str, int))]
-        tags += [normalize_tag(t) for t in _HASHTAG_RE.findall(body)]
-        note.body = body.strip() + "\n"
+        note.body = body.strip() + "\n"  # #tags in the text become tags when the note is saved
         note.tags = [t for t in tags if t][:200]
         url = meta.get("url") or meta.get("source")
         note.url = url if isinstance(url, str) else ""

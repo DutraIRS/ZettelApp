@@ -37,6 +37,7 @@ from zettelapp.core.security import (
     sniff_image_type,
 )
 from zettelapp.core.textutil import (
+    extract_hashtags,
     extract_inline_cards,
     find_wikilinks,
     fold,
@@ -44,7 +45,7 @@ from zettelapp.core.textutil import (
     slugify_type,
 )
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2  # 2: tags.source tells tags added by hand from #tags written in the text
 MAX_TITLE = 500
 MAX_BODY = 5_000_000
 
@@ -64,6 +65,7 @@ CREATE TABLE IF NOT EXISTS notes (
 CREATE TABLE IF NOT EXISTS tags (
     note_id TEXT NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
     tag TEXT NOT NULL,
+    source TEXT NOT NULL DEFAULT 'manual',
     PRIMARY KEY (note_id, tag)
 );
 CREATE INDEX IF NOT EXISTS idx_tags_tag ON tags(tag);
@@ -198,12 +200,14 @@ class Vault:
         return row is not None
 
     def _migrate(self) -> None:
+        # executescript() commits any open transaction first, so the idempotent
+        # CREATE ... IF NOT EXISTS scripts run on their own; upgrades run in one transaction.
+        self.conn.executescript(_SCHEMA)
+        try:
+            self.conn.executescript(_FTS_SCHEMA)
+        except sqlite3.OperationalError:
+            pass  # SQLite built without FTS5: search falls back to LIKE.
         with self.transaction():
-            self.conn.executescript(_SCHEMA)
-            try:
-                self.conn.executescript(_FTS_SCHEMA)
-            except sqlite3.OperationalError:
-                pass  # SQLite built without FTS5: search falls back to LIKE.
             version = self.get_meta("schema_version")
             if version is None:
                 self._set_meta("schema_version", str(SCHEMA_VERSION))
@@ -213,6 +217,27 @@ class Vault:
                     self._insert_link_type(lt, pos)
             elif int(version) > SCHEMA_VERSION:
                 raise VaultError("This vault was created by a newer version of ZettelApp.")
+            elif int(version) < 2:
+                self._upgrade_to_v2()
+                self._set_meta("schema_version", str(SCHEMA_VERSION))
+
+    def _upgrade_to_v2(self) -> None:
+        """Add tags.source and turn #tags already written in notes into tags."""
+        columns = {r["name"] for r in self.conn.execute("PRAGMA table_info(tags)")}
+        if "source" not in columns:
+            self.conn.execute("ALTER TABLE tags ADD COLUMN source TEXT NOT NULL DEFAULT 'manual'")
+        has_fts = self._table_exists("notes_fts")
+        for row in self.conn.execute("SELECT id, body FROM notes WHERE body LIKE '%#%'").fetchall():
+            self.conn.executemany(
+                "INSERT OR IGNORE INTO tags (note_id, tag, source) VALUES (?, ?, 'inline')",
+                [(row["id"], t) for t in extract_hashtags(row["body"])],
+            )
+            if has_fts:
+                self.conn.execute(
+                    "UPDATE notes_fts SET tags = (SELECT group_concat(tag, ' ') FROM tags "
+                    "WHERE note_id = ?) WHERE note_id = ?",
+                    (row["id"], row["id"]),
+                )
 
     def get_meta(self, key: str) -> str | None:
         row = self.conn.execute("SELECT value FROM meta WHERE key = ?", (key,)).fetchone()
@@ -315,19 +340,43 @@ class Vault:
         self._changed("notes")
         return note
 
-    def save_note(self, note: Note, touch: bool = True) -> Note:
+    def save_note(
+        self, note: Note, touch: bool = True, manual_tags: Iterable[str] | None = None
+    ) -> Note:
+        """Save *note*. #tags in its text become tags; *manual_tags*, when given, are the
+        tags added by hand (the editor knows them), otherwise they are inferred."""
         with self.transaction():
-            self._write_note(note, touch)
+            self._write_note(note, touch, manual_tags)
         self._changed("notes")
         return note
 
-    def _write_note(self, note: Note, touch: bool) -> None:
+    def _write_note(
+        self, note: Note, touch: bool, manual_tags: Iterable[str] | None = None
+    ) -> None:
         note.title = (note.title or "")[:MAX_TITLE]
         note.body = (note.body or "")[:MAX_BODY]
         note.url = (normalize_source_url(note.url) or "") if note.url else ""
         note.image = note.image if is_valid_asset_name(note.image) else ""
         note.mindmap = sanitize_mindmap(note.mindmap, strict=True) if note.mindmap else None
-        note.tags = sorted({t for t in (normalize_tag(x) for x in note.tags) if t})
+        inline = set(extract_hashtags(note.body))
+        if manual_tags is not None:
+            manual = {t for t in (normalize_tag(x) for x in manual_tags) if t}
+        else:
+            # note.tags holds every tag when read back. A tag stays manual if it was added
+            # by hand; one that came from (or is now in) the text stays derived from it, so
+            # deleting #tag from the text removes the tag, like inline links and cards.
+            source = {
+                r["tag"]: r["source"]
+                for r in self.conn.execute(
+                    "SELECT tag, source FROM tags WHERE note_id = ?", (note.id,)
+                )
+            }
+            manual = {
+                t
+                for t in (normalize_tag(x) for x in note.tags)
+                if t and (source.get(t) == "manual" or (t not in source and t not in inline))
+            }
+        note.tags = sorted(manual | inline)
         if touch:
             note.modified = utc_now()
         row = self.conn.execute("SELECT title FROM notes WHERE id = ?", (note.id,)).fetchone()
@@ -346,7 +395,8 @@ class Vault:
         )
         self.conn.execute("DELETE FROM tags WHERE note_id = ?", (note.id,))
         self.conn.executemany(
-            "INSERT INTO tags (note_id, tag) VALUES (?, ?)", [(note.id, t) for t in note.tags]
+            "INSERT INTO tags (note_id, tag, source) VALUES (?, ?, ?)",
+            [(note.id, t, "manual" if t in manual else "inline") for t in note.tags],
         )
         if self.has_fts:
             self.conn.execute("DELETE FROM notes_fts WHERE note_id = ?", (note.id,))
@@ -391,6 +441,16 @@ class Vault:
             modified=row["modified"],
             deleted=bool(row["deleted"]),
         )
+
+    def manual_tags(self, note_id: str) -> list[str]:
+        """The note's tags that were added by hand rather than written as #tags in its text."""
+        return [
+            r["tag"]
+            for r in self.conn.execute(
+                "SELECT tag FROM tags WHERE note_id = ? AND source = 'manual' ORDER BY tag",
+                (note_id,),
+            )
+        ]
 
     def get_note(self, note_id: str) -> Note | None:
         row = self.conn.execute("SELECT * FROM notes WHERE id = ?", (note_id,)).fetchone()

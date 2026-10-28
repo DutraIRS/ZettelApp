@@ -185,9 +185,21 @@ def cloze_numbers(text: str) -> list[int]:
     return sorted({int(m.group(1)) for m in CLOZE_RE.finditer(text)})
 
 
-_HASHTAG_RE = re.compile(r"(?<![\w#&/])#([^\W\d_][\w/-]{0,60})", re.UNICODE)
+HASHTAG_RE = re.compile(r"(?<![\w#&/])#([^\W\d_][\w/-]{0,60})", re.UNICODE)
+_CODE_RE = re.compile(r"```.*?```|~~~.*?~~~|`[^`\n]*`", re.S)
+_WIKI_SPAN_RE = re.compile(r"\[\[[^\]\n]*\]\]")
+_LINK_TARGET_RE = re.compile(r"\]\([^)\n]*\)")
 
 
 def normalize_tag(tag: str) -> str:
     tag = re.sub(r"\s+", "-", (tag or "").strip().lstrip("#"))
     return re.sub(r"[^\w/-]", "", tag)[:60].lower()
+
+
+def extract_hashtags(text: str) -> list[str]:
+    """Tags written as #tag in the text, ignoring code, link targets and [[#headings]]."""
+    text = _CODE_RE.sub(" ", text or "")
+    text = _WIKI_SPAN_RE.sub(" ", text)
+    text = _LINK_TARGET_RE.sub("]", text)
+    tags = {normalize_tag(m).strip("/-") for m in HASHTAG_RE.findall(text)}
+    return sorted(t for t in tags if t)
