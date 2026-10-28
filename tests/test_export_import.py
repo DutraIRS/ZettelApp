@@ -70,7 +70,13 @@ def _styled_type(vault):
 
 def test_link_styles_survive_an_archive_roundtrip(vault, sample, tmp_path):
     _styled_type(vault)
-    contradicts = vault.link_type_map()["contradicts"]
+    types = vault.link_type_map()
+    contradicts = types["contradicts"]
+    supports = types["supports"]
+    supports.color = "#112233"
+    supports.line_style = "long_dash"
+    supports.arrow = "bar"
+    vault.save_link_type(supports)
     vault.add_link(sample["a"].id, sample["b"].id, "inspired_by")
     dest = tmp_path / "archive.zip"
     ex.export(vault, "archive", {n.id for n in vault.all_notes()}, dest)
@@ -85,6 +91,11 @@ def test_link_styles_survive_an_archive_roundtrip(vault, sample, tmp_path):
     import_path(other, dest)
     copy = other.link_type_map()
     assert (copy["inspired_by"].line_style, copy["inspired_by"].arrow) == ("long_dash", "bar")
+    assert (copy["supports"].color, copy["supports"].line_style, copy["supports"].arrow) == (
+        "#112233",
+        "long_dash",
+        "bar",
+    )
     assert copy["contradicts"].line_style == contradicts.line_style
     assert {l.type for l in other.links_from(sample["a"].id)} >= {"inspired_by"}
     other.close()

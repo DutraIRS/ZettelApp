@@ -312,6 +312,38 @@ def test_a_new_vault_opens_on_the_start_here_hub(window):
     assert "Start here" in window.editor.body.titles_model.stringList()  # [[ completes titles
 
 
+@pytest.mark.parametrize("dialog", ["new_vault_dialog", "open_vault_dialog"])
+def test_dialog_created_vaults_start_with_the_tour(window, tmp_path, monkeypatch, dialog):
+    from PySide6.QtWidgets import QFileDialog, QMessageBox
+
+    folder = tmp_path / dialog
+    folder.mkdir()
+    monkeypatch.setattr(QFileDialog, "getExistingDirectory", lambda *_args: str(folder))
+    monkeypatch.setattr(QMessageBox, "question", lambda *_args: QMessageBox.StandardButton.Yes)
+    starts = []
+    monkeypatch.setattr(window.quest, "start_up", lambda first_run: starts.append(first_run))
+
+    getattr(window, dialog)()
+
+    assert window.vault.count_notes() == 11
+    assert window.editor.note.title == "Start here"
+    assert starts == [True]
+
+
+def test_failed_default_vault_open_does_not_start_the_quest(window, tmp_path, monkeypatch):
+    from zettelapp.ui import main_window
+
+    monkeypatch.setattr(main_window, "default_vault_dir", lambda: tmp_path / "unopenable")
+    monkeypatch.setattr(main_window.settings, "get", lambda *_args: "")
+    monkeypatch.setattr(window, "open_vault", lambda _folder: False)
+    starts = []
+    monkeypatch.setattr(window.quest, "start_up", lambda first_run: starts.append(first_run))
+
+    window.open_default_vault()
+
+    assert starts == []
+
+
 def test_mcp_switch_starts_off_and_closing_the_app_turns_it_off(window, monkeypatch, tmp_path):
     from zettelapp import mcp_switch
 

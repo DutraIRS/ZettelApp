@@ -229,24 +229,26 @@ def _import_data(
 
     existing_types = vault.link_type_map()
     for raw in data.get("link_types") or []:
-        if (
-            isinstance(raw, dict)
-            and isinstance(raw.get("id"), str)
-            and raw["id"] not in existing_types
-        ):
-            # Exports before link styles have none: such a type gets the least used line.
-            line_style = raw.get("line_style") or least_used_line_style(vault.link_types())
-            vault.save_link_type(
-                LinkType(
-                    raw["id"],
-                    _str(raw.get("label"), 60),
-                    _str(raw.get("inverse_label"), 60),
-                    _str(raw.get("color"), 7),
-                    bool(raw.get("directed", True)),
-                    line_style=line_style,
-                    arrow=raw.get("arrow") or "triangle",
-                )
+        if not isinstance(raw, dict) or not isinstance(raw.get("id"), str):
+            continue
+        existing = existing_types.get(raw["id"])
+        # Old exports have no style fields. Preserve an existing type's style; give a
+        # genuinely new type the least-used line so adjacent types remain distinct.
+        line_style = raw.get("line_style") or (
+            existing.line_style if existing else least_used_line_style(vault.link_types())
+        )
+        imported = vault.save_link_type(
+            LinkType(
+                raw["id"],
+                _str(raw.get("label"), 60),
+                _str(raw.get("inverse_label"), 60),
+                _str(raw.get("color"), 7),
+                bool(raw.get("directed", True)),
+                line_style=line_style,
+                arrow=raw.get("arrow") or (existing.arrow if existing else "triangle"),
             )
+        )
+        existing_types[imported.id] = imported
 
     raw_notes = [n for n in (data.get("notes") or []) if isinstance(n, dict)]
     id_map: dict[str, str] = {}

@@ -494,25 +494,30 @@ class MainWindow(QMainWindow):
             != QMessageBox.StandardButton.Yes
         ):
             return
-        self.open_vault(folder)
+        self._open_vault_with_onboarding(folder)
 
     def new_vault_dialog(self) -> None:
         folder = QFileDialog.getExistingDirectory(
             self, "Choose or create an empty folder for the new vault", str(documents_dir())
         )
         if folder:
-            self.open_vault(folder)
+            self._open_vault_with_onboarding(folder)
 
     def open_default_vault(self) -> None:
         last = settings.get(settings.LAST_VAULT, "")
         if last and Vault.is_vault(last) and self.open_vault(last):
             self.quest.start_up(first_run=False)
             return
-        folder = default_vault_dir()
+        self._open_vault_with_onboarding(default_vault_dir())
+
+    def _open_vault_with_onboarding(self, folder: str | Path) -> bool:
         fresh = not Vault.is_vault(folder)
-        if self.open_vault(folder) and fresh:
+        if not self.open_vault(folder):
+            return False
+        if fresh:
             self._create_welcome_notes()
-        self.quest.start_up(first_run=fresh)  # the adventure is offered on the very first run
+        self.quest.start_up(first_run=fresh)
+        return True
 
     def _create_welcome_notes(self) -> None:
         """Fill a new vault with the starter notes (in the interface language) and open the hub."""

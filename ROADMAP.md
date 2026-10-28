@@ -11,22 +11,22 @@ Each would need careful work across the whole app rather than a small addition.
 
 ## 1. App localisation (many languages)
 
-**Status: translation infrastructure is ready; translated catalogues need native-speaker review.**
+**Status: translation infrastructure is ready; the app remains in English until translated catalogues
+are written and reviewed.**
 
 Already done:
 
 - The Windows installer lets you pick a language, suggests your Windows display language, and is fully
   translated (using Inno Setup's bundled translations).
-- The installer stores your choice in `HKEY_CURRENT_USER\Software\ZettelApp\ZettelApp\ui\language`, so the
-  app follows it with no reinstall.
+- The installer stores its language choice in
+  `HKEY_CURRENT_USER\Software\ZettelApp\ZettelApp\ui\language`, ready for the app catalogues.
 - User-visible interface strings are marked for translation and extracted into a source catalogue.
-- The app loads the selected catalogue at startup and has a language option in
-  *Tools ▸ Options ▸ General*.
+- The app has safe catalogue loading, plural rules, right-to-left layout support and English fallback.
 
 Plan:
 
 1. Translate. Start with **Portuguese (Brazil), Spanish, French and German**, then accept community
-   translations.
+   translations and expose complete catalogues in *Tools ▸ Options ▸ General*.
 2. Review every catalogue with a native speaker and test layouts with longer strings.
 3. Translate the documentation.
 
