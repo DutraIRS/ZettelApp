@@ -4,6 +4,26 @@ All notable changes to ZettelApp are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [1.1.0] - 2026-10-28
+
+### Added
+
+- **The Lost Princess of the Archive**, an optional first-run adventure that teaches notes, links, tags,
+  suggestions, the graph, mind maps, attachments, review and Insights through real actions.
+- Translation infrastructure, a source message catalogue and language selection for future community
+  translations.
+- Line styles and arrow-tip choices for built-in and custom link types, including a live preview.
+
+### Changed
+
+- Link styles now travel through archive and JSON export, import and MCP responses.
+- New vaults start with a small linked tour of ZettelApp.
+- The website, documentation navigation and footer now adapt to narrow phone screens.
+
+### Fixed
+
+- Close the database connection when opening or upgrading a vault fails.
+
 ## [1.0.0] - 2026-10-28
 
 First release.

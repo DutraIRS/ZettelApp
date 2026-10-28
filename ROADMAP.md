@@ -11,29 +11,27 @@ Each would need careful work across the whole app rather than a small addition.
 
 ## 1. App localisation (many languages)
 
-**Status: the installer is ready; the app is English-only.** *(Evaluated for 1.0 and deferred.)*
+**Status: translation infrastructure is ready; translated catalogues need native-speaker review.**
 
 Already done:
 
 - The Windows installer lets you pick a language, suggests your Windows display language, and is fully
   translated (using Inno Setup's bundled translations).
 - The installer stores your choice in `HKEY_CURRENT_USER\Software\ZettelApp\ZettelApp\ui\language`, so the
-  app can follow it as soon as translations exist, with no reinstall.
+  app follows it with no reinstall.
+- User-visible interface strings are marked for translation and extracted into a source catalogue.
+- The app loads the selected catalogue at startup and has a language option in
+  *Tools ▸ Options ▸ General*.
 
 Plan:
 
-1. Wrap every user-visible string in the UI with Qt's translation system (`self.tr(...)` /
-   `QCoreApplication.translate(...)`). This means several hundred strings across all windows and dialogs.
-2. Extract them with `pyside6-lupdate` into `.ts` files.
-3. Translate. Start with **Portuguese (Brazil), Spanish, French and German**, then accept community
-   translations through Qt Linguist or Weblate.
-4. Compile with `pyside6-lrelease`, and load the matching `QTranslator` (plus Qt's own translations) at
-   startup, based on the stored language or the Windows language.
-5. Localise dates and numbers with `QLocale`.
-6. Add a language option in *Tools ▸ Options ▸ General* and translate the documentation.
+1. Translate. Start with **Portuguese (Brazil), Spanish, French and German**, then accept community
+   translations.
+2. Review every catalogue with a native speaker and test layouts with longer strings.
+3. Translate the documentation.
 
-Why deferred: the change touches every screen. Each language also needs a native-speaker review and
-layout checks, because longer strings can break the design.
+The remaining work needs native-speaker review and layout checks because longer strings can break the
+design.
 
 ## 2. Linux (.deb, AppImage, Flatpak)
 
