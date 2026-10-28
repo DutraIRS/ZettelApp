@@ -76,7 +76,7 @@ class ReviewPage(QWidget):
         line = QHBoxLayout()
         self.mode_combo = QComboBox()
         self.mode_combo.setAccessibleName(_("Quiz type"))
-        for key, text in MODES.items():
+        for key, text in ((k, _(v)) for k, v in MODES.items()):
             self.mode_combo.addItem(text, key)
         self.count = QSpinBox()
         self.count.setRange(3, 100)

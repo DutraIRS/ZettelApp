@@ -18,6 +18,7 @@ from dataclasses import dataclass, field
 
 from zettelapp.core.security import ZOTERO_KEY_RE, is_zotero_url
 from zettelapp.core.textutil import normalize_tag
+from zettelapp.i18n import _
 
 DEFAULT_PORT = 23119
 MAX_RESPONSE = 10 * 1024 * 1024
@@ -191,24 +192,28 @@ class ZoteroClient:
         except urllib.error.HTTPError as exc:
             if exc.code == 403:
                 raise ZoteroError(
-                    "Zotero refused the request. In Zotero, open Settings ▸ Advanced and turn on "
-                    "“Allow other applications on this computer to communicate with Zotero”."
+                    _(
+                        "Zotero refused the request. In Zotero, open Settings ▸ Advanced and turn on "
+                        "“Allow other applications on this computer to communicate with Zotero”."
+                    )
                 ) from exc
             if exc.code == 404:
                 raise ZoteroError(
-                    "This Zotero version has no local API. Update to Zotero 7 or later."
+                    _("This Zotero version has no local API. Update to Zotero 7 or later.")
                 ) from exc
-            raise ZoteroError(f"Zotero answered with an error ({exc.code}).") from exc
+            raise ZoteroError(
+                _("Zotero answered with an error ({code}).").format(code=exc.code)
+            ) from exc
         except (urllib.error.URLError, OSError) as exc:
             raise ZoteroError(
-                "Could not reach Zotero. Make sure Zotero 7 or later is running."
+                _("Could not reach Zotero. Make sure Zotero 7 or later is running.")
             ) from exc
         if len(body) > MAX_RESPONSE:
-            raise ZoteroError("Zotero sent too much data.")
+            raise ZoteroError(_("Zotero sent too much data."))
         try:
             return json.loads(body.decode("utf-8"))
         except (ValueError, UnicodeDecodeError) as exc:
-            raise ZoteroError("Zotero sent an unexpected response.") from exc
+            raise ZoteroError(_("Zotero sent an unexpected response.")) from exc
 
     def search(self, query: str, limit: int = 25) -> list[ZoteroItem]:
         params = {"limit": max(1, min(int(limit), 100)), "qmode": "titleCreatorYear"}
@@ -218,7 +223,7 @@ class ZoteroClient:
             params.update({"sort": "dateModified", "direction": "desc"})
         data = self._get("/items/top", params)
         if not isinstance(data, list):
-            raise ZoteroError("Zotero sent an unexpected response.")
+            raise ZoteroError(_("Zotero sent an unexpected response."))
         return [item for item in (parse_item(raw) for raw in data) if item is not None]
 
     def pdf_attachment(self, key: str) -> str | None:
@@ -248,15 +253,15 @@ def literature_note(
     item: ZoteroItem, pdf_key: str | None = None
 ) -> tuple[str, str, list[str], str]:
     """(title, body, tags, source link) for a new literature note about *item*."""
-    lines = [f"**Reference:** {item.reference()}", ""]
-    links = [f"[Open in Zotero]({item.select_url})"]
+    lines = [f"**{_('Reference:')}** {item.reference()}", ""]
+    links = [f"[{_('Open in Zotero')}]({item.select_url})"]
     if pdf_key:
-        links.append(f"[Open PDF]({pdf_url(pdf_key, group_id=item.group_id)})")
+        links.append(f"[{_('Open PDF')}]({pdf_url(pdf_key, group_id=item.group_id)})")
     if item.doi:
         links.append(f"[DOI](https://doi.org/{urllib.parse.quote(item.doi, safe='/')})")
     lines += [" · ".join(links), ""]
     if item.abstract:
         lines += ["> " + item.abstract.replace("\n", "\n> "), ""]
-    lines += ["## Key ideas", "", "- ", "", "## My thoughts", "", ""]
+    lines += ["## " + _("Key ideas"), "", "- ", "", "## " + _("My thoughts"), "", ""]
     tags = ["literature"] + [t for t in item.tags if t != "literature"]
     return item.title, "\n".join(lines), tags, item.select_url

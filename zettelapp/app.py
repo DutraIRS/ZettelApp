@@ -21,6 +21,7 @@ from PySide6.QtWidgets import QApplication, QMessageBox
 
 from zettelapp import APP_NAME, ORG_NAME, __version__, i18n, settings, winintegration
 from zettelapp.core.security import parse_app_url
+from zettelapp.i18n import _
 from zettelapp.paths import ensure_dir, logs_dir, resource_path
 from zettelapp.ui import theme
 
@@ -107,11 +108,15 @@ def _install_excepthook() -> None:
         box = QMessageBox(
             QMessageBox.Icon.Critical,
             APP_NAME,
-            "Something went wrong. Your notes are saved automatically, so nothing should be lost.\n\n"
-            f"{exc_type.__name__}: {exc}",
+            _(
+                "Something went wrong. Your notes are saved automatically, so nothing should be lost."
+            )
+            + f"\n\n{exc_type.__name__}: {exc}",
         )
         box.setDetailedText("".join(traceback.format_exception(exc_type, exc, tb)))
-        box.setInformativeText(f"Details were written to the log in {logs_dir()}.")
+        box.setInformativeText(
+            _("Details were written to the log in {folder}.").format(folder=logs_dir())
+        )
         box.exec()
 
     sys.excepthook = hook

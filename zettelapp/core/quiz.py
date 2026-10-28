@@ -22,14 +22,15 @@ from zettelapp.core.textutil import (
     strip_markdown,
     tokenize,
 )
+from zettelapp.i18n import N_, _
 
 GRADES = {"again": 1, "hard": 3, "good": 4, "easy": 5}
 
 MODES = {
-    "flashcards": "Flashcards (spaced repetition)",
-    "choice": "Multiple choice",
-    "typed": "Type the answer",
-    "notes": "Name that note",
+    "flashcards": N_("Flashcards (spaced repetition)"),
+    "choice": N_("Multiple choice"),
+    "typed": N_("Type the answer"),
+    "notes": N_("Name that note"),
 }
 
 
@@ -195,7 +196,7 @@ def _note_questions(notes: dict[str, Note], count: int, rng: random.Random) -> l
         questions.append(
             Question(
                 "choice",
-                "Which note is this?\n\n> " + _mask_title(note.body, note.title),
+                _("Which note is this?") + "\n\n> " + _mask_title(note.body, note.title),
                 note.display_title,
                 note.id,
                 note.display_title,
