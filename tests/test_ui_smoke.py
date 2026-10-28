@@ -254,3 +254,29 @@ def test_mcp_switch_starts_off_and_closing_the_app_turns_it_off(window, monkeypa
     window.mcp_toggle.click()
     window.close()  # closing ZettelApp cuts agents off
     assert not mcp_switch.mcp_switched_on() and not window.mcp_toggle.isChecked()
+
+
+def test_update_notice_is_quiet_and_shown_once_per_version(window, monkeypatch):
+    from PySide6.QtWidgets import QApplication
+
+    from zettelapp import settings
+
+    focus = QApplication.focusWidget()
+    window._show_update_notice("999.0.0")
+    notice = window.update_notice
+    assert notice.isVisible() and QApplication.focusWidget() is focus  # never steals focus
+    corner = notice.geometry()
+    assert corner.right() < window.width() and corner.bottom() < window.statusBar().y()
+    assert corner.left() > window.width() / 2  # lower right
+    assert settings.get(settings.UPDATE_NOTIFIED) == "999.0.0"
+    notice.close()
+    window._show_update_notice("999.0.0")  # already announced: nothing new
+    assert window.update_notice is notice
+
+    window._show_update_notice("999.1.0")
+    window.update_notice._silence()  # "Don't check for updates"
+    assert settings.get(settings.UPDATE_CHECK) is False
+    calls = []
+    monkeypatch.setattr("zettelapp.ui.main_window.run_task", lambda *a, **k: calls.append(a))
+    window.check_for_updates()
+    assert calls == []  # silenced for good

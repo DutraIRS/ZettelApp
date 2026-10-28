@@ -38,6 +38,7 @@ from zettelapp.core.importer import import_path
 from zettelapp.core.security import UnsafeInputError, is_valid_note_id, safe_filename
 from zettelapp.core.storage import Vault, VaultError
 from zettelapp.core.suggest import FEATURES, NoteData
+from zettelapp.core.updates import available_update
 from zettelapp.mcp_switch import McpSwitch
 from zettelapp.paths import backups_dir, default_vault_dir, documents_dir
 from zettelapp.ui import icons, theme
@@ -50,6 +51,7 @@ from zettelapp.ui.note_list import NoteListPanel
 from zettelapp.ui.review_page import ReviewPage
 from zettelapp.ui.settings_dialog import OptionsDialog
 from zettelapp.ui.side_panel import SidePanel
+from zettelapp.ui.update_notice import UpdateNotice
 from zettelapp.ui.widgets import InfoBar, ToggleSwitch, label
 from zettelapp.ui.workers import SuggestionService, run_task
 
@@ -1077,6 +1079,24 @@ class MainWindow(QMainWindow):
     def showEvent(self, event) -> None:  # noqa: N802
         super().showEvent(event)
         winintegration.set_window_frame_dark(int(self.winId()), theme.current().dark)
+
+    # --- updates --------------------------------------------------------------
+
+    def check_for_updates(self) -> None:
+        """Quietly ask the website for the latest version; failures never show anything."""
+        if settings.get(settings.UPDATE_CHECK):
+            run_task(available_update, on_done=self._show_update_notice, on_error=lambda *_: None)
+
+    def _show_update_notice(self, version: str | None) -> None:
+        if (
+            not version
+            or version == settings.get(settings.UPDATE_NOTIFIED)
+            or not settings.get(settings.UPDATE_CHECK)
+        ):
+            return
+        settings.put(settings.UPDATE_NOTIFIED, version)  # each version is announced once
+        self.update_notice = UpdateNotice(self, version)
+        self.update_notice.show()
 
     # --- MCP switch ---------------------------------------------------------
 

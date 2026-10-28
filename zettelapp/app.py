@@ -13,7 +13,7 @@ import sys
 import traceback
 from logging.handlers import RotatingFileHandler
 
-from PySide6.QtCore import QByteArray, Qt
+from PySide6.QtCore import QByteArray, Qt, QTimer
 from PySide6.QtGui import QIcon
 from PySide6.QtNetwork import QLocalServer, QLocalSocket
 from PySide6.QtWidgets import QApplication, QMessageBox
@@ -25,6 +25,7 @@ from zettelapp.ui import theme
 
 log = logging.getLogger("zettelapp")
 MAX_MESSAGE = 4096
+UPDATE_CHECK_DELAY_MS = 4000
 
 
 def configure_logging() -> None:
@@ -175,6 +176,8 @@ def main(argv: list[str] | None = None) -> int:
         window.open_default_vault()
     if "open" in message:
         window.handle_message(message)
+    # Look for a newer version once start-up has settled; it never interrupts anything.
+    QTimer.singleShot(UPDATE_CHECK_DELAY_MS, window.check_for_updates)
 
     def follow_system_theme(*_args) -> None:
         if settings.get(settings.THEME) == "system":

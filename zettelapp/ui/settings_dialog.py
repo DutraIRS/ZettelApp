@@ -181,6 +181,13 @@ class OptionsDialog(QDialog):
         self.autosave.setValue(settings.get(settings.AUTOSAVE_MS))
         form.addRow("Save after typing stops for", self.autosave)
         lay.addLayout(form)
+        self.update_check = QCheckBox("Check for updates when ZettelApp starts")
+        self.update_check.setToolTip(
+            "Downloads a small version file from the ZettelApp website. Nothing about you "
+            "or your notes is sent, and a new version is announced only once."
+        )
+        self.update_check.setChecked(settings.get(settings.UPDATE_CHECK))
+        lay.addWidget(self.update_check)
         lay.addWidget(
             label(
                 "Notes are saved automatically. Your vault is a folder with a SQLite database "
@@ -667,6 +674,7 @@ class OptionsDialog(QDialog):
         settings.put(settings.THEME, self.theme.currentData())
         settings.put(settings.EDITOR_FONT_SIZE, self.font_size.value())
         settings.put(settings.AUTOSAVE_MS, self.autosave.value())
+        settings.put(settings.UPDATE_CHECK, self.update_check.isChecked())
         settings.put(settings.SUGGEST_ENABLED, self.suggest_on.isChecked())
         settings.put(
             settings.SUGGEST_FEATURES, [k for k, b in self.feature_boxes.items() if b.isChecked()]

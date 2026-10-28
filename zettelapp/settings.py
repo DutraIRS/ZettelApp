@@ -37,6 +37,8 @@ LLM_EFFORT = "llm/effort"
 LLM_CONTEXT_NOTES = "llm/contextNotes"
 LLM_PRIVACY_ACK = "llm/privacyAcknowledged"
 MCP_ALLOW_WRITES = "mcp/allowWrites"
+UPDATE_CHECK = "updates/checkAtStart"
+UPDATE_NOTIFIED = "updates/notifiedVersion"  # the newest version already announced
 
 DEFAULTS: dict[str, Any] = {
     THEME: "system",
@@ -56,6 +58,8 @@ DEFAULTS: dict[str, Any] = {
     LLM_CONTEXT_NOTES: 8,
     LLM_PRIVACY_ACK: False,
     MCP_ALLOW_WRITES: False,
+    UPDATE_CHECK: True,
+    UPDATE_NOTIFIED: "",
 }
 
 

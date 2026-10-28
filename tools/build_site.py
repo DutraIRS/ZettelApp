@@ -1,13 +1,15 @@
 """Build the documentation pages of the website from docs/*.md.
 
 Run with:  python tools/build_site.py
-Writes website/docs/<page>.html (docs/index.md becomes website/docs/index.html).
+Writes website/docs/<page>.html (docs/index.md becomes website/docs/index.html) and
+website/version.json, which installed copies read to learn about new versions.
 Uses markdown-it-py with raw HTML disabled, like the app itself.
 """
 
 from __future__ import annotations
 
 import html
+import json
 import re
 import sys
 import unicodedata
@@ -199,7 +201,24 @@ def build() -> list[Path]:
     return written
 
 
+def app_version() -> str:
+    text = (ROOT / "zettelapp" / "__init__.py").read_text(encoding="utf-8")
+    match = re.search(r'^__version__\s*=\s*"([^"]+)"', text, re.M)
+    if not match:
+        raise SystemExit("No __version__ in zettelapp/__init__.py")
+    return match.group(1)
+
+
+def write_version_file() -> Path:
+    """website/version.json, read by the app's update check (only "version" is used)."""
+    target = ROOT / "website" / "version.json"
+    data = {"name": "ZettelApp", "version": app_version()}
+    target.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8", newline="\n")
+    return target
+
+
 if __name__ == "__main__":
     files = build()
-    print(f"Wrote {len(files)} pages to {OUT}")
+    version_file = write_version_file()
+    print(f"Wrote {len(files)} pages to {OUT} and {version_file.name}")
     sys.exit(0)
