@@ -488,7 +488,7 @@ class NoteEditor(QWidget):
             self.body.textCursor().insertText(f"[{selected or url}]({url})")
 
     def insert_note_link(self, title: str, link_type: str = "related") -> None:
-        prefix = "" if link_type == "related" else f"{link_type}:: "
+        prefix = "" if link_type == "related" else f"{link_type}::"
         self.body.textCursor().insertText(f"{prefix}[[{title}]]")
         self.body.setFocus()
 

@@ -66,7 +66,7 @@ def test_the_adventure_is_offered_on_the_first_run_only(tmp_path, monkeypatch, w
     monkeypatch.setattr(main_window, "default_vault_dir", lambda: tmp_path / "Documents")
     monkeypatch.setattr(main_window.settings, "get", _without_last_vault(main_window.settings))
     window.open_default_vault()  # a fresh default vault: starter notes and the offer
-    assert window.editor.note.title == "Start here"
+    assert window.editor.note.title == "Welcome to ZettelApp"
     pump(1200)
     card = window.quest.card
     assert window.quest.is_visible() and card.title.text() == "The Lost Prince of the Archive"
@@ -75,8 +75,8 @@ def test_the_adventure_is_offered_on_the_first_run_only(tmp_path, monkeypatch, w
     assert not window.quest.is_visible() and window.quest.state() == "declined"
     assert "Help ▸ The Lost Prince of the Archive" in window.statusBar().currentMessage()
 
-    window.quest.start_up(first_run=True)  # never offered twice
-    window.quest.start_up(first_run=False)
+    window.quest.start_up()  # never offered twice
+    window.quest.start_up()
     pump(1200)
     assert not window.quest.is_visible()
 
@@ -90,10 +90,11 @@ def _without_last_vault(module):
     return get
 
 
-def test_an_existing_vault_is_not_interrupted(window):
-    window.quest.start_up(first_run=False)
+def test_a_declined_adventure_is_never_offered_again(window):
+    window.quest.decline()
+    window.quest.start_up()
     pump(1200)
-    assert window.quest.card is None and window.quest.state() == ""
+    assert window.quest.card is None and window.quest.state() == "declined"
 
 
 def test_each_chapter_is_solved_by_doing_it(window):
@@ -118,7 +119,7 @@ def test_each_chapter_is_solved_by_doing_it(window):
     follow_clue(window)
 
     assert chapter(window) == "thread"
-    edit(window, "Zetto went missing. [[Start here]]")
+    edit(window, "Zetto went missing. [[Welcome to ZettelApp]]")
     follow_clue(window)
 
     assert chapter(window) == "marks"
@@ -128,7 +129,7 @@ def test_each_chapter_is_solved_by_doing_it(window):
     follow_clue(window)
 
     assert chapter(window) == "reason"
-    edit(window, "Zetto went missing. [[Start here]]\n\nsupports:: [[One idea per note]]")
+    edit(window, "Zetto went missing. [[Welcome to ZettelApp]]\n\nsupports:: [[One idea per note]]")
     follow_clue(window)
 
     assert chapter(window) == "whispers"
@@ -182,7 +183,7 @@ def test_what_the_reader_does_while_reading_a_clue_counts(window):
     window.new_note()
     window.editor.title.setText("Journal")
     edit(window)
-    edit(window, "[[Start here]]")  # done before following the clue
+    edit(window, "[[Welcome to ZettelApp]]")  # done before following the clue
     follow_clue(window)
     pump(250)
     assert quest.card.title.text() == "Clue found!"  # chapter 2 solved at once
@@ -208,7 +209,7 @@ def test_progress_is_remembered_paused_and_resumed(window):
     second = MainWindow()
     second.show()
     assert second.open_vault(window.vault.folder)
-    second.quest.start_up(first_run=False)
+    second.quest.start_up()
     pump(1200)
     assert second.quest.is_visible() and second.quest.chapter.key == "thread"
     assert second.quest.card.dots.states[:3] == ["skipped", "current", "todo"]

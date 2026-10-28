@@ -306,10 +306,12 @@ def test_hashtags_typed_in_the_text_show_as_tag_chips(window):
 def test_a_new_vault_opens_on_the_start_here_hub(window):
     window._create_welcome_notes()
     note = window.editor.note
-    assert note.title == "Start here"
+    assert note.title == "Welcome to ZettelApp"
     assert window.list.current_id() == note.id
     assert len(window.vault.links_from(note.id)) == 10  # the hub lists every starter note
-    assert "Start here" in window.editor.body.titles_model.stringList()  # [[ completes titles
+    assert (
+        "Welcome to ZettelApp" in window.editor.body.titles_model.stringList()
+    )  # [[ completes titles
 
 
 @pytest.mark.parametrize("dialog", ["new_vault_dialog", "open_vault_dialog"])
@@ -321,13 +323,13 @@ def test_dialog_created_vaults_start_with_the_tour(window, tmp_path, monkeypatch
     monkeypatch.setattr(QFileDialog, "getExistingDirectory", lambda *_args: str(folder))
     monkeypatch.setattr(QMessageBox, "question", lambda *_args: QMessageBox.StandardButton.Yes)
     starts = []
-    monkeypatch.setattr(window.quest, "start_up", lambda first_run: starts.append(first_run))
+    monkeypatch.setattr(window.quest, "start_up", lambda *a: starts.append(a))
 
     getattr(window, dialog)()
 
     assert window.vault.count_notes() == 11
-    assert window.editor.note.title == "Start here"
-    assert starts == [True]
+    assert window.editor.note.title == "Welcome to ZettelApp"
+    assert len(starts) == 1
 
 
 def test_failed_default_vault_open_does_not_start_the_quest(window, tmp_path, monkeypatch):
@@ -337,7 +339,7 @@ def test_failed_default_vault_open_does_not_start_the_quest(window, tmp_path, mo
     monkeypatch.setattr(main_window.settings, "get", lambda *_args: "")
     monkeypatch.setattr(window, "open_vault", lambda _folder: False)
     starts = []
-    monkeypatch.setattr(window.quest, "start_up", lambda first_run: starts.append(first_run))
+    monkeypatch.setattr(window.quest, "start_up", lambda *a: starts.append(a))
 
     window.open_default_vault()
 

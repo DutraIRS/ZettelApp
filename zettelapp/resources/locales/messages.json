@@ -2465,12 +2465,6 @@
    "zettelapp/ui/editor.py:150"
   ]
  },
- "Start here": {
-  "plural": null,
-  "where": [
-   "zettelapp/core/starter.py:27"
-  ]
- },
  "Start quiz": {
   "plural": null,
   "where": [
@@ -3049,6 +3043,12 @@
   "plural": null,
   "where": [
    "zettelapp/ui/dialogs.py:262"
+  ]
+ },
+ "Welcome to ZettelApp": {
+  "plural": null,
+  "where": [
+   "zettelapp/core/starter.py:27"
   ]
  },
  "Welcome to ZettelApp! These notes are a small Zettelkasten about the app itself. Each one holds a single idea and links to the next, so you learn by following links.": {

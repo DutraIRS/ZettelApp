@@ -403,7 +403,7 @@ FINALE = (
 def _example(key: str) -> str:
     """A [[link]] to a starter note, in the reader's language, for the tasks' examples."""
     title = _(STARTER_TITLES["atomic" if key == "reason" else "hub"])
-    return f"supports:: [[{title}]]" if key == "reason" else f"[[{title}]]"
+    return f"supports::[[{title}]]" if key == "reason" else f"[[{title}]]"
 
 
 def _lines(pieces: tuple[str, ...]) -> str:
@@ -463,10 +463,10 @@ class Quest(QObject):
 
     # --- entry points ------------------------------------------------------------------
 
-    def start_up(self, first_run: bool) -> None:
-        """Called once the start-up vault is open: offer the adventure on the very first
-        run, or bring back an adventure that was in progress when ZettelApp closed."""
-        if first_run and not self.state():
+    def start_up(self, first_run: bool | None = None) -> None:
+        """Offer the adventure once, on the first launch whose quest state is still empty
+        (an upgraded user gets it too), or bring back one that was in progress."""
+        if not self.state():
             QTimer.singleShot(OFFER_DELAY_MS, self.offer)
         elif self.state() == "active":
             QTimer.singleShot(OFFER_DELAY_MS, self.resume)

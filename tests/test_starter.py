@@ -61,7 +61,7 @@ def test_starter_notes_are_written_in_the_interface_language(vault, monkeypatch)
         i18n,
         "_catalog",
         {
-            "Start here": "Comece aqui",
+            "Welcome to ZettelApp": "Comece aqui",
             "One idea per note": "Uma ideia por nota",
             "What is a Zettelkasten?": "O que é um Zettelkasten?",
             "Next: {link}": "Próxima: {link}",

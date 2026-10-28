@@ -505,7 +505,7 @@ class OptionsDialog(QDialog):
         self.type_sample.set_type(lt)
         type_id = lt.id or slugify_type(lt.label)
         hint = (
-            _("In a note, write {example}.").format(example=f"{type_id}:: [[…]]")
+            _("In a note, write {example}.").format(example=f"{type_id}::[[…]]")
             if type_id
             else _("Give the link type a name.")
         )

@@ -1,6 +1,6 @@
 """The notes a new vault starts with: a small Zettelkasten about ZettelApp itself.
 
-A "Start here" hub (a map of content) lists ten short notes in reading order. Each holds
+A "Welcome to ZettelApp" hub (a map of content) lists ten short notes in reading order. Each holds
 one idea, says exactly where to click or what to type, and links on to the next note.
 Typed links appear where the relation is true when read from the note that holds them:
 "One idea per note" is *part of* "What is a Zettelkasten?", "Mind maps" *extends*
@@ -24,7 +24,7 @@ from zettelapp.i18n import N_, _
 # Reading order. Keys are stable; titles and tags are translated when the notes are made.
 HUB = "hub"
 TITLES: dict[str, str] = {
-    HUB: N_("Start here"),
+    HUB: N_("Welcome to ZettelApp"),
     "zettelkasten": N_("What is a Zettelkasten?"),
     "atomic": N_("One idea per note"),
     "linking": N_("Link with a reason"),

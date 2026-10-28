@@ -29,7 +29,7 @@ installer. If you downloaded it from the official release page and the checksum 
 
 A **vault** is a folder holding your notes: a database file (`zettel.db`) and an `assets` folder for images.
 On first start ZettelApp creates one in **Documents\ZettelApp** with eleven linked starter notes. The
-*Start here* note leads through links, tags, images, mind maps, flashcards and the rest of the app. An
+*Welcome to ZettelApp* note leads through links, tags, images, mind maps, flashcards and the rest of the app. An
 optional ten-minute adventure offers the same tour through real actions. New vaults created with
 *File ▸ New Vault…* or *File ▸ Open Vault…* receive the same starter material, so you can work elsewhere,
 for example in a OneDrive folder.

@@ -13,7 +13,7 @@ minutes.
 2. Start ZettelApp.
 
 **You should see** the Notes page with eleven linked starter notes in a new vault in
-*Documents\ZettelApp*. *Start here* is open in the editor. After a moment, ZettelApp also offers the
+*Documents\ZettelApp*. "Welcome to ZettelApp" is open in the editor. After a moment, ZettelApp also offers the
 optional *Lost Prince of the Archive* adventure; choose **Not now** if you prefer this written tour.
 
 ## 2. Create a note

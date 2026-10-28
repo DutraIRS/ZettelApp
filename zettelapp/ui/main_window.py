@@ -506,7 +506,7 @@ class MainWindow(QMainWindow):
     def open_default_vault(self) -> None:
         last = settings.get(settings.LAST_VAULT, "")
         if last and Vault.is_vault(last) and self.open_vault(last):
-            self.quest.start_up(first_run=False)
+            self.quest.start_up()
             return
         self._open_vault_with_onboarding(default_vault_dir())
 
@@ -516,7 +516,7 @@ class MainWindow(QMainWindow):
             return False
         if fresh:
             self._create_welcome_notes()
-        self.quest.start_up(first_run=fresh)
+        self.quest.start_up()
         return True
 
     def _create_welcome_notes(self) -> None:
