@@ -33,8 +33,7 @@ def test_language_links_switch_the_same_page_and_fall_back_for_untranslated_page
 
     # From inside a translated page, switching to another translated page stays on the same stem.
     links = dict(
-        (folder, href)
-        for folder, _n, _c, href in build_site._language_links("fr", "docs", "faq")
+        (folder, href) for folder, _n, _c, href in build_site._language_links("fr", "docs", "faq")
     )
     assert links[""] == "../../docs/faq.html"
     assert links["de"] == "../../de/docs/faq.html"
@@ -70,9 +69,7 @@ def _first_visit(script: str, path: str, browser_languages: list[str]) -> list[s
         "globalThis.localStorage = { data: {}, getItem(k) { return k in this.data ? this.data[k] : null; },"
         " setItem(k, v) { this.data[k] = String(v); } };\n"
         f"globalThis.location = {{ pathname: {json.dumps(path)}, search: '', hash: '',"
-        " replace(u) { calls.push(u); } };\n"
-        + script
-        + "\nconsole.log(JSON.stringify(calls));\n"
+        " replace(u) { calls.push(u); } };\n" + script + "\nconsole.log(JSON.stringify(calls));\n"
     )
     done = subprocess.run(
         ["node", "-"], input=harness, capture_output=True, text=True, timeout=30, check=True

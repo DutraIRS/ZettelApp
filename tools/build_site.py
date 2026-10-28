@@ -403,9 +403,7 @@ def description(markdown: str) -> str:
     return "ZettelApp documentation"
 
 
-def _language_links(
-    current: str, target: str, stem: str = ""
-) -> list[tuple[str, str, str, str]]:
+def _language_links(current: str, target: str, stem: str = "") -> list[tuple[str, str, str, str]]:
     """(folder, name, code, href) for every language, for *current* page's language/kind.
 
     *target* is "docs" for a documentation page (linking to the same page) or "home".
