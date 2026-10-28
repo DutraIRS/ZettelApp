@@ -1,24 +1,37 @@
-"""Markdown editing: syntax highlighting, [[ completion, image paste and drop."""
+"""Markdown editing: syntax highlighting, [[ completion, Ctrl+click links, image paste and drop."""
 
 from __future__ import annotations
 
 import re
 from collections.abc import Callable
 
-from PySide6.QtCore import QBuffer, QByteArray, QIODevice, QStringListModel, Qt, Signal
+from PySide6.QtCore import (
+    QBuffer,
+    QByteArray,
+    QEvent,
+    QIODevice,
+    QPoint,
+    QStringListModel,
+    Qt,
+    Signal,
+)
 from PySide6.QtGui import (
     QColor,
+    QCursor,
     QFont,
     QKeySequence,
     QSyntaxHighlighter,
     QTextCharFormat,
     QTextCursor,
 )
-from PySide6.QtWidgets import QCompleter, QPlainTextEdit
+from PySide6.QtWidgets import QCompleter, QPlainTextEdit, QToolTip
 
+from zettelapp.core.textutil import HASHTAG_RE, find_wikilinks, normalize_tag
 from zettelapp.ui import theme
 
 _IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp")
+_MD_LINK_RE = re.compile(r"(?<!!)\[[^\]\n]*\]\(<?([^)>\s]+)>?(?:\s+\"[^\"\n]*\")?\)")
+_URL_RE = re.compile(r"\b(?:https?://|mailto:)[^\s<>()\[\]]*[^\s<>()\[\].,;:!?'\"]")
 
 
 def _fmt(
@@ -99,14 +112,22 @@ class MarkdownEditor(QPlainTextEdit):
     *store_image* receives (bytes, original name) and returns an asset name; it
     validates the data, so pasted or dropped files can never inject anything
     but a real raster image into the vault.
+
+    Ctrl+click follows a [[note link]], a web or Zotero link or a #tag, like links in
+    Word or VS Code; a plain click keeps placing the caret so links stay editable.
+    *resolve_note* maps a link target to a note id (None when there is no such note).
     """
 
     imageError = Signal(str)
+    linkActivated = Signal(str, str)  # kind ("note", "url" or "tag"), target
 
     def __init__(self, store_image: Callable[[bytes, str], str], parent=None):
         super().__init__(parent)
         self.setObjectName("BodyEdit")
         self.store_image = store_image
+        self.resolve_note: Callable[[str], str | None] | None = None
+        self._pressed_link: tuple[str, str] | None = None
+        self.viewport().setMouseTracking(True)
         self.setAccessibleName("Note text")
         self.setPlaceholderText(
             "Start writing… Use [[ to link a note, #tags, Q:/A: or {{c1::cloze}} for flashcards."
@@ -189,7 +210,97 @@ class MarkdownEditor(QPlainTextEdit):
         if event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter) and not event.modifiers():
             self._continue_list()
             return
+        if event.key() == Qt.Key.Key_Control:
+            self._update_link_cursor(Qt.KeyboardModifier.ControlModifier)
         super().keyPressEvent(event)
+
+    def keyReleaseEvent(self, event) -> None:  # noqa: N802
+        if event.key() == Qt.Key.Key_Control:
+            self._update_link_cursor(Qt.KeyboardModifier.NoModifier)
+        super().keyReleaseEvent(event)
+
+    # --- Ctrl+click links -------------------------------------------------------
+
+    def link_at(self, pos: QPoint) -> tuple[str, str] | None:
+        """The link under a viewport position: ("note", title), ("url", href) or ("tag", tag)."""
+        cursor = self.cursorForPosition(pos)
+        rect = self.cursorRect(cursor)
+        if not rect.top() <= pos.y() <= rect.bottom():
+            return None  # below the last line
+        text = cursor.block().text()
+        col = cursor.positionInBlock()
+        if rect.center().x() > pos.x():
+            col -= 1  # the caret snaps to the nearest gap; the character left of it is hovered
+        if not 0 <= col < len(text):
+            return None
+        for wl in find_wikilinks(text):
+            if wl.start <= col < wl.end:
+                return "note", wl.target
+        for m in _MD_LINK_RE.finditer(text):
+            if m.start() <= col < m.end():
+                return "url", m.group(1)
+        for m in _URL_RE.finditer(text):
+            if m.start() <= col < m.end():
+                return "url", m.group(0)
+        for m in HASHTAG_RE.finditer(text):
+            if m.start() <= col < m.end():
+                return "tag", normalize_tag(m.group(1))
+        return None
+
+    def _link_tip(self, kind: str, target: str) -> str:
+        if kind == "note":
+            if self.resolve_note is not None and self.resolve_note(target) is None:
+                return f"No note called “{target}” yet. Ctrl+click to create it."
+            return f"Ctrl+click to open “{target}”"
+        if kind == "tag":
+            return f"Ctrl+click to list the notes tagged #{target}"
+        return f"Ctrl+click to open {target}"
+
+    def _update_link_cursor(self, modifiers) -> None:
+        pos = self.viewport().mapFromGlobal(QCursor.pos())
+        over = (
+            bool(modifiers & Qt.KeyboardModifier.ControlModifier)
+            and self.viewport().rect().contains(pos)
+            and self.link_at(pos) is not None
+        )
+        self.viewport().setCursor(
+            Qt.CursorShape.PointingHandCursor if over else Qt.CursorShape.IBeamCursor
+        )
+
+    def mousePressEvent(self, event) -> None:  # noqa: N802
+        if (
+            event.button() == Qt.MouseButton.LeftButton
+            and event.modifiers() & Qt.KeyboardModifier.ControlModifier
+        ):
+            self._pressed_link = self.link_at(event.position().toPoint())
+            if self._pressed_link is not None:
+                event.accept()
+                return
+        super().mousePressEvent(event)
+
+    def mouseReleaseEvent(self, event) -> None:  # noqa: N802
+        link, self._pressed_link = self._pressed_link, None
+        if link is not None:
+            if link == self.link_at(event.position().toPoint()):
+                self.linkActivated.emit(*link)
+            event.accept()
+            return
+        super().mouseReleaseEvent(event)
+
+    def mouseMoveEvent(self, event) -> None:  # noqa: N802
+        super().mouseMoveEvent(event)
+        if not event.buttons():
+            self._update_link_cursor(event.modifiers())
+
+    def viewportEvent(self, event) -> bool:  # noqa: N802
+        if event.type() == QEvent.Type.ToolTip:
+            link = self.link_at(event.pos())
+            if link is None:
+                QToolTip.hideText()
+            else:
+                QToolTip.showText(event.globalPos(), self._link_tip(*link), self.viewport())
+            return True
+        return super().viewportEvent(event)
 
     def _continue_list(self) -> None:
         cursor = self.textCursor()

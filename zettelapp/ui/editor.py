@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from datetime import UTC, datetime
 
-from PySide6.QtCore import QSize, Qt, QTimer, Signal
-from PySide6.QtGui import QGuiApplication, QPixmap
+from PySide6.QtCore import QSize, Qt, QTimer, QUrl, Signal
+from PySide6.QtGui import QDesktopServices, QGuiApplication, QPixmap
 from PySide6.QtWidgets import (
     QButtonGroup,
     QFileDialog,
@@ -25,8 +25,13 @@ from PySide6.QtWidgets import (
 )
 
 from zettelapp.core.models import Flashcard, Note, new_mindmap_node
-from zettelapp.core.security import UnsafeInputError, normalize_source_url, normalize_web_url
-from zettelapp.core.textutil import strip_markdown
+from zettelapp.core.security import (
+    UnsafeInputError,
+    is_openable_url,
+    normalize_source_url,
+    normalize_web_url,
+)
+from zettelapp.core.textutil import extract_hashtags, strip_markdown
 from zettelapp.ui import icons, theme
 from zettelapp.ui.dialogs import CardDialog, TextPromptDialog
 from zettelapp.ui.markdown_editor import MarkdownEditor
@@ -71,6 +76,9 @@ class NoteEditor(QWidget):
         self.autosave = QTimer(self, singleShot=True, timeout=self.flush)
         self.preview_timer = QTimer(
             self, singleShot=True, interval=350, timeout=self._refresh_preview
+        )
+        self.inline_tag_timer = QTimer(
+            self, singleShot=True, interval=400, timeout=self._refresh_inline_tags
         )
 
         outer = QVBoxLayout(self)
@@ -196,7 +204,10 @@ class NoteEditor(QWidget):
         self.tabs = QTabWidget()
         self.tabs.setDocumentMode(True)
         self.body = MarkdownEditor(self._store_image)
+        self.body.resolve_note = self._resolve
+        self.body.linkActivated.connect(self._follow_link)
         self.body.textChanged.connect(self._edited)
+        self.body.textChanged.connect(self.inline_tag_timer.start)
         self.body.imageError.connect(lambda msg: QMessageBox.warning(self, "Image not added", msg))
         self.preview = NotePreview(
             lambda name: self.window.vault.asset_path(name) if self.window.vault else None
@@ -299,7 +310,7 @@ class NoteEditor(QWidget):
         self.title.setText(note.title)
         self.body.setPlainText(note.body)
         self.url.setText(note.url)
-        self.tags.set_tags(note.tags)
+        self.tags.set_tags(self.window.vault.manual_tags(note.id), extract_hashtags(note.body))
         self.tags.set_known_tags([t for t, _ in self.window.vault.all_tags()])
         self.mindmap.set_mindmap(note.mindmap)
         self._loading = False
@@ -326,7 +337,7 @@ class NoteEditor(QWidget):
             return None
         self.note.title = self.title.text().strip()
         self.note.body = self.body.toPlainText()
-        self.note.tags = self.tags.tags()
+        self.note.tags = sorted(set(self.tags.tags()) | set(extract_hashtags(self.note.body)))
         url = self.url.text().strip()
         self.note.url = (normalize_source_url(url) or "") if url else ""
         return self.note
@@ -336,7 +347,7 @@ class NoteEditor(QWidget):
         if not self._dirty or self.note is None or self.window.vault is None:
             return
         note = self.collect()
-        self.window.vault.save_note(note)
+        self.window.vault.save_note(note, manual_tags=self.tags.tags())
         self._dirty = False
         self._refresh_meta()
         self._refresh_cards()
@@ -354,10 +365,33 @@ class NoteEditor(QWidget):
         if self.note is not None and self.preview.isVisible():
             self.preview.show_markdown(self.body.toPlainText())
 
+    def _refresh_inline_tags(self) -> None:
+        if self.note is not None:
+            self.tags.set_inline_tags(extract_hashtags(self.body.toPlainText()))
+
     def refresh_style(self) -> None:
         self.body.highlighter.rebuild()
         self._refresh_preview()
         self.mindmap.rebuild()
+
+    # --- following links ------------------------------------------------------
+
+    def _resolve(self, target: str) -> str | None:
+        return self.window.vault.resolve_title(target) if self.window.vault else None
+
+    def _follow_link(self, kind: str, target: str) -> None:
+        if kind == "note":
+            note_id = self._resolve(target)
+            if note_id:
+                self.openNote.emit(note_id)
+            else:
+                self.newNoteRequested.emit(target)
+        elif kind == "tag":
+            self.window.show_tag(target)
+        elif is_openable_url(target):  # web pages, e-mail and Zotero items only
+            QDesktopServices.openUrl(QUrl(target))
+        else:
+            self.statusMessage.emit("Only web, e-mail and Zotero links can be opened.")
 
     # --- view modes -----------------------------------------------------
 
@@ -541,9 +575,6 @@ class NoteEditor(QWidget):
                 self.url.setText(normalize_source_url(text))
 
     def _open_url(self) -> None:
-        from PySide6.QtCore import QUrl
-        from PySide6.QtGui import QDesktopServices
-
         url = normalize_source_url(self.url.text())
         if url:
             QDesktopServices.openUrl(QUrl(url))

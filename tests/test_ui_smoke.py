@@ -162,3 +162,68 @@ def test_review_start_button_click_starts_review(window):
     )
     button.click()  # Qt passes checked: bool; start_due must not receive it
     assert window.review.stack.currentIndex() == 1  # quiz started, no TypeError raised
+
+
+def _point_in(body, text):
+    """Viewport position of a character inside *text* in the editor."""
+    from PySide6.QtGui import QTextCursor
+
+    cursor = QTextCursor(body.document())
+    cursor.setPosition(body.toPlainText().index(text) + 2)
+    return body.cursorRect(cursor).center()
+
+
+def test_ctrl_click_follows_links_and_tags(window):
+    from PySide6.QtCore import Qt
+    from PySide6.QtTest import QTest
+
+    target = window.vault.create_note("Target note", "Hello")
+    source = window.vault.create_note("Source", "See [[Target note]] and #idea here.")
+    window.list.refresh()
+    window.open_note(source.id)
+    body = window.editor.body
+    pump()
+    assert body.link_at(_point_in(body, "Target note")) == ("note", "Target note")
+    assert body.link_at(_point_in(body, "#idea")) == ("tag", "idea")
+    assert body.link_at(_point_in(body, "See")) is None
+    assert "Ctrl+click to open" in body._link_tip("note", "Target note")
+    assert "create it" in body._link_tip("note", "Missing note")
+
+    QTest.mouseClick(body.viewport(), Qt.MouseButton.LeftButton, pos=_point_in(body, "Target"))
+    assert window.current_note_id() == source.id  # a plain click only places the caret
+    QTest.mouseClick(
+        body.viewport(),
+        Qt.MouseButton.LeftButton,
+        Qt.KeyboardModifier.ControlModifier,
+        _point_in(body, "Target"),
+    )
+    assert window.current_note_id() == target.id
+
+    window.open_note(source.id)
+    QTest.mouseClick(
+        body.viewport(),
+        Qt.MouseButton.LeftButton,
+        Qt.KeyboardModifier.ControlModifier,
+        _point_in(body, "#idea"),
+    )
+    assert window.list.tag_filter.currentData() == "idea"
+
+
+def test_hashtags_typed_in_the_text_show_as_tag_chips(window):
+    from PySide6.QtWidgets import QToolButton
+
+    note = window.vault.create_note("Tagged", "Plain text", tags=["manual"])
+    window.list.refresh()
+    window.open_note(note.id)
+    window.editor.body.setPlainText("Now with #idea")
+    window.editor._refresh_inline_tags()
+    pump(50)
+    chips = {
+        c.text(): bool(c.property("inline"))
+        for c in window.editor.tags.findChildren(QToolButton, "Chip")
+    }
+    assert chips == {"#manual  ✕": False, "#idea": True}
+    window.editor.flush()
+    assert window.vault.get_note(note.id).tags == ["idea", "manual"]
+    assert window.vault.manual_tags(note.id) == ["manual"]
+

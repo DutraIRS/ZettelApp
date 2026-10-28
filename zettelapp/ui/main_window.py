@@ -634,6 +634,19 @@ class MainWindow(QMainWindow):
         self.side.set_suggestions([], "")
         self.request_suggestions()
 
+    def show_tag(self, tag: str) -> None:
+        """List the notes with *tag* (Ctrl+click on a #tag)."""
+        if self.vault is None:
+            return
+        self.editor.flush()  # a #tag typed a moment ago must be saved before it can be listed
+        self.list.refresh_tags()
+        index = self.list.tag_filter.findData(tag)
+        if index < 0:
+            self.statusBar().showMessage(f"No notes are tagged #{tag} yet.", 5000)
+            return
+        self.show_page(0)
+        self.list.tag_filter.setCurrentIndex(index)
+
     def _refresh_after_save(self) -> None:
         self.list.refresh()
         self.list.refresh_tags()
