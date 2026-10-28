@@ -1,7 +1,7 @@
 import pytest
 
 from tests.conftest import tiny_png
-from zettelapp.core.models import LinkType
+from zettelapp.core.models import MAX_MINDMAP_DEPTH, LinkType, new_mindmap_node
 from zettelapp.core.security import UnsafeInputError
 from zettelapp.core.storage import Vault
 
@@ -108,6 +108,25 @@ def test_images_are_validated(vault):
     with pytest.raises(UnsafeInputError):
         vault.add_image(b"<svg onload='alert(1)'/>", "evil.svg")
     assert vault.asset_path("../zettel.db") is None
+
+
+def test_saving_an_overdeep_mindmap_preserves_the_previous_tree(vault):
+    note = vault.create_note("Map")
+    note.mindmap = new_mindmap_node("Saved root")
+    vault.save_note(note)
+
+    root = new_mindmap_node("Too deep")
+    current = root
+    for depth in range(MAX_MINDMAP_DEPTH + 1):
+        child = new_mindmap_node(str(depth))
+        current["children"].append(child)
+        current = child
+    note.mindmap = root
+
+    with pytest.raises(UnsafeInputError, match="deeper"):
+        vault.save_note(note)
+
+    assert vault.get_note(note.id).mindmap["text"] == "Saved root"
 
 
 def test_backup(vault, tmp_path, sample):

@@ -88,3 +88,23 @@ def test_dialogs_construct(window):
     options = OptionsDialog(window)
     assert options.pages.count() == options.nav.count() == 9
     options.close()
+
+
+def test_mindmap_editor_blocks_children_beyond_the_storage_limit(window):
+    from zettelapp.core.models import MAX_MINDMAP_DEPTH, mindmap_nodes, new_mindmap_node
+    from zettelapp.ui.mindmap import MindMapView
+
+    root = new_mindmap_node("Root")
+    current = root
+    for depth in range(MAX_MINDMAP_DEPTH):
+        child = new_mindmap_node(str(depth))
+        current["children"].append(child)
+        current = child
+    view = MindMapView(window)
+    view.set_mindmap(root)
+    view.select(current["id"])
+    before = list(mindmap_nodes(view.root))
+
+    view.add_child()
+
+    assert list(mindmap_nodes(view.root)) == before

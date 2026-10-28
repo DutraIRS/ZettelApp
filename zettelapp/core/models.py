@@ -96,15 +96,26 @@ def new_mindmap_node(text: str = "", note: str | None = None) -> dict[str, Any]:
     return node
 
 
-def sanitize_mindmap(data: Any) -> dict[str, Any] | None:
+def sanitize_mindmap(data: Any, *, strict: bool = False) -> dict[str, Any] | None:
     """Return a clean copy of a mind map tree, or None if it is unusable."""
-    from zettelapp.core.security import is_valid_note_id
+    from zettelapp.core.security import UnsafeInputError, is_valid_note_id
 
     count = 0
 
+    def invalid(message: str) -> None:
+        if strict:
+            raise UnsafeInputError(message)
+
     def clean(node: Any, depth: int) -> dict[str, Any] | None:
         nonlocal count
-        if not isinstance(node, dict) or depth > MAX_MINDMAP_DEPTH or count >= MAX_MINDMAP_NODES:
+        if not isinstance(node, dict):
+            invalid("A mind map node must be an object.")
+            return None
+        if depth > MAX_MINDMAP_DEPTH:
+            invalid(f"A mind map cannot be deeper than {MAX_MINDMAP_DEPTH} levels.")
+            return None
+        if count >= MAX_MINDMAP_NODES:
+            invalid(f"A mind map cannot contain more than {MAX_MINDMAP_NODES} nodes.")
             return None
         count += 1
         out = new_mindmap_node(str(node.get("text", ""))[:500])
@@ -114,6 +125,7 @@ def sanitize_mindmap(data: Any) -> dict[str, Any] | None:
             out["note"] = node["note"]
         children = node.get("children") or []
         if not isinstance(children, list):
+            invalid("A mind map node's children must be a list.")
             return None
         for child in children:
             c = clean(child, depth + 1)

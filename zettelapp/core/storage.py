@@ -326,7 +326,7 @@ class Vault:
         note.body = (note.body or "")[:MAX_BODY]
         note.url = (normalize_source_url(note.url) or "") if note.url else ""
         note.image = note.image if is_valid_asset_name(note.image) else ""
-        note.mindmap = sanitize_mindmap(note.mindmap) if note.mindmap else None
+        note.mindmap = sanitize_mindmap(note.mindmap, strict=True) if note.mindmap else None
         note.tags = sorted({t for t in (normalize_tag(x) for x in note.tags) if t})
         if touch:
             note.modified = utc_now()

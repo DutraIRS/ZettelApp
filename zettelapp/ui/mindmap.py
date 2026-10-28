@@ -15,7 +15,12 @@ from PySide6.QtWidgets import (
     QMenu,
 )
 
-from zettelapp.core.models import MAX_MINDMAP_NODES, mindmap_nodes, new_mindmap_node
+from zettelapp.core.models import (
+    MAX_MINDMAP_DEPTH,
+    MAX_MINDMAP_NODES,
+    mindmap_nodes,
+    new_mindmap_node,
+)
 from zettelapp.ui import icons, theme
 
 H_GAP = 56
@@ -246,6 +251,9 @@ class MindMapView(QGraphicsView):
             return
         node, _ = _find(self.root, self.selected_id or self.root["id"])
         node = node or self.root
+        depth = next(depth for candidate, depth in mindmap_nodes(self.root) if candidate is node)
+        if depth >= MAX_MINDMAP_DEPTH:
+            return
         child = new_mindmap_node("New idea")
         node.setdefault("children", []).append(child)
         self.selected_id = child["id"]
@@ -255,6 +263,8 @@ class MindMapView(QGraphicsView):
     def add_sibling(self) -> None:
         if self.root is None or self.selected_id in (None, self.root["id"]):
             self.add_child()
+            return
+        if self._count() >= MAX_MINDMAP_NODES:
             return
         node, parent = _find(self.root, self.selected_id)
         if parent is None:
