@@ -42,6 +42,7 @@
       <li><a href="zotero.html">Zotero</a></li>
       <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
       <li><a href="mcp-server.html" aria-current="page">MCP server</a></li>
+      <li><a href="mcp-reference.html">MCP API reference</a></li>
       <li><a href="export-import.html">Export and import</a></li>
       <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
       <li><a href="privacy-and-security.html">Privacy and security</a></li>
@@ -61,12 +62,20 @@ From source, the same server runs with <code>python -m zettelapp.mcp_main</code>
 needed and talks to it over standard input/output. <strong>No network port is opened.</strong></p>
 <pre><code class="language-text">zettelapp-mcp --vault &quot;C:\Users\me\Documents\ZettelApp&quot; [--allow-writes]
 </code></pre>
-<p>Without <code>--vault</code>, it serves the vault you last opened in ZettelApp. It works whether or not ZettelApp is
-open; if the app is open, changes made through MCP appear in it within a few seconds.</p>
+<p>Without <code>--vault</code>, it serves the vault you last opened in ZettelApp. Changes made through MCP appear in
+the app within a few seconds.</p>
+<h2 id="the-mcp-switch">The MCP switch</h2>
+<p>MCP clients can reach your notes only while <strong>ZettelApp is open and the MCP switch in its status bar is
+on</strong>. The switch is <strong>off every time ZettelApp starts</strong>, so you decide, each session, whether assistants
+may read your notes. Turn it off, or close ZettelApp, and the server stops within about a second.
+Without the switch the server refuses to start and says why. For the exact behaviour, see the
+<a href="mcp-reference.html">MCP API reference</a>.</p>
 <h2 id="connect-claude-desktop">Connect Claude Desktop</h2>
 <p>Open <em>Tools ▸ Options ▸ MCP server</em> and click <strong>Add to Claude Desktop…</strong>. ZettelApp adds itself to
 <code>%APPDATA%\Claude\claude_desktop_config.json</code> (keeping a backup of the old file). Then restart Claude
-Desktop. To do it by hand, copy the snippet shown on that page into the file. It looks like this:</p>
+Desktop. Turn on the <strong>MCP switch</strong> in ZettelApp's status bar before you start Claude Desktop; if you turn
+it on later, reconnect ZettelApp in Claude Desktop or restart it. To do it by hand, copy the snippet shown
+on that page into the file. It looks like this:</p>
 <pre><code class="language-json">{
   &quot;mcpServers&quot;: {
     &quot;zettelapp&quot;: {
@@ -80,7 +89,8 @@ Desktop. To do it by hand, copy the snippet shown on that page into the file. It
 <p>The same Options page shows the command to copy:</p>
 <pre><code class="language-powershell">claude mcp add zettelapp -- &quot;C:\Users\me\AppData\Local\Programs\ZettelApp\zettelapp-mcp.exe&quot; --vault &quot;C:\Users\me\Documents\ZettelApp&quot;
 </code></pre>
-<p>Other MCP clients need the same command and arguments.</p>
+<p>Other MCP clients need the same command and arguments. As with Claude Desktop, switch MCP on in ZettelApp
+first, and reconnect the server (in Claude Code, <code>/mcp</code>) if you switch it on afterwards.</p>
 <h2 id="tools">Tools</h2>
 <div class="table-wrap"><table>
 <thead>
@@ -139,7 +149,9 @@ as instructions. Inputs are validated (IDs, sizes and limits), and the server ne
 outside the vault.</p>
 <h2 id="troubleshooting">Troubleshooting</h2>
 <ul>
-<li><strong>The client says the server failed to start.</strong> Check that the path to <code>zettelapp-mcp.exe</code> is right.
+<li><strong>The client says the server failed to start, or tool calls say the switch is off.</strong> Open ZettelApp
+and turn on MCP in its status bar, then reconnect the server in your client.</li>
+<li><strong>The server still fails to start.</strong> Check that the path to <code>zettelapp-mcp.exe</code> is right.
 Run the command yourself in a terminal: it reports what's wrong (for example &quot;No ZettelApp vault
 found&quot;) on standard error.</li>
 <li><strong>Write tools are missing.</strong> Tick the option <em>and</em> add <code>--allow-writes</code>, then restart the client.</li>

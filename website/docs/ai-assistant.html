@@ -42,6 +42,7 @@
       <li><a href="zotero.html">Zotero</a></li>
       <li><a href="ai-assistant.html" aria-current="page">Ask your notes (AI)</a></li>
       <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="mcp-reference.html">MCP API reference</a></li>
       <li><a href="export-import.html">Export and import</a></li>
       <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
       <li><a href="privacy-and-security.html">Privacy and security</a></li>
@@ -98,6 +99,25 @@ computer (<code>http://localhost:…</code>). Addresses must use <code>https://<
 <code>localhost</code>.</p>
 <p>With Claude you can also set the <strong>effort</strong> (low to max): higher effort thinks more before answering, and
 costs more. The default is <em>medium</em>.</p>
+<h2 id="bring-your-own-llm">Bring your own LLM</h2>
+<p>Ask uses <strong>your own account</strong> with the provider you pick, so any usage is billed by that provider to you.
+ZettelApp has no AI service of its own. Your API key is saved in <strong>Windows Credential Manager</strong>, never in
+settings files.</p>
+<ul>
+<li><strong>Providers</strong>: Anthropic Claude, OpenAI and Z.ai (GLM), in <em>Tools ▸ Options ▸ AI assistant ▸ Provider</em>.
+Pick a <strong>Model</strong> from the list (<em>Refresh list</em> asks the provider which models your key can use) or type
+any model ID your key has access to.</li>
+<li><strong>Your own server</strong>: any service that offers an <strong>OpenAI-style chat completions</strong> API works. Choose
+<strong>OpenAI</strong> and set <strong>Endpoint (optional)</strong> to its base address, for example
+<code>https://my-proxy.example.com/v1</code>, <code>http://localhost:11434/v1</code> (Ollama) or <code>http://localhost:1234/v1</code>
+(LM Studio). Plain <code>http://</code> is accepted only for <code>localhost</code>, <code>127.0.0.1</code> and <code>::1</code>; everything else
+must use <code>https://</code>. For those local addresses the <strong>API key</strong> may stay empty.</li>
+<li><strong>Check it</strong>: press <strong>Test connection</strong>. For a local model, your question and notes never leave your
+computer.</li>
+<li><strong>What is sent</strong>: only your question and the most relevant notes, found on your computer. The number of
+notes is the <strong>how many notes</strong> box on the Ask page (8 by default), and the <em>Sources sent</em> list shows
+exactly which ones went.</li>
+</ul>
 <h2 id="ask-a-question">Ask a question</h2>
 <p>Type a question and press <strong>Ask</strong> (Ctrl+Enter). Choose where to look with <strong>Search in</strong>: the entire
 collection, the open note and its linked notes, or the notes with a tag. Choose <strong>how many notes</strong> to send.</p>

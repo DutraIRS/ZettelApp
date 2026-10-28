@@ -42,6 +42,7 @@
       <li><a href="zotero.html">Zotero</a></li>
       <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
       <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="mcp-reference.html">MCP API reference</a></li>
       <li><a href="export-import.html">Export and import</a></li>
       <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
       <li><a href="privacy-and-security.html">Privacy and security</a></li>
@@ -58,7 +59,24 @@ common ones, and Ctrl+B / Ctrl+I work as usual. Lists continue when you press En
 <p>The editor has three modes (Ctrl+E cycles through them): <strong>Edit</strong>, <strong>Split</strong> (text and preview side by
 side) and <strong>Preview</strong>.</p>
 <p>For safety, raw HTML in a note is shown as text and never rendered. Links in the preview open only web
-pages (<code>http</code>, <code>https</code>), e-mail (<code>mailto</code>) and Zotero items. See <a href="privacy-and-security.html">Privacy and security</a>.</p>
+pages (<code>http</code>, <code>https</code>), e-mail (<code>mailto</code>), notes, Zotero items and local files (shown in File Explorer,
+see <a href="#links-to-local-files">Links to local files</a>). See <a href="privacy-and-security.html">Privacy and security</a>.</p>
+<h3 id="following-links">Following links</h3>
+<ul>
+<li><strong>In the editor</strong>, <strong>Ctrl+click</strong> follows a <code>[[note link]]</code> (creating the note if it doesn't exist yet),
+a web, e-mail or Zotero link, a local file link, or a <code>#tag</code> (which lists the notes with that tag).
+Hover over the text and a tooltip says what the click will do. A plain click just places the caret, so
+you can still edit link text.</li>
+<li><strong>In the preview</strong>, a normal click follows links.</li>
+</ul>
+<h3 id="links-to-local-files">Links to local files</h3>
+<p><em>Insert ▸ Link to a File…</em> (or the folder button on the toolbar) lets you pick a file and inserts a link
+such as <code>[report.pdf](file:///C:/Users/me/Documents/report.pdf)</code>. Dragging a file that isn't an image into
+the note text does the same. The file is linked where it is; nothing is copied into the vault.</p>
+<p>Clicking the link in the preview, or Ctrl+clicking it in the editor, opens <strong>File Explorer with the file
+selected</strong>. The file itself is never opened or run. Only paths on a local drive are allowed: network
+(UNC) paths such as <code>\\server\share\file.pdf</code> are refused, because looking them up can send your Windows
+credentials to that server.</p>
 <p>Every note has:</p>
 <ul>
 <li>a <strong>title</strong> (the large field at the top);</li>
@@ -157,9 +175,14 @@ reverse name, a colour and a <em>Directed</em> switch. In text, use the type's i
 form, e.g. a type called &quot;Inspired by&quot; becomes <code>inspired_by::</code>). Removing a type turns its links into
 <em>Related to</em> links, so nothing is lost. <em>Related to</em> itself can't be removed.</p>
 <h2 id="tags">Tags</h2>
-<p>Add tags in the tag field under the title (press Enter after each). Tags are lower-case and may be
-nested with a slash, such as <code>math/algebra</code>. Filtering by <code>math</code> also finds notes tagged <code>math/algebra</code>.
+<p>Add tags in the tag field under the title (press Enter after each), or write them <strong>in the text</strong> with a
+hash sign, like <code>#welcome</code> or <code>#math/algebra</code>. Tags are lower-case and may be nested with a slash, such as
+<code>math/algebra</code>. Filtering by <code>math</code> also finds notes tagged <code>math/algebra</code>.
 Use the tag filter above the note list, or type <code>tag:name</code> in the search box.</p>
+<p>Tags written in the text are real tags, shown as <strong>outlined chips</strong> next to the <em>Add tag</em> box. They
+disappear when you delete the <code>#tag</code> from the text. A <code>#tag</code> is ignored inside code, inside link targets
+and in <code>[[#headings]]</code>. Tags typed in the <em>Add tag</em> box are separate: they stay until you remove them with
+their ✕. Ctrl+click a <code>#tag</code> in the editor to list the notes that have it.</p>
 <h2 id="source-link">Source link</h2>
 <p>The field with the globe icon holds the note's <strong>source</strong>: a web page (<code>https://…</code>), an e-mail address,
 or a Zotero item (<code>zotero://select/library/items/…</code>). The button next to it opens the link. Other kinds of

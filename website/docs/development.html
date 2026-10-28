@@ -42,6 +42,7 @@
       <li><a href="zotero.html">Zotero</a></li>
       <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
       <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="mcp-reference.html">MCP API reference</a></li>
       <li><a href="export-import.html">Export and import</a></li>
       <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
       <li><a href="privacy-and-security.html">Privacy and security</a></li>
@@ -91,7 +92,7 @@ import, Anki, quizzes, Zotero, the LLM providers (no network) and the MCP server
 </tr>
 <tr>
 <td><code>python tools/build_site.py</code></td>
-<td>Builds the documentation pages of the website (<code>website/docs/</code>) from <code>docs/*.md</code>.</td>
+<td>Builds the documentation pages of the website (<code>website/docs/</code>) from <code>docs/*.md</code>, and <code>website/version.json</code> from the app version.</td>
 </tr>
 </tbody>
 </table></div>
@@ -112,12 +113,27 @@ and <code>zettelapp://</code> link registration;</li>
 trigger fewer antivirus false positives than single-file builds.</p>
 <h2 id="release">Release</h2>
 <ol>
-<li>Update <code>__version__</code> in <code>zettelapp/__init__.py</code> and <code>CHANGELOG.md</code>.</li>
+<li>Update <code>__version__</code> in <code>zettelapp/__init__.py</code> and <code>CHANGELOG.md</code>, run <code>python tools/build_site.py</code>
+(it also writes <code>website/version.json</code> from <code>zettelapp.__version__</code>, which installed copies read to
+learn about new versions) and commit the result.</li>
 <li>Commit, then tag and push: <code>git tag v1.0.1; git push origin v1.0.1</code>.</li>
-<li>GitHub Actions builds the app on Windows, runs the tests and publishes a GitHub release with
+<li>GitHub Actions checks that the tag matches the app version, runs lint, formatting, the tests and the
+dependency audit, builds the app on Windows and publishes a GitHub release with
 <code>ZettelApp-Setup.exe</code>, <code>ZettelApp-Portable.zip</code> and <code>SHA256SUMS.txt</code>. The website's download buttons
 always point to the latest release.</li>
 </ol>
+<p>A release needs a <strong>code-signing certificate</strong>, stored in the repository secrets
+<code>WINDOWS_SIGNING_CERT_BASE64</code> and <code>WINDOWS_SIGNING_CERT_PASSWORD</code>. Without it the release job stops,
+unless the repository variable <code>ALLOW_UNSIGNED_RELEASE</code> is set to <code>true</code> to approve an unsigned release
+(see <code>.github/workflows/release.yml</code>).</p>
+<p>The CI workflow (<code>.github/workflows/ci.yml</code>) runs each check as its own step: lint, formatting, the
+dependency audit and a check that the generated website files are up to date (it fails when
+<code>website/docs</code> or <code>website/version.json</code> differ from what <code>tools/build_site.py</code> writes), then the tests
+and a build of the packaged app with its self-test.</p>
+<p><code>packaging/build.ps1</code> finds Inno Setup on <code>PATH</code>, installed for the current user
+(<code>%LOCALAPPDATA%\Programs\Inno Setup 6</code>) or for everyone.</p>
+<p>The vault database has a <strong>schema version</strong> (currently 2: the <code>tags.source</code> column tells tags added by
+hand from <code>#tags</code> written in the text). Older vaults are upgraded automatically when opened.</p>
 <p>The website (<code>website/</code>) is deployed to GitHub Pages by <code>.github/workflows/pages.yml</code> whenever <code>docs/</code> or
 <code>website/</code> change on <code>main</code>.</p>
 <h2 id="project-layout">Project layout</h2>

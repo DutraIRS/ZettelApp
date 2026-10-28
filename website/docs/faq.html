@@ -42,6 +42,7 @@
       <li><a href="zotero.html">Zotero</a></li>
       <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
       <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="mcp-reference.html">MCP API reference</a></li>
       <li><a href="export-import.html">Export and import</a></li>
       <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
       <li><a href="privacy-and-security.html">Privacy and security</a></li>
@@ -61,8 +62,23 @@ sponsor a specific <a href="https://github.com/DutraIRS/ZettelApp/blob/main/ROAD
 touch through <a href="https://github.com/DutraIRS/ZettelApp">GitHub</a>. Sponsors are thanked in the release notes.
 Reporting bugs, improving the docs and sharing ZettelApp help too.</p>
 <h3 id="does-it-need-the-internet">Does it need the internet?</h3>
-<p>No. Everything works offline. The internet is used only when you ask a question on the <strong>Ask</strong> page or
-open a link. See <a href="privacy-and-security.html">Privacy and security</a>.</p>
+<p>No. Everything works offline. The internet is used only for a small update check at start-up (which you
+can turn off), when you ask a question on the <strong>Ask</strong> page, and when you open a link. See
+<a href="privacy-and-security.html">Privacy and security</a>.</p>
+<h3 id="does-zettelapp-check-for-updates">Does ZettelApp check for updates?</h3>
+<p>Yes, once at start-up: one request for a small file on the project's website, with nothing about you or
+your notes. If a newer version exists, a notice appears in the lower-right corner. Turn it off with
+<em>Tools ▸ Options ▸ General ▸ Check for updates when ZettelApp starts</em>, or with <strong>Don't check for updates</strong>
+on the notice. See <a href="getting-started.html#updates">Getting started</a>.</p>
+<h3 id="what-is-the-mcp-switch-in-the-status-bar">What is the MCP switch in the status bar?</h3>
+<p>It lets AI assistants such as Claude Desktop or Claude Code use your notes through
+<a href="mcp-server.html">MCP</a>. It is <strong>off every time ZettelApp starts</strong>. While it is off, or ZettelApp is closed,
+assistants can't reach your notes. After you switch it on, reconnect ZettelApp in your MCP client (or
+restart the client).</p>
+<h3 id="can-i-use-a-model-on-my-own-computer">Can I use a model on my own computer?</h3>
+<p>Yes. In <em>Tools ▸ Options ▸ AI assistant</em>, choose <strong>OpenAI</strong> and set <strong>Endpoint</strong> to your local server, for
+example <code>http://localhost:11434/v1</code> (Ollama) or <code>http://localhost:1234/v1</code> (LM Studio). No API key is
+needed for <code>localhost</code>. See <a href="ai-assistant.html#bring-your-own-llm">Bring your own LLM</a>.</p>
 <h3 id="where-are-my-notes">Where are my notes?</h3>
 <p>In your vault folder, by default <strong>Documents\ZettelApp</strong>: a <code>zettel.db</code> database and an <code>assets</code> folder.
 <em>File ▸ Show Vault in File Explorer</em> opens it.</p>
@@ -95,11 +111,12 @@ matters most, and the estimates improve as you link and dismiss. See
 <p>The installer is. It offers many languages and suggests your Windows language. The app's own text is in
 English for now; translating it is on the
 <a href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">roadmap</a>.</p>
-<h3 id="how-do-i-uninstall">How do I uninstall?</h3>
-<p><em>Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall</em>. Your vaults in Documents are kept. For the
-portable version, delete its folder. Preferences live in the registry under
-<code>HKEY_CURRENT_USER\Software\ZettelApp</code>, and logs and backups in <code>%LOCALAPPDATA%\ZettelApp</code>. You can
-delete both if you no longer need them.</p>
+<h3 id="how-do-i-uninstall-and-what-happens-to-my-data">How do I uninstall, and what happens to my data?</h3>
+<p><em>Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall</em>. The uninstaller offers an unticked <strong>Also
+delete my ZettelApp settings and data</strong> option that removes preferences, saved API keys, logs, cache and
+automatic backups. <strong>Your notes are never deleted</strong>: vaults such as Documents\ZettelApp are kept. For the
+portable version, delete its folder; its preferences live in the registry under
+<code>HKEY_CURRENT_USER\Software\ZettelApp</code>, and logs and backups in <code>%LOCALAPPDATA%\ZettelApp</code>.</p>
 <h3 id="something-went-wrong-where-are-the-logs">Something went wrong. Where are the logs?</h3>
 <p>In <code>%LOCALAPPDATA%\ZettelApp\Logs</code>. Please include the relevant part when you
 <a href="https://github.com/DutraIRS/ZettelApp/issues">report an issue</a>. Check that it contains nothing private

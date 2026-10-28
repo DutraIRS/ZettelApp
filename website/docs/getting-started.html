@@ -42,6 +42,7 @@
       <li><a href="zotero.html">Zotero</a></li>
       <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
       <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="mcp-reference.html">MCP API reference</a></li>
       <li><a href="export-import.html">Export and import</a></li>
       <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
       <li><a href="privacy-and-security.html">Privacy and security</a></li>
@@ -83,8 +84,8 @@ installer. If you downloaded it from the official release page and the checksum 
 <strong>More info ▸ Run anyway</strong>. Code signing is on the <a href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">roadmap</a>.</p>
 <h2 id="your-first-vault">Your first vault</h2>
 <p>A <strong>vault</strong> is a folder holding your notes: a database file (<code>zettel.db</code>) and an <code>assets</code> folder for images.
-On first start ZettelApp creates one in <strong>Documents\ZettelApp</strong> with three short notes that show the main
-ideas. Use <em>File ▸ New Vault…</em> or <em>File ▸ Open Vault…</em> to work elsewhere, for example in a OneDrive folder.
+On first start ZettelApp creates one in <strong>Documents\ZettelApp</strong> with three short notes. The welcome note
+explains links, tags, images, mind maps and flashcards. Use <em>File ▸ New Vault…</em> or <em>File ▸ Open Vault…</em> to work elsewhere, for example in a OneDrive folder.
 <em>File ▸ Open Recent</em> lists the vaults you used last.</p>
 <p>Notes save automatically as you type. There is no Save button.</p>
 <h2 id="a-tour-of-the-window">A tour of the window</h2>
@@ -108,6 +109,20 @@ Edit, Split and Preview modes), its <strong>Mind map</strong> and its <strong>Fl
 size, link suggestions, link types, AI, MCP server, Anki, Zotero, Windows integration and backups.</p>
 <p>The app follows your Windows <strong>light/dark</strong> setting and <strong>accent colour</strong>. You can force a theme in
 <em>View ▸ Theme</em>.</p>
+<h2 id="updates">Updates</h2>
+<p>About four seconds after it starts, ZettelApp makes one HTTPS request to
+<code>https://dutrairs.github.io/ZettelApp/version.json</code> to learn the newest version. It sends nothing else
+(only a <code>ZettelApp/&lt;version&gt;</code> user-agent), and if the request fails you won't see anything. When a newer
+version exists, a small notice appears in the lower-right corner, at most once per version. It never
+takes focus. <strong>Download</strong> opens the releases page in your browser, <strong>✕</strong> closes the notice, and
+<strong>Don't check for updates</strong> turns checking off. You can turn it back on in
+<em>Tools ▸ Options ▸ General ▸ Check for updates when ZettelApp starts</em>. ZettelApp never installs
+anything by itself.</p>
+<h2 id="uninstalling">Uninstalling</h2>
+<p>Use <em>Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall</em>. After you confirm, a dialog offers
+an unticked <strong>Also delete my ZettelApp settings and data</strong> option. It removes your settings, saved API
+keys, logs, cache and automatic backups (<code>%LOCALAPPDATA%\ZettelApp</code>). Your notes are never deleted:
+vault folders such as <code>Documents\ZettelApp</code> stay. For the portable version, delete its folder.</p>
 <h2 id="next-steps">Next steps</h2>
 <ul>
 <li>Learn the note syntax in <a href="notes-and-links.html">Notes and links</a>.</li>
