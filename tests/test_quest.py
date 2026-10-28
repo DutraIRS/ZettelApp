@@ -238,13 +238,13 @@ def test_the_card_paints_with_and_without_illustrations(window, tmp_path, monkey
 
     from zettelapp.ui import quest_card
 
+    monkeypatch.setattr(quest_card, "resource_path", lambda *p: tmp_path.joinpath("resources", *p))
     quest = window.quest
     quest.offer()
-    assert quest.card.hero.pixmap is None  # no illustration yet: a tinted glyph instead
+    assert quest.card.hero.pixmap is None  # missing illustrations use a tinted glyph
     assert not quest.card.grab().isNull()
     (tmp_path / "resources" / "quest").mkdir(parents=True)
     (tmp_path / "resources" / "quest" / "journal.png").write_bytes(tiny_png((200, 120, 40)))
-    monkeypatch.setattr(quest_card, "resource_path", lambda *p: tmp_path.joinpath("resources", *p))
     quest.begin()
     quest.card.hint_button.click()
     assert quest.card.hint.isVisible() and quest.card.hero.pixmap is not None
@@ -255,3 +255,19 @@ def test_the_card_paints_with_and_without_illustrations(window, tmp_path, monkey
     quest.skip()
     assert quest.card.hero.pixmap is None
     window.grab()
+
+
+def test_bundled_quest_illustrations_are_complete():
+    from PySide6.QtGui import QImage
+
+    from zettelapp.paths import resource_path
+    from zettelapp.ui.quest import CHAPTERS
+
+    names = ["prologue", *(chapter.key for chapter in CHAPTERS), "finale"]
+    assert len(names) == 12
+    for name in names:
+        path = resource_path("quest", f"{name}.png")
+        image = QImage(str(path))
+        assert not image.isNull(), name
+        assert (image.width(), image.height()) == (1200, 400), name
+        assert path.stat().st_size < 400_000, name
