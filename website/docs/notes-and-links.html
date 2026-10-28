@@ -14,8 +14,8 @@
 <a class="skip" href="#content">Skip to content</a>
 <header class="site-header">
   <div class="wrap header-row">
-    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> ZettelApp</a>
-    <nav aria-label="Main">
+    <a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a>
+    <nav class="nav-wide" aria-label="Main">
       <ul class="nav">
         <li><a href="../#features">Features</a></li>
         <li><a href="tutorial.html">Tutorial</a></li>
@@ -25,12 +25,26 @@
         <li><a class="nav-cta" href="../#download">Download</a></li>
       </ul>
     </nav>
+    <div class="header-actions">
+      <a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Donate"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Donate</span></a>
+      <a class="hbtn cta" href="../#download">Download</a>
+      <details class="menu">
+        <summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary>
+        <ul class="menu-panel">
+          <li><a href="../#features">Features</a></li>
+          <li><a href="tutorial.html">Tutorial</a></li>
+          <li><a href="./">Docs</a></li>
+          <li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li>
+        </ul>
+      </details>
+    </div>
   </div>
 </header>
 <div class="wrap docs-layout">
   <nav class="docs-nav" aria-label="Documentation">
-    <h2>Documentation</h2>
-    <ul>
+    <details class="docs-menu">
+      <summary><span class="docs-menu-text"><span class="docs-menu-label">Documentation</span><span class="docs-menu-current">Notes and links</span></span></summary>
+      <ul>
       <li><a href="index.html">Overview</a></li>
       <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
       <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
@@ -48,7 +62,30 @@
       <li><a href="privacy-and-security.html">Privacy and security</a></li>
       <li><a href="development.html">Development</a></li>
       <li><a href="faq.html">FAQ</a></li>
-    </ul>
+      </ul>
+    </details>
+    <div class="docs-list">
+      <h2>Documentation</h2>
+      <ul>
+      <li><a href="index.html">Overview</a></li>
+      <li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li>
+      <li><a href="tutorial.html">Tutorial: first 30 minutes</a></li>
+      <li><a href="getting-started.html">Getting started</a></li>
+      <li><a href="notes-and-links.html" aria-current="page">Notes and links</a></li>
+      <li><a href="link-suggestions.html">Link suggestions</a></li>
+      <li><a href="graph-and-insights.html">Graph and Insights</a></li>
+      <li><a href="review-and-anki.html">Review, quizzes and Anki</a></li>
+      <li><a href="zotero.html">Zotero</a></li>
+      <li><a href="ai-assistant.html">Ask your notes (AI)</a></li>
+      <li><a href="mcp-server.html">MCP server</a></li>
+      <li><a href="mcp-reference.html">MCP API reference</a></li>
+      <li><a href="export-import.html">Export and import</a></li>
+      <li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li>
+      <li><a href="privacy-and-security.html">Privacy and security</a></li>
+      <li><a href="development.html">Development</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
   </nav>
   <main id="content" class="doc">
 <h1 id="notes-and-links">Notes and links</h1>
@@ -267,8 +304,8 @@ and come back when the note is restored.</p>
 </div>
 <footer class="site-footer">
   <div class="wrap footer-row">
-    <p><img src="../assets/favicon.png" alt="" width="20" height="20"> ZettelApp · public domain
-      (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</p>
+    <p><img src="../assets/favicon.png" alt="" width="20" height="20">
+      <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p>
     <ul class="nav">
       <li><a href="../">Home</a></li>
       <li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li>
