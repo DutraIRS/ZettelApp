@@ -18,6 +18,7 @@ from zettelapp import APP_NAME, ORG_NAME
 LAST_VAULT = "vault/last"
 RECENT_VAULTS = "vault/recent"
 THEME = "ui/theme"  # system | light | dark
+UI_LANGUAGE = "ui/language"  # system, a code from i18n.LANGUAGES, or the installer's choice
 EDITOR_FONT_SIZE = "editor/fontSize"
 AUTOSAVE_MS = "editor/autosaveMs"
 SUGGEST_ENABLED = "suggest/enabled"
@@ -42,6 +43,7 @@ UPDATE_NOTIFIED = "updates/notifiedVersion"  # the newest version already announ
 
 DEFAULTS: dict[str, Any] = {
     THEME: "system",
+    UI_LANGUAGE: "system",
     EDITOR_FONT_SIZE: 11,
     AUTOSAVE_MS: 800,
     SUGGEST_ENABLED: True,

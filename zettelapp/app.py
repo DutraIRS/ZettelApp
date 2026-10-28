@@ -19,7 +19,7 @@ from PySide6.QtGui import QIcon
 from PySide6.QtNetwork import QLocalServer, QLocalSocket
 from PySide6.QtWidgets import QApplication, QMessageBox
 
-from zettelapp import APP_NAME, ORG_NAME, __version__, settings, winintegration
+from zettelapp import APP_NAME, ORG_NAME, __version__, i18n, settings, winintegration
 from zettelapp.core.security import parse_app_url
 from zettelapp.paths import ensure_dir, logs_dir, resource_path
 from zettelapp.ui import theme
@@ -181,6 +181,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     _install_excepthook()
+    i18n.install(app, settings.get(settings.UI_LANGUAGE))
     theme.apply_theme(app, settings.get(settings.THEME))
 
     from zettelapp.ui.main_window import MainWindow
