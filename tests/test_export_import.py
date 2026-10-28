@@ -222,3 +222,73 @@ def test_archive_failure_rolls_back_imported_assets(vault, monkeypatch, tmp_path
     monkeypatch.setattr(vault, "save_note", original_save)
     assert vault.get_note("20260101000004") is None
     assert not any(vault.assets_dir.iterdir())
+
+
+@pytest.mark.parametrize("zipped", [False, True])
+def test_markdown_import_failure_rolls_back_notes_links_and_images(
+    vault, monkeypatch, tmp_path, zipped
+):
+    folder = tmp_path / "markdown"
+    folder.mkdir()
+    (folder / "pic.png").write_bytes(tiny_png())
+    (folder / "a.md").write_text("# First\n\nSee [[b]].\n\n![[pic.png]]\n", encoding="utf-8")
+    (folder / "b.md").write_text("# Second\n\nBack to [[a]].\n", encoding="utf-8")
+    source = folder
+    if zipped:
+        source = tmp_path / "markdown.zip"
+        with zipfile.ZipFile(source, "w") as zf:
+            for path in folder.iterdir():
+                zf.write(path, path.name)
+    original_save = vault.save_note
+    written = {}
+
+    def fail_on_second_save(note, touch=True):
+        if written:
+            raise RuntimeError("simulated Markdown import failure")
+        original_save(note, touch)
+        written.update(links=len(vault.all_links()), images=len(list(vault.assets_dir.iterdir())))
+        return note
+
+    monkeypatch.setattr(vault, "save_note", fail_on_second_save)
+    events = []
+    vault.listeners.append(events.append)
+
+    with pytest.raises(RuntimeError, match="simulated Markdown import failure"):
+        import_path(vault, source)
+
+    assert written == {"links": 1, "images": 1}  # the first note was saved before the failure
+    assert vault.all_notes(include_deleted=True) == []
+    assert vault.all_links() == []
+    assert not any(vault.assets_dir.iterdir())
+    assert events == []
+
+
+def test_single_markdown_file_failure_rolls_back(vault, monkeypatch, tmp_path):
+    (tmp_path / "pic.png").write_bytes(tiny_png())
+    source = tmp_path / "note.md"
+    source.write_text("# Note\n\n![[pic.png]]\n", encoding="utf-8")
+
+    def fail_save(note, touch=True):
+        raise RuntimeError("simulated Markdown import failure")
+
+    monkeypatch.setattr(vault, "save_note", fail_save)
+
+    with pytest.raises(RuntimeError, match="simulated Markdown import failure"):
+        import_path(vault, source)
+
+    assert vault.all_notes(include_deleted=True) == []
+    assert not any(vault.assets_dir.iterdir())
+
+
+def test_markdown_import_skips_a_bad_image_and_keeps_the_rest(vault, tmp_path):
+    folder = tmp_path / "markdown"
+    folder.mkdir()
+    (folder / "fake.png").write_text("not an image", encoding="utf-8")
+    (folder / "a.md").write_text("# First\n\n![[fake.png]]\n", encoding="utf-8")
+
+    result = import_path(vault, folder)
+
+    assert result.notes == 1 and result.images == 0
+    assert len(result.warnings) == 1 and "fake.png" in result.warnings[0]
+    assert vault.resolve_title("First") is not None
+    assert not any(vault.assets_dir.iterdir())
