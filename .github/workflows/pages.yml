@@ -33,7 +33,7 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install "markdown-it-py==4.2.0"
           python tools/build_site.py
-      - uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v3
         with:
           path: website
