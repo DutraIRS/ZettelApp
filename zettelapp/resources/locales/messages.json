@@ -507,7 +507,7 @@
  "Built-in link types can be renamed and restyled but not removed.": {
   "plural": null,
   "where": [
-   "zettelapp/core/storage.py:715",
+   "zettelapp/core/storage.py:719",
    "zettelapp/ui/settings_dialog.py:461",
    "zettelapp/ui/settings_dialog.py:513"
   ]
@@ -2693,7 +2693,7 @@
  "The default link type cannot be removed.": {
   "plural": null,
   "where": [
-   "zettelapp/core/storage.py:710"
+   "zettelapp/core/storage.py:714"
   ]
  },
  "The door swings open onto a spiral stair. At the top shines the Tower of Insight.": {
