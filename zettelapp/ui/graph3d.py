@@ -6,7 +6,7 @@ import math
 
 import numpy as np
 from PySide6.QtCore import QPointF, QRectF, Qt, QTimer, Signal
-from PySide6.QtGui import QColor, QFontMetricsF, QPainter, QPainterPath, QPen, QRadialGradient
+from PySide6.QtGui import QColor, QFontMetricsF, QPainter, QPainterPath, QPen
 from PySide6.QtWidgets import QWidget
 
 from zettelapp.ui import theme
@@ -16,6 +16,7 @@ from zettelapp.ui.graph_common import (
     draw_edge_label,
     edge_shape,
     label_point,
+    padded_hull,
     parallel_lanes,
 )
 from zettelapp.ui.link_style import draw_tip, link_pen
@@ -131,25 +132,39 @@ class Graph3DView(QWidget):
         self._screen = screen
         base = min(self.width(), self.height()) * 0.36 * self.zoom_level
 
-        if self.show_groups:  # soft halos behind each group
+        if self.show_groups:  # solid, clearly bounded hulls; only their size follows depth
+            label_font = theme.ui_font(9, theme.QFont.Weight.DemiBold)
+            label_metrics = QFontMetricsF(label_font)
+            groups = []
             for group, members in self.data.members().items():
                 idx = [self._index[m] for m in members if m in self._index]
-                if not idx:
-                    continue
-                centre = screen[idx].mean(axis=0)
-                spread = (
-                    float(np.sqrt(((screen[idx] - centre) ** 2).sum(axis=1).mean())) + base * 0.06
+                if idx:
+                    groups.append((group, idx, float(np.mean(depth[idx]))))
+            groups.sort(key=lambda g: g[2])  # farthest first, so nearer hulls paint over them
+            for group, idx, d in groups:
+                pts = [tuple(screen[i]) for i in idx]
+                node_r = max(
+                    node_radius(self.data.degree.get(self.data.ids[i], 0)) * (0.55 + 0.6 * depth[i])
+                    for i in idx
                 )
-                color = QColor(self.data.group_color(group))
-                gradient = QRadialGradient(QPointF(*centre), spread * 1.25)
-                inner, outer = QColor(color), QColor(color)
-                inner.setAlphaF(0.13)
-                outer.setAlphaF(0.0)
-                gradient.setColorAt(0, inner)
-                gradient.setColorAt(1, outer)
-                painter.setPen(Qt.PenStyle.NoPen)
-                painter.setBrush(gradient)
-                painter.drawEllipse(QPointF(*centre), spread * 1.25, spread * 1.25)
+                region = padded_hull(pts, (node_r + base * 0.16) * (0.55 + 0.6 * d))
+                fill = QColor(self.data.group_color(group))
+                fill.setAlphaF(0.18)
+                stroke = QColor(self.data.group_color(group))
+                stroke.setAlphaF(0.55)
+                painter.setPen(QPen(stroke, 1.4))
+                painter.setBrush(fill)
+                painter.drawPath(region)
+                top = region.boundingRect()
+                label = self.data.group_label(group)
+                painter.setFont(label_font)
+                painter.setPen(t.q("text_secondary"))
+                painter.drawText(
+                    QPointF(
+                        top.center().x() - label_metrics.horizontalAdvance(label) / 2, top.top() - 8
+                    ),
+                    label,
+                )
 
         focus = self.hovered or self.selected
         neighbors = self._neighbors.get(focus, set()) if focus else set()

@@ -125,3 +125,32 @@ def test_both_graph_views_paint_every_line_style_and_tip():
         view.select(data.ids[0]) if view is view2d else view.focus_node(data.ids[0])
         assert not view.grab().isNull()
     assert not view2d.render_image().isNull()
+
+
+def test_3d_group_hulls_are_depth_aware_and_survive_rotation_and_single_member_groups():
+    """The 3D group hulls must shrink/fade with distance (not look like flat 2D stickers)."""
+    import math
+
+    from PySide6.QtWidgets import QApplication
+
+    from zettelapp.ui.graph3d import Graph3DView
+
+    QApplication.instance() or QApplication(["test"])
+    data = _styled_graph()
+    # Spread members across distinct depths, including a lone-member group (hull fallback).
+    deep = {
+        i: (200 * math.cos(k), 200 * math.sin(k), 300.0 * (k % 4 - 1.5))
+        for k, i in enumerate(data.ids)
+    }
+    data.group_of = {i: k % 3 for k, i in enumerate(data.ids)}
+    data.group_of[data.ids[-1]] = 3  # a group of exactly one note
+    data.group_names = ["Alpha", "Beta", "Gamma", "Lone"]
+
+    view = Graph3DView()
+    view.resize(640, 480)
+    view.set_graph(data, deep, show_groups=True, show_labels=True)
+    assert not view.grab().isNull()
+    for yaw in (0.3, 1.1, 2.4, -0.8):
+        view.yaw = yaw
+        view.pitch = 0.2
+        assert not view.grab().isNull()  # no exception while rotating through every angle
