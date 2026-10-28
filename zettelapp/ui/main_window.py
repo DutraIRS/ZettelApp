@@ -38,6 +38,7 @@ from zettelapp.core.importer import import_path
 from zettelapp.core.security import UnsafeInputError, is_valid_note_id, safe_filename
 from zettelapp.core.storage import Vault, VaultError
 from zettelapp.core.suggest import FEATURES, NoteData
+from zettelapp.mcp_switch import McpSwitch
 from zettelapp.paths import backups_dir, default_vault_dir, documents_dir
 from zettelapp.ui import icons, theme
 from zettelapp.ui.ask_page import AskPage
@@ -49,7 +50,7 @@ from zettelapp.ui.note_list import NoteListPanel
 from zettelapp.ui.review_page import ReviewPage
 from zettelapp.ui.settings_dialog import OptionsDialog
 from zettelapp.ui.side_panel import SidePanel
-from zettelapp.ui.widgets import InfoBar, label
+from zettelapp.ui.widgets import InfoBar, ToggleSwitch, label
 from zettelapp.ui.workers import SuggestionService, run_task
 
 log = logging.getLogger(__name__)
@@ -206,6 +207,7 @@ class MainWindow(QMainWindow):
         self._build_menus()
         self.status_vault = label("", "caption")
         self.status_counts = label("", "caption")
+        self.statusBar().addPermanentWidget(self._build_mcp_switch())
         self.statusBar().addPermanentWidget(self.status_counts)
         self.statusBar().addPermanentWidget(self.status_vault)
         self._restore_window()
@@ -1076,7 +1078,59 @@ class MainWindow(QMainWindow):
         super().showEvent(event)
         winintegration.set_window_frame_dark(int(self.winId()), theme.current().dark)
 
+    # --- MCP switch ---------------------------------------------------------
+
+    def _build_mcp_switch(self) -> QWidget:
+        """The status-bar switch that lets MCP clients (AI agents) reach the vault.
+
+        Always off when ZettelApp starts; the state is never saved."""
+        self.mcp_switch = McpSwitch()
+        self.mcp_toggle = ToggleSwitch()
+        self.mcp_toggle.setAccessibleName("Let AI agents use ZettelApp through MCP")
+        self.mcp_toggle.toggled.connect(self._set_mcp)
+        self.mcp_label = label("MCP off", "caption")
+        box = QWidget()
+        row = QHBoxLayout(box)
+        row.setContentsMargins(0, 0, 10, 0)
+        row.setSpacing(4)
+        row.addWidget(self.mcp_toggle)
+        row.addWidget(self.mcp_label)
+        box.setToolTip(
+            "MCP lets AI agents such as Claude Desktop or Claude Code search and read your notes.\n"
+            "It works only while ZettelApp is open and this switch is on. The switch is off\n"
+            "whenever ZettelApp starts, and the agent's connection stops when you switch it\n"
+            "off or close ZettelApp. Set it up in Tools ▸ Options ▸ MCP server."
+        )
+        return box
+
+    def _set_mcp(self, on: bool) -> None:
+        try:
+            if on:
+                self.mcp_switch.on()
+            else:
+                self.mcp_switch.off()
+        except OSError:
+            log.exception("Could not switch MCP access")
+            self.mcp_toggle.blockSignals(True)
+            self.mcp_toggle.setChecked(self.mcp_switch.is_on)
+            self.mcp_toggle.blockSignals(False)
+            self.statusBar().showMessage("Could not switch MCP on.", 6000)
+            return
+        self.mcp_label.setText("MCP on" if on else "MCP off")
+        if on:
+            what = "read and add to" if settings.get(settings.MCP_ALLOW_WRITES) else "read"
+            self.statusBar().showMessage(
+                f"MCP is on: AI agents connected to ZettelApp can {what} your notes "
+                "until you switch it off or close ZettelApp.",
+                8000,
+            )
+        else:
+            self.statusBar().showMessage(
+                "MCP is off: AI agents can no longer reach your notes.", 5000
+            )
+
     def closeEvent(self, event) -> None:  # noqa: N802
+        self.mcp_toggle.setChecked(False)  # agents lose access the moment the app closes
         self.editor.flush()
         store = settings.store()
         store.setValue("window/geometry", self.saveGeometry())

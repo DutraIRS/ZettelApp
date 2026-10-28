@@ -1,9 +1,29 @@
 import io
 import json
+import logging
+import os
+import subprocess
 import sys
+import threading
 
-from zettelapp import mcp_main, mcp_server
+import pytest
+
+from zettelapp import mcp_main, mcp_server, mcp_switch
 from zettelapp.mcp_server import PROTOCOL_VERSIONS, ZettelMcpServer
+
+REAL_WATCHER = mcp_main._exit_when_switched_off
+
+
+@pytest.fixture(autouse=True)
+def switched_on(monkeypatch):
+    """ZettelApp is open with its MCP switch on, unless a test says otherwise. The real
+    watcher would end the test process when the switch goes off, so it is replaced."""
+    state = {"on": True}
+    monkeypatch.setattr(mcp_server, "mcp_switched_on", lambda: state["on"])
+    monkeypatch.setattr(mcp_main, "mcp_switched_on", lambda: state["on"])
+    monkeypatch.setattr(mcp_main, "_exit_when_switched_off", lambda log: None)
+    return state
+
 
 READ_TOOLS = {
     "search_notes",
@@ -201,3 +221,69 @@ def test_main_entry_point(vault, sample, monkeypatch, tmp_path):
     assert "create_note" in {t["name"] for t in replies[0]["result"]["tools"]}
     code, _ = _run_main(monkeypatch, ["--vault", str(tmp_path / "missing")], False, listing)
     assert code == 2
+
+
+def test_tools_refuse_while_the_switch_is_off(vault, sample, switched_on):
+    server = ZettelMcpServer(vault)
+    switched_on["on"] = False
+    (listing,) = run(server, req(1, "tools/list"))
+    assert {t["name"] for t in listing["result"]["tools"]} == READ_TOOLS  # still listed
+    reply = call(server, "search_notes", {"query": "memory"})
+    assert reply["result"]["isError"] is True
+    assert "MCP switch is off" in reply["result"]["content"][0]["text"]
+    switched_on["on"] = True
+    assert call(server, "search_notes", {"query": "memory"})["result"]["isError"] is False
+
+
+def test_server_refuses_to_start_while_the_switch_is_off(vault, monkeypatch, switched_on):
+    switched_on["on"] = False
+    code, replies = _run_main(monkeypatch, ["--vault", str(vault.folder)], False, [req(1, "ping")])
+    assert code == 1 and replies == []
+
+
+def test_server_process_ends_once_switched_off(monkeypatch, switched_on):
+    exited = threading.Event()
+    monkeypatch.setattr(mcp_main.os, "_exit", lambda code: exited.set())
+    monkeypatch.setattr(mcp_main, "SWITCH_POLL_SECONDS", 0.01)
+    watcher = REAL_WATCHER(logging.getLogger("test"))
+    assert not exited.wait(0.1)  # keeps serving while the switch is on
+    switched_on["on"] = False
+    watcher.join(5)
+    assert exited.is_set()
+
+
+@pytest.fixture
+def private_switch(monkeypatch, tmp_path):
+    """A switch nobody else uses, so a ZettelApp running on this machine can't interfere."""
+    monkeypatch.setattr(mcp_switch, "EVENT_NAME", rf"Local\ZettelApp.Test.{os.getpid()}")
+    monkeypatch.setattr(mcp_switch, "_pid_file", lambda: tmp_path / "mcp-switch-on.pid")
+    return mcp_switch
+
+
+def test_the_switch_is_seen_by_other_processes_only_while_on(private_switch):
+    switch = private_switch.McpSwitch()
+    probe = (
+        "import sys; from zettelapp import mcp_switch as s; s.EVENT_NAME = sys.argv[1]; "
+        "print(s.mcp_switched_on())"
+    )
+
+    def seen_elsewhere() -> bool:
+        out = subprocess.run(
+            [sys.executable, "-c", probe, private_switch.EVENT_NAME],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+        return out.stdout.strip() == "True"
+
+    assert not private_switch.mcp_switched_on()
+    switch.on()
+    try:
+        assert switch.is_on and private_switch.mcp_switched_on()
+        if sys.platform == "win32":
+            assert seen_elsewhere()  # the MCP server is a separate process
+    finally:
+        switch.off()
+    assert not switch.is_on and not private_switch.mcp_switched_on()
+    if sys.platform == "win32":
+        assert not seen_elsewhere()

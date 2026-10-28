@@ -4,9 +4,10 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from PySide6.QtCore import QPoint, QRect, QSize, Qt, QTimer, Signal
-from PySide6.QtGui import QAction, QFontMetrics, QPainter
+from PySide6.QtCore import QPoint, QPointF, QRect, QRectF, QSize, Qt, QTimer, Signal
+from PySide6.QtGui import QAction, QFontMetrics, QPainter, QPen
 from PySide6.QtWidgets import (
+    QAbstractButton,
     QComboBox,
     QCompleter,
     QFrame,
@@ -25,6 +26,40 @@ from PySide6.QtWidgets import (
 
 from zettelapp.core.textutil import normalize_tag
 from zettelapp.ui import icons, theme
+
+
+class ToggleSwitch(QAbstractButton):
+    """A Windows 11 style on/off switch (checkable; Space toggles it)."""
+
+    def __init__(self, parent: QWidget | None = None):
+        super().__init__(parent)
+        self.setCheckable(True)
+        self.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+        self.setAttribute(Qt.WidgetAttribute.WA_Hover, True)
+
+    def sizeHint(self) -> QSize:  # noqa: N802
+        return QSize(40, 22)
+
+    def paintEvent(self, event) -> None:  # noqa: N802
+        t = theme.current()
+        painter = QPainter(self)
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        h = 18.0
+        track = QRectF(2, (self.height() - h) / 2, h * 2, h)
+        on = self.isChecked()
+        if self.hasFocus():
+            painter.setPen(QPen(t.q("text"), 1.5))
+            painter.setBrush(Qt.BrushStyle.NoBrush)
+            painter.drawRoundedRect(track.adjusted(-2, -2, 2, 2), h / 2 + 2, h / 2 + 2)
+        painter.setPen(Qt.PenStyle.NoPen if on else QPen(t.q("text_secondary"), 1))
+        painter.setBrush(t.q("accent") if on else Qt.BrushStyle.NoBrush)
+        painter.drawRoundedRect(track.adjusted(0.5, 0.5, -0.5, -0.5), h / 2, h / 2)
+        radius = (5.5 if self.underMouse() else 4.5) if self.isEnabled() else 4.0
+        x = track.right() - h / 2 if on else track.left() + h / 2
+        painter.setPen(Qt.PenStyle.NoPen)
+        painter.setBrush(t.q("on_accent") if on else t.q("text_secondary"))
+        painter.drawEllipse(QPointF(x, track.center().y()), radius, radius)
 
 
 def label(text: str = "", role: str | None = None, wrap: bool = False) -> QLabel:

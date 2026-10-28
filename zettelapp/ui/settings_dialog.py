@@ -461,9 +461,13 @@ class OptionsDialog(QDialog):
     def _mcp(self, lay: QVBoxLayout) -> None:
         lay.addWidget(
             label(
-                "ZettelApp includes a Model Context Protocol (MCP) server, so assistants such as Claude Desktop or "
-                "Claude Code can search and read your vault. It runs only when your MCP client starts it, talks over "
-                "standard input/output (no network port), and is read-only unless you allow changes below.",
+                "ZettelApp includes a Model Context Protocol (MCP) server, so assistants such as "
+                "Claude Desktop or Claude Code can search and read your vault. It works only while "
+                "ZettelApp is open and the MCP switch in the status bar is on. The switch is off "
+                "whenever ZettelApp starts, and the server stops as soon as you switch it off or "
+                "close ZettelApp. Turn the switch on before you start your MCP client, or reconnect "
+                "ZettelApp in the client afterwards. The server talks over standard input/output "
+                "(no network port) and is read-only unless you allow changes below.",
                 "caption",
                 wrap=True,
             )

@@ -238,3 +238,19 @@ def test_welcome_note_demonstrates_links_and_tags(window):
         window.vault.resolve_title("How link suggestions work"),
         window.vault.resolve_title("Writing atomic notes"),
     }
+
+
+def test_mcp_switch_starts_off_and_closing_the_app_turns_it_off(window, monkeypatch, tmp_path):
+    from zettelapp import mcp_switch
+
+    monkeypatch.setattr(mcp_switch, "EVENT_NAME", rf"Local\ZettelApp.UiTest.{os.getpid()}")
+    monkeypatch.setattr(mcp_switch, "_pid_file", lambda: tmp_path / "mcp-switch-on.pid")
+    assert not window.mcp_toggle.isChecked() and not mcp_switch.mcp_switched_on()
+    assert window.mcp_label.text() == "MCP off"
+    window.mcp_toggle.click()
+    assert mcp_switch.mcp_switched_on() and window.mcp_label.text() == "MCP on"
+    window.mcp_toggle.click()
+    assert not mcp_switch.mcp_switched_on()
+    window.mcp_toggle.click()
+    window.close()  # closing ZettelApp cuts agents off
+    assert not mcp_switch.mcp_switched_on() and not window.mcp_toggle.isChecked()
