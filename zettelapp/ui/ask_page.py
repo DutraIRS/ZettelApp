@@ -18,7 +18,7 @@ from PySide6.QtWidgets import (
 )
 
 from zettelapp import settings
-from zettelapp.core.llm import PROVIDERS, LLMSettings, retrieve_context, stream_answer
+from zettelapp.core.llm import LLMSettings, retrieve_context, stream_answer
 from zettelapp.core.render import NoteRenderer
 from zettelapp.core.secrets import get_secret
 from zettelapp.ui import icons
@@ -62,8 +62,10 @@ class AskPage(QWidget):
 
         ask = Card()
         self.question = QPlainTextEdit()
-        self.question.setPlaceholderText("Ask a question about your notes, e.g. “How does spaced repetition relate "
-                                         "to active recall?”  (Ctrl+Enter to ask)")
+        self.question.setPlaceholderText(
+            "Ask a question about your notes, e.g. “How does spaced repetition relate "
+            "to active recall?”  (Ctrl+Enter to ask)"
+        )
         self.question.setAccessibleName("Question")
         self.question.setFixedHeight(84)
         ask.body.addWidget(self.question)
@@ -97,7 +99,9 @@ class AskPage(QWidget):
         answer_head.addWidget(self.copy_button)
         answer_head.addWidget(self.save_button)
         answer_card.body.addLayout(answer_head)
-        self.answer = NotePreview(lambda name: self.window.vault.asset_path(name) if self.window.vault else None)
+        self.answer = NotePreview(
+            lambda name: self.window.vault.asset_path(name) if self.window.vault else None
+        )
         self.answer.noteRequested.connect(self.openNote)
         answer_card.body.addWidget(self.answer, 1)
         body.addWidget(answer_card, 3)
@@ -107,7 +111,9 @@ class AskPage(QWidget):
         self.sources_list = QListWidget()
         self.sources_list.setAccessibleName("Notes sent with the question")
         self.sources_list.setWordWrap(True)
-        self.sources_list.itemClicked.connect(lambda item: self.openNote.emit(item.data(Qt.ItemDataRole.UserRole)))
+        self.sources_list.itemClicked.connect(
+            lambda item: self.openNote.emit(item.data(Qt.ItemDataRole.UserRole))
+        )
         sources_card.body.addWidget(self.sources_list, 1)
         self.privacy = label("", "caption", wrap=True)
         sources_card.body.addWidget(self.privacy)
@@ -130,10 +136,14 @@ class AskPage(QWidget):
         info = cfg.info
         has_key = not info.requires_key or bool(get_secret(info.secret_name))
         model = cfg.effective_model()
-        self.provider_label.setText(f"{info.label} · {model}" + ("" if has_key else " · no API key"))
-        self.privacy.setText(f"Only your question and the notes listed above are sent to {info.label}. "
-                             f"The model gets no tools and cannot change your notes. Your API key is kept in "
-                             f"Windows Credential Manager.")
+        self.provider_label.setText(
+            f"{info.label} · {model}" + ("" if has_key else " · no API key")
+        )
+        self.privacy.setText(
+            f"Only your question and the notes listed above are sent to {info.label}. "
+            f"The model gets no tools and cannot change your notes. Your API key is kept in "
+            f"Windows Credential Manager."
+        )
         if self.window.vault:
             self.scope.set_tags(self.window.vault.all_tags())
 
@@ -149,8 +159,12 @@ class AskPage(QWidget):
     def _renderer(self) -> NoteRenderer:
         vault = self.window.vault
         titles = vault.titles()
-        return NoteRenderer(vault.resolve_title, lambda i: titles.get(i) or "Untitled",
-                            link_types=vault.link_type_map(), allow_new_note_links=False)
+        return NoteRenderer(
+            vault.resolve_title,
+            lambda i: titles.get(i) or "Untitled",
+            link_types=vault.link_type_map(),
+            allow_new_note_links=False,
+        )
 
     def ask(self) -> None:
         vault = self.window.vault
@@ -161,16 +175,26 @@ class AskPage(QWidget):
         info = cfg.info
         key = get_secret(info.secret_name)
         if info.requires_key and not key:
-            if QMessageBox.question(self, "Connect an AI provider",
-                                    f"Add your {info.label} API key in Options to ask questions about your notes. "
-                                    "Open Options now?") == QMessageBox.StandardButton.Yes:
+            if (
+                QMessageBox.question(
+                    self,
+                    "Connect an AI provider",
+                    f"Add your {info.label} API key in Options to ask questions about your notes. "
+                    "Open Options now?",
+                )
+                == QMessageBox.StandardButton.Yes
+            ):
                 self.configureRequested.emit()
             return
         if not settings.get(settings.LLM_PRIVACY_ACK):
-            box = QMessageBox(QMessageBox.Icon.Information, "Before you ask",
-                              f"Your question and the most relevant notes (up to {self.limit.value()}) will be sent to "
-                              f"{info.label} using your API key. Nothing else leaves this computer.",
-                              QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel, self)
+            box = QMessageBox(
+                QMessageBox.Icon.Information,
+                "Before you ask",
+                f"Your question and the most relevant notes (up to {self.limit.value()}) will be sent to "
+                f"{info.label} using your API key. Nothing else leaves this computer.",
+                QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel,
+                self,
+            )
             dont = QCheckBox("Don't show this again")
             box.setCheckBox(dont)
             if box.exec() != QMessageBox.StandardButton.Ok:
@@ -181,7 +205,11 @@ class AskPage(QWidget):
         ids = self.window.resolve_scope(*self.scope.value())
         notes = [n for n in vault.all_notes() if n.id in ids]
         mode = self.scope.value()[0]
-        focus = [self.window.current_note_id()] if mode == "subgraph" and self.window.current_note_id() else []
+        focus = (
+            [self.window.current_note_id()]
+            if mode == "subgraph" and self.window.current_note_id()
+            else []
+        )
         context = retrieve_context(notes, question, self.limit.value(), focus_ids=focus)
         self.sources = context
         self.sources_list.clear()
@@ -241,8 +269,10 @@ class AskPage(QWidget):
         vault = self.window.vault
         if vault is None or not self.answer_text:
             return
+
         def alias(title: str) -> str:
             return "".join(c for c in (title or "Untitled") if c not in "[]|")
+
         sources = "\n".join(f"- cites:: [[{n.id}|{alias(n.title)}]]" for n in self.sources)
         body = f"{self.answer_text.strip()}\n\n## Sources\n\n{sources}\n"
         note = vault.create_note(title=self.question_text[:120], body=body, tags=["ai-answer"])

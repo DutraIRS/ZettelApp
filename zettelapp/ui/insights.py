@@ -49,7 +49,11 @@ def _compact(n: float) -> str:
 def _rounded_bar(rect: QRectF, horizontal: bool, radius: float = 4.0) -> QPainterPath:
     """A bar with a rounded data end and a square baseline."""
     path = QPainterPath()
-    r = min(radius, (rect.height() if horizontal else rect.width()) / 2, (rect.width() if horizontal else rect.height()))
+    r = min(
+        radius,
+        (rect.height() if horizontal else rect.width()) / 2,
+        (rect.width() if horizontal else rect.height()),
+    )
     if horizontal:
         path.moveTo(rect.left(), rect.top())
         path.lineTo(rect.right() - r, rect.top())
@@ -87,7 +91,10 @@ class BarChart(QWidget):
 
     def _geometry(self):
         metrics = QFontMetricsF(theme.ui_font(9))
-        label_w = min(self.width() * 0.42, max((metrics.horizontalAdvance(r[0]) for r in self.rows), default=0) + 8)
+        label_w = min(
+            self.width() * 0.42,
+            max((metrics.horizontalAdvance(r[0]) for r in self.rows), default=0) + 8,
+        )
         value_w = metrics.horizontalAdvance("00000") + 8
         left = label_w + 8
         width = max(10.0, self.width() - left - value_w)
@@ -109,13 +116,21 @@ class BarChart(QWidget):
         for i, (text, value, color, _) in enumerate(self.rows):
             y = 8 + i * (BAR + 12)
             painter.setPen(t.q("text_secondary"))
-            painter.drawText(QRectF(0, y, label_w, BAR), Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
-                             metrics.elidedText(text, Qt.TextElideMode.ElideRight, label_w))
+            painter.drawText(
+                QRectF(0, y, label_w, BAR),
+                Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
+                metrics.elidedText(text, Qt.TextElideMode.ElideRight, label_w),
+            )
             w = width * value / top_value
-            painter.fillPath(_rounded_bar(QRectF(left, y, max(w, 2), BAR), True), color or t.category(0))
+            painter.fillPath(
+                _rounded_bar(QRectF(left, y, max(w, 2), BAR), True), color or t.category(0)
+            )
             painter.setPen(t.q("text"))
-            painter.drawText(QRectF(left + w + 6, y, 80, BAR), Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
-                             _compact(value))
+            painter.drawText(
+                QRectF(left + w + 6, y, 80, BAR),
+                Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+                _compact(value),
+            )
 
     def _row_at(self, pos: QPointF) -> int | None:
         i = int((pos.y() - 8) // (BAR + 12))
@@ -127,7 +142,9 @@ class BarChart(QWidget):
             QToolTip.hideText()
             return
         text, value, _, payload = self.rows[i]
-        QToolTip.showText(event.globalPosition().toPoint(), f"{text}: {_compact(value)} {self.unit}".strip(), self)
+        QToolTip.showText(
+            event.globalPosition().toPoint(), f"{text}: {_compact(value)} {self.unit}".strip(), self
+        )
         self.setCursor(Qt.CursorShape.PointingHandCursor if payload else Qt.CursorShape.ArrowCursor)
 
     def mousePressEvent(self, event) -> None:  # noqa: N802
@@ -167,8 +184,11 @@ class ColumnChart(QWidget):
             painter.setPen(QPen(t.q("grid" if k else "axis"), 1))
             painter.drawLine(QPointF(plot.left(), y), QPointF(plot.right(), y))
             painter.setPen(t.q("text_muted"))
-            painter.drawText(QRectF(0, y - 8, plot.left() - 6, 16), Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
-                             _compact(v))
+            painter.drawText(
+                QRectF(0, y - 8, plot.left() - 6, 16),
+                Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
+                _compact(v),
+            )
         slot = plot.width() / len(self.rows)
         width = min(24.0, slot * 0.6)
         step = max(1, int(len(self.rows) / max(1, plot.width() / 56)))
@@ -176,22 +196,34 @@ class ColumnChart(QWidget):
             x = plot.left() + slot * i + (slot - width) / 2
             h = plot.height() * value / top_value
             if value:
-                painter.fillPath(_rounded_bar(QRectF(x, plot.bottom() - h, width, h), False), t.category(0))
+                painter.fillPath(
+                    _rounded_bar(QRectF(x, plot.bottom() - h, width, h), False), t.category(0)
+                )
             if i % step == 0:
                 painter.setPen(t.q("text_muted"))
-                painter.drawText(QRectF(x - 20, plot.bottom() + 4, width + 40, 16), Qt.AlignmentFlag.AlignHCenter, name)
+                painter.drawText(
+                    QRectF(x - 20, plot.bottom() + 4, width + 40, 16),
+                    Qt.AlignmentFlag.AlignHCenter,
+                    name,
+                )
         last_name, last = self.rows[-1]  # label the most recent value only
         x = plot.left() + slot * (len(self.rows) - 1) + slot / 2
         painter.setPen(t.q("text"))
-        painter.drawText(QRectF(x - 30, plot.bottom() - plot.height() * last / top_value - 18, 60, 16),
-                         Qt.AlignmentFlag.AlignHCenter, _compact(last))
+        painter.drawText(
+            QRectF(x - 30, plot.bottom() - plot.height() * last / top_value - 18, 60, 16),
+            Qt.AlignmentFlag.AlignHCenter,
+            _compact(last),
+        )
 
     def mouseMoveEvent(self, event) -> None:  # noqa: N802
         plot = self._plot()
         if not self.rows or not plot.contains(event.position()):
             QToolTip.hideText()
             return
-        i = min(len(self.rows) - 1, int((event.position().x() - plot.left()) / (plot.width() / len(self.rows))))
+        i = min(
+            len(self.rows) - 1,
+            int((event.position().x() - plot.left()) / (plot.width() / len(self.rows))),
+        )
         name, value = self.rows[i]
         QToolTip.showText(event.globalPosition().toPoint(), f"{name}: {int(value)} notes", self)
 
@@ -270,9 +302,17 @@ class InsightsPage(QWidget):
         layout.addLayout(head)
         tiles = QHBoxLayout()
         tiles.setSpacing(12)
-        self.tiles = {key: StatTile(text) for key, text in (
-            ("notes", "Notes"), ("links", "Links"), ("tags", "Tags"), ("orphans", "Unlinked notes"),
-            ("cards", "Flashcards"), ("due", "Due for review"))}
+        self.tiles = {
+            key: StatTile(text)
+            for key, text in (
+                ("notes", "Notes"),
+                ("links", "Links"),
+                ("tags", "Tags"),
+                ("orphans", "Unlinked notes"),
+                ("cards", "Flashcards"),
+                ("due", "Due for review"),
+            )
+        }
         for tile in self.tiles.values():
             tiles.addWidget(tile)
         layout.addLayout(tiles)
@@ -286,10 +326,15 @@ class InsightsPage(QWidget):
         self.types_card = ChartCard("Links by type", self.types_chart)
         self.hubs_chart = BarChart("links")
         self.hubs_chart.rowClicked.connect(lambda note_id: self.openNote.emit(str(note_id)))
-        self.hubs_card = ChartCard("Most connected notes", self.hubs_chart, "Click a bar to open the note")
+        self.hubs_card = ChartCard(
+            "Most connected notes", self.hubs_chart, "Click a bar to open the note"
+        )
         self.clusters_chart = BarChart("notes")
-        self.clusters_card = ChartCard("Topics (k-means clusters)", self.clusters_chart,
-                                       "Notes grouped by meaning (LSA embeddings); k chosen by silhouette score")
+        self.clusters_card = ChartCard(
+            "Topics (k-means clusters)",
+            self.clusters_chart,
+            "Notes grouped by meaning (LSA embeddings); k chosen by silhouette score",
+        )
         grid.addWidget(self.timeline_card, 0, 0, 1, 2)
         grid.addWidget(self.tags_card, 1, 0)
         grid.addWidget(self.types_card, 1, 1)
@@ -318,9 +363,14 @@ class InsightsPage(QWidget):
         due = vault.due_cards()
         orphans = [n for n in notes if not degree.get(n.id)]
         self.tiles["notes"].set(f"{len(notes):,}", f"{vault.count_notes(deleted=True)} in Trash")
-        self.tiles["links"].set(f"{len(links):,}", f"{(2 * len(links) / len(notes)):.1f} per note" if notes else "")
+        self.tiles["links"].set(
+            f"{len(links):,}", f"{(2 * len(links) / len(notes)):.1f} per note" if notes else ""
+        )
         self.tiles["tags"].set(f"{len(tags):,}")
-        self.tiles["orphans"].set(f"{len(orphans):,}", "Link them to grow your network" if orphans else "Every note is linked")
+        self.tiles["orphans"].set(
+            f"{len(orphans):,}",
+            "Link them to grow your network" if orphans else "Every note is linked",
+        )
         self.tiles["cards"].set(f"{len(cards):,}")
         self.tiles["due"].set(f"{len(due):,}", "cards today")
 
@@ -340,8 +390,10 @@ class InsightsPage(QWidget):
             per_month[(when.year, when.month)] += 1
         rows = [(date(yy, mm, 1).strftime("%b"), per_month[(yy, mm)]) for yy, mm in months]
         self.timeline.set_rows(rows)
-        self.timeline_card.set_table(["Month", "Notes"], [(date(yy, mm, 1).strftime("%B %Y"), per_month[(yy, mm)])
-                                                          for yy, mm in months])
+        self.timeline_card.set_table(
+            ["Month", "Notes"],
+            [(date(yy, mm, 1).strftime("%B %Y"), per_month[(yy, mm)]) for yy, mm in months],
+        )
 
         top_tags = sorted(tags, key=lambda x: -x[1])[:10]
         self.tags_chart.set_rows([(f"#{name}", n, None, None) for name, n in top_tags])
@@ -349,11 +401,21 @@ class InsightsPage(QWidget):
 
         types = vault.link_type_map()
         by_type = Counter(l.type for l in links)
-        self.types_chart.set_rows([(types[k].label if k in types else k, v,
-                                    t.entity(types[k].color) if k in types else None, None)
-                                   for k, v in by_type.most_common()])
-        self.types_card.set_table(["Link type", "Links"], [(types[k].label if k in types else k, v)
-                                                           for k, v in by_type.most_common()])
+        self.types_chart.set_rows(
+            [
+                (
+                    types[k].label if k in types else k,
+                    v,
+                    t.entity(types[k].color) if k in types else None,
+                    None,
+                )
+                for k, v in by_type.most_common()
+            ]
+        )
+        self.types_card.set_table(
+            ["Link type", "Links"],
+            [(types[k].label if k in types else k, v) for k, v in by_type.most_common()],
+        )
 
         titles = {n.id: n.display_title for n in notes}
         hubs = degree.most_common(10)
@@ -365,8 +427,15 @@ class InsightsPage(QWidget):
                 self.clusters_chart.set_rows([])
                 return
             sizes = Counter(result.labels.tolist())
-            rows = [(f"{c + 1}: " + ", ".join(result.keywords.get(c, [])[:3]), sizes[c], t.category(c) if c < 8 else None, None)
-                    for c in sorted(sizes)]
+            rows = [
+                (
+                    f"{c + 1}: " + ", ".join(result.keywords.get(c, [])[:3]),
+                    sizes[c],
+                    t.category(c) if c < 8 else None,
+                    None,
+                )
+                for c in sorted(sizes)
+            ]
             self.clusters_chart.set_rows(rows)
             self.clusters_card.set_table(["Cluster", "Notes"], [(r[0], r[1]) for r in rows])
 

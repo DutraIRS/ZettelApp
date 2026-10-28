@@ -35,8 +35,13 @@ def label(text: str = "", role: str | None = None, wrap: bool = False) -> QLabel
     return w
 
 
-def tool_button(icon_name: str, tooltip: str, on_click: Callable | None = None, checkable: bool = False,
-                text: str = "") -> QToolButton:
+def tool_button(
+    icon_name: str,
+    tooltip: str,
+    on_click: Callable | None = None,
+    checkable: bool = False,
+    text: str = "",
+) -> QToolButton:
     b = QToolButton()
     b.setIcon(icons.icon(icon_name))
     b.setIconSize(QSize(16, 16))
@@ -52,7 +57,9 @@ def tool_button(icon_name: str, tooltip: str, on_click: Callable | None = None, 
     return b
 
 
-def accent_button(text: str, on_click: Callable | None = None, icon_name: str | None = None) -> QPushButton:
+def accent_button(
+    text: str, on_click: Callable | None = None, icon_name: str | None = None
+) -> QPushButton:
     b = QPushButton(text)
     b.setProperty("accent", True)
     b.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -156,7 +163,9 @@ class TagEditor(QWidget):
         self.input.setPlaceholderText("Add tag")
         self.input.setAccessibleName("Add tag")
         self.input.setFixedWidth(120)
-        self.input.setStyleSheet("QLineEdit { border: none; background: transparent; padding: 2px 4px; }")
+        self.input.setStyleSheet(
+            "QLineEdit { border: none; background: transparent; padding: 2px 4px; }"
+        )
         self.input.returnPressed.connect(self._commit)
         self.completer = QCompleter([])
         self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
@@ -213,8 +222,10 @@ class SearchBox(QLineEdit):
         self.setPlaceholderText(placeholder)
         self.setAccessibleName(placeholder)
         self.setClearButtonEnabled(True)
-        self.addAction(QAction(icons.icon("search", theme.current().text_muted, 16), "", self),
-                       QLineEdit.ActionPosition.LeadingPosition)
+        self.addAction(
+            QAction(icons.icon("search", theme.current().text_muted, 16), "", self),
+            QLineEdit.ActionPosition.LeadingPosition,
+        )
         self.setStyleSheet("QLineEdit#Search { padding-left: 4px; }")
 
 
@@ -248,12 +259,20 @@ class InfoBar(QFrame):
         self._callback: Callable | None = None
         self.action.clicked.connect(self._run)
 
-    def show_message(self, text: str, kind: str = "info", action: str | None = None,
-                     callback: Callable | None = None, timeout_ms: int = 8000) -> None:
+    def show_message(
+        self,
+        text: str,
+        kind: str = "info",
+        action: str | None = None,
+        callback: Callable | None = None,
+        timeout_ms: int = 8000,
+    ) -> None:
         t = theme.current()
         color = {"info": t.accent, "success": t.success, "error": t.danger}.get(kind, t.accent)
-        self.setStyleSheet(f"InfoBar {{ background: {t.surface}; border: 1px solid {t.border};"
-                           f" border-left: 4px solid {color}; border-radius: 6px; }}")
+        self.setStyleSheet(
+            f"InfoBar {{ background: {t.surface}; border: 1px solid {t.border};"
+            f" border-left: 4px solid {color}; border-radius: 6px; }}"
+        )
         glyph = {"info": "info", "success": "check", "error": "info"}[kind]
         self.icon.setPixmap(icons.icon(glyph, color).pixmap(18, 18))
         self.text.setText(text)

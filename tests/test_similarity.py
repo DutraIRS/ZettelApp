@@ -24,8 +24,16 @@ def naive_levenshtein(a: str, b: str) -> int:
     return prev[-1]
 
 
-@pytest.mark.parametrize("a,b,d", [("kitten", "sitting", 3), ("", "abc", 3), ("flaw", "lawn", 2),
-                                   ("same", "same", 0), ("informação", "informacao", 2)])
+@pytest.mark.parametrize(
+    "a,b,d",
+    [
+        ("kitten", "sitting", 3),
+        ("", "abc", 3),
+        ("flaw", "lawn", 2),
+        ("same", "same", 0),
+        ("informação", "informacao", 2),
+    ],
+)
 def test_levenshtein_known_values(a, b, d):
     assert levenshtein_distance(a, b) == d
     assert _levenshtein_bitparallel(a, b) == d

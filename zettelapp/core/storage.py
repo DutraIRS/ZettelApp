@@ -36,7 +36,13 @@ from zettelapp.core.security import (
     normalize_source_url,
     sniff_image_type,
 )
-from zettelapp.core.textutil import extract_inline_cards, find_wikilinks, fold, normalize_tag, slugify_type
+from zettelapp.core.textutil import (
+    extract_inline_cards,
+    find_wikilinks,
+    fold,
+    normalize_tag,
+    slugify_type,
+)
 
 SCHEMA_VERSION = 1
 MAX_TITLE = 500
@@ -232,13 +238,27 @@ class Vault:
                 return candidate
             when += timedelta(seconds=1)
 
-    def create_note(self, title: str = "", body: str = "", tags: Iterable[str] = (),
-                    url: str = "", note_id: str | None = None, created: str | None = None) -> Note:
+    def create_note(
+        self,
+        title: str = "",
+        body: str = "",
+        tags: Iterable[str] = (),
+        url: str = "",
+        note_id: str | None = None,
+        created: str | None = None,
+    ) -> Note:
         if note_id is not None and not is_valid_note_id(note_id):
             raise UnsafeInputError(f"Invalid note id: {note_id!r}")
         now = utc_now()
-        note = Note(id=note_id or self.new_note_id(), title=title, body=body, url=url,
-                    tags=list(tags), created=created or now, modified=now)
+        note = Note(
+            id=note_id or self.new_note_id(),
+            title=title,
+            body=body,
+            url=url,
+            tags=list(tags),
+            created=created or now,
+            modified=now,
+        )
         with self.conn:
             self.conn.execute(
                 "INSERT INTO notes (id, created, modified) VALUES (?, ?, ?)",
@@ -267,13 +287,20 @@ class Vault:
         old_title = row["title"] if row else ""
         self.conn.execute(
             "UPDATE notes SET title = ?, body = ?, url = ?, image = ?, mindmap = ?, modified = ? WHERE id = ?",
-            (note.title, note.body, note.url, note.image,
-             json.dumps(note.mindmap, ensure_ascii=False) if note.mindmap else None,
-             note.modified, note.id),
+            (
+                note.title,
+                note.body,
+                note.url,
+                note.image,
+                json.dumps(note.mindmap, ensure_ascii=False) if note.mindmap else None,
+                note.modified,
+                note.id,
+            ),
         )
         self.conn.execute("DELETE FROM tags WHERE note_id = ?", (note.id,))
-        self.conn.executemany("INSERT INTO tags (note_id, tag) VALUES (?, ?)",
-                              [(note.id, t) for t in note.tags])
+        self.conn.executemany(
+            "INSERT INTO tags (note_id, tag) VALUES (?, ?)", [(note.id, t) for t in note.tags]
+        )
         if self.has_fts:
             self.conn.execute("DELETE FROM notes_fts WHERE note_id = ?", (note.id,))
             self.conn.execute(
@@ -288,10 +315,13 @@ class Vault:
     def _resync_references(self, titles: set[str], skip: str) -> None:
         """Re-resolve [[Title]] links in other notes after a note is created or renamed."""
         for title in titles:
-            pattern = "%[[" + title.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+            pattern = (
+                "%[[" + title.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+            )
             rows = self.conn.execute(
                 "SELECT id, body FROM notes WHERE deleted = 0 AND id != ? AND body LIKE ? ESCAPE '\\'",
-                (skip, pattern)).fetchall()
+                (skip, pattern),
+            ).fetchall()
             for r in rows:
                 self._sync_inline_links(Note(id=r["id"], body=r["body"]))
 
@@ -303,8 +333,15 @@ class Vault:
             except (ValueError, TypeError):
                 mindmap = None
         return Note(
-            id=row["id"], title=row["title"], body=row["body"], url=row["url"], image=row["image"],
-            tags=tags, mindmap=mindmap, created=row["created"], modified=row["modified"],
+            id=row["id"],
+            title=row["title"],
+            body=row["body"],
+            url=row["url"],
+            image=row["image"],
+            tags=tags,
+            mindmap=mindmap,
+            created=row["created"],
+            modified=row["modified"],
             deleted=bool(row["deleted"]),
         )
 
@@ -312,8 +349,12 @@ class Vault:
         row = self.conn.execute("SELECT * FROM notes WHERE id = ?", (note_id,)).fetchone()
         if row is None:
             return None
-        tags = [r["tag"] for r in self.conn.execute(
-            "SELECT tag FROM tags WHERE note_id = ? ORDER BY tag", (note_id,))]
+        tags = [
+            r["tag"]
+            for r in self.conn.execute(
+                "SELECT tag FROM tags WHERE note_id = ? ORDER BY tag", (note_id,)
+            )
+        ]
         return self._row_to_note(row, tags)
 
     def all_notes(self, include_deleted: bool = False) -> list[Note]:
@@ -321,7 +362,10 @@ class Vault:
         for r in self.conn.execute("SELECT note_id, tag FROM tags ORDER BY tag"):
             tags[r["note_id"]].append(r["tag"])
         sql = "SELECT * FROM notes" + ("" if include_deleted else " WHERE deleted = 0")
-        return [self._row_to_note(r, tags.get(r["id"], [])) for r in self.conn.execute(sql + " ORDER BY id")]
+        return [
+            self._row_to_note(r, tags.get(r["id"], []))
+            for r in self.conn.execute(sql + " ORDER BY id")
+        ]
 
     def notes_by_ids(self, ids: Iterable[str]) -> list[Note]:
         wanted = set(ids)
@@ -332,10 +376,15 @@ class Vault:
         return self.conn.execute(sql, (note_id,)).fetchone() is not None
 
     def count_notes(self, deleted: bool = False) -> int:
-        return self.conn.execute("SELECT COUNT(*) FROM notes WHERE deleted = ?", (int(deleted),)).fetchone()[0]
+        return self.conn.execute(
+            "SELECT COUNT(*) FROM notes WHERE deleted = ?", (int(deleted),)
+        ).fetchone()[0]
 
     def titles(self) -> dict[str, str]:
-        return {r["id"]: r["title"] for r in self.conn.execute("SELECT id, title FROM notes WHERE deleted = 0")}
+        return {
+            r["id"]: r["title"]
+            for r in self.conn.execute("SELECT id, title FROM notes WHERE deleted = 0")
+        }
 
     def resolve_title(self, target: str) -> str | None:
         """Note id for a wiki-link target given as an id or a title."""
@@ -350,18 +399,24 @@ class Vault:
 
     def trash_note(self, note_id: str) -> None:
         with self.conn:
-            self.conn.execute("UPDATE notes SET deleted = 1, modified = ? WHERE id = ?", (utc_now(), note_id))
+            self.conn.execute(
+                "UPDATE notes SET deleted = 1, modified = ? WHERE id = ?", (utc_now(), note_id)
+            )
         self._changed("notes")
 
     def restore_note(self, note_id: str) -> None:
         with self.conn:
-            self.conn.execute("UPDATE notes SET deleted = 0, modified = ? WHERE id = ?", (utc_now(), note_id))
+            self.conn.execute(
+                "UPDATE notes SET deleted = 0, modified = ? WHERE id = ?", (utc_now(), note_id)
+            )
         self._changed("notes")
 
     def purge_note(self, note_id: str) -> None:
         with self.conn:
             self.conn.execute("DELETE FROM notes WHERE id = ?", (note_id,))
-            self.conn.execute("DELETE FROM suggestion_feedback WHERE a = ? OR b = ?", (note_id, note_id))
+            self.conn.execute(
+                "DELETE FROM suggestion_feedback WHERE a = ? OR b = ?", (note_id, note_id)
+            )
             if self.has_fts:
                 self.conn.execute("DELETE FROM notes_fts WHERE note_id = ?", (note_id,))
         self._changed("notes")
@@ -381,14 +436,26 @@ class Vault:
         tokens = re.findall(r"\w+", text)
         deleted_clause = "" if include_deleted else " AND n.deleted = 0"
         if not tokens:
-            ids = [r["id"] for r in self.conn.execute(
-                "SELECT id FROM notes n WHERE 1 = 1" + deleted_clause + " ORDER BY modified DESC")]
+            ids = [
+                r["id"]
+                for r in self.conn.execute(
+                    "SELECT id FROM notes n WHERE 1 = 1"
+                    + deleted_clause
+                    + " ORDER BY modified DESC"
+                )
+            ]
         elif self.has_fts:
             match = " ".join(f'"{t}"*' for t in tokens)
-            ids = [r["note_id"] for r in self.conn.execute(
-                "SELECT f.note_id FROM notes_fts f JOIN notes n ON n.id = f.note_id "
-                "WHERE notes_fts MATCH ?" + deleted_clause +
-                " ORDER BY bm25(notes_fts, 0.0, 6.0, 1.0, 3.0) LIMIT 1000", (match,))]
+            ids = [
+                r["note_id"]
+                for r in self.conn.execute(
+                    "SELECT f.note_id FROM notes_fts f JOIN notes n ON n.id = f.note_id "
+                    "WHERE notes_fts MATCH ?"
+                    + deleted_clause
+                    + " ORDER BY bm25(notes_fts, 0.0, 6.0, 1.0, 3.0) LIMIT 1000",
+                    (match,),
+                )
+            ]
         else:
             sql = "SELECT id FROM notes n WHERE 1 = 1" + deleted_clause
             params: list[str] = []
@@ -405,9 +472,13 @@ class Vault:
     # --- tags -------------------------------------------------------------
 
     def all_tags(self) -> list[tuple[str, int]]:
-        return [(r["tag"], r["n"]) for r in self.conn.execute(
-            "SELECT t.tag, COUNT(*) AS n FROM tags t JOIN notes n ON n.id = t.note_id "
-            "WHERE n.deleted = 0 GROUP BY t.tag ORDER BY t.tag")]
+        return [
+            (r["tag"], r["n"])
+            for r in self.conn.execute(
+                "SELECT t.tag, COUNT(*) AS n FROM tags t JOIN notes n ON n.id = t.note_id "
+                "WHERE n.deleted = 0 GROUP BY t.tag ORDER BY t.tag"
+            )
+        ]
 
     def notes_with_tags(self, tags: Iterable[str], match_all: bool = True) -> set[str]:
         tags = [t for t in tags if t]
@@ -416,9 +487,15 @@ class Vault:
         sets = []
         for t in tags:
             # A tag also matches its nested children, e.g. "math" matches "math/algebra".
-            sets.append({r["note_id"] for r in self.conn.execute(
-                "SELECT note_id FROM tags WHERE tag = ? OR tag LIKE ? ESCAPE '\\'",
-                (t, t.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "/%"))})
+            sets.append(
+                {
+                    r["note_id"]
+                    for r in self.conn.execute(
+                        "SELECT note_id FROM tags WHERE tag = ? OR tag LIKE ? ESCAPE '\\'",
+                        (t, t.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "/%"),
+                    )
+                }
+            )
         return set.intersection(*sets) if match_all else set.union(*sets)
 
     # --- link types -------------------------------------------------------
@@ -427,12 +504,29 @@ class Vault:
         self.conn.execute(
             "INSERT OR REPLACE INTO link_types (id, label, inverse_label, color, directed, builtin, position) "
             "VALUES (?, ?, ?, ?, ?, ?, ?)",
-            (lt.id, lt.label, lt.inverse_label, lt.color, int(lt.directed), int(lt.builtin), position),
+            (
+                lt.id,
+                lt.label,
+                lt.inverse_label,
+                lt.color,
+                int(lt.directed),
+                int(lt.builtin),
+                position,
+            ),
         )
 
     def link_types(self) -> list[LinkType]:
-        return [LinkType(r["id"], r["label"], r["inverse_label"], r["color"], bool(r["directed"]), bool(r["builtin"]))
-                for r in self.conn.execute("SELECT * FROM link_types ORDER BY position, label")]
+        return [
+            LinkType(
+                r["id"],
+                r["label"],
+                r["inverse_label"],
+                r["color"],
+                bool(r["directed"]),
+                bool(r["builtin"]),
+            )
+            for r in self.conn.execute("SELECT * FROM link_types ORDER BY position, label")
+        ]
 
     def link_type_map(self) -> dict[str, LinkType]:
         return {lt.id: lt for lt in self.link_types()}
@@ -445,9 +539,16 @@ class Vault:
             lt.color = "#8A8A8A"
         lt.label = lt.label.strip()[:60] or lt.id
         lt.inverse_label = lt.inverse_label.strip()[:60] or lt.label
-        existing = self.conn.execute("SELECT builtin, position FROM link_types WHERE id = ?", (lt.id,)).fetchone()
-        position = existing["position"] if existing else self.conn.execute(
-            "SELECT COALESCE(MAX(position), 0) + 1 FROM link_types").fetchone()[0]
+        existing = self.conn.execute(
+            "SELECT builtin, position FROM link_types WHERE id = ?", (lt.id,)
+        ).fetchone()
+        position = (
+            existing["position"]
+            if existing
+            else self.conn.execute(
+                "SELECT COALESCE(MAX(position), 0) + 1 FROM link_types"
+            ).fetchone()[0]
+        )
         lt.builtin = bool(existing["builtin"]) if existing else False
         with self.conn:
             self._insert_link_type(lt, position)
@@ -461,7 +562,9 @@ class Vault:
             # Re-type existing links; INSERT OR IGNORE avoids clashing with an existing "related" link.
             self.conn.execute(
                 "INSERT OR IGNORE INTO links (src, dst, type, origin, created) "
-                "SELECT src, dst, 'related', origin, created FROM links WHERE type = ?", (type_id,))
+                "SELECT src, dst, 'related', origin, created FROM links WHERE type = ?",
+                (type_id,),
+            )
             self.conn.execute("DELETE FROM links WHERE type = ?", (type_id,))
             self.conn.execute("DELETE FROM link_types WHERE id = ?", (type_id,))
         self._changed("types")
@@ -473,14 +576,17 @@ class Vault:
 
     # --- links ------------------------------------------------------------
 
-    def add_link(self, src: str, dst: str, link_type: str = "related", origin: str = "manual") -> bool:
+    def add_link(
+        self, src: str, dst: str, link_type: str = "related", origin: str = "manual"
+    ) -> bool:
         if src == dst or not self.note_exists(src, True) or not self.note_exists(dst, True):
             return False
         link_type = self._valid_type(link_type)
         with self.conn:
             cur = self.conn.execute(
                 "INSERT OR IGNORE INTO links (src, dst, type, origin, created) VALUES (?, ?, ?, ?, ?)",
-                (src, dst, link_type, origin, utc_now()))
+                (src, dst, link_type, origin, utc_now()),
+            )
         self._changed("links")
         return cur.rowcount > 0
 
@@ -489,7 +595,10 @@ class Vault:
             if link_type is None:
                 self.conn.execute("DELETE FROM links WHERE src = ? AND dst = ?", (src, dst))
             else:
-                self.conn.execute("DELETE FROM links WHERE src = ? AND dst = ? AND type = ?", (src, dst, link_type))
+                self.conn.execute(
+                    "DELETE FROM links WHERE src = ? AND dst = ? AND type = ?",
+                    (src, dst, link_type),
+                )
         self._changed("links")
 
     def change_link_type(self, src: str, dst: str, old_type: str, new_type: str) -> None:
@@ -497,26 +606,37 @@ class Vault:
         with self.conn:
             self.conn.execute(
                 "UPDATE OR IGNORE links SET type = ?, origin = 'manual' WHERE src = ? AND dst = ? AND type = ?",
-                (new_type, src, dst, old_type))
+                (new_type, src, dst, old_type),
+            )
         self._changed("links")
 
     def reverse_link(self, src: str, dst: str, link_type: str) -> None:
         """Flip a link's direction (dst -> src), keeping its type."""
         with self.conn:
-            row = self.conn.execute("SELECT origin FROM links WHERE src = ? AND dst = ? AND type = ?",
-                                    (src, dst, link_type)).fetchone()
+            row = self.conn.execute(
+                "SELECT origin FROM links WHERE src = ? AND dst = ? AND type = ?",
+                (src, dst, link_type),
+            ).fetchone()
             if row is None or row["origin"] == "inline":
                 return  # links written in the text are reversed by editing the text
-            self.conn.execute("DELETE FROM links WHERE src = ? AND dst = ? AND type = ?", (src, dst, link_type))
+            self.conn.execute(
+                "DELETE FROM links WHERE src = ? AND dst = ? AND type = ?", (src, dst, link_type)
+            )
             self.conn.execute(
                 "INSERT OR IGNORE INTO links (src, dst, type, origin, created) VALUES (?, ?, ?, 'manual', ?)",
-                (dst, src, link_type, utc_now()))
+                (dst, src, link_type, utc_now()),
+            )
         self._changed("links")
 
     def _links(self, where: str, params: tuple) -> list[Link]:
-        return [Link(r["src"], r["dst"], r["type"], r["origin"]) for r in self.conn.execute(
-            "SELECT l.* FROM links l JOIN notes a ON a.id = l.src JOIN notes b ON b.id = l.dst "
-            "WHERE a.deleted = 0 AND b.deleted = 0" + where + " ORDER BY l.created", params)]
+        return [
+            Link(r["src"], r["dst"], r["type"], r["origin"])
+            for r in self.conn.execute(
+                "SELECT l.* FROM links l JOIN notes a ON a.id = l.src JOIN notes b ON b.id = l.dst "
+                "WHERE a.deleted = 0 AND b.deleted = 0" + where + " ORDER BY l.created",
+                params,
+            )
+        ]
 
     def links_from(self, note_id: str) -> list[Link]:
         return self._links(" AND l.src = ?", (note_id,))
@@ -535,24 +655,36 @@ class Vault:
         wikilinks = find_wikilinks(note.body)
         if wikilinks:
             by_title: dict[str, str] = {}
-            for r in self.conn.execute("SELECT id, title FROM notes WHERE deleted = 0 ORDER BY id DESC"):
+            for r in self.conn.execute(
+                "SELECT id, title FROM notes WHERE deleted = 0 ORDER BY id DESC"
+            ):
                 by_title[fold(r["title"].strip())] = r["id"]
             types = {r["id"] for r in self.conn.execute("SELECT id FROM link_types")}
             for wl in wikilinks:
-                dst = wl.target if is_valid_note_id(wl.target) and self.note_exists(wl.target, True) \
+                dst = (
+                    wl.target
+                    if is_valid_note_id(wl.target) and self.note_exists(wl.target, True)
                     else by_title.get(fold(wl.target))
+                )
                 if dst and dst != note.id:
                     desired.add((dst, wl.link_type if wl.link_type in types else "related"))
-        existing = {(r["dst"], r["type"]) for r in self.conn.execute(
-            "SELECT dst, type FROM links WHERE src = ? AND origin = 'inline'", (note.id,))}
+        existing = {
+            (r["dst"], r["type"])
+            for r in self.conn.execute(
+                "SELECT dst, type FROM links WHERE src = ? AND origin = 'inline'", (note.id,)
+            )
+        }
         for dst, link_type in existing - desired:
-            self.conn.execute("DELETE FROM links WHERE src = ? AND dst = ? AND type = ? AND origin = 'inline'",
-                              (note.id, dst, link_type))
+            self.conn.execute(
+                "DELETE FROM links WHERE src = ? AND dst = ? AND type = ? AND origin = 'inline'",
+                (note.id, dst, link_type),
+            )
         now = utc_now()
         for dst, link_type in desired - existing:
             self.conn.execute(
                 "INSERT OR IGNORE INTO links (src, dst, type, origin, created) VALUES (?, ?, ?, 'inline', ?)",
-                (note.id, dst, link_type, now))
+                (note.id, dst, link_type, now),
+            )
 
     # --- assets -----------------------------------------------------------
 
@@ -572,7 +704,8 @@ class Vault:
         with self.conn:
             self.conn.execute(
                 "INSERT OR IGNORE INTO assets (name, original_name, size, created) VALUES (?, ?, ?, ?)",
-                (name, Path(original_name).name[:200], len(data), utc_now()))
+                (name, Path(original_name).name[:200], len(data), utc_now()),
+            )
         return name
 
     def add_image_file(self, path: str | Path) -> str:
@@ -591,21 +724,32 @@ class Vault:
 
     @staticmethod
     def _row_to_card(r: sqlite3.Row) -> Flashcard:
-        return Flashcard(r["id"], r["note_id"], r["front"], r["back"], r["kind"], r["source"], r["anki_note_id"])
+        return Flashcard(
+            r["id"], r["note_id"], r["front"], r["back"], r["kind"], r["source"], r["anki_note_id"]
+        )
 
     def cards_for(self, note_id: str) -> list[Flashcard]:
-        return [self._row_to_card(r) for r in self.conn.execute(
-            "SELECT * FROM flashcards WHERE note_id = ? ORDER BY source DESC, id", (note_id,))]
+        return [
+            self._row_to_card(r)
+            for r in self.conn.execute(
+                "SELECT * FROM flashcards WHERE note_id = ? ORDER BY source DESC, id", (note_id,)
+            )
+        ]
 
     def cards_for_notes(self, note_ids: Iterable[str] | None = None) -> list[Flashcard]:
         rows = self.conn.execute(
-            "SELECT c.* FROM flashcards c JOIN notes n ON n.id = c.note_id WHERE n.deleted = 0 ORDER BY c.note_id, c.id")
+            "SELECT c.* FROM flashcards c JOIN notes n ON n.id = c.note_id WHERE n.deleted = 0 ORDER BY c.note_id, c.id"
+        )
         wanted = None if note_ids is None else set(note_ids)
         return [self._row_to_card(r) for r in rows if wanted is None or r["note_id"] in wanted]
 
     def card_counts(self) -> dict[str, int]:
-        return {r["note_id"]: r["n"] for r in self.conn.execute(
-            "SELECT note_id, COUNT(*) AS n FROM flashcards GROUP BY note_id")}
+        return {
+            r["note_id"]: r["n"]
+            for r in self.conn.execute(
+                "SELECT note_id, COUNT(*) AS n FROM flashcards GROUP BY note_id"
+            )
+        }
 
     def save_card(self, card: Flashcard) -> Flashcard:
         card.kind = "cloze" if card.kind == "cloze" else "basic"
@@ -613,11 +757,14 @@ class Vault:
             if card.id is None:
                 cur = self.conn.execute(
                     "INSERT INTO flashcards (note_id, front, back, kind, source) VALUES (?, ?, ?, ?, ?)",
-                    (card.note_id, card.front, card.back, card.kind, card.source))
+                    (card.note_id, card.front, card.back, card.kind, card.source),
+                )
                 card.id = cur.lastrowid
             else:
-                self.conn.execute("UPDATE flashcards SET front = ?, back = ?, kind = ? WHERE id = ?",
-                                  (card.front, card.back, card.kind, card.id))
+                self.conn.execute(
+                    "UPDATE flashcards SET front = ?, back = ?, kind = ? WHERE id = ?",
+                    (card.front, card.back, card.kind, card.id),
+                )
         self._changed("cards")
         return card
 
@@ -628,22 +775,32 @@ class Vault:
 
     def set_anki_note_id(self, card_id: int, anki_note_id: int | None) -> None:
         with self.conn:
-            self.conn.execute("UPDATE flashcards SET anki_note_id = ? WHERE id = ?", (anki_note_id, card_id))
+            self.conn.execute(
+                "UPDATE flashcards SET anki_note_id = ? WHERE id = ?", (anki_note_id, card_id)
+            )
 
     def _sync_inline_cards(self, note: Note) -> None:
         found = {(c.kind, c.front): c.back for c in extract_inline_cards(note.body)}
-        existing = {(r["kind"], r["front"]): (r["id"], r["back"]) for r in self.conn.execute(
-            "SELECT id, kind, front, back FROM flashcards WHERE note_id = ? AND source = 'inline'", (note.id,))}
+        existing = {
+            (r["kind"], r["front"]): (r["id"], r["back"])
+            for r in self.conn.execute(
+                "SELECT id, kind, front, back FROM flashcards WHERE note_id = ? AND source = 'inline'",
+                (note.id,),
+            )
+        }
         for key, (card_id, back) in existing.items():
             if key not in found:
                 self.conn.execute("DELETE FROM flashcards WHERE id = ?", (card_id,))
             elif found[key] != back:
-                self.conn.execute("UPDATE flashcards SET back = ? WHERE id = ?", (found[key], card_id))
+                self.conn.execute(
+                    "UPDATE flashcards SET back = ? WHERE id = ?", (found[key], card_id)
+                )
         for (kind, front), back in found.items():
             if (kind, front) not in existing:
                 self.conn.execute(
                     "INSERT INTO flashcards (note_id, front, back, kind, source) VALUES (?, ?, ?, ?, 'inline')",
-                    (note.id, front, back, kind))
+                    (note.id, front, back, kind),
+                )
 
     # --- spaced repetition state -----------------------------------------
 
@@ -657,14 +814,22 @@ class Vault:
         with self.conn:
             self.conn.execute(
                 "INSERT OR REPLACE INTO reviews (card_id, ease, interval, reps, lapses, due) VALUES (?, ?, ?, ?, ?, ?)",
-                (state.card_id, state.ease, state.interval, state.reps, state.lapses, state.due))
+                (state.card_id, state.ease, state.interval, state.reps, state.lapses, state.due),
+            )
         self._changed("reviews")
 
-    def due_cards(self, today: date | None = None, note_ids: Iterable[str] | None = None) -> list[Flashcard]:
+    def due_cards(
+        self, today: date | None = None, note_ids: Iterable[str] | None = None
+    ) -> list[Flashcard]:
         today_s = (today or date.today()).isoformat()
-        due_ids = {r["id"] for r in self.conn.execute(
-            "SELECT c.id FROM flashcards c LEFT JOIN reviews r ON r.card_id = c.id "
-            "WHERE r.card_id IS NULL OR r.due <= ?", (today_s,))}
+        due_ids = {
+            r["id"]
+            for r in self.conn.execute(
+                "SELECT c.id FROM flashcards c LEFT JOIN reviews r ON r.card_id = c.id "
+                "WHERE r.card_id IS NULL OR r.due <= ?",
+                (today_s,),
+            )
+        }
         return [c for c in self.cards_for_notes(note_ids) if c.id in due_ids]
 
     # --- link-suggestion feedback ----------------------------------------
@@ -674,11 +839,15 @@ class Vault:
         with self.conn:
             self.conn.execute(
                 "INSERT OR REPLACE INTO suggestion_feedback (a, b, label, created) VALUES (?, ?, ?, ?)",
-                (a, b, int(bool(label)), utc_now()))
+                (a, b, int(bool(label)), utc_now()),
+            )
         self._changed("feedback")
 
     def feedback(self) -> dict[tuple[str, str], int]:
-        return {(r["a"], r["b"]): r["label"] for r in self.conn.execute("SELECT a, b, label FROM suggestion_feedback")}
+        return {
+            (r["a"], r["b"]): r["label"]
+            for r in self.conn.execute("SELECT a, b, label FROM suggestion_feedback")
+        }
 
     def reset_feedback(self) -> None:
         with self.conn:

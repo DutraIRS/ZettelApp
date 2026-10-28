@@ -80,8 +80,9 @@ def anki_tag(tag: str) -> str:
     return re.sub(r"\s+", "_", tag.replace("/", "::"))
 
 
-def build_payloads(cards: Sequence[Flashcard], notes: dict[str, Note], vault_id: str,
-                   renderer: NoteRenderer) -> list[CardPayload]:
+def build_payloads(
+    cards: Sequence[Flashcard], notes: dict[str, Note], vault_id: str, renderer: NoteRenderer
+) -> list[CardPayload]:
     payloads = []
     for card in cards:
         note = notes.get(card.note_id)
@@ -96,39 +97,68 @@ def build_payloads(cards: Sequence[Flashcard], notes: dict[str, Note], vault_id:
             model = BASIC_MODEL_NAME
             fields = {"Front": front_html, "Back": renderer.render(card.back)}
         fields.update({"Source": source, "ZettelID": note.id, "CardKey": card_key(vault_id, card)})
-        media = sorted({m for v in fields.values() for m in _SRC_RE.findall(v) if is_valid_asset_name(m)})
+        media = sorted(
+            {m for v in fields.values() for m in _SRC_RE.findall(v) if is_valid_asset_name(m)}
+        )
         tags = ["zettelapp"] + [anki_tag(t) for t in note.tags]
         payloads.append(CardPayload(card, model, fields, tags, media))
     return payloads
 
 
-def anki_renderer(resolve: Callable[[str], str | None], title_of: Callable[[str], str]) -> NoteRenderer:
+def anki_renderer(
+    resolve: Callable[[str], str | None], title_of: Callable[[str], str]
+) -> NoteRenderer:
     """Renderer whose note links open ZettelApp and whose images are Anki media files."""
-    return NoteRenderer(resolve, title_of, note_href=app_url, asset_href=lambda name: name,
-                        allow_new_note_links=False, keep_cloze=True)
+    return NoteRenderer(
+        resolve,
+        title_of,
+        note_href=app_url,
+        asset_href=lambda name: name,
+        allow_new_note_links=False,
+        keep_cloze=True,
+    )
 
 
 # --- .apkg export -------------------------------------------------------------
 
-def write_apkg(payloads: Sequence[CardPayload], dest: Path, deck_name: str,
-               asset_path: Callable[[str], Path | None], vault_id: str) -> int:
+
+def write_apkg(
+    payloads: Sequence[CardPayload],
+    dest: Path,
+    deck_name: str,
+    asset_path: Callable[[str], Path | None],
+    vault_id: str,
+) -> int:
     import genanki
 
-    basic = genanki.Model(BASIC_MODEL_ID, BASIC_MODEL_NAME, fields=[{"name": f} for f in FIELDS],
-                          templates=[BASIC_TEMPLATE], css=CARD_CSS)
-    cloze = genanki.Model(CLOZE_MODEL_ID, CLOZE_MODEL_NAME, fields=[{"name": f} for f in CLOZE_FIELDS],
-                          templates=[CLOZE_TEMPLATE], css=CARD_CSS, model_type=genanki.Model.CLOZE)
+    basic = genanki.Model(
+        BASIC_MODEL_ID,
+        BASIC_MODEL_NAME,
+        fields=[{"name": f} for f in FIELDS],
+        templates=[BASIC_TEMPLATE],
+        css=CARD_CSS,
+    )
+    cloze = genanki.Model(
+        CLOZE_MODEL_ID,
+        CLOZE_MODEL_NAME,
+        fields=[{"name": f} for f in CLOZE_FIELDS],
+        templates=[CLOZE_TEMPLATE],
+        css=CARD_CSS,
+        model_type=genanki.Model.CLOZE,
+    )
     deck = genanki.Deck(deck_id(deck_name), deck_name)
     media_files: set[str] = set()
     for p in payloads:
         model = cloze if p.model == CLOZE_MODEL_NAME else basic
         order = CLOZE_FIELDS if p.model == CLOZE_MODEL_NAME else FIELDS
-        deck.add_note(genanki.Note(
-            model=model,
-            fields=[p.fields.get(f, "") for f in order],
-            tags=p.tags,
-            guid=genanki.guid_for("zettelapp", vault_id, p.card.id),
-        ))
+        deck.add_note(
+            genanki.Note(
+                model=model,
+                fields=[p.fields.get(f, "") for f in order],
+                tags=p.tags,
+                guid=genanki.guid_for("zettelapp", vault_id, p.card.id),
+            )
+        )
         for name in p.media:
             path = asset_path(name)
             if path is not None:
@@ -140,6 +170,7 @@ def write_apkg(payloads: Sequence[CardPayload], dest: Path, deck_name: str,
 
 
 # --- AnkiConnect --------------------------------------------------------------
+
 
 class AnkiConnectError(RuntimeError):
     pass
@@ -166,13 +197,16 @@ class AnkiConnect:
 
     def invoke(self, action: str, **params):
         payload = json.dumps({"action": action, "version": 6, "params": params}).encode("utf-8")
-        request = urllib.request.Request(self.url, data=payload, headers={"Content-Type": "application/json"})
+        request = urllib.request.Request(
+            self.url, data=payload, headers={"Content-Type": "application/json"}
+        )
         try:
             with self._opener.open(request, timeout=self.timeout) as response:
                 data = json.loads(response.read(20_000_000).decode("utf-8"))
         except (urllib.error.URLError, OSError) as exc:
             raise AnkiConnectError(
-                "Could not reach Anki. Make sure Anki is running with the AnkiConnect add-on installed.") from exc
+                "Could not reach Anki. Make sure Anki is running with the AnkiConnect add-on installed."
+            ) from exc
         except ValueError as exc:
             raise AnkiConnectError("Anki sent an unexpected response.") from exc
         if not isinstance(data, dict) or "result" not in data or "error" not in data:
@@ -187,21 +221,47 @@ class AnkiConnect:
     def ensure_models(self) -> None:
         names = set(self.invoke("modelNames"))
         if BASIC_MODEL_NAME not in names:
-            self.invoke("createModel", modelName=BASIC_MODEL_NAME, inOrderFields=FIELDS, css=CARD_CSS,
-                        isCloze=False, cardTemplates=[{"Name": BASIC_TEMPLATE["name"], "Front": BASIC_TEMPLATE["qfmt"],
-                                                       "Back": BASIC_TEMPLATE["afmt"]}])
+            self.invoke(
+                "createModel",
+                modelName=BASIC_MODEL_NAME,
+                inOrderFields=FIELDS,
+                css=CARD_CSS,
+                isCloze=False,
+                cardTemplates=[
+                    {
+                        "Name": BASIC_TEMPLATE["name"],
+                        "Front": BASIC_TEMPLATE["qfmt"],
+                        "Back": BASIC_TEMPLATE["afmt"],
+                    }
+                ],
+            )
         if CLOZE_MODEL_NAME not in names:
-            self.invoke("createModel", modelName=CLOZE_MODEL_NAME, inOrderFields=CLOZE_FIELDS, css=CARD_CSS,
-                        isCloze=True, cardTemplates=[{"Name": CLOZE_TEMPLATE["name"], "Front": CLOZE_TEMPLATE["qfmt"],
-                                                      "Back": CLOZE_TEMPLATE["afmt"]}])
+            self.invoke(
+                "createModel",
+                modelName=CLOZE_MODEL_NAME,
+                inOrderFields=CLOZE_FIELDS,
+                css=CARD_CSS,
+                isCloze=True,
+                cardTemplates=[
+                    {
+                        "Name": CLOZE_TEMPLATE["name"],
+                        "Front": CLOZE_TEMPLATE["qfmt"],
+                        "Back": CLOZE_TEMPLATE["afmt"],
+                    }
+                ],
+            )
 
     def browse(self, query: str) -> None:
         self.invoke("guiBrowse", query=query)
 
-    def sync(self, payloads: Sequence[CardPayload], deck_name: str,
-             asset_path: Callable[[str], Path | None],
-             remember_id: Callable[[int, int | None], None],
-             progress: Callable[[int, int], None] | None = None) -> SyncReport:
+    def sync(
+        self,
+        payloads: Sequence[CardPayload],
+        deck_name: str,
+        asset_path: Callable[[str], Path | None],
+        remember_id: Callable[[int, int | None], None],
+        progress: Callable[[int, int], None] | None = None,
+    ) -> SyncReport:
         report = SyncReport()
         self.invoke("createDeck", deck=deck_name)
         self.ensure_models()
@@ -217,8 +277,11 @@ class AnkiConnect:
                 for name in p.media:
                     path = asset_path(name)
                     if path is not None and name not in stored_media:
-                        self.invoke("storeMediaFile", filename=name,
-                                    data=base64.b64encode(path.read_bytes()).decode("ascii"))
+                        self.invoke(
+                            "storeMediaFile",
+                            filename=name,
+                            data=base64.b64encode(path.read_bytes()).decode("ascii"),
+                        )
                         stored_media.add(name)
                 anki_id = p.card.anki_note_id
                 if anki_id is None or anki_id not in alive:
@@ -229,10 +292,18 @@ class AnkiConnect:
                     self.invoke("addTags", notes=[anki_id], tags=" ".join(p.tags))
                     report.updated += 1
                 else:
-                    anki_id = int(self.invoke("addNote", note={
-                        "deckName": deck_name, "modelName": p.model, "fields": p.fields, "tags": p.tags,
-                        "options": {"allowDuplicate": False, "duplicateScope": "deck"},
-                    }))
+                    anki_id = int(
+                        self.invoke(
+                            "addNote",
+                            note={
+                                "deckName": deck_name,
+                                "modelName": p.model,
+                                "fields": p.fields,
+                                "tags": p.tags,
+                                "options": {"allowDuplicate": False, "duplicateScope": "deck"},
+                            },
+                        )
+                    )
                     report.added += 1
                 if anki_id != p.card.anki_note_id:
                     remember_id(p.card.id, anki_id)

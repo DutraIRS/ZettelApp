@@ -30,7 +30,13 @@ MAX_MESSAGE_BYTES = 10 * 1024 * 1024
 MAX_BODY_RETURNED = 200_000
 MAX_SUBGRAPH_NODES = 500
 
-PARSE_ERROR, INVALID_REQUEST, METHOD_NOT_FOUND, INVALID_PARAMS, INTERNAL_ERROR = -32700, -32600, -32601, -32602, -32603
+PARSE_ERROR, INVALID_REQUEST, METHOD_NOT_FOUND, INVALID_PARAMS, INTERNAL_ERROR = (
+    -32700,
+    -32600,
+    -32601,
+    -32602,
+    -32603,
+)
 
 INSTRUCTIONS = (
     "Tools for the user's ZettelApp Zettelkasten (a personal knowledge base of linked notes). "
@@ -54,6 +60,7 @@ class ToolInputError(ValueError):
 def _settings_allow_writes() -> bool:
     try:
         from zettelapp import settings
+
         return bool(settings.get(settings.MCP_ALLOW_WRITES))
     except Exception:  # Qt missing or settings unreadable: fail closed
         return False
@@ -74,14 +81,24 @@ class Tool:
             "name": self.name,
             "title": self.title,
             "description": self.description,
-            "inputSchema": {"type": "object", "properties": self.properties, "required": self.required,
-                            "additionalProperties": False},
-            "annotations": {"title": self.title, "readOnlyHint": not self.write,
-                            "destructiveHint": False, "idempotentHint": not self.write, "openWorldHint": False},
+            "inputSchema": {
+                "type": "object",
+                "properties": self.properties,
+                "required": self.required,
+                "additionalProperties": False,
+            },
+            "annotations": {
+                "title": self.title,
+                "readOnlyHint": not self.write,
+                "destructiveHint": False,
+                "idempotentHint": not self.write,
+                "openWorldHint": False,
+            },
         }
 
 
 # --- argument helpers ---------------------------------------------------------------
+
 
 def _note_id(args: dict, key: str = "id") -> str:
     value = args.get(key)
@@ -97,10 +114,14 @@ def _int(args: dict, key: str, default: int, low: int, high: int) -> int:
     return max(low, min(high, int(value)))
 
 
-def _str(args: dict, key: str, default: str = "", limit: int = 10_000, required: bool = False) -> str:
+def _str(
+    args: dict, key: str, default: str = "", limit: int = 10_000, required: bool = False
+) -> str:
     value = args.get(key, default)
     if not isinstance(value, str) or (required and not value.strip()):
-        raise ToolInputError(f"'{key}' must be a non-empty string." if required else f"'{key}' must be a string.")
+        raise ToolInputError(
+            f"'{key}' must be a non-empty string." if required else f"'{key}' must be a string."
+        )
     if len(value) > limit:
         raise ToolInputError(f"'{key}' is longer than {limit} characters.")
     return value
@@ -114,8 +135,12 @@ def _str_list(args: dict, key: str, limit: int = 100) -> list[str]:
 
 
 class ZettelMcpServer:
-    def __init__(self, vault: Vault, allow_writes: bool = False,
-                 writes_enabled: Callable[[], bool] | None = None):
+    def __init__(
+        self,
+        vault: Vault,
+        allow_writes: bool = False,
+        writes_enabled: Callable[[], bool] | None = None,
+    ):
         self.vault = vault
         self.allow_writes = allow_writes
         self._writes_enabled = writes_enabled
@@ -125,7 +150,9 @@ class ZettelMcpServer:
         self.tools = {t.name: t for t in self._define_tools()}
 
     def writes_allowed(self) -> bool:
-        enabled = self._writes_enabled or _settings_allow_writes  # the app's option, read on every check
+        enabled = (
+            self._writes_enabled or _settings_allow_writes
+        )  # the app's option, read on every check
         return self.allow_writes and not self.vault.readonly and bool(enabled())
 
     # --- transport ------------------------------------------------------------------
@@ -137,7 +164,9 @@ class ZettelMcpServer:
             if not line:
                 break
             if len(line) > MAX_MESSAGE_BYTES and not line.endswith(b"\n"):
-                while line and not line.endswith(b"\n"):  # discard the rest of the oversized message
+                while line and not line.endswith(
+                    b"\n"
+                ):  # discard the rest of the oversized message
                     line = instream.readline(MAX_MESSAGE_BYTES)
                 self._write(outstream, self._error(None, INVALID_REQUEST, "Message too large."))
                 continue
@@ -149,7 +178,9 @@ class ZettelMcpServer:
 
     @staticmethod
     def _write(outstream: BinaryIO, message: Any) -> None:
-        outstream.write(json.dumps(message, ensure_ascii=False, separators=(",", ":")).encode("utf-8") + b"\n")
+        outstream.write(
+            json.dumps(message, ensure_ascii=False, separators=(",", ":")).encode("utf-8") + b"\n"
+        )
         outstream.flush()
 
     def handle_raw(self, line: bytes) -> Any:
@@ -174,8 +205,11 @@ class ZettelMcpServer:
         is_request = "id" in message
         if not isinstance(method, str):
             # A response from the client; this server never sends requests.
-            return None if "result" in message or "error" in message else self._error(
-                msg_id, INVALID_REQUEST, "Invalid request")
+            return (
+                None
+                if "result" in message or "error" in message
+                else self._error(msg_id, INVALID_REQUEST, "Invalid request")
+            )
         params = message.get("params") or {}
         try:
             if not isinstance(params, dict):
@@ -193,7 +227,9 @@ class ZettelMcpServer:
     def _dispatch(self, method: str, params: dict) -> dict:
         if method == "initialize":
             requested = params.get("protocolVersion")
-            self.protocol_version = requested if requested in PROTOCOL_VERSIONS else PROTOCOL_VERSIONS[0]
+            self.protocol_version = (
+                requested if requested in PROTOCOL_VERSIONS else PROTOCOL_VERSIONS[0]
+            )
             return {
                 "protocolVersion": self.protocol_version,
                 "capabilities": {"tools": {"listChanged": False}},
@@ -203,7 +239,13 @@ class ZettelMcpServer:
         if method == "ping" or method.startswith("notifications/"):
             return {}
         if method == "tools/list":
-            return {"tools": [t.describe() for t in self.tools.values() if not t.write or self.writes_allowed()]}
+            return {
+                "tools": [
+                    t.describe()
+                    for t in self.tools.values()
+                    if not t.write or self.writes_allowed()
+                ]
+            }
         if method == "tools/call":
             return self._call_tool(params)
         raise RpcError(METHOD_NOT_FOUND, f"Method not found: {method}")
@@ -223,8 +265,10 @@ class ZettelMcpServer:
             data = tool.handler(args)
         except ToolInputError as exc:
             return {"content": [{"type": "text", "text": str(exc)}], "isError": True}
-        result: dict[str, Any] = {"content": [{"type": "text", "text": json.dumps(data, ensure_ascii=False, indent=1)}],
-                                  "isError": False}
+        result: dict[str, Any] = {
+            "content": [{"type": "text", "text": json.dumps(data, ensure_ascii=False, indent=1)}],
+            "isError": False,
+        }
         if self.protocol_version >= "2025-06-18":
             result["structuredContent"] = data
         return result
@@ -232,45 +276,107 @@ class ZettelMcpServer:
     # --- tools ----------------------------------------------------------------------
 
     def _define_tools(self) -> list[Tool]:
-        note_id = {"type": "string", "description": "Note id, a 14-digit timestamp such as 20261027153012."}
+        note_id = {
+            "type": "string",
+            "description": "Note id, a 14-digit timestamp such as 20261027153012.",
+        }
         return [
-            Tool("search_notes", "Search notes",
-                 "Full-text search over note titles, text and tags. Add tag:name to filter by tag. "
-                 "An empty query lists recently edited notes.",
-                 {"query": {"type": "string", "description": "Words to search for; may include tag:name."},
-                  "limit": {"type": "integer", "minimum": 1, "maximum": 50, "default": 10}},
-                 self._search_notes, ["query"]),
-            Tool("get_note", "Read a note",
-                 "Full text of a note with its tags, URL, dates, typed links (in both directions), "
-                 "flashcards and mind map outline.",
-                 {"id": note_id}, self._get_note, ["id"]),
-            Tool("list_tags", "List tags", "All tags in the vault with the number of notes using each.",
-                 {}, self._list_tags),
-            Tool("get_subgraph", "Explore connections",
-                 "Notes within a number of links of a note, and the typed links between them.",
-                 {"id": note_id,
-                  "depth": {"type": "integer", "minimum": 1, "maximum": 4, "default": 1},
-                  "link_types": {"type": "array", "items": {"type": "string"},
-                                 "description": "Only follow these link types (see list_link_types)."}},
-                 self._get_subgraph, ["id"]),
-            Tool("suggest_links", "Suggest links",
-                 "Notes that are likely related to a note but not yet linked, ranked by ZettelApp's "
-                 "Naive Bayes link suggester.",
-                 {"id": note_id, "limit": {"type": "integer", "minimum": 1, "maximum": 25, "default": 8}},
-                 self._suggest_links, ["id"]),
-            Tool("list_link_types", "List link types",
-                 "The kinds of links notes can have (for example supports, contradicts, part_of).",
-                 {}, self._list_link_types),
-            Tool("create_note", "Create a note",
-                 "Create a new note. Use [[Title]] in the body to link to existing notes.",
-                 {"title": {"type": "string", "maxLength": MAX_TITLE},
-                  "body": {"type": "string", "description": "Markdown text."},
-                  "tags": {"type": "array", "items": {"type": "string"}}},
-                 self._create_note, ["title"], write=True),
-            Tool("add_link", "Link two notes", "Add a typed link from one note to another.",
-                 {"src": note_id, "dst": note_id,
-                  "type": {"type": "string", "default": "related", "description": "A link type id."}},
-                 self._add_link, ["src", "dst"], write=True),
+            Tool(
+                "search_notes",
+                "Search notes",
+                "Full-text search over note titles, text and tags. Add tag:name to filter by tag. "
+                "An empty query lists recently edited notes.",
+                {
+                    "query": {
+                        "type": "string",
+                        "description": "Words to search for; may include tag:name.",
+                    },
+                    "limit": {"type": "integer", "minimum": 1, "maximum": 50, "default": 10},
+                },
+                self._search_notes,
+                ["query"],
+            ),
+            Tool(
+                "get_note",
+                "Read a note",
+                "Full text of a note with its tags, URL, dates, typed links (in both directions), "
+                "flashcards and mind map outline.",
+                {"id": note_id},
+                self._get_note,
+                ["id"],
+            ),
+            Tool(
+                "list_tags",
+                "List tags",
+                "All tags in the vault with the number of notes using each.",
+                {},
+                self._list_tags,
+            ),
+            Tool(
+                "get_subgraph",
+                "Explore connections",
+                "Notes within a number of links of a note, and the typed links between them.",
+                {
+                    "id": note_id,
+                    "depth": {"type": "integer", "minimum": 1, "maximum": 4, "default": 1},
+                    "link_types": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Only follow these link types (see list_link_types).",
+                    },
+                },
+                self._get_subgraph,
+                ["id"],
+            ),
+            Tool(
+                "suggest_links",
+                "Suggest links",
+                "Notes that are likely related to a note but not yet linked, ranked by ZettelApp's "
+                "Naive Bayes link suggester.",
+                {
+                    "id": note_id,
+                    "limit": {"type": "integer", "minimum": 1, "maximum": 25, "default": 8},
+                },
+                self._suggest_links,
+                ["id"],
+            ),
+            Tool(
+                "list_link_types",
+                "List link types",
+                "The kinds of links notes can have (for example supports, contradicts, part_of).",
+                {},
+                self._list_link_types,
+            ),
+            Tool(
+                "create_note",
+                "Create a note",
+                "Create a new note. Use [[Title]] in the body to link to existing notes.",
+                {
+                    "title": {"type": "string", "maxLength": MAX_TITLE},
+                    "body": {"type": "string", "description": "Markdown text."},
+                    "tags": {"type": "array", "items": {"type": "string"}},
+                },
+                self._create_note,
+                ["title"],
+                write=True,
+            ),
+            Tool(
+                "add_link",
+                "Link two notes",
+                "Add a typed link from one note to another.",
+                {
+                    "src": note_id,
+                    "dst": note_id,
+                    "type": {
+                        "type": "string",
+                        "default": "related",
+                        "description": "A link type id.",
+                    },
+                },
+                self._add_link,
+                ["src", "dst"],
+                write=True,
+            ),
         ]
 
     def _require_note(self, note_id: str):
@@ -284,9 +390,19 @@ class ZettelMcpServer:
         limit = _int(args, "limit", 10, 1, 50)
         ids = self.vault.search(query)[:limit]
         notes = {n.id: n for n in self.vault.notes_by_ids(ids)}
-        return {"results": [{"id": i, "title": notes[i].display_title, "tags": notes[i].tags,
-                             "snippet": snippet(notes[i].body, 200), "modified": notes[i].modified}
-                            for i in ids if i in notes]}
+        return {
+            "results": [
+                {
+                    "id": i,
+                    "title": notes[i].display_title,
+                    "tags": notes[i].tags,
+                    "snippet": snippet(notes[i].body, 200),
+                    "modified": notes[i].modified,
+                }
+                for i in ids
+                if i in notes
+            ]
+        }
 
     def _get_note(self, args: dict) -> dict:
         note = self._require_note(_note_id(args))
@@ -296,17 +412,28 @@ class ZettelMcpServer:
         def describe(link, outgoing: bool) -> dict:
             other = link.dst if outgoing else link.src
             lt = types.get(link.type)
-            return {"id": other, "title": titles.get(other) or "Untitled", "type": link.type,
-                    "label": lt.label_for(outgoing) if lt else link.type}
+            return {
+                "id": other,
+                "title": titles.get(other) or "Untitled",
+                "type": link.type,
+                "label": lt.label_for(outgoing) if lt else link.type,
+            }
 
         body = note.body
         data = {
-            "id": note.id, "title": note.display_title, "tags": note.tags, "url": note.url,
-            "created": note.created, "modified": note.modified,
+            "id": note.id,
+            "title": note.display_title,
+            "tags": note.tags,
+            "url": note.url,
+            "created": note.created,
+            "modified": note.modified,
             "body": body[:MAX_BODY_RETURNED],
             "links_out": [describe(l, True) for l in self.vault.links_from(note.id)],
             "links_in": [describe(l, False) for l in self.vault.links_to(note.id)],
-            "flashcards": [{"front": c.front, "back": c.back, "kind": c.kind} for c in self.vault.cards_for(note.id)],
+            "flashcards": [
+                {"front": c.front, "back": c.back, "kind": c.kind}
+                for c in self.vault.cards_for(note.id)
+            ],
         }
         if len(body) > MAX_BODY_RETURNED:
             data["body_truncated"] = True
@@ -330,8 +457,11 @@ class ZettelMcpServer:
         data = {
             "root": root,
             "nodes": [{"id": i, "title": titles.get(i) or "Untitled"} for i in sorted(ids)],
-            "links": [{"src": l.src, "dst": l.dst, "type": l.type} for l in links
-                      if l.src in ids and l.dst in ids and (types is None or l.type in types)],
+            "links": [
+                {"src": l.src, "dst": l.dst, "type": l.type}
+                for l in links
+                if l.src in ids and l.dst in ids and (types is None or l.type in types)
+            ],
         }
         if truncated:
             data["truncated"] = True
@@ -341,12 +471,19 @@ class ZettelMcpServer:
         # Rebuild only when the vault changed (it may be edited by the app meanwhile).
         row = self.vault.conn.execute(
             "SELECT (SELECT COUNT(*) FROM notes), (SELECT MAX(modified) FROM notes), "
-            "(SELECT COUNT(*) FROM links), (SELECT COUNT(*) FROM suggestion_feedback)").fetchone()
+            "(SELECT COUNT(*) FROM links), (SELECT COUNT(*) FROM suggestion_feedback)"
+        ).fetchone()
         key = tuple(row)
         if self._suggester is None or key != self._suggester_key:
             suggester = LinkSuggester()
-            suggester.rebuild([NoteData(n.id, n.title, n.body, frozenset(n.tags)) for n in self.vault.all_notes()],
-                              [(l.src, l.dst) for l in self.vault.all_links()], self.vault.feedback())
+            suggester.rebuild(
+                [
+                    NoteData(n.id, n.title, n.body, frozenset(n.tags))
+                    for n in self.vault.all_notes()
+                ],
+                [(l.src, l.dst) for l in self.vault.all_links()],
+                self.vault.feedback(),
+            )
             self._suggester, self._suggester_key = suggester, key
         return self._suggester
 
@@ -354,18 +491,40 @@ class ZettelMcpServer:
         note = self._require_note(_note_id(args))
         limit = _int(args, "limit", 8, 1, 25)
         results = self._suggester_for_vault().suggest(
-            NoteData(note.id, note.title, note.body, frozenset(note.tags)), limit=limit, min_probability=0.2)
-        return {"suggestions": [{"id": s.note_id, "title": s.title, "probability": round(s.probability, 3),
-                                 "reasons": [label for label, weight in s.contributions[:3] if weight > 0]}
-                                for s in results]}
+            NoteData(note.id, note.title, note.body, frozenset(note.tags)),
+            limit=limit,
+            min_probability=0.2,
+        )
+        return {
+            "suggestions": [
+                {
+                    "id": s.note_id,
+                    "title": s.title,
+                    "probability": round(s.probability, 3),
+                    "reasons": [label for label, weight in s.contributions[:3] if weight > 0],
+                }
+                for s in results
+            ]
+        }
 
     def _list_link_types(self, args: dict) -> dict:
-        return {"link_types": [{"id": t.id, "label": t.label, "inverse_label": t.inverse_label,
-                                "directed": t.directed} for t in self.vault.link_types()]}
+        return {
+            "link_types": [
+                {
+                    "id": t.id,
+                    "label": t.label,
+                    "inverse_label": t.inverse_label,
+                    "directed": t.directed,
+                }
+                for t in self.vault.link_types()
+            ]
+        }
 
     def _ensure_writable(self) -> None:
         if not self.writes_allowed():  # the option may have been switched off meanwhile
-            raise ToolInputError("Writing is turned off in ZettelApp (Tools ▸ Options ▸ MCP server).")
+            raise ToolInputError(
+                "Writing is turned off in ZettelApp (Tools ▸ Options ▸ MCP server)."
+            )
 
     def _create_note(self, args: dict) -> dict:
         self._ensure_writable()

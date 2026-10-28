@@ -24,6 +24,7 @@ def window(tmp_path, monkeypatch):
     assert w.open_vault(tmp_path / "vault")
     yield w
     from PySide6.QtCore import QThreadPool
+
     QThreadPool.globalInstance().waitForDone(20000)
     w.suggestions.pool.waitForDone(20000)
     w.close()
@@ -31,6 +32,7 @@ def window(tmp_path, monkeypatch):
 
 def pump(ms=300):
     from PySide6.QtCore import QEventLoop, QThreadPool, QTimer
+
     QThreadPool.globalInstance().waitForDone(20000)
     loop = QEventLoop()
     QTimer.singleShot(ms, loop.quit)
@@ -39,6 +41,7 @@ def pump(ms=300):
 
 def test_full_workflow(window):
     from tools.demo_vault import build_demo
+
     ids = build_demo(window.vault)
     window.list.refresh()
     window.open_note(ids["Atomic notes"])
@@ -49,7 +52,9 @@ def test_full_workflow(window):
 
     window.new_note()
     window.editor.title.setText("Retrieval and spacing")
-    window.editor.body.setPlainText("Testing yourself at spaced intervals. supports:: [[Spaced repetition]]")
+    window.editor.body.setPlainText(
+        "Testing yourself at spaced intervals. supports:: [[Spaced repetition]]"
+    )
     window.editor._edited()
     window.editor.flush()
     note_id = window.current_note_id()
@@ -74,6 +79,7 @@ def test_full_workflow(window):
 def test_dialogs_construct(window):
     from zettelapp.ui.dialogs import AboutDialog, ExportDialog, LinkPickerDialog, ShortcutsDialog
     from zettelapp.ui.settings_dialog import OptionsDialog
+
     window.vault.create_note("One", "text")
     AboutDialog(window).close()
     ShortcutsDialog(window).close()

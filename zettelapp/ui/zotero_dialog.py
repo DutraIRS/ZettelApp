@@ -64,8 +64,15 @@ class ZoteroDialog(QDialog):
         self.cite_button.clicked.connect(lambda: self._finish("cite"))
         self.note_button.clicked.connect(lambda: self._finish("note"))
         row = QHBoxLayout()
-        row.addWidget(label("Needs Zotero 7+ running, with Settings ▸ Advanced ▸ “Allow other applications on this "
-                            "computer to communicate with Zotero” turned on.", "caption", wrap=True), 1)
+        row.addWidget(
+            label(
+                "Needs Zotero 7+ running, with Settings ▸ Advanced ▸ “Allow other applications on this "
+                "computer to communicate with Zotero” turned on.",
+                "caption",
+                wrap=True,
+            ),
+            1,
+        )
         row.addWidget(buttons)
         layout.addLayout(row)
         self._timer = QTimer(self, singleShot=True, interval=300, timeout=self._run_search)
@@ -90,10 +97,14 @@ class ZoteroDialog(QDialog):
                 return
             self.results.clear()
             for item in items:
-                entry = QListWidgetItem(icons.icon("document"), f"{item.short_citation()}\n{item.title}")
+                entry = QListWidgetItem(
+                    icons.icon("document"), f"{item.short_citation()}\n{item.title}"
+                )
                 entry.setData(Qt.ItemDataRole.UserRole, item)
                 self.results.addItem(entry)
-            self.state.setText(f"{len(items)} items" + (" (most recently modified)" if not query.strip() else ""))
+            self.state.setText(
+                f"{len(items)} items" + (" (most recently modified)" if not query.strip() else "")
+            )
             if items:
                 self.results.setCurrentRow(0)
             else:
@@ -114,14 +125,19 @@ class ZoteroDialog(QDialog):
             self.details.clear()
             return
         esc = html.escape
-        rows = [f"<h3>{esc(item.title)}</h3>", f"<p>{esc('; '.join(item.creators) or 'Unknown author')}"
-                f" · {esc(item.year or 'n.d.')}</p>"]
+        rows = [
+            f"<h3>{esc(item.title)}</h3>",
+            f"<p>{esc('; '.join(item.creators) or 'Unknown author')}"
+            f" · {esc(item.year or 'n.d.')}</p>",
+        ]
         if item.publication:
             rows.append(f"<p><i>{esc(item.publication)}</i></p>")
         if item.doi:
             rows.append(f"<p>DOI {esc(item.doi)}</p>")
         if item.abstract:
-            rows.append(f"<p>{esc(item.abstract[:900])}{'…' if len(item.abstract) > 900 else ''}</p>")
+            rows.append(
+                f"<p>{esc(item.abstract[:900])}{'…' if len(item.abstract) > 900 else ''}</p>"
+            )
         if item.tags:
             rows.append("<p>" + " ".join(f"#{esc(t)}" for t in item.tags[:12]) + "</p>")
         self.details.setHtml("".join(rows))

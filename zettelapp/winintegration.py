@@ -23,6 +23,7 @@ _PROTOCOL_KEY = rf"Software\Classes\{URL_SCHEME}"
 def set_app_user_model_id() -> None:
     if IS_WINDOWS:
         import ctypes
+
         try:
             ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(APP_USER_MODEL_ID)
         except (AttributeError, OSError):
@@ -35,11 +36,16 @@ def set_window_frame_dark(win_id: int, dark: bool) -> None:
         return
     import ctypes
     from ctypes import wintypes
+
     value = ctypes.c_int(1 if dark else 0)
     for attribute in (20, 19):  # DWMWA_USE_IMMERSIVE_DARK_MODE (and its pre-20H1 id)
         try:
-            if ctypes.windll.dwmapi.DwmSetWindowAttribute(
-                    wintypes.HWND(win_id), attribute, ctypes.byref(value), ctypes.sizeof(value)) == 0:
+            if (
+                ctypes.windll.dwmapi.DwmSetWindowAttribute(
+                    wintypes.HWND(win_id), attribute, ctypes.byref(value), ctypes.sizeof(value)
+                )
+                == 0
+            ):
                 return
         except (AttributeError, OSError):
             return
@@ -49,6 +55,7 @@ def allow_foreground_switch() -> None:
     """Let the already-running instance bring itself to the front."""
     if IS_WINDOWS:
         import ctypes
+
         try:
             ctypes.windll.user32.AllowSetForegroundWindow(-1)  # ASFW_ANY
         except (AttributeError, OSError):
@@ -68,6 +75,7 @@ def register_url_protocol() -> None:
     if not IS_WINDOWS:
         return
     import winreg
+
     command = launch_command()
     icon_source = sys.executable if getattr(sys, "frozen", False) else command.split('"')[1]
     with winreg.CreateKey(winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY) as key:
@@ -83,6 +91,7 @@ def unregister_url_protocol() -> None:
     if not IS_WINDOWS:
         return
     import winreg
+
     for sub in (r"\shell\open\command", r"\shell\open", r"\shell", r"\DefaultIcon", ""):
         try:
             winreg.DeleteKey(winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + sub)
@@ -94,8 +103,11 @@ def registered_command() -> str | None:
     if not IS_WINDOWS:
         return None
     import winreg
+
     try:
-        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + r"\shell\open\command") as key:
+        with winreg.OpenKey(
+            winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + r"\shell\open\command"
+        ) as key:
             return winreg.QueryValueEx(key, "")[0]
     except OSError:
         return None
@@ -112,4 +124,5 @@ def reveal_in_explorer(path: str | Path) -> None:
     else:  # pragma: no cover
         from PySide6.QtCore import QUrl
         from PySide6.QtGui import QDesktopServices
+
         QDesktopServices.openUrl(QUrl.fromLocalFile(str(path if path.is_dir() else path.parent)))

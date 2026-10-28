@@ -19,21 +19,31 @@ from zettelapp.mcp_server import ZettelMcpServer, _settings_allow_writes
 def _last_vault() -> str | None:
     try:
         from zettelapp import settings
+
         return settings.get(settings.LAST_VAULT) or None
     except Exception:
         return None
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(prog="zettelapp-mcp", description="MCP server for a ZettelApp vault (stdio).")
-    parser.add_argument("--vault", help="Vault folder (default: the vault last opened in ZettelApp).")
-    parser.add_argument("--allow-writes", action="store_true",
-                        help="Offer create_note and add_link (also requires the option in ZettelApp).")
+    parser = argparse.ArgumentParser(
+        prog="zettelapp-mcp", description="MCP server for a ZettelApp vault (stdio)."
+    )
+    parser.add_argument(
+        "--vault", help="Vault folder (default: the vault last opened in ZettelApp)."
+    )
+    parser.add_argument(
+        "--allow-writes",
+        action="store_true",
+        help="Offer create_note and add_link (also requires the option in ZettelApp).",
+    )
     parser.add_argument("--version", action="version", version=f"zettelapp-mcp {__version__}")
     args = parser.parse_args(argv)
     if hasattr(sys.stderr, "reconfigure"):
         sys.stderr.reconfigure(encoding="utf-8", errors="backslashreplace")
-    logging.basicConfig(stream=sys.stderr, level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
+    logging.basicConfig(
+        stream=sys.stderr, level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s"
+    )
     log = logging.getLogger("zettelapp.mcp")
 
     if sys.stdin is None or sys.stdout is None:
@@ -45,7 +55,9 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     writes = args.allow_writes and _settings_allow_writes()
     if args.allow_writes and not writes:
-        log.warning("--allow-writes ignored: enable MCP writes in ZettelApp (Tools ▸ Options ▸ MCP server).")
+        log.warning(
+            "--allow-writes ignored: enable MCP writes in ZettelApp (Tools ▸ Options ▸ MCP server)."
+        )
     try:
         vault = Vault.open(path, create=False, readonly=not writes)
     except (VaultError, OSError) as exc:

@@ -24,7 +24,10 @@ ASSET_NAME_RE = re.compile(r"^[0-9a-f]{20}\.(?:png|jpg|gif|webp|bmp)$")
 MAX_IMAGE_BYTES = 25 * 1024 * 1024
 
 _WINDOWS_RESERVED = {
-    "CON", "PRN", "AUX", "NUL",
+    "CON",
+    "PRN",
+    "AUX",
+    "NUL",
     *(f"COM{i}" for i in range(1, 10)),
     *(f"LPT{i}" for i in range(1, 10)),
 }
@@ -63,7 +66,8 @@ def is_safe_web_url(url: str) -> bool:
 
 ZOTERO_KEY_RE = re.compile(r"[A-Z0-9]{8}")
 _ZOTERO_URL_RE = re.compile(
-    r"^zotero://(?:select|open-pdf)/(?:library|groups/\d{1,12})/items/[A-Z0-9]{8}(?:\?page=\d{1,5})?$")
+    r"^zotero://(?:select|open-pdf)/(?:library|groups/\d{1,12})/items/[A-Z0-9]{8}(?:\?page=\d{1,5})?$"
+)
 
 
 def is_zotero_url(url: object) -> bool:

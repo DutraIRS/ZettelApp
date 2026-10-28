@@ -79,7 +79,9 @@ def import_path(vault: Vault, path: str | Path) -> ImportResult:
                 with tempfile.TemporaryDirectory(prefix="zettelapp-import-") as tmp:
                     _extract(zf, Path(tmp))
                     return import_markdown_folder(vault, Path(tmp))
-        raise UnsafeInputError("This archive contains neither a ZettelApp export nor Markdown files.")
+        raise UnsafeInputError(
+            "This archive contains neither a ZettelApp export nor Markdown files."
+        )
     raise UnsafeInputError(f"Unsupported file type: {suffix or path.name}")
 
 
@@ -95,6 +97,7 @@ def _extract(zf: zipfile.ZipFile, dest: Path) -> None:
 
 
 # --- ZettelApp archive / JSON -----------------------------------------------
+
 
 def _import_archive(vault: Vault, zf: zipfile.ZipFile) -> ImportResult:
     info = zf.getinfo("manifest.json")
@@ -130,7 +133,9 @@ def _timestamp(value) -> str | None:
     if isinstance(value, datetime):
         return value.isoformat(timespec="seconds")
     if isinstance(value, date):  # YAML turns bare dates into date objects
-        return datetime(value.year, value.month, value.day).astimezone().isoformat(timespec="seconds")
+        return (
+            datetime(value.year, value.month, value.day).astimezone().isoformat(timespec="seconds")
+        )
     if not isinstance(value, str):
         return None
     try:
@@ -139,8 +144,9 @@ def _timestamp(value) -> str | None:
         return None
 
 
-def import_data(vault: Vault, data, asset_map: dict[str, str] | None = None,
-                result: ImportResult | None = None) -> ImportResult:
+def import_data(
+    vault: Vault, data, asset_map: dict[str, str] | None = None, result: ImportResult | None = None
+) -> ImportResult:
     result = result or ImportResult()
     asset_map = asset_map or {}
     if not isinstance(data, dict) or data.get("format") != "zettelapp":
@@ -150,9 +156,20 @@ def import_data(vault: Vault, data, asset_map: dict[str, str] | None = None,
 
     existing_types = vault.link_type_map()
     for raw in data.get("link_types") or []:
-        if isinstance(raw, dict) and isinstance(raw.get("id"), str) and raw["id"] not in existing_types:
-            vault.save_link_type(LinkType(raw["id"], _str(raw.get("label"), 60), _str(raw.get("inverse_label"), 60),
-                                          _str(raw.get("color"), 7), bool(raw.get("directed", True))))
+        if (
+            isinstance(raw, dict)
+            and isinstance(raw.get("id"), str)
+            and raw["id"] not in existing_types
+        ):
+            vault.save_link_type(
+                LinkType(
+                    raw["id"],
+                    _str(raw.get("label"), 60),
+                    _str(raw.get("inverse_label"), 60),
+                    _str(raw.get("color"), 7),
+                    bool(raw.get("directed", True)),
+                )
+            )
 
     raw_notes = [n for n in (data.get("notes") or []) if isinstance(n, dict)]
     id_map: dict[str, str] = {}
@@ -169,7 +186,9 @@ def import_data(vault: Vault, data, asset_map: dict[str, str] | None = None,
             new_id = old_id if current is None else None
         else:
             new_id = None
-        note = vault.create_note(title=title, note_id=new_id, created=_timestamp(raw.get("created")))
+        note = vault.create_note(
+            title=title, note_id=new_id, created=_timestamp(raw.get("created"))
+        )
         if is_valid_note_id(old_id):
             id_map[old_id] = note.id
         pending.append((note, raw))
@@ -182,6 +201,7 @@ def import_data(vault: Vault, data, asset_map: dict[str, str] | None = None,
             if target in id_map and id_map[target] != target:
                 return m.group(0).replace(target, id_map[target], 1)
             return m.group(0)
+
         return WIKILINK_RE.sub(relink, body)
 
     for note, raw in pending:
@@ -198,7 +218,11 @@ def import_data(vault: Vault, data, asset_map: dict[str, str] | None = None,
         if not isinstance(raw, dict) or raw.get("origin") == "inline":
             continue  # inline links are re-created from the note text
         src, dst = id_map.get(raw.get("src")), id_map.get(raw.get("dst"))
-        if src and dst and vault.add_link(src, dst, _str(raw.get("type"), 40) or "related", "manual"):
+        if (
+            src
+            and dst
+            and vault.add_link(src, dst, _str(raw.get("type"), 40) or "related", "manual")
+        ):
             result.links += 1
 
     for raw in data.get("flashcards") or []:
@@ -207,13 +231,21 @@ def import_data(vault: Vault, data, asset_map: dict[str, str] | None = None,
         note_id = id_map.get(raw.get("note_id"))
         front = _str(raw.get("front"), 20_000)
         if note_id and front:
-            vault.save_card(Flashcard(None, note_id, remap_body(front), remap_body(_str(raw.get("back"), 20_000)),
-                                      "cloze" if raw.get("kind") == "cloze" else "basic"))
+            vault.save_card(
+                Flashcard(
+                    None,
+                    note_id,
+                    remap_body(front),
+                    remap_body(_str(raw.get("back"), 20_000)),
+                    "cloze" if raw.get("kind") == "cloze" else "basic",
+                )
+            )
             result.cards += 1
     return result
 
 
 # --- Markdown folders -------------------------------------------------------------
+
 
 def import_markdown_folder(vault: Vault, folder: Path) -> ImportResult:
     result = ImportResult()
@@ -236,10 +268,12 @@ def _parse_front_matter(text: str) -> tuple[dict, str]:
         meta = yaml.safe_load(m.group(1))
     except yaml.YAMLError:
         return {}, text
-    return (meta if isinstance(meta, dict) else {}), text[m.end():]
+    return (meta if isinstance(meta, dict) else {}), text[m.end() :]
 
 
-def _import_markdown_files(vault: Vault, root: Path, files: list[Path], result: ImportResult) -> None:
+def _import_markdown_files(
+    vault: Vault, root: Path, files: list[Path], result: ImportResult
+) -> None:
     images_by_name: dict[str, Path] = {}
     for p in root.rglob("*"):
         if p.suffix.lower() in (".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp") and p.is_file():
@@ -262,12 +296,18 @@ def _import_markdown_files(vault: Vault, root: Path, files: list[Path], result: 
     created: dict[str, Note] = {}
     for path, meta, body, title in parsed:
         wanted = meta.get("id") if isinstance(meta.get("id"), str) else None
-        note_id = wanted if is_valid_note_id(wanted) and not vault.note_exists(wanted, True) else None
+        note_id = (
+            wanted if is_valid_note_id(wanted) and not vault.note_exists(wanted, True) else None
+        )
         when = datetime.fromtimestamp(path.stat().st_mtime)
         if note_id is None:
             note_id = vault.new_note_id(when)
-        created[str(path)] = vault.create_note(title=title, note_id=note_id,
-                                               created=_timestamp(meta.get("created")) or when.astimezone().isoformat(timespec="seconds"))
+        created[str(path)] = vault.create_note(
+            title=title,
+            note_id=note_id,
+            created=_timestamp(meta.get("created"))
+            or when.astimezone().isoformat(timespec="seconds"),
+        )
     stems = {fold(Path(p).stem): n for p, n in created.items()}
 
     def image_ref(source: Path, target: str) -> str | None:
@@ -298,7 +338,9 @@ def _import_markdown_files(vault: Vault, root: Path, files: list[Path], result: 
 
         def relink(m: re.Match) -> str:
             target = m.group("target").strip()
-            linked = stems.get(fold(Path(target).stem if target.lower().endswith(".md") else target))
+            linked = stems.get(
+                fold(Path(target).stem if target.lower().endswith(".md") else target)
+            )
             if linked is None:
                 return m.group(0)
             prefix = f"{m.group('type')}:: " if m.group("type") else ""
@@ -329,7 +371,9 @@ def _import_markdown_files(vault: Vault, root: Path, files: list[Path], result: 
         image = meta.get("image")
         if isinstance(image, str):
             note.image = image_ref(path, image) or ""
-        note.mindmap = sanitize_mindmap(meta.get("mindmap")) if isinstance(meta.get("mindmap"), dict) else None
+        note.mindmap = (
+            sanitize_mindmap(meta.get("mindmap")) if isinstance(meta.get("mindmap"), dict) else None
+        )
         vault.save_note(note, touch=False)
         result.notes += 1
         result.links += len(vault.links_from(note.id))

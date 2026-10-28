@@ -38,7 +38,15 @@ from zettelapp.core.similarity import (
     jaro_winkler_similarity,
     levenshtein_similarity,
 )
-from zettelapp.core.textutil import STOPWORDS, WIKILINK_RE, WORD_RE, fold, normalize, strip_markdown, tokenize
+from zettelapp.core.textutil import (
+    STOPWORDS,
+    WIKILINK_RE,
+    WORD_RE,
+    fold,
+    normalize,
+    strip_markdown,
+    tokenize,
+)
 
 
 @dataclass(frozen=True)
@@ -67,9 +75,14 @@ BODY_PREFIX = 400  # characters compared with Levenshtein
 class NaiveBayesLinkModel:
     """Binned (categorical) Naive Bayes with Dirichlet priors."""
 
-    def __init__(self, bins: int = 8, prior_strength: float = 10.0,
-                 enabled: Iterable[str] | None = None, features: Sequence[Feature] = FEATURES,
-                 evidence_weight: float = 0.6):
+    def __init__(
+        self,
+        bins: int = 8,
+        prior_strength: float = 10.0,
+        enabled: Iterable[str] | None = None,
+        features: Sequence[Feature] = FEATURES,
+        evidence_weight: float = 0.6,
+    ):
         self.features = tuple(features)
         self.bins = bins
         self.prior_strength = prior_strength
@@ -105,7 +118,9 @@ class NaiveBayesLinkModel:
                 bins[..., i] = np.where(x[..., i] >= 0.5, self.bins - 1, 0)
         return bins
 
-    def fit(self, x: np.ndarray, y: np.ndarray, weights: np.ndarray | None = None) -> NaiveBayesLinkModel:
+    def fit(
+        self, x: np.ndarray, y: np.ndarray, weights: np.ndarray | None = None
+    ) -> NaiveBayesLinkModel:
         x = np.asarray(x, dtype=float).reshape(-1, len(self.features))
         y = np.asarray(y).astype(int)
         w = np.ones(len(y)) if weights is None else np.asarray(weights, dtype=float)
@@ -179,7 +194,9 @@ class Suggestion:
 
 
 def _prepare(note: NoteData) -> _Prepared:
-    plain = strip_markdown(WIKILINK_RE.sub(" ", note.body))  # see module docstring: avoids label leakage
+    plain = strip_markdown(
+        WIKILINK_RE.sub(" ", note.body)
+    )  # see module docstring: avoids label leakage
     words = WORD_RE.findall(fold(plain))
     title_words = WORD_RE.findall(fold(note.title))
     tag_tokens = [part for t in note.tags for part in t.split("/")]
@@ -196,13 +213,21 @@ def _prepare(note: NoteData) -> _Prepared:
 def _mentions(a: _Prepared, b: _Prepared) -> float:
     def inside(title: str, words: str) -> bool:
         return len(title) >= 4 and f" {title} " in words
+
     return 1.0 if inside(a.title_words, b.words) or inside(b.title_words, a.words) else 0.0
 
 
 class LinkSuggester:
-    def __init__(self, bins: int = 8, prior_strength: float = 10.0, enabled: Iterable[str] | None = None,
-                 negatives_per_positive: int = 3, max_positive_pairs: int = 600, prefilter: int = 150,
-                 seed: int = 13):
+    def __init__(
+        self,
+        bins: int = 8,
+        prior_strength: float = 10.0,
+        enabled: Iterable[str] | None = None,
+        negatives_per_positive: int = 3,
+        max_positive_pairs: int = 600,
+        prefilter: int = 150,
+        seed: int = 13,
+    ):
         self.model = NaiveBayesLinkModel(bins, prior_strength, enabled)
         self.negatives_per_positive = negatives_per_positive
         self.max_positive_pairs = max_positive_pairs
@@ -218,8 +243,12 @@ class LinkSuggester:
 
     # --- corpus and training ---------------------------------------------
 
-    def rebuild(self, notes: Sequence[NoteData], links: Iterable[tuple[str, str]],
-                feedback: Mapping[tuple[str, str], int] | None = None) -> None:
+    def rebuild(
+        self,
+        notes: Sequence[NoteData],
+        links: Iterable[tuple[str, str]],
+        feedback: Mapping[tuple[str, str], int] | None = None,
+    ) -> None:
         self.notes = {n.id: n for n in notes}
         prepared = {}
         for n in notes:
@@ -242,7 +271,11 @@ class LinkSuggester:
                 self.linked.add(_pair(a, b))
         feedback = feedback or {}
         self.rejected = {p for p, label in feedback.items() if not label}
-        accepted = {p for p, label in feedback.items() if label and p[0] in self.notes and p[1] in self.notes}
+        accepted = {
+            p
+            for p, label in feedback.items()
+            if label and p[0] in self.notes and p[1] in self.notes
+        }
         self._train(accepted)
 
     def _train(self, accepted: set[tuple[str, str]]) -> None:
@@ -293,8 +326,13 @@ class LinkSuggester:
 
     # --- prediction -------------------------------------------------------
 
-    def suggest(self, note: NoteData, limit: int = 8, min_probability: float = 0.3,
-                exclude: Iterable[str] = ()) -> list[Suggestion]:
+    def suggest(
+        self,
+        note: NoteData,
+        limit: int = 8,
+        min_probability: float = 0.3,
+        exclude: Iterable[str] = (),
+    ) -> list[Suggestion]:
         if self.index is None or not self.notes:
             return []
         q = _prepare(note)
@@ -327,7 +365,9 @@ class LinkSuggester:
         partial = self.model.predict_log_odds(x)
         top = np.argsort(-partial)[: self.prefilter]
         for row in top:
-            x[row, _IDX["body_lev"]] = levenshtein_similarity(q.body_prefix, self.prepared[candidates[row]].body_prefix)
+            x[row, _IDX["body_lev"]] = levenshtein_similarity(
+                q.body_prefix, self.prepared[candidates[row]].body_prefix
+            )
         x_top = x[top]
         ratios = self.model.log_ratios(x_top)
         probs = 1.0 / (1.0 + np.exp(-(self.model.log_prior_odds + ratios.sum(axis=1))))
@@ -338,13 +378,22 @@ class LinkSuggester:
                 break
             cid = candidates[top[k]]
             contributions = sorted(
-                ((f.label, float(r)) for f, r, on in zip(FEATURES, ratios[k], self.model.enabled) if on),
-                key=lambda item: -abs(item[1]))
-            out.append(Suggestion(
-                note_id=cid, title=self.notes[cid].title or "Untitled", probability=float(probs[k]),
-                contributions=contributions,
-                features={f.key: float(v) for f, v in zip(FEATURES, x_top[k])},
-            ))
+                (
+                    (f.label, float(r))
+                    for f, r, on in zip(FEATURES, ratios[k], self.model.enabled)
+                    if on
+                ),
+                key=lambda item: -abs(item[1]),
+            )
+            out.append(
+                Suggestion(
+                    note_id=cid,
+                    title=self.notes[cid].title or "Untitled",
+                    probability=float(probs[k]),
+                    contributions=contributions,
+                    features={f.key: float(v) for f, v in zip(FEATURES, x_top[k])},
+                )
+            )
         return out
 
     def report(self) -> dict:

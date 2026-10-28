@@ -34,8 +34,10 @@ class Clustering:
 
 
 def embed_notes(notes: Sequence[Note], dims: int = 48) -> tuple[SemanticIndex, np.ndarray]:
-    index = SemanticIndex({n.id: tokenize(n.title) * 2 + tokenize(n.body) + list(n.tags) for n in notes},
-                          lsa_dims=dims)
+    index = SemanticIndex(
+        {n.id: tokenize(n.title) * 2 + tokenize(n.body) + list(n.tags) for n in notes},
+        lsa_dims=dims,
+    )
     if index.embeddings is not None:
         return index, index.embeddings
     # Too few notes for LSA: fall back to dense, normalised TF-IDF vectors.
@@ -57,19 +59,20 @@ def _kmeans_pp(x: np.ndarray, k: int, rng: np.random.Generator) -> np.ndarray:
     return np.array(centers)
 
 
-def kmeans(x: np.ndarray, k: int, n_init: int = 6, max_iter: int = 100,
-           seed: int = 0) -> tuple[np.ndarray, np.ndarray, float]:
+def kmeans(
+    x: np.ndarray, k: int, n_init: int = 6, max_iter: int = 100, seed: int = 0
+) -> tuple[np.ndarray, np.ndarray, float]:
     """Lloyd's algorithm with k-means++ seeding; returns (labels, centers, inertia)."""
     n = len(x)
     k = max(1, min(k, n))
     rng = np.random.default_rng(seed)
-    sq = (x ** 2).sum(axis=1)
+    sq = (x**2).sum(axis=1)
     best: tuple[np.ndarray, np.ndarray, float] | None = None
     for _ in range(n_init):
         centers = _kmeans_pp(x, k, rng)
         labels = np.zeros(n, dtype=int)
         for _ in range(max_iter):
-            dist = sq[:, None] - 2 * x @ centers.T + (centers ** 2).sum(axis=1)[None, :]
+            dist = sq[:, None] - 2 * x @ centers.T + (centers**2).sum(axis=1)[None, :]
             labels = dist.argmin(axis=1)
             new = centers.copy()
             for j in range(k):
@@ -78,7 +81,7 @@ def kmeans(x: np.ndarray, k: int, n_init: int = 6, max_iter: int = 100,
             if np.allclose(new, centers):
                 break
             centers = new
-        dist = sq[:, None] - 2 * x @ centers.T + (centers ** 2).sum(axis=1)[None, :]
+        dist = sq[:, None] - 2 * x @ centers.T + (centers**2).sum(axis=1)[None, :]
         inertia = float(np.maximum(dist[np.arange(n), labels], 0).sum())
         if best is None or inertia < best[2]:
             best = (labels, centers, inertia)
@@ -188,8 +191,9 @@ def _keywords(index: SemanticIndex, labels: np.ndarray, top: int = 4) -> dict[in
     return out
 
 
-def cluster_notes(notes: Sequence[Note], method: str = "kmeans", k: int | None = None,
-                  seed: int = 0) -> Clustering | None:
+def cluster_notes(
+    notes: Sequence[Note], method: str = "kmeans", k: int | None = None, seed: int = 0
+) -> Clustering | None:
     """Cluster notes; *k* None picks the k with the best silhouette score."""
     if len(notes) < 3:
         return None

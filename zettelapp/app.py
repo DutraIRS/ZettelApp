@@ -29,8 +29,12 @@ MAX_MESSAGE = 4096
 
 def configure_logging() -> None:
     try:
-        handler = RotatingFileHandler(ensure_dir(logs_dir()) / "zettelapp.log", maxBytes=1_000_000,
-                                      backupCount=3, encoding="utf-8")
+        handler = RotatingFileHandler(
+            ensure_dir(logs_dir()) / "zettelapp.log",
+            maxBytes=1_000_000,
+            backupCount=3,
+            encoding="utf-8",
+        )
     except OSError:
         handler = logging.StreamHandler()
     handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s"))
@@ -85,6 +89,7 @@ def _listen(window) -> QLocalServer:
                 return
             if isinstance(message, dict):
                 window.handle_message(message)
+
         socket.readyRead.connect(read)
         socket.disconnected.connect(socket.deleteLater)
 
@@ -97,23 +102,29 @@ def _install_excepthook() -> None:
         log.error("Unhandled error", exc_info=(exc_type, exc, tb))
         if QApplication.instance() is None:
             return
-        box = QMessageBox(QMessageBox.Icon.Critical, APP_NAME,
-                          "Something went wrong. Your notes are saved automatically, so nothing should be lost.\n\n"
-                          f"{exc_type.__name__}: {exc}")
+        box = QMessageBox(
+            QMessageBox.Icon.Critical,
+            APP_NAME,
+            "Something went wrong. Your notes are saved automatically, so nothing should be lost.\n\n"
+            f"{exc_type.__name__}: {exc}",
+        )
         box.setDetailedText("".join(traceback.format_exception(exc_type, exc, tb)))
         box.setInformativeText(f"Details were written to the log in {logs_dir()}.")
         box.exec()
+
     sys.excepthook = hook
 
 
 def _self_test(argv: list[str]) -> int:
     """Check that a packaged build is complete: import every module and build the window offscreen."""
     import zettelapp
+
     for module in pkgutil.walk_packages(zettelapp.__path__, "zettelapp."):
         importlib.import_module(module.name)
     app = QApplication([argv[0], "-platform", "offscreen"])
     theme.apply_theme(app, "light")
     from zettelapp.ui.main_window import MainWindow
+
     window = MainWindow()
     window.close()
     print(f"{APP_NAME} {__version__} self-test OK")
@@ -135,7 +146,9 @@ def main(argv: list[str] | None = None) -> int:
     vault_arg = _option(argv, "--vault")
     winintegration.set_app_user_model_id()
     configure_logging()
-    QApplication.setHighDpiScaleFactorRoundingPolicy(Qt.HighDpiScaleFactorRoundingPolicy.PassThrough)
+    QApplication.setHighDpiScaleFactorRoundingPolicy(
+        Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
+    )
     app = QApplication(argv)
     app.setApplicationName(APP_NAME)
     app.setOrganizationName(ORG_NAME)
@@ -166,6 +179,7 @@ def main(argv: list[str] | None = None) -> int:
     def follow_system_theme(*_args) -> None:
         if settings.get(settings.THEME) == "system":
             window.settings_changed()
+
     try:
         app.styleHints().colorSchemeChanged.connect(follow_system_theme)
     except AttributeError:  # pragma: no cover - Qt < 6.5

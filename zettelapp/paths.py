@@ -32,7 +32,9 @@ def _known_folder_documents() -> Path | None:
 
     # FOLDERID_Documents {FDD39AD0-238F-46AF-ADB4-6C85480369C7}
     folder_id = GUID(
-        0xFDD39AD0, 0x238F, 0x46AF,
+        0xFDD39AD0,
+        0x238F,
+        0x46AF,
         (ctypes.c_ubyte * 8)(0xAD, 0xB4, 0x6C, 0x85, 0x48, 0x03, 0x69, 0xC7),
     )
     path_ptr = ctypes.c_wchar_p()

@@ -41,8 +41,14 @@ class _Task(QRunnable):
             self.signals.done.emit(result)
 
 
-def run_task(fn: Callable, *args, on_done: Callable | None = None, on_error: Callable | None = None,
-             pool: QThreadPool | None = None, **kwargs) -> None:
+def run_task(
+    fn: Callable,
+    *args,
+    on_done: Callable | None = None,
+    on_error: Callable | None = None,
+    pool: QThreadPool | None = None,
+    **kwargs,
+) -> None:
     task = _Task(fn, args, kwargs)
     if on_done:
         task.signals.done.connect(on_done)
@@ -94,7 +100,8 @@ class SuggestionService(QObject):
         notes_count = vault.count_notes()
         signature = (notes_count, hash(tuple(sorted(links))), hash(tuple(sorted(feedback.items()))))
         stale = signature != self._signature or (
-            vault.generation != self._generation and time.monotonic() - self._built_at > 60)
+            vault.generation != self._generation and time.monotonic() - self._built_at > 60
+        )
         corpus = None
         if stale:
             corpus = [NoteData(n.id, n.title, n.body, frozenset(n.tags)) for n in vault.all_notes()]

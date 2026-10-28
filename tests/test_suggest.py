@@ -9,8 +9,11 @@ def note_data(n):
 
 def build(vault):
     s = LinkSuggester()
-    s.rebuild([note_data(n) for n in vault.all_notes()], [(l.src, l.dst) for l in vault.all_links()],
-              vault.feedback())
+    s.rebuild(
+        [note_data(n) for n in vault.all_notes()],
+        [(l.src, l.dst) for l in vault.all_links()],
+        vault.feedback(),
+    )
     return s
 
 
@@ -41,8 +44,11 @@ def test_missing_and_disabled_features_are_neutral():
 
 def test_suggestions_rank_related_notes_first(vault, sample):
     s = build(vault)
-    new = vault.create_note("Memory retention", "How retention of memory decays and how review and "
-                            "spaced repetition help.", tags=["memory"])
+    new = vault.create_note(
+        "Memory retention",
+        "How retention of memory decays and how review and spaced repetition help.",
+        tags=["memory"],
+    )
     results = s.suggest(note_data(new), limit=4, min_probability=0.0)
     ids = [r.note_id for r in results]
     assert sample["d"].id not in ids[:2]  # the bread recipe is not a good link
@@ -67,6 +73,7 @@ def test_empty_note_has_no_suggestions(vault, sample):
 
 def test_inline_links_do_not_leak_into_features():
     from zettelapp.core.suggest import _prepare
+
     p = _prepare(NoteData("1", "A note", "See [[Forgetting curve]] and supports:: [[Other idea]]"))
     assert "forgetting" not in p.words and "forgetting" not in p.tokens
     assert "supports" not in p.tokens

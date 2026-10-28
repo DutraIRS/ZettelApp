@@ -46,7 +46,8 @@ def normalize(text: str) -> str:
 
 def tokenize(text: str) -> list[str]:
     return [
-        t for t in WORD_RE.findall(fold(text))
+        t
+        for t in WORD_RE.findall(fold(text))
         if len(t) > 1 and not t.isdigit() and t not in STOPWORDS
     ]
 
@@ -102,7 +103,9 @@ def find_wikilinks(text: str) -> list[WikiLink]:
     links = []
     for m in WIKILINK_RE.finditer(text or ""):
         link_type = slugify_type(m.group("type")) if m.group("type") else None
-        links.append(WikiLink(m.group("target").strip(), m.group("alias"), link_type, m.start(), m.end()))
+        links.append(
+            WikiLink(m.group("target").strip(), m.group("alias"), link_type, m.start(), m.end())
+        )
     return links
 
 
@@ -138,7 +141,12 @@ def extract_inline_cards(body: str) -> list[InlineCard]:
             continue
         question = [q.group(1)]
         i += 1
-        while i < len(lines) and lines[i].strip() and not _A_RE.match(lines[i]) and not _Q_RE.match(lines[i]):
+        while (
+            i < len(lines)
+            and lines[i].strip()
+            and not _A_RE.match(lines[i])
+            and not _Q_RE.match(lines[i])
+        ):
             question.append(lines[i])
             i += 1
         if i < len(lines) and _A_RE.match(lines[i]):
@@ -159,10 +167,12 @@ def extract_inline_cards(body: str) -> list[InlineCard]:
 
 def cloze_front(text: str, number: int | None = None) -> str:
     """Hide cloze deletions ("[...]" or the hint) for quizzing."""
+
     def repl(m: re.Match) -> str:
         if number is not None and int(m.group(1)) != number:
             return m.group(2)
         return f"[{m.group(3)}]" if m.group(3) else "[…]"
+
     return CLOZE_RE.sub(repl, text)
 
 

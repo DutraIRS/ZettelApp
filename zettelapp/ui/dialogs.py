@@ -41,7 +41,9 @@ from zettelapp.ui.widgets import ScopePicker, SearchBox, label
 
 
 def _buttons(dialog: QDialog, ok_text: str = "OK") -> QDialogButtonBox:
-    box = QDialogButtonBox(QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel)
+    box = QDialogButtonBox(
+        QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+    )
     ok = box.button(QDialogButtonBox.StandardButton.Ok)
     ok.setText(ok_text)
     ok.setProperty("accent", True)
@@ -54,8 +56,15 @@ def _buttons(dialog: QDialog, ok_text: str = "OK") -> QDialogButtonBox:
 class LinkPickerDialog(QDialog):
     """Pick a note (searching by title or content) and a link type."""
 
-    def __init__(self, vault: Vault, exclude: set[str], parent=None, title: str = "Link to note",
-                 show_types: bool = True, initial_type: str = "related"):
+    def __init__(
+        self,
+        vault: Vault,
+        exclude: set[str],
+        parent=None,
+        title: str = "Link to note",
+        show_types: bool = True,
+        initial_type: str = "related",
+    ):
         super().__init__(parent)
         self.vault = vault
         self.setWindowTitle(title)
@@ -87,6 +96,7 @@ class LinkPickerDialog(QDialog):
     @staticmethod
     def _swatch(lt: LinkType):
         from PySide6.QtGui import QColor, QIcon, QPainter, QPixmap
+
         px = QPixmap(14, 14)
         px.fill(Qt.GlobalColor.transparent)
         p = QPainter(px)
@@ -140,8 +150,12 @@ class CardDialog(QDialog):
         form.addRow("Front", self.front)
         self.back_label = QLabel("Back")
         form.addRow(self.back_label, self.back)
-        hint = label("Markdown, [[links]] and images work on both sides. Cloze cards hide each "
-                     "{{c1::…}} in turn.", "caption", wrap=True)
+        hint = label(
+            "Markdown, [[links]] and images work on both sides. Cloze cards hide each "
+            "{{c1::…}} in turn.",
+            "caption",
+            wrap=True,
+        )
         form.addRow(hint)
         form.addRow(_buttons(self, "Save"))
         self.kind.currentIndexChanged.connect(self._update)
@@ -164,8 +178,14 @@ class CardDialog(QDialog):
 class ExportDialog(QDialog):
     """Choose what to export (collection, subgraph or tag) and the format."""
 
-    def __init__(self, vault: Vault, current_note: str | None, resolve_scope: Callable, parent=None,
-                 initial_scope: str = "all"):
+    def __init__(
+        self,
+        vault: Vault,
+        current_note: str | None,
+        resolve_scope: Callable,
+        parent=None,
+        initial_scope: str = "all",
+    ):
         super().__init__(parent)
         self.vault = vault
         self.resolve_scope = resolve_scope
@@ -216,7 +236,9 @@ class ExportDialog(QDialog):
         mode, depth, tag = self.scope.value()
         suffix = {"all": "", "subgraph": " subgraph", "tag": f" {tag}"}.get(mode, "")
         name = f"{self.vault.name}{suffix} {date.today():%Y-%m-%d}{fmt.extension}"
-        path, _ = QFileDialog.getSaveFileName(self, "Export", str(documents_dir() / name), fmt.file_filter)
+        path, _ = QFileDialog.getSaveFileName(
+            self, "Export", str(documents_dir() / name), fmt.file_filter
+        )
         return Path(path) if path else None
 
 
@@ -232,8 +254,14 @@ class AboutDialog(QDialog):
         logo_path = resource_path("icon-256.png")
         if logo_path.exists():
             from PySide6.QtGui import QPixmap
-            logo.setPixmap(QPixmap(str(logo_path)).scaled(QSize(64, 64), Qt.AspectRatioMode.KeepAspectRatio,
-                                                          Qt.TransformationMode.SmoothTransformation))
+
+            logo.setPixmap(
+                QPixmap(str(logo_path)).scaled(
+                    QSize(64, 64),
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation,
+                )
+            )
         head.addWidget(logo)
         names = QVBoxLayout()
         names.addWidget(label(APP_NAME, "title"))
@@ -249,7 +277,8 @@ class AboutDialog(QDialog):
             f"Released into the public domain (The Unlicense). Built with Qt for Python (LGPLv3), "
             f"NumPy, RapidFuzz, genanki, markdown-it-py, PyYAML and the Anthropic SDK; see "
             f"THIRD_PARTY_NOTICES.md for licences.<br><br>"
-            f"<span>Python {platform.python_version()} · {platform.system()} {platform.release()}</span>")
+            f"<span>Python {platform.python_version()} · {platform.system()} {platform.release()}</span>"
+        )
         text.setWordWrap(True)
         text.setOpenExternalLinks(True)
         text.setTextInteractionFlags(Qt.TextInteractionFlag.TextBrowserInteraction)
@@ -266,17 +295,51 @@ class AboutDialog(QDialog):
 
 
 SHORTCUTS = [
-    ("Notes", [("New note", "Ctrl+N"), ("Find notes", "Ctrl+F"), ("Link to note", "Ctrl+K"),
-               ("Insert image", "Ctrl+Shift+I"), ("Add flashcard", "Ctrl+Shift+F"),
-               ("Cite a Zotero reference", "Insert ▸ Zotero Reference"),
-               ("Toggle edit / preview", "Ctrl+E"), ("Move note to Trash", "Ctrl+Delete"),
-               ("Bold / italic", "Ctrl+B / Ctrl+I")]),
-    ("Navigate", [("Notes", "Ctrl+1"), ("Graph", "Ctrl+2"), ("Insights", "Ctrl+3"), ("Review", "Ctrl+4"),
-                  ("Ask your notes", "Ctrl+5"), ("Full screen", "F11")]),
-    ("Files", [("Open vault", "Ctrl+O"), ("Export", "Ctrl+Shift+E"), ("Options", "Ctrl+,"),
-               ("Help", "F1"), ("Exit", "Alt+F4")]),
-    ("Mind map", [("Add child", "Tab"), ("Add sibling", "Enter"), ("Rename", "F2"), ("Delete", "Del"),
-                  ("Move selection", "Arrow keys")]),
+    (
+        "Notes",
+        [
+            ("New note", "Ctrl+N"),
+            ("Find notes", "Ctrl+F"),
+            ("Link to note", "Ctrl+K"),
+            ("Insert image", "Ctrl+Shift+I"),
+            ("Add flashcard", "Ctrl+Shift+F"),
+            ("Cite a Zotero reference", "Insert ▸ Zotero Reference"),
+            ("Toggle edit / preview", "Ctrl+E"),
+            ("Move note to Trash", "Ctrl+Delete"),
+            ("Bold / italic", "Ctrl+B / Ctrl+I"),
+        ],
+    ),
+    (
+        "Navigate",
+        [
+            ("Notes", "Ctrl+1"),
+            ("Graph", "Ctrl+2"),
+            ("Insights", "Ctrl+3"),
+            ("Review", "Ctrl+4"),
+            ("Ask your notes", "Ctrl+5"),
+            ("Full screen", "F11"),
+        ],
+    ),
+    (
+        "Files",
+        [
+            ("Open vault", "Ctrl+O"),
+            ("Export", "Ctrl+Shift+E"),
+            ("Options", "Ctrl+,"),
+            ("Help", "F1"),
+            ("Exit", "Alt+F4"),
+        ],
+    ),
+    (
+        "Mind map",
+        [
+            ("Add child", "Tab"),
+            ("Add sibling", "Enter"),
+            ("Rename", "F2"),
+            ("Delete", "Del"),
+            ("Move selection", "Arrow keys"),
+        ],
+    ),
     ("Review", [("Show answer", "Space"), ("Again / Hard / Good / Easy", "1 / 2 / 3 / 4")]),
 ]
 

@@ -6,7 +6,13 @@ import math
 
 from PySide6.QtCore import QPointF, QRectF, Qt, QTimer, Signal
 from PySide6.QtGui import QBrush, QColor, QFontMetricsF, QPainter, QPainterPath, QPen, QPixmap
-from PySide6.QtWidgets import QGraphicsItem, QGraphicsObject, QGraphicsPathItem, QGraphicsScene, QGraphicsView
+from PySide6.QtWidgets import (
+    QGraphicsItem,
+    QGraphicsObject,
+    QGraphicsPathItem,
+    QGraphicsScene,
+    QGraphicsView,
+)
 
 from zettelapp.ui import theme
 from zettelapp.ui.graph_common import MAX_GROUP_COLORS, GraphData, padded_hull
@@ -31,11 +37,17 @@ class NodeItem(QGraphicsObject):
             px = QPixmap(str(data.images[note_id]))
             if not px.isNull():
                 size = int(self.radius * 4)
-                self.pixmap = px.scaled(size, size, Qt.AspectRatioMode.KeepAspectRatioByExpanding,
-                                        Qt.TransformationMode.SmoothTransformation)
-        self.setFlags(QGraphicsItem.GraphicsItemFlag.ItemIsMovable
-                      | QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
-                      | QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges)
+                self.pixmap = px.scaled(
+                    size,
+                    size,
+                    Qt.AspectRatioMode.KeepAspectRatioByExpanding,
+                    Qt.TransformationMode.SmoothTransformation,
+                )
+        self.setFlags(
+            QGraphicsItem.GraphicsItemFlag.ItemIsMovable
+            | QGraphicsItem.GraphicsItemFlag.ItemIsSelectable
+            | QGraphicsItem.GraphicsItemFlag.ItemSendsGeometryChanges
+        )
         self.setAcceptHoverEvents(True)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         self.setToolTip(self.title)
@@ -48,7 +60,9 @@ class NodeItem(QGraphicsObject):
 
     def shape(self) -> QPainterPath:
         path = QPainterPath()
-        path.addEllipse(QPointF(0, 0), self.radius + 4, self.radius + 4)  # hit target larger than the mark
+        path.addEllipse(
+            QPointF(0, 0), self.radius + 4, self.radius + 4
+        )  # hit target larger than the mark
         return path
 
     def paint(self, painter: QPainter, option, widget=None) -> None:
@@ -66,19 +80,30 @@ class NodeItem(QGraphicsObject):
             clip.addEllipse(QPointF(0, 0), r - 1.5, r - 1.5)
             painter.save()
             painter.setClipPath(clip)
-            painter.drawPixmap(QRectF(-r, -r, 2 * r, 2 * r), self.pixmap, QRectF(self.pixmap.rect()))
+            painter.drawPixmap(
+                QRectF(-r, -r, 2 * r, 2 * r), self.pixmap, QRectF(self.pixmap.rect())
+            )
             painter.restore()
         if self.note_id in (view.selected, view.data.focus):
             painter.setBrush(Qt.BrushStyle.NoBrush)
             painter.setPen(QPen(t.q("text"), 2))
             painter.drawEllipse(QPointF(0, 0), r + 4, r + 4)
-        if self.label_visible or self.note_id in (view.hovered, view.selected) or \
-                (view.hover_set is not None and self.note_id in view.hover_set):
+        if (
+            self.label_visible
+            or self.note_id in (view.hovered, view.selected)
+            or (view.hover_set is not None and self.note_id in view.hover_set)
+        ):
             painter.setFont(view.label_font)
-            painter.setPen(t.q("text") if self.note_id in (view.hovered, view.selected) else t.q("text_secondary"))
+            painter.setPen(
+                t.q("text")
+                if self.note_id in (view.hovered, view.selected)
+                else t.q("text_secondary")
+            )
             metrics = QFontMetricsF(view.label_font)
             text = metrics.elidedText(self.title, Qt.TextElideMode.ElideRight, 150)
-            painter.drawText(QRectF(-80, r + 3, 160, metrics.height()), Qt.AlignmentFlag.AlignHCenter, text)
+            painter.drawText(
+                QRectF(-80, r + 3, 160, metrics.height()), Qt.AlignmentFlag.AlignHCenter, text
+            )
 
     def itemChange(self, change, value):  # noqa: N802
         if change == QGraphicsItem.GraphicsItemChange.ItemPositionHasChanged:
@@ -131,8 +156,13 @@ class Graph2DView(QGraphicsView):
         self._neighbors: dict[str, set[str]] = {}
         self._edge_timer = QTimer(self, singleShot=True, interval=16, timeout=self._rebuild_edges)
 
-    def set_graph(self, data: GraphData, positions: dict[str, tuple[float, ...]], show_groups: bool,
-                  show_labels: bool) -> None:
+    def set_graph(
+        self,
+        data: GraphData,
+        positions: dict[str, tuple[float, ...]],
+        show_groups: bool,
+        show_labels: bool,
+    ) -> None:
         self.data = data
         self.positions = {k: (v[0], v[1]) for k, v in positions.items() if k in set(data.ids)}
         self.show_groups = show_groups
@@ -184,7 +214,9 @@ class Graph2DView(QGraphicsView):
             color = QColor(t.entity(entry[1].color) if entry else t.q("text_muted"))
             color.setAlphaF(0.55)
             item = QGraphicsPathItem(path)
-            item.setPen(QPen(color, 1.6, type_dash(entry[0] if entry else 0), Qt.PenCapStyle.RoundCap))
+            item.setPen(
+                QPen(color, 1.6, type_dash(entry[0] if entry else 0), Qt.PenCapStyle.RoundCap)
+            )
             item.setZValue(1)
             scene.addItem(item)
             self.edge_items.append(item)
@@ -205,7 +237,9 @@ class Graph2DView(QGraphicsView):
                 scene.addItem(hull)
                 self.hull_items.append(hull)
                 top = region.boundingRect()
-                text = scene.addSimpleText(self.data.group_label(group), theme.ui_font(9, theme.QFont.Weight.DemiBold))
+                text = scene.addSimpleText(
+                    self.data.group_label(group), theme.ui_font(9, theme.QFont.Weight.DemiBold)
+                )
                 text.setBrush(t.q("text_secondary"))
                 text.setPos(top.center().x() - text.boundingRect().width() / 2, top.top() - 20)
                 text.setZValue(0)
@@ -221,15 +255,21 @@ class Graph2DView(QGraphicsView):
         ux, uy = dx / length, dy / length
         tip = QPointF(b.x() - ux * (r + 3), b.y() - uy * (r + 3))
         size = 7.0
-        left = QPointF(tip.x() - ux * size - uy * size * 0.55, tip.y() - uy * size + ux * size * 0.55)
-        right = QPointF(tip.x() - ux * size + uy * size * 0.55, tip.y() - uy * size - ux * size * 0.55)
+        left = QPointF(
+            tip.x() - ux * size - uy * size * 0.55, tip.y() - uy * size + ux * size * 0.55
+        )
+        right = QPointF(
+            tip.x() - ux * size + uy * size * 0.55, tip.y() - uy * size - ux * size * 0.55
+        )
         path.moveTo(left)
         path.lineTo(tip)
         path.lineTo(right)
 
     def set_hover(self, note_id: str | None) -> None:
         self.hovered = note_id
-        self.hover_set = None if note_id is None else {note_id} | self._neighbors.get(note_id, set())
+        self.hover_set = (
+            None if note_id is None else {note_id} | self._neighbors.get(note_id, set())
+        )
         self._update_overlay()
         self.scene().update()
 
@@ -246,7 +286,9 @@ class Graph2DView(QGraphicsView):
                 path.moveTo(QPointF(*self.positions[focus]))
                 path.lineTo(QPointF(*self.positions[nb]))
         self.overlay = QGraphicsPathItem(path)
-        self.overlay.setPen(QPen(theme.current().q("accent"), 2.2, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
+        self.overlay.setPen(
+            QPen(theme.current().q("accent"), 2.2, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap)
+        )
         self.overlay.setZValue(1.5)
         self.scene().addItem(self.overlay)
 
@@ -285,11 +327,16 @@ class Graph2DView(QGraphicsView):
 
     def render_image(self, scale: float = 2.0):
         from PySide6.QtGui import QImage
+
         rect = self.scene().itemsBoundingRect().adjusted(-30, -30, 30, 30)
-        image = QImage(int(rect.width() * scale), int(rect.height() * scale), QImage.Format.Format_ARGB32)
+        image = QImage(
+            int(rect.width() * scale), int(rect.height() * scale), QImage.Format.Format_ARGB32
+        )
         image.fill(theme.current().q("surface"))
         painter = QPainter(image)
-        painter.setRenderHints(QPainter.RenderHint.Antialiasing | QPainter.RenderHint.TextAntialiasing)
+        painter.setRenderHints(
+            QPainter.RenderHint.Antialiasing | QPainter.RenderHint.TextAntialiasing
+        )
         self.scene().render(painter, QRectF(image.rect()), rect)
         painter.end()
         return image

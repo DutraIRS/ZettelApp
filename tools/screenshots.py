@@ -57,7 +57,9 @@ def main() -> None:
         window.resize(1440, 900)
         window.show()
         window.open_vault(vault_dir)
-        window.status_vault.setText(r"C:\Users\you\Documents\ZettelApp")  # never publish a real local path
+        window.status_vault.setText(
+            r"C:\Users\you\Documents\ZettelApp"
+        )  # never publish a real local path
         window.open_note(ids["Spaced repetition"])
         window.editor.set_view_mode(1)
         settle(app, 900, window)
@@ -100,7 +102,8 @@ def main() -> None:
             f"forgetting [[{ids['Spaced repetition']}]], and each review is an act of **active recall** "
             f"[[{ids['Active recall']}]], which strengthens memory more than rereading "
             f"[[{ids['Illusion of competence']}]]. The forgetting curve flattens after each successful "
-            f"retrieval [[{ids['Forgetting curve']}]].")
+            f"retrieval [[{ids['Forgetting curve']}]]."
+        )
         settle(app)
         window.grab().save(str(out / f"ask-{mode}.png"))
         window.close()

@@ -40,8 +40,10 @@ PAGES = [
     ("faq", "FAQ"),
 ]
 
-CSP = ("default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; "
-       "base-uri 'none'; form-action 'none'")
+CSP = (
+    "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; "
+    "base-uri 'none'; form-action 'none'"
+)
 
 TEMPLATE = """<!doctype html>
 <html lang="en">
@@ -125,7 +127,7 @@ def rewrite_href(href: str) -> str:
         else:  # a Markdown file outside docs/ (ROADMAP.md, …): link to it on GitHub
             path = REPO + path.lstrip("./").replace("../", "")
     elif path.startswith("../website/"):
-        path = "../" + path[len("../website/"):]
+        path = "../" + path[len("../website/") :]
     elif path.startswith("../"):
         path = REPO + path[3:]
     return path + (f"#{fragment}" if fragment else "")
@@ -144,8 +146,16 @@ def postprocess(body: str) -> str:
         return f'<h{level} id="{slug}">{content}</h{level}>'
 
     body = re.sub(r"<h([1-6])>(.*?)</h\1>", heading, body, flags=re.S)
-    body = re.sub(r'(href|src)="([^"]*)"', lambda m: f'{m.group(1)}="{html.escape(rewrite_href(html.unescape(m.group(2))), quote=True)}"', body)
-    body = body.replace("<table>", '<div class="table-wrap"><table>').replace("</table>", "</table></div>")
+    body = re.sub(
+        r'(href|src)="([^"]*)"',
+        lambda m: (
+            f'{m.group(1)}="{html.escape(rewrite_href(html.unescape(m.group(2))), quote=True)}"'
+        ),
+        body,
+    )
+    body = body.replace("<table>", '<div class="table-wrap"><table>').replace(
+        "</table>", "</table></div>"
+    )
     body = re.sub(r"<img ", '<img loading="lazy" ', body)
     return body
 
@@ -172,10 +182,17 @@ def build() -> list[Path]:
         title_match = re.search(r"^#\s+(.+)$", text, re.M)
         title = title_match.group(1).strip() if title_match else label
         nav = "\n".join(
-            f'      <li><a href="{p}.html"{" aria-current=\"page\"" if p == stem else ""}>{html.escape(l)}</a></li>'
-            for p, l in PAGES)
-        page = TEMPLATE.format(csp=CSP, title=html.escape(title), description=description(text), nav=nav,
-                               body=body, source=f"{REPO}docs/{stem}.md")
+            f'      <li><a href="{p}.html"{' aria-current="page"' if p == stem else ""}>{html.escape(l)}</a></li>'
+            for p, l in PAGES
+        )
+        page = TEMPLATE.format(
+            csp=CSP,
+            title=html.escape(title),
+            description=description(text),
+            nav=nav,
+            body=body,
+            source=f"{REPO}docs/{stem}.md",
+        )
         target = OUT / f"{stem}.html"
         target.write_text(page, encoding="utf-8", newline="\n")
         written.append(target)

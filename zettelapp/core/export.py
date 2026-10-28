@@ -47,16 +47,40 @@ class ExportFormat:
 
 
 FORMATS = [
-    ExportFormat("archive", "ZettelApp archive", ".zip",
-                 "Everything, including images. Re-import it into ZettelApp on any computer."),
-    ExportFormat("markdown", "Markdown files", ".zip",
-                 "One .md file per note with front matter and [[wiki links]]. Opens in Obsidian and other editors."),
-    ExportFormat("html", "Website", ".zip",
-                 "A self-contained static website with a graph overview. No scripts; open index.html."),
-    ExportFormat("json", "JSON", ".json", "Structured data for scripts and other tools (images not included)."),
-    ExportFormat("graphml", "GraphML", ".graphml", "The link graph for Gephi, yEd, Cytoscape or NetworkX."),
+    ExportFormat(
+        "archive",
+        "ZettelApp archive",
+        ".zip",
+        "Everything, including images. Re-import it into ZettelApp on any computer.",
+    ),
+    ExportFormat(
+        "markdown",
+        "Markdown files",
+        ".zip",
+        "One .md file per note with front matter and [[wiki links]]. Opens in Obsidian and other editors.",
+    ),
+    ExportFormat(
+        "html",
+        "Website",
+        ".zip",
+        "A self-contained static website with a graph overview. No scripts; open index.html.",
+    ),
+    ExportFormat(
+        "json",
+        "JSON",
+        ".json",
+        "Structured data for scripts and other tools (images not included).",
+    ),
+    ExportFormat(
+        "graphml", "GraphML", ".graphml", "The link graph for Gephi, yEd, Cytoscape or NetworkX."
+    ),
     ExportFormat("dot", "Graphviz DOT", ".dot", "The link graph as a Graphviz diagram."),
-    ExportFormat("anki", "Anki deck", ".apkg", "The flashcards of the exported notes, ready to import into Anki."),
+    ExportFormat(
+        "anki",
+        "Anki deck",
+        ".apkg",
+        "The flashcards of the exported notes, ready to import into Anki.",
+    ),
 ]
 FORMATS_BY_KEY = {f.key: f for f in FORMATS}
 
@@ -87,7 +111,9 @@ class ExportResult:
 
 def collect(vault: Vault, note_ids: Iterable[str]) -> Bundle:
     ids = set(note_ids)
-    notes = sorted((n for n in vault.all_notes() if n.id in ids), key=lambda n: fold(n.display_title))
+    notes = sorted(
+        (n for n in vault.all_notes() if n.id in ids), key=lambda n: fold(n.display_title)
+    )
     links = [l for l in vault.all_links() if l.src in ids and l.dst in ids]
     cards = vault.cards_for_notes(ids)
     refs: set[str] = set()
@@ -113,15 +139,23 @@ def atomic_output(dest: Path) -> Iterator[Path]:
             tmp.unlink()
 
 
-def export(vault: Vault, fmt: str, note_ids: Iterable[str], dest: str | Path, *,
-           title: str | None = None, deck_name: str = "ZettelApp") -> ExportResult:
+def export(
+    vault: Vault,
+    fmt: str,
+    note_ids: Iterable[str],
+    dest: str | Path,
+    *,
+    title: str | None = None,
+    deck_name: str = "ZettelApp",
+) -> ExportResult:
     bundle = collect(vault, note_ids)
     dest = Path(dest)
     title = title or vault.name
     writers = {
         "archive": lambda p: _write_archive(bundle, vault, p),
-        "json": lambda p: p.write_text(json.dumps(bundle_to_dict(bundle), ensure_ascii=False, indent=2),
-                                       encoding="utf-8"),
+        "json": lambda p: p.write_text(
+            json.dumps(bundle_to_dict(bundle), ensure_ascii=False, indent=2), encoding="utf-8"
+        ),
         "markdown": lambda p: _write_markdown(bundle, vault, p),
         "html": lambda p: _write_site(bundle, vault, p, title),
         "graphml": lambda p: _write_graphml(bundle, p),
@@ -132,10 +166,13 @@ def export(vault: Vault, fmt: str, note_ids: Iterable[str], dest: str | Path, *,
         raise ValueError(f"Unknown export format: {fmt}")
     with atomic_output(dest) as tmp:
         writers[fmt](tmp)
-    return ExportResult(dest, len(bundle.notes), len(bundle.links), len(bundle.cards), len(bundle.assets))
+    return ExportResult(
+        dest, len(bundle.notes), len(bundle.links), len(bundle.cards), len(bundle.assets)
+    )
 
 
 # --- JSON / archive ---------------------------------------------------------
+
 
 def bundle_to_dict(bundle: Bundle) -> dict:
     return {
@@ -144,27 +181,58 @@ def bundle_to_dict(bundle: Bundle) -> dict:
         "app_version": __version__,
         "exported": datetime.now().astimezone().isoformat(timespec="seconds"),
         "vault": bundle.vault_name,
-        "notes": [{
-            "id": n.id, "title": n.title, "body": n.body, "url": n.url, "image": n.image, "tags": n.tags,
-            "mindmap": n.mindmap, "created": n.created, "modified": n.modified,
-        } for n in bundle.notes],
-        "links": [{"src": l.src, "dst": l.dst, "type": l.type, "origin": l.origin} for l in bundle.links],
-        "link_types": [{"id": t.id, "label": t.label, "inverse_label": t.inverse_label, "color": t.color,
-                        "directed": t.directed} for t in bundle.link_types],
-        "flashcards": [{"note_id": c.note_id, "front": c.front, "back": c.back, "kind": c.kind,
-                        "source": c.source} for c in bundle.cards],
+        "notes": [
+            {
+                "id": n.id,
+                "title": n.title,
+                "body": n.body,
+                "url": n.url,
+                "image": n.image,
+                "tags": n.tags,
+                "mindmap": n.mindmap,
+                "created": n.created,
+                "modified": n.modified,
+            }
+            for n in bundle.notes
+        ],
+        "links": [
+            {"src": l.src, "dst": l.dst, "type": l.type, "origin": l.origin} for l in bundle.links
+        ],
+        "link_types": [
+            {
+                "id": t.id,
+                "label": t.label,
+                "inverse_label": t.inverse_label,
+                "color": t.color,
+                "directed": t.directed,
+            }
+            for t in bundle.link_types
+        ],
+        "flashcards": [
+            {
+                "note_id": c.note_id,
+                "front": c.front,
+                "back": c.back,
+                "kind": c.kind,
+                "source": c.source,
+            }
+            for c in bundle.cards
+        ],
         "assets": bundle.assets,
     }
 
 
 def _write_archive(bundle: Bundle, vault: Vault, path: Path) -> None:
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as zf:
-        zf.writestr("manifest.json", json.dumps(bundle_to_dict(bundle), ensure_ascii=False, indent=1))
+        zf.writestr(
+            "manifest.json", json.dumps(bundle_to_dict(bundle), ensure_ascii=False, indent=1)
+        )
         for name in bundle.assets:
             zf.write(vault.asset_path(name), f"assets/{name}")
 
 
 # --- Markdown -----------------------------------------------------------------
+
 
 def _unique_stems(notes: list[Note]) -> dict[str, str]:
     stems: dict[str, str] = {}
@@ -187,10 +255,13 @@ def _resolver(notes: list[Note]):
     def resolve(target: str) -> str | None:
         target = target.strip()
         return target if target in ids else by_title.get(fold(target))
+
     return resolve
 
 
-def _markdown_for(note: Note, bundle: Bundle, stems: dict[str, str], resolve, types: dict[str, LinkType]) -> str:
+def _markdown_for(
+    note: Note, bundle: Bundle, stems: dict[str, str], resolve, types: dict[str, LinkType]
+) -> str:
     def rewrite(m: re.Match) -> str:
         dst = resolve(m.group("target"))
         if dst is None or dst not in stems:
@@ -247,8 +318,10 @@ def _write_markdown(bundle: Bundle, vault: Vault, path: Path) -> None:
 
 # --- static website ---------------------------------------------------------
 
-_CSP = ("default-src 'none'; img-src 'self'; style-src 'self'; base-uri 'none'; "
-        "form-action 'none'; frame-ancestors 'none'")
+_CSP = (
+    "default-src 'none'; img-src 'self'; style-src 'self'; base-uri 'none'; "
+    "form-action 'none'; frame-ancestors 'none'"
+)
 
 SITE_CSS = """
 :root { --bg: #f7f7f8; --surface: #fff; --text: #1b1b1b; --muted: #5f6368; --border: #e3e3e6;
@@ -341,23 +414,31 @@ def _svg_graph(bundle: Bundle, types: dict[str, LinkType]) -> str:
         degree[l.src] += 1
         degree[l.dst] += 1
     labelled = set(sorted(ids, key=lambda i: -degree[i])[:60])
-    out = [f'<svg class="graph" viewBox="{min_x:.0f} {min_y:.0f} {width:.0f} {height:.0f}" '
-           f'xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Graph of notes">']
+    out = [
+        f'<svg class="graph" viewBox="{min_x:.0f} {min_y:.0f} {width:.0f} {height:.0f}" '
+        f'xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Graph of notes">'
+    ]
     for l in bundle.links:
         if l.src in pos and l.dst in pos:
             (x1, y1), (x2, y2) = pos[l.src], pos[l.dst]
             color = types[l.type].color if l.type in types else "#8a8a8a"
-            out.append(f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" '
-                       f'stroke="{color}" stroke-width="1.5"/>')
+            out.append(
+                f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" '
+                f'stroke="{color}" stroke-width="1.5"/>'
+            )
     titles = {n.id: n.display_title for n in notes}
     for node_id in ids:
         x, y = pos[node_id]
         r = 5 + min(10, degree[node_id] ** 0.5 * 2)
         label = html.escape(titles[node_id])
-        out.append(f'<a href="notes/{node_id}.html"><circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}">'
-                   f'<title>{label}</title></circle>')
+        out.append(
+            f'<a href="notes/{node_id}.html"><circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}">'
+            f"<title>{label}</title></circle>"
+        )
         if node_id in labelled:
-            out.append(f'<text x="{x:.1f}" y="{y + r + 13:.1f}" text-anchor="middle">{label[:40]}</text>')
+            out.append(
+                f'<text x="{x:.1f}" y="{y + r + 13:.1f}" text-anchor="middle">{label[:40]}</text>'
+            )
         out.append("</a>")
     out.append("</svg>")
     return "".join(out)
@@ -368,10 +449,13 @@ def _write_site(bundle: Bundle, vault: Vault, path: Path, title: str) -> None:
     types = {t.id: t for t in bundle.link_types}
     resolve = _resolver(bundle.notes)
     renderer = NoteRenderer(
-        resolve, title_of=lambda i: notes[i].display_title if i in notes else i,
+        resolve,
+        title_of=lambda i: notes[i].display_title if i in notes else i,
         note_href=lambda i: f"{i}.html" if i in notes else None,
         asset_href=lambda name: f"../assets/{name}" if name in bundle.assets else None,
-        link_types=types, allow_new_note_links=False)
+        link_types=types,
+        allow_new_note_links=False,
+    )
     tag_index: dict[str, list[Note]] = defaultdict(list)
     for n in bundle.notes:
         for t in n.tags:
@@ -386,39 +470,63 @@ def _write_site(bundle: Bundle, vault: Vault, path: Path, title: str) -> None:
         items = "".join(
             f'<li><a href="notes/{n.id}.html"><strong>{html.escape(n.display_title)}</strong>'
             f'<span class="snippet">{html.escape(snippet(n.body, 160))}</span></a></li>'
-            for n in bundle.notes)
+            for n in bundle.notes
+        )
         tags = "".join(
             f'<li><a href="#tag-{html.escape(t, quote=True)}">#{html.escape(t)} ({len(v)})</a></li>'
-            for t, v in sorted(tag_index.items()))
+            for t, v in sorted(tag_index.items())
+        )
         tag_sections = "".join(
             f'<section id="tag-{html.escape(t, quote=True)}"><h2>#{html.escape(t)}</h2><ul class="links">'
-            + "".join(f'<li><a href="notes/{n.id}.html">{html.escape(n.display_title)}</a></li>' for n in v)
-            + "</ul></section>" for t, v in sorted(tag_index.items()))
-        body = (f'<main><h1>{html.escape(title)}</h1>'
-                f'<p class="meta">{len(bundle.notes)} notes · {len(bundle.links)} links · exported '
-                f'{datetime.now():%d %b %Y}</p>{_svg_graph(bundle, types)}'
-                + (f'<section><h2>Tags</h2><ul class="chips">{tags}</ul></section>' if tags else "")
-                + f'<section><h2>All notes</h2><ul class="notes">{items}</ul></section>{tag_sections}</main>')
+            + "".join(
+                f'<li><a href="notes/{n.id}.html">{html.escape(n.display_title)}</a></li>'
+                for n in v
+            )
+            + "</ul></section>"
+            for t, v in sorted(tag_index.items())
+        )
+        body = (
+            f"<main><h1>{html.escape(title)}</h1>"
+            f'<p class="meta">{len(bundle.notes)} notes · {len(bundle.links)} links · exported '
+            f"{datetime.now():%d %b %Y}</p>{_svg_graph(bundle, types)}"
+            + (f'<section><h2>Tags</h2><ul class="chips">{tags}</ul></section>' if tags else "")
+            + f'<section><h2>All notes</h2><ul class="notes">{items}</ul></section>{tag_sections}</main>'
+        )
         zf.writestr("index.html", _page(title, body, ""))
 
 
-def _note_page(n: Note, bundle: Bundle, renderer: NoteRenderer, types: dict[str, LinkType], site: str) -> str:
+def _note_page(
+    n: Note, bundle: Bundle, renderer: NoteRenderer, types: dict[str, LinkType], site: str
+) -> str:
     notes = bundle.note_map
     esc = html.escape
-    parts = [f'<header class="top"><a href="../index.html">← {esc(site)}</a></header><main>',
-             f"<h1>{esc(n.display_title)}</h1>",
-             f'<p class="meta">{esc(n.id)} · created {_fmt_date(n.created)} · edited {_fmt_date(n.modified)}</p>']
+    parts = [
+        f'<header class="top"><a href="../index.html">← {esc(site)}</a></header><main>',
+        f"<h1>{esc(n.display_title)}</h1>",
+        f'<p class="meta">{esc(n.id)} · created {_fmt_date(n.created)} · edited {_fmt_date(n.modified)}</p>',
+    ]
     if n.tags:
-        parts.append('<ul class="chips">' + "".join(
-            f'<li><a href="../index.html#tag-{esc(t, quote=True)}">#{esc(t)}</a></li>' for t in n.tags) + "</ul>")
+        parts.append(
+            '<ul class="chips">'
+            + "".join(
+                f'<li><a href="../index.html#tag-{esc(t, quote=True)}">#{esc(t)}</a></li>'
+                for t in n.tags
+            )
+            + "</ul>"
+        )
     if n.image and n.image in bundle.assets:
         parts.append(f'<img class="hero" src="../assets/{n.image}" alt="">')
     if n.url and is_openable_url(n.url):
-        parts.append(f'<p>🔗 <a href="{esc(n.url, quote=True)}" rel="noopener noreferrer">{esc(n.url)}</a></p>')
+        parts.append(
+            f'<p>🔗 <a href="{esc(n.url, quote=True)}" rel="noopener noreferrer">{esc(n.url)}</a></p>'
+        )
     parts.append(f'<article class="card">{renderer.render(n.body)}</article>')
     if n.mindmap:
-        parts.append("<section><h2>Mind map</h2>"
-                     + mindmap_to_html(n.mindmap, lambda i: f"{i}.html" if i in notes else None) + "</section>")
+        parts.append(
+            "<section><h2>Mind map</h2>"
+            + mindmap_to_html(n.mindmap, lambda i: f"{i}.html" if i in notes else None)
+            + "</section>"
+        )
     rows = []
     for l in bundle.links:
         if n.id not in (l.src, l.dst):
@@ -427,41 +535,72 @@ def _note_page(n: Note, bundle: Bundle, renderer: NoteRenderer, types: dict[str,
         other = notes[l.dst if outgoing else l.src]
         lt = types.get(l.type)
         label = lt.label_for(outgoing) if lt else l.type
-        rows.append(f'<li><span class="type">{esc(label)}</span>'
-                    f'<a href="{other.id}.html">{esc(other.display_title)}</a></li>')
+        rows.append(
+            f'<li><span class="type">{esc(label)}</span>'
+            f'<a href="{other.id}.html">{esc(other.display_title)}</a></li>'
+        )
     if rows:
         parts.append(f'<section><h2>Links</h2><ul class="links">{"".join(rows)}</ul></section>')
     cards = [c for c in bundle.cards if c.note_id == n.id]
     if cards:
-        parts.append("<section><h2>Flashcards</h2>" + "".join(
-            f"<details><summary>{esc(c.front if c.kind == 'basic' else 'Cloze')}</summary>"
-            f"{renderer.render(c.back if c.kind == 'basic' else c.front)}</details>" for c in cards) + "</section>")
+        parts.append(
+            "<section><h2>Flashcards</h2>"
+            + "".join(
+                f"<details><summary>{esc(c.front if c.kind == 'basic' else 'Cloze')}</summary>"
+                f"{renderer.render(c.back if c.kind == 'basic' else c.front)}</details>"
+                for c in cards
+            )
+            + "</section>"
+        )
     parts.append("</main>")
     return _page(f"{n.display_title} · {site}", "".join(parts), "../")
 
 
 # --- graph formats ------------------------------------------------------------
 
+
 def _write_graphml(bundle: Bundle, path: Path) -> None:
     ns = "http://graphml.graphdrawing.org/xmlns"
     ET.register_namespace("", ns)
     root = ET.Element(f"{{{ns}}}graphml")
-    keys = [("title", "node"), ("tags", "node"), ("url", "node"), ("created", "node"), ("modified", "node"),
-            ("type", "edge"), ("label", "edge")]
+    keys = [
+        ("title", "node"),
+        ("tags", "node"),
+        ("url", "node"),
+        ("created", "node"),
+        ("modified", "node"),
+        ("type", "edge"),
+        ("label", "edge"),
+    ]
     for name, scope in keys:
-        ET.SubElement(root, f"{{{ns}}}key", id=f"{scope}_{name}", attrib={
-            "for": scope, "attr.name": name, "attr.type": "string"})
+        ET.SubElement(
+            root,
+            f"{{{ns}}}key",
+            id=f"{scope}_{name}",
+            attrib={"for": scope, "attr.name": name, "attr.type": "string"},
+        )
     graph = ET.SubElement(root, f"{{{ns}}}graph", id="zettelkasten", edgedefault="directed")
     for n in bundle.notes:
         node = ET.SubElement(graph, f"{{{ns}}}node", id=n.id)
-        for name, value in (("title", n.display_title), ("tags", " ".join(n.tags)), ("url", n.url),
-                            ("created", n.created), ("modified", n.modified)):
+        for name, value in (
+            ("title", n.display_title),
+            ("tags", " ".join(n.tags)),
+            ("url", n.url),
+            ("created", n.created),
+            ("modified", n.modified),
+        ):
             ET.SubElement(node, f"{{{ns}}}data", key=f"node_{name}").text = value
     types = {t.id: t for t in bundle.link_types}
     for i, l in enumerate(bundle.links):
         lt = types.get(l.type)
-        edge = ET.SubElement(graph, f"{{{ns}}}edge", id=f"e{i}", source=l.src, target=l.dst,
-                             directed="true" if (lt is None or lt.directed) else "false")
+        edge = ET.SubElement(
+            graph,
+            f"{{{ns}}}edge",
+            id=f"e{i}",
+            source=l.src,
+            target=l.dst,
+            directed="true" if (lt is None or lt.directed) else "false",
+        )
         ET.SubElement(edge, f"{{{ns}}}data", key="edge_type").text = l.type
         ET.SubElement(edge, f"{{{ns}}}data", key="edge_label").text = lt.label if lt else l.type
     ET.ElementTree(root).write(path, encoding="utf-8", xml_declaration=True)
@@ -473,15 +612,20 @@ def _dot_str(value: str) -> str:
 
 def _dot(bundle: Bundle, title: str) -> str:
     types = {t.id: t for t in bundle.link_types}
-    lines = [f"digraph {_dot_str(title)} {{",
-             '  graph [overlap=false, splines=true, fontname="Segoe UI"];',
-             '  node [shape=box, style="rounded,filled", fillcolor="#eef3fb", color="#0f6cbd", fontname="Segoe UI"];',
-             '  edge [fontname="Segoe UI", fontsize=9];']
+    lines = [
+        f"digraph {_dot_str(title)} {{",
+        '  graph [overlap=false, splines=true, fontname="Segoe UI"];',
+        '  node [shape=box, style="rounded,filled", fillcolor="#eef3fb", color="#0f6cbd", fontname="Segoe UI"];',
+        '  edge [fontname="Segoe UI", fontsize=9];',
+    ]
     for n in bundle.notes:
         lines.append(f"  {_dot_str(n.id)} [label={_dot_str(n.display_title)}];")
     for l in bundle.links:
         lt = types.get(l.type)
-        attrs = [f"color={_dot_str(lt.color if lt else '#8a8a8a')}", f"label={_dot_str(lt.label if lt else l.type)}"]
+        attrs = [
+            f"color={_dot_str(lt.color if lt else '#8a8a8a')}",
+            f"label={_dot_str(lt.label if lt else l.type)}",
+        ]
         if lt is not None and not lt.directed:
             attrs.append("dir=none")
         lines.append(f"  {_dot_str(l.src)} -> {_dot_str(l.dst)} [{', '.join(attrs)}];")
@@ -491,13 +635,19 @@ def _dot(bundle: Bundle, title: str) -> str:
 
 # --- Anki -------------------------------------------------------------------
 
+
 def _write_anki(bundle: Bundle, vault: Vault, path: Path, deck_name: str) -> None:
     notes = bundle.note_map
-    renderer = anki_renderer(_resolver(bundle.notes), lambda i: notes[i].display_title if i in notes else i)
+    renderer = anki_renderer(
+        _resolver(bundle.notes), lambda i: notes[i].display_title if i in notes else i
+    )
     payloads = build_payloads(bundle.cards, notes, bundle.vault_id, renderer)
     write_apkg(payloads, path, deck_name, vault.asset_path, bundle.vault_id)
 
 
 def export_mindmap(mindmap: dict, dest: str | Path) -> None:
     with atomic_output(Path(dest)) as tmp:
-        tmp.write_text('<?xml version="1.0" encoding="UTF-8"?>\n' + mindmap_to_freemind(mindmap), encoding="utf-8")
+        tmp.write_text(
+            '<?xml version="1.0" encoding="UTF-8"?>\n' + mindmap_to_freemind(mindmap),
+            encoding="utf-8",
+        )

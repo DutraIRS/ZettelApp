@@ -70,8 +70,12 @@ class GraphPage(QWidget):
         bar.addWidget(label("Graph", "heading"))
         bar.addSpacing(12)
         self.scope_group = QButtonGroup(self)
-        for i, (text, tip) in enumerate((("All notes", "Show the whole collection"),
-                                         ("Local", "Show the open note and its neighbourhood"))):
+        for i, (text, tip) in enumerate(
+            (
+                ("All notes", "Show the whole collection"),
+                ("Local", "Show the open note and its neighbourhood"),
+            )
+        ):
             b = QToolButton()
             b.setText(text)
             b.setToolTip(tip)
@@ -112,7 +116,9 @@ class GraphPage(QWidget):
         bar.addWidget(self.k)
         self.group_box = QCheckBox("Group")
         self.group_box.setChecked(True)
-        self.group_box.setToolTip("Pull notes of the same group together and shade each group's area")
+        self.group_box.setToolTip(
+            "Pull notes of the same group together and shade each group's area"
+        )
         bar.addWidget(self.group_box)
         self.labels_box = QCheckBox("Labels")
         self.labels_box.setChecked(True)
@@ -160,7 +166,11 @@ class GraphPage(QWidget):
         tools.addWidget(tool_button("fit", "Fit to window", lambda: self._view().fit()))
         tools.addWidget(tool_button("refresh", "Recompute layout", self.relayout))
         tools.addWidget(tool_button("image", "Save as image…", self.save_image))
-        tools.addWidget(tool_button("export", "Export these notes…", lambda: self.exportRequested.emit(set(self._ids))))
+        tools.addWidget(
+            tool_button(
+                "export", "Export these notes…", lambda: self.exportRequested.emit(set(self._ids))
+            )
+        )
         canvas_layout.addLayout(tools)
         body.addWidget(canvas, 1)
 
@@ -189,7 +199,9 @@ class GraphPage(QWidget):
 
         self.scope_group.idClicked.connect(lambda _: self.refresh())
         self.dim_group.idClicked.connect(self._dims_changed)
-        self.depth.valueChanged.connect(lambda _: self.refresh() if self.scope_group.checkedId() == 1 else None)
+        self.depth.valueChanged.connect(
+            lambda _: self.refresh() if self.scope_group.checkedId() == 1 else None
+        )
         self.color_by.currentIndexChanged.connect(lambda _: self.refresh())
         self.k.valueChanged.connect(lambda _: self.refresh())
         self.group_box.toggled.connect(lambda _: self.refresh())
@@ -251,7 +263,9 @@ class GraphPage(QWidget):
         notes = {n.id: n for n in vault.all_notes()}
         links = [l for l in vault.all_links() if l.type not in self.hidden_types]
         local = self.scope_group.checkedId() == 1 and self.focus_id in notes
-        ids = sorted(subgraph([self.focus_id], links, self.depth.value())) if local else sorted(notes)
+        ids = (
+            sorted(subgraph([self.focus_id], links, self.depth.value())) if local else sorted(notes)
+        )
         id_set = set(ids)
         links = [l for l in links if l.src in id_set and l.dst in id_set]
         self._ids = ids
@@ -265,8 +279,15 @@ class GraphPage(QWidget):
                 path = vault.asset_path(notes[i].image)
                 if path:
                     images[i] = path
-        data = GraphData(ids, {i: notes[i].display_title for i in ids}, links, dict(degree),
-                         images=images, types=type_map, focus=self.focus_id if local else None)
+        data = GraphData(
+            ids,
+            {i: notes[i].display_title for i in ids},
+            links,
+            dict(degree),
+            images=images,
+            types=type_map,
+            focus=self.focus_id if local else None,
+        )
         mode = self.color_by.currentData()
         dims = 3 if self.dim_group.checkedId() == 1 else 2
         grouping = self.group_box.isChecked() and mode != "none"
@@ -278,7 +299,14 @@ class GraphPage(QWidget):
         tag_counts = Counter(t for i in ids for t in notes[i].tags)
         note_payload = [notes[i] for i in ids]
         cluster_key = (mode, self.k.value(), tuple(ids), vault.generation)
-        layout_key = (dims, grouping, mode, self.k.value(), tuple(ids), tuple(sorted(self.hidden_types)))
+        layout_key = (
+            dims,
+            grouping,
+            mode,
+            self.k.value(),
+            tuple(ids),
+            tuple(sorted(self.hidden_types)),
+        )
         cached_clusters = self._clusters.get(cluster_key)
         cached_layout = self._layouts.get(layout_key)
 
@@ -295,22 +323,34 @@ class GraphPage(QWidget):
                 names = [f"#{t}" for t in top]
                 quality = "Each note takes the colour of its most common tag."
             elif mode in ("kmeans", "hierarchical"):
-                result = cached_clusters or cluster_notes(note_payload, mode, self.k.value() or None)
+                result = cached_clusters or cluster_notes(
+                    note_payload, mode, self.k.value() or None
+                )
                 if result is not None:
                     label_of = result.label_of()
                     group_of = {i: label_of.get(i) for i in ids}
-                    names = [f"Cluster {c + 1}: {', '.join(result.keywords.get(c, [])[:3])}"
-                             for c in range(result.k)]
-                    method = "k-means" if result.method == "kmeans" else "average-linkage hierarchical"
+                    names = [
+                        f"Cluster {c + 1}: {', '.join(result.keywords.get(c, [])[:3])}"
+                        for c in range(result.k)
+                    ]
+                    method = (
+                        "k-means" if result.method == "kmeans" else "average-linkage hierarchical"
+                    )
                     quality = f"{result.k} clusters by {method} clustering of LSA embeddings."
                     if result.silhouette is not None:
-                        quality += f" Silhouette score {result.silhouette:.2f} (higher is better, max 1)."
+                        quality += (
+                            f" Silhouette score {result.silhouette:.2f} (higher is better, max 1)."
+                        )
                 self._clusters[cluster_key] = result
             positions = cached_layout or force_layout(
-                ids, [(l.src, l.dst) for l in links], dims=dims,
+                ids,
+                [(l.src, l.dst) for l in links],
+                dims=dims,
                 groups={i: g for i, g in group_of.items() if g is not None and g < MAX_GROUP_COLORS}
-                if grouping else None,
-                group_strength=0.5 if grouping else 0.0)
+                if grouping
+                else None,
+                group_strength=0.5 if grouping else 0.0,
+            )
             return group_of, names, quality, positions
 
         def done(result) -> None:
@@ -323,10 +363,16 @@ class GraphPage(QWidget):
             self._view().set_graph(data, positions, grouping, self.labels_box.isChecked())
             self._fill_legend(data, types)
             self.quality.setText(quality)
-            self.info.setText(f"{len(ids)} notes · {len(links)} links" + (" · local graph" if local else ""))
+            self.info.setText(
+                f"{len(ids)} notes · {len(links)} links" + (" · local graph" if local else "")
+            )
             self.status.emit("")
 
-        run_task(work, on_done=done, on_error=lambda msg: self.info.setText(f"Could not draw the graph: {msg}"))
+        run_task(
+            work,
+            on_done=done,
+            on_error=lambda msg: self.info.setText(f"Could not draw the graph: {msg}"),
+        )
 
     def _fill_legend(self, data: GraphData, types) -> None:
         self.legend.clear()
@@ -338,19 +384,25 @@ class GraphPage(QWidget):
             if g >= MAX_GROUP_COLORS:
                 other += counts[g]
                 continue
-            item = QListWidgetItem(_dot(data.group_color(g)), f"{data.group_label(g)}  ({counts[g]})")
+            item = QListWidgetItem(
+                _dot(data.group_color(g)), f"{data.group_label(g)}  ({counts[g]})"
+            )
             item.setData(Qt.ItemDataRole.UserRole, g)
             self.legend.addItem(item)
         if other or counts.get(None):
-            item = QListWidgetItem(_dot(theme.current().q("text_muted")),
-                                   f"Other / untagged  ({other + counts.get(None, 0)})")
+            item = QListWidgetItem(
+                _dot(theme.current().q("text_muted")),
+                f"Other / untagged  ({other + counts.get(None, 0)})",
+            )
             item.setData(Qt.ItemDataRole.UserRole, -1)
             self.legend.addItem(item)
         self.type_legend.clear()
         used = Counter(l.type for l in data.links)
         for i, lt in enumerate(types):
             if used.get(lt.id):
-                self.type_legend.addItem(QListWidgetItem(type_icon(lt, i), f"{lt.label}  ({used[lt.id]})"))
+                self.type_legend.addItem(
+                    QListWidgetItem(type_icon(lt, i), f"{lt.label}  ({used[lt.id]})")
+                )
 
     def _legend_clicked(self, item: QListWidgetItem) -> None:
         group = item.data(Qt.ItemDataRole.UserRole)
@@ -376,7 +428,9 @@ class GraphPage(QWidget):
         self.status.emit("No note in the graph matches that title.")
 
     def save_image(self) -> None:
-        path, _ = QFileDialog.getSaveFileName(self, "Save graph as image", "Graph.png", "PNG image (*.png)")
+        path, _ = QFileDialog.getSaveFileName(
+            self, "Save graph as image", "Graph.png", "PNG image (*.png)"
+        )
         if path:
             self._view().render_image().save(path, "PNG")
             self.window.notify_file(path, "Graph image saved")

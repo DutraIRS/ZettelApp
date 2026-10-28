@@ -46,7 +46,12 @@ if sys.platform == "win32":
     _CredWrite.argtypes = [_PCREDENTIAL, wintypes.DWORD]
     _CredWrite.restype = wintypes.BOOL
     _CredRead = _advapi32.CredReadW
-    _CredRead.argtypes = [wintypes.LPCWSTR, wintypes.DWORD, wintypes.DWORD, ctypes.POINTER(_PCREDENTIAL)]
+    _CredRead.argtypes = [
+        wintypes.LPCWSTR,
+        wintypes.DWORD,
+        wintypes.DWORD,
+        ctypes.POINTER(_PCREDENTIAL),
+    ]
     _CredRead.restype = wintypes.BOOL
     _CredDelete = _advapi32.CredDeleteW
     _CredDelete.argtypes = [wintypes.LPCWSTR, wintypes.DWORD, wintypes.DWORD]

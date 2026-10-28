@@ -77,7 +77,10 @@ class ZoteroItem:
     def reference(self) -> str:
         """A compact, APA-like reference line (plain text)."""
         authors = ", ".join(self.creators[:6]) + (", et al." if len(self.creators) > 6 else "")
-        parts = [f"{authors} ({self.year or 'n.d.'})." if authors else f"({self.year or 'n.d.'}).", f"{self.title}."]
+        parts = [
+            f"{authors} ({self.year or 'n.d.'})." if authors else f"({self.year or 'n.d.'}).",
+            f"{self.title}.",
+        ]
         if self.publication:
             parts.append(f"{self.publication}.")
         if self.doi:
@@ -115,24 +118,48 @@ def parse_item(raw: dict) -> ZoteroItem | None:
         value = data.get(name)
         return value.strip()[:limit] if isinstance(value, str) else ""
 
-    creators = [n for n in (_creator_name(c) for c in data.get("creators") or [] if
-                            isinstance(c, dict) and c.get("creatorType", "author") in ("author", "editor", "contributor"))
-                if n]
+    creators = [
+        n
+        for n in (
+            _creator_name(c)
+            for c in data.get("creators") or []
+            if isinstance(c, dict)
+            and c.get("creatorType", "author") in ("author", "editor", "contributor")
+        )
+        if n
+    ]
     meta = raw.get("meta") if isinstance(raw.get("meta"), dict) else {}
     parsed = meta.get("parsedDate") if isinstance(meta.get("parsedDate"), str) else ""
-    year = parsed[:4] if parsed[:4].isdigit() else (re.search(r"\b(1[5-9]|20)\d{2}\b", text("date")) or [""])[0]
+    year = (
+        parsed[:4]
+        if parsed[:4].isdigit()
+        else (re.search(r"\b(1[5-9]|20)\d{2}\b", text("date")) or [""])[0]
+    )
     library = raw.get("library") if isinstance(raw.get("library"), dict) else {}
-    group_id = library.get("id") if library.get("type") == "group" and isinstance(library.get("id"), int) else None
+    group_id = (
+        library.get("id")
+        if library.get("type") == "group" and isinstance(library.get("id"), int)
+        else None
+    )
     url = text("url", 2048)
     doi = re.sub(r"^(?:https?://(?:dx\.)?doi\.org/|doi:)", "", text("DOI", 200), flags=re.I)
-    tags = [normalize_tag(t["tag"]) for t in data.get("tags") or []
-            if isinstance(t, dict) and isinstance(t.get("tag"), str)]
+    tags = [
+        normalize_tag(t["tag"])
+        for t in data.get("tags") or []
+        if isinstance(t, dict) and isinstance(t.get("tag"), str)
+    ]
     return ZoteroItem(
-        key=key, title=text("title", 500) or "Untitled", item_type=text("itemType", 60), creators=creators[:30],
-        year=year, publication=text("publicationTitle") or text("bookTitle") or text("publisher"),
+        key=key,
+        title=text("title", 500) or "Untitled",
+        item_type=text("itemType", 60),
+        creators=creators[:30],
+        year=year,
+        publication=text("publicationTitle") or text("bookTitle") or text("publisher"),
         doi=doi if re.fullmatch(r"10\.\d{4,9}/\S+", doi) else "",
         url=url if url.lower().startswith(("http://", "https://")) else "",
-        abstract=text("abstractNote", 4000), tags=[t for t in tags if t][:50], group_id=group_id,
+        abstract=text("abstractNote", 4000),
+        tags=[t for t in tags if t][:50],
+        group_id=group_id,
     )
 
 
@@ -144,23 +171,33 @@ class ZoteroClient:
             raise ValueError("Invalid port")
         self.base = f"http://127.0.0.1:{int(port)}/api/users/0"
         self.timeout = timeout
-        self._opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))  # never use a proxy
+        self._opener = urllib.request.build_opener(
+            urllib.request.ProxyHandler({})
+        )  # never use a proxy
 
     def _get(self, path: str, params: dict | None = None):
         url = self.base + path + ("?" + urllib.parse.urlencode(params) if params else "")
-        request = urllib.request.Request(url, headers={"Accept": "application/json", "Zotero-API-Version": "3"})
+        request = urllib.request.Request(
+            url, headers={"Accept": "application/json", "Zotero-API-Version": "3"}
+        )
         try:
             with self._opener.open(request, timeout=self.timeout) as response:
                 body = response.read(MAX_RESPONSE + 1)
         except urllib.error.HTTPError as exc:
             if exc.code == 403:
-                raise ZoteroError("Zotero refused the request. In Zotero, open Settings ▸ Advanced and turn on "
-                                  "“Allow other applications on this computer to communicate with Zotero”.") from exc
+                raise ZoteroError(
+                    "Zotero refused the request. In Zotero, open Settings ▸ Advanced and turn on "
+                    "“Allow other applications on this computer to communicate with Zotero”."
+                ) from exc
             if exc.code == 404:
-                raise ZoteroError("This Zotero version has no local API. Update to Zotero 7 or later.") from exc
+                raise ZoteroError(
+                    "This Zotero version has no local API. Update to Zotero 7 or later."
+                ) from exc
             raise ZoteroError(f"Zotero answered with an error ({exc.code}).") from exc
         except (urllib.error.URLError, OSError) as exc:
-            raise ZoteroError("Could not reach Zotero. Make sure Zotero 7 or later is running.") from exc
+            raise ZoteroError(
+                "Could not reach Zotero. Make sure Zotero 7 or later is running."
+            ) from exc
         if len(body) > MAX_RESPONSE:
             raise ZoteroError("Zotero sent too much data.")
         try:
@@ -186,8 +223,12 @@ class ZoteroClient:
         children = self._get(f"/items/{key}/children")
         for child in children if isinstance(children, list) else []:
             data = child.get("data") if isinstance(child, dict) else None
-            if isinstance(data, dict) and data.get("contentType") == "application/pdf" \
-                    and isinstance(data.get("key"), str) and ZOTERO_KEY_RE.fullmatch(data["key"]):
+            if (
+                isinstance(data, dict)
+                and data.get("contentType") == "application/pdf"
+                and isinstance(data.get("key"), str)
+                and ZOTERO_KEY_RE.fullmatch(data["key"])
+            ):
                 return data["key"]
         return None
 
@@ -198,7 +239,9 @@ def citation_markdown(item: ZoteroItem) -> str:
     return f"[{label}]({item.select_url})"
 
 
-def literature_note(item: ZoteroItem, pdf_key: str | None = None) -> tuple[str, str, list[str], str]:
+def literature_note(
+    item: ZoteroItem, pdf_key: str | None = None
+) -> tuple[str, str, list[str], str]:
     """(title, body, tags, source link) for a new literature note about *item*."""
     lines = [f"**Reference:** {item.reference()}", ""]
     links = [f"[Open in Zotero]({item.select_url})"]

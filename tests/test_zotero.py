@@ -7,17 +7,28 @@ import pytest
 from zettelapp.core import zotero
 from zettelapp.core.render import NoteRenderer
 from zettelapp.core.security import is_zotero_url, normalize_source_url
-from zettelapp.core.zotero import ZoteroClient, ZoteroError, citation_markdown, literature_note, parse_item
+from zettelapp.core.zotero import (
+    ZoteroClient,
+    ZoteroError,
+    citation_markdown,
+    literature_note,
+    parse_item,
+)
 
 ITEM = {
     "key": "ABCD2345",
     "library": {"type": "user", "id": 0},
     "meta": {"creatorSummary": "Ebbinghaus", "parsedDate": "1885-01-01"},
     "data": {
-        "key": "ABCD2345", "itemType": "book", "title": "Memory: A Contribution to Experimental Psychology",
+        "key": "ABCD2345",
+        "itemType": "book",
+        "title": "Memory: A Contribution to Experimental Psychology",
         "creators": [{"creatorType": "author", "firstName": "Hermann", "lastName": "Ebbinghaus"}],
-        "date": "1885", "DOI": "https://doi.org/10.1037/10011-000", "url": "javascript:alert(1)",
-        "abstractNote": "Classic study of forgetting.", "publisher": "Teachers College",
+        "date": "1885",
+        "DOI": "https://doi.org/10.1037/10011-000",
+        "url": "javascript:alert(1)",
+        "abstractNote": "Classic study of forgetting.",
+        "publisher": "Teachers College",
         "tags": [{"tag": "Memory Research"}, {"tag": 5}],
     },
 }
@@ -41,6 +52,7 @@ def fake_opener(payload=None, error=None):
             if error:
                 raise error
             return FakeResponse(json.dumps(payload).encode())
+
     return Opener()
 
 
@@ -88,8 +100,12 @@ def test_client_search_and_errors(monkeypatch):
 
 def test_pdf_attachment_lookup():
     client = ZoteroClient()
-    client._opener = fake_opener([{"data": {"key": "NOTE2345", "itemType": "note"}},
-                                  {"data": {"key": "PDFK2345", "contentType": "application/pdf"}}])
+    client._opener = fake_opener(
+        [
+            {"data": {"key": "NOTE2345", "itemType": "note"}},
+            {"data": {"key": "PDFK2345", "contentType": "application/pdf"}},
+        ]
+    )
     assert client.pdf_attachment("ABCD2345") == "PDFK2345"
     assert client.pdf_attachment("../evil") is None
 
@@ -97,7 +113,10 @@ def test_pdf_attachment_lookup():
 def test_zotero_urls_and_source_links(vault):
     assert is_zotero_url(zotero.pdf_url("ABCD2345", page=3))
     assert not is_zotero_url("zotero://select/library/items/abcd2345")  # keys are upper-case
-    assert normalize_source_url("zotero://select/library/items/ABCD2345") == "zotero://select/library/items/ABCD2345"
+    assert (
+        normalize_source_url("zotero://select/library/items/ABCD2345")
+        == "zotero://select/library/items/ABCD2345"
+    )
     note = vault.create_note("Lit", url="zotero://select/library/items/ABCD2345")
     assert vault.get_note(note.id).url == "zotero://select/library/items/ABCD2345"
     note.url = "zotero://run/calc"

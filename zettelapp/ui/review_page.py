@@ -96,10 +96,15 @@ class ReviewPage(QWidget):
         head.addWidget(self.anki_state)
         head.addWidget(link_button("Check connection", self.check_anki))
         anki.body.addLayout(head)
-        anki.body.addWidget(label(
-            "Sync the flashcards in the chosen scope to Anki through the AnkiConnect add-on (code 2055492159), or "
-            "export a deck file. Each card links back to its note with a zettelapp:// link, and syncing again "
-            "updates cards instead of duplicating them.", "caption", wrap=True))
+        anki.body.addWidget(
+            label(
+                "Sync the flashcards in the chosen scope to Anki through the AnkiConnect add-on (code 2055492159), or "
+                "export a deck file. Each card links back to its note with a zettelapp:// link, and syncing again "
+                "updates cards instead of duplicating them.",
+                "caption",
+                wrap=True,
+            )
+        )
         deck_row = QHBoxLayout()
         deck_row.addWidget(label("Deck", "secondary"))
         self.deck = QLineEdit(settings.get(settings.ANKI_DECK))
@@ -125,8 +130,11 @@ class ReviewPage(QWidget):
         due = vault.due_cards()
         total = len(vault.cards_for_notes())
         self.due_count.setText(str(len(due)))
-        self.due_detail.setText(f"of {total} flashcards" if total else
-                                "No flashcards yet. Add some from a note's Flashcards tab, or write Q:/A: in a note.")
+        self.due_detail.setText(
+            f"of {total} flashcards"
+            if total
+            else "No flashcards yet. Add some from a note's Flashcards tab, or write Q:/A: in a note."
+        )
         self.scope.set_tags(vault.all_tags())
 
     def showEvent(self, event) -> None:  # noqa: N802
@@ -159,7 +167,9 @@ class ReviewPage(QWidget):
         self.answer.noteRequested.connect(self.openNote)
         card.body.addWidget(self.answer)
         self.source = link_button("")
-        self.source.clicked.connect(lambda: self.openNote.emit(self.questions[self.position].note_id))
+        self.source.clicked.connect(
+            lambda: self.openNote.emit(self.questions[self.position].note_id)
+        )
         card.body.addWidget(self.source, 0, Qt.AlignmentFlag.AlignLeft)
         self.feedback = label("", "section")
         card.body.addWidget(self.feedback)
@@ -176,7 +186,9 @@ class ReviewPage(QWidget):
         self.show_button = accent_button("Show answer  (Space)", self._reveal)
         buttons.addWidget(self.show_button)
         self.grade_buttons = []
-        for i, (grade, text) in enumerate((("again", "Again"), ("hard", "Hard"), ("good", "Good"), ("easy", "Easy")), 1):
+        for i, (grade, text) in enumerate(
+            (("again", "Again"), ("hard", "Hard"), ("good", "Good"), ("easy", "Easy")), 1
+        ):
             b = QPushButton(f"{text}  ({i})")
             b.clicked.connect(lambda _=False, g=grade: self._grade(g))
             if grade == "good":
@@ -204,7 +216,9 @@ class ReviewPage(QWidget):
         layout.addWidget(self.summary_text)
         row = QHBoxLayout()
         row.addStretch(1)
-        row.addWidget(accent_button("Back to Review", lambda: (self.stack.setCurrentIndex(0), self.refresh())))
+        row.addWidget(
+            accent_button("Back to Review", lambda: (self.stack.setCurrentIndex(0), self.refresh()))
+        )
         row.addStretch(1)
         layout.addLayout(row)
         layout.addStretch(2)
@@ -216,8 +230,12 @@ class ReviewPage(QWidget):
     def _renderer(self) -> NoteRenderer:
         vault = self.window.vault
         titles = vault.titles()
-        return NoteRenderer(vault.resolve_title, lambda i: titles.get(i) or "Untitled",
-                            link_types=vault.link_type_map(), allow_new_note_links=False)
+        return NoteRenderer(
+            vault.resolve_title,
+            lambda i: titles.get(i) or "Untitled",
+            link_types=vault.link_type_map(),
+            allow_new_note_links=False,
+        )
 
     def start_due(self, note_ids: set[str] | None = None) -> None:
         vault = self.window.vault
@@ -243,11 +261,18 @@ class ReviewPage(QWidget):
 
     def _start(self, questions: list[Question], mode: str) -> None:
         if not questions:
-            QMessageBox.information(self, "Nothing to review", {
-                "flashcards": "No flashcards are due. Great job! Add more from a note's Flashcards tab.",
-                "notes": "“Name that note” needs at least two notes with a title and some text.",
-            }.get(mode, "There are no flashcards in this selection. Add flashcards to notes first, "
-                        "or choose “Name that note”."))
+            QMessageBox.information(
+                self,
+                "Nothing to review",
+                {
+                    "flashcards": "No flashcards are due. Great job! Add more from a note's Flashcards tab.",
+                    "notes": "“Name that note” needs at least two notes with a title and some text.",
+                }.get(
+                    mode,
+                    "There are no flashcards in this selection. Add flashcards to notes first, "
+                    "or choose “Name that note”.",
+                ),
+            )
             return
         renderer = self._renderer()
         self.prompt.set_renderer(renderer)
@@ -317,10 +342,16 @@ class ReviewPage(QWidget):
         self.score += correct
         for i, b in enumerate(self.choice_buttons):
             if i == q.correct:
-                b.setStyleSheet(f"QPushButton {{ text-align: left; padding: 9px 14px; border: 2px solid {t.success}; }}")
+                b.setStyleSheet(
+                    f"QPushButton {{ text-align: left; padding: 9px 14px; border: 2px solid {t.success}; }}"
+                )
             elif i == index:
-                b.setStyleSheet(f"QPushButton {{ text-align: left; padding: 9px 14px; border: 2px solid {t.danger}; }}")
-        self.feedback.setText("✓ Correct" if correct else "✗ Not quite. The correct answer is highlighted.")
+                b.setStyleSheet(
+                    f"QPushButton {{ text-align: left; padding: 9px 14px; border: 2px solid {t.danger}; }}"
+                )
+        self.feedback.setText(
+            "✓ Correct" if correct else "✗ Not quite. The correct answer is highlighted."
+        )
         self._reveal()
 
     def _check_typed(self) -> None:
@@ -331,8 +362,14 @@ class ReviewPage(QWidget):
         similarity, verdict = grade_typed(self.typed.text(), q.answer)
         self.typed.setEnabled(False)
         self.score += verdict == "correct"
-        self.feedback.setText({"correct": "✓ Correct", "close": f"≈ Almost ({similarity:.0%} similar)",
-                               "wrong": "✗ Not quite"}[verdict] + f". Answer: {q.answer}")
+        self.feedback.setText(
+            {
+                "correct": "✓ Correct",
+                "close": f"≈ Almost ({similarity:.0%} similar)",
+                "wrong": "✗ Not quite",
+            }[verdict]
+            + f". Answer: {q.answer}"
+        )
         self._reveal()
 
     def _next(self) -> None:
@@ -344,9 +381,13 @@ class ReviewPage(QWidget):
 
     def finish(self) -> None:
         answered = min(self.position, len(self.questions))
-        self.summary_title.setText("Session complete" if answered >= len(self.questions) else "Session ended")
+        self.summary_title.setText(
+            "Session complete" if answered >= len(self.questions) else "Session ended"
+        )
         noun = "remembered" if self.mode == "flashcards" else "correct"
-        self.summary_text.setText(f"{self.score} of {answered} {noun}" if answered else "No questions answered.")
+        self.summary_text.setText(
+            f"{self.score} of {answered} {noun}" if answered else "No questions answered."
+        )
         self.stack.setCurrentIndex(2)
 
     def _space(self) -> None:
@@ -392,7 +433,9 @@ class ReviewPage(QWidget):
         deck = self.deck.text().strip() or "ZettelApp"
         settings.put(settings.ANKI_DECK, deck)
         notes = {n.id: n for n in vault.all_notes()}
-        renderer = anki_renderer(vault.resolve_title, lambda i: notes[i].display_title if i in notes else i)
+        renderer = anki_renderer(
+            vault.resolve_title, lambda i: notes[i].display_title if i in notes else i
+        )
         payloads = build_payloads(cards, notes, vault.vault_id, renderer)
         media = {name: vault.asset_path(name) for p in payloads for name in p.media}
         remembered: list[tuple[int, int | None]] = []
@@ -400,7 +443,9 @@ class ReviewPage(QWidget):
         self.status.emit(f"Syncing {len(payloads)} cards to Anki…")
 
         def work():
-            return AnkiConnect(port).sync(payloads, deck, media.get, lambda c, a: remembered.append((c, a)))
+            return AnkiConnect(port).sync(
+                payloads, deck, media.get, lambda c, a: remembered.append((c, a))
+            )
 
         def done(report) -> None:
             for card_id, anki_id in remembered:

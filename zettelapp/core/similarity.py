@@ -23,6 +23,7 @@ except ImportError:  # pragma: no cover
 
 # --- edit distances ---------------------------------------------------------
 
+
 def _levenshtein_bitparallel(text: str, pattern: str) -> int:
     if not pattern:
         return len(text)
@@ -123,6 +124,7 @@ def jaccard(a: set, b: set) -> float:
 
 # --- TF-IDF and latent semantic analysis -----------------------------------
 
+
 class SemanticIndex:
     """TF-IDF vectors plus an LSA embedding (truncated SVD) of a corpus.
 
@@ -138,7 +140,9 @@ class SemanticIndex:
         for tokens in docs.values():
             df.update(set(tokens))
         self.vocab = {term: i for i, term in enumerate(sorted(df))}
-        self.idf = np.array([math.log((1 + n) / (1 + df[t])) + 1.0 for t in sorted(df)], dtype=np.float64)
+        self.idf = np.array(
+            [math.log((1 + n) / (1 + df[t])) + 1.0 for t in sorted(df)], dtype=np.float64
+        )
         self.vectors: list[dict[int, float]] = [self.vectorize(docs[doc_id]) for doc_id in self.ids]
         self.postings: dict[int, list[tuple[int, float]]] = {}
         for i, vec in enumerate(self.vectors):
@@ -153,7 +157,9 @@ class SemanticIndex:
 
     def vectorize(self, tokens: Sequence[str]) -> dict[int, float]:
         counts = Counter(t for t in tokens if t in self.vocab)
-        vec = {self.vocab[t]: (1.0 + math.log(c)) * self.idf[self.vocab[t]] for t, c in counts.items()}
+        vec = {
+            self.vocab[t]: (1.0 + math.log(c)) * self.idf[self.vocab[t]] for t, c in counts.items()
+        }
         norm = math.sqrt(sum(w * w for w in vec.values()))
         return {k: w / norm for k, w in vec.items()} if norm else {}
 
@@ -172,7 +178,11 @@ class SemanticIndex:
                 rows.append(i)
                 cols.append(term)
                 vals.append(w)
-        return np.array(rows, dtype=np.int64), np.array(cols, dtype=np.int64), np.array(vals, dtype=np.float64)
+        return (
+            np.array(rows, dtype=np.int64),
+            np.array(cols, dtype=np.int64),
+            np.array(vals, dtype=np.float64),
+        )
 
     def _fit_lsa(self, dims: int, seed: int) -> None:
         n, v = len(self.ids), len(self.vocab)
@@ -185,13 +195,17 @@ class SemanticIndex:
         def x_dot(m: np.ndarray) -> np.ndarray:  # X @ m, X is (n, v)
             out = np.zeros((n, m.shape[1]))
             for s in range(0, len(vals), chunk):
-                np.add.at(out, rows[s:s + chunk], vals[s:s + chunk, None] * m[cols[s:s + chunk]])
+                np.add.at(
+                    out, rows[s : s + chunk], vals[s : s + chunk, None] * m[cols[s : s + chunk]]
+                )
             return out
 
         def xt_dot(m: np.ndarray) -> np.ndarray:  # X.T @ m
             out = np.zeros((v, m.shape[1]))
             for s in range(0, len(vals), chunk):
-                np.add.at(out, cols[s:s + chunk], vals[s:s + chunk, None] * m[rows[s:s + chunk]])
+                np.add.at(
+                    out, cols[s : s + chunk], vals[s : s + chunk, None] * m[rows[s : s + chunk]]
+                )
             return out
 
         # Randomised truncated SVD (Halko, Martinsson & Tropp 2011).

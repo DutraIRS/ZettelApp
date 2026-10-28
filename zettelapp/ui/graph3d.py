@@ -39,12 +39,19 @@ class Graph3DView(QWidget):
         self._neighbors: dict[str, set[str]] = {}
         self.rotate_timer = QTimer(self, interval=33, timeout=self._spin)
 
-    def set_graph(self, data: GraphData, positions: dict[str, tuple[float, ...]], show_groups: bool,
-                  show_labels: bool) -> None:
+    def set_graph(
+        self,
+        data: GraphData,
+        positions: dict[str, tuple[float, ...]],
+        show_groups: bool,
+        show_labels: bool,
+    ) -> None:
         self.data = data
         self.show_groups = show_groups
         self.show_labels = show_labels
-        pts = np.array([positions.get(i, (0.0, 0.0, 0.0))[:3] for i in data.ids], dtype=float).reshape(-1, 3)
+        pts = np.array(
+            [positions.get(i, (0.0, 0.0, 0.0))[:3] for i in data.ids], dtype=float
+        ).reshape(-1, 3)
         if len(pts):
             pts -= pts.mean(axis=0)
             radius = np.linalg.norm(pts, axis=1).max()
@@ -95,14 +102,18 @@ class Graph3DView(QWidget):
         camera = 3.2
         f = min(self.width(), self.height()) * 0.36 * self.zoom_level
         scale = f * camera / (camera - q[:, 2])
-        screen = np.column_stack([self.width() / 2 + q[:, 0] * scale, self.height() / 2 - q[:, 1] * scale])
+        screen = np.column_stack(
+            [self.width() / 2 + q[:, 0] * scale, self.height() / 2 - q[:, 1] * scale]
+        )
         depth = (q[:, 2] + 1) / 2  # 0 = far, 1 = near
         return screen, scale, np.clip(depth, 0, 1)
 
     def paintEvent(self, event) -> None:  # noqa: N802
         t = theme.current()
         painter = QPainter(self)
-        painter.setRenderHints(QPainter.RenderHint.Antialiasing | QPainter.RenderHint.TextAntialiasing)
+        painter.setRenderHints(
+            QPainter.RenderHint.Antialiasing | QPainter.RenderHint.TextAntialiasing
+        )
         painter.fillRect(self.rect(), t.q("surface"))
         if not len(self.points):
             painter.setPen(t.q("text_muted"))
@@ -118,7 +129,9 @@ class Graph3DView(QWidget):
                 if not idx:
                     continue
                 centre = screen[idx].mean(axis=0)
-                spread = float(np.sqrt(((screen[idx] - centre) ** 2).sum(axis=1).mean())) + base * 0.06
+                spread = (
+                    float(np.sqrt(((screen[idx] - centre) ** 2).sum(axis=1).mean())) + base * 0.06
+                )
                 color = QColor(self.data.group_color(group))
                 gradient = QRadialGradient(QPointF(*centre), spread * 1.25)
                 inner, outer = QColor(color), QColor(color)
@@ -143,7 +156,9 @@ class Graph3DView(QWidget):
             color = QColor(t.q("accent") if highlighted else self.data.link_color(link))
             color.setAlphaF(0.9 if highlighted else 0.12 + 0.45 * d)
             entry = self.data.types.get(link.type)
-            painter.setPen(QPen(color, 2.0 if highlighted else 1.0 + d, type_dash(entry[0] if entry else 0)))
+            painter.setPen(
+                QPen(color, 2.0 if highlighted else 1.0 + d, type_dash(entry[0] if entry else 0))
+            )
             painter.drawLine(QPointF(*screen[a]), QPointF(*screen[b]))
 
         order = np.argsort(depth)
@@ -155,7 +170,11 @@ class Graph3DView(QWidget):
         for i in order:
             node = self.data.ids[i]
             d = depth[i]
-            r = node_radius(self.data.degree.get(node, 0)) * (0.55 + 0.6 * d) * min(1.6, self.zoom_level ** 0.5)
+            r = (
+                node_radius(self.data.degree.get(node, 0))
+                * (0.55 + 0.6 * d)
+                * min(1.6, self.zoom_level**0.5)
+            )
             color = QColor(self.data.group_color(self.data.group_of.get(node)))
             dim = focus is not None and node != focus and node not in neighbors
             color.setAlphaF((0.35 + 0.65 * d) * (0.3 if dim else 1.0))
@@ -167,14 +186,26 @@ class Graph3DView(QWidget):
                 painter.setBrush(Qt.BrushStyle.NoBrush)
                 painter.setPen(QPen(t.q("text"), 1.8))
                 painter.drawEllipse(p, r + 4, r + 4)
-            if node in (focus,) or node in neighbors or (self.show_labels and node in labelled and d > 0.45):
+            if (
+                node in (focus,)
+                or node in neighbors
+                or (self.show_labels and node in labelled and d > 0.45)
+            ):
                 painter.setPen(t.q("text") if node == focus else t.q("text_secondary"))
-                text = metrics.elidedText(self.data.titles.get(node) or "Untitled", Qt.TextElideMode.ElideRight, 150)
-                painter.drawText(QRectF(p.x() - 80, p.y() + r + 2, 160, metrics.height()),
-                                 Qt.AlignmentFlag.AlignHCenter, text)
+                text = metrics.elidedText(
+                    self.data.titles.get(node) or "Untitled", Qt.TextElideMode.ElideRight, 150
+                )
+                painter.drawText(
+                    QRectF(p.x() - 80, p.y() + r + 2, 160, metrics.height()),
+                    Qt.AlignmentFlag.AlignHCenter,
+                    text,
+                )
         painter.setPen(t.q("text_muted"))
-        painter.drawText(QRectF(10, self.height() - 24, self.width() - 20, 18), Qt.AlignmentFlag.AlignLeft,
-                         "Drag to orbit · wheel to zoom · double-click a note to open it")
+        painter.drawText(
+            QRectF(10, self.height() - 24, self.width() - 20, 18),
+            Qt.AlignmentFlag.AlignLeft,
+            "Drag to orbit · wheel to zoom · double-click a note to open it",
+        )
 
     # --- interaction ----------------------------------------------------------
 
@@ -183,7 +214,7 @@ class Graph3DView(QWidget):
             return None
         d = np.hypot(self._screen[:, 0] - pos.x(), self._screen[:, 1] - pos.y())
         i = int(np.argmin(d))
-        return self.data.ids[i] if d[i] <= 14 + 6 * self.zoom_level ** 0.5 else None
+        return self.data.ids[i] if d[i] <= 14 + 6 * self.zoom_level**0.5 else None
 
     def mousePressEvent(self, event) -> None:  # noqa: N802
         self._drag_from = event.position()
@@ -203,7 +234,9 @@ class Graph3DView(QWidget):
         if node != self.hovered:
             self.hovered = node
             self.setToolTip(self.data.titles.get(node, "") if node else "")
-            self.setCursor(Qt.CursorShape.PointingHandCursor if node else Qt.CursorShape.OpenHandCursor)
+            self.setCursor(
+                Qt.CursorShape.PointingHandCursor if node else Qt.CursorShape.OpenHandCursor
+            )
             self.update()
 
     def mouseReleaseEvent(self, event) -> None:  # noqa: N802

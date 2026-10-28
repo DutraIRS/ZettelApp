@@ -1,9 +1,9 @@
 import pytest
 
+from tests.conftest import tiny_png
 from zettelapp.core.models import LinkType
 from zettelapp.core.security import UnsafeInputError
 from zettelapp.core.storage import Vault
-from tests.conftest import tiny_png
 
 
 def test_create_and_reload(tmp_path):
@@ -33,12 +33,18 @@ def test_unsafe_url_is_dropped(vault):
 def test_inline_typed_links_and_cards(vault):
     target = vault.create_note("Target note")
     other = vault.create_note("Other")
-    n = vault.create_note("Source", f"See [[Target note]] and supports:: [[{other.id}|alias]].\n\n"
-                                    "Q: What?\nA: That.\n\n{{c1::Cloze}} text")
+    n = vault.create_note(
+        "Source",
+        f"See [[Target note]] and supports:: [[{other.id}|alias]].\n\n"
+        "Q: What?\nA: That.\n\n{{c1::Cloze}} text",
+    )
     links = {(l.dst, l.type, l.origin) for l in vault.links_from(n.id)}
     assert links == {(target.id, "related", "inline"), (other.id, "supports", "inline")}
     cards = vault.cards_for(n.id)
-    assert {(c.kind, c.front) for c in cards} == {("basic", "What?"), ("cloze", "{{c1::Cloze}} text")}
+    assert {(c.kind, c.front) for c in cards} == {
+        ("basic", "What?"),
+        ("cloze", "{{c1::Cloze}} text"),
+    }
     n.body = "No more links"
     vault.save_note(n)
     assert vault.links_from(n.id) == []

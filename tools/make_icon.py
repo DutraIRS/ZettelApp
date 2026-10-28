@@ -9,8 +9,16 @@ import struct
 import sys
 from pathlib import Path
 
-from PySide6.QtCore import QByteArray, QBuffer, QIODevice, QPointF, QRectF, Qt
-from PySide6.QtGui import QColor, QGuiApplication, QImage, QLinearGradient, QPainter, QPainterPath, QPen
+from PySide6.QtCore import QBuffer, QByteArray, QIODevice, QPointF, QRectF, Qt
+from PySide6.QtGui import (
+    QColor,
+    QGuiApplication,
+    QImage,
+    QLinearGradient,
+    QPainter,
+    QPainterPath,
+    QPen,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 RESOURCES = ROOT / "zettelapp" / "resources"
@@ -44,7 +52,9 @@ def draw(size: int) -> QImage:
     white = QColor("#ffffff")
     pen = QPen(white, max(1.0, s * 0.05), Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap)
     p.setPen(pen)
-    pts = [QPointF(tile.left() + x * tile.width(), tile.top() + y * tile.height()) for x, y in NODES]
+    pts = [
+        QPointF(tile.left() + x * tile.width(), tile.top() + y * tile.height()) for x, y in NODES
+    ]
     for a, b in EDGES:
         p.drawLine(pts[a], pts[b])
     p.setPen(Qt.PenStyle.NoPen)

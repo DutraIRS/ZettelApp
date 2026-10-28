@@ -41,8 +41,11 @@ class _NodeItem(QGraphicsItem):
         self.setFlag(QGraphicsItem.GraphicsItemFlag.ItemIsSelectable)
         self.setAcceptHoverEvents(True)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.setToolTip("Linked note: double-click the link icon area or use the context menu to open it"
-                        if node.get("note") else "")
+        self.setToolTip(
+            "Linked note: double-click the link icon area or use the context menu to open it"
+            if node.get("note")
+            else ""
+        )
 
     def boundingRect(self) -> QRectF:  # noqa: N802
         return self.rect.adjusted(-3, -3, 3, 3)
@@ -75,11 +78,17 @@ class _NodeItem(QGraphicsItem):
         if self.node.get("note"):
             text_rect.setRight(text_rect.right() - 18)
             painter.setFont(icons.glyph_font(12))
-            painter.drawText(QRectF(text_rect.right() + 4, self.rect.top(), 16, self.rect.height()),
-                             Qt.AlignmentFlag.AlignCenter, icons.glyph("link"))
+            painter.drawText(
+                QRectF(text_rect.right() + 4, self.rect.top(), 16, self.rect.height()),
+                Qt.AlignmentFlag.AlignCenter,
+                icons.glyph("link"),
+            )
             painter.setFont(font)
-        painter.drawText(text_rect, Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft,
-                         self.node.get("text") or "…")
+        painter.drawText(
+            text_rect,
+            Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft,
+            self.node.get("text") or "…",
+        )
 
     def mousePressEvent(self, event) -> None:  # noqa: N802
         self.view.select(self.node["id"])
@@ -147,7 +156,11 @@ class MindMapView(QGraphicsView):
         col_width: dict[int, float] = {}
         for node, depth in mindmap_nodes(self.root):
             metrics = QFontMetricsF(self.node_font(depth))
-            w = min(260.0, metrics.horizontalAdvance(node.get("text") or "…")) + 2 * PAD_X + (18 if node.get("note") else 0)
+            w = (
+                min(260.0, metrics.horizontalAdvance(node.get("text") or "…"))
+                + 2 * PAD_X
+                + (18 if node.get("note") else 0)
+            )
             h = metrics.height() + 2 * PAD_Y
             sizes[node["id"]] = QRectF(0, 0, w, h)
             col_width[depth] = max(col_width.get(depth, 0), w)
@@ -189,7 +202,14 @@ class MindMapView(QGraphicsView):
                 path.cubicTo(start + QPointF(dx, 0), end - QPointF(dx, 0), end)
                 edge = QGraphicsPathItem(path)
                 color = t.category(branch_of.get(child["id"], 0) % len(t.categorical))
-                edge.setPen(QPen(color, 2.2 if depth == 0 else 1.6, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
+                edge.setPen(
+                    QPen(
+                        color,
+                        2.2 if depth == 0 else 1.6,
+                        Qt.PenStyle.SolidLine,
+                        Qt.PenCapStyle.RoundCap,
+                    )
+                )
                 edge.setZValue(-1)
                 scene.addItem(edge)
                 draw(child, depth + 1)
@@ -258,7 +278,9 @@ class MindMapView(QGraphicsView):
             index = parent["children"].index(node)
             parent["children"].remove(node)
             siblings = parent["children"]
-            self.selected_id = siblings[min(index, len(siblings) - 1)]["id"] if siblings else parent["id"]
+            self.selected_id = (
+                siblings[min(index, len(siblings) - 1)]["id"] if siblings else parent["id"]
+            )
             self._emit()
 
     def edit(self, node_id: str) -> None:
@@ -312,7 +334,9 @@ class MindMapView(QGraphicsView):
             self.delete_selected()
         elif key == Qt.Key.Key_F2 and self.selected_id:
             self.edit(self.selected_id)
-        elif key in (Qt.Key.Key_Left, Qt.Key.Key_Right, Qt.Key.Key_Up, Qt.Key.Key_Down) and self.root:
+        elif (
+            key in (Qt.Key.Key_Left, Qt.Key.Key_Right, Qt.Key.Key_Up, Qt.Key.Key_Down) and self.root
+        ):
             self._navigate(key)
         else:
             super().keyPressEvent(event)
@@ -349,10 +373,16 @@ class MindMapView(QGraphicsView):
             menu.addAction("Add sibling\tEnter", self.add_sibling)
             menu.addAction(icons.icon("edit"), "Rename\tF2", lambda: self.edit(item.node["id"]))
             menu.addSeparator()
-            menu.addAction(icons.icon("link"), "Link to note…", lambda: self.linkNoteRequested.emit(item.node["id"]))
+            menu.addAction(
+                icons.icon("link"),
+                "Link to note…",
+                lambda: self.linkNoteRequested.emit(item.node["id"]),
+            )
             if item.node.get("note"):
                 menu.addAction("Open linked note", lambda: self.openNote.emit(item.node["note"]))
-                menu.addAction("Remove note link", lambda: self.set_node_note(item.node["id"], None))
+                menu.addAction(
+                    "Remove note link", lambda: self.set_node_note(item.node["id"], None)
+                )
             menu.addSeparator()
             menu.addAction(icons.icon("delete"), "Delete\tDel", self.delete_selected)
         else:
@@ -364,16 +394,21 @@ class MindMapView(QGraphicsView):
 
     def render_image(self, scale: float = 2.0) -> QImage:
         rect = self.scene().itemsBoundingRect().adjusted(-24, -24, 24, 24)
-        image = QImage(int(rect.width() * scale), int(rect.height() * scale), QImage.Format.Format_ARGB32)
+        image = QImage(
+            int(rect.width() * scale), int(rect.height() * scale), QImage.Format.Format_ARGB32
+        )
         image.fill(theme.current().q("surface"))
         painter = QPainter(image)
-        painter.setRenderHints(QPainter.RenderHint.Antialiasing | QPainter.RenderHint.TextAntialiasing)
+        painter.setRenderHints(
+            QPainter.RenderHint.Antialiasing | QPainter.RenderHint.TextAntialiasing
+        )
         self.scene().render(painter, QRectF(image.rect()), rect)
         painter.end()
         return image
 
     def render_svg(self, path: str) -> None:
         from PySide6.QtSvg import QSvgGenerator
+
         rect = self.scene().itemsBoundingRect().adjusted(-24, -24, 24, 24)
         generator = QSvgGenerator()
         generator.setFileName(path)

@@ -4,15 +4,14 @@ from __future__ import annotations
 
 import html
 
-from PySide6.QtCore import QRectF, QSize, Qt, Signal
-from PySide6.QtGui import QAction, QColor, QIcon, QPainter, QPen, QPixmap
+from PySide6.QtCore import QSize, Qt, Signal
+from PySide6.QtGui import QAction, QIcon, QPainter, QPen, QPixmap
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QListWidget,
     QListWidgetItem,
     QMenu,
     QProgressBar,
-    QPushButton,
     QScrollArea,
     QSizePolicy,
     QToolButton,
@@ -25,8 +24,13 @@ from zettelapp.core.suggest import Suggestion
 from zettelapp.ui import icons, theme
 from zettelapp.ui.widgets import ElidedLabel, label, link_button, tool_button
 
-DASHES = [Qt.PenStyle.SolidLine, Qt.PenStyle.DashLine, Qt.PenStyle.DotLine, Qt.PenStyle.DashDotLine,
-          Qt.PenStyle.DashDotDotLine]
+DASHES = [
+    Qt.PenStyle.SolidLine,
+    Qt.PenStyle.DashLine,
+    Qt.PenStyle.DotLine,
+    Qt.PenStyle.DashDotLine,
+    Qt.PenStyle.DashDotDotLine,
+]
 
 
 def type_dash(index: int) -> Qt.PenStyle:
@@ -68,7 +72,9 @@ class _SuggestionRow(QWidget):
         bar.setTextVisible(False)
         bar.setFixedHeight(4)
         bar.setAccessibleName(f"Match {s.probability:.0%}")
-        strength = "strong" if s.probability >= 0.5 else "likely" if s.probability >= 0.25 else "possible"
+        strength = (
+            "strong" if s.probability >= 0.5 else "likely" if s.probability >= 0.25 else "possible"
+        )
         meta = label(f"{s.probability:.0%} · {strength}", "caption")
         text.addWidget(title)
         text.addWidget(bar)
@@ -83,20 +89,32 @@ class _SuggestionRow(QWidget):
         link.clicked.connect(lambda: panel.acceptSuggestion.emit(s.note_id, "related"))
         menu = QMenu(link)
         for i, lt in enumerate(panel.link_types):
-            menu.addAction(type_icon(lt, i), lt.label,
-                           lambda t=lt.id: panel.acceptSuggestion.emit(s.note_id, t))
+            menu.addAction(
+                type_icon(lt, i),
+                lt.label,
+                lambda t=lt.id: panel.acceptSuggestion.emit(s.note_id, t),
+            )
         link.setMenu(menu)
         row.addWidget(link)
-        row.addWidget(tool_button("cancel", "Not related: dismiss and teach the model",
-                                  lambda: panel.rejectSuggestion.emit(s.note_id)))
+        row.addWidget(
+            tool_button(
+                "cancel",
+                "Not related: dismiss and teach the model",
+                lambda: panel.rejectSuggestion.emit(s.note_id),
+            )
+        )
         self.setToolTip(self._explain())
 
     def _explain(self) -> str:
         rows = "".join(
             f"<tr><td>{html.escape(name)}</td><td align='right'>{'+' if v >= 0 else '−'}{abs(v):.2f}</td></tr>"
-            for name, v in self.s.contributions if abs(v) >= 0.01)
-        return (f"<b>Why this suggestion?</b><br>Naive Bayes estimate: {self.s.probability:.0%}<br>"
-                f"<span>Evidence (log-likelihood ratio per feature):</span><table>{rows}</table>")
+            for name, v in self.s.contributions
+            if abs(v) >= 0.01
+        )
+        return (
+            f"<b>Why this suggestion?</b><br>Naive Bayes estimate: {self.s.probability:.0%}<br>"
+            f"<span>Evidence (log-likelihood ratio per feature):</span><table>{rows}</table>"
+        )
 
 
 class SidePanel(QWidget):
@@ -135,8 +153,14 @@ class SidePanel(QWidget):
         head.addWidget(bulb)
         head.addWidget(label("Suggested links", "section"), 1)
         layout.addLayout(head)
-        layout.addWidget(label("Naive Bayes over semantic, Levenshtein and tag similarity. "
-                               "Learns from the links you make and dismiss.", "caption", wrap=True))
+        layout.addWidget(
+            label(
+                "Naive Bayes over semantic, Levenshtein and tag similarity. "
+                "Learns from the links you make and dismiss.",
+                "caption",
+                wrap=True,
+            )
+        )
         self.status = label("", "caption", wrap=True)
         layout.addWidget(self.status)
         self.suggestions = QVBoxLayout()
@@ -163,8 +187,12 @@ class SidePanel(QWidget):
         w.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         w.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         w.customContextMenuRequested.connect(lambda pos, lw=w: self._link_menu(lw, pos))
-        w.itemActivated.connect(lambda item: self.openNote.emit(item.data(Qt.ItemDataRole.UserRole)[1]))
-        w.itemClicked.connect(lambda item: self.openNote.emit(item.data(Qt.ItemDataRole.UserRole)[1]))
+        w.itemActivated.connect(
+            lambda item: self.openNote.emit(item.data(Qt.ItemDataRole.UserRole)[1])
+        )
+        w.itemClicked.connect(
+            lambda item: self.openNote.emit(item.data(Qt.ItemDataRole.UserRole)[1])
+        )
         return w
 
     def set_link_types(self, types: list[LinkType]) -> None:
@@ -183,11 +211,18 @@ class SidePanel(QWidget):
             self.suggestions.addWidget(_SuggestionRow(s, self))
         self.status.setText("" if items else empty_text)
 
-    def set_links(self, note_id: str, outgoing: list[tuple[Link, str]], incoming: list[tuple[Link, str]]) -> None:
+    def set_links(
+        self, note_id: str, outgoing: list[tuple[Link, str]], incoming: list[tuple[Link, str]]
+    ) -> None:
         types = {lt.id: (i, lt) for i, lt in enumerate(self.link_types)}
-        for widget, rows, out in ((self.outgoing, outgoing, True), (self.incoming, incoming, False)):
+        for widget, rows, out in (
+            (self.outgoing, outgoing, True),
+            (self.incoming, incoming, False),
+        ):
             widget.clear()
-            for link, title in sorted(rows, key=lambda r: (types.get(r[0].type, (99,))[0], r[1].casefold())):
+            for link, title in sorted(
+                rows, key=lambda r: (types.get(r[0].type, (99,))[0], r[1].casefold())
+            ):
                 index, lt = types.get(link.type, (0, None))
                 verb = lt.label_for(out) if lt else link.type
                 item = QListWidgetItem(f"{title or 'Untitled'}\n{verb}")
@@ -195,7 +230,10 @@ class SidePanel(QWidget):
                     item.setIcon(type_icon(lt, index))
                 other = link.dst if out else link.src
                 item.setData(Qt.ItemDataRole.UserRole, (link, other))
-                item.setToolTip(f"{verb} “{title}”" + ("  (from a [[link]] in the text)" if link.origin == "inline" else ""))
+                item.setToolTip(
+                    f"{verb} “{title}”"
+                    + ("  (from a [[link]] in the text)" if link.origin == "inline" else "")
+                )
                 widget.addItem(item)
             if not rows:
                 placeholder = QListWidgetItem("No links yet" if out else "No notes link here yet")
@@ -217,15 +255,23 @@ class SidePanel(QWidget):
             action = QAction(type_icon(lt, i), lt.label, change)
             action.setCheckable(True)
             action.setChecked(lt.id == link.type)
-            action.triggered.connect(lambda _=False, t=lt.id: self.changeLinkType.emit(link.src, link.dst, link.type, t))
+            action.triggered.connect(
+                lambda _=False, t=lt.id: self.changeLinkType.emit(link.src, link.dst, link.type, t)
+            )
             change.addAction(action)
         lt = next((t for t in self.link_types if t.id == link.type), None)
         if lt is not None and lt.directed and link.origin != "inline":
-            menu.addAction(icons.icon("sync"), "Reverse direction",
-                           lambda: self.reverseLink.emit(link.src, link.dst, link.type))
+            menu.addAction(
+                icons.icon("sync"),
+                "Reverse direction",
+                lambda: self.reverseLink.emit(link.src, link.dst, link.type),
+            )
         if link.origin == "inline":
             menu.addAction("Remove (edit the [[link]] in the text)").setEnabled(False)
         else:
-            menu.addAction(icons.icon("delete"), "Remove link",
-                           lambda: self.removeLink.emit(link.src, link.dst, link.type))
+            menu.addAction(
+                icons.icon("delete"),
+                "Remove link",
+                lambda: self.removeLink.emit(link.src, link.dst, link.type),
+            )
         menu.exec(widget.mapToGlobal(pos))

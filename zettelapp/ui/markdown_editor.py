@@ -6,7 +6,14 @@ import re
 from collections.abc import Callable
 
 from PySide6.QtCore import QBuffer, QByteArray, QIODevice, QStringListModel, Qt, Signal
-from PySide6.QtGui import QColor, QFont, QKeySequence, QSyntaxHighlighter, QTextCharFormat, QTextCursor
+from PySide6.QtGui import (
+    QColor,
+    QFont,
+    QKeySequence,
+    QSyntaxHighlighter,
+    QTextCharFormat,
+    QTextCursor,
+)
 from PySide6.QtWidgets import QCompleter, QPlainTextEdit
 
 from zettelapp.ui import theme
@@ -14,8 +21,14 @@ from zettelapp.ui import theme
 _IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp")
 
 
-def _fmt(color: str | None = None, bold: bool = False, italic: bool = False, size: float | None = None,
-         background: str | None = None, underline: bool = False) -> QTextCharFormat:
+def _fmt(
+    color: str | None = None,
+    bold: bool = False,
+    italic: bool = False,
+    size: float | None = None,
+    background: str | None = None,
+    underline: bool = False,
+) -> QTextCharFormat:
     f = QTextCharFormat()
     if color:
         f.setForeground(QColor(color) if color.startswith("#") else theme.current().q(color))
@@ -47,10 +60,16 @@ class MarkdownHighlighter(QSyntaxHighlighter):
             (re.compile(r"^\s*(?:[-*+]|\d+[.)])\s"), _fmt("accent", bold=True)),
             (re.compile(r"^>.*$"), _fmt("text_secondary", italic=True)),
             (re.compile(r"\*\*[^*\n]+\*\*|__[^_\n]+__"), _fmt(bold=True)),
-            (re.compile(r"(?<![*\w])\*[^*\n]+\*(?!\*)|(?<![_\w])_[^_\n]+_(?!_)"), _fmt(italic=True)),
+            (
+                re.compile(r"(?<![*\w])\*[^*\n]+\*(?!\*)|(?<![_\w])_[^_\n]+_(?!_)"),
+                _fmt(italic=True),
+            ),
             (re.compile(r"`[^`\n]+`"), _fmt("text_secondary", background="hover")),
             (re.compile(r"!?\[[^\]\n]*\]\([^)\n]*\)"), _fmt("accent")),
-            (re.compile(r"(?:[A-Za-z][\w-]{0,30}::[ \t]*)?\[\[[^\]\n]+\]\]"), _fmt("accent", underline=True)),
+            (
+                re.compile(r"(?:[A-Za-z][\w-]{0,30}::[ \t]*)?\[\[[^\]\n]+\]\]"),
+                _fmt("accent", underline=True),
+            ),
             (re.compile(r"\{\{c\d+::.*?\}\}"), _fmt(bold=True, background="accent_subtle")),
             (re.compile(r"^\s*(?:Q|A|Question|Answer)\s*:", re.I), _fmt("accent", bold=True)),
             (re.compile(r"(?<![\w#&/])#[^\W\d_][\w/-]*"), _fmt("text_secondary", bold=True)),
@@ -89,7 +108,9 @@ class MarkdownEditor(QPlainTextEdit):
         self.setObjectName("BodyEdit")
         self.store_image = store_image
         self.setAccessibleName("Note text")
-        self.setPlaceholderText("Start writing… Use [[ to link a note, #tags, Q:/A: or {{c1::cloze}} for flashcards.")
+        self.setPlaceholderText(
+            "Start writing… Use [[ to link a note, #tags, Q:/A: or {{c1::cloze}} for flashcards."
+        )
         self.setTabChangesFocus(False)
         self.setLineWrapMode(QPlainTextEdit.LineWrapMode.WidgetWidth)
         self.setViewportMargins(0, 0, 0, 0)
@@ -124,7 +145,7 @@ class MarkdownEditor(QPlainTextEdit):
         start = block.rfind("[[")
         if start < 0 or "]]" in block[start:]:
             return None
-        prefix = block[start + 2:]
+        prefix = block[start + 2 :]
         return prefix if len(prefix) <= 80 and "\n" not in prefix else None
 
     def _maybe_complete(self) -> None:
@@ -144,13 +165,19 @@ class MarkdownEditor(QPlainTextEdit):
     def _insert_completion(self, title: str) -> None:
         prefix = self._link_prefix() or ""
         cursor = self.textCursor()
-        cursor.movePosition(QTextCursor.MoveOperation.Left, QTextCursor.MoveMode.KeepAnchor, len(prefix))
+        cursor.movePosition(
+            QTextCursor.MoveOperation.Left, QTextCursor.MoveMode.KeepAnchor, len(prefix)
+        )
         cursor.insertText(title + "]]")
         self.setTextCursor(cursor)
 
     def keyPressEvent(self, event) -> None:  # noqa: N802
         if self.completer.popup().isVisible() and event.key() in (
-                Qt.Key.Key_Enter, Qt.Key.Key_Return, Qt.Key.Key_Escape, Qt.Key.Key_Tab):
+            Qt.Key.Key_Enter,
+            Qt.Key.Key_Return,
+            Qt.Key.Key_Escape,
+            Qt.Key.Key_Tab,
+        ):
             event.ignore()
             return
         if event.matches(QKeySequence.StandardKey.Bold):
@@ -172,7 +199,9 @@ class MarkdownEditor(QPlainTextEdit):
             cursor.insertText("\n")
             return
         if not m.group(3).strip():  # empty item ends the list
-            cursor.movePosition(QTextCursor.MoveOperation.StartOfBlock, QTextCursor.MoveMode.KeepAnchor)
+            cursor.movePosition(
+                QTextCursor.MoveOperation.StartOfBlock, QTextCursor.MoveMode.KeepAnchor
+            )
             cursor.removeSelectedText()
             cursor.insertText("\n")
             return
@@ -201,7 +230,10 @@ class MarkdownEditor(QPlainTextEdit):
         while True:
             cursor.insertText(prefix)
             end += len(prefix)
-            if not cursor.movePosition(QTextCursor.MoveOperation.NextBlock) or cursor.position() > end:
+            if (
+                not cursor.movePosition(QTextCursor.MoveOperation.NextBlock)
+                or cursor.position() > end
+            ):
                 break
         cursor.endEditBlock()
 
@@ -216,7 +248,9 @@ class MarkdownEditor(QPlainTextEdit):
     # --- images -----------------------------------------------------------------
 
     def canInsertFromMimeData(self, source) -> bool:  # noqa: N802
-        return source.hasImage() or self._image_urls(source) or super().canInsertFromMimeData(source)
+        return (
+            source.hasImage() or self._image_urls(source) or super().canInsertFromMimeData(source)
+        )
 
     def insertFromMimeData(self, source) -> None:  # noqa: N802
         urls = self._image_urls(source)
@@ -238,8 +272,11 @@ class MarkdownEditor(QPlainTextEdit):
     def _image_urls(source) -> list[str]:
         if not source.hasUrls():
             return []
-        return [u.toLocalFile() for u in source.urls()
-                if u.isLocalFile() and u.toLocalFile().lower().endswith(_IMAGE_SUFFIXES)]
+        return [
+            u.toLocalFile()
+            for u in source.urls()
+            if u.isLocalFile() and u.toLocalFile().lower().endswith(_IMAGE_SUFFIXES)
+        ]
 
     def _insert_image_file(self, path: str) -> None:
         try:

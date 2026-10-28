@@ -9,7 +9,13 @@ from PySide6.QtCore import Qt, QUrl, Signal
 from PySide6.QtGui import QDesktopServices, QImage, QTextDocument
 from PySide6.QtWidgets import QTextBrowser
 
-from zettelapp.core.render import ASSET_SCHEME, NEW_NOTE_SCHEME, NOTE_SCHEME, NoteRenderer, new_note_title
+from zettelapp.core.render import (
+    ASSET_SCHEME,
+    NEW_NOTE_SCHEME,
+    NOTE_SCHEME,
+    NoteRenderer,
+    new_note_title,
+)
 from zettelapp.core.security import is_openable_url, is_valid_asset_name, is_valid_note_id
 from zettelapp.ui import theme
 
@@ -65,20 +71,22 @@ class NotePreview(QTextBrowser):
         # Only images from the vault's assets folder are ever loaded.
         if kind == QTextDocument.ResourceType.ImageResource.value:
             text = url.toString()
-            if text.startswith(ASSET_SCHEME) and is_valid_asset_name(text[len(ASSET_SCHEME):]):
-                path = self.asset_path(text[len(ASSET_SCHEME):])
+            if text.startswith(ASSET_SCHEME) and is_valid_asset_name(text[len(ASSET_SCHEME) :]):
+                path = self.asset_path(text[len(ASSET_SCHEME) :])
                 if path is not None:
                     image = QImage(str(path))
                     max_width = max(200, self.viewport().width() - 24)
                     if image.width() > max_width:
-                        image = image.scaledToWidth(max_width, Qt.TransformationMode.SmoothTransformation)
+                        image = image.scaledToWidth(
+                            max_width, Qt.TransformationMode.SmoothTransformation
+                        )
                     return image
         return None
 
     def _on_anchor(self, url: QUrl) -> None:
         href = url.toString()
-        if href.startswith(NOTE_SCHEME) and is_valid_note_id(href[len(NOTE_SCHEME):]):
-            self.noteRequested.emit(href[len(NOTE_SCHEME):])
+        if href.startswith(NOTE_SCHEME) and is_valid_note_id(href[len(NOTE_SCHEME) :]):
+            self.noteRequested.emit(href[len(NOTE_SCHEME) :])
         elif href.startswith(NEW_NOTE_SCHEME):
             title = new_note_title(href)
             if title:

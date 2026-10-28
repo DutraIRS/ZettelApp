@@ -4,13 +4,13 @@ import zipfile
 
 import pytest
 
+from tests.conftest import tiny_png
 from zettelapp.core import export as ex
 from zettelapp.core.graph import force_layout, subgraph
 from zettelapp.core.importer import import_path
 from zettelapp.core.render import NoteRenderer
 from zettelapp.core.security import UnsafeInputError
 from zettelapp.core.storage import Vault
-from tests.conftest import tiny_png
 
 
 def test_subgraph_depth(vault, sample):
@@ -21,7 +21,9 @@ def test_subgraph_depth(vault, sample):
 
 
 def test_layout_is_finite(vault, sample):
-    pos = force_layout([n.id for n in vault.all_notes()], [(l.src, l.dst) for l in vault.all_links()])
+    pos = force_layout(
+        [n.id for n in vault.all_notes()], [(l.src, l.dst) for l in vault.all_links()]
+    )
     assert len(pos) == 5
     assert all(abs(x) < 1e5 and abs(y) < 1e5 for x, y in pos.values())
 
@@ -74,7 +76,9 @@ def test_markdown_roundtrip(vault, sample, tmp_path):
 
 
 def test_html_export_is_script_free(vault, sample, tmp_path):
-    sample["d"].body = "<script>alert(1)</script> [x](javascript:alert(2)) ![img](https://evil.example/x.png)"
+    sample[
+        "d"
+    ].body = "<script>alert(1)</script> [x](javascript:alert(2)) ![img](https://evil.example/x.png)"
     vault.save_note(sample["d"])
     dest = tmp_path / "site.zip"
     ex.export(vault, "html", {n.id for n in vault.all_notes()}, dest)
@@ -102,8 +106,10 @@ def test_anki_package_contains_cards(vault, sample, tmp_path):
 
 def test_renderer_blocks_unsafe_content(vault, sample):
     r = NoteRenderer(vault.resolve_title, lambda i: vault.get_note(i).title)
-    out = r.render("<img src=x onerror=alert(1)> [a](javascript:alert(1)) [b](file:///C:/x) "
-                   "[[Forgetting curve]] [[Missing]] ![x](C:/secret.png) [ok](https://example.com)")
+    out = r.render(
+        "<img src=x onerror=alert(1)> [a](javascript:alert(1)) [b](file:///C:/x) "
+        "[[Forgetting curve]] [[Missing]] ![x](C:/secret.png) [ok](https://example.com)"
+    )
     assert "<img" not in out
     assert 'href="javascript' not in out and 'href="file' not in out
     assert f'href="zettel:{sample["b"].id}"' in out
@@ -123,7 +129,14 @@ def test_malicious_archives_are_rejected(vault, tmp_path):
     with pytest.raises(UnsafeInputError):
         import_path(vault, bomb)
     bad = tmp_path / "bad.json"
-    bad.write_text(json.dumps({"format": "zettelapp", "version": 1,
-                               "notes": [{"id": "../../x", "title": 5, "body": None, "tags": "notalist"}]}))
+    bad.write_text(
+        json.dumps(
+            {
+                "format": "zettelapp",
+                "version": 1,
+                "notes": [{"id": "../../x", "title": 5, "body": None, "tags": "notalist"}],
+            }
+        )
+    )
     result = import_path(vault, bad)
     assert result.notes == 1 and vault.all_notes()[0].title == ""

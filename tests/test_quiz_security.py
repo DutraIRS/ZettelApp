@@ -46,26 +46,36 @@ def test_quiz_modes(vault, sample):
     assert any(q.answer == "Retrieval practice" for q in typed)
     named = build_quiz("notes", notes, cards, seed=1)
     assert named and all(q.choices[q.correct] == q.note_title for q in named)
-    assert all("▁▁▁" in q.prompt or q.note_title.split()[0].lower() not in q.prompt.lower() for q in named)
+    assert all(
+        "▁▁▁" in q.prompt or q.note_title.split()[0].lower() not in q.prompt.lower() for q in named
+    )
 
 
 def test_wikilink_and_card_parsing():
     links = find_wikilinks("a [[One]] supports:: [[Two|2]] [[Three#Section]] `[[code]]`")
     assert [(l.target, l.link_type, l.alias) for l in links][:3] == [
-        ("One", None, None), ("Two", "supports", "2"), ("Three", None, None)]
-    cards = extract_inline_cards("Q: Multi\nline?\nA: Yes\nand more\n\n```\nQ: not a card\nA: no\n```")
+        ("One", None, None),
+        ("Two", "supports", "2"),
+        ("Three", None, None),
+    ]
+    cards = extract_inline_cards(
+        "Q: Multi\nline?\nA: Yes\nand more\n\n```\nQ: not a card\nA: no\n```"
+    )
     assert [(c.front, c.back) for c in cards] == [("Multi\nline?", "Yes\nand more")]
 
 
-@pytest.mark.parametrize("url,expected", [
-    ("example.com", "https://example.com"),
-    ("https://example.com/a?b=c", "https://example.com/a?b=c"),
-    ("me@example.com", "mailto:me@example.com"),
-    ("javascript:alert(1)", None),
-    ("file:///C:/Windows", None),
-    ("http://", None),
-    ("ms-settings:display", None),
-])
+@pytest.mark.parametrize(
+    "url,expected",
+    [
+        ("example.com", "https://example.com"),
+        ("https://example.com/a?b=c", "https://example.com/a?b=c"),
+        ("me@example.com", "mailto:me@example.com"),
+        ("javascript:alert(1)", None),
+        ("file:///C:/Windows", None),
+        ("http://", None),
+        ("ms-settings:display", None),
+    ],
+)
 def test_url_normalization(url, expected):
     assert normalize_web_url(url) == expected
 

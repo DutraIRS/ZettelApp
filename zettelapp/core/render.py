@@ -17,7 +17,12 @@ from xml.etree import ElementTree as ET
 from markdown_it import MarkdownIt
 
 from zettelapp.core.models import LinkType, mindmap_nodes
-from zettelapp.core.security import is_safe_web_url, is_valid_asset_name, is_valid_note_id, is_zotero_url
+from zettelapp.core.security import (
+    is_safe_web_url,
+    is_valid_asset_name,
+    is_valid_note_id,
+    is_zotero_url,
+)
 from zettelapp.core.textutil import CLOZE_RE, WIKILINK_RE
 
 NOTE_SCHEME = "zettel:"
@@ -41,14 +46,16 @@ class NoteRenderer:
     the in-app preview (zettel:/asset: URLs) and exported web pages.
     """
 
-    def __init__(self,
-                 resolve: Callable[[str], str | None],
-                 title_of: Callable[[str], str] = lambda note_id: note_id,
-                 note_href: Callable[[str], str | None] = lambda note_id: NOTE_SCHEME + note_id,
-                 asset_href: Callable[[str], str | None] = lambda name: ASSET_SCHEME + name,
-                 link_types: dict[str, LinkType] | None = None,
-                 allow_new_note_links: bool = True,
-                 keep_cloze: bool = False):
+    def __init__(
+        self,
+        resolve: Callable[[str], str | None],
+        title_of: Callable[[str], str] = lambda note_id: note_id,
+        note_href: Callable[[str], str | None] = lambda note_id: NOTE_SCHEME + note_id,
+        asset_href: Callable[[str], str | None] = lambda name: ASSET_SCHEME + name,
+        link_types: dict[str, LinkType] | None = None,
+        allow_new_note_links: bool = True,
+        keep_cloze: bool = False,
+    ):
         self.resolve = resolve
         self.keep_cloze = keep_cloze
         self.title_of = title_of
@@ -91,7 +98,7 @@ class NoteRenderer:
 
     def _target_href(self, href: str) -> str | None:
         if href.startswith(NOTE_SCHEME):
-            note_id = href[len(NOTE_SCHEME):]
+            note_id = href[len(NOTE_SCHEME) :]
             return self.note_href(note_id) if is_valid_note_id(note_id) else None
         if href.startswith(NEW_NOTE_SCHEME):
             return href if self.allow_new_note_links else None
@@ -121,7 +128,7 @@ class NoteRenderer:
         token = tokens[idx]
         alt = renderer.renderInlineAsText(token.children or [], options, env)
         src = token.attrGet("src") or ""
-        name = src[len(ASSET_SCHEME):] if src.startswith(ASSET_SCHEME) else ""
+        name = src[len(ASSET_SCHEME) :] if src.startswith(ASSET_SCHEME) else ""
         url = self.asset_href(name) if is_valid_asset_name(name) else None
         if url is None:
             return f'<span class="missing-image">[{html.escape(alt or "image")}]</span>'
@@ -134,10 +141,11 @@ class NoteRenderer:
 def new_note_title(href: str) -> str | None:
     if not href.startswith(NEW_NOTE_SCHEME):
         return None
-    return unquote(href[len(NEW_NOTE_SCHEME):])[:200] or None
+    return unquote(href[len(NEW_NOTE_SCHEME) :])[:200] or None
 
 
 # --- mind maps ------------------------------------------------------------
+
 
 def mindmap_to_markdown(root: dict) -> str:
     lines = []
@@ -156,15 +164,20 @@ def mindmap_to_html(root: dict, note_href: Callable[[str], str | None] = lambda 
         label = f'<a href="{html.escape(href, quote=True)}">{text}</a>' if href else text
         children = "".join(render(c) for c in node.get("children", []))
         return f"<li>{label}" + (f"<ul>{children}</ul>" if children else "") + "</li>"
+
     return f'<ul class="mindmap">{render(root)}</ul>'
 
 
 def mindmap_to_freemind(root: dict) -> str:
     """FreeMind 1.0 (.mm) XML, readable by FreeMind, Freeplane, XMind and others."""
+
     def build(parent: ET.Element, node: dict) -> None:
-        el = ET.SubElement(parent, "node", TEXT=node.get("text") or "", ID="ID_" + node.get("id", "x"))
+        el = ET.SubElement(
+            parent, "node", TEXT=node.get("text") or "", ID="ID_" + node.get("id", "x")
+        )
         for child in node.get("children", []):
             build(el, child)
+
     doc = ET.Element("map", version="1.0.1")
     build(doc, root)
     return ET.tostring(doc, encoding="unicode")

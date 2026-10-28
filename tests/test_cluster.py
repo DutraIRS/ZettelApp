@@ -46,8 +46,13 @@ def test_cluster_notes_names_clusters():
     for t, words in topics.items():
         w = words.split()
         for i in range(6):
-            notes.append(Note(id=f"2026010100{len(notes):04d}", title=f"{t} {i}",
-                              body=" ".join(w[i % len(w):] + w[: i % len(w)])))
+            notes.append(
+                Note(
+                    id=f"2026010100{len(notes):04d}",
+                    title=f"{t} {i}",
+                    body=" ".join(w[i % len(w) :] + w[: i % len(w)]),
+                )
+            )
     result = cluster_notes(notes, "kmeans")
     assert result.k == 3
     by_cluster = {}
@@ -65,7 +70,9 @@ def test_group_layout_pulls_groups_together():
     pos = force_layout(nodes, [], groups=groups, group_strength=1.0, seed=3)
     xy = np.array([pos[n] for n in nodes])
     g = np.array([groups[n] for n in nodes])
-    within = np.mean([np.linalg.norm(xy[g == c] - xy[g == c].mean(0), axis=1).mean() for c in (0, 1)])
+    within = np.mean(
+        [np.linalg.norm(xy[g == c] - xy[g == c].mean(0), axis=1).mean() for c in (0, 1)]
+    )
     between = np.linalg.norm(xy[g == 0].mean(0) - xy[g == 1].mean(0))
     assert between > within * 0.5
     pos3 = force_layout(nodes, [("0", "1")], dims=3)

@@ -79,20 +79,38 @@ class NoteDelegate(QStyledItemDelegate):
         date = row["date"]
         date_font = theme.ui_font(8.5)
         date_width = QFontMetrics(date_font).horizontalAdvance(date)
-        title = metrics.elidedText(row["title"], Qt.TextElideMode.ElideRight, int(inner.width() - date_width - 10))
-        painter.drawText(QRectF(inner.left(), inner.top(), inner.width(), metrics.height()),
-                         Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter, title)
+        title = metrics.elidedText(
+            row["title"], Qt.TextElideMode.ElideRight, int(inner.width() - date_width - 10)
+        )
+        painter.drawText(
+            QRectF(inner.left(), inner.top(), inner.width(), metrics.height()),
+            Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
+            title,
+        )
         painter.setFont(date_font)
         painter.setPen(t.q("text_muted"))
-        painter.drawText(QRectF(inner.left(), inner.top(), inner.width(), metrics.height()),
-                         Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter, date)
+        painter.drawText(
+            QRectF(inner.left(), inner.top(), inner.width(), metrics.height()),
+            Qt.AlignmentFlag.AlignRight | Qt.AlignmentFlag.AlignVCenter,
+            date,
+        )
         body_font = theme.ui_font(9)
         painter.setFont(body_font)
         painter.setPen(t.q("text_secondary"))
         body_metrics = QFontMetrics(body_font)
-        text = body_metrics.elidedText(row["snippet"] or "No text", Qt.TextElideMode.ElideRight, int(inner.width()))
-        painter.drawText(QRectF(inner.left(), inner.top() + metrics.height() + 3, inner.width(), body_metrics.height()),
-                         Qt.AlignmentFlag.AlignLeft, text)
+        text = body_metrics.elidedText(
+            row["snippet"] or "No text", Qt.TextElideMode.ElideRight, int(inner.width())
+        )
+        painter.drawText(
+            QRectF(
+                inner.left(),
+                inner.top() + metrics.height() + 3,
+                inner.width(),
+                body_metrics.height(),
+            ),
+            Qt.AlignmentFlag.AlignLeft,
+            text,
+        )
         extras = []
         if row["tags"]:
             extras.append("  ".join("#" + tag for tag in row["tags"][:4]))
@@ -102,9 +120,19 @@ class NoteDelegate(QStyledItemDelegate):
             extras.append(f"{row['cards']} card{'s' if row['cards'] != 1 else ''}")
         painter.setFont(date_font)
         painter.setPen(t.q("text_muted"))
-        foot = QFontMetrics(date_font).elidedText("  ·  ".join(extras), Qt.TextElideMode.ElideRight, int(inner.width()))
-        painter.drawText(QRectF(inner.left(), inner.bottom() - QFontMetrics(date_font).height(), inner.width(),
-                                QFontMetrics(date_font).height()), Qt.AlignmentFlag.AlignLeft, foot)
+        foot = QFontMetrics(date_font).elidedText(
+            "  ·  ".join(extras), Qt.TextElideMode.ElideRight, int(inner.width())
+        )
+        painter.drawText(
+            QRectF(
+                inner.left(),
+                inner.bottom() - QFontMetrics(date_font).height(),
+                inner.width(),
+                QFontMetrics(date_font).height(),
+            ),
+            Qt.AlignmentFlag.AlignLeft,
+            foot,
+        )
         painter.restore()
 
 
@@ -159,8 +187,12 @@ class NoteListPanel(QWidget):
         self.tag_filter.setAccessibleName("Filter by tag")
         self.sort = QComboBox()
         self.sort.setAccessibleName("Sort notes")
-        for text, key in (("Last edited", "modified"), ("Created", "created"), ("Title", "title"),
-                          ("Most linked", "links")):
+        for text, key in (
+            ("Last edited", "modified"),
+            ("Created", "created"),
+            ("Title", "title"),
+            ("Most linked", "links"),
+        ):
             self.sort.addItem(text, key)
         filters.addWidget(self.tag_filter, 1)
         filters.addWidget(self.sort)
@@ -178,11 +210,17 @@ class NoteListPanel(QWidget):
         self.view.selectionModel().currentChanged.connect(self._current_changed)
         layout.addWidget(self.view, 1)
         foot = QHBoxLayout()
-        self.trash_button = tool_button("trash", "Show the Trash", self.toggle_trash, checkable=True, text="Trash")
+        self.trash_button = tool_button(
+            "trash", "Show the Trash", self.toggle_trash, checkable=True, text="Trash"
+        )
         foot.addWidget(self.trash_button)
         foot.addStretch(1)
-        self.empty_trash = tool_button("delete", "Permanently delete everything in the Trash",
-                                       self.emptyTrashRequested.emit, text="Empty Trash")
+        self.empty_trash = tool_button(
+            "delete",
+            "Permanently delete everything in the Trash",
+            self.emptyTrashRequested.emit,
+            text="Empty Trash",
+        )
         self.empty_trash.setVisible(False)
         foot.addWidget(self.empty_trash)
         layout.addLayout(foot)
@@ -223,9 +261,15 @@ class NoteListPanel(QWidget):
         tag = self.tag_filter.currentData()
         if tag:
             query += f" tag:{tag}"
-        notes = {n.id: n for n in self.vault.all_notes(include_deleted=True) if n.deleted == self.trash_mode}
+        notes = {
+            n.id: n
+            for n in self.vault.all_notes(include_deleted=True)
+            if n.deleted == self.trash_mode
+        }
         if query.strip():
-            ids = [i for i in self.vault.search(query, include_deleted=self.trash_mode) if i in notes]
+            ids = [
+                i for i in self.vault.search(query, include_deleted=self.trash_mode) if i in notes
+            ]
         else:
             ids = list(notes)
         degree: dict[str, int] = {}
@@ -236,15 +280,24 @@ class NoteListPanel(QWidget):
         key = self.sort.currentData()
         if not query.strip() or key != "modified":
             sorters = {
-                "modified": lambda i: notes[i].modified, "created": lambda i: notes[i].created,
-                "title": lambda i: fold(notes[i].display_title), "links": lambda i: degree.get(i, 0),
+                "modified": lambda i: notes[i].modified,
+                "created": lambda i: notes[i].created,
+                "title": lambda i: fold(notes[i].display_title),
+                "links": lambda i: degree.get(i, 0),
             }
             ids.sort(key=sorters[key], reverse=key in ("modified", "created", "links"))
-        rows = [{
-            "id": i, "title": notes[i].display_title, "snippet": snippet(notes[i].body, 160),
-            "date": _short_date(notes[i].modified), "tags": notes[i].tags, "links": degree.get(i, 0),
-            "cards": cards.get(i, 0),
-        } for i in ids]
+        rows = [
+            {
+                "id": i,
+                "title": notes[i].display_title,
+                "snippet": snippet(notes[i].body, 160),
+                "date": _short_date(notes[i].modified),
+                "tags": notes[i].tags,
+                "links": degree.get(i, 0),
+                "cards": cards.get(i, 0),
+            }
+            for i in ids
+        ]
         self.model.set_rows(rows)
         total = len(notes)
         self.count.setText(f"{len(rows)} of {total}" if len(rows) != total else f"{total}")
@@ -281,15 +334,29 @@ class NoteListPanel(QWidget):
         note_id = index.data(Qt.ItemDataRole.UserRole)["id"]
         menu = QMenu(self)
         if self.trash_mode:
-            menu.addAction(icons.icon("restore"), "Restore", lambda: self.restoreRequested.emit(note_id))
-            menu.addAction(icons.icon("delete"), "Delete permanently…", lambda: self.purgeRequested.emit(note_id))
+            menu.addAction(
+                icons.icon("restore"), "Restore", lambda: self.restoreRequested.emit(note_id)
+            )
+            menu.addAction(
+                icons.icon("delete"),
+                "Delete permanently…",
+                lambda: self.purgeRequested.emit(note_id),
+            )
         else:
             menu.addAction(icons.icon("open"), "Open", lambda: self.noteSelected.emit(note_id))
             link_menu = menu.addMenu(icons.icon("link"), "Link from the open note as")
             for lt in self.link_types:
                 link_menu.addAction(lt.label, lambda t=lt.id: self.linkToCurrent.emit(note_id, t))
-            menu.addAction(icons.icon("graph"), "Show in graph", lambda: self.showInGraph.emit(note_id))
-            menu.addAction(icons.icon("export"), "Export with linked notes…", lambda: self.exportFrom.emit(note_id))
+            menu.addAction(
+                icons.icon("graph"), "Show in graph", lambda: self.showInGraph.emit(note_id)
+            )
+            menu.addAction(
+                icons.icon("export"),
+                "Export with linked notes…",
+                lambda: self.exportFrom.emit(note_id),
+            )
             menu.addSeparator()
-            menu.addAction(icons.icon("delete"), "Move to Trash", lambda: self.trashRequested.emit(note_id))
+            menu.addAction(
+                icons.icon("delete"), "Move to Trash", lambda: self.trashRequested.emit(note_id)
+            )
         menu.exec(self.view.viewport().mapToGlobal(pos))

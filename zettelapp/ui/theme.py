@@ -15,8 +15,26 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QFont, QGuiApplication, QPalette
 from PySide6.QtWidgets import QApplication
 
-CATEGORICAL_LIGHT = ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#6250d6", "#e34948"]
-CATEGORICAL_DARK = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300", "#9085e9", "#e66767"]
+CATEGORICAL_LIGHT = [
+    "#2a78d6",
+    "#eb6834",
+    "#1baf7a",
+    "#eda100",
+    "#e87ba4",
+    "#008300",
+    "#6250d6",
+    "#e34948",
+]
+CATEGORICAL_DARK = [
+    "#3987e5",
+    "#d95926",
+    "#199e70",
+    "#c98500",
+    "#d55181",
+    "#008300",
+    "#9085e9",
+    "#e66767",
+]
 _DARK_STEP = {light.lower(): dark for light, dark in zip(CATEGORICAL_LIGHT, CATEGORICAL_DARK)}
 
 UI_FONTS = ["Segoe UI Variable Text", "Segoe UI", "Arial"]
@@ -66,13 +84,15 @@ def _windows_accent(dark: bool) -> str | None:
     if sys.platform != "win32":
         return None
     import winreg
+
     try:
-        with winreg.OpenKey(winreg.HKEY_CURRENT_USER,
-                            r"Software\Microsoft\Windows\CurrentVersion\Explorer\Accent") as key:
+        with winreg.OpenKey(
+            winreg.HKEY_CURRENT_USER, r"Software\Microsoft\Windows\CurrentVersion\Explorer\Accent"
+        ) as key:
             data, _ = winreg.QueryValueEx(key, "AccentPalette")
         # Eight RGBA entries from lightest to darkest; Windows uses entry 1 on
         # dark backgrounds and entry 4 on light ones.
-        r, g, b = data[4 * (1 if dark else 4): 4 * (1 if dark else 4) + 3]
+        r, g, b = data[4 * (1 if dark else 4) : 4 * (1 if dark else 4) + 3]
         return f"#{r:02x}{g:02x}{b:02x}"
     except (OSError, ValueError, TypeError):
         return None
@@ -92,21 +112,49 @@ def build_theme(mode: str = "system") -> Theme:
     a = QColor(accent)
     if dark:
         return Theme(
-            dark=True, window="#202020", surface="#2b2b2b", surface_alt="#272727", sidebar="#1c1c1c",
-            hover="#12ffffff", pressed="#0cffffff", border="#3a3a3a", border_strong="#4d4d4d",
-            text="#f3f3f3", text_secondary="#c5c5c5", text_muted="#9a9a9a",
-            accent=accent, accent_hover=a.lighter(112).name(), on_accent="#000000",
+            dark=True,
+            window="#202020",
+            surface="#2b2b2b",
+            surface_alt="#272727",
+            sidebar="#1c1c1c",
+            hover="#12ffffff",
+            pressed="#0cffffff",
+            border="#3a3a3a",
+            border_strong="#4d4d4d",
+            text="#f3f3f3",
+            text_secondary="#c5c5c5",
+            text_muted="#9a9a9a",
+            accent=accent,
+            accent_hover=a.lighter(112).name(),
+            on_accent="#000000",
             accent_subtle=f"#{0x33:02x}{a.red():02x}{a.green():02x}{a.blue():02x}",
-            grid="#383835", axis="#4a4a47", danger="#ff99a4", success="#6ccb5f",
+            grid="#383835",
+            axis="#4a4a47",
+            danger="#ff99a4",
+            success="#6ccb5f",
             categorical=CATEGORICAL_DARK,
         )
     return Theme(
-        dark=False, window="#f3f3f3", surface="#ffffff", surface_alt="#fafafa", sidebar="#ebebeb",
-        hover="#0a000000", pressed="#06000000", border="#e5e5e5", border_strong="#cfcfcf",
-        text="#1b1b1b", text_secondary="#5d5d5d", text_muted="#8a8a8a",
-        accent=accent, accent_hover=a.lighter(115).name(), on_accent="#ffffff",
+        dark=False,
+        window="#f3f3f3",
+        surface="#ffffff",
+        surface_alt="#fafafa",
+        sidebar="#ebebeb",
+        hover="#0a000000",
+        pressed="#06000000",
+        border="#e5e5e5",
+        border_strong="#cfcfcf",
+        text="#1b1b1b",
+        text_secondary="#5d5d5d",
+        text_muted="#8a8a8a",
+        accent=accent,
+        accent_hover=a.lighter(115).name(),
+        on_accent="#ffffff",
         accent_subtle=f"#{0x24:02x}{a.red():02x}{a.green():02x}{a.blue():02x}",
-        grid="#e1e0d9", axis="#c3c2b7", danger="#c42b1c", success="#0f7b0f",
+        grid="#e1e0d9",
+        axis="#c3c2b7",
+        danger="#c42b1c",
+        success="#0f7b0f",
         categorical=CATEGORICAL_LIGHT,
     )
 
@@ -131,10 +179,15 @@ def _indicator_images(t: Theme) -> str:
     from zettelapp.paths import local_data_dir
     from zettelapp.ui import icons
 
-    folder = local_data_dir() / "Cache" / f"theme-{'dark' if t.dark else 'light'}-{t.accent.lstrip('#')}"
+    folder = (
+        local_data_dir() / "Cache" / f"theme-{'dark' if t.dark else 'light'}-{t.accent.lstrip('#')}"
+    )
     folder.mkdir(parents=True, exist_ok=True)
-    for name, glyph, color in (("check", "check", t.on_accent), ("down", "chevron_down", t.text_secondary),
-                               ("up", "chevron_up", t.text_secondary)):
+    for name, glyph, color in (
+        ("check", "check", t.on_accent),
+        ("down", "chevron_down", t.text_secondary),
+        ("up", "chevron_up", t.text_secondary),
+    ):
         path = folder / f"{name}.png"
         if not path.exists():
             icons.icon(glyph, color, 16).pixmap(32, 32).save(str(path), "PNG")
@@ -149,8 +202,12 @@ def _css(color: str) -> str:
 
 def stylesheet(t: Theme) -> str:
     images = _indicator_images(t)
-    t = Theme(**{k: (_css(v) if isinstance(v, str) and k in ("hover", "pressed", "accent_subtle") else v)
-                 for k, v in t.__dict__.items()})
+    t = Theme(
+        **{
+            k: (_css(v) if isinstance(v, str) and k in ("hover", "pressed", "accent_subtle") else v)
+            for k, v in t.__dict__.items()
+        }
+    )
     return f"""
 QCheckBox::indicator, QGroupBox::indicator, QTableWidget::indicator {{ width: 16px; height: 16px;
     border: 1px solid {t.border_strong}; border-radius: 4px; background: {t.surface}; }}
@@ -273,21 +330,35 @@ def apply_theme(app: QApplication, mode: str = "system", font_size: float = 10.0
     _current = t
     try:
         QGuiApplication.styleHints().setColorScheme(
-            Qt.ColorScheme.Dark if t.dark else Qt.ColorScheme.Light if mode != "system" else Qt.ColorScheme.Unknown)
+            Qt.ColorScheme.Dark
+            if t.dark
+            else Qt.ColorScheme.Light
+            if mode != "system"
+            else Qt.ColorScheme.Unknown
+        )
     except AttributeError:  # pragma: no cover - Qt < 6.8
         pass
     app.setStyle("Fusion")
     pal = QPalette()
     roles = {
-        QPalette.ColorRole.Window: t.window, QPalette.ColorRole.WindowText: t.text,
-        QPalette.ColorRole.Base: t.surface, QPalette.ColorRole.AlternateBase: t.surface_alt,
-        QPalette.ColorRole.Text: t.text, QPalette.ColorRole.Button: t.surface,
-        QPalette.ColorRole.ButtonText: t.text, QPalette.ColorRole.Highlight: t.accent,
-        QPalette.ColorRole.HighlightedText: t.on_accent, QPalette.ColorRole.ToolTipBase: t.surface,
-        QPalette.ColorRole.ToolTipText: t.text, QPalette.ColorRole.PlaceholderText: t.text_muted,
-        QPalette.ColorRole.Link: t.accent, QPalette.ColorRole.Mid: t.border_strong,
-        QPalette.ColorRole.Midlight: t.border, QPalette.ColorRole.Light: t.surface,
-        QPalette.ColorRole.Dark: t.border_strong, QPalette.ColorRole.Shadow: "#000000",
+        QPalette.ColorRole.Window: t.window,
+        QPalette.ColorRole.WindowText: t.text,
+        QPalette.ColorRole.Base: t.surface,
+        QPalette.ColorRole.AlternateBase: t.surface_alt,
+        QPalette.ColorRole.Text: t.text,
+        QPalette.ColorRole.Button: t.surface,
+        QPalette.ColorRole.ButtonText: t.text,
+        QPalette.ColorRole.Highlight: t.accent,
+        QPalette.ColorRole.HighlightedText: t.on_accent,
+        QPalette.ColorRole.ToolTipBase: t.surface,
+        QPalette.ColorRole.ToolTipText: t.text,
+        QPalette.ColorRole.PlaceholderText: t.text_muted,
+        QPalette.ColorRole.Link: t.accent,
+        QPalette.ColorRole.Mid: t.border_strong,
+        QPalette.ColorRole.Midlight: t.border,
+        QPalette.ColorRole.Light: t.surface,
+        QPalette.ColorRole.Dark: t.border_strong,
+        QPalette.ColorRole.Shadow: "#000000",
     }
     for role, color in roles.items():
         pal.setColor(role, QColor(color))
@@ -300,5 +371,6 @@ def apply_theme(app: QApplication, mode: str = "system", font_size: float = 10.0
     app.setFont(ui_font(font_size))
     app.setStyleSheet(stylesheet(t))
     from zettelapp.ui import icons
+
     icons.clear_cache()
     return t

@@ -59,21 +59,38 @@ class ProviderInfo:
 
 PROVIDERS: dict[str, ProviderInfo] = {
     "anthropic": ProviderInfo(
-        "anthropic", "Anthropic Claude", ANTHROPIC, "https://api.anthropic.com", "claude-opus-5-5",
+        "anthropic",
+        "Anthropic Claude",
+        ANTHROPIC,
+        "https://api.anthropic.com",
+        "claude-opus-5-5",
         ("claude-opus-5-5", "claude-sonnet-5-5", "claude-haiku-5-5"),
-        "https://platform.claude.com/settings/keys"),
+        "https://platform.claude.com/settings/keys",
+    ),
     "openai": ProviderInfo(
-        "openai", "OpenAI", OPENAI_COMPATIBLE, "https://api.openai.com/v1", "gpt-6.1-sol",
+        "openai",
+        "OpenAI",
+        OPENAI_COMPATIBLE,
+        "https://api.openai.com/v1",
+        "gpt-6.1-sol",
         ("gpt-6.1-sol", "gpt-6-astra", "gpt-6-luna"),
-        "https://platform.openai.com/api-keys"),
+        "https://platform.openai.com/api-keys",
+    ),
     "zai": ProviderInfo(
-        "zai", "Z.ai (GLM)", OPENAI_COMPATIBLE, "https://api.z.ai/api/paas/v4", "glm-5.3",
+        "zai",
+        "Z.ai (GLM)",
+        OPENAI_COMPATIBLE,
+        "https://api.z.ai/api/paas/v4",
+        "glm-5.3",
         ("glm-5.3", "glm-5.3-flash", "glm-4.7-flash"),
-        "https://docs.z.ai/api-reference/introduction"),
+        "https://docs.z.ai/api-reference/introduction",
+    ),
 }
 
 # Models that accept Anthropic's server-side refusal fallback ("fallbacks": "default").
-_FALLBACK_MODELS = frozenset({"claude-opus-5-5", "claude-opus-5", "claude-sonnet-5-5", "claude-fable-5-1"})
+_FALLBACK_MODELS = frozenset(
+    {"claude-opus-5-5", "claude-opus-5", "claude-sonnet-5-5", "claude-fable-5-1"}
+)
 _LOCAL_HOSTS = frozenset({"localhost", "127.0.0.1", "::1"})
 
 
@@ -90,7 +107,9 @@ def validate_base_url(url: str) -> str:
         raise LLMError("The API address is not a valid URL.")
     if parts.scheme == "https" or (parts.scheme == "http" and host in _LOCAL_HOSTS):
         return url
-    raise LLMError("The API address must use https:// (plain http:// is allowed only for localhost).")
+    raise LLMError(
+        "The API address must use https:// (plain http:// is allowed only for localhost)."
+    )
 
 
 @dataclass
@@ -120,6 +139,7 @@ class LLMSettings:
 
 # --- retrieval and prompting --------------------------------------------------
 
+
 @dataclass
 class ContextNote:
     id: str
@@ -128,8 +148,9 @@ class ContextNote:
     body: str
 
 
-def retrieve_context(notes: list[Note], question: str, limit: int,
-                     focus_ids: Iterable[str] = ()) -> list[ContextNote]:
+def retrieve_context(
+    notes: list[Note], question: str, limit: int, focus_ids: Iterable[str] = ()
+) -> list[ContextNote]:
     """The notes to send with *question*: *focus_ids* first, then the best matches.
 
     The total size is capped at MAX_CONTEXT_CHARS; a note cut to fit ends with
@@ -141,7 +162,9 @@ def retrieve_context(notes: list[Note], question: str, limit: int,
     chosen = [i for i in dict.fromkeys(focus_ids) if i in by_id]
     wanted = max(int(limit), len(chosen))
     if len(chosen) < wanted and live:
-        index = SemanticIndex({n.id: tokenize(n.title) * 2 + tokenize(n.body) + list(n.tags) for n in live})
+        index = SemanticIndex(
+            {n.id: tokenize(n.title) * 2 + tokenize(n.body) + list(n.tags) for n in live}
+        )
         query = index.vectorize(tokenize(question))
         scores = index.cosine_all(query)
         lsa = index.lsa_all(query)
@@ -193,8 +216,10 @@ def _neutralize(text: str) -> str:
 def build_prompt(question: str, notes: list[ContextNote]) -> tuple[str, str]:
     parts = ["<notes>"]
     for n in notes:
-        attrs = (f'id="{html.escape(n.id, quote=True)}" title="{html.escape(n.title, quote=True)}" '
-                 f'tags="{html.escape(", ".join(n.tags), quote=True)}"')
+        attrs = (
+            f'id="{html.escape(n.id, quote=True)}" title="{html.escape(n.title, quote=True)}" '
+            f'tags="{html.escape(", ".join(n.tags), quote=True)}"'
+        )
         parts.append(f"<note {attrs}>\n{_neutralize(n.body)}\n</note>")
     if not notes:
         parts.append("(No matching notes were found.)")
@@ -204,6 +229,7 @@ def build_prompt(question: str, notes: list[ContextNote]) -> tuple[str, str]:
 
 
 # --- adapters -----------------------------------------------------------------
+
 
 def _scrub(message: str, api_key: str | None) -> str:
     message = " ".join(str(message).split())[:500]
@@ -232,24 +258,34 @@ class AnthropicAdapter:
         import anthropic
 
         if isinstance(exc, anthropic.AuthenticationError):
-            return LLMError("Anthropic rejected the API key. Check it in Tools ▸ Options ▸ AI assistant.")
+            return LLMError(
+                "Anthropic rejected the API key. Check it in Tools ▸ Options ▸ AI assistant."
+            )
         if isinstance(exc, anthropic.PermissionDeniedError):
             return LLMError("This API key is not allowed to use the selected model.")
         if isinstance(exc, anthropic.NotFoundError):
-            return LLMError("The selected model was not found. Choose another model in Tools ▸ Options ▸ AI assistant.")
+            return LLMError(
+                "The selected model was not found. Choose another model in Tools ▸ Options ▸ AI assistant."
+            )
         if isinstance(exc, anthropic.RateLimitError):
             return LLMError("Rate limit or usage limit reached. Wait a moment and try again.")
         if isinstance(exc, anthropic.APIStatusError):
             if exc.status_code >= 500:
-                return LLMError(f"Anthropic is having trouble right now (error {exc.status_code}). Try again later.")
-            return LLMError(f"Anthropic returned an error: {_scrub(getattr(exc, 'message', exc), api_key)}")
+                return LLMError(
+                    f"Anthropic is having trouble right now (error {exc.status_code}). Try again later."
+                )
+            return LLMError(
+                f"Anthropic returned an error: {_scrub(getattr(exc, 'message', exc), api_key)}"
+            )
         if isinstance(exc, anthropic.APITimeoutError):
             return LLMError("The request to Anthropic timed out. Try again.")
         if isinstance(exc, anthropic.APIConnectionError):
             return LLMError("Could not reach Anthropic. Check your internet connection.")
         return LLMError(_scrub(exc, api_key))
 
-    def stream(self, settings: LLMSettings, api_key: str | None, system: str, user: str) -> Iterator[str]:
+    def stream(
+        self, settings: LLMSettings, api_key: str | None, system: str, user: str
+    ) -> Iterator[str]:
         import anthropic
 
         client = self._client(settings, api_key)
@@ -267,8 +303,7 @@ class AnthropicAdapter:
             request["fallbacks"] = "default"
         try:
             with client.beta.messages.stream(**request) as stream:
-                for text in stream.text_stream:
-                    yield text
+                yield from stream.text_stream
                 final = stream.get_final_message()
         except anthropic.APIError as exc:
             raise self._translate(exc, api_key) from None
@@ -307,7 +342,9 @@ def parse_sse(lines: Iterable[bytes]) -> Iterator[str]:
         if not isinstance(event, dict):
             continue
         if isinstance(event.get("error"), dict):
-            raise LLMError(f"The provider returned an error: {_scrub(event['error'].get('message', ''), None)}")
+            raise LLMError(
+                f"The provider returned an error: {_scrub(event['error'].get('message', ''), None)}"
+            )
         for choice in (event.get("choices") or [])[:1]:
             if not isinstance(choice, dict):
                 continue
@@ -325,19 +362,39 @@ def parse_sse(lines: Iterable[bytes]) -> Iterator[str]:
 class OpenAICompatibleAdapter:
     """Any endpoint that implements OpenAI's /chat/completions (OpenAI, Z.ai, local servers)."""
 
-    def _request(self, settings: LLMSettings, api_key: str | None, path: str,
-                 body: dict | None = None) -> urllib.request.Request:
+    def _request(
+        self, settings: LLMSettings, api_key: str | None, path: str, body: dict | None = None
+    ) -> urllib.request.Request:
         info = settings.info
-        if info.requires_key and not api_key and urlsplit(settings.effective_base_url()).hostname not in _LOCAL_HOSTS:
-            raise LLMError(f"Add your {info.label} API key in Tools ▸ Options ▸ AI assistant first.")
-        headers = {"Content-Type": "application/json", "Accept": "application/json, text/event-stream"}
+        if (
+            info.requires_key
+            and not api_key
+            and urlsplit(settings.effective_base_url()).hostname not in _LOCAL_HOSTS
+        ):
+            raise LLMError(
+                f"Add your {info.label} API key in Tools ▸ Options ▸ AI assistant first."
+            )
+        headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream",
+        }
         if api_key:
             headers["Authorization"] = f"Bearer {api_key}"
         data = json.dumps(body).encode("utf-8") if body is not None else None
-        return urllib.request.Request(settings.effective_base_url() + path, data=data, headers=headers,
-                                      method="POST" if data is not None else "GET")
+        return urllib.request.Request(
+            settings.effective_base_url() + path,
+            data=data,
+            headers=headers,
+            method="POST" if data is not None else "GET",
+        )
 
-    def _open(self, settings: LLMSettings, api_key: str | None, request: urllib.request.Request, timeout: float):
+    def _open(
+        self,
+        settings: LLMSettings,
+        api_key: str | None,
+        request: urllib.request.Request,
+        timeout: float,
+    ):
         label = settings.info.label
         try:
             return urllib.request.urlopen(request, timeout=timeout)
@@ -356,18 +413,32 @@ class OpenAICompatibleAdapter:
                 429: "Rate limit or quota reached. Wait a moment and try again.",
             }
             message = messages.get(exc.code) or (
-                f"{label} is having trouble right now (error {exc.code}). Try again later." if exc.code >= 500
-                else f"{label} returned an error ({exc.code}): {_scrub(detail, api_key)}")
+                f"{label} is having trouble right now (error {exc.code}). Try again later."
+                if exc.code >= 500
+                else f"{label} returned an error ({exc.code}): {_scrub(detail, api_key)}"
+            )
             raise LLMError(message) from None
         except (urllib.error.URLError, OSError):
-            raise LLMError(f"Could not reach {label}. Check your internet connection and the API address.") from None
+            raise LLMError(
+                f"Could not reach {label}. Check your internet connection and the API address."
+            ) from None
 
-    def stream(self, settings: LLMSettings, api_key: str | None, system: str, user: str) -> Iterator[str]:
-        request = self._request(settings, api_key, "/chat/completions", {
-            "model": settings.effective_model(),
-            "stream": True,
-            "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
-        })
+    def stream(
+        self, settings: LLMSettings, api_key: str | None, system: str, user: str
+    ) -> Iterator[str]:
+        request = self._request(
+            settings,
+            api_key,
+            "/chat/completions",
+            {
+                "model": settings.effective_model(),
+                "stream": True,
+                "messages": [
+                    {"role": "system", "content": system},
+                    {"role": "user", "content": user},
+                ],
+            },
+        )
         with self._open(settings, api_key, request, timeout=300) as response:
             yield from parse_sse(response)
 
@@ -391,8 +462,10 @@ def _adapter(settings: LLMSettings):
 
 # --- public API -------------------------------------------------------------------
 
-def stream_answer(settings: LLMSettings, api_key: str | None, question: str,
-                  notes: list[ContextNote]) -> Iterator[str]:
+
+def stream_answer(
+    settings: LLMSettings, api_key: str | None, question: str, notes: list[ContextNote]
+) -> Iterator[str]:
     """Yield the answer as text chunks; raises LLMError on failure."""
     question = (question or "").strip()
     if not question:
@@ -410,5 +483,9 @@ def list_models(settings: LLMSettings, api_key: str | None) -> list[str]:
 def test_connection(settings: LLMSettings, api_key: str | None) -> str:
     models = list_models(settings, api_key)
     model = settings.effective_model()
-    note = "" if not models or model in models else f" Note: {model} is not in the provider's model list."
+    note = (
+        ""
+        if not models or model in models
+        else f" Note: {model} is not in the provider's model list."
+    )
     return f"Connected to {settings.info.label}. {len(models)} models available.{note}"

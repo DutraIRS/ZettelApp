@@ -12,8 +12,16 @@ import numpy as np
 
 from zettelapp.core.models import Flashcard, Note, ReviewState
 from zettelapp.core.similarity import SemanticIndex, levenshtein_similarity
-from zettelapp.core.textutil import CLOZE_RE, cloze_back, cloze_front, cloze_numbers, fold, normalize, \
-    strip_markdown, tokenize
+from zettelapp.core.textutil import (
+    CLOZE_RE,
+    cloze_back,
+    cloze_front,
+    cloze_numbers,
+    fold,
+    normalize,
+    strip_markdown,
+    tokenize,
+)
 
 GRADES = {"again": 1, "hard": 3, "good": 4, "easy": 5}
 
@@ -85,15 +93,18 @@ def _card_items(card: Flashcard) -> list[tuple[str, str, str]]:
     if card.kind == "cloze":
         items = []
         for number in cloze_numbers(card.front):
-            answers = [m.group(2) for m in CLOZE_RE.finditer(card.front) if int(m.group(1)) == number]
+            answers = [
+                m.group(2) for m in CLOZE_RE.finditer(card.front) if int(m.group(1)) == number
+            ]
             short = ", ".join(answers)
             items.append((cloze_front(card.front, number), cloze_back(card.front), short))
         return items
     return [(card.front, card.back, card.back)]
 
 
-def _distractors(correct: str, pool: Sequence[str], rng: random.Random, n: int = 3,
-                 by_length: bool = True) -> list[str]:
+def _distractors(
+    correct: str, pool: Sequence[str], rng: random.Random, n: int = 3, by_length: bool = True
+) -> list[str]:
     seen = {fold(correct.strip())}
     options = []
     for candidate in pool:
@@ -107,8 +118,13 @@ def _distractors(correct: str, pool: Sequence[str], rng: random.Random, n: int =
     return options[:n]
 
 
-def build_quiz(mode: str, notes: dict[str, Note], cards: Sequence[Flashcard], count: int = 20,
-               seed: int | None = None) -> list[Question]:
+def build_quiz(
+    mode: str,
+    notes: dict[str, Note],
+    cards: Sequence[Flashcard],
+    count: int = 20,
+    seed: int | None = None,
+) -> list[Question]:
     rng = random.Random(seed)
     questions: list[Question] = []
     if mode == "notes":
@@ -129,12 +145,24 @@ def build_quiz(mode: str, notes: dict[str, Note], cards: Sequence[Flashcard], co
                 continue
             choices = wrong + [short]
             rng.shuffle(choices)
-            questions.append(Question("choice", prompt, answer, note.id, note.display_title, card.id,
-                                      choices, choices.index(short)))
+            questions.append(
+                Question(
+                    "choice",
+                    prompt,
+                    answer,
+                    note.id,
+                    note.display_title,
+                    card.id,
+                    choices,
+                    choices.index(short),
+                )
+            )
         elif mode == "typed":
             questions.append(Question("typed", prompt, short, note.id, note.display_title, card.id))
         else:
-            questions.append(Question("flashcard", prompt, answer, note.id, note.display_title, card.id))
+            questions.append(
+                Question("flashcard", prompt, answer, note.id, note.display_title, card.id)
+            )
     return questions
 
 
@@ -162,10 +190,21 @@ def _note_questions(notes: dict[str, Note], count: int, rng: random.Random) -> l
         wrong = _distractors(note.display_title, [titles[j] for j in nearest], rng, by_length=False)
         if len(wrong) < 3:
             others = [t for t in titles.values() if t not in wrong]
-            wrong += _distractors(note.display_title, rng.sample(others, min(len(others), 8)), rng)[: 3 - len(wrong)]
+            wrong += _distractors(note.display_title, rng.sample(others, min(len(others), 8)), rng)[
+                : 3 - len(wrong)
+            ]
         choices = wrong + [note.display_title]
         rng.shuffle(choices)
-        questions.append(Question("choice", "Which note is this?\n\n> " + _mask_title(note.body, note.title),
-                                  note.display_title, note.id, note.display_title, None,
-                                  choices, choices.index(note.display_title)))
+        questions.append(
+            Question(
+                "choice",
+                "Which note is this?\n\n> " + _mask_title(note.body, note.title),
+                note.display_title,
+                note.id,
+                note.display_title,
+                None,
+                choices,
+                choices.index(note.display_title),
+            )
+        )
     return questions
