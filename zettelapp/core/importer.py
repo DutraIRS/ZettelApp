@@ -2,7 +2,8 @@
 
 Imported files are untrusted: archive paths are validated (no zip-slip),
 sizes are bounded, every field is type-checked, and images are re-verified
-by content before they are stored.
+by content before they are stored. Each import runs in one vault transaction,
+so an import that fails leaves the vault unchanged.
 """
 
 from __future__ import annotations
@@ -73,7 +74,8 @@ def import_path(vault: Vault, path: str | Path) -> ImportResult:
         return import_data(vault, json.loads(path.read_text(encoding="utf-8")))
     if suffix == ".md":
         result = ImportResult()
-        _import_markdown_files(vault, path.parent, [path], result)
+        with vault.transaction():
+            _import_markdown_files(vault, path.parent, [path], result)
         return result
     if suffix == ".zip":
         with zipfile.ZipFile(path) as zf:
@@ -310,7 +312,8 @@ def import_markdown_folder(vault: Vault, folder: Path) -> ImportResult:
         files.append(path)
         if len(files) > MAX_MARKDOWN_FILES:
             raise UnsafeInputError("The folder contains too many Markdown files.")
-    _import_markdown_files(vault, folder, files, result)
+    with vault.transaction():
+        _import_markdown_files(vault, folder, files, result)
     return result
 
 
