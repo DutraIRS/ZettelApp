@@ -1,7 +1,13 @@
 # ZettelApp codebase evaluation
 
+> **Status on 2026-10-28.** This is the audit as written on 2026-10-27, before the remediation commits; its findings, line numbers and counts describe that snapshot. All three release blockers have since been resolved:
+>
+> 1. **Test command: resolved.** `python -m pytest -q` runs and passes, and CI and the release workflow run it with coverage as a step of its own, so failing tests fail the build (`489daa4`). No committed `pyproject.toml` has ever contained the `--timeout=30` option described in H1, so that failure could not be reproduced from the repository.
+> 2. **Atomic imports: fixed.** Every kind of import runs in one vault transaction; on any error it is rolled back and the image files the import added are deleted. This covers ZettelApp archives and JSON, which are also validated before the first write (`ef916b6`), and Markdown folders, zips of Markdown files and single `.md` files.
+> 3. **Mind-map truncation: fixed.** The mind-map editor no longer adds ideas beyond the depth or node limit, and saving rejects an oversized map with an error instead of trimming it (`01cb1c0`). Mind maps built *From links* stop at the node limit and say how many links were left out.
+
 **Audit date:** 2026-10-27  
-**Repository:** `C:\Users\quiia\Desktop\ZettelApp`  
+**Repository:** the repository root  
 **Snapshot:** branch `feature/zettelapp-1.0`, commit `f977dcedd3df608694028604e60d0fb870d92265`, plus the existing working-tree changes listed near the end of this report  
 **Application:** Python 3.12+ / PySide6 Windows desktop application, version 1.0.0
 
