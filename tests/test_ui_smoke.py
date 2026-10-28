@@ -110,6 +110,31 @@ def test_mindmap_editor_blocks_children_beyond_the_storage_limit(window):
     assert list(mindmap_nodes(view.root)) == before
 
 
+def test_mindmap_from_links_stays_within_the_node_limit(window, monkeypatch):
+    from zettelapp.core.models import mindmap_nodes
+
+    monkeypatch.setattr("zettelapp.core.models.MAX_MINDMAP_NODES", 7)
+    vault = window.vault
+    hub = vault.create_note("Hub")
+    neighbours = []
+    for i in range(3):
+        note = vault.create_note(f"Linked {i}")
+        vault.add_link(hub.id, note.id, "related")
+        neighbours.append(note.id)
+        for j in range(4):
+            vault.add_link(note.id, vault.create_note(f"Further {i}.{j}").id, "related")
+    window.list.refresh()
+    window.open_note(hub.id)
+
+    window.editor.mindmap_from_links()
+    window.editor.flush()  # saving refuses a map with more nodes than the limit
+
+    nodes = list(mindmap_nodes(vault.get_note(hub.id).mindmap))
+    assert len(nodes) == 7  # the root, one link type, 3 linked notes and 2 of their links
+    assert sorted(node["note"] for node, depth in nodes if depth == 2) == sorted(neighbours)
+    assert window.statusBar().currentMessage().startswith("Left out 10 links")
+
+
 @pytest.mark.parametrize("servers", [None, [], "invalid"])
 def test_mcp_config_rejects_invalid_server_collections(servers):
     from zettelapp.ui.settings_dialog import _merge_mcp_entry

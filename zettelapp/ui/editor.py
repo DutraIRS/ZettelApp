@@ -467,27 +467,46 @@ class NoteEditor(QWidget):
     def mindmap_from_links(self) -> None:
         if self.note is None:
             return
+        from zettelapp.core.models import MAX_MINDMAP_NODES
+
         vault = self.window.vault
+        links = vault.links_from(self.note.id) + vault.links_to(self.note.id)
+        if not links:
+            self.statusMessage.emit("This note has no links yet. Link it to other notes first.")
+            return
         types = vault.link_type_map()
         titles = vault.titles()
         root = new_mindmap_node(self.title.text() or "Untitled", self.note.id)
         groups: dict[str, dict] = {}
         seen = {self.note.id}
-        for link in vault.links_from(self.note.id) + vault.links_to(self.note.id):
+        # Storage refuses maps with more than MAX_MINDMAP_NODES nodes, so the root, the link
+        # types and every linked note get room first, then the notes those link to.
+        room = MAX_MINDMAP_NODES - 1
+        left_out = 0
+        linked: list[tuple[dict, list[str]]] = []
+        for link in links:
             outgoing = link.src == self.note.id
             other = link.dst if outgoing else link.src
             lt = types.get(link.type)
             verb = lt.label_for(outgoing) if lt else link.type
+            second_level = sorted(vault.neighbors(other) - seen - {other})[:6]
+            seen.add(other)
+            cost = 1 if verb in groups else 2  # a new link type needs its branch too
+            if cost > room:
+                left_out += 1 + len(second_level)
+                continue
+            room -= cost
             branch = groups.setdefault(verb, new_mindmap_node(verb))
             child = new_mindmap_node(titles.get(other) or "Untitled", other)
-            for second in sorted(vault.neighbors(other) - seen - {other})[:6]:
-                child["children"].append(new_mindmap_node(titles.get(second) or "Untitled", second))
-            seen.add(other)
             branch["children"].append(child)
+            linked.append((child, second_level))
+        for child, second_level in linked:
+            fit = second_level[:room]
+            for second in fit:
+                child["children"].append(new_mindmap_node(titles.get(second) or "Untitled", second))
+            room -= len(fit)
+            left_out += len(second_level) - len(fit)
         root["children"] = list(groups.values())
-        if not root["children"]:
-            self.statusMessage.emit("This note has no links yet. Link it to other notes first.")
-            return
         if (
             self.note.mindmap
             and QMessageBox.question(
@@ -501,6 +520,11 @@ class NoteEditor(QWidget):
         self.mindmap.set_mindmap(root)
         self._mindmap_changed(root)
         self.tabs.setCurrentIndex(1)
+        if left_out:
+            self.statusMessage.emit(
+                f"Left out {left_out} link{'s' if left_out != 1 else ''}: "
+                f"a mind map holds at most {MAX_MINDMAP_NODES} ideas."
+            )
 
     def _mindmap_changed(self, data) -> None:
         if self.note is None:
