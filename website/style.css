@@ -308,15 +308,15 @@ h1, h2, h3 { font-family: var(--font-display); line-height: 1.2; }
 .doc h2 { margin-top: 2em; font-size: 1.45rem; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
 .doc h3 { margin-top: 1.6em; font-size: 1.15rem; }
 .doc h1, .doc h2, .doc h3 { scroll-margin-top: 80px; }
-.doc p, .doc li { overflow-wrap: anywhere; }
+.doc p, .doc li { overflow-wrap: break-word; }
 .doc img { border-radius: 10px; border: 1px solid var(--border); box-shadow: var(--shadow); }
 .doc pre {
   background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px;
-  padding: 14px 16px; overflow-x: auto; line-height: 1.5;
+  padding: 14px 16px; overflow-x: auto; line-height: 1.5; max-width: 100%; overscroll-behavior-x: contain;
 }
 .doc pre code { background: none; padding: 0; font-size: 0.88rem; }
 .doc blockquote { margin: 1em 0; padding: 4px 16px; border-left: 4px solid var(--accent-a); color: var(--muted); background: var(--surface-2); border-radius: 0 8px 8px 0; }
-.table-wrap { overflow-x: auto; margin: 1em 0; }
+.table-wrap { overflow-x: auto; margin: 1em 0; overscroll-behavior-x: contain; }
 .doc table { border-collapse: collapse; width: 100%; font-size: 0.95rem; }
 .doc th, .doc td { text-align: left; vertical-align: top; padding: 8px 12px; border-bottom: 1px solid var(--border); }
 .doc th { background: var(--surface-2); font-weight: 600; }
@@ -326,4 +326,41 @@ h1, h2, h3 { font-family: var(--font-display); line-height: 1.2; }
    Below 900px the page is one column; on phones the card runs edge to edge. */
 @media (max-width: 899.98px) {
   .docs-layout { gap: 16px; padding-top: 16px; }
+  .doc th, .doc td { min-width: 7rem; }
+  .doc td code { white-space: nowrap; }
+}
+
+@media (max-width: 640px) {
+  .doc {
+    margin-left: calc(-1 * var(--gutter)); margin-right: calc(-1 * var(--gutter));
+    padding: 22px var(--gutter) 28px; border-left: 0; border-right: 0; border-radius: 0; box-shadow: none;
+  }
+  .doc h1 { font-size: 1.75rem; }
+  .doc h2 { font-size: 1.3rem; margin-top: 1.7em; }
+  .doc h3 { font-size: 1.1rem; }
+  .doc ul, .doc ol { padding-left: 1.35em; }
+  .doc pre { padding: 12px 14px; }
+  .doc pre code { font-size: 0.82rem; }
+  .doc blockquote { padding: 2px 14px; margin: 1em 0; }
+  .table-wrap { border: 1px solid var(--border); border-radius: 10px; }
+  .table-wrap table { font-size: 0.9rem; }
+  .doc tr:last-child td { border-bottom: 0; }
+  .doc-footer { margin-top: 28px; }
+
+  /* Soft edge shadows hint that tables and code blocks scroll sideways (CSS-only "scroll shadows"). */
+  .table-wrap, .doc pre { --fade: color-mix(in srgb, var(--text) 24%, transparent); }
+  .table-wrap {
+    background:
+      linear-gradient(to right, var(--surface) 30%, transparent) left center / 28px 100% no-repeat local,
+      linear-gradient(to left, var(--surface) 30%, transparent) right center / 28px 100% no-repeat local,
+      radial-gradient(farthest-side at 0 50%, var(--fade), transparent) left center / 12px 100% no-repeat scroll,
+      radial-gradient(farthest-side at 100% 50%, var(--fade), transparent) right center / 12px 100% no-repeat scroll;
+  }
+  .doc pre {
+    background:
+      linear-gradient(to right, var(--surface-2) 30%, transparent) left center / 28px 100% no-repeat local,
+      linear-gradient(to left, var(--surface-2) 30%, transparent) right center / 28px 100% no-repeat local,
+      radial-gradient(farthest-side at 0 50%, var(--fade), transparent) left center / 12px 100% no-repeat scroll,
+      radial-gradient(farthest-side at 100% 50%, var(--fade), transparent) right center / 12px 100% no-repeat scroll var(--surface-2);
+  }
 }
