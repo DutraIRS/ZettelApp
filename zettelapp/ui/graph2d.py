@@ -355,10 +355,6 @@ class Graph2DView(QGraphicsView):
             self.select(note_id)
             self.centerOn(item)
 
-    def matching(self, query: str) -> list[str]:
-        q = query.casefold().strip()
-        return [i for i in self.data.ids if q and q in (self.data.titles.get(i) or "").casefold()]
-
     def fit(self) -> None:
         rect = self.scene().itemsBoundingRect()
         if rect.isEmpty():

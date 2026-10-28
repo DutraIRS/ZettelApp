@@ -16,7 +16,6 @@ from PySide6.QtWidgets import (
     QLayout,
     QLineEdit,
     QPushButton,
-    QSizePolicy,
     QSpinBox,
     QToolButton,
     QVBoxLayout,
@@ -403,16 +402,3 @@ class ScopePicker(QWidget):
 
     def value(self) -> tuple[str, int, str | None]:
         return self.mode.currentData(), self.depth_spin.value(), self.tag.currentData()
-
-
-def hline() -> QFrame:
-    line = QFrame()
-    line.setFrameShape(QFrame.Shape.HLine)
-    line.setStyleSheet(f"color: {theme.current().border};")
-    return line
-
-
-def expanding() -> QWidget:
-    w = QWidget()
-    w.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
-    return w

@@ -118,7 +118,6 @@ class LLMSettings:
     model: str = ""
     base_url: str = ""
     effort: str = "medium"
-    context_notes: int = 8
 
     @property
     def info(self) -> ProviderInfo:

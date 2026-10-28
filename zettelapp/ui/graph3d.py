@@ -39,7 +39,6 @@ class Graph3DView(QWidget):
         self.hovered: str | None = None
         self.selected: str | None = None
         self._screen = np.zeros((0, 2))
-        self._scale = np.zeros(0)
         self._drag_from: QPointF | None = None
         self._dragged = False
         self._neighbors: dict[str, set[str]] = {}
@@ -128,8 +127,8 @@ class Graph3DView(QWidget):
             painter.setPen(t.q("text_muted"))
             painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, "No notes to show")
             return
-        screen, scale, depth = self._project()
-        self._screen, self._scale = screen, scale
+        screen, _scale, depth = self._project()
+        self._screen = screen
         base = min(self.width(), self.height()) * 0.36 * self.zoom_level
 
         if self.show_groups:  # soft halos behind each group

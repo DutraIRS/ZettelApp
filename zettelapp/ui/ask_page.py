@@ -33,7 +33,6 @@ def current_llm_settings() -> LLMSettings:
         model=settings.get(settings.LLM_MODEL, "") or "",
         base_url=settings.get(settings.LLM_BASE_URL, "") or "",
         effort=settings.get(settings.LLM_EFFORT),
-        context_notes=settings.get(settings.LLM_CONTEXT_NOTES),
     )
 
 
@@ -224,7 +223,6 @@ class AskPage(QWidget):
         self.copy_button.setEnabled(False)
         self.save_button.setEnabled(False)
         self._set_idle(False)
-        cfg.context_notes = self.limit.value()
         self.status.emit(f"Asking {info.label} ({len(context)} notes sent)…")
         thread = StreamThread(lambda: stream_answer(cfg, key, question, context), self)
         thread.chunk.connect(self._chunk)

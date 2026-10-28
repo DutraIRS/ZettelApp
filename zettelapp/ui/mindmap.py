@@ -5,7 +5,7 @@ from __future__ import annotations
 import copy
 
 from PySide6.QtCore import QPointF, QRectF, Qt, Signal
-from PySide6.QtGui import QAction, QColor, QFontMetricsF, QImage, QPainter, QPainterPath, QPen
+from PySide6.QtGui import QColor, QFontMetricsF, QImage, QPainter, QPainterPath, QPen
 from PySide6.QtWidgets import (
     QGraphicsItem,
     QGraphicsPathItem,
@@ -428,11 +428,3 @@ class MindMapView(QGraphicsView):
         painter = QPainter(generator)
         self.scene().render(painter, QRectF(0, 0, rect.width(), rect.height()), rect)
         painter.end()
-
-
-def actions_for(view: MindMapView, parent) -> list[QAction]:
-    return [
-        QAction(icons.icon("add"), "Add child", parent, triggered=view.add_child),
-        QAction("Add sibling", parent, triggered=view.add_sibling),
-        QAction(icons.icon("delete"), "Delete", parent, triggered=view.delete_selected),
-    ]

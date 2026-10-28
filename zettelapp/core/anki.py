@@ -27,7 +27,6 @@ BASIC_MODEL_ID = 1_733_870_101
 CLOZE_MODEL_ID = 1_733_870_102
 BASIC_MODEL_NAME = "ZettelApp Basic"
 CLOZE_MODEL_NAME = "ZettelApp Cloze"
-DEFAULT_DECK = "ZettelApp"
 
 CARD_CSS = """
 .card { font-family: "Segoe UI", system-ui, sans-serif; font-size: 20px; line-height: 1.5;
@@ -250,9 +249,6 @@ class AnkiConnect:
                     }
                 ],
             )
-
-    def browse(self, query: str) -> None:
-        self.invoke("guiBrowse", query=query)
 
     def sync(
         self,

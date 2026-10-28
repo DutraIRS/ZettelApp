@@ -320,9 +320,6 @@ class NoteListPanel(QWidget):
                 return
         self.view.clearSelection()
 
-    def update_row(self, note_id: str) -> None:
-        self.refresh()
-
     def _current_changed(self, current, _previous) -> None:
         if current.isValid():
             self.noteSelected.emit(current.data(Qt.ItemDataRole.UserRole)["id"])

@@ -206,7 +206,7 @@ class ColumnChart(QWidget):
                     Qt.AlignmentFlag.AlignHCenter,
                     name,
                 )
-        last_name, last = self.rows[-1]  # label the most recent value only
+        _, last = self.rows[-1]  # label the most recent value only
         x = plot.left() + slot * (len(self.rows) - 1) + slot / 2
         painter.setPen(t.q("text"))
         painter.drawText(

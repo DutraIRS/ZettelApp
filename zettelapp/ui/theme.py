@@ -59,7 +59,6 @@ class Theme:
     on_accent: str
     accent_subtle: str
     grid: str
-    axis: str
     danger: str
     success: str
     categorical: list[str] = field(default_factory=list)
@@ -129,7 +128,6 @@ def build_theme(mode: str = "system") -> Theme:
             on_accent="#000000",
             accent_subtle=f"#{0x33:02x}{a.red():02x}{a.green():02x}{a.blue():02x}",
             grid="#383835",
-            axis="#4a4a47",
             danger="#ff99a4",
             success="#6ccb5f",
             categorical=CATEGORICAL_DARK,
@@ -152,7 +150,6 @@ def build_theme(mode: str = "system") -> Theme:
         on_accent="#ffffff",
         accent_subtle=f"#{0x24:02x}{a.red():02x}{a.green():02x}{a.blue():02x}",
         grid="#e1e0d9",
-        axis="#c3c2b7",
         danger="#c42b1c",
         success="#0f7b0f",
         categorical=CATEGORICAL_LIGHT,

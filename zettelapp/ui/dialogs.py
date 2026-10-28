@@ -27,7 +27,6 @@ from PySide6.QtWidgets import (
     QTableWidget,
     QTableWidgetItem,
     QVBoxLayout,
-    QWidget,
 )
 
 from zettelapp import APP_NAME, DOCS_URL, HOMEPAGE_URL, REPO_URL, SPONSOR_URL, __version__
@@ -391,11 +390,3 @@ class TextPromptDialog(QDialog):
 
     def value(self) -> str:
         return self.edit.text().strip()
-
-
-def wrap_widget(widget: QWidget, margins: int = 0) -> QWidget:
-    holder = QWidget()
-    lay = QVBoxLayout(holder)
-    lay.setContentsMargins(margins, margins, margins, margins)
-    lay.addWidget(widget)
-    return holder

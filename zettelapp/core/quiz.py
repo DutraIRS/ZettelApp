@@ -5,7 +5,7 @@ from __future__ import annotations
 import random
 import re
 from collections.abc import Sequence
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from datetime import date, timedelta
 
 import numpy as np
@@ -69,9 +69,6 @@ class Question:
     card_id: int | None = None
     choices: list[str] = field(default_factory=list)
     correct: int = -1
-
-    def to_dict(self) -> dict:
-        return asdict(self)
 
 
 def grade_typed(given: str, expected: str) -> tuple[float, str]:

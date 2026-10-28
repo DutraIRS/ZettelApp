@@ -84,6 +84,11 @@ show_missing = true
 skip_covered = true
 
 [tool.pyright]
-include = ["zettelapp/core", "zettelapp/mcp_server.py", "zettelapp/mcp_main.py"]
+include = [
+    "zettelapp/core",
+    "zettelapp/mcp_server.py",
+    "zettelapp/mcp_main.py",
+    "zettelapp/mcp_switch.py",
+]
 typeCheckingMode = "basic"
 reportMissingImports = "warning"
