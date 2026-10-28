@@ -152,9 +152,12 @@ web or elsewhere on disk.</li>
 <li><strong>Link allowlist.</strong> Clicking a link opens only web pages (<code>http</code>/<code>https</code>), e-mail (<code>mailto</code>), notes, and
 Zotero <em>select item</em> / <em>open PDF</em> links. <code>javascript:</code>, <code>file:</code> and other schemes are refused.</li>
 <li><strong>Images are verified by content</strong>, not by file name. Only PNG, JPEG, GIF, WebP and BMP up to 25 MB are
-accepted; SVG is refused because it can carry scripts.</li>
+accepted; SVG is refused because it can carry scripts. Verification covers the file signature and
+compressed size; pixel dimensions are checked when the image is first displayed.</li>
 <li><strong>Safe imports.</strong> Archives are checked for path tricks (&quot;zip-slip&quot;) and decompression bombs. Every field
-is validated and size-limited, and Markdown imports can't reach outside the imported folder.</li>
+is validated and size-limited, Markdown imports can't reach outside the imported folder, and a failed
+import leaves the vault unchanged: imports run in a single database transaction that is rolled back on
+any error.</li>
 <li><strong>Safe exports.</strong> Exported websites contain no scripts and carry a strict Content-Security-Policy. Files
 are written atomically.</li>
 <li><strong>Database safety.</strong> All database queries use bound parameters, and search text is never interpreted as
