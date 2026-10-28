@@ -8,7 +8,7 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Added
 
-- **The Lost Princess of the Archive**, an optional first-run adventure that teaches notes, links, tags,
+- **The Lost Prince of the Archive**, an optional first-run adventure that teaches notes, links, tags,
   suggestions, the graph, mind maps, attachments, review and Insights through real actions.
 - Translation infrastructure, a source message catalogue and language selection for future community
   translations.

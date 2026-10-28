@@ -1,4 +1,4 @@
-"""The Lost Princess of the Archive: an optional adventure that teaches ZettelApp.
+"""The Lost Prince of the Archive: an optional adventure that teaches ZettelApp.
 
 Ten chapters each point at one feature. The app notices when the reader has really used
 it (a note created, a link written, the graph opened, a card reviewed…) by comparing a
@@ -180,7 +180,7 @@ CHAPTERS: list[Chapter] = [
             ),
             N_("“Start a journal of your search.”"),
         ),
-        N_("Create a new note and give it a title, for example “The missing princess”."),
+        N_("Create a new note and give it a title, for example “The missing prince”."),
         N_(
             "Click New above the note list, or press Ctrl+N. The title goes at the top of the note."
         ),
@@ -221,7 +221,7 @@ CHAPTERS: list[Chapter] = [
         N_("Marks on the Shelves"),
         (
             N_("Archivists mark their notes so they can gather them later."),
-            N_("Ada marked every note she wrote."),
+            N_("Zetto marked every note he wrote."),
         ),
         N_("Give a note a tag."),
         N_(
@@ -229,7 +229,7 @@ CHAPTERS: list[Chapter] = [
         ),
         (
             N_("Your mark glows, and the shelf slides aside."),
-            N_("Behind it is a card in Ada's hand: “A thread is strongest when it says why.”"),
+            N_("Behind it is a card in Zetto's hand: “A thread is strongest when it says why.”"),
         ),
         _tags,
         _new,
@@ -241,7 +241,9 @@ CHAPTERS: list[Chapter] = [
         N_("Threads That Say Why"),
         (
             N_("A plain thread only says that two notes are related."),
-            N_("Ada's threads said how: one note supports another, extends it, or is part of it."),
+            N_(
+                "Zetto's threads said how: one note supports another, extends it, or is part of it."
+            ),
         ),
         N_("Make a typed link: write a link type and two colons before a link, like {example}."),
         N_(
@@ -288,9 +290,9 @@ CHAPTERS: list[Chapter] = [
         N_("Click Graph in the bar on the left, or press Ctrl+2."),
         (
             N_(
-                "Near your notes, a tiny drawing flickers on the map: a branching tree in Ada's hand."
+                "Near your notes, a tiny drawing flickers on the map: a branching tree in Zetto's hand."
             ),
-            N_("It's her plan!"),
+            N_("It's his plan!"),
         ),
         _page(GRAPH_PAGE),
         _shown,
@@ -299,9 +301,11 @@ CHAPTERS: list[Chapter] = [
     Chapter(
         "plan",
         "mindmap",
-        N_("Ada's Branching Plan"),
+        N_("Zetto's Branching Plan"),
         (
-            N_("Ada sketched her plans as mind maps: one idea in the middle, branches all around."),
+            N_(
+                "Zetto sketched his plans as mind maps: one idea in the middle, branches all around."
+            ),
             N_("Add a branch of your own."),
         ),
         N_("Open a note's Mind map tab and add an idea."),
@@ -310,7 +314,7 @@ CHAPTERS: list[Chapter] = [
         ),
         (
             N_(
-                "Your new branch points east, to the gallery where Ada pinned her evidence to the walls."
+                "Your new branch points east, to the gallery where Zetto pinned his evidence to the walls."
             ),
         ),
         _mindmap_sizes,
@@ -378,17 +382,17 @@ PROLOGUE = (
     N_(
         "The Fog of Forgetting has crept into the Great Archive. Whatever isn't written down and linked fades into grey."
     ),
-    N_("Princess Ada, keeper of the Archive, went in after it and hasn't come back."),
+    N_("Prince Zetto, keeper of the Archive, went in after it and hasn't come back."),
     N_(
-        "Her owl, Quill, lands on your desk: “Only an Archivist can find her. Each clue hides in a corner of this app. Will you help?”"
+        "His owl, Quill, lands on your desk: “Only a fox's nose can find him. Each clue hides in a corner of this app. Will you help?”"
     ),
 )
 FINALE = (
     N_(
-        "Counted, linked and remembered, your Archive leaves the Fog nowhere to hide. It thins and fades, and Princess Ada steps out of the mist."
+        "Counted, linked and remembered, your Archive leaves the Fog nowhere to hide. It thins and fades, and Prince Zetto steps out of the mist."
     ),
     N_(
-        "“You found me by following links,” she smiles. “Write one idea per note, link it with a reason, and the Fog will never return.”"
+        "“You found me by following links,” he smiles. “Write one idea per note, link it with a reason, and the Fog will never return.”"
     ),
     N_(
         "Beyond the Archive's walls, Ask answers questions from your notes with an AI of your choice, and MCP lets AI agents read them."
@@ -641,7 +645,7 @@ class Quest(QObject):
                 kicker=n_(
                     "You found {n} clue of {total}", "You found {n} clues of {total}", found
                 ).format(n=found, total=len(CHAPTERS)),
-                title=_("The princess is free!"),
+                title=_("The prince is free!"),
                 story=_lines(FINALE),
                 progress=self._progress(len(CHAPTERS)),
                 primary=(_("The end"), self.hide),

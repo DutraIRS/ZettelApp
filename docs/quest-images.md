@@ -1,4 +1,4 @@
-# Illustrations for “The Lost Princess of the Archive”
+# Illustrations for “The Lost Prince of the Archive”
 
 The first-run adventure (`zettelapp/ui/quest.py`) shows one illustration at the top of its card for the
 prologue, each of the ten chapters and the finale: **12 images**. This page describes each one and gives
@@ -39,9 +39,10 @@ Use the same style prefix for every image so the set looks like one storybook.
 - **No text:** no letters, words, numbers or runes anywhere (the app is translated into eleven languages).
   Index cards show only wavy ink lines.
 - **Recurring characters** (keep them identical across images):
-  - **Princess Ada:** a young woman with warm brown skin, dark curly hair tied up with a blue ribbon,
-    round gold-rimmed glasses, a deep-blue cloak embroidered with fine silver thread, carrying a small
-    stack of index cards. Kind, clever, calm.
+  - **Prince Zetto:** an elegant fox prince with pale skin, long silver-white hair, magenta-purple
+    streaked hair strands and matching magenta-purple stripe tattoos on his cheeks and wrists,
+    amber-gold eyes, a pristine white and honey-gold robe with a deep-blue sash, fox ears and a
+    single fluffy fox tail, carrying a small stack of index cards. Regal, calm, quietly kind.
   - **Quill:** a small, round snowy owl with big amber eyes, tiny round spectacles and one blue-tipped
     wing feather. Friendly and expressive; she is the guide.
   - **The Archivist (the player):** never shows a face. Seen from behind or as hands only, wearing a
@@ -157,7 +158,7 @@ brass railing, looking at it. One small cluster at the edge flickers with a tiny
 > spectacles perches on the railing, gazing at it. At the edge of the constellation a tiny branching-tree
 > shape flickers. Dusty navy background with soft stars.
 
-### 8. `plan.png`: Chapter 7, Ada's Branching Plan
+### 8. `plan.png`: Chapter 7, Zetto's Branching Plan
 
 Task: add a mind-map idea. Mood: creativity.
 
@@ -209,12 +210,12 @@ light. The fog stays below, thinning.
 > mist lingers at the bottom of the stairs and thins as it rises. A small round snowy owl flies up the
 > stairwell.
 
-### 12. `finale.png`: The princess is free!
+### 12. `finale.png`: The prince is free!
 
 Shown when the adventure is complete. Mood: joy, warmth, relief.
 
-Morning light floods the Great Archive; the fog is gone. Princess Ada steps forward smiling, holding her
-stack of index cards, her blue cloak's silver threads shining. Quill flies happily around her. The
+Morning light floods the Great Archive; the fog is gone. Prince Zetto steps forward smiling, holding his
+stack of index cards, his robe's silver threads shining. Quill flies happily around him. The
 Archivist, seen from behind, faces her. Glowing blue threads connect the shelves in every direction like
 a festive web.
 
@@ -228,6 +229,6 @@ a festive web.
 
 ## Checking them in the app
 
-Put the files in `zettelapp/resources/quest/`, start ZettelApp and choose *Help ▸ The Lost Princess of the
+Put the files in `zettelapp/resources/quest/`, start ZettelApp and choose *Help ▸ The Lost Prince of the
 Archive*. *Skip this step* walks through every chapter quickly. Look at the card in both *View ▸ Theme ▸
 Light* and *Dark*.

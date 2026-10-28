@@ -69,11 +69,11 @@ def test_the_adventure_is_offered_on_the_first_run_only(tmp_path, monkeypatch, w
     assert window.editor.note.title == "Start here"
     pump(1200)
     card = window.quest.card
-    assert window.quest.is_visible() and card.title.text() == "The Lost Princess of the Archive"
+    assert window.quest.is_visible() and card.title.text() == "The Lost Prince of the Archive"
     assert card.primary.text() == "Begin the adventure" and card.secondary.text() == "Not now"
     card.secondary.click()  # Not now
     assert not window.quest.is_visible() and window.quest.state() == "declined"
-    assert "Help ▸ The Lost Princess of the Archive" in window.statusBar().currentMessage()
+    assert "Help ▸ The Lost Prince of the Archive" in window.statusBar().currentMessage()
 
     window.quest.start_up(first_run=True)  # never offered twice
     window.quest.start_up(first_run=False)
@@ -113,12 +113,12 @@ def test_each_chapter_is_solved_by_doing_it(window):
     window.new_note()  # an untitled note is not enough
     pump(250)
     assert chapter(window) == "journal"
-    window.editor.title.setText("The missing princess")
+    window.editor.title.setText("The missing prince")
     edit(window)
     follow_clue(window)
 
     assert chapter(window) == "thread"
-    edit(window, "Ada went missing. [[Start here]]")
+    edit(window, "Zetto went missing. [[Start here]]")
     follow_clue(window)
 
     assert chapter(window) == "marks"
@@ -128,7 +128,7 @@ def test_each_chapter_is_solved_by_doing_it(window):
     follow_clue(window)
 
     assert chapter(window) == "reason"
-    edit(window, "Ada went missing. [[Start here]]\n\nsupports:: [[One idea per note]]")
+    edit(window, "Zetto went missing. [[Start here]]\n\nsupports:: [[One idea per note]]")
     follow_clue(window)
 
     assert chapter(window) == "whispers"
@@ -169,7 +169,7 @@ def test_each_chapter_is_solved_by_doing_it(window):
     pump(300)
     assert quest.state() == "finished" and quest.chapter is None
     assert quest.clues() == CHAPTER_KEYS
-    assert quest.card.title.text() == "The princess is free!"
+    assert quest.card.title.text() == "The prince is free!"
     assert quest.card.kicker.text() == "You found 10 clues of 10"
     assert not quest.spotlight.isVisible()
     quest.card.primary.click()
@@ -200,7 +200,7 @@ def test_progress_is_remembered_paused_and_resumed(window):
     assert not quest.is_visible() and quest.state() == "paused"
     assert "Resume it any time" in window.statusBar().currentMessage()
     edit(window, "Linked while paused: [[One idea per note]]")  # doesn't count
-    quest.menu_action.trigger()  # Help ▸ The Lost Princess of the Archive
+    quest.menu_action.trigger()  # Help ▸ The Lost Prince of the Archive
     assert quest.is_visible() and chapter(window) == "thread"
     assert quest.restart_action.isEnabled()
 

@@ -38,7 +38,7 @@ Atomic notes, typed links, mind maps, flashcards, a 2D/3D knowledge graph, and l
   stored in Windows Credential Manager.
 - **MCP server**: let Claude Desktop, Claude Code and other MCP clients search and read your vault, only
   while ZettelApp is open with its status-bar MCP switch on (read-only by default).
-- **Learn by doing** with *The Lost Princess of the Archive*, an optional first-run adventure that guides
+- **Learn by doing** with *The Lost Prince of the Archive*, an optional first-run adventure that guides
   you through ZettelApp's main features.
 - **Export the whole collection or any subgraph**: ZettelApp archive, Markdown (Obsidian), static website,
   JSON, GraphML, Graphviz and Anki. Imports Markdown folders and Obsidian vaults.

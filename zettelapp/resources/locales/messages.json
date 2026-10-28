@@ -122,7 +122,7 @@
  "A short adventure through ZettelApp's features": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:704"
+   "zettelapp/ui/quest.py:708"
   ]
  },
  "A Zettelkasten (German for “slip box”) is a collection of short notes that link to each other. Knowledge grows by connection rather than by filing: a note can take part in many conversations instead of sitting in one folder.": {
@@ -149,40 +149,16 @@
    "zettelapp/ui/dialogs.py:352"
   ]
  },
- "Ada marked every note she wrote.": {
-  "plural": null,
-  "where": [
-   "zettelapp/ui/quest.py:224"
-  ]
- },
- "Ada sketched her plans as mind maps: one idea in the middle, branches all around.": {
-  "plural": null,
-  "where": [
-   "zettelapp/ui/quest.py:304"
-  ]
- },
- "Ada's Branching Plan": {
-  "plural": null,
-  "where": [
-   "zettelapp/ui/quest.py:302"
-  ]
- },
- "Ada's threads said how: one note supports another, extends it, or is part of it.": {
-  "plural": null,
-  "where": [
-   "zettelapp/ui/quest.py:244"
-  ]
- },
  "Add a branch of your own.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:305"
+   "zettelapp/ui/quest.py:309"
   ]
  },
  "Add a picture to a note, or link a file.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:328"
+   "zettelapp/ui/quest.py:332"
   ]
  },
  "Add child": {
@@ -294,7 +270,7 @@
  "All around you, the shelves begin to whisper the names of notes…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:252"
+   "zettelapp/ui/quest.py:254"
   ]
  },
  "All tags": {
@@ -306,7 +282,7 @@
  "An optional adventure · about 10 minutes": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:484"
+   "zettelapp/ui/quest.py:488"
   ]
  },
  "Anki": {
@@ -459,10 +435,10 @@
  "Begin the adventure": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:487"
+   "zettelapp/ui/quest.py:491"
   ]
  },
- "Behind it is a card in Ada's hand: “A thread is strongest when it says why.”": {
+ "Behind it is a card in Zetto's hand: “A thread is strongest when it says why.”": {
   "plural": null,
   "where": [
    "zettelapp/ui/quest.py:232"
@@ -471,13 +447,13 @@
  "Behind your evidence, a stone door appears, carved with a riddle.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:333"
+   "zettelapp/ui/quest.py:337"
   ]
  },
  "Beyond the Archive's walls, Ask answers questions from your notes with an AI of your choice, and MCP lets AI agents read them.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:393"
+   "zettelapp/ui/quest.py:397"
   ]
  },
  "Bold (Ctrl+B)": {
@@ -546,8 +522,8 @@
  "Chapter {n} of {total}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:557",
-   "zettelapp/ui/quest.py:620"
+   "zettelapp/ui/quest.py:561",
+   "zettelapp/ui/quest.py:624"
   ]
  },
  "Check connection": {
@@ -614,19 +590,19 @@
  "Click Graph in the bar on the left, or press Ctrl+2.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:288"
+   "zettelapp/ui/quest.py:290"
   ]
  },
  "Click Insights in the bar on the left, or press Ctrl+3.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:368"
+   "zettelapp/ui/quest.py:372"
   ]
  },
  "Click Mind map above the note text, then Add idea. In the map, Tab adds a child idea and Enter a sibling.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:308"
+   "zettelapp/ui/quest.py:312"
   ]
  },
  "Click New above the note list, or press Ctrl+N. The title goes at the top of the note.": {
@@ -638,7 +614,7 @@
  "Close": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:656",
+   "zettelapp/ui/quest.py:660",
    "zettelapp/ui/update_notice.py:66"
   ]
  },
@@ -657,7 +633,7 @@
  "Clue found!": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:621"
+   "zettelapp/ui/quest.py:625"
   ]
  },
  "Cluster": {
@@ -731,7 +707,7 @@
  "Copy an image and press Ctrl+V in the text, or use Insert image or Link to a file on the toolbar above the note.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:329"
+   "zettelapp/ui/quest.py:333"
   ]
  },
  "Copy note ID": {
@@ -776,13 +752,13 @@
    "zettelapp/core/llm.py:441"
   ]
  },
- "Counted, linked and remembered, your Archive leaves the Fog nowhere to hide. It thins and fades, and Princess Ada steps out of the mist.": {
+ "Counted, linked and remembered, your Archive leaves the Fog nowhere to hide. It thins and fades, and Prince Zetto steps out of the mist.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:387"
+   "zettelapp/ui/quest.py:391"
   ]
  },
- "Create a new note and give it a title, for example “The missing princess”.": {
+ "Create a new note and give it a title, for example “The missing prince”.": {
   "plural": null,
   "where": [
    "zettelapp/ui/quest.py:183"
@@ -1009,7 +985,7 @@
  "Every note is a star, and every link a line between two stars.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:285"
+   "zettelapp/ui/quest.py:287"
   ]
  },
  "Every note is linked": {
@@ -1021,7 +997,7 @@
  "Evidence on the Wall": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:323"
+   "zettelapp/ui/quest.py:327"
   ]
  },
  "Example of": {
@@ -1172,19 +1148,19 @@
  "Flashcards turn it back: every answer you recall makes a memory stronger.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:346"
+   "zettelapp/ui/quest.py:350"
   ]
  },
  "Follow the clue": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:624"
+   "zettelapp/ui/quest.py:628"
   ]
  },
  "Forgetting is the Fog's only weapon.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:345"
+   "zettelapp/ui/quest.py:349"
   ]
  },
  "Format": {
@@ -1220,13 +1196,13 @@
  "From the Map Room you can see the whole Archive at once.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:284"
+   "zettelapp/ui/quest.py:286"
   ]
  },
  "From the tower, the whole Archive can be counted: every note, link and tag.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:364"
+   "zettelapp/ui/quest.py:368"
   ]
  },
  "From: {note_title}": {
@@ -1296,10 +1272,10 @@
    "zettelapp/ui/dialogs.py:324"
   ]
  },
- "Her owl, Quill, lands on your desk: “Only an Archivist can find her. Each clue hides in a corner of this app. Will you help?”": {
+ "His owl, Quill, lands on your desk: “Only a fox's nose can find him. Each clue hides in a corner of this app. Will you help?”": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:382"
+   "zettelapp/ui/quest.py:386"
   ]
  },
  "How many links away from the current note to include": {
@@ -1405,19 +1381,19 @@
  "It learns from every answer you give.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:266"
+   "zettelapp/ui/quest.py:268"
   ]
  },
  "It opens only for those who remember.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:334"
+   "zettelapp/ui/quest.py:338"
   ]
  },
- "It's her plan!": {
+ "It's his plan!": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:293"
+   "zettelapp/ui/quest.py:295"
   ]
  },
  "Italic (Ctrl+I)": {
@@ -1598,7 +1574,7 @@
  "Make a typed link: write a link type and two colons before a link, like {example}.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:246"
+   "zettelapp/ui/quest.py:248"
   ]
  },
  "Markdown, [[links]] and images work on both sides. Cloze cards hide each {{c1::…}} in turn.": {
@@ -1714,16 +1690,16 @@
    "zettelapp/ui/dialogs.py:308"
   ]
  },
- "Near your notes, a tiny drawing flickers on the map: a branching tree in Ada's hand.": {
+ "Near your notes, a tiny drawing flickers on the map: a branching tree in Zetto's hand.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:290"
+   "zettelapp/ui/quest.py:292"
   ]
  },
  "Need a hint?": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:562"
+   "zettelapp/ui/quest.py:566"
   ]
  },
  "Needs Zotero 7+ running, with Settings ▸ Advanced ▸ “Allow other applications on this computer to communicate with Zotero” turned on.": {
@@ -1852,7 +1828,7 @@
  "Not now": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:488"
+   "zettelapp/ui/quest.py:492"
   ]
  },
  "Note": {
@@ -2011,7 +1987,7 @@
  "Open a note's Mind map tab and add an idea.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:307"
+   "zettelapp/ui/quest.py:311"
   ]
  },
  "Open arrow": {
@@ -2029,7 +2005,7 @@
  "Open Insights.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:367"
+   "zettelapp/ui/quest.py:371"
   ]
  },
  "Open linked note": {
@@ -2047,7 +2023,7 @@
  "Open the Graph.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:287"
+   "zettelapp/ui/quest.py:289"
   ]
  },
  "Open the source link": {
@@ -2089,7 +2065,7 @@
  "Pictures, documents and sources are evidence.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:325"
+   "zettelapp/ui/quest.py:329"
   ]
  },
  "Pictures, files and sources": {
@@ -2101,7 +2077,7 @@
  "Pin them to your notes, and the Fog can't take them.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:326"
+   "zettelapp/ui/quest.py:330"
   ]
  },
  "PNG image (*.png)": {
@@ -2135,10 +2111,10 @@
    "zettelapp/ui/settings_dialog.py:127"
   ]
  },
- "Princess Ada, keeper of the Archive, went in after it and hasn't come back.": {
+ "Prince Zetto, keeper of the Archive, went in after it and hasn't come back.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:381"
+   "zettelapp/ui/quest.py:385"
   ]
  },
  "Q&A": {
@@ -2255,7 +2231,7 @@
  "Restart the Adventure": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:692"
+   "zettelapp/ui/quest.py:696"
   ]
  },
  "Restore": {
@@ -2267,7 +2243,7 @@
  "Resume the adventure where you left it": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:702"
+   "zettelapp/ui/quest.py:706"
   ]
  },
  "Reverse name": {
@@ -2287,7 +2263,7 @@
  "Review a flashcard: open Review, click Start review, show the answer and grade yourself.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:348"
+   "zettelapp/ui/quest.py:352"
   ]
  },
  "Right-click links an idea to a note": {
@@ -2420,7 +2396,7 @@
  "Skip this step": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:564"
+   "zettelapp/ui/quest.py:568"
   ]
  },
  "Solid": {
@@ -2474,7 +2450,7 @@
  "Space shows the answer, and keys 1 to 4 grade it. Nothing due? Write a Q: line and an A: line in a note first.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:351"
+   "zettelapp/ui/quest.py:355"
   ]
  },
  "Spaced repetition": {
@@ -2529,7 +2505,7 @@
  "Suggestions need a note with a few sentences. If none appear, open another note or write a little more.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:271"
+   "zettelapp/ui/quest.py:273"
   ]
  },
  "Supported by": {
@@ -2644,7 +2620,7 @@
  "The adventure is paused. Resume it any time from Help ▸ {title}.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:515"
+   "zettelapp/ui/quest.py:519"
   ]
  },
  "The answer was cut off at the length limit.": {
@@ -2681,7 +2657,7 @@
  "The Archive knows which notes belong together, and whispers them to those who listen.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:263"
+   "zettelapp/ui/quest.py:265"
   ]
  },
  "The Archivist's Journal": {
@@ -2699,13 +2675,13 @@
  "The door swings open onto a spiral stair. At the top shines the Tower of Insight.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:354"
+   "zettelapp/ui/quest.py:358"
   ]
  },
  "The end": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:647"
+   "zettelapp/ui/quest.py:651"
   ]
  },
  "The Fog can't swallow a note that is tied to others.": {
@@ -2717,7 +2693,7 @@
  "The Fog of Forgetting has crept into the Great Archive. Whatever isn't written down and linked fades into grey.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:378"
+   "zettelapp/ui/quest.py:382"
   ]
  },
  "The graph and Insights": {
@@ -2732,7 +2708,7 @@
    "zettelapp/ui/insights.py:335"
   ]
  },
- "The Lost Princess of the Archive": {
+ "The Lost Prince of the Archive": {
   "plural": null,
   "where": [
    "zettelapp/core/starter.py:64"
@@ -2741,7 +2717,7 @@
  "The Map Room": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:282"
+   "zettelapp/ui/quest.py:284"
   ]
  },
  "The method": {
@@ -2768,10 +2744,10 @@
    "zettelapp/core/starter.py:145"
   ]
  },
- "The princess is free!": {
+ "The prince is free!": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:644"
+   "zettelapp/ui/quest.py:648"
   ]
  },
  "The provider declined to answer this question.": {
@@ -2813,7 +2789,7 @@
  "The Riddle Door": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:343"
+   "zettelapp/ui/quest.py:347"
   ]
  },
  "The selected model was not found. Choose another model in Tools ▸ Options ▸ AI assistant.": {
@@ -2843,25 +2819,25 @@
  "The Tower of Insight": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:362"
+   "zettelapp/ui/quest.py:366"
   ]
  },
  "The types are supports, contradicts, extends, example, part_of and cites. Add link… in the side panel lets you choose one too.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:247"
+   "zettelapp/ui/quest.py:249"
   ]
  },
  "The Whispering Shelves": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:261"
+   "zettelapp/ui/quest.py:263"
   ]
  },
  "The whispers fade, all but one: “Climb to the Map Room and see the Archive whole.”": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:274"
+   "zettelapp/ui/quest.py:276"
   ]
  },
  "The whole collection": {
@@ -3020,7 +2996,7 @@
  "Under Suggested links on the right, click Link to accept a suggestion, or ✕ to dismiss one.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:268"
+   "zettelapp/ui/quest.py:270"
   ]
  },
  "Unknown AI provider: {provider!r}": {
@@ -3090,7 +3066,7 @@
  "What is counted can't hide in the Fog.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:365"
+   "zettelapp/ui/quest.py:369"
   ]
  },
  "What should a single note contain?": {
@@ -3150,13 +3126,13 @@
  "You can start the adventure any time from Help ▸ {title}.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:509"
+   "zettelapp/ui/quest.py:513"
   ]
  },
  "You found {n} clue of {total}": {
   "plural": "You found {n} clues of {total}",
   "where": [
-   "zettelapp/ui/quest.py:641"
+   "zettelapp/ui/quest.py:645"
   ]
  },
  "Your mark glows, and the shelf slides aside.": {
@@ -3165,10 +3141,10 @@
    "zettelapp/ui/quest.py:231"
   ]
  },
- "Your new branch points east, to the gallery where Ada pinned her evidence to the walls.": {
+ "Your new branch points east, to the gallery where Zetto pinned his evidence to the walls.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:312"
+   "zettelapp/ui/quest.py:316"
   ]
  },
  "Your question and the most relevant notes (up to {limit}) will be sent to {provider} using your API key. Nothing else leaves this computer.": {
@@ -3180,7 +3156,7 @@
  "Your thread hums with meaning.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:251"
+   "zettelapp/ui/quest.py:253"
   ]
  },
  "ZettelApp won't check for updates. Turn it back on in Tools ▸ Options ▸ General.": {
@@ -3205,6 +3181,30 @@
   "plural": null,
   "where": [
    "zettelapp/core/starter.py:45"
+  ]
+ },
+ "Zetto marked every note he wrote.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/quest.py:224"
+  ]
+ },
+ "Zetto sketched his plans as mind maps: one idea in the middle, branches all around.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/quest.py:306"
+  ]
+ },
+ "Zetto's Branching Plan": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/quest.py:304"
+  ]
+ },
+ "Zetto's threads said how: one note supports another, extends it, or is part of it.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/quest.py:244"
   ]
  },
  "Zotero answered with an error ({code}).": {
@@ -3359,10 +3359,10 @@
    "zettelapp/ui/quest.py:181"
   ]
  },
- "“You found me by following links,” she smiles. “Write one idea per note, link it with a reason, and the Fog will never return.”": {
+ "“You found me by following links,” he smiles. “Write one idea per note, link it with a reason, and the Fog will never return.”": {
   "plural": null,
   "where": [
-   "zettelapp/ui/quest.py:390"
+   "zettelapp/ui/quest.py:394"
   ]
  },
  "‹ End session": {

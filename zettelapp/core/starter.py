@@ -61,7 +61,7 @@ TAGS: dict[str, list[str]] = {
     "ai": [TAG_AI],
 }
 EXAMPLE_TAG = N_("idea")  # written as a #tag in the text of "Tags gather notes"
-QUEST_TITLE = N_("The Lost Princess of the Archive")  # the adventure in zettelapp.ui.quest
+QUEST_TITLE = N_("The Lost Prince of the Archive")  # the adventure in zettelapp.ui.quest
 
 _UNLINKABLE = re.compile(r"[\[\]|#\n]")
 
