@@ -15,11 +15,16 @@ import sqlite3
 import uuid
 from collections import defaultdict
 from collections.abc import Callable, Iterable
+from dataclasses import replace
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
 from zettelapp.core.models import (
+    ARROW_TIPS,
     DEFAULT_LINK_TYPES,
+    LEGACY_ARROW,
+    LEGACY_LINE_STYLES,
+    LINE_STYLES,
     Flashcard,
     Link,
     LinkType,
@@ -44,8 +49,11 @@ from zettelapp.core.textutil import (
     normalize_tag,
     slugify_type,
 )
+from zettelapp.i18n import _
 
-SCHEMA_VERSION = 2  # 2: tags.source tells tags added by hand from #tags written in the text
+# 2: tags.source tells tags added by hand from #tags written in the text
+# 3: link_types.line_style and link_types.arrow store how each link type is drawn
+SCHEMA_VERSION = 3
 MAX_TITLE = 500
 MAX_BODY = 5_000_000
 
@@ -76,7 +84,9 @@ CREATE TABLE IF NOT EXISTS link_types (
     color TEXT NOT NULL,
     directed INTEGER NOT NULL DEFAULT 1,
     builtin INTEGER NOT NULL DEFAULT 0,
-    position INTEGER NOT NULL DEFAULT 0
+    position INTEGER NOT NULL DEFAULT 0,
+    line_style TEXT NOT NULL DEFAULT 'solid',
+    arrow TEXT NOT NULL DEFAULT 'triangle'
 );
 CREATE TABLE IF NOT EXISTS links (
     src TEXT NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
@@ -214,11 +224,14 @@ class Vault:
                 self._set_meta("vault_id", uuid.uuid4().hex)
                 self._set_meta("created", utc_now())
                 for pos, lt in enumerate(DEFAULT_LINK_TYPES):
-                    self._insert_link_type(lt, pos)
+                    names = {"label": _(lt.label), "inverse_label": _(lt.inverse_label)}
+                    self._insert_link_type(replace(lt, **names), pos)
             elif int(version) > SCHEMA_VERSION:
                 raise VaultError("This vault was created by a newer version of ZettelApp.")
-            elif int(version) < 2:
-                self._upgrade_to_v2()
+            elif int(version) < SCHEMA_VERSION:
+                if int(version) < 2:
+                    self._upgrade_to_v2()
+                self._upgrade_to_v3()
                 self._set_meta("schema_version", str(SCHEMA_VERSION))
 
     def _upgrade_to_v2(self) -> None:
@@ -238,6 +251,27 @@ class Vault:
                     "WHERE note_id = ?) WHERE note_id = ?",
                     (row["id"], row["id"]),
                 )
+
+    def _upgrade_to_v3(self) -> None:
+        """Store each link type's line style and arrow tip, keeping the look it had: the
+        dash came from the type's place in the list and every arrow was open."""
+        columns = {r["name"] for r in self.conn.execute("PRAGMA table_info(link_types)")}
+        if "line_style" not in columns:
+            self.conn.execute(
+                "ALTER TABLE link_types ADD COLUMN line_style TEXT NOT NULL DEFAULT 'solid'"
+            )
+        if "arrow" not in columns:
+            self.conn.execute(
+                "ALTER TABLE link_types ADD COLUMN arrow TEXT NOT NULL DEFAULT 'triangle'"
+            )
+        rows = self.conn.execute("SELECT id FROM link_types ORDER BY position, label").fetchall()
+        self.conn.executemany(
+            "UPDATE link_types SET line_style = ?, arrow = ? WHERE id = ?",
+            [
+                (LEGACY_LINE_STYLES[i % len(LEGACY_LINE_STYLES)], LEGACY_ARROW, r["id"])
+                for i, r in enumerate(rows)
+            ],
+        )
 
     def get_meta(self, key: str) -> str | None:
         row = self.conn.execute("SELECT value FROM meta WHERE key = ?", (key,)).fetchone()
@@ -609,8 +643,8 @@ class Vault:
 
     def _insert_link_type(self, lt: LinkType, position: int) -> None:
         self.conn.execute(
-            "INSERT OR REPLACE INTO link_types (id, label, inverse_label, color, directed, builtin, position) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?)",
+            "INSERT OR REPLACE INTO link_types (id, label, inverse_label, color, directed, builtin, "
+            "position, line_style, arrow) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 lt.id,
                 lt.label,
@@ -619,6 +653,8 @@ class Vault:
                 int(lt.directed),
                 int(lt.builtin),
                 position,
+                lt.line_style,
+                lt.arrow,
             ),
         )
 
@@ -631,6 +667,8 @@ class Vault:
                 r["color"],
                 bool(r["directed"]),
                 bool(r["builtin"]),
+                r["line_style"] if r["line_style"] in LINE_STYLES else "solid",
+                r["arrow"] if r["arrow"] in ARROW_TIPS else "triangle",
             )
             for r in self.conn.execute("SELECT * FROM link_types ORDER BY position, label")
         ]
@@ -644,6 +682,10 @@ class Vault:
             raise UnsafeInputError("A link type needs a name.")
         if not re.fullmatch(r"#[0-9A-Fa-f]{6}", lt.color or ""):
             lt.color = "#8A8A8A"
+        if lt.line_style not in LINE_STYLES:
+            lt.line_style = "solid"
+        if lt.arrow not in ARROW_TIPS:
+            lt.arrow = "triangle"
         lt.label = lt.label.strip()[:60] or lt.id
         lt.inverse_label = lt.inverse_label.strip()[:60] or lt.label
         existing = self.conn.execute(
@@ -663,8 +705,14 @@ class Vault:
         return lt
 
     def delete_link_type(self, type_id: str) -> None:
+        """Remove one of your own link types; its links become "related" links."""
         if type_id == "related":
-            raise VaultError("The default link type cannot be removed.")
+            raise VaultError(_("The default link type cannot be removed."))
+        row = self.conn.execute(
+            "SELECT builtin FROM link_types WHERE id = ?", (type_id,)
+        ).fetchone()
+        if row is not None and row["builtin"]:
+            raise VaultError(_("Built-in link types can be renamed and restyled but not removed."))
         with self.transaction():
             # Re-type existing links; INSERT OR IGNORE avoids clashing with an existing "related" link.
             self.conn.execute(

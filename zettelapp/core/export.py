@@ -10,6 +10,7 @@ from __future__ import annotations
 import contextlib
 import html
 import json
+import math
 import os
 import re
 import zipfile
@@ -23,7 +24,7 @@ from xml.etree import ElementTree as ET
 from zettelapp import __version__
 from zettelapp.core.anki import anki_renderer, build_payloads, write_apkg
 from zettelapp.core.graph import force_layout
-from zettelapp.core.models import Flashcard, Link, LinkType, Note
+from zettelapp.core.models import Flashcard, Link, LinkType, Note, stroke_dashes
 from zettelapp.core.render import NoteRenderer, mindmap_to_freemind, mindmap_to_html
 from zettelapp.core.security import is_openable_url, safe_filename
 from zettelapp.core.storage import Vault
@@ -205,6 +206,8 @@ def bundle_to_dict(bundle: Bundle) -> dict:
                 "inverse_label": t.inverse_label,
                 "color": t.color,
                 "directed": t.directed,
+                "line_style": t.line_style,
+                "arrow": t.arrow,
             }
             for t in bundle.link_types
         ],
@@ -364,7 +367,8 @@ ul.mindmap, ul.mindmap ul { list-style: none; padding-left: 18px; border-left: 2
 ul.mindmap { padding-left: 0; border: none; }
 .graph { width: 100%; height: auto; background: var(--surface); border: 1px solid var(--border);
          border-radius: 10px; }
-.graph line { stroke-opacity: .55; }
+.graph .link { opacity: .55; }
+.links svg.style { vertical-align: middle; margin-right: 8px; }
 .graph circle { fill: var(--accent); stroke: var(--surface); stroke-width: 2; }
 .graph text { fill: var(--muted); font-size: 11px; }
 .notes { list-style: none; padding: 0; display: grid; gap: 10px; }
@@ -402,6 +406,62 @@ def _fmt_date(iso: str) -> str:
         return iso
 
 
+# Arrow tips drawn with the tip at (0, 0), pointing along +x: outline, whether it is
+# filled, and how far back from the tip the line stops (filled tips cover their length).
+_SVG_TIPS = {
+    "triangle": ("M0 0L-7 -3.9L-7 3.9Z", True, 7.0),
+    "open": ("M-7 -3.9L0 0L-7 3.9", False, 0.0),
+    "diamond": ("M0 0L-5.6 -3.4L-11.2 0L-5.6 3.4Z", True, 11.2),
+    "circle": ("M0 0A3 3 0 1 1 -6 0A3 3 0 1 1 0 0Z", True, 6.0),
+    "bar": ("M0 -4.5L0 4.5", False, 0.0),
+}
+
+
+def _svg_link(
+    x1: float, y1: float, x2: float, y2: float, lt: LinkType | None, width: float, end_gap: float
+) -> str:
+    """A link drawn in its type's colour, line style and arrow tip; *end_gap* keeps the
+    tip clear of the target note's circle."""
+    color = lt.color if lt else "#8a8a8a"
+    length = math.hypot(x2 - x1, y2 - y1)
+    tip = _SVG_TIPS.get(lt.tip) if lt and lt.tip and length > end_gap + 12 else None
+    parts = []
+    if tip:
+        ux, uy = (x2 - x1) / length, (y2 - y1) / length
+        x2, y2 = x2 - ux * end_gap, y2 - uy * end_gap
+        outline, filled, back = tip
+        angle = math.degrees(math.atan2(uy, ux))
+        fill = color if filled else "none"
+        parts.append(
+            f'<path d="{outline}" transform="translate({x2:.1f} {y2:.1f}) rotate({angle:.1f})" '
+            f'fill="{fill}" stroke="{color}" stroke-width="{width:g}" stroke-linejoin="round" '
+            'stroke-linecap="round"/>'
+        )
+        x2, y2 = x2 - ux * back, y2 - uy * back
+    dashes = stroke_dashes(lt.line_style) if lt else []
+    dash = (
+        ' stroke-linecap="round" stroke-dasharray="'
+        + " ".join(f"{v * width:.2f}" for v in dashes)
+        + '"'
+        if dashes
+        else ""
+    )
+    line = (
+        f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" '
+        f'stroke="{color}" stroke-width="{width:g}"{dash}/>'
+    )
+    return '<g class="link">' + line + "".join(parts) + "</g>"
+
+
+def _svg_style_sample(lt: LinkType | None) -> str:
+    """A small picture of a link type's line, as the app shows it beside links."""
+    return (
+        '<svg class="style" width="30" height="10" viewBox="0 0 30 10" aria-hidden="true">'
+        + _svg_link(1, 5, 29, 5, lt, 1.5, 0.5)
+        + "</svg>"
+    )
+
+
 def _svg_graph(bundle: Bundle, types: dict[str, LinkType]) -> str:
     notes = bundle.notes[:1500]
     if not notes:
@@ -418,6 +478,10 @@ def _svg_graph(bundle: Bundle, types: dict[str, LinkType]) -> str:
         degree[l.src] += 1
         degree[l.dst] += 1
     labelled = set(sorted(ids, key=lambda i: -degree[i])[:60])
+
+    def radius(node_id: str) -> float:
+        return 5 + min(10, degree[node_id] ** 0.5 * 2)
+
     out = [
         f'<svg class="graph" viewBox="{min_x:.0f} {min_y:.0f} {width:.0f} {height:.0f}" '
         f'xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Graph of notes">'
@@ -425,15 +489,11 @@ def _svg_graph(bundle: Bundle, types: dict[str, LinkType]) -> str:
     for l in bundle.links:
         if l.src in pos and l.dst in pos:
             (x1, y1), (x2, y2) = pos[l.src], pos[l.dst]
-            color = types[l.type].color if l.type in types else "#8a8a8a"
-            out.append(
-                f'<line x1="{x1:.1f}" y1="{y1:.1f}" x2="{x2:.1f}" y2="{y2:.1f}" '
-                f'stroke="{color}" stroke-width="1.5"/>'
-            )
+            out.append(_svg_link(x1, y1, x2, y2, types.get(l.type), 1.5, radius(l.dst) + 3))
     titles = {n.id: n.display_title for n in notes}
     for node_id in ids:
         x, y = pos[node_id]
-        r = 5 + min(10, degree[node_id] ** 0.5 * 2)
+        r = radius(node_id)
         label = html.escape(titles[node_id])
         out.append(
             f'<a href="notes/{node_id}.html"><circle cx="{x:.1f}" cy="{y:.1f}" r="{r:.1f}">'
@@ -542,7 +602,7 @@ def _note_page(
         lt = types.get(l.type)
         label = lt.label_for(outgoing) if lt else l.type
         rows.append(
-            f'<li><span class="type">{esc(label)}</span>'
+            f'<li>{_svg_style_sample(lt)}<span class="type">{esc(label)}</span>'
             f'<a href="{other.id}.html">{esc(other.display_title)}</a></li>'
         )
     if rows:
@@ -577,6 +637,9 @@ def _write_graphml(bundle: Bundle, path: Path) -> None:
         ("modified", "node"),
         ("type", "edge"),
         ("label", "edge"),
+        ("color", "edge"),
+        ("line_style", "edge"),
+        ("arrow", "edge"),
     ]
     for name, scope in keys:
         ET.SubElement(
@@ -607,13 +670,30 @@ def _write_graphml(bundle: Bundle, path: Path) -> None:
             target=l.dst,
             directed="true" if (lt is None or lt.directed) else "false",
         )
-        ET.SubElement(edge, f"{{{ns}}}data", key="edge_type").text = l.type
-        ET.SubElement(edge, f"{{{ns}}}data", key="edge_label").text = lt.label if lt else l.type
+        for name, value in (
+            ("type", l.type),
+            ("label", lt.label if lt else l.type),
+            ("color", lt.color if lt else "#8a8a8a"),
+            ("line_style", lt.line_style if lt else "solid"),
+            ("arrow", (lt.tip or "none") if lt else "triangle"),
+        ):
+            ET.SubElement(edge, f"{{{ns}}}data", key=f"edge_{name}").text = value
     ET.ElementTree(root).write(path, encoding="utf-8", xml_declaration=True)
 
 
 def _dot_str(value: str) -> str:
     return '"' + value.replace("\\", "\\\\").replace('"', '\\"').replace("\n", "\\n") + '"'
+
+
+# Graphviz has no dash-dot or long-dash edges; those are drawn dashed.
+_DOT_STYLES = {"solid": "solid", "dotted": "dotted"}
+_DOT_ARROWS = {
+    "triangle": "normal",
+    "open": "vee",
+    "diamond": "diamond",
+    "circle": "dot",
+    "bar": "tee",
+}
 
 
 def _dot(bundle: Bundle, title: str) -> str:
@@ -632,8 +712,9 @@ def _dot(bundle: Bundle, title: str) -> str:
             f"color={_dot_str(lt.color if lt else '#8a8a8a')}",
             f"label={_dot_str(lt.label if lt else l.type)}",
         ]
-        if lt is not None and not lt.directed:
-            attrs.append("dir=none")
+        if lt is not None:
+            attrs.append(f"style={_DOT_STYLES.get(lt.line_style, 'dashed')}")
+            attrs.append(f"arrowhead={_DOT_ARROWS[lt.tip]}" if lt.tip else "dir=none")
         lines.append(f"  {_dot_str(l.src)} -> {_dot_str(l.dst)} [{', '.join(attrs)}];")
     lines.append("}")
     return "\n".join(lines) + "\n"

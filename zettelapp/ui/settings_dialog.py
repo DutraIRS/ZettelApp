@@ -6,10 +6,11 @@ import json
 import os
 import shutil
 import sys
+from dataclasses import replace
 from pathlib import Path
 
-from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QColor, QGuiApplication
+from PySide6.QtCore import QPointF, QRectF, QSize, Qt
+from PySide6.QtGui import QColor, QGuiApplication, QIcon, QPainter, QPen, QPixmap
 from PySide6.QtWidgets import (
     QCheckBox,
     QColorDialog,
@@ -28,8 +29,6 @@ from PySide6.QtWidgets import (
     QSlider,
     QSpinBox,
     QStackedWidget,
-    QTableWidget,
-    QTableWidgetItem,
     QVBoxLayout,
     QWidget,
 )
@@ -43,11 +42,23 @@ from zettelapp.core.llm import (
     list_models,
     test_connection,
 )
-from zettelapp.core.models import LinkType
+from zettelapp.core.models import LinkType, least_used_line_style
 from zettelapp.core.secrets import delete_secret, get_secret, set_secret
 from zettelapp.core.suggest import FEATURES
+from zettelapp.core.textutil import slugify_type
+from zettelapp.i18n import _
 from zettelapp.paths import backups_dir
-from zettelapp.ui import icons
+from zettelapp.ui import icons, theme
+from zettelapp.ui.graph_common import draw_edge_label
+from zettelapp.ui.link_style import (
+    ARROW_TIP_NAMES,
+    LINE_STYLE_NAMES,
+    LIST_ICON,
+    draw_sample,
+    sample_icon,
+    type_color,
+    type_icon,
+)
 from zettelapp.ui.widgets import label, link_button
 from zettelapp.ui.workers import run_task
 
@@ -104,6 +115,73 @@ def claude_desktop_config_path() -> Path:
         / "Claude"
         / "claude_desktop_config.json"
     )
+
+
+class _LinkSample(QWidget):
+    """A live preview of a link type: two notes joined by a link in its style."""
+
+    def __init__(self):
+        super().__init__()
+        self.lt: LinkType | None = None
+        self.setMinimumHeight(64)
+        self.setAccessibleName(_("Preview"))
+
+    def set_type(self, lt: LinkType) -> None:
+        self.lt = lt
+        self.update()
+
+    def paintEvent(self, event) -> None:  # noqa: N802
+        if self.lt is None:
+            return
+        t = theme.current()
+        p = QPainter(self)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
+        p.setRenderHint(QPainter.RenderHint.TextAntialiasing)
+        box = QRectF(self.rect()).adjusted(0.5, 0.5, -0.5, -0.5)
+        p.setPen(QPen(t.q("border"), 1))
+        p.setBrush(t.q("surface_alt"))
+        p.drawRoundedRect(box, 6, 6)
+        radius, y = 8.0, box.top() + 32
+        a = QPointF(box.left() + 40, y)
+        b = QPointF(box.right() - 40, y)
+        draw_sample(
+            p,
+            QPointF(a.x() + radius, y),
+            QPointF(b.x() - radius - 3, y),
+            type_color(self.lt),
+            self.lt.line_style,
+            self.lt.tip,
+            width=2.2,
+        )
+        font = theme.ui_font(8.5)
+        p.setFont(font)
+        for centre, name in ((a, _("Note A")), (b, _("Note B"))):
+            p.setPen(QPen(t.q("surface"), 2))
+            p.setBrush(t.q("text_muted"))
+            p.drawEllipse(centre, radius, radius)
+            p.setPen(t.q("text_secondary"))
+            p.drawText(
+                QRectF(centre.x() - 60, y + radius + 3, 120, 18),
+                Qt.AlignmentFlag.AlignHCenter,
+                name,
+            )
+        name = self.lt.label.strip() or _("Untitled")
+        draw_edge_label(p, QPointF(box.center().x(), y - 15), name, font)
+        reverse = self.lt.inverse_label.strip()
+        reading = (
+            _("Seen from Note B: {reverse}").format(reverse=reverse)
+            if self.lt.directed and reverse
+            else _("Reads the same from both notes")
+        )
+        p.setPen(t.q("text_muted"))
+        p.drawText(
+            QRectF(a.x() + 60, y + 6, b.x() - a.x() - 120, 20),
+            Qt.AlignmentFlag.AlignHCenter,
+            p.fontMetrics().elidedText(
+                reading, Qt.TextElideMode.ElideRight, int(b.x() - a.x() - 120)
+            ),
+        )
+        p.end()
 
 
 class OptionsDialog(QDialog):
@@ -270,71 +348,229 @@ class OptionsDialog(QDialog):
     def _link_types(self, lay: QVBoxLayout) -> None:
         lay.addWidget(
             label(
-                "Typed links say how notes relate. Directed types read differently from each side "
-                "(“Supports” / “Supported by”). In text, write type:: [[Note]], e.g. supports:: [[Claim]].",
+                _(
+                    "Typed links say how notes relate. Directed types read differently from "
+                    "each side (“Supports” / “Supported by”). Each type has its own colour and "
+                    "line, so links stay easy to tell apart in the graph even without colour."
+                ),
                 "caption",
                 wrap=True,
             )
         )
-        self.types_table = QTableWidget(0, 4)
-        self.types_table.setHorizontalHeaderLabels(["Name", "Reverse name", "Colour", "Directed"])
-        self.types_table.horizontalHeader().setStretchLastSection(True)
-        self.types_table.verticalHeader().setVisible(False)
-        self.types_table.cellDoubleClicked.connect(self._pick_colour)
-        lay.addWidget(self.types_table, 1)
-        row = QHBoxLayout()
-        row.addWidget(link_button("Add link type", self._add_type))
-        row.addWidget(link_button("Remove selected", self._remove_type))
-        row.addStretch(1)
-        lay.addLayout(row)
+        body = QHBoxLayout()
+        body.setSpacing(12)
+        left = QVBoxLayout()
+        self.types_list = QListWidget()
+        self.types_list.setAccessibleName(_("Link types"))
+        self.types_list.setIconSize(LIST_ICON)
+        self.types_list.setFixedWidth(220)
+        self.types_list.currentRowChanged.connect(self._show_type)
+        left.addWidget(self.types_list, 1)
+        buttons = QHBoxLayout()
+        buttons.addWidget(link_button(_("Add link type"), self._add_type))
+        self.remove_type_button = link_button(_("Remove"), self._remove_type)
+        buttons.addWidget(self.remove_type_button)
+        buttons.addStretch(1)
+        left.addLayout(buttons)
+        body.addLayout(left)
+
+        editor = QWidget()
+        editor.setObjectName("Card")
+        editor_lay = QVBoxLayout(editor)
+        editor_lay.setContentsMargins(16, 14, 16, 14)
+        editor_lay.setSpacing(10)
+        form = QFormLayout()
+        form.setHorizontalSpacing(14)
+        self.type_name = QLineEdit()
+        self.type_name.setMaxLength(60)
+        self.type_name.textEdited.connect(self._type_edited)
+        form.addRow(_("Name"), self.type_name)
+        self.type_reverse = QLineEdit()
+        self.type_reverse.setMaxLength(60)
+        self.type_reverse.setToolTip(_("How the link reads from the note it points to"))
+        self.type_reverse.textEdited.connect(self._type_edited)
+        form.addRow(_("Reverse name"), self.type_reverse)
+        self.type_directed = QCheckBox(_("Directed: reads differently from each side"))
+        self.type_directed.toggled.connect(self._type_edited)
+        form.addRow("", self.type_directed)
+        self.type_colour = QPushButton()
+        self.type_colour.setAccessibleName(_("Colour"))
+        self.type_colour.setToolTip(_("Choose a colour"))
+        self.type_colour.setCursor(Qt.CursorShape.PointingHandCursor)
+        self.type_colour.clicked.connect(self._pick_colour)
+        colour_row = QHBoxLayout()
+        colour_row.addWidget(self.type_colour)
+        colour_row.addStretch(1)
+        form.addRow(_("Colour"), colour_row)
+        self.type_line = QComboBox()
+        self.type_line.setAccessibleName(_("Line style"))
+        self.type_line.setIconSize(LIST_ICON)
+        for key, name in LINE_STYLE_NAMES.items():
+            self.type_line.addItem(_(name), key)
+        self.type_line.currentIndexChanged.connect(self._type_edited)
+        form.addRow(_("Line"), self.type_line)
+        self.type_arrow = QComboBox()
+        self.type_arrow.setAccessibleName(_("Arrow tip"))
+        self.type_arrow.setIconSize(LIST_ICON)
+        for key, name in ARROW_TIP_NAMES.items():
+            self.type_arrow.addItem(_(name), key)
+        self.type_arrow.currentIndexChanged.connect(self._type_edited)
+        form.addRow(_("Arrow tip"), self.type_arrow)
+        editor_lay.addLayout(form)
+        self.type_sample = _LinkSample()
+        editor_lay.addWidget(self.type_sample)
+        self.type_hint = label("", "caption", wrap=True)
+        self.type_hint.setTextFormat(Qt.TextFormat.PlainText)
+        editor_lay.addWidget(self.type_hint)
+        editor_lay.addStretch(1)
+        body.addWidget(editor, 1)
+        lay.addLayout(body, 1)
+
         self._removed_types: list[str] = []
-        for lt in self.window.vault.link_types() if self.window.vault else []:
-            self._add_type_row(lt)
+        self._types = [
+            replace(lt) for lt in (self.window.vault.link_types() if self.window.vault else [])
+        ]
+        self._loading_type = False
+        self._type_editor = editor
+        editor.setEnabled(False)
+        for lt in self._types:
+            self.types_list.addItem(QListWidgetItem(type_icon(lt), lt.label))
+        if self._types:
+            self.types_list.setCurrentRow(0)
 
-    def _add_type_row(self, lt: LinkType) -> None:
-        r = self.types_table.rowCount()
-        self.types_table.insertRow(r)
-        name = QTableWidgetItem(lt.label)
-        name.setData(Qt.ItemDataRole.UserRole, lt.id)
-        self.types_table.setItem(r, 0, name)
-        self.types_table.setItem(r, 1, QTableWidgetItem(lt.inverse_label))
-        colour = QTableWidgetItem(lt.color)
-        colour.setBackground(QColor(lt.color))
-        colour.setForeground(QColor("#ffffff"))
-        colour.setFlags(colour.flags() & ~Qt.ItemFlag.ItemIsEditable)
-        colour.setToolTip("Double-click to choose a colour")
-        self.types_table.setItem(r, 2, colour)
-        directed = QTableWidgetItem()
-        directed.setFlags(Qt.ItemFlag.ItemIsUserCheckable | Qt.ItemFlag.ItemIsEnabled)
-        directed.setCheckState(Qt.CheckState.Checked if lt.directed else Qt.CheckState.Unchecked)
-        self.types_table.setItem(r, 3, directed)
+    def _current_type(self) -> LinkType | None:
+        row = self.types_list.currentRow()
+        return self._types[row] if 0 <= row < len(self._types) else None
 
-    def _pick_colour(self, row: int, column: int) -> None:
-        if column != 2:
+    def _show_type(self, row: int) -> None:
+        """Fill the editor with the link type in *row*."""
+        lt = self._current_type()
+        self._type_editor.setEnabled(lt is not None)
+        if lt is None:
+            self.remove_type_button.setEnabled(False)
             return
-        item = self.types_table.item(row, 2)
-        colour = QColorDialog.getColor(QColor(item.text()), self, "Link colour")
+        self._loading_type = True
+        self.type_name.setText(lt.label)
+        self.type_reverse.setText(lt.inverse_label)
+        self.type_directed.setChecked(lt.directed)
+        self.type_line.setCurrentIndex(max(0, self.type_line.findData(lt.line_style)))
+        self.type_arrow.setCurrentIndex(max(0, self.type_arrow.findData(lt.arrow)))
+        self._loading_type = False
+        self.remove_type_button.setEnabled(not lt.builtin)
+        self.remove_type_button.setToolTip(
+            _("Built-in link types can be renamed and restyled but not removed.")
+            if lt.builtin
+            else ""
+        )
+        self._refresh_type()
+
+    def _type_edited(self, *_args) -> None:
+        lt = self._current_type()
+        if lt is None or self._loading_type:
+            return
+        lt.label = self.type_name.text()
+        lt.inverse_label = self.type_reverse.text()
+        lt.directed = self.type_directed.isChecked()
+        lt.line_style = self.type_line.currentData()
+        lt.arrow = self.type_arrow.currentData()
+        self._refresh_type()
+
+    def _refresh_type(self) -> None:
+        """Redraw the previews of the type being edited."""
+        lt = self._current_type()
+        if lt is None:
+            return
+        color = type_color(lt)
+        item = self.types_list.currentItem()
+        item.setText(lt.label.strip() or _("Untitled"))
+        item.setIcon(type_icon(lt))
+        self.type_reverse.setEnabled(lt.directed)
+        self.type_arrow.setEnabled(lt.directed)
+        self.type_reverse.setPlaceholderText("" if lt.directed else _("Same as the name"))
+        swatch = QPixmap(32, 32)
+        swatch.setDevicePixelRatio(2)
+        swatch.fill(Qt.GlobalColor.transparent)
+        p = QPainter(swatch)
+        p.setRenderHint(QPainter.RenderHint.Antialiasing)
+        p.setPen(QPen(theme.current().q("border_strong"), 1))
+        p.setBrush(color)
+        p.drawRoundedRect(QRectF(1.5, 1.5, 13, 13), 3, 3)
+        p.end()
+        self.type_colour.setIcon(QIcon(swatch))
+        self.type_colour.setText(lt.color.upper())
+        for i in range(self.type_line.count()):
+            self.type_line.setItemIcon(i, sample_icon(color, self.type_line.itemData(i), None))
+        for i in range(self.type_arrow.count()):
+            self.type_arrow.setItemIcon(i, sample_icon(color, "solid", self.type_arrow.itemData(i)))
+        self.type_sample.set_type(lt)
+        type_id = lt.id or slugify_type(lt.label)
+        hint = (
+            _("In a note, write {example}.").format(example=f"{type_id}:: [[…]]")
+            if type_id
+            else _("Give the link type a name.")
+        )
+        if lt.builtin:
+            hint += " " + _("Built-in link types can be renamed and restyled but not removed.")
+        self.type_hint.setText(hint)
+
+    def _pick_colour(self) -> None:
+        lt = self._current_type()
+        if lt is None:
+            return
+        colour = QColorDialog.getColor(QColor(lt.color), self, _("Link colour"))
         if colour.isValid():
-            item.setText(colour.name())
-            item.setBackground(colour)
+            lt.color = colour.name()
+            self._refresh_type()
 
     def _add_type(self) -> None:
-        self._add_type_row(LinkType("", "New link type", "New link type (reverse)", "#6250d6"))
-        self.types_table.editItem(self.types_table.item(self.types_table.rowCount() - 1, 0))
+        used = [lt.color.lower() for lt in self._types]
+        lt = LinkType(
+            "",
+            _("New link type"),
+            _("New link type (reverse)"),
+            min(theme.CATEGORICAL_LIGHT, key=used.count),
+            line_style=least_used_line_style(self._types),
+        )
+        self._types.append(lt)
+        self.types_list.addItem(QListWidgetItem(type_icon(lt), lt.label))
+        self.types_list.setCurrentRow(len(self._types) - 1)
+        self.type_name.setFocus()
+        self.type_name.selectAll()
 
     def _remove_type(self) -> None:
-        row = self.types_table.currentRow()
-        if row < 0:
+        lt = self._current_type()
+        if lt is None or lt.builtin:
             return
-        type_id = self.types_table.item(row, 0).data(Qt.ItemDataRole.UserRole)
-        if type_id == "related":
-            QMessageBox.information(
-                self, "Link types", "“Related to” is the default link type and can't be removed."
-            )
-            return
-        if type_id:
-            self._removed_types.append(type_id)
-        self.types_table.removeRow(row)
+        if lt.id:
+            self._removed_types.append(lt.id)
+        row = self.types_list.currentRow()
+        del self._types[row]
+        self.types_list.takeItem(row)
+        self._show_type(self.types_list.currentRow())
+
+    def _save_link_types(self, vault) -> bool:
+        """Store the edited link types; False (after saying why) if one can't be saved."""
+        taken: set[str] = set()
+        for row, lt in enumerate(self._types):
+            type_id = lt.id or slugify_type(lt.label)
+            problem = None
+            if not type_id:
+                problem = _("Give the new link type a name.")
+            elif type_id in taken:
+                problem = _("There is already a link type “{name}”.").format(name=lt.label.strip())
+            if problem:
+                self.nav.setCurrentRow(PAGES.index("Link types"))
+                self.types_list.setCurrentRow(row)
+                QMessageBox.warning(self, _("Link types"), problem)
+                return False
+            taken.add(type_id)
+        for type_id in self._removed_types:
+            vault.delete_link_type(type_id)
+        self._removed_types = []
+        for lt in self._types:
+            lt.id = vault.save_link_type(replace(lt)).id  # new types keep their id from now on
+        self._refresh_type()
+        return True
 
     def _ai(self, lay: QVBoxLayout) -> None:
         lay.addWidget(
@@ -706,21 +942,8 @@ class OptionsDialog(QDialog):
             self.key.clear()
             self._provider_changed()
         vault = self.window.vault
-        if vault is not None:
-            for type_id in self._removed_types:
-                vault.delete_link_type(type_id)
-            self._removed_types = []
-            for r in range(self.types_table.rowCount()):
-                name = self.types_table.item(r, 0)
-                vault.save_link_type(
-                    LinkType(
-                        name.data(Qt.ItemDataRole.UserRole) or name.text(),
-                        name.text(),
-                        self.types_table.item(r, 1).text(),
-                        self.types_table.item(r, 2).text(),
-                        self.types_table.item(r, 3).checkState() == Qt.CheckState.Checked,
-                    )
-                )
+        if vault is not None and not self._save_link_types(vault):
+            return False
         self.window.settings_changed()
         return True
 

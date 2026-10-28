@@ -18,7 +18,7 @@ from zettelapp.ui.graph_common import (
     label_point,
     parallel_lanes,
 )
-from zettelapp.ui.side_panel import type_dash
+from zettelapp.ui.link_style import draw_tip, link_pen
 
 
 class Graph3DView(QWidget):
@@ -168,23 +168,22 @@ class Graph3DView(QWidget):
             color = QColor(self.data.link_color(link))
             alpha = 0.95 if highlighted else 0.12 + 0.45 * d
             color.setAlphaF(alpha * (0.35 if focus is not None and not highlighted else 1.0))
-            entry = self.data.types.get(link.type)
             radius = node_radius(self.data.degree.get(link.dst, 0)) * (0.55 + 0.6 * depth[b])
+            tip = self.data.link_tip(link) if highlighted else None
             shape = edge_shape(
                 link,
                 QPointF(*screen[a]),
                 QPointF(*screen[b]),
                 self._lanes[i] * spread,
                 radius,
-                highlighted and self.data.link_directed(link),
+                tip is not None,
+                tip or "triangle",
             )
-            painter.setPen(
-                QPen(color, 2.4 if highlighted else 1.0 + d, type_dash(entry[0] if entry else 0))
-            )
+            width = 2.4 if highlighted else 1.0 + d
+            painter.setPen(link_pen(color, width, self.data.link_style(link)))
             painter.drawPath(shape.path)
             if shape.arrow is not None:
-                painter.setPen(QPen(color, 2.4, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
-                painter.drawPath(shape.arrow)
+                draw_tip(painter, shape.arrow, color, width, shape.filled)
 
         order = np.argsort(depth)
         by_degree = sorted(self.data.ids, key=lambda i: -self.data.degree.get(i, 0))

@@ -151,7 +151,9 @@ def test_graph_tools(vault, sample):
     assert len(suggestions["suggestions"]) <= 3
     assert all(s["id"] != sample["b"].id for s in suggestions["suggestions"])
     types = call(server, "list_link_types", {})["result"]["structuredContent"]["link_types"]
-    assert "supports" in {t["id"] for t in types}
+    by_id = {t["id"]: t for t in types}
+    assert by_id["supports"]["line_style"] == "dashed" and by_id["supports"]["arrow"] == "triangle"
+    assert by_id["related"]["arrow"] == "none" and by_id["related"]["color"] == "#898781"
 
 
 def test_protocol_errors(vault):

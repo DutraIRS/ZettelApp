@@ -31,12 +31,13 @@ from PySide6.QtWidgets import (
 
 from zettelapp import APP_NAME, DOCS_URL, HOMEPAGE_URL, REPO_URL, SPONSOR_URL, __version__
 from zettelapp.core.export import FORMATS, FORMATS_BY_KEY
-from zettelapp.core.models import Flashcard, LinkType
+from zettelapp.core.models import Flashcard
 from zettelapp.core.storage import Vault
 from zettelapp.core.textutil import fold
 from zettelapp.i18n import N_, _
 from zettelapp.paths import documents_dir, resource_path
 from zettelapp.ui import icons, theme
+from zettelapp.ui.link_style import LIST_ICON, type_icon
 from zettelapp.ui.widgets import ScopePicker, SearchBox, label
 
 
@@ -78,8 +79,9 @@ class LinkPickerDialog(QDialog):
         layout.addWidget(self.list, 1)
         self.type_combo = QComboBox()
         self.type_combo.setAccessibleName(_("Link type"))
+        self.type_combo.setIconSize(LIST_ICON)
         for lt in vault.link_types():
-            self.type_combo.addItem(self._swatch(lt), lt.label, lt.id)
+            self.type_combo.addItem(type_icon(lt), lt.label, lt.id)
         self.type_combo.setCurrentIndex(max(0, self.type_combo.findData(initial_type)))
         if show_types:
             row = QHBoxLayout()
@@ -92,20 +94,6 @@ class LinkPickerDialog(QDialog):
         self.list.itemDoubleClicked.connect(lambda _unused: self.accept())
         self._refresh()
         self.search.setFocus()
-
-    @staticmethod
-    def _swatch(lt: LinkType):
-        from PySide6.QtGui import QColor, QIcon, QPainter, QPixmap
-
-        px = QPixmap(14, 14)
-        px.fill(Qt.GlobalColor.transparent)
-        p = QPainter(px)
-        p.setRenderHint(QPainter.RenderHint.Antialiasing)
-        p.setBrush(theme.current().entity(lt.color) if lt.color else QColor("#888"))
-        p.setPen(Qt.PenStyle.NoPen)
-        p.drawEllipse(2, 2, 10, 10)
-        p.end()
-        return QIcon(px)
 
     def _refresh(self) -> None:
         query = self.search.text().strip()

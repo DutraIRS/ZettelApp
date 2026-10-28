@@ -90,6 +90,56 @@ def test_dialogs_construct(window):
     options.close()
 
 
+def test_options_page_edits_link_types_and_their_styles(window, monkeypatch):
+    from zettelapp.ui.settings_dialog import OptionsDialog
+
+    vault = window.vault
+    dialog = OptionsDialog(window, "Link types")
+    ids = [lt.id for lt in dialog._types]
+    dialog.types_list.setCurrentRow(ids.index("supports"))
+    assert not dialog.remove_type_button.isEnabled()  # built-in: restyle, don't remove
+    dialog.type_name.setText("Backs")
+    dialog.type_name.textEdited.emit("Backs")
+    dialog.type_line.setCurrentIndex(dialog.type_line.findData("long_dash"))
+    dialog.type_arrow.setCurrentIndex(dialog.type_arrow.findData("diamond"))
+    dialog.grab()  # paints the preview and the combo pictures
+
+    dialog._add_type()
+    assert dialog.remove_type_button.isEnabled()
+    dialog.type_name.setText("Inspired by")
+    dialog.type_name.textEdited.emit("Inspired by")
+    dialog.type_directed.setChecked(False)
+    assert not dialog.type_arrow.isEnabled() and not dialog.type_reverse.isEnabled()
+    dialog.type_line.setCurrentIndex(dialog.type_line.findData("dotted"))
+    assert dialog.apply()
+
+    types = vault.link_type_map()
+    backs, inspired = types["supports"], types["inspired_by"]
+    assert (backs.label, backs.line_style, backs.arrow, backs.builtin) == (
+        "Backs",
+        "long_dash",
+        "diamond",
+        True,
+    )
+    assert (inspired.line_style, inspired.directed, inspired.tip) == ("dotted", False, None)
+    assert dialog._types[-1].id == "inspired_by"  # applying twice doesn't add it again
+    assert dialog.apply() and len(vault.link_types()) == len(ids) + 1
+
+    dialog._remove_type()  # the new type is still selected
+    warnings = []
+    monkeypatch.setattr(
+        "zettelapp.ui.settings_dialog.QMessageBox.warning", lambda *a: warnings.append(a[2])
+    )
+    dialog._add_type()
+    dialog.type_name.setText("")
+    dialog.type_name.textEdited.emit("")
+    assert not dialog.apply() and warnings  # a new type needs a name
+    dialog._remove_type()
+    assert dialog.apply()
+    assert "inspired_by" not in vault.link_type_map()
+    dialog.close()
+
+
 def test_mindmap_editor_blocks_children_beyond_the_storage_limit(window):
     from zettelapp.core.models import MAX_MINDMAP_DEPTH, mindmap_nodes, new_mindmap_node
     from zettelapp.ui.mindmap import MindMapView

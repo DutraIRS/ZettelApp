@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import html
 
-from PySide6.QtCore import QSize, Qt, Signal
-from PySide6.QtGui import QAction, QIcon, QPainter, QPen, QPixmap
+from PySide6.QtCore import Qt, Signal
+from PySide6.QtGui import QAction
 from PySide6.QtWidgets import (
     QHBoxLayout,
     QListWidget,
@@ -22,35 +22,8 @@ from PySide6.QtWidgets import (
 from zettelapp.core.models import Link, LinkType
 from zettelapp.core.suggest import Suggestion
 from zettelapp.ui import icons, theme
+from zettelapp.ui.link_style import LIST_ICON, MENU_ICON, type_icon
 from zettelapp.ui.widgets import ElidedLabel, label, link_button, tool_button
-
-DASHES = [
-    Qt.PenStyle.SolidLine,
-    Qt.PenStyle.DashLine,
-    Qt.PenStyle.DotLine,
-    Qt.PenStyle.DashDotLine,
-    Qt.PenStyle.DashDotDotLine,
-]
-
-
-def type_dash(index: int) -> Qt.PenStyle:
-    """Second visual cue for link types (besides colour) for colour-blind readers and print."""
-    return DASHES[index % len(DASHES)]
-
-
-def type_icon(lt: LinkType, index: int, size: int = 22) -> QIcon:
-    px = QPixmap(size * 2, size * 2)
-    px.setDevicePixelRatio(2)
-    px.fill(Qt.GlobalColor.transparent)
-    p = QPainter(px)
-    p.setRenderHint(QPainter.RenderHint.Antialiasing)
-    p.setPen(QPen(theme.current().entity(lt.color), 2.2, type_dash(index), Qt.PenCapStyle.RoundCap))
-    p.drawLine(2, size // 2, size - 4, size // 2)
-    if lt.directed:
-        p.drawLine(size - 8, size // 2 - 4, size - 4, size // 2)
-        p.drawLine(size - 8, size // 2 + 4, size - 4, size // 2)
-    p.end()
-    return QIcon(px)
 
 
 class _SuggestionRow(QWidget):
@@ -88,9 +61,9 @@ class _SuggestionRow(QWidget):
         link.setToolTip("Link as “Related to”; use the arrow to choose another link type")
         link.clicked.connect(lambda: panel.acceptSuggestion.emit(s.note_id, "related"))
         menu = QMenu(link)
-        for i, lt in enumerate(panel.link_types):
+        for lt in panel.link_types:
             menu.addAction(
-                type_icon(lt, i),
+                type_icon(lt, MENU_ICON),
                 lt.label,
                 lambda t=lt.id: panel.acceptSuggestion.emit(s.note_id, t),
             )
@@ -182,7 +155,7 @@ class SidePanel(QWidget):
     def _list(self, name: str) -> QListWidget:
         w = QListWidget()
         w.setAccessibleName(name)
-        w.setIconSize(QSize(22, 22))
+        w.setIconSize(LIST_ICON)
         w.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
         w.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
         w.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
@@ -223,11 +196,11 @@ class SidePanel(QWidget):
             for link, title in sorted(
                 rows, key=lambda r: (types.get(r[0].type, (99,))[0], r[1].casefold())
             ):
-                index, lt = types.get(link.type, (0, None))
+                lt = types.get(link.type, (0, None))[1]
                 verb = lt.label_for(out) if lt else link.type
                 item = QListWidgetItem(f"{title or 'Untitled'}\n{verb}")
                 if lt:
-                    item.setIcon(type_icon(lt, index))
+                    item.setIcon(type_icon(lt))
                 other = link.dst if out else link.src
                 item.setData(Qt.ItemDataRole.UserRole, (link, other))
                 item.setToolTip(
@@ -251,8 +224,8 @@ class SidePanel(QWidget):
         menu = QMenu(self)
         menu.addAction(icons.icon("open"), "Open note", lambda: self.openNote.emit(other))
         change = menu.addMenu("Change link type")
-        for i, lt in enumerate(self.link_types):
-            action = QAction(type_icon(lt, i), lt.label, change)
+        for lt in self.link_types:
+            action = QAction(type_icon(lt, MENU_ICON), lt.label, change)
             action.setCheckable(True)
             action.setChecked(lt.id == link.type)
             action.triggered.connect(

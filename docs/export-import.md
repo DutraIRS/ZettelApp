@@ -18,12 +18,12 @@ button exports the notes on screen) and from a graph node's menu.
 
 | Format | File | Contents |
 |---|---|---|
-| **ZettelApp archive** | `.zip` | Everything, including images: notes, typed links, link types, flashcards, mind maps. Re-import it into ZettelApp on any computer. Best for backups and moving vaults. |
+| **ZettelApp archive** | `.zip` | Everything, including images: notes, typed links, link types (with their colours, line styles and arrow tips), flashcards, mind maps. Re-import it into ZettelApp on any computer. Best for backups and moving vaults. |
 | **Markdown files** | `.zip` | One `.md` file per note with YAML front matter (id, title, tags, source link, dates, typed links, mind map) and `[[wiki links]]` between files. Links not written in the text are listed under *Links* as `type:: [[Note]]`, and manual flashcards under *Flashcards* as `Q:`/`A:`. Images are in `assets/`. Opens in Obsidian and other Markdown editors. |
-| **Website** | `.zip` | A self-contained static website: an index with a graph overview, a tag index and one page per note, with links, mind maps and flashcards (answers revealed on click). No scripts; it works offline by opening `index.html`. Light and dark themes. |
+| **Website** | `.zip` | A self-contained static website: an index with a graph overview, a tag index and one page per note, with links drawn in their link types' colours and line styles, mind maps and flashcards (answers revealed on click). No scripts; it works offline by opening `index.html`. Light and dark themes. |
 | **JSON** | `.json` | Structured data for scripts and other tools (images referenced, not included). |
-| **GraphML** | `.graphml` | The link graph for Gephi, yEd, Cytoscape or NetworkX, with titles, tags and dates on nodes and link types on edges (directed or not). |
-| **Graphviz DOT** | `.dot` | The graph as a Graphviz diagram, with link types coloured and labelled; undirected types have no arrows. |
+| **GraphML** | `.graphml` | The link graph for Gephi, yEd, Cytoscape or NetworkX, with titles, tags and dates on nodes and link types on edges (directed or not), with each type's colour, line style and arrow tip. |
+| **Graphviz DOT** | `.dot` | The graph as a Graphviz diagram, with link types coloured, labelled and styled: solid, dashed or dotted lines (Graphviz draws dash-dot and long-dash lines dashed) and each type's arrow tip; undirected types have no arrows. |
 | **Anki deck** | `.apkg` | The flashcards of the exported notes. See [Anki](review-and-anki.md#anki). |
 
 Exports are written to a temporary file and moved into place only when complete, so an interrupted
@@ -44,8 +44,9 @@ can be saved as a PNG image.
 What is kept:
 
 - **From ZettelApp archives and JSON:** notes keep their IDs, typed links, flashcards, mind maps and
-  images. Importing the same archive twice skips notes that haven't changed. If an ID is already used by
-  a different note, the import gets a new ID and the links are updated.
+  images. Link types the vault doesn't have yet are added with their colours and styles; types it has
+  keep their own. Importing the same archive twice skips notes that haven't changed. If an ID is already
+  used by a different note, the import gets a new ID and the links are updated.
 - **From Markdown:**
   - the title comes from the front matter `title`, the first `# heading` or the file name;
   - tags come from front matter `tags` and inline `#hashtags`;

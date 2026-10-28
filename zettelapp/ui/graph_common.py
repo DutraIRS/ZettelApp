@@ -20,6 +20,7 @@ from PySide6.QtGui import (
 
 from zettelapp.core.models import Link, LinkType
 from zettelapp.ui import theme
+from zettelapp.ui.link_style import ARROW_SIZE, tip_shape
 
 MAX_GROUP_COLORS = 8  # categorical palette size; further groups fold into "Other"
 
@@ -33,7 +34,7 @@ class GraphData:
     group_of: dict[str, int | None] = field(default_factory=dict)  # note -> group index
     group_names: list[str] = field(default_factory=list)
     images: dict[str, Path] = field(default_factory=dict)
-    types: dict[str, tuple[int, LinkType]] = field(default_factory=dict)
+    types: dict[str, LinkType] = field(default_factory=dict)
     focus: str | None = None
 
     def group_color(self, group: int | None) -> QColor:
@@ -46,13 +47,22 @@ class GraphData:
         return self.group_names[group] if group < len(self.group_names) else "Other"
 
     def link_color(self, link: Link) -> QColor:
-        entry = self.types.get(link.type)
-        return theme.current().entity(entry[1].color) if entry else theme.current().q("text_muted")
+        lt = self.types.get(link.type)
+        return theme.current().entity(lt.color) if lt else theme.current().q("text_muted")
+
+    def link_style(self, link: Link) -> str:
+        lt = self.types.get(link.type)
+        return lt.line_style if lt else "solid"
+
+    def link_tip(self, link: Link) -> str | None:
+        """The arrow tip of a directed link's type; None for undirected links."""
+        lt = self.types.get(link.type)
+        return lt.tip if lt else None
 
     def link_label(self, link: Link, seen_from: str) -> str:
         """How *link* reads from the note *seen_from*: "Supports" or "Supported by"."""
-        entry = self.types.get(link.type)
-        return entry[1].label_for(link.src == seen_from) if entry else link.type
+        lt = self.types.get(link.type)
+        return lt.label_for(link.src == seen_from) if lt else link.type
 
     def neighbour_labels(self, focus: str) -> dict[str, str]:
         """For each note linked to *focus*, the types of all links between them, as one
@@ -67,8 +77,8 @@ class GraphData:
         return {other: " · ".join(texts) for other, texts in out.items()}
 
     def link_directed(self, link: Link) -> bool:
-        entry = self.types.get(link.type)
-        return bool(entry and entry[1].directed)
+        lt = self.types.get(link.type)
+        return bool(lt and lt.directed)
 
     def members(self) -> dict[int, list[str]]:
         out: dict[int, list[str]] = {}
@@ -106,48 +116,78 @@ def label_point(focus: QPointF, other: QPointF) -> QPointF:
 
 @dataclass
 class EdgeShape:
-    path: QPainterPath  # the link itself
-    arrow: QPainterPath | None  # arrowhead at the target, for directed links
+    path: QPainterPath  # the link itself, ending where its arrow tip begins
+    arrow: QPainterPath | None  # the tip at the target, for directed links
+    filled: bool = False  # whether the tip is a filled shape (triangle, diamond, circle)
+
+
+def _distance_param(point, target: QPointF, distance: float) -> float:
+    """The curve parameter t (0-1) where *point(t)* is *distance* from *target*, the
+    curve's end; the distance shrinks towards the end, so bisection finds it."""
+    lo, hi = 0.0, 1.0
+    for _step in range(24):
+        mid = (lo + hi) / 2
+        p = point(mid)
+        if math.hypot(p.x() - target.x(), p.y() - target.y()) > distance:
+            lo = mid
+        else:
+            hi = mid
+    return (lo + hi) / 2
 
 
 def edge_shape(
-    link: Link, a: QPointF, b: QPointF, bend: float, target_radius: float, directed: bool
+    link: Link,
+    a: QPointF,
+    b: QPointF,
+    bend: float,
+    target_radius: float,
+    directed: bool,
+    arrow: str = "triangle",
+    size: float = ARROW_SIZE,
 ) -> EdgeShape:
-    """A link from *a* to *b*, bowed sideways by *bend* pixels (0 = straight).
+    """A link from *a* to *b*, bowed sideways by *bend* pixels (0 = straight), with an
+    *arrow* tip just outside the target's circle when *directed*.
 
     The side is taken from the pair's canonical direction, so A→B and B→A in different
-    lanes never coincide.
+    lanes never coincide. On a curve the tip sits on the curve and follows its direction
+    where it meets the circle, and the line stops where a filled tip begins.
     """
     dx, dy = b.x() - a.x(), b.y() - a.y()
     length = math.hypot(dx, dy) or 1.0
     nx, ny = -dy / length, dx / length
     if link.src > link.dst:
         nx, ny = -nx, -ny
-    path = QPainterPath(a)
-    if bend:
-        # A quadratic curve passes half-way to its control point at the middle, so the
-        # curve's widest point is *bend* pixels from the straight line.
-        mid = QPointF((a.x() + b.x()) / 2, (a.y() + b.y()) / 2)
-        control = QPointF(mid.x() + nx * bend * 2, mid.y() + ny * bend * 2)
-        path.quadTo(control, b)
-        tx, ty = b.x() - control.x(), b.y() - control.y()
-    else:
-        path.lineTo(b)
-        tx, ty = dx, dy
-    arrow = None
-    if directed and length > target_radius * 2 + 4:
-        t_len = math.hypot(tx, ty) or 1.0
-        ux, uy = tx / t_len, ty / t_len
-        tip = QPointF(b.x() - ux * (target_radius + 3), b.y() - uy * (target_radius + 3))
-        size = 7.0
-        arrow = QPainterPath(
-            QPointF(tip.x() - ux * size - uy * size * 0.55, tip.y() - uy * size + ux * size * 0.55)
-        )
-        arrow.lineTo(tip)
-        arrow.lineTo(
-            QPointF(tip.x() - ux * size + uy * size * 0.55, tip.y() - uy * size - ux * size * 0.55)
-        )
-    return EdgeShape(path, arrow)
+    # A quadratic curve passes half-way to its control point at the middle, so the
+    # curve's widest point is *bend* pixels from the straight line.
+    mid = QPointF((a.x() + b.x()) / 2, (a.y() + b.y()) / 2)
+    control = QPointF(mid.x() + nx * bend * 2, mid.y() + ny * bend * 2)
+
+    def point(t: float) -> QPointF:
+        s = 1 - t
+        return a * (s * s) + control * (2 * s * t) + b * (t * t)
+
+    def path_to(t: float) -> QPainterPath:
+        path = QPainterPath(a)
+        if bend:  # the first part of the curve, up to t (de Casteljau)
+            path.quadTo(a + (control - a) * t, point(t))
+        else:
+            path.lineTo(point(t))
+        return path
+
+    if not directed or length <= target_radius * 2 + 4:
+        return EdgeShape(path_to(1.0), None)
+    gap = target_radius + 3
+    tip_point = point(_distance_param(point, b, gap))
+    behind = point(_distance_param(point, b, gap + size))  # aim along the curve's end
+    tx, ty = tip_point.x() - behind.x(), tip_point.y() - behind.y()
+    t_len = math.hypot(tx, ty) or 1.0
+    tip = tip_shape(tip_point, tx / t_len, ty / t_len, arrow, size)
+    end = (
+        _distance_param(point, b, gap + tip.length)
+        if tip.length
+        else _distance_param(point, b, gap)
+    )
+    return EdgeShape(path_to(end), tip.path, tip.filled)
 
 
 def draw_edge_label(painter: QPainter, center: QPointF, text: str, font: QFont) -> None:
