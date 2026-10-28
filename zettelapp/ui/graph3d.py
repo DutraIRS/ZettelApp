@@ -10,8 +10,14 @@ from PySide6.QtGui import QColor, QFontMetricsF, QPainter, QPen, QRadialGradient
 from PySide6.QtWidgets import QWidget
 
 from zettelapp.ui import theme
-from zettelapp.ui.graph2d import node_radius
-from zettelapp.ui.graph_common import GraphData
+from zettelapp.ui.graph2d import LANE_SPREAD, node_radius
+from zettelapp.ui.graph_common import (
+    GraphData,
+    draw_edge_label,
+    edge_shape,
+    label_point,
+    parallel_lanes,
+)
 from zettelapp.ui.side_panel import type_dash
 
 
@@ -37,6 +43,8 @@ class Graph3DView(QWidget):
         self._drag_from: QPointF | None = None
         self._dragged = False
         self._neighbors: dict[str, set[str]] = {}
+        self._lanes: list[float] = []
+        self._index: dict[str, int] = {}
         self.rotate_timer = QTimer(self, interval=33, timeout=self._spin)
 
     def set_graph(
@@ -62,6 +70,7 @@ class Graph3DView(QWidget):
         for l in data.links:
             self._neighbors.setdefault(l.src, set()).add(l.dst)
             self._neighbors.setdefault(l.dst, set()).add(l.src)
+        self._lanes = parallel_lanes(data.links)
         self.update()
 
     def set_auto_rotate(self, on: bool) -> None:
@@ -146,20 +155,37 @@ class Graph3DView(QWidget):
         focus = self.hovered or self.selected
         neighbors = self._neighbors.get(focus, set()) if focus else set()
         edges = []
-        for link in self.data.links:
+        for i, link in enumerate(self.data.links):
             a, b = self._index.get(link.src), self._index.get(link.dst)
             if a is not None and b is not None:
-                edges.append(((depth[a] + depth[b]) / 2, a, b, link))
+                edges.append(((depth[a] + depth[b]) / 2, a, b, i, link))
         edges.sort(key=lambda e: e[0])
-        for d, a, b, link in edges:
+        spread = LANE_SPREAD * 0.7 * min(1.6, self.zoom_level**0.5)
+        painter.setBrush(Qt.BrushStyle.NoBrush)
+        for d, a, b, i, link in edges:
+            # The focused note's links keep their type colour and get arrows and labels;
+            # every other link fades so overlapping links don't hide them.
             highlighted = focus is not None and focus in (link.src, link.dst)
-            color = QColor(t.q("accent") if highlighted else self.data.link_color(link))
-            color.setAlphaF(0.9 if highlighted else 0.12 + 0.45 * d)
+            color = QColor(self.data.link_color(link))
+            alpha = 0.95 if highlighted else 0.12 + 0.45 * d
+            color.setAlphaF(alpha * (0.35 if focus is not None and not highlighted else 1.0))
             entry = self.data.types.get(link.type)
-            painter.setPen(
-                QPen(color, 2.0 if highlighted else 1.0 + d, type_dash(entry[0] if entry else 0))
+            radius = node_radius(self.data.degree.get(link.dst, 0)) * (0.55 + 0.6 * depth[b])
+            shape = edge_shape(
+                link,
+                QPointF(*screen[a]),
+                QPointF(*screen[b]),
+                self._lanes[i] * spread,
+                radius,
+                highlighted and self.data.link_directed(link),
             )
-            painter.drawLine(QPointF(*screen[a]), QPointF(*screen[b]))
+            painter.setPen(
+                QPen(color, 2.4 if highlighted else 1.0 + d, type_dash(entry[0] if entry else 0))
+            )
+            painter.drawPath(shape.path)
+            if shape.arrow is not None:
+                painter.setPen(QPen(color, 2.4, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap))
+                painter.drawPath(shape.arrow)
 
         order = np.argsort(depth)
         by_degree = sorted(self.data.ids, key=lambda i: -self.data.degree.get(i, 0))
@@ -200,6 +226,14 @@ class Graph3DView(QWidget):
                     Qt.AlignmentFlag.AlignHCenter,
                     text,
                 )
+        if focus is not None and focus in self._index:
+            label_font = theme.ui_font(8)
+            here = QPointF(*screen[self._index[focus]])
+            for other, text in self.data.neighbour_labels(focus).items():
+                if other in self._index:
+                    there = QPointF(*screen[self._index[other]])
+                    draw_edge_label(painter, label_point(here, there), text, label_font)
+        painter.setFont(font)
         painter.setPen(t.q("text_muted"))
         painter.drawText(
             QRectF(10, self.height() - 24, self.width() - 20, 18),

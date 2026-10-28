@@ -15,12 +15,44 @@ from PySide6.QtWidgets import (
 )
 
 from zettelapp.ui import theme
-from zettelapp.ui.graph_common import MAX_GROUP_COLORS, GraphData, padded_hull
+from zettelapp.ui.graph_common import (
+    MAX_GROUP_COLORS,
+    EdgeShape,
+    GraphData,
+    draw_edge_label,
+    edge_shape,
+    label_point,
+    padded_hull,
+    parallel_lanes,
+)
 from zettelapp.ui.side_panel import type_dash
+
+LANE_SPREAD = 20.0  # scene units between links that join the same two notes
 
 
 def node_radius(degree: int) -> float:
     return 7.0 + min(16.0, math.sqrt(degree) * 3.2)
+
+
+class EdgeLabel(QGraphicsItem):
+    """The type of a highlighted link, on a pill so it stays readable over other links."""
+
+    def __init__(self, center: QPointF, text: str, font):
+        super().__init__()
+        self.text = text
+        self.font = font
+        metrics = QFontMetricsF(font)
+        self.size = (metrics.horizontalAdvance(text) + 12, metrics.height() + 4)
+        self.setPos(center)
+        self.setZValue(1.8)  # above links, below notes so titles stay readable
+
+    def boundingRect(self) -> QRectF:  # noqa: N802
+        w, h = self.size
+        return QRectF(-w / 2, -h / 2, w, h)
+
+    def paint(self, painter: QPainter, option, widget=None) -> None:
+        painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        draw_edge_label(painter, QPointF(0, 0), self.text, self.font)
 
 
 class NodeItem(QGraphicsObject):
@@ -143,10 +175,11 @@ class Graph2DView(QGraphicsView):
         self.setAccessibleName("Knowledge graph")
         self.data = GraphData([], {}, [], {})
         self.positions: dict[str, tuple[float, float]] = {}
-        self.items: dict[str, NodeItem] = {}
+        self.node_items: dict[str, NodeItem] = {}
         self.edge_items: list[QGraphicsPathItem] = []
         self.hull_items: list[QGraphicsItem] = []
-        self.overlay: QGraphicsPathItem | None = None
+        self.overlay_items: list[QGraphicsItem] = []
+        self._lanes: list[float] = []
         self.hovered: str | None = None
         self.selected: str | None = None
         self.hover_set: set[str] | None = None
@@ -171,10 +204,11 @@ class Graph2DView(QGraphicsView):
         for l in data.links:
             self._neighbors.setdefault(l.src, set()).add(l.dst)
             self._neighbors.setdefault(l.dst, set()).add(l.src)
+        self._lanes = parallel_lanes(data.links)
         scene = self.scene()
         scene.clear()
-        self.items.clear()
-        self.edge_items, self.hull_items, self.overlay = [], [], None
+        self.node_items.clear()
+        self.edge_items, self.hull_items, self.overlay_items = [], [], []
         t = theme.current()
         self.setBackgroundBrush(t.q("surface"))
         many = len(data.ids) > 150
@@ -185,7 +219,7 @@ class Graph2DView(QGraphicsView):
             item.label_visible = show_labels and note_id in labelled
             item.setPos(*self.positions.get(note_id, (0.0, 0.0)))
             scene.addItem(item)
-            self.items[note_id] = item
+            self.node_items[note_id] = item
         self._rebuild_edges()
         self.fit()
 
@@ -199,24 +233,17 @@ class Graph2DView(QGraphicsView):
         self.edge_items, self.hull_items = [], []
         t = theme.current()
         paths: dict[str, QPainterPath] = {}
-        for link in self.data.links:
-            if link.src not in self.positions or link.dst not in self.positions:
+        for i, link in enumerate(self.data.links):
+            shape = self._edge(i)
+            if shape is None:
                 continue
-            a, b = QPointF(*self.positions[link.src]), QPointF(*self.positions[link.dst])
             path = paths.setdefault(link.type, QPainterPath())
-            path.moveTo(a)
-            path.lineTo(b)
-            entry = self.data.types.get(link.type)
-            if entry and entry[1].directed:
-                self._arrow(path, a, b, node_radius(self.data.degree.get(link.dst, 0)))
+            path.addPath(shape.path)
+            if shape.arrow is not None:
+                path.addPath(shape.arrow)
         for type_id, path in paths.items():
-            entry = self.data.types.get(type_id)
-            color = QColor(t.entity(entry[1].color) if entry else t.q("text_muted"))
-            color.setAlphaF(0.55)
             item = QGraphicsPathItem(path)
-            item.setPen(
-                QPen(color, 1.6, type_dash(entry[0] if entry else 0), Qt.PenCapStyle.RoundCap)
-            )
+            item.setPen(self._edge_pen(type_id, 1.6, 0.55))
             item.setZValue(1)
             scene.addItem(item)
             self.edge_items.append(item)
@@ -246,24 +273,31 @@ class Graph2DView(QGraphicsView):
                 self.hull_items.append(text)
         self._update_overlay()
 
-    @staticmethod
-    def _arrow(path: QPainterPath, a: QPointF, b: QPointF, r: float) -> None:
-        dx, dy = b.x() - a.x(), b.y() - a.y()
-        length = math.hypot(dx, dy)
-        if length < r * 2 + 4:
-            return
-        ux, uy = dx / length, dy / length
-        tip = QPointF(b.x() - ux * (r + 3), b.y() - uy * (r + 3))
-        size = 7.0
-        left = QPointF(
-            tip.x() - ux * size - uy * size * 0.55, tip.y() - uy * size + ux * size * 0.55
+    def _edge(self, i: int) -> EdgeShape | None:
+        link = self.data.links[i]
+        if link.src not in self.positions or link.dst not in self.positions:
+            return None
+        return edge_shape(
+            link,
+            QPointF(*self.positions[link.src]),
+            QPointF(*self.positions[link.dst]),
+            self._lanes[i] * LANE_SPREAD,
+            node_radius(self.data.degree.get(link.dst, 0)),
+            self.data.link_directed(link),
         )
-        right = QPointF(
-            tip.x() - ux * size + uy * size * 0.55, tip.y() - uy * size - ux * size * 0.55
+
+    def _edge_pen(self, type_id: str, width: float, alpha: float) -> QPen:
+        entry = self.data.types.get(type_id)
+        t = theme.current()
+        color = QColor(t.entity(entry[1].color) if entry else t.q("text_muted"))
+        color.setAlphaF(alpha)
+        return QPen(
+            color,
+            width,
+            type_dash(entry[0] if entry else 0),
+            Qt.PenCapStyle.RoundCap,
+            Qt.PenJoinStyle.RoundJoin,
         )
-        path.moveTo(left)
-        path.lineTo(tip)
-        path.lineTo(right)
 
     def set_hover(self, note_id: str | None) -> None:
         self.hovered = note_id
@@ -274,23 +308,39 @@ class Graph2DView(QGraphicsView):
         self.scene().update()
 
     def _update_overlay(self) -> None:
-        if self.overlay is not None:
-            self.scene().removeItem(self.overlay)
-            self.overlay = None
+        """Isolate the hovered (or selected) note's links: dim the rest, draw its own links
+        on top in their type colours, and label each with its type."""
+        scene = self.scene()
+        for item in self.overlay_items:
+            scene.removeItem(item)
+        self.overlay_items = []
         focus = self.hovered or self.selected
-        if focus is None or focus not in self.positions:
+        active = focus is not None and focus in self.positions
+        for item in self.edge_items:
+            item.setOpacity(0.3 if active else 1.0)
+        if not active:
             return
-        path = QPainterPath()
-        for nb in self._neighbors.get(focus, ()):
-            if nb in self.positions:
-                path.moveTo(QPointF(*self.positions[focus]))
-                path.lineTo(QPointF(*self.positions[nb]))
-        self.overlay = QGraphicsPathItem(path)
-        self.overlay.setPen(
-            QPen(theme.current().q("accent"), 2.2, Qt.PenStyle.SolidLine, Qt.PenCapStyle.RoundCap)
-        )
-        self.overlay.setZValue(1.5)
-        self.scene().addItem(self.overlay)
+        for i, link in enumerate(self.data.links):
+            if focus not in (link.src, link.dst):
+                continue
+            shape = self._edge(i)
+            if shape is None:
+                continue
+            path = QPainterPath(shape.path)
+            if shape.arrow is not None:
+                path.addPath(shape.arrow)
+            line = QGraphicsPathItem(path)
+            line.setPen(self._edge_pen(link.type, 2.6, 1.0))
+            line.setZValue(1.5)
+            scene.addItem(line)
+            self.overlay_items.append(line)
+        font = theme.ui_font(8)
+        here = QPointF(*self.positions[focus])
+        for other, text in self.data.neighbour_labels(focus).items():
+            if other in self.positions:
+                label = EdgeLabel(label_point(here, QPointF(*self.positions[other])), text, font)
+                scene.addItem(label)
+                self.overlay_items.append(label)
 
     def select(self, note_id: str | None) -> None:
         self.selected = note_id
@@ -300,7 +350,7 @@ class Graph2DView(QGraphicsView):
             self.nodeSelected.emit(note_id)
 
     def focus_node(self, note_id: str) -> None:
-        item = self.items.get(note_id)
+        item = self.node_items.get(note_id)
         if item:
             self.select(note_id)
             self.centerOn(item)

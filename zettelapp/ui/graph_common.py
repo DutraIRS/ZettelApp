@@ -2,11 +2,21 @@
 
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from PySide6.QtCore import QPointF, Qt
-from PySide6.QtGui import QColor, QPainterPath, QPainterPathStroker, QPolygonF
+from PySide6.QtCore import QPointF, QRectF, Qt
+from PySide6.QtGui import (
+    QColor,
+    QFont,
+    QFontMetricsF,
+    QPainter,
+    QPainterPath,
+    QPainterPathStroker,
+    QPen,
+    QPolygonF,
+)
 
 from zettelapp.core.models import Link, LinkType
 from zettelapp.ui import theme
@@ -39,12 +49,121 @@ class GraphData:
         entry = self.types.get(link.type)
         return theme.current().entity(entry[1].color) if entry else theme.current().q("text_muted")
 
+    def link_label(self, link: Link, seen_from: str) -> str:
+        """How *link* reads from the note *seen_from*: "Supports" or "Supported by"."""
+        entry = self.types.get(link.type)
+        return entry[1].label_for(link.src == seen_from) if entry else link.type
+
+    def neighbour_labels(self, focus: str) -> dict[str, str]:
+        """For each note linked to *focus*, the types of all links between them, as one
+        label ("Supports · Extended by"), so links between the same notes share a label."""
+        out: dict[str, list[str]] = {}
+        for link in self.links:
+            if focus in (link.src, link.dst) and link.src != link.dst:
+                other = link.dst if link.src == focus else link.src
+                text = self.link_label(link, focus)
+                if text not in out.setdefault(other, []):
+                    out[other].append(text)
+        return {other: " · ".join(texts) for other, texts in out.items()}
+
+    def link_directed(self, link: Link) -> bool:
+        entry = self.types.get(link.type)
+        return bool(entry and entry[1].directed)
+
     def members(self) -> dict[int, list[str]]:
         out: dict[int, list[str]] = {}
         for node, g in self.group_of.items():
             if g is not None and g < MAX_GROUP_COLORS:
                 out.setdefault(g, []).append(node)
         return out
+
+
+def parallel_lanes(links: list[Link]) -> list[float]:
+    """Each link's lane among the links joining the same two notes.
+
+    A lone link gets 0 (drawn straight); two links get -0.5 and 0.5, three get -1, 0
+    and 1, and so on, so links between the same notes fan out instead of overlapping.
+    """
+    pairs: dict[tuple[str, str], list[int]] = {}
+    for i, link in enumerate(links):
+        a, b = sorted((link.src, link.dst))
+        pairs.setdefault((a, b), []).append(i)
+    lanes = [0.0] * len(links)
+    for members in pairs.values():
+        for j, i in enumerate(members):
+            lanes[i] = j - (len(members) - 1) / 2
+    return lanes
+
+
+LABEL_POSITION = 0.58  # labels sit a little past the middle, towards the neighbour
+
+
+def label_point(focus: QPointF, other: QPointF) -> QPointF:
+    """Where the label for the links between *focus* and *other* goes; going past the
+    middle spreads the labels around a well-connected note."""
+    return focus + (other - focus) * LABEL_POSITION
+
+
+@dataclass
+class EdgeShape:
+    path: QPainterPath  # the link itself
+    arrow: QPainterPath | None  # arrowhead at the target, for directed links
+
+
+def edge_shape(
+    link: Link, a: QPointF, b: QPointF, bend: float, target_radius: float, directed: bool
+) -> EdgeShape:
+    """A link from *a* to *b*, bowed sideways by *bend* pixels (0 = straight).
+
+    The side is taken from the pair's canonical direction, so A→B and B→A in different
+    lanes never coincide.
+    """
+    dx, dy = b.x() - a.x(), b.y() - a.y()
+    length = math.hypot(dx, dy) or 1.0
+    nx, ny = -dy / length, dx / length
+    if link.src > link.dst:
+        nx, ny = -nx, -ny
+    path = QPainterPath(a)
+    if bend:
+        # A quadratic curve passes half-way to its control point at the middle, so the
+        # curve's widest point is *bend* pixels from the straight line.
+        mid = QPointF((a.x() + b.x()) / 2, (a.y() + b.y()) / 2)
+        control = QPointF(mid.x() + nx * bend * 2, mid.y() + ny * bend * 2)
+        path.quadTo(control, b)
+        tx, ty = b.x() - control.x(), b.y() - control.y()
+    else:
+        path.lineTo(b)
+        tx, ty = dx, dy
+    arrow = None
+    if directed and length > target_radius * 2 + 4:
+        t_len = math.hypot(tx, ty) or 1.0
+        ux, uy = tx / t_len, ty / t_len
+        tip = QPointF(b.x() - ux * (target_radius + 3), b.y() - uy * (target_radius + 3))
+        size = 7.0
+        arrow = QPainterPath(
+            QPointF(tip.x() - ux * size - uy * size * 0.55, tip.y() - uy * size + ux * size * 0.55)
+        )
+        arrow.lineTo(tip)
+        arrow.lineTo(
+            QPointF(tip.x() - ux * size + uy * size * 0.55, tip.y() - uy * size - ux * size * 0.55)
+        )
+    return EdgeShape(path, arrow)
+
+
+def draw_edge_label(painter: QPainter, center: QPointF, text: str, font: QFont) -> None:
+    """A link-type label on a pill of the surface colour, readable over other links."""
+    t = theme.current()
+    metrics = QFontMetricsF(font)
+    width, height = metrics.horizontalAdvance(text) + 10, metrics.height() + 2
+    rect = QRectF(center.x() - width / 2, center.y() - height / 2, width, height)
+    background = QColor(t.q("surface"))
+    background.setAlphaF(0.92)
+    painter.setPen(QPen(t.q("border"), 1))
+    painter.setBrush(background)
+    painter.drawRoundedRect(rect, height / 2, height / 2)
+    painter.setFont(font)
+    painter.setPen(t.q("text_secondary"))  # text wears text tokens; the line carries the colour
+    painter.drawText(rect, Qt.AlignmentFlag.AlignCenter, text)
 
 
 def convex_hull(points: list[tuple[float, float]]) -> list[tuple[float, float]]:
