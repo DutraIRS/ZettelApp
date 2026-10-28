@@ -164,7 +164,7 @@ class MainWindow(QMainWindow):
         self.splitter.addWidget(self.editor)
         self.splitter.addWidget(self.side)
         self.splitter.setStretchFactor(1, 1)
-        self.splitter.setSizes([320, 760, 300])
+        self.splitter.setSizes([280, 760, 260])  # room for the editor toolbar on one line
         self.splitter.setChildrenCollapsible(False)
         self.list.setMinimumWidth(240)
         self.side.setMinimumWidth(240)

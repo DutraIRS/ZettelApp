@@ -233,6 +233,11 @@ class NoteListPanel(QWidget):
             (_("Most linked"), "links"),
         ):
             self.sort.addItem(text, key)
+        for combo in (self.tag_filter, self.sort):  # long tags or words mustn't widen the list
+            combo.setMinimumContentsLength(6)
+            combo.setSizeAdjustPolicy(
+                QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
+            )
         filters.addWidget(self.tag_filter, 1)
         filters.addWidget(self.sort)
         layout.addLayout(filters)

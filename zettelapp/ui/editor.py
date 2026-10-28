@@ -40,7 +40,7 @@ from zettelapp.ui.dialogs import AlarmDialog, CardDialog, FormulaDialog, TextPro
 from zettelapp.ui.markdown_editor import MarkdownEditor, referenced_assets
 from zettelapp.ui.mindmap import MindMapView
 from zettelapp.ui.preview import NotePreview
-from zettelapp.ui.widgets import TagEditor, accent_button, label, tool_button
+from zettelapp.ui.widgets import FlowLayout, TagEditor, accent_button, label, tool_button
 
 
 def friendly_time(iso: str) -> str:
@@ -95,11 +95,13 @@ class NoteEditor(QWidget):
         icon.setPixmap(icons.icon("notes", theme.current().text_muted, 48).pixmap(48, 48))
         icon.setAlignment(Qt.AlignmentFlag.AlignCenter)
         empty_layout.addWidget(icon)
-        msg = label(_("Select a note or create a new one"), "heading")
+        msg = label(_("Select a note or create a new one"), "heading", wrap=True)
         msg.setAlignment(Qt.AlignmentFlag.AlignCenter)
         empty_layout.addWidget(msg)
         hint = label(
-            _("One idea per note. Link it to others to grow your Zettelkasten."), "secondary"
+            _("One idea per note. Link it to others to grow your Zettelkasten."),
+            "secondary",
+            wrap=True,
         )
         hint.setAlignment(Qt.AlignmentFlag.AlignCenter)
         empty_layout.addWidget(hint)
@@ -120,12 +122,21 @@ class NoteEditor(QWidget):
         outer.addWidget(self.stack)
 
         # Toolbar --------------------------------------------------------
-        bar = QHBoxLayout()
-        bar.setSpacing(2)
-        bar.addWidget(
-            tool_button("trash", _("Move note to Trash"), lambda: self.window.trash_current())
-        )
-        bar.addSpacing(6)
+        # The tools wrap onto another line in a narrow window instead of setting the whole
+        # window's minimum width; the view modes stay at the end of the first line.
+        tools = QWidget()
+        flow = FlowLayout(tools, spacing=10)
+
+        def group(*buttons: QWidget) -> None:
+            box = QWidget()
+            row = QHBoxLayout(box)
+            row.setContentsMargins(0, 0, 0, 0)
+            row.setSpacing(2)
+            for button in buttons:
+                row.addWidget(button)
+            flow.addWidget(box)
+
+        group(tool_button("trash", _("Move note to Trash"), lambda: self.window.trash_current()))
         self.fmt_buttons = [
             tool_button("bold", _("Bold (Ctrl+B)"), lambda: self.body.wrap_selection("**")),
             tool_button("italic", _("Italic (Ctrl+I)"), lambda: self.body.wrap_selection("*")),
@@ -135,31 +146,30 @@ class NoteEditor(QWidget):
             tool_button("code", _("Code"), lambda: self.body.wrap_selection("`")),
             tool_button("formula", _("Insert formula (LaTeX)"), self.insert_formula),
         ]
-        for b in self.fmt_buttons:
-            bar.addWidget(b)
-        bar.addSpacing(10)
-        bar.addWidget(
-            tool_button("relationship", _("Link to note (Ctrl+K)"), self.linkNoteRequested.emit)
-        )
-        bar.addWidget(tool_button("folder", _("Link to a file"), self.insert_file_link))
-        bar.addWidget(tool_button("globe", _("Insert web link"), self.insert_web_link))
-        bar.addWidget(tool_button("image", _("Insert image (Ctrl+Shift+I)"), self.insert_image))
-        bar.addWidget(
+        group(*self.fmt_buttons)
+        group(
+            tool_button("relationship", _("Link to note (Ctrl+K)"), self.linkNoteRequested.emit),
+            tool_button("folder", _("Link to a file"), self.insert_file_link),
+            tool_button("globe", _("Insert web link"), self.insert_web_link),
+            tool_button("image", _("Insert image (Ctrl+Shift+I)"), self.insert_image),
             tool_button(
                 "library", _("Cite a Zotero reference"), lambda: self.window.zotero_reference()
-            )
+            ),
+            tool_button("mindmap", _("Add mind map"), self.show_mindmap),
+            tool_button("cards", _("Add flashcard (Ctrl+Shift+F)"), self.add_card),
+            tool_button("alarm", _("Set an alarm for this note"), self.set_alarm),
         )
-        bar.addWidget(tool_button("mindmap", _("Add mind map"), self.show_mindmap))
-        bar.addWidget(tool_button("cards", _("Add flashcard (Ctrl+Shift+F)"), self.add_card))
-        bar.addWidget(tool_button("alarm", _("Set an alarm for this note"), self.set_alarm))
-        bar.addStretch(1)
+        bar = QHBoxLayout()
+        bar.setSpacing(2)
+        bar.addWidget(tools, 1)
+        top = Qt.AlignmentFlag.AlignTop
         self.mode_group = QButtonGroup(self)
         for i, (name, tip) in enumerate(
             (("edit", _("Edit")), ("view", _("Split view")), ("document", _("Preview")))
         ):
             b = tool_button(name, _("{tip} (Ctrl+E cycles)").format(tip=tip), checkable=True)
             self.mode_group.addButton(b, i)
-            bar.addWidget(b)
+            bar.addWidget(b, 0, top)
         self.mode_group.idClicked.connect(self.set_view_mode)
         more = QToolButton()
         more.setIcon(icons.icon("more"))
@@ -168,7 +178,7 @@ class NoteEditor(QWidget):
         more.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
         self.more_menu = QMenu(more)
         more.setMenu(self.more_menu)
-        bar.addWidget(more)
+        bar.addWidget(more, 0, top)
         layout.addLayout(bar)
 
         # Title, metadata and picture ------------------------------------
@@ -182,7 +192,7 @@ class NoteEditor(QWidget):
         self.title.textEdited.connect(self._edited)
         self.title.returnPressed.connect(lambda: self.body.setFocus())
         titles.addWidget(self.title)
-        self.meta = label("", "caption")
+        self.meta = label("", "caption", wrap=True)
         self.meta.setTextInteractionFlags(Qt.TextInteractionFlag.TextSelectableByMouse)
         titles.addWidget(self.meta)
         head.addLayout(titles, 1)
@@ -288,6 +298,7 @@ class NoteEditor(QWidget):
                     "Right-click an idea to link it to a note."
                 ),
                 "caption",
+                wrap=True,
             )
         )
         self.tabs.addTab(mind, icons.icon("mindmap"), _("Mind map"))
