@@ -1,0 +1,45 @@
+{
+ "title": "ZettelApp – Windows용 Zettelkasten",
+ "description": "ZettelApp은 Windows용 무료 Zettelkasten 앱이에요. 원자적 노트, 유형이 있는 링크, 마인드맵, 플래시카드, 2D/3D 지식 그래프, 사용자에게서 배우는 링크 제안을 제공해요.",
+ "skip": "본문으로 건너뛰기",
+ "nav_label": "주 메뉴",
+ "features": "기능",
+ "tutorial": "튜토리얼",
+ "docs": "설명서",
+ "donate": "후원",
+ "download": "다운로드",
+ "menu": "메뉴",
+ "license_html": "ZettelApp · 퍼블릭 도메인 (<a href=\"https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE\">The Unlicense</a>)",
+ "footer_links": [
+  [
+   "docs/",
+   "설명서",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp",
+   "GitHub",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/issues",
+   "이슈",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md",
+   "보안",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/blob/main/THIRD_PARTY_NOTICES.md",
+   "고지 사항",
+   ""
+  ],
+  [
+   "https://ko-fi.com/dutrairs",
+   "후원",
+   "noopener"
+  ]
+ ]
+}

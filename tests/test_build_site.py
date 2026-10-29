@@ -1,4 +1,4 @@
-"""The generated website: language redirect script, language menu, and link integrity."""
+"""The website, built with Rational Web: pages, language menu, redirect script and links."""
 
 import json
 import re
@@ -8,18 +8,19 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 import pytest
+from rational.rendering import to_html
 
-from tools import build_site
+from tools import build_site, website
 
 
 def test_csp_allows_the_language_script_but_nothing_else():
-    assert "script-src 'self'" in build_site.CSP
-    assert "'unsafe-inline'" not in build_site.CSP and "'unsafe-eval'" not in build_site.CSP
+    assert "script-src 'self'" in website.CSP
+    assert "'unsafe-inline'" not in website.CSP and "'unsafe-eval'" not in website.CSP
 
 
 def test_language_links_switch_the_same_page_and_fall_back_for_untranslated_pages():
     links = dict(
-        (folder, href) for folder, _n, _c, href in build_site._language_links("", "docs", "faq")
+        (folder, href) for folder, _n, _c, href in website.language_links("", "docs", "faq")
     )
     assert links[""] == "faq.html"
     assert links["fr"] == "../fr/docs/faq.html"
@@ -27,22 +28,22 @@ def test_language_links_switch_the_same_page_and_fall_back_for_untranslated_page
     # mcp-reference.md has no translation: non-English links fall back to that language's docs index.
     links = dict(
         (folder, href)
-        for folder, _n, _c, href in build_site._language_links("", "docs", "mcp-reference")
+        for folder, _n, _c, href in website.language_links("", "docs", "mcp-reference")
     )
     assert links["fr"] == "../fr/docs/"
 
     # From inside a translated page, switching to another translated page stays on the same stem.
     links = dict(
-        (folder, href) for folder, _n, _c, href in build_site._language_links("fr", "docs", "faq")
+        (folder, href) for folder, _n, _c, href in website.language_links("fr", "docs", "faq")
     )
     assert links[""] == "../../docs/faq.html"
     assert links["de"] == "../../de/docs/faq.html"
 
 
 def test_language_switch_is_a_dropdown_with_every_language_and_marks_the_current_one():
-    markup = build_site.language_switch("ar", "home")
+    markup = to_html(website.language_switch("ar", "home", "Languages"))
     assert markup.startswith('<details class="lang-switch">')
-    assert markup.count("<li>") == len(build_site.LANGS) + 1  # every language plus English
+    assert markup.count("<li>") == len(website.LANGS) + 1  # every language plus English
     assert 'href="../ar/" lang="ar" hreflang="ar" aria-current="true"' in markup
 
 
@@ -52,10 +53,10 @@ def test_lang_script_detects_browser_language_and_redirects_once(tmp_path, monke
     target = build_site.write_lang_script()
     script = target.read_text(encoding="utf-8")
     assert "zettelapp-lang" in script
-    for folder in build_site.LANGS:
+    for folder in website.LANGS:
         assert f'"{folder}"' in script
     # Every translated page stem is embedded so untranslated pages can fall back sensibly.
-    for stem in build_site.TRANSLATED:
+    for stem in website.TRANSLATED:
         assert f'"{stem}"' in script
 
 
@@ -104,10 +105,10 @@ def test_build_writes_every_page_with_no_broken_local_links():
     assert written, "build() should write at least the English pages"
     assert (build_site.ROOT / "website" / "assets" / "lang.js").exists()
 
-    website = build_site.ROOT / "website"
-    html_files = list(website.rglob("*.html"))
-    expected_docs = len(build_site.PAGES) + len(build_site.LANGS) * len(build_site.TRANSLATED)
-    expected_landing = 1 + len(build_site.LANGS)
+    site_dir = build_site.ROOT / "website"
+    html_files = list(site_dir.rglob("*.html"))
+    expected_docs = len(website.PAGES) + len(website.LANGS) * len(website.TRANSLATED)
+    expected_landing = 1 + len(website.LANGS)
     assert len(html_files) == expected_docs + expected_landing
     for html_file in html_files:
         text = html_file.read_text(encoding="utf-8")
@@ -123,11 +124,11 @@ def test_build_writes_every_page_with_no_broken_local_links():
             target = (html_file.parent / parsed.path).resolve()
             if target.is_dir():
                 target = target / "index.html"
-            assert target.exists(), f"{html_file.relative_to(website)} -> {href}"
+            assert target.exists(), f"{html_file.relative_to(site_dir)} -> {href}"
 
 
-def test_every_landing_page_has_the_relaxed_csp_and_both_language_widgets():
-    for folder in ["", *build_site.LANGS]:
+def test_every_landing_page_has_the_csp_both_language_widgets_and_no_rational_extras():
+    for folder in ["", *website.LANGS]:
         path = (
             Path(build_site.ROOT) / "website" / folder / "index.html"
             if folder
@@ -136,5 +137,7 @@ def test_every_landing_page_has_the_relaxed_csp_and_both_language_widgets():
         text = path.read_text(encoding="utf-8")
         assert "script-src 'self'" in text
         assert "assets/lang.js" in text
-        assert "<!--langswitch-->" in text and "<!--/langswitch-->" in text
-        assert "<!--langs-->" in text and "<!--/langs-->" in text
+        assert '<details class="lang-switch">' in text and 'class="nav lang-row"' in text
+        assert "Proudly developed with" in text
+        # Static and self-styled: no theme stylesheet, inline style, runtime or 404 page.
+        assert "_rational" not in text and "<style" not in text and "data-rw" not in text

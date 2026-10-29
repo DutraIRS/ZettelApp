@@ -1,0 +1,45 @@
+{
+ "title": "ZettelApp – تطبيق Zettelkasten لنظام Windows",
+ "description": "ZettelApp تطبيق Zettelkasten مجاني لنظام Windows: ملاحظات ذرّية وروابط مصنّفة وخرائط ذهنية وبطاقات تعليمية ورسم معرفي ثنائي/ثلاثي الأبعاد واقتراحات روابط تتعلم من اختياراتك.",
+ "skip": "انتقل إلى المحتوى",
+ "nav_label": "التنقل الرئيسي",
+ "features": "الميزات",
+ "tutorial": "الدليل العملي",
+ "docs": "التوثيق",
+ "donate": "تبرّع",
+ "download": "تنزيل",
+ "menu": "القائمة",
+ "license_html": "ZettelApp · ملك عام (<a href=\"https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE\">The Unlicense</a>)",
+ "footer_links": [
+  [
+   "docs/",
+   "التوثيق",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp",
+   "GitHub",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/issues",
+   "المشكلات",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md",
+   "الأمان",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/blob/main/THIRD_PARTY_NOTICES.md",
+   "الإشعارات",
+   ""
+  ],
+  [
+   "https://ko-fi.com/dutrairs",
+   "تبرّع",
+   "noopener"
+  ]
+ ]
+}
