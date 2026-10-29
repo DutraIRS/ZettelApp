@@ -2,7 +2,7 @@
 
 One small HTTPS request for version.json on the app's website. Nothing about the user
 or their notes is sent; failures of any kind are silent. The result is only a version
-number: the download link the app shows is always the fixed releases page.
+number: the download link the app shows goes straight to the latest installer.
 """
 
 from __future__ import annotations

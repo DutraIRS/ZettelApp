@@ -18,7 +18,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from zettelapp import RELEASES_URL, settings
+from zettelapp import DOWNLOAD_URL, settings
 from zettelapp.i18n import _
 from zettelapp.ui import icons, theme
 from zettelapp.ui.widgets import accent_button, label, link_button, tool_button
@@ -83,7 +83,7 @@ class UpdateNotice(QFrame):
         return False
 
     def _download(self) -> None:
-        QDesktopServices.openUrl(QUrl(RELEASES_URL))  # always the fixed releases page
+        QDesktopServices.openUrl(QUrl(DOWNLOAD_URL))  # the latest installer, straight from GitHub
         self.close()
 
     def _silence(self) -> None:
