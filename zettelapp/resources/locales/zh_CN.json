@@ -913,5 +913,29 @@
  "“{title}” moved to the Trash.": "“{title}”已移到回收站。",
  "2D view": "2D 视图",
  "3D view": "3D 视图",
- "Clusters": "聚类"
+ "Clusters": "聚类",
+ "&Duplicate Note": "复制笔记(&D)",
+ "Duplicate": "复制",
+ "{title} (copy)": "{title}（副本）",
+ "Delete {n} note permanently…": [
+  "永久删除 {n} 条笔记…"
+ ],
+ "Duplicate {n} note": [
+  "复制 {n} 条笔记"
+ ],
+ "Move {n} note to Trash": [
+  "将 {n} 条笔记移到回收站"
+ ],
+ "Restore {n} note": [
+  "还原 {n} 条笔记"
+ ],
+ "{n} note duplicated.": [
+  "已复制 {n} 条笔记。"
+ ],
+ "{n} note moved to the Trash.": [
+  "已将 {n} 条笔记移到回收站。"
+ ],
+ "{n} note restored.": [
+  "已还原 {n} 条笔记。"
+ ]
 }

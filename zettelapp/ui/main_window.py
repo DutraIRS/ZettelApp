@@ -208,9 +208,10 @@ class MainWindow(QMainWindow):
         self.list.exportFrom.connect(
             lambda note_id: (self.open_note(note_id), self.export_dialog("subgraph"))
         )
-        self.list.trashRequested.connect(self.trash_note)
-        self.list.restoreRequested.connect(self.restore_note)
-        self.list.purgeRequested.connect(self.purge_note)
+        self.list.trashRequested.connect(self.trash_notes)
+        self.list.restoreRequested.connect(self.restore_notes)
+        self.list.purgeRequested.connect(self.purge_notes)
+        self.list.duplicateRequested.connect(self.duplicate_notes)
         self.list.emptyTrashRequested.connect(self.empty_trash)
         self.editor.saved.connect(lambda _id: self.refresh_timer.start())
         self.editor.contentChanged.connect(self.suggest_timer.start)
@@ -310,6 +311,7 @@ class MainWindow(QMainWindow):
         e.addSeparator()
         self._action(e, "&Find Notes", self._focus_search, QKeySequence.StandardKey.Find, "search")
         e.addSeparator()
+        self._action(e, "&Duplicate Note", self.duplicate_current, "Ctrl+D", "copy")
         self._action(e, "Move Note to &Trash", self.trash_current, "Ctrl+Delete", "delete")
 
         v = bar.addMenu(_("&View"))
@@ -760,50 +762,115 @@ class MainWindow(QMainWindow):
                 + n_("{n} link", "{n} links", links).format(n=links)
             )
 
+    def _targets(self) -> list[str]:
+        """The notes the Edit menu acts on: those selected in the list, or the open one."""
+        ids = self.list.selected_ids() if self.list.view.hasFocus() else []
+        current = self.current_note_id()
+        return ids or ([current] if current else [])
+
     def trash_current(self) -> None:
-        note_id = self.current_note_id()
-        if note_id:
-            self.trash_note(note_id)
+        if ids := self._targets():
+            self.trash_notes(ids)
+
+    def duplicate_current(self) -> None:
+        if ids := self._targets():
+            self.duplicate_notes(ids)
 
     def trash_note(self, note_id: str) -> None:
+        self.trash_notes([note_id])
+
+    def trash_notes(self, note_ids: list[str]) -> None:
         self.editor.flush()
-        title = self.vault.get_note(note_id).display_title
-        self.vault.trash_note(note_id)
-        if note_id == self.current_note_id():
+        notes = [n for i in note_ids if (n := self.vault.get_note(i))]
+        with self.vault.transaction():
+            for note in notes:
+                self.vault.trash_note(note.id)
+        if self.current_note_id() in {n.id for n in notes}:
             self.editor.load(None)
         self.list.refresh()
         self._update_counts()
-        self.info.show_message(
-            _("“{title}” moved to the Trash.").format(title=title),
-            "info",
-            _("Undo"),
-            lambda: self.restore_note(note_id),
+        ids = [n.id for n in notes]
+        message = (
+            _("“{title}” moved to the Trash.").format(title=notes[0].display_title)
+            if len(notes) == 1
+            else n_(
+                "{n} note moved to the Trash.", "{n} notes moved to the Trash.", len(notes)
+            ).format(n=len(notes))
         )
+        self.info.show_message(message, "info", _("Undo"), lambda: self.restore_notes(ids))
 
     def restore_note(self, note_id: str) -> None:
-        self.vault.restore_note(note_id)
+        self.restore_notes([note_id])
+
+    def restore_notes(self, note_ids: list[str]) -> None:
+        with self.vault.transaction():
+            for note_id in note_ids:
+                self.vault.restore_note(note_id)
         self.list.refresh()
         self._update_counts()
-        self.statusBar().showMessage(_("Note restored."), 4000)
+        n = len(note_ids)
+        self.statusBar().showMessage(
+            _("Note restored.")
+            if n == 1
+            else n_("{n} note restored.", "{n} notes restored.", n).format(n=n),
+            4000,
+        )
 
     def purge_note(self, note_id: str) -> None:
-        note = self.vault.get_note(note_id)
+        self.purge_notes([note_id])
+
+    def purge_notes(self, note_ids: list[str]) -> None:
+        notes = [n for i in note_ids if (n := self.vault.get_note(i))]
+        if not notes:
+            return
+        question = (
+            _("Permanently delete “{title}”? This can't be undone.").format(
+                title=notes[0].display_title
+            )
+            if len(notes) == 1
+            else n_(
+                "Permanently delete {n} note? This can't be undone.",
+                "Permanently delete {n} notes? This can't be undone.",
+                len(notes),
+            ).format(n=len(notes))
+        )
         if (
             QMessageBox.warning(
                 self,
                 _("Delete permanently"),
-                _("Permanently delete “{title}”? This can't be undone.").format(
-                    title=note.display_title
-                ),
+                question,
                 QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
                 QMessageBox.StandardButton.No,
             )
             == QMessageBox.StandardButton.Yes
         ):
-            if note_id == self.current_note_id():
+            if self.current_note_id() in {n.id for n in notes}:
                 self.editor.load(None)
-            self.vault.purge_note(note_id)
+            with self.vault.transaction():
+                for note in notes:
+                    self.vault.purge_note(note.id)
             self.list.refresh()
+
+    def duplicate_notes(self, note_ids: list[str]) -> None:
+        self.editor.flush()
+        copies = []
+        with self.vault.transaction():
+            for note_id in note_ids:
+                note = self.vault.get_note(note_id)
+                if note is not None:
+                    title = _("{title} (copy)").format(title=note.title) if note.title else ""
+                    copies.append(self.vault.duplicate_note(note_id, title))
+        if not copies:
+            return
+        self.list.refresh()
+        self._update_counts()
+        self.suggestions.invalidate()
+        self.graph.invalidate()
+        self.open_note(copies[0].id)
+        self.statusBar().showMessage(
+            n_("{n} note duplicated.", "{n} notes duplicated.", len(copies)).format(n=len(copies)),
+            4000,
+        )
 
     def empty_trash(self) -> None:
         n = self.vault.count_notes(deleted=True)

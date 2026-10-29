@@ -936,5 +936,36 @@
  "“{title}” moved to the Trash.": "„{title}“ wurde in den Papierkorb verschoben.",
  "2D view": "2D-Ansicht",
  "3D view": "3D-Ansicht",
- "Clusters": "Cluster"
+ "Clusters": "Cluster",
+ "&Duplicate Note": "Notiz &duplizieren",
+ "Duplicate": "Duplizieren",
+ "{title} (copy)": "{title} (Kopie)",
+ "Delete {n} note permanently…": [
+  "{n} Notiz endgültig löschen…",
+  "{n} Notizen endgültig löschen…"
+ ],
+ "Duplicate {n} note": [
+  "{n} Notiz duplizieren",
+  "{n} Notizen duplizieren"
+ ],
+ "Move {n} note to Trash": [
+  "{n} Notiz in den Papierkorb verschieben",
+  "{n} Notizen in den Papierkorb verschieben"
+ ],
+ "Restore {n} note": [
+  "{n} Notiz wiederherstellen",
+  "{n} Notizen wiederherstellen"
+ ],
+ "{n} note duplicated.": [
+  "{n} Notiz dupliziert.",
+  "{n} Notizen dupliziert."
+ ],
+ "{n} note moved to the Trash.": [
+  "{n} Notiz in den Papierkorb verschoben.",
+  "{n} Notizen in den Papierkorb verschoben."
+ ],
+ "{n} note restored.": [
+  "{n} Notiz wiederhergestellt.",
+  "{n} Notizen wiederhergestellt."
+ ]
 }
