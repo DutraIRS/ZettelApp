@@ -598,6 +598,25 @@ class Vault:
                 return r["id"]
         return None
 
+    def duplicate_note(self, note_id: str, title: str) -> Note:
+        """A copy of a note under *title*: its text, source, tags, picture and mind map, the
+        links it makes (#tags and [[links]] in the text come back with the text) and the
+        flashcards written by hand. Links to it, its alarm and review history are not copied."""
+        original = self.get_note(note_id)
+        if original is None:
+            raise VaultError(_("That note no longer exists."))
+        with self.transaction():
+            copy = self.create_note(title, original.body, self.manual_tags(note_id), original.url)
+            copy.image, copy.mindmap = original.image, original.mindmap
+            self.save_note(copy, manual_tags=self.manual_tags(note_id), touch=False)
+            for link in self.links_from(note_id):
+                if link.origin != "inline":
+                    self.add_link(copy.id, link.dst, link.type, link.origin)
+            for card in self.cards_for(note_id):
+                if card.source == "manual":
+                    self.save_card(Flashcard(None, copy.id, card.front, card.back, card.kind))
+        return copy
+
     def trash_note(self, note_id: str) -> None:
         with self.transaction():
             self.conn.execute(

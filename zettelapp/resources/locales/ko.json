@@ -913,5 +913,29 @@
  "“{title}” moved to the Trash.": "“{title}”을(를) 휴지통으로 옮겼어요.",
  "2D view": "2D 보기",
  "3D view": "3D 보기",
- "Clusters": "클러스터"
+ "Clusters": "클러스터",
+ "&Duplicate Note": "노트 복제(&D)",
+ "Duplicate": "복제",
+ "{title} (copy)": "{title} (사본)",
+ "Delete {n} note permanently…": [
+  "노트 {n}개 영구 삭제…"
+ ],
+ "Duplicate {n} note": [
+  "노트 {n}개 복제"
+ ],
+ "Move {n} note to Trash": [
+  "노트 {n}개를 휴지통으로 이동"
+ ],
+ "Restore {n} note": [
+  "노트 {n}개 복원"
+ ],
+ "{n} note duplicated.": [
+  "노트 {n}개를 복제했어요."
+ ],
+ "{n} note moved to the Trash.": [
+  "노트 {n}개를 휴지통으로 옮겼어요."
+ ],
+ "{n} note restored.": [
+  "노트 {n}개를 복원했어요."
+ ]
 }

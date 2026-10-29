@@ -196,3 +196,72 @@ def test_menu_checks_are_drawn(window):
     )
     assert white > 4  # the tick is white on the accent square, not just a painted box
     menu.close()
+
+
+def _select_rows(window, *ids):
+    from PySide6.QtCore import QItemSelectionModel
+
+    view, rows = window.list.view, [r["id"] for r in window.list.model.rows]
+    view.clearSelection()
+    for note_id in ids:
+        view.selectionModel().select(
+            window.list.model.index(rows.index(note_id)), QItemSelectionModel.SelectionFlag.Select
+        )
+
+
+def test_several_notes_can_be_selected_trashed_restored_and_deleted(window, monkeypatch):
+    from PySide6.QtWidgets import QListView, QMessageBox
+
+    a, b, c = (window.vault.create_note(t, "text") for t in ("A", "B", "C"))
+    window.list.refresh()
+    assert window.list.view.selectionMode() == QListView.SelectionMode.ExtendedSelection
+    _select_rows(window, a.id, c.id)
+    assert set(window.list.selected_ids()) == {a.id, c.id}
+
+    window.list.trashRequested.emit(window.list.selected_ids())
+    assert window.vault.get_note(a.id).deleted and window.vault.get_note(c.id).deleted
+    assert not window.vault.get_note(b.id).deleted
+    window.restore_notes([a.id, c.id])
+    assert not window.vault.get_note(a.id).deleted
+
+    window.trash_notes([a.id, c.id])
+    monkeypatch.setattr(QMessageBox, "warning", lambda *a, **k: QMessageBox.StandardButton.Yes)
+    window.purge_notes([a.id, c.id])
+    assert window.vault.get_note(a.id) is None and window.vault.get_note(c.id) is None
+
+
+def test_duplicating_copies_text_tags_links_and_hand_written_cards(window):
+    from zettelapp.core.models import Flashcard
+
+    target = window.vault.create_note("Target", "x")
+    note = window.vault.create_note("Idea", "See [[Target]] #inline", tags=["manual"])
+    window.vault.add_link(note.id, target.id, "supports")
+    window.vault.save_card(Flashcard(None, note.id, "Q?", "A."))
+    window.list.refresh()
+
+    window.duplicate_notes([note.id])
+    copies = [n for n in window.vault.all_notes() if n.title == "Idea (copy)"]
+    assert len(copies) == 1
+    copy = copies[0]
+    assert copy.body == note.body and set(copy.tags) == {"manual", "inline"}
+    assert {(l.dst, l.type) for l in window.vault.links_from(copy.id)} >= {(target.id, "supports")}
+    assert [c.front for c in window.vault.cards_for(copy.id) if c.source == "manual"] == ["Q?"]
+    assert window.current_note_id() == copy.id  # the copy is opened
+
+
+def test_shift_arrows_extend_the_selection_and_delete_trashes_it(window):
+    from PySide6.QtCore import Qt
+    from PySide6.QtTest import QTest
+
+    for title in ("A", "B", "C"):
+        window.vault.create_note(title, "text")
+    window.list.refresh()
+    view = window.list.view
+    view.setFocus()
+    view.setCurrentIndex(window.list.model.index(0))
+    QTest.keyClick(view, Qt.Key.Key_Down, Qt.KeyboardModifier.ShiftModifier)
+    chosen = window.list.selected_ids()
+    assert len(chosen) == 2
+    QTest.keyClick(view, Qt.Key.Key_Delete)
+    assert all(window.vault.get_note(i).deleted for i in chosen)
+    assert len(window.list.model.rows) == 1
