@@ -154,3 +154,39 @@ def test_3d_group_hulls_are_depth_aware_and_survive_rotation_and_single_member_g
         view.yaw = yaw
         view.pitch = 0.2
         assert not view.grab().isNull()  # no exception while rotating through every angle
+
+
+def test_clicking_a_group_area_selects_it_and_dragging_moves_all_its_notes():
+    from PySide6.QtCore import QPoint, Qt
+    from PySide6.QtTest import QTest
+    from PySide6.QtWidgets import QApplication
+
+    from zettelapp.ui.graph2d import Graph2DView
+
+    QApplication.instance() or QApplication(["test"])
+    data = _styled_graph()
+    members = data.ids[:2]
+    data.group_of = {i: (0 if i in members else 1) for i in data.ids}
+    data.group_names = ["Near", "Far"]
+    positions = {i: (1000.0 + 300 * k, 1000.0) for k, i in enumerate(data.ids)}
+    positions[members[0]], positions[members[1]] = (0.0, 0.0), (60.0, 0.0)
+    view = Graph2DView()
+    view.resize(800, 600)
+    view.show()
+    view.set_graph(data, positions, show_groups=True, show_labels=False)
+    view.resetTransform()
+    view.centerOn(30, 0)
+    QApplication.processEvents()
+
+    blob = view.mapFromScene(30, 28)  # inside the padded area, between the two notes
+    assert view._group_at(blob) == 0
+    before = {m: view.positions[m] for m in data.ids}
+    QTest.mousePress(view.viewport(), Qt.MouseButton.LeftButton, pos=blob)
+    assert view.selected_group == 0
+    QTest.mouseMove(view.viewport(), blob + QPoint(40, 25))
+    QTest.mouseRelease(view.viewport(), Qt.MouseButton.LeftButton, pos=blob + QPoint(40, 25))
+
+    for m in members:
+        assert view.positions[m] == (before[m][0] + 40, before[m][1] + 25)
+    for other in data.ids[2:]:
+        assert view.positions[other] == before[other]  # other groups stay put

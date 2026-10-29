@@ -15,7 +15,7 @@ it has, and each line is a link.
 | **2D / 3D** | Switch between a flat, draggable layout and a 3D view you can orbit. |
 | **Colour by** | Tags, *Clusters: k-means*, *Clusters: hierarchical*, or nothing. |
 | **k** | Number of clusters. *Auto k* picks it for you (see below). |
-| **Group** | Pull notes of the same group together and shade each group's area. |
+| **Group** | Pull notes of the same group together and shade each group's area. In 2D, click an area to select it and drag it to move all its notes. |
 | **Labels** | Show note titles. In large graphs, only the best-connected notes are labelled until you hover. |
 | **Link types** | Hide or show individual link types. |
 | **Find in graph** | Type part of a title and press Enter to jump to the note. |

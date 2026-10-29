@@ -12,6 +12,7 @@ All notable changes to ZettelApp are documented here. The format follows
   suggestions, the graph, mind maps, attachments, review and Insights through real actions.
 - Line styles and arrow-tip choices for built-in and custom link types, including a live preview.
 - Checklists (`- [ ]`) in note bodies, toggled from the preview.
+- In the 2D graph, click a group's area to select it and drag it to move all its notes.
 - Alarm notes: set a date and optional time and get a notification (ZettelApp must be running).
 - LaTeX formulas (`$…$` and `$$…$$`) with a formula dialog and live preview.
 - A title image per note (right-click an image), shown as a rounded thumbnail in the note list.
