@@ -936,5 +936,36 @@
  "“{title}” moved to the Trash.": "«{title}» se movió a la papelera.",
  "2D view": "Vista 2D",
  "3D view": "Vista 3D",
- "Clusters": "Grupos"
+ "Clusters": "Grupos",
+ "&Duplicate Note": "&Duplicar nota",
+ "Duplicate": "Duplicar",
+ "{title} (copy)": "{title} (copia)",
+ "Delete {n} note permanently…": [
+  "Eliminar {n} nota definitivamente…",
+  "Eliminar {n} notas definitivamente…"
+ ],
+ "Duplicate {n} note": [
+  "Duplicar {n} nota",
+  "Duplicar {n} notas"
+ ],
+ "Move {n} note to Trash": [
+  "Mover {n} nota a la papelera",
+  "Mover {n} notas a la papelera"
+ ],
+ "Restore {n} note": [
+  "Restaurar {n} nota",
+  "Restaurar {n} notas"
+ ],
+ "{n} note duplicated.": [
+  "{n} nota duplicada.",
+  "{n} notas duplicadas."
+ ],
+ "{n} note moved to the Trash.": [
+  "{n} nota movida a la papelera.",
+  "{n} notas movidas a la papelera."
+ ],
+ "{n} note restored.": [
+  "{n} nota restaurada.",
+  "{n} notas restauradas."
+ ]
 }

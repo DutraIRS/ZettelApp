@@ -1,5 +1,5 @@
 ﻿; Inno Setup 6 script for the ZettelApp installer.
-; Build with packaging/build.ps1, or: ISCC.exe /DAppVersion=1.1.0 packaging\installer.iss
+; Build with packaging/build.ps1, or: ISCC.exe /DAppVersion=1.1.1 packaging\installer.iss
 ;
 ; - Installs per user by default (no administrator rights; %LOCALAPPDATA%\Programs\ZettelApp),
 ;   with the standard option to install for all users instead.
@@ -11,7 +11,7 @@
 ;   notes are never removed.
 
 #ifndef AppVersion
-  #define AppVersion "1.1.0"
+  #define AppVersion "1.1.1"
 #endif
 
 [Setup]

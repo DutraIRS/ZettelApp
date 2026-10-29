@@ -1,0 +1,45 @@
+{
+ "title": "ZettelApp – ein Zettelkasten für Windows",
+ "description": "ZettelApp ist eine kostenlose Zettelkasten-App für Windows: atomare Notizen, typisierte Links, Mindmaps, Lernkarten, ein 2D-/3D-Wissensgraph und Linkvorschläge, die von Ihnen lernen.",
+ "skip": "Zum Inhalt springen",
+ "nav_label": "Hauptnavigation",
+ "features": "Funktionen",
+ "tutorial": "Tutorial",
+ "docs": "Dokumentation",
+ "donate": "Spenden",
+ "download": "Herunterladen",
+ "menu": "Menü",
+ "license_html": "ZettelApp · Gemeinfreiheit (<a href=\"https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE\">The Unlicense</a>)",
+ "footer_links": [
+  [
+   "docs/",
+   "Dokumentation",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp",
+   "GitHub",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/issues",
+   "Probleme",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md",
+   "Sicherheit",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/blob/main/THIRD_PARTY_NOTICES.md",
+   "Hinweise",
+   ""
+  ],
+  [
+   "https://ko-fi.com/dutrairs",
+   "Spenden",
+   "noopener"
+  ]
+ ]
+}

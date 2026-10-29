@@ -183,6 +183,8 @@ class Graph2DView(QGraphicsView):
         self._lanes: list[float] = []
         self.hovered: str | None = None
         self.selected: str | None = None
+        self.selected_group: object = None  # a group picked by clicking its area
+        self._group_drag: tuple[object, QPointF] | None = None  # group, last scene point
         self.hover_set: set[str] | None = None
         self.show_groups = True
         self.show_labels = True
@@ -200,6 +202,7 @@ class Graph2DView(QGraphicsView):
         self.data = data
         self.positions = {k: (v[0], v[1]) for k, v in positions.items() if k in set(data.ids)}
         self.show_groups = show_groups
+        self.selected_group, self._group_drag = None, None
         self.show_labels = show_labels
         self._neighbors = {}
         for l in data.links:
@@ -263,8 +266,11 @@ class Graph2DView(QGraphicsView):
                 stroke = QColor(self.data.group_color(group))
                 stroke.setAlphaF(0.35)
                 hull = QGraphicsPathItem(region)
+                hull.setData(0, ("group", group))
                 hull.setBrush(QBrush(fill))
-                hull.setPen(QPen(stroke, 1))
+                chosen = group == self.selected_group
+                stroke.setAlphaF(0.9 if chosen else 0.35)
+                hull.setPen(QPen(stroke, 2.4 if chosen else 1))
                 hull.setZValue(0)
                 scene.addItem(hull)
                 self.hull_items.append(hull)
@@ -358,6 +364,57 @@ class Graph2DView(QGraphicsView):
                 label = EdgeLabel(label_point(here, QPointF(*self.positions[other])), text, font)
                 scene.addItem(label)
                 self.overlay_items.append(label)
+
+    # --- groups: click an area to select it, drag it to move all its notes -----------
+
+    def _group_at(self, pos) -> object:
+        for item in self.items(pos):
+            if isinstance(item, NodeItem):
+                return None  # a note on top of the area wins
+            tag = item.data(0)
+            if isinstance(tag, tuple) and tag[0] == "group":
+                return tag[1]
+        return None
+
+    def mousePressEvent(self, event) -> None:  # noqa: N802
+        group = (
+            self._group_at(event.position().toPoint())
+            if self.show_groups and event.button() == Qt.MouseButton.LeftButton
+            else None
+        )
+        if group is None:
+            if event.button() == Qt.MouseButton.LeftButton and self.selected_group is not None:
+                self.selected_group = None
+                self.schedule_edges()
+            super().mousePressEvent(event)
+            return
+        self.selected_group = group
+        self._group_drag = (group, self.mapToScene(event.position().toPoint()))
+        self.setCursor(Qt.CursorShape.ClosedHandCursor)
+        self.schedule_edges()
+        event.accept()
+
+    def mouseMoveEvent(self, event) -> None:  # noqa: N802
+        if self._group_drag is None:
+            super().mouseMoveEvent(event)
+            return
+        group, last = self._group_drag
+        here = self.mapToScene(event.position().toPoint())
+        delta = here - last
+        for note_id, g in self.data.group_of.items():
+            item = self.node_items.get(note_id)
+            if g == group and item is not None:
+                item.moveBy(delta.x(), delta.y())  # itemChange updates positions and edges
+        self._group_drag = (group, here)
+        event.accept()
+
+    def mouseReleaseEvent(self, event) -> None:  # noqa: N802
+        if self._group_drag is None:
+            super().mouseReleaseEvent(event)
+            return
+        self._group_drag = None
+        self.unsetCursor()
+        event.accept()
 
     def select(self, note_id: str | None) -> None:
         self.selected = note_id

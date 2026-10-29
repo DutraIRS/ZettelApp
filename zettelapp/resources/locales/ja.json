@@ -913,5 +913,29 @@
  "“{title}” moved to the Trash.": "「{title}」をごみ箱に移動しました。",
  "2D view": "2D 表示",
  "3D view": "3D 表示",
- "Clusters": "クラスター"
+ "Clusters": "クラスター",
+ "&Duplicate Note": "ノートを複製(&D)",
+ "Duplicate": "複製",
+ "{title} (copy)": "{title} (コピー)",
+ "Delete {n} note permanently…": [
+  "{n} 件のノートを完全に削除…"
+ ],
+ "Duplicate {n} note": [
+  "{n} 件のノートを複製"
+ ],
+ "Move {n} note to Trash": [
+  "{n} 件のノートをごみ箱に移動"
+ ],
+ "Restore {n} note": [
+  "{n} 件のノートを復元"
+ ],
+ "{n} note duplicated.": [
+  "{n} 件のノートを複製しました。"
+ ],
+ "{n} note moved to the Trash.": [
+  "{n} 件のノートをごみ箱に移動しました。"
+ ],
+ "{n} note restored.": [
+  "{n} 件のノートを復元しました。"
+ ]
 }

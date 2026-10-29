@@ -1,0 +1,45 @@
+{
+ "title": "ZettelApp – 适用于 Windows 的 Zettelkasten",
+ "description": "ZettelApp 是一款适用于 Windows 的免费 Zettelkasten 应用:原子笔记、类型链接、思维导图、闪卡、2D/3D 知识图谱,以及会从你身上学习的链接建议。",
+ "skip": "跳到正文",
+ "nav_label": "主导航",
+ "features": "功能",
+ "tutorial": "教程",
+ "docs": "文档",
+ "donate": "捐赠",
+ "download": "下载",
+ "menu": "菜单",
+ "license_html": "ZettelApp · 公有领域(<a href=\"https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE\">The Unlicense</a>)",
+ "footer_links": [
+  [
+   "docs/",
+   "文档",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp",
+   "GitHub",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/issues",
+   "问题反馈",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md",
+   "安全",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/blob/main/THIRD_PARTY_NOTICES.md",
+   "声明",
+   ""
+  ],
+  [
+   "https://ko-fi.com/dutrairs",
+   "捐赠",
+   "noopener"
+  ]
+ ]
+}

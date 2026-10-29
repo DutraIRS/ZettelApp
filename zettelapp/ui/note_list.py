@@ -5,8 +5,24 @@ from __future__ import annotations
 from datetime import datetime
 from functools import lru_cache
 
-from PySide6.QtCore import QAbstractListModel, QModelIndex, QRectF, QSize, Qt, QTimer, Signal
-from PySide6.QtGui import QFontMetrics, QImage, QPainter, QPainterPath, QPen, QPixmap
+from PySide6.QtCore import (
+    QAbstractListModel,
+    QEvent,
+    QModelIndex,
+    QRectF,
+    QSize,
+    Qt,
+    QTimer,
+    Signal,
+)
+from PySide6.QtGui import (
+    QFontMetrics,
+    QImage,
+    QPainter,
+    QPainterPath,
+    QPen,
+    QPixmap,
+)
 from PySide6.QtWidgets import (
     QComboBox,
     QHBoxLayout,
@@ -194,9 +210,11 @@ class NoteListPanel(QWidget):
     linkToCurrent = Signal(str, str)
     showInGraph = Signal(str)
     exportFrom = Signal(str)
-    trashRequested = Signal(str)
-    restoreRequested = Signal(str)
-    purgeRequested = Signal(str)
+    # Note actions carry every selected note (Ctrl/Shift+click, Shift+arrows select several).
+    trashRequested = Signal(list)
+    restoreRequested = Signal(list)
+    purgeRequested = Signal(list)
+    duplicateRequested = Signal(list)
     emptyTrashRequested = Signal()
 
     def __init__(self, parent=None):
@@ -249,8 +267,10 @@ class NoteListPanel(QWidget):
         self.view.setUniformItemSizes(True)
         self.view.setAccessibleName(_("Notes"))
         self.view.setVerticalScrollMode(QListView.ScrollMode.ScrollPerPixel)
+        self.view.setSelectionMode(QListView.SelectionMode.ExtendedSelection)
         self.view.setContextMenuPolicy(Qt.ContextMenuPolicy.CustomContextMenu)
         self.view.customContextMenuRequested.connect(self._menu)
+        self.view.installEventFilter(self)  # Delete trashes the selected notes
         self.view.selectionModel().currentChanged.connect(self._current_changed)
         layout.addWidget(self.view, 1)
         foot = QHBoxLayout()
@@ -354,6 +374,31 @@ class NoteListPanel(QWidget):
         path = self.vault.asset_path(asset) if asset and self.vault else None
         return str(path) if path else None
 
+    def selected_ids(self) -> list[str]:
+        """The selected notes in list order (the current note when nothing is selected)."""
+        rows = sorted(index.row() for index in self.view.selectionModel().selectedIndexes())
+        ids = [self.model.rows[row]["id"] for row in rows if row < len(self.model.rows)]
+        current = self.current_id()
+        return ids or ([current] if current else [])
+
+    def _emit_for_selection(self, signal) -> None:
+        if ids := self.selected_ids():
+            signal.emit(ids)
+
+    def eventFilter(self, watched, event) -> bool:  # noqa: N802
+        if (
+            watched is self.view
+            and event.type() == QEvent.Type.KeyPress
+            and event.key() == Qt.Key.Key_Delete
+            and event.modifiers() == Qt.KeyboardModifier.NoModifier
+        ):
+            self._delete_selected()
+            return True
+        return super().eventFilter(watched, event)
+
+    def _delete_selected(self) -> None:
+        self._emit_for_selection(self.purgeRequested if self.trash_mode else self.trashRequested)
+
     def current_id(self) -> str | None:
         index = self.view.currentIndex()
         return index.data(Qt.ItemDataRole.UserRole)["id"] if index.isValid() else None
@@ -379,15 +424,45 @@ class NoteListPanel(QWidget):
         if not index.isValid():
             return
         note_id = index.data(Qt.ItemDataRole.UserRole)["id"]
+        if not self.view.selectionModel().isSelected(index):  # right-click outside the selection
+            self.view.setCurrentIndex(index)
+        ids = self.selected_ids()
         menu = QMenu(self)
-        if self.trash_mode:
+        if len(ids) > 1:
+            n = len(ids)
+            if self.trash_mode:
+                menu.addAction(
+                    icons.icon("restore"),
+                    n_("Restore {n} note", "Restore {n} notes", n).format(n=n),
+                    lambda: self.restoreRequested.emit(ids),
+                )
+                menu.addAction(
+                    icons.icon("delete"),
+                    n_("Delete {n} note permanently…", "Delete {n} notes permanently…", n).format(
+                        n=n
+                    ),
+                    lambda: self.purgeRequested.emit(ids),
+                )
+            else:
+                menu.addAction(
+                    icons.icon("copy"),
+                    n_("Duplicate {n} note", "Duplicate {n} notes", n).format(n=n),
+                    lambda: self.duplicateRequested.emit(ids),
+                )
+                menu.addSeparator()
+                menu.addAction(
+                    icons.icon("delete"),
+                    n_("Move {n} note to Trash", "Move {n} notes to Trash", n).format(n=n),
+                    lambda: self.trashRequested.emit(ids),
+                )
+        elif self.trash_mode:
             menu.addAction(
-                icons.icon("restore"), _("Restore"), lambda: self.restoreRequested.emit(note_id)
+                icons.icon("restore"), _("Restore"), lambda: self.restoreRequested.emit(ids)
             )
             menu.addAction(
                 icons.icon("delete"),
                 _("Delete permanently…"),
-                lambda: self.purgeRequested.emit(note_id),
+                lambda: self.purgeRequested.emit(ids),
             )
         else:
             menu.addAction(icons.icon("open"), _("Open"), lambda: self.noteSelected.emit(note_id))
@@ -402,8 +477,11 @@ class NoteListPanel(QWidget):
                 _("Export with linked notes…"),
                 lambda: self.exportFrom.emit(note_id),
             )
+            menu.addAction(
+                icons.icon("copy"), _("Duplicate"), lambda: self.duplicateRequested.emit(ids)
+            )
             menu.addSeparator()
             menu.addAction(
-                icons.icon("delete"), _("Move to Trash"), lambda: self.trashRequested.emit(note_id)
+                icons.icon("delete"), _("Move to Trash"), lambda: self.trashRequested.emit(ids)
             )
         menu.exec(self.view.viewport().mapToGlobal(pos))

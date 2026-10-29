@@ -4,6 +4,21 @@ All notable changes to ZettelApp are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [1.1.1] - 2026-10-29
+
+### Added
+
+- Select several notes in the list (Ctrl+click, Shift+click, Shift+arrows) to duplicate, trash,
+  restore or delete them together; Delete moves the selection to the Trash.
+- Duplicate a note (*Edit ▸ Duplicate Note*, Ctrl+D): its text, tags, picture, mind map, the links
+  it makes and its hand-written flashcards.
+- In the 2D graph, click a group's area to select it and drag it to move all its notes.
+
+### Changed
+
+- The website is built with [Rational Web](https://github.com/DutraIRS/Rational-Web). It looks and
+  works exactly as before, with a "Proudly developed with RationalWeb" line in the footer.
+
 ## [1.1.0] - 2026-10-28
 
 ### Added

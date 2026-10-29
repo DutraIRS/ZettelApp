@@ -1,0 +1,298 @@
+  <section class="hero">
+    <div class="wrap hero-inner">
+      <img class="hero-icon" src="../assets/icon-512.png" alt="" width="96" height="96">
+      <h1>اربط أفكارك.</h1>
+      <p class="lead">ZettelApp تطبيق Zettelkasten لنظام Windows. اكتب ملاحظات صغيرة واربطها بمعانٍ واضحة، ودعه يقترح الروابط التي فاتتك. استكشف معرفتك في رسم بياني ثنائي أو ثلاثي الأبعاد، وحوّلها إلى بطاقات تعليمية.</p>
+      <div class="actions">
+        <a class="button primary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe">تنزيل لنظام Windows</a>
+        <a class="button secondary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Portable.zip">.zip محمول</a>
+      </div>
+      <p class="fine">مجاني ومفتوح المصدر · Windows 10 و11، 64-bit ·
+        <a href="https://github.com/DutraIRS/ZettelApp/releases/latest">كل الإصدارات ومجاميع التحقق</a></p>
+    </div>
+    <div class="wrap">
+      <figure class="shot hero-shot">
+        <picture>
+          <source srcset="../assets/screenshots/notes-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/notes-light.png" width="1440" height="900"
+               alt="صفحة الملاحظات في ZettelApp: قائمة ملاحظات على اليسار، وملاحظة عن التكرار المتباعد بنص Markdown ومعاينة في الوسط، وروابط مقترحة مع درجات التطابق على اليمين.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section id="start" class="section">
+    <div class="wrap">
+      <h2 class="section-title">هل أنت جديد على Zettelkasten؟</h2>
+      <p class="section-lead">تعرّف على المنهج في خمس دقائق، ثم جرّبه عمليًا.</p>
+      <ul class="cards duo">
+        <li class="card feature-link">
+          <p class="eyebrow">المنهج</p>
+          <h3><a href="docs/what-is-zettelkasten.html">ما هو Zettelkasten؟</a></h3>
+          <p>نشأة صندوق البطاقات ومبادئه (الملاحظات الذرّية والربط مع بيان السبب والبنية التي تنشأ تلقائيًا) وأنواع الملاحظات الثلاثة والمزالق الشائعة.</p>
+        </li>
+        <li class="card feature-link">
+          <p class="eyebrow">تطبيق عملي</p>
+          <h3><a href="docs/tutorial.html">ابدأ الدليل العملي</a></h3>
+          <p>أول 30 دقيقة لك: اكتب الملاحظات واربطها، واستكشف الروابط المصنّفة والاقتراحات والخرائط الذهنية والبطاقات التعليمية والرسم البياني الثنائي والثلاثي الأبعاد.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="features" class="section">
+    <div class="wrap">
+      <h2 class="section-title">كل ما يحتاج إليه Zettelkasten</h2>
+      <p class="section-lead">فكرة واحدة في كل ملاحظة، ترتبط بروابط توضّح صلة الأفكار. يحافظ ZettelApp على المنهج ويزيل العوائق.</p>
+      <ul class="cards">
+        <li class="card">
+          <h3>ملاحظات ذرّية</h3>
+          <p>ملاحظات Markdown بمعرّفات زمنية تلقائية ووسوم (في مربع الوسوم أو كـ #tags في النص) ورابط مصدر وصور يمكنك لصقها أو سحبها وروابط لملفات على الكمبيوتر والحفظ التلقائي.</p>
+        </li>
+        <li class="card">
+          <h3>روابط مصنّفة وموجّهة</h3>
+          <p>اكتب <code>supports:: [[Claim]]</code>. <em>يناقض</em>, <em>يوسّع</em>,
+            <em>مثال على</em>, <em>جزء من</em>, <em>يستشهد بـ</em>، أو أنواعك الخاصة. وتُقرأ الروابط الخلفية بصورة طبيعية:
+            <em>مدعوم من</em>.</p>
+        </li>
+        <li class="card">
+          <h3>اقتراحات تتعلم</h3>
+          <p>يرجّح نموذج Naive Bayes التشابه الدلالي وتشابه الكلمات والسلاسل النصية والوسوم والروابط المشتركة، ويتعلم من كل اقتراح تقبله أو ترفضه.</p>
+        </li>
+        <li class="card">
+          <h3>الرسم البياني ثنائي وثلاثي الأبعاد</h3>
+          <p>لوّن الملاحظات بحسب الوسوم أو مجموعات المعاني باستخدام k-means والتجميع الهرمي، وقرّب المجموعات على خلفيات مظللة.</p>
+        </li>
+        <li class="card">
+          <h3>خرائط ذهنية</h3>
+          <p>ارسم أفكار الملاحظة كخريطة ذهنية باستخدام لوحة المفاتيح، واربط الأفكار بالملاحظات، وصدّرها بصيغة PNG أو SVG أو FreeMind.</p>
+        </li>
+        <li class="card">
+          <h3>المراجعة والاختبارات</h3>
+          <p>البطاقات التعليمية من <code>Q:</code>/<code>A:</code> و<code>{{c1::cloze}}</code> ، وتكرار متباعد SM-2 والاختيار من متعدد والإجابات المكتوبة و <em>سمّ تلك الملاحظة</em>.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split">
+      <div class="split-text">
+        <p class="eyebrow">اقتراحات الروابط</p>
+        <h2>اكتشف الروابط التي فاتتك</h2>
+        <p>أثناء الكتابة، يقارن ZettelApp الملاحظة ببقية مستودعك باستخدام ثمانية مقاييس:</p>
+        <ul class="ticks">
+          <li>المعنى (التحليل الدلالي الكامن)؛</li>
+          <li>الكلمات المفتاحية المشتركة (TF-IDF)؛</li>
+          <li>تشابه العناوين والنصوص وفق Levenshtein وJaro-Winkler؛</li>
+          <li>الوسوم والروابط المشتركة والعناوين المذكورة في النص.</li>
+        </ul>
+        <p>يحوّل مصنّف Naive Bayes هذه الأدلة إلى احتمال، ويوضح سبب كل اقتراح.</p>
+        <p>اربط الاقتراح بنقرة واحدة واختر نوع الرابط، أو ارفضه. في كلتا الحالتين، يتعلم النموذج كيف
+          <em>أنت</em> تربط الأفكار.</p>
+        <p><a class="more" href="docs/link-suggestions.html">كيف تعمل اقتراحات الروابط</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/graph-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/graph-light.png" width="1440" height="900" loading="lazy"
+               alt="الرسم المعرفي ثنائي الأبعاد: ملاحظات مجمعة بحسب الوسم على خلفيات ملونة، وروابط مصنّفة مرسومة بخطوط ملونة أو متقطعة أو ذات أسهم، مع مفتاح للرسم.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split reverse">
+      <div class="split-text">
+        <p class="eyebrow">الرسم البياني</p>
+        <h2>معرفتك في بعدين وثلاثة أبعاد</h2>
+        <p>استكشف المجموعة كاملة أو جوار ملاحظة واحدة. لوّن الملاحظات بحسب الوسم، أو دع التجميع يعثر على موضوعاتك:</p>
+        <ul class="ticks">
+          <li><b>k-means</b> أو <b>هرمي</b> تجميعًا لمعاني الملاحظات؛</li>
+          <li>اختيار عدد المجموعات باستخدام درجة silhouette؛</li>
+          <li>تسمية المجموعات بكلماتها المفتاحية.</li>
+        </ul>
+        <p>فعّل <b>المجموعة</b> لتقريب الملاحظات ذات الصلة على خلفيات مظللة. اختيرت الألوان لتبقى متميزة حتى مع اضطرابات رؤية الألوان.</p>
+        <p><a class="more" href="docs/graph-and-insights.html">الرسم البياني والإحصاءات</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/graph-3d-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/graph-3d-light.png" width="1440" height="900" loading="lazy"
+               alt="الرسم البياني ثلاثي الأبعاد: ملاحظات ملونة بحسب مجموعات k-means مع هالات ناعمة، ومفتاح يسمّي كل مجموعة بكلماتها المفتاحية.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split">
+      <div class="split-text">
+        <p class="eyebrow">خرائط ذهنية</p>
+        <h2>فكّر على هيئة فروع</h2>
+        <p>يمكن لكل ملاحظة أن تتضمن خريطة ذهنية:</p>
+        <ul class="ticks">
+          <li><kbd>Tab</kbd> يضيف فكرة فرعية، <kbd>Enter</kbd> فكرة شقيقة، <kbd>F2</kbd> لإعادة التسمية؛</li>
+          <li>اربط أي فكرة بملاحظة؛</li>
+          <li>أنشئ خريطة من روابط الملاحظة بنقرة واحدة؛</li>
+          <li>صدّرها بصيغة PNG أو SVG أو FreeMind.</li>
+        </ul>
+        <p><a class="more" href="docs/notes-and-links.html#mind-maps">خرائط ذهنية</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/mindmap-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/mindmap-light.png" width="1440" height="900" loading="lazy"
+               alt="خريطة ذهنية بعنوان «تعلّم يدوم»، تتفرع إلى التباعد والاسترجاع والصعوبة والمعنى، ولكل فرع لونه.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split reverse">
+      <div class="split-text">
+        <p class="eyebrow">المراجعة</p>
+        <h2>تذكّر ما تكتبه</h2>
+        <p>حوّل الملاحظات إلى بطاقات تعليمية وراجعها باستخدام التكرار المتباعد SM-2. ويمكنك أيضًا اختبار نفسك:</p>
+        <ul class="ticks">
+          <li>اختيار من متعدد؛</li>
+          <li>إجابات مكتوبة تتسامح مع الأخطاء المطبعية؛</li>
+          <li><em>سمّ تلك الملاحظة</em>، وتكون الخيارات الخاطئة أكثر الملاحظات تشابهًا.</li>
+        </ul>
+        <p>هل تفضّل Anki؟ زامن عبر AnkiConnect أو صدّر حزمة. ترتبط كل بطاقة بملاحظتها.</p>
+        <p><a class="more" href="docs/review-and-anki.html">المراجعة والاختبارات وAnki</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/insights-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/insights-light.png" width="1440" height="900" loading="lazy"
+               alt="صفحة الإحصاءات: بطاقات بأعداد الملاحظات والروابط والوسوم والملاحظات غير المرتبطة والبطاقات التعليمية، ومخطط للملاحظات المضافة شهريًا ومخططات أعمدة لأبرز الوسوم والروابط بحسب النوع.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section showcase">
+    <div class="wrap split">
+      <div class="split-text">
+        <p class="eyebrow">اسأل ملاحظاتك</p>
+        <h2>إجابات مستندة إلى ملاحظاتك</h2>
+        <p>استخدم مفتاحك الخاص لـ <b>Anthropic Claude</b>, <b>OpenAI</b> أو <b>Z.ai</b> واطرح الأسئلة.</p>
+        <ul class="ticks">
+          <li>يُعثر على الملاحظات الأكثر صلة على جهازك.</li>
+          <li>لا يُرسل إلا تلك الملاحظات، ويمكنك معرفة ما أُرسل بالضبط.</li>
+          <li>تستشهد الإجابات بها عبر روابط قابلة للنقر.</li>
+          <li>تبقى المفاتيح في مدير بيانات الاعتماد في Windows.</li>
+        </ul>
+        <p><a class="more" href="docs/ai-assistant.html">اسأل ملاحظاتك</a></p>
+      </div>
+      <figure class="shot">
+        <picture>
+          <source srcset="../assets/screenshots/ask-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="../assets/screenshots/ask-light.png" width="1440" height="900" loading="lazy"
+               alt="صفحة «اسأل» تعرض سؤالًا عن التباعد والاسترجاع وإجابة تستشهد بالملاحظات على هيئة روابط.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <h2 class="section-title">يعمل مع أدواتك</h2>
+      <ul class="cards">
+        <li class="card">
+          <h3>Zotero</h3>
+          <p>ابحث في مكتبتك وأدرج استشهادات تفتح العنصر وأنشئ ملاحظات مراجع بروابط إلى ملف PDF.</p>
+          <a class="more" href="docs/zotero.html">Zotero</a>
+        </li>
+        <li class="card">
+          <h3>Anki</h3>
+          <p>زامن البطاقات التعليمية عبر AnkiConnect أو صدّر <code>.apkg</code> حزمًا. تؤدي إعادة المزامنة إلى تحديث البطاقات بدلًا من إنشاء نسخ مكررة.</p>
+          <a class="more" href="docs/review-and-anki.html#anki">Anki</a>
+        </li>
+        <li class="card">
+          <h3>خادم MCP</h3>
+          <p>أتح لعملاء MCP مثل Claude Desktop وClaude Code البحث في مستودعك وقراءة محتوياته أثناء فتح ZettelApp وتفعيل مفتاح MCP فقط. ويظل المستودع للقراءة فقط ما لم تسمح بالتعديل.</p>
+          <a class="more" href="docs/mcp-server.html">خادم MCP</a>
+        </li>
+        <li class="card">
+          <h3>Obsidian وMarkdown</h3>
+          <p>استورد مجلدات Markdown ومستودعات Obsidian، أو صدّر الملاحظات كملفات Markdown مع رأس أمامي و
+            <code>[[links]]</code>.</p>
+          <a class="more" href="docs/export-import.html">استيراد</a>
+        </li>
+        <li class="card">
+          <h3>صدّر أي شيء</h3>
+          <p>صدّر المجموعة كاملة أو أي رسم فرعي كأرشيف أو موقع ويب ثابت أو JSON أو GraphML أو Graphviz أو حزمة Anki.</p>
+          <a class="more" href="docs/export-import.html">تصدير</a>
+        </li>
+        <li class="card">
+          <h3>مصمم لـ Windows</h3>
+          <p>يتبع السمة الفاتحة أو الداكنة ولون التمييز لديك. قوائم واختصارات مألوفة ومثبّت لكل مستخدم ونسخ احتياطية يومية.</p>
+          <a class="more" href="docs/getting-started.html">البدء</a>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="privacy" class="section tinted">
+    <div class="wrap">
+      <h2 class="section-title">خصوصية وأمان في صميم التصميم</h2>
+      <p class="section-lead">ملاحظاتك ملكك. يعمل ZettelApp دون اتصال. ولا يستخدم الشبكة إلا للتحقق بهدوء من توفر إصدار جديد عند بدء التشغيل (ويمكنك إيقاف ذلك) أو عندما تطلب منه ذلك.</p>
+      <ul class="cards compact">
+        <li class="card"><h3>دون اتصال أولًا</h3><p>لا حسابات ولا قياس عن بُعد ولا تتبع. توجد الملاحظات في المجلد الذي تختاره.</p></li>
+        <li class="card"><h3>لا محتوى نشطًا</h3><p>لا يمكن للملاحظات تشغيل نصوص برمجية أو تحميل أي شيء من الويب. تُفحص الواردات لكشف حيل المسارات وقنابل فك الضغط.</p></li>
+        <li class="card"><h3>مفاتيحك تبقى سرية</h3><p>تُحفظ مفاتيح API في مدير بيانات الاعتماد في Windows ولا تُكتب مطلقًا في الملفات أو السجلات.</p></li>
+        <li class="card"><h3>شبكات أمان</h3><p>حفظ تلقائي وسلة محذوفات تتيح الاستعادة ونسخة احتياطية يومية لكل مستودع تفتحه.</p></li>
+      </ul>
+      <p class="center"><a class="more" href="docs/privacy-and-security.html">تفاصيل الخصوصية والأمان</a></p>
+    </div>
+  </section>
+
+  <section id="download" class="section">
+    <div class="wrap download">
+      <div>
+        <h2>نزّل ZettelApp</h2>
+        <p>مجاني ومفتوح المصدر وصادر إلى الملكية العامة.</p>
+        <div class="actions">
+          <a class="button primary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe">تنزيل المثبّت</a>
+          <a class="button secondary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Portable.zip">.zip محمول</a>
+        </div>
+        <p class="fine"><a href="https://github.com/DutraIRS/ZettelApp/releases/latest">كل الإصدارات وملاحظات الإصدار ومجاميع التحقق SHA-256</a></p>
+      </div>
+      <dl class="specs">
+        <dt>النظام</dt><dd>Windows 10 (21H2 أو أحدث) أو Windows 11، 64-bit</dd>
+        <dt>التثبيت</dt><dd>لكل مستخدم، من دون الحاجة إلى صلاحيات مسؤول. اختر لغة المثبّت عند بدء التثبيت.</dd>
+        <dt>SmartScreen</dt><dd>لم تُوقّع الإصدارات رقميًا بعد. إذا حذرك Windows، فاختر <i>مزيد من المعلومات ▸ التشغيل على أي حال</i>
+          بعد التحقق من مجموع التحقق.</dd>
+        <dt>المصدر</dt><dd><a href="https://github.com/DutraIRS/ZettelApp">github.com/DutraIRS/ZettelApp</a></dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="section tinted">
+    <div class="wrap">
+      <h2 class="section-title">قريبًا</h2>
+      <ul class="cards compact">
+        <li class="card"><h3>مزيد من اللغات</h3><p>التطبيق وهذه الصفحات متاحة بـ 11 لغة؛ ونرحب بإضافة المزيد.</p></li>
+        <li class="card"><h3>Linux</h3><p>.deb وحزم AppImage.</p></li>
+        <li class="card"><h3>إصدارات موقّعة</h3><p>لن تظهر تحذيرات SmartScreen بعد الآن.</p></li>
+        <li class="card"><h3>ذكاء اصطناعي دون اتصال</h3><p>نماذج تضمين محلية لتحسين الاقتراحات أكثر.</p></li>
+      </ul>
+      <p class="center"><a class="more" href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">اقرأ خارطة الطريق</a></p>
+    </div>
+  </section>
+
+  <section id="support" class="section">
+    <div class="wrap support">
+      <h2>ادعم ZettelApp</h2>
+      <p>ZettelApp برنامج مجاني وملك عام يُطوّر علنًا. إذا وفر عليك الوقت أو أردت أن ترى خارطة الطريق تتحقق أسرع، فنرجو أن تفكر في رعايته.</p>
+      <div class="actions">
+        <a class="button donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> تبرّع عبر Ko-fi</a>
+      </div>
+      <p class="fine">للشركات: يمكن للرعاية تمويل بند محدد في خارطة الطريق.
+        <a href="https://github.com/DutraIRS/ZettelApp">تواصل معنا عبر GitHub</a>. نشكر الرعاة في ملاحظات الإصدار.</p>
+    </div>
+  </section>
