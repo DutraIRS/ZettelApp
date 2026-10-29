@@ -4,3 +4,4 @@ pytest-cov==7.1.0
 pyinstaller==6.22.3
 pip-audit==2.10.1
 ruff==0.17.3
+rational==0.3.0a1  # builds the website (tools/website.py)

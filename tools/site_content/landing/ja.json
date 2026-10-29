@@ -1,0 +1,45 @@
+{
+ "title": "ZettelApp – Windows 向けの Zettelkasten",
+ "description": "ZettelApp は Windows 向けの無料の Zettelkasten アプリです。アトミックなノート、種類付きリンク、マインドマップ、フラッシュカード、2D/3D の知識グラフ、あなたから学習するリンク候補を備えています。",
+ "skip": "本文へスキップ",
+ "nav_label": "メイン",
+ "features": "機能",
+ "tutorial": "チュートリアル",
+ "docs": "ドキュメント",
+ "donate": "寄付",
+ "download": "ダウンロード",
+ "menu": "メニュー",
+ "license_html": "ZettelApp · パブリックドメイン (<a href=\"https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE\">The Unlicense</a>)",
+ "footer_links": [
+  [
+   "docs/",
+   "ドキュメント",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp",
+   "GitHub",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/issues",
+   "Issues",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md",
+   "セキュリティ",
+   ""
+  ],
+  [
+   "https://github.com/DutraIRS/ZettelApp/blob/main/THIRD_PARTY_NOTICES.md",
+   "通知",
+   ""
+  ],
+  [
+   "https://ko-fi.com/dutrairs",
+   "寄付",
+   "noopener"
+  ]
+ ]
+}
