@@ -80,9 +80,10 @@ The result has four fields:
 - A message without an `id` is a notification. It is handled and never answered, even when it fails.
 - The server never sends requests, so responses from the client (messages with `result` or `error` and
   no `method`) are ignored.
-- A JSON array is handled as a JSON-RPC batch (as in protocol `2025-03-26`), whatever version was
-  chosen. Its messages are handled in order, and the replies to its requests are written together as one
-  array on one line. A batch that holds only notifications gets no reply.
+- A non-empty JSON array is handled as a JSON-RPC batch (as in protocol `2025-03-26`), whatever version
+  was chosen. Its messages are handled in order, and the replies to its requests are written together as
+  one array on one line. A batch that holds only notifications gets no reply; an empty batch is an invalid
+  request.
 
 ## Errors
 
@@ -95,6 +96,7 @@ Protocol problems are JSON-RPC errors. Problems with a tool's arguments are tool
 | The message isn't a JSON object, or `jsonrpc` isn't `"2.0"` | Error `-32600` *Invalid request*, `id` `null` |
 | The message is larger than 10 MiB | Error `-32600` *Message too large.*, `id` `null` |
 | A message without `method` that isn't a response | Error `-32600` *Invalid request* |
+| An empty JSON-RPC batch | Error `-32600` *Invalid request*, `id` `null` |
 | An unknown method | Error `-32601` *Method not found: …* |
 | `params` isn't an object | Error `-32602` *params must be an object* |
 | `tools/call` names an unknown tool, or a write tool while writes aren't allowed | Error `-32602` *Unknown tool: …* |
@@ -130,6 +132,7 @@ Every tool's `inputSchema` is a JSON Schema object with `additionalProperties: f
 every argument again itself:
 
 - **Unknown names** are refused: *Unknown argument(s): …*.
+- **Required names** must be present, even when an empty string is a valid value: *Missing required argument(s): …*.
 - **Numbers** must be JSON numbers (`true` and `false` are refused). Decimals are cut to whole numbers,
   and values outside a tool's range are moved to the nearest limit, not refused.
 - **Strings** must be strings within the length limit given for each argument.

@@ -46,6 +46,7 @@ class Graph3DView(QWidget):
         self._neighbors: dict[str, set[str]] = {}
         self._lanes: list[float] = []
         self._index: dict[str, int] = {}
+        self._auto_rotate = False
         self.rotate_timer = QTimer(self, interval=33, timeout=self._spin)
 
     def set_graph(
@@ -75,10 +76,20 @@ class Graph3DView(QWidget):
         self.update()
 
     def set_auto_rotate(self, on: bool) -> None:
-        if on:
+        self._auto_rotate = on
+        if on and self.isVisible():
             self.rotate_timer.start()
         else:
             self.rotate_timer.stop()
+
+    def hideEvent(self, event) -> None:  # noqa: N802
+        self.rotate_timer.stop()
+        super().hideEvent(event)
+
+    def showEvent(self, event) -> None:  # noqa: N802
+        super().showEvent(event)
+        if self._auto_rotate:
+            self.rotate_timer.start()
 
     def _spin(self) -> None:
         self.yaw += 0.008

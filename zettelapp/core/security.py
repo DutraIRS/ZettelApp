@@ -199,6 +199,7 @@ def app_url(note_id: str) -> str:
 
 MAX_ARCHIVE_MEMBERS = 50_000
 MAX_ARCHIVE_TOTAL_BYTES = 2 * 1024**3
+MAX_ARCHIVE_MEMBER_BYTES = 32 * 1024**2
 MAX_COMPRESSION_RATIO = 200
 
 
@@ -210,6 +211,8 @@ def check_zip(zf: zipfile.ZipFile) -> None:
     total = 0
     for info in members:
         safe_member_path(info.filename)
+        if info.file_size > MAX_ARCHIVE_MEMBER_BYTES:
+            raise UnsafeInputError("A file in the archive is too large to import.")
         total += info.file_size
         if info.compress_size and info.file_size / info.compress_size > MAX_COMPRESSION_RATIO:
             raise UnsafeInputError(

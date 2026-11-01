@@ -35,10 +35,22 @@ MAX_CONTEXT_CHARS = 120_000
 MAX_QUESTION_CHARS = 8_000
 MAX_STREAM_BYTES = 8 * 1024 * 1024
 TRUNCATED_MARKER = "\n\n[note truncated]"
+_DEFAULT_URLOPEN = urllib.request.urlopen
 
 
 class LLMError(Exception):
     """A user-presentable failure. Messages never contain the API key."""
+
+
+class _SameOriginRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """Never send provider credentials to a different origin or scheme."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        old = urlsplit(req.full_url)
+        new = urlsplit(newurl)
+        if (old.scheme.lower(), old.netloc.lower()) != (new.scheme.lower(), new.netloc.lower()):
+            return None
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
 @dataclass(frozen=True)
@@ -407,7 +419,11 @@ class OpenAICompatibleAdapter:
     ):
         label = settings.info.label
         try:
-            return urllib.request.urlopen(request, timeout=timeout)
+            # Keep transport injection possible for tests and embedded clients.
+            if urllib.request.urlopen is not _DEFAULT_URLOPEN:
+                return urllib.request.urlopen(request, timeout=timeout)
+            opener = urllib.request.build_opener(_SameOriginRedirectHandler)
+            return opener.open(request, timeout=timeout)
         except urllib.error.HTTPError as exc:
             detail = ""
             try:

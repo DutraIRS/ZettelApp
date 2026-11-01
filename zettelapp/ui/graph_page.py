@@ -251,6 +251,7 @@ class GraphPage(QWidget):
         self.refresh()
 
     def invalidate(self) -> None:
+        self._request += 1
         self._layouts.clear()
         self._clusters.clear()
 

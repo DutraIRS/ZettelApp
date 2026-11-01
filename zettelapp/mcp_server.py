@@ -29,6 +29,12 @@ log = logging.getLogger("zettelapp.mcp")
 
 PROTOCOL_VERSIONS = ("2025-11-25", "2025-06-18", "2025-03-26", "2024-11-05")
 MAX_MESSAGE_BYTES = 10 * 1024 * 1024
+
+
+def _reject_json_constant(value: str):
+    raise ValueError(f"non-standard JSON constant: {value}")
+
+
 MAX_BODY_RETURNED = 200_000
 MAX_SUBGRAPH_NODES = 500
 
@@ -197,10 +203,12 @@ class ZettelMcpServer:
 
     def handle_raw(self, line: bytes) -> Any:
         try:
-            message = json.loads(line.decode("utf-8"))
+            message = json.loads(line.decode("utf-8"), parse_constant=_reject_json_constant)
         except (UnicodeDecodeError, ValueError):
             return self._error(None, PARSE_ERROR, "Parse error")
         if isinstance(message, list):  # JSON-RPC batch (protocol 2025-03-26)
+            if not message:
+                return self._error(None, INVALID_REQUEST, "Invalid request")
             replies = [r for r in (self.handle(m) for m in message) if r is not None]
             return replies or None
         return self.handle(message)
@@ -212,17 +220,24 @@ class ZettelMcpServer:
     def handle(self, message: Any) -> dict | None:
         if not isinstance(message, dict) or message.get("jsonrpc") != "2.0":
             return self._error(None, INVALID_REQUEST, "Invalid request")
-        method = message.get("method")
         msg_id = message.get("id")
+        if "id" in message and (
+            isinstance(msg_id, bool) or not isinstance(msg_id, (str, int, float, type(None)))
+        ):
+            return self._error(None, INVALID_REQUEST, "Invalid request")
         is_request = "id" in message
-        if not isinstance(method, str):
+        if "method" not in message:
             # A response from the client; this server never sends requests.
             return (
                 None
                 if "result" in message or "error" in message
                 else self._error(msg_id, INVALID_REQUEST, "Invalid request")
             )
-        params = message.get("params") or {}
+        method = message["method"]
+        if not isinstance(method, str):
+            return self._error(None, INVALID_REQUEST, "Invalid request")
+        params = message.get("params", {})
+
         try:
             if not isinstance(params, dict):
                 raise RpcError(INVALID_PARAMS, "params must be an object")
@@ -269,13 +284,16 @@ class ZettelMcpServer:
             raise RpcError(INVALID_PARAMS, f"Unknown tool: {name}")
         if not self.switched_on():  # checked on every call, not just at start-up
             return {"content": [{"type": "text", "text": SWITCHED_OFF}], "isError": True}
-        args = params.get("arguments") or {}
+        args = params.get("arguments", {})
         if not isinstance(args, dict):
             raise RpcError(INVALID_PARAMS, "arguments must be an object")
         unknown = set(args) - set(tool.properties)
         try:
             if unknown:
                 raise ToolInputError(f"Unknown argument(s): {', '.join(sorted(unknown))}")
+            missing = set(tool.required) - set(args)
+            if missing:
+                raise ToolInputError(f"Missing required argument(s): {', '.join(sorted(missing))}")
             data = tool.handler(args)
         except ToolInputError as exc:
             return {"content": [{"type": "text", "text": str(exc)}], "isError": True}

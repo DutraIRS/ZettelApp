@@ -543,7 +543,7 @@
  "Add your Anthropic API key in Tools ▸ Options ▸ AI assistant first.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:248"
+   "zettelapp/core/llm.py:260"
   ]
  },
  "Add your {label} API key in Options to ask questions about your notes. Open Options now?": {
@@ -555,7 +555,7 @@
  "Add your {label} API key in Tools ▸ Options ▸ AI assistant first.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:383"
+   "zettelapp/core/llm.py:395"
   ]
  },
  "Address (http, https or mailto):": {
@@ -699,19 +699,19 @@
  "Anthropic is having trouble right now (error {status_code}). Try again later.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:277"
+   "zettelapp/core/llm.py:289"
   ]
  },
  "Anthropic rejected the API key. Check it in Tools ▸ Options ▸ AI assistant.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:262"
+   "zettelapp/core/llm.py:274"
   ]
  },
  "Anthropic returned an error: {scrub}": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:282"
+   "zettelapp/core/llm.py:294"
   ]
  },
  "API key": {
@@ -1128,13 +1128,13 @@
  "Cluster {n}: {keywords}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:355"
+   "zettelapp/ui/graph_page.py:356"
   ]
  },
  "Clusters": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:422"
+   "zettelapp/ui/graph_page.py:423"
   ]
  },
  "Clusters: hierarchical": {
@@ -1172,13 +1172,13 @@
  "Computing graph layout…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:316"
+   "zettelapp/ui/graph_page.py:317"
   ]
  },
  "Computing layout…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:315"
+   "zettelapp/ui/graph_page.py:316"
   ]
  },
  "Connect an AI provider": {
@@ -1214,7 +1214,7 @@
  "Connected to {provider}. {n} model available.": {
   "plural": "Connected to {provider}. {n} models available.",
   "where": [
-   "zettelapp/core/llm.py:506"
+   "zettelapp/core/llm.py:522"
   ]
  },
  "Contains": {
@@ -1265,7 +1265,7 @@
  "Could not draw the graph: {error}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:414"
+   "zettelapp/ui/graph_page.py:415"
   ]
  },
  "Could not get an answer.": {
@@ -1290,7 +1290,7 @@
  "Could not reach Anthropic. Check your internet connection.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:289"
+   "zettelapp/core/llm.py:301"
   ]
  },
  "Could not reach Zotero. Make sure Zotero 7 or later is running.": {
@@ -1302,7 +1302,7 @@
  "Could not reach {label}. Check your internet connection and the API address.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:441"
+   "zettelapp/core/llm.py:457"
   ]
  },
  "Could not read from Windows Credential Manager.": {
@@ -1611,7 +1611,7 @@
  "Drag to orbit · wheel to zoom · double-click a note to open it": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph3d.py:281"
+   "zettelapp/ui/graph3d.py:282"
   ]
  },
  "Due for review": {
@@ -1647,7 +1647,7 @@
  "Each note takes the colour of its most common tag.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:346"
+   "zettelapp/ui/graph_page.py:347"
   ]
  },
  "Edit": {
@@ -1678,7 +1678,7 @@
  "Empty or invalid path in archive.": {
   "plural": null,
   "where": [
-   "zettelapp/core/security.py:225"
+   "zettelapp/core/security.py:228"
   ]
  },
  "Empty Trash": {
@@ -2077,7 +2077,7 @@
  "Graph image saved": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:481"
+   "zettelapp/ui/graph_page.py:482"
   ]
  },
  "Group": {
@@ -2090,7 +2090,7 @@
   "plural": null,
   "where": [
    "zettelapp/ui/graph_page.py:197",
-   "zettelapp/ui/graph_page.py:422"
+   "zettelapp/ui/graph_page.py:423"
   ]
  },
  "Groups legend": {
@@ -2561,13 +2561,13 @@
  "Link type “{name}” has an unknown arrow tip: {value}": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:165"
+   "zettelapp/core/importer.py:172"
   ]
  },
  "Link type “{name}” has an unknown line style: {value}": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:164"
+   "zettelapp/core/importer.py:171"
   ]
  },
  "Link types": {
@@ -2640,7 +2640,7 @@
  "local graph": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:406"
+   "zettelapp/ui/graph_page.py:407"
   ]
  },
  "Long dash": {
@@ -2753,7 +2753,7 @@
  "Missing image {name}": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:127"
+   "zettelapp/core/importer.py:133"
   ]
  },
  "Model": {
@@ -3004,7 +3004,7 @@
  "No note in the graph matches that title.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:473"
+   "zettelapp/ui/graph_page.py:474"
   ]
  },
  "No notes are tagged #{tag} yet.": {
@@ -3022,7 +3022,7 @@
  "No notes to show": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph3d.py:130"
+   "zettelapp/ui/graph3d.py:143"
   ]
  },
  "No questions answered.": {
@@ -3131,7 +3131,7 @@
  "Note: {model} is not in the provider's model list.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:512"
+   "zettelapp/core/llm.py:528"
   ]
  },
  "Notes": {
@@ -3372,7 +3372,7 @@
  "Other / untagged ({n})": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:436"
+   "zettelapp/ui/graph_page.py:437"
   ]
  },
  "Outgoing links": {
@@ -3396,7 +3396,7 @@
  "Path escapes its folder: {relative!r}": {
   "plural": null,
   "where": [
-   "zettelapp/core/security.py:239"
+   "zettelapp/core/security.py:242"
   ]
  },
  "Permanently delete everything in the Trash": {
@@ -3440,7 +3440,7 @@
   "plural": null,
   "where": [
    "zettelapp/ui/editor.py:668",
-   "zettelapp/ui/graph_page.py:477"
+   "zettelapp/ui/graph_page.py:478"
   ]
  },
  "PNG image…": {
@@ -3538,13 +3538,13 @@
  "Rate limit or quota reached. Wait a moment and try again.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:427"
+   "zettelapp/core/llm.py:443"
   ]
  },
  "Rate limit or usage limit reached. Wait a moment and try again.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:273"
+   "zettelapp/core/llm.py:285"
   ]
  },
  "Reads the same from both notes": {
@@ -3791,7 +3791,7 @@
  "Save graph as image": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:477"
+   "zettelapp/ui/graph_page.py:478"
   ]
  },
  "Scope": {
@@ -3978,7 +3978,7 @@
  "Silhouette score {score} (higher is better, max 1).": {
   "plural": null,
   "where": [
-   "zettelapp/ui/graph_page.py:375"
+   "zettelapp/ui/graph_page.py:376"
   ]
  },
  "Silver threads are links: they tie one note to another.": {
@@ -3996,20 +3996,20 @@
  "Skipped image {name}: {error}": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:136",
-   "zettelapp/core/importer.py:394"
+   "zettelapp/core/importer.py:142",
+   "zettelapp/core/importer.py:406"
   ]
  },
  "Skipped oversized image {name}": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:130"
+   "zettelapp/core/importer.py:136"
   ]
  },
  "Skipped {name}: file too large": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:347"
+   "zettelapp/core/importer.py:359"
   ]
  },
  "Solid": {
@@ -4160,7 +4160,7 @@
  "Suspicious compression ratio in {filename!r}.": {
   "plural": null,
   "where": [
-   "zettelapp/core/security.py:216"
+   "zettelapp/core/security.py:219"
   ]
  },
  "SVG image (*.svg)": {
@@ -4234,7 +4234,7 @@
   "plural": null,
   "where": [
    "zettelapp/ui/graph_page.py:123",
-   "zettelapp/ui/graph_page.py:422",
+   "zettelapp/ui/graph_page.py:423",
    "zettelapp/ui/insights.py:322"
   ]
  },
@@ -4298,32 +4298,32 @@
  "The answer was cut off at the length limit.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:319",
-   "zettelapp/core/llm.py:367"
+   "zettelapp/core/llm.py:331",
+   "zettelapp/core/llm.py:379"
   ]
  },
  "The API address is not a valid URL.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:108"
+   "zettelapp/core/llm.py:120"
   ]
  },
  "The API address must use https:// (plain http:// is allowed only for localhost).": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:112"
+   "zettelapp/core/llm.py:124"
   ]
  },
  "The archive contains too many files.": {
   "plural": null,
   "where": [
-   "zettelapp/core/security.py:209"
+   "zettelapp/core/security.py:210"
   ]
  },
  "The archive is too large to import.": {
   "plural": null,
   "where": [
-   "zettelapp/core/security.py:219"
+   "zettelapp/core/security.py:222"
   ]
  },
  "The Archive knows which notes belong together, and whispers them to those who listen.": {
@@ -4335,7 +4335,7 @@
  "The archive manifest is too large.": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:115"
+   "zettelapp/core/importer.py:121"
   ]
  },
  "The Archivist's Journal": {
@@ -4377,7 +4377,7 @@
  "The export field “{field}” must be a list.": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:181"
+   "zettelapp/core/importer.py:188"
   ]
  },
  "The file is too large to import.": {
@@ -4401,7 +4401,7 @@
  "The folder contains too many Markdown files.": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:319"
+   "zettelapp/core/importer.py:331"
   ]
  },
  "The graph and Insights": {
@@ -4437,13 +4437,13 @@
  "The model declined to answer this question.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:317"
+   "zettelapp/core/llm.py:329"
   ]
  },
  "The model or API address was not found. Check Tools ▸ Options ▸ AI assistant.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:424"
+   "zettelapp/core/llm.py:440"
   ]
  },
  "The other types are {types}. The side panel on the right lists each link with its type, and the note at the other end shows it under **Backlinks**, read the other way round.": {
@@ -4461,37 +4461,37 @@
  "The provider declined to answer this question.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:365"
+   "zettelapp/core/llm.py:377"
   ]
  },
  "The provider returned an error: {scrub}": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:352"
+   "zettelapp/core/llm.py:364"
   ]
  },
  "The provider sent an unexpected model list.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:471"
+   "zettelapp/core/llm.py:487"
   ]
  },
  "The question is too long. Shorten it and try again.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:494"
+   "zettelapp/core/llm.py:510"
   ]
  },
  "The request to Anthropic timed out. Try again.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:287"
+   "zettelapp/core/llm.py:299"
   ]
  },
  "The response was unexpectedly large and was stopped.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:337"
+   "zettelapp/core/llm.py:349"
   ]
  },
  "The Riddle Door": {
@@ -4521,7 +4521,7 @@
  "The selected model was not found. Choose another model in Tools ▸ Options ▸ AI assistant.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:268"
+   "zettelapp/core/llm.py:280"
   ]
  },
  "The Silver Thread": {
@@ -4599,8 +4599,8 @@
  "This API key is not allowed to use the selected model.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:265",
-   "zettelapp/core/llm.py:423"
+   "zettelapp/core/llm.py:277",
+   "zettelapp/core/llm.py:439"
   ]
  },
  "This archive contains neither a ZettelApp export nor Markdown files.": {
@@ -4618,7 +4618,7 @@
  "This export was made by a newer version of ZettelApp.": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:176"
+   "zettelapp/core/importer.py:183"
   ]
  },
  "This habit is part of the method:": {
@@ -4630,7 +4630,7 @@
  "This is not a ZettelApp export.": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:174"
+   "zettelapp/core/importer.py:181"
   ]
  },
  "This note has no links yet. Link it to other notes first.": {
@@ -4752,7 +4752,7 @@
  "Type a question first.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:492"
+   "zettelapp/core/llm.py:508"
   ]
  },
  "Type the answer": {
@@ -4794,7 +4794,7 @@
  "Unknown AI provider: {provider!r}": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:127"
+   "zettelapp/core/llm.py:139"
   ]
  },
  "Unknown author": {
@@ -4812,8 +4812,8 @@
  "Unsafe path in archive: {name!r}": {
   "plural": null,
   "where": [
-   "zettelapp/core/security.py:228",
-   "zettelapp/core/security.py:230"
+   "zettelapp/core/security.py:231",
+   "zettelapp/core/security.py:233"
   ]
  },
  "Unsupported file type: {name}": {
@@ -5191,13 +5191,13 @@
  "{n} cluster by average-linkage hierarchical clustering of LSA embeddings.": {
   "plural": "{n} clusters by average-linkage hierarchical clustering of LSA embeddings.",
   "where": [
-   "zettelapp/ui/graph_page.py:368"
+   "zettelapp/ui/graph_page.py:369"
   ]
  },
  "{n} cluster by k-means clustering of LSA embeddings.": {
   "plural": "{n} clusters by k-means clustering of LSA embeddings.",
   "where": [
-   "zettelapp/ui/graph_page.py:362"
+   "zettelapp/ui/graph_page.py:363"
   ]
  },
  "{n} flashcard": {
@@ -5240,7 +5240,7 @@
  "{n} link": {
   "plural": "{n} links",
   "where": [
-   "zettelapp/ui/graph_page.py:403",
+   "zettelapp/ui/graph_page.py:404",
    "zettelapp/ui/insights.py:82",
    "zettelapp/ui/main_window.py:1143",
    "zettelapp/ui/main_window.py:1091",
@@ -5263,7 +5263,7 @@
  "{n} note": {
   "plural": "{n} notes",
   "where": [
-   "zettelapp/ui/graph_page.py:402",
+   "zettelapp/ui/graph_page.py:403",
    "zettelapp/ui/insights.py:80",
    "zettelapp/ui/main_window.py:1142",
    "zettelapp/ui/main_window.py:1090",
@@ -5279,7 +5279,7 @@
  "{n} note in this group": {
   "plural": "{n} notes in this group",
   "where": [
-   "zettelapp/ui/graph_page.py:457"
+   "zettelapp/ui/graph_page.py:458"
   ]
  },
  "{n} note moved to the Trash.": {
@@ -5309,19 +5309,19 @@
  "{provider} is having trouble right now (error {code}). Try again later.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:430"
+   "zettelapp/core/llm.py:446"
   ]
  },
  "{provider} rejected the API key. Check it in Tools ▸ Options ▸ AI assistant.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:420"
+   "zettelapp/core/llm.py:436"
   ]
  },
  "{provider} returned an error ({code}): {detail}": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:434"
+   "zettelapp/core/llm.py:450"
   ]
  },
  "{score} of {n} correct": {

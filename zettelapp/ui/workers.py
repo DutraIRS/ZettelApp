@@ -101,9 +101,11 @@ class SuggestionService(QObject):
         with self._lock:
             self.suggester = LinkSuggester(prior_strength=prior_strength, enabled=enabled_features)
             self._signature = None
+            self._request += 1  # discard work started with the previous configuration
 
     def invalidate(self) -> None:
         self._signature = None
+        self._request += 1  # pending results belong to the previous vault or settings
 
     def request(self, vault: Vault, note: NoteData, limit: int, min_probability: float) -> None:
         self._request += 1

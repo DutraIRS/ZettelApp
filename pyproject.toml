@@ -35,6 +35,7 @@ dev = [
     "pyinstaller>=6.10",
     "pip-audit>=2.10",
     "ruff>=0.17",
+    "rational==0.3.0a1",
 ]
 
 [project.urls]
