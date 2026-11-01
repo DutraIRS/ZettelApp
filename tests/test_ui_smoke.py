@@ -78,7 +78,7 @@ def test_full_workflow(window):
 
 def test_dialogs_construct(window):
     from zettelapp.ui.dialogs import AboutDialog, ExportDialog, LinkPickerDialog, ShortcutsDialog
-    from zettelapp.ui.settings_dialog import OptionsDialog
+    from zettelapp.ui.settings_dialog import PAGES, OptionsDialog
 
     window.vault.create_note("One", "text")
     AboutDialog(window).close()
@@ -86,7 +86,7 @@ def test_dialogs_construct(window):
     LinkPickerDialog(window.vault, set(), window).close()
     ExportDialog(window.vault, None, window.resolve_scope, window).close()
     options = OptionsDialog(window)
-    assert options.pages.count() == options.nav.count() == 9
+    assert options.pages.count() == options.nav.count() == len(PAGES)
     options.close()
 
 

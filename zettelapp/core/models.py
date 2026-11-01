@@ -41,6 +41,16 @@ class Link:
     origin: str = "manual"  # manual | inline | suggestion
 
 
+TAG_RELATION_TYPES = ("parent", "related", "synonym")
+
+
+@dataclass(frozen=True)
+class TagRelationship:
+    source: str
+    target: str
+    relation_type: str
+
+
 # How a link type is drawn. Dashes are a second cue besides colour (for colour-blind
 # readers and print), so the built-in types don't share one style.
 LINE_STYLES = ("solid", "dashed", "dotted", "dash_dot", "dash_dot_dot", "long_dash")

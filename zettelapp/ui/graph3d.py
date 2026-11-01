@@ -41,8 +41,10 @@ class Graph3DView(QWidget):
         self.hovered: str | None = None
         self.selected: str | None = None
         self._screen = np.zeros((0, 2))
+        self._scale = np.zeros(0)
         self._drag_from: QPointF | None = None
         self._dragged = False
+        self._group_drag: tuple[object, QPointF] | None = None  # group, last screen point
         self._neighbors: dict[str, set[str]] = {}
         self._lanes: list[float] = []
         self._index: dict[str, int] = {}
@@ -140,26 +142,14 @@ class Graph3DView(QWidget):
             painter.setPen(t.q("text_muted"))
             painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, _("No notes to show"))
             return
-        screen, _scale, depth = self._project()
+        screen, scale, depth = self._project()
         self._screen = screen
-        base = min(self.width(), self.height()) * 0.36 * self.zoom_level
+        self._scale = scale
 
-        if self.show_groups:  # solid, clearly bounded hulls; only their size follows depth
+        if self.show_groups:
             label_font = theme.ui_font(9, theme.QFont.Weight.DemiBold)
             label_metrics = QFontMetricsF(label_font)
-            groups = []
-            for group, members in self.data.members().items():
-                idx = [self._index[m] for m in members if m in self._index]
-                if idx:
-                    groups.append((group, idx, float(np.mean(depth[idx]))))
-            groups.sort(key=lambda g: g[2])  # farthest first, so nearer hulls paint over them
-            for group, idx, d in groups:
-                pts = [tuple(screen[i]) for i in idx]
-                node_r = max(
-                    node_radius(self.data.degree.get(self.data.ids[i], 0)) * (0.55 + 0.6 * depth[i])
-                    for i in idx
-                )
-                region = padded_hull(pts, (node_r + base * 0.16) * (0.55 + 0.6 * d))
+            for group, _idx, d, region in self._group_regions(screen, depth):
                 fill = QColor(self.data.group_color(group))
                 fill.setAlphaF(0.18)
                 stroke = QColor(self.data.group_color(group))
@@ -304,8 +294,71 @@ class Graph3DView(QWidget):
     def mousePressEvent(self, event) -> None:  # noqa: N802
         self._drag_from = event.position()
         self._dragged = False
+        if (
+            event.button() == Qt.MouseButton.LeftButton
+            and self.show_groups
+            and self._node_at(event.position()) is None
+        ):
+            group = self._group_at(event.position())
+            if group is not None:
+                self._group_drag = (group, self._drag_from)
+                self.setCursor(Qt.CursorShape.ClosedHandCursor)
+
+    def _group_regions(self, screen=None, depth=None):
+        """Group indices and projected hulls, farthest first for painting."""
+        if screen is None or depth is None:
+            screen, _, depth = self._project()
+        groups = []
+        for group, members in self.data.members().items():
+            idx = [self._index[m] for m in members if m in self._index]
+            if idx:
+                groups.append((group, idx, float(np.mean(depth[idx]))))
+        groups.sort(key=lambda g: g[2])
+        base = min(self.width(), self.height()) * 0.36 * self.zoom_level
+        for group, idx, d in groups:
+            node_r = max(
+                node_radius(self.data.degree.get(self.data.ids[i], 0)) * (0.55 + 0.6 * depth[i])
+                for i in idx
+            )
+            region = padded_hull(
+                [tuple(screen[i]) for i in idx], (node_r + base * 0.16) * (0.55 + 0.6 * d)
+            )
+            yield group, idx, d, region
+
+    def _group_at(self, pos: QPointF) -> object | None:
+        if not len(self.points):
+            return None
+        for group, _idx, _depth, region in reversed(list(self._group_regions())):
+            if region.contains(pos):
+                return group
+        return None
 
     def mouseMoveEvent(self, event) -> None:  # noqa: N802
+        if self._group_drag is not None and self._drag_from is not None:
+            group, last = self._group_drag
+            here = event.position()
+            delta = here - last
+            if abs(delta.x()) + abs(delta.y()) > 0:
+                idx = [
+                    self._index[m] for m in self.data.members().get(group, ()) if m in self._index
+                ]
+                if idx:
+                    # Screen delta to a world-space offset: undo the camera rotation and
+                    # the group's mean depth scale, so the notes track the cursor.
+                    s = (
+                        float(np.mean(self._scale[idx]))
+                        if len(self._scale) == len(self.points)
+                        else 1.0
+                    )
+                    dq = np.array([delta.x() / s, -delta.y() / s, 0.0])
+                    cy, sy = math.cos(self.yaw), math.sin(self.yaw)
+                    cp, sp = math.cos(self.pitch), math.sin(self.pitch)
+                    rot_y = np.array([[cy, 0, sy], [0, 1, 0], [-sy, 0, cy]])
+                    rot_x = np.array([[1, 0, 0], [0, cp, -sp], [0, sp, cp]])
+                    self.points[idx] += (rot_x @ rot_y).T @ dq
+                    self.update()
+            self._group_drag = (group, here)
+            return
         if self._drag_from is not None and event.buttons() & Qt.MouseButton.LeftButton:
             delta = event.position() - self._drag_from
             if abs(delta.x()) + abs(delta.y()) > 2:
@@ -325,6 +378,10 @@ class Graph3DView(QWidget):
             self.update()
 
     def mouseReleaseEvent(self, event) -> None:  # noqa: N802
+        if self._group_drag is not None:
+            self._group_drag = None
+            self.unsetCursor()
+            return
         if not self._dragged and event.button() == Qt.MouseButton.LeftButton:
             node = self._node_at(event.position())
             self.selected = node

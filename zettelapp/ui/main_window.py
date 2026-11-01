@@ -53,7 +53,13 @@ from zettelapp.mcp_switch import McpSwitch
 from zettelapp.paths import backups_dir, default_vault_dir, documents_dir
 from zettelapp.ui import icons, theme
 from zettelapp.ui.ask_page import AskPage
-from zettelapp.ui.dialogs import AboutDialog, ExportDialog, LinkPickerDialog, ShortcutsDialog
+from zettelapp.ui.dialogs import (
+    AboutDialog,
+    ExportDialog,
+    LinkPickerDialog,
+    ShortcutsDialog,
+    TagOntologyDialog,
+)
 from zettelapp.ui.editor import NoteEditor
 from zettelapp.ui.graph_page import GraphPage
 from zettelapp.ui.insights import InsightsPage
@@ -157,6 +163,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(central)
 
         self.list = NoteListPanel()
+        self.list.ontologyRequested.connect(self.open_tag_ontology)
         self.editor = NoteEditor(self)
         self.side = SidePanel()
         self.splitter = QSplitter(Qt.Orientation.Horizontal)
@@ -733,6 +740,14 @@ class MainWindow(QMainWindow):
             return
         self.show_page(0)
         self.list.tag_filter.setCurrentIndex(index)
+
+    def open_tag_ontology(self) -> None:
+        if self.vault is None:
+            return
+        dialog = TagOntologyDialog(self.vault, self)
+        dialog.changed.connect(self._refresh_after_save)
+        dialog.tagSelected.connect(self.show_tag)
+        dialog.exec()
 
     def _refresh_after_save(self) -> None:
         self.list.refresh()

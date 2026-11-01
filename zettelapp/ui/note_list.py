@@ -205,6 +205,8 @@ def _short_date(iso: str) -> str:
 
 
 class NoteListPanel(QWidget):
+    ontologyRequested = Signal()
+
     noteSelected = Signal(str)
     newNoteRequested = Signal()
     linkToCurrent = Signal(str, str)
@@ -242,6 +244,9 @@ class NoteListPanel(QWidget):
         filters = QHBoxLayout()
         self.tag_filter = QComboBox()
         self.tag_filter.setAccessibleName(_("Filter by tag"))
+        self.ontology_button = tool_button(
+            "tag", _("Manage tag ontology"), self.ontologyRequested.emit, text=_("Ontology")
+        )
         self.sort = QComboBox()
         self.sort.setAccessibleName(_("Sort notes"))
         for text, key in (
@@ -257,6 +262,7 @@ class NoteListPanel(QWidget):
                 QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
             )
         filters.addWidget(self.tag_filter, 1)
+        filters.addWidget(self.ontology_button)
         filters.addWidget(self.sort)
         layout.addLayout(filters)
         self.model = NoteListModel()
@@ -304,7 +310,8 @@ class NoteListPanel(QWidget):
         self.tag_filter.clear()
         self.tag_filter.addItem(icons.icon("tag"), _("All tags"), None)
         if self.vault:
-            for tag, n in self.vault.all_tags():
+            for tag in self.vault.all_tag_names():
+                n = len(self.vault.notes_with_tags([tag]))
                 self.tag_filter.addItem(f"#{tag}  ({n})", tag)
         self.tag_filter.setCurrentIndex(max(0, self.tag_filter.findData(current)))
         self.tag_filter.blockSignals(False)
@@ -334,6 +341,26 @@ class NoteListPanel(QWidget):
             ids = [
                 i for i in self.vault.search(query, include_deleted=self.trash_mode) if i in notes
             ]
+            try:
+                from zettelapp import settings as prefs
+                from zettelapp.core import search as hybrid
+
+                weights = {
+                    "fuzzy": prefs.get(prefs.SEARCH_FUZZY_WEIGHT),
+                    "lexical": prefs.get(prefs.SEARCH_LEXICAL_WEIGHT),
+                    "semantic": prefs.get(prefs.SEARCH_SEMANTIC_WEIGHT),
+                    "ontology": prefs.get(prefs.SEARCH_ONTOLOGY_WEIGHT),
+                }
+                if not prefs.get(prefs.SEARCH_SEMANTIC_ENABLED):
+                    weights.pop("semantic")
+                service = hybrid.SearchService(self.vault, weights)
+                ranked = service.search(query)
+                order = [r.note_id for r in ranked if r.note_id in notes]
+                if order:
+                    # Keep notes the hybrid engine missed (e.g. tag-only matches) after ranked ones.
+                    ids = order + [i for i in ids if i not in set(order)]
+            except Exception:
+                pass  # hybrid ranking is an enhancement; plain search remains correct
         else:
             ids = list(notes)
         degree: dict[str, int] = {}

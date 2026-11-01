@@ -190,3 +190,44 @@ def test_clicking_a_group_area_selects_it_and_dragging_moves_all_its_notes():
         assert view.positions[m] == (before[m][0] + 40, before[m][1] + 25)
     for other in data.ids[2:]:
         assert view.positions[other] == before[other]  # other groups stay put
+
+
+def test_dragging_a_3d_group_area_moves_only_its_notes():
+    import numpy as np
+    from PySide6.QtCore import QPoint, QPointF, Qt
+    from PySide6.QtTest import QTest
+    from PySide6.QtWidgets import QApplication
+
+    from zettelapp.ui.graph3d import Graph3DView
+
+    QApplication.instance() or QApplication(["test"])
+    data = _styled_graph()
+    members = data.ids[:2]
+    data.group_of = {i: (0 if i in members else 1) for i in data.ids}
+    data.group_names = ["Near", "Far"]
+    positions = {i: (5.0 + k, 5.0, 0.0) for k, i in enumerate(data.ids)}
+    positions[members[0]], positions[members[1]] = (-0.2, 0.0, 0.0), (0.2, 0.0, 0.0)
+    view = Graph3DView()
+    view.resize(800, 600)
+    view.show()
+    view.set_graph(data, positions, show_groups=True, show_labels=False)
+    QApplication.processEvents()
+    view.grab()  # populate projected positions and scales
+
+    region = next(region for group, _idx, _depth, region in view._group_regions() if group == 0)
+    bounds = region.boundingRect().toAlignedRect()
+    blob = next(
+        QPoint(x, y)
+        for y in range(bounds.top(), bounds.bottom() + 1, 4)
+        for x in range(bounds.left(), bounds.right() + 1, 4)
+        if view._group_at(QPointF(x, y)) == 0 and view._node_at(QPointF(x, y)) is None
+    )
+    before = view.points.copy()
+    QTest.mousePress(view, Qt.MouseButton.LeftButton, pos=blob)
+    QTest.mouseMove(view, blob + QPoint(40, 25))
+    QTest.mouseRelease(view, Qt.MouseButton.LeftButton, pos=blob + QPoint(40, 25))
+
+    moved = [view._index[m] for m in members]
+    still = [view._index[m] for m in data.ids[2:]]
+    assert np.any(view.points[moved] != before[moved])
+    assert np.array_equal(view.points[still], before[still])

@@ -5,6 +5,7 @@ from __future__ import annotations
 import json
 import os
 import shutil
+import sqlite3
 import sys
 from dataclasses import replace
 from pathlib import Path
@@ -77,6 +78,7 @@ def _merge_mcp_entry(config: dict, entry: dict) -> dict:
 # Page names are also their keys (open_options("AI assistant")); they are translated where shown.
 PAGES = [
     N_("General"),
+    N_("Search"),
     N_("Link suggestions"),
     N_("Link types"),
     N_("AI assistant"),
@@ -88,6 +90,7 @@ PAGES = [
 ]
 PAGE_ICONS = {
     "General": "settings",
+    "Search": "search",
     "Link suggestions": "lightbulb",
     "Link types": "relationship",
     "AI assistant": "chat",
@@ -202,6 +205,7 @@ class OptionsDialog(QDialog):
         self.pages = QStackedWidget()
         builders = [
             self._general,
+            self._search,
             self._suggestions,
             self._link_types,
             self._ai,
@@ -292,6 +296,171 @@ class OptionsDialog(QDialog):
                 wrap=True,
             )
         )
+
+    def _search(self, lay: QVBoxLayout) -> None:
+        lay.addWidget(label(_("General search"), "section"))
+        form = QFormLayout()
+        self.w_fuzzy = QDoubleSpinBox()
+        self.w_lexical = QDoubleSpinBox()
+        self.w_semantic = QDoubleSpinBox()
+        self.w_ontology = QDoubleSpinBox()
+        for box, key in (
+            (self.w_fuzzy, settings.SEARCH_FUZZY_WEIGHT),
+            (self.w_lexical, settings.SEARCH_LEXICAL_WEIGHT),
+            (self.w_semantic, settings.SEARCH_SEMANTIC_WEIGHT),
+            (self.w_ontology, settings.SEARCH_ONTOLOGY_WEIGHT),
+        ):
+            box.setRange(0.0, 1.0)
+            box.setSingleStep(0.05)
+            box.setDecimals(2)
+            box.setValue(settings.get(key))
+        form.addRow(_("Fuzzy match weight"), self.w_fuzzy)
+        form.addRow(_("Full-text weight"), self.w_lexical)
+        form.addRow(_("Semantic weight"), self.w_semantic)
+        form.addRow(_("Tag and ontology weight"), self.w_ontology)
+        lay.addLayout(form)
+        lay.addWidget(
+            label(
+                _(
+                    "Weights are relative; signals that are unavailable (such as semantic "
+                    "search when it is off) are dropped and the rest renormalized."
+                ),
+                "caption",
+                wrap=True,
+            )
+        )
+        self.rebuild_fts = QPushButton(_("Rebuild full-text index"))
+        self.rebuild_fts.clicked.connect(self._rebuild_fts)
+        lay.addWidget(self.rebuild_fts)
+
+        lay.addWidget(label(_("Semantic search"), "section"))
+        self.semantic_on = QCheckBox(_("Enable semantic search (requires a local embedding model)"))
+        self.semantic_on.setChecked(settings.get(settings.SEARCH_SEMANTIC_ENABLED))
+        lay.addWidget(self.semantic_on)
+        sem_form = QFormLayout()
+        self.semantic_model = QComboBox()
+        from zettelapp.core.embedding_service import EmbeddingService
+
+        service = self._embedding_service()
+        catalog = {m.model_id: m for m in EmbeddingService.catalog()}
+        current = settings.get(settings.SEARCH_SEMANTIC_MODEL)
+        for info in service.installed_models():
+            catalog.setdefault(info.model_id, info)
+        for model_id, info in catalog.items():
+            installed = service.is_model_installed(model_id)
+            suffix = "" if installed else _(" (not installed)")
+            self.semantic_model.addItem(f"{info.display_name()}{suffix}", model_id)
+        self.semantic_model.setCurrentIndex(max(0, self.semantic_model.findData(current)))
+        sem_form.addRow(_("Embedding model"), self.semantic_model)
+        self.semantic_threads = QSpinBox()
+        self.semantic_threads.setRange(1, 8)
+        self.semantic_threads.setValue(settings.get(settings.SEARCH_SEMANTIC_THREADS))
+        sem_form.addRow(_("CPU threads for indexing"), self.semantic_threads)
+        lay.addLayout(sem_form)
+        self.semantic_indexing = QCheckBox(_("Index notes for semantic search in the background"))
+        self.semantic_indexing.setChecked(settings.get(settings.SEARCH_SEMANTIC_INDEXING))
+        lay.addWidget(self.semantic_indexing)
+        sem_buttons = QHBoxLayout()
+        self.semantic_rebuild = QPushButton(_("Rebuild semantic index"))
+        self.semantic_rebuild.clicked.connect(self._rebuild_semantic)
+        self.semantic_delete = QPushButton(_("Delete stored embeddings"))
+        self.semantic_delete.clicked.connect(self._delete_embeddings)
+        sem_buttons.addWidget(self.semantic_rebuild)
+        sem_buttons.addWidget(self.semantic_delete)
+        sem_buttons.addStretch(1)
+        lay.addLayout(sem_buttons)
+        try:
+            mb = service.storage_bytes() / 1e6
+            self.semantic_storage = label(
+                _("Embedding storage: {size}").format(size=f"{mb:.1f} MB"), "caption"
+            )
+        except Exception:
+            self.semantic_storage = label("", "caption")
+        lay.addWidget(self.semantic_storage)
+
+        lay.addWidget(label(_("Adaptive ranking"), "section"))
+        self.adaptive_on = QCheckBox(_("Improve ranking from my explicit feedback"))
+        self.adaptive_on.setToolTip(
+            _(
+                "When enabled, the Relevant / Not relevant buttons on search results adjust "
+                "the ranking weights. Only explicit clicks are used; browsing is never tracked."
+            )
+        )
+        self.adaptive_on.setChecked(settings.get(settings.SEARCH_ADAPTIVE_ENABLED))
+        lay.addWidget(self.adaptive_on)
+        adv_form = QFormLayout()
+        self.adaptive_epsilon = QDoubleSpinBox()
+        self.adaptive_epsilon.setRange(0.0, 0.5)
+        self.adaptive_epsilon.setSingleStep(0.05)
+        self.adaptive_epsilon.setDecimals(2)
+        self.adaptive_epsilon.setValue(settings.get(settings.SEARCH_ADAPTIVE_EPSILON))
+        adv_form.addRow(_("Exploration rate (advanced)"), self.adaptive_epsilon)
+        lay.addLayout(adv_form)
+        self.adaptive_reset = QPushButton(_("Reset learned preferences"))
+        self.adaptive_reset.clicked.connect(self._reset_adaptive)
+        lay.addWidget(self.adaptive_reset)
+        lay.addWidget(
+            label(
+                _(
+                    "All learning happens on this computer. No searches are logged and no "
+                    "activity other than your feedback influences ranking."
+                ),
+                "caption",
+                wrap=True,
+            )
+        )
+
+    def _rebuild_fts(self) -> None:
+
+        if self.window.vault is None:
+            return
+        try:
+            with self.window.vault.transaction():
+                self.window.vault.conn.execute("DELETE FROM notes_fts")
+                for note in self.window.vault.all_notes(include_deleted=True):
+                    if not self.window.vault.has_fts:
+                        break
+                    self.window.vault.conn.execute(
+                        "INSERT INTO notes_fts (note_id, title, body, tags) "
+                        "SELECT ?, title, body, "
+                        "(SELECT group_concat(tag, ' ') FROM tags WHERE note_id = ?) "
+                        "FROM notes WHERE id = ?",
+                        (note.id, note.id, note.id),
+                    )
+            QMessageBox.information(self, _("Search"), _("Full-text index rebuilt."))
+        except sqlite3.Error as exc:  # FTS5 unavailable
+            QMessageBox.warning(self, _("Search"), str(exc))
+
+    def _embedding_service(self):
+        from zettelapp.core.embedding_service import EmbeddingService
+        from zettelapp.paths import local_data_dir
+
+        if getattr(self, "_embed_service", None) is None:
+            self._embed_service = EmbeddingService(local_data_dir() / "Search")
+        return self._embed_service
+
+    def _rebuild_semantic(self) -> None:
+        if self.window.vault is None:
+            return
+        model_id = self.semantic_model.currentData()
+        try:
+            service = self._embedding_service()
+            if not service.is_model_installed(model_id):
+                QMessageBox.information(self, _("Semantic search"), _("Install the model first."))
+                return
+            service.rebuild(self.window.vault, model_id)
+            QMessageBox.information(self, _("Semantic search"), _("Semantic index rebuilt."))
+        except (FileNotFoundError, RuntimeError, OSError) as exc:
+            QMessageBox.warning(self, _("Semantic search"), str(exc))
+
+    def _delete_embeddings(self) -> None:
+        service = self._embedding_service()
+        service.delete_embeddings()
+        QMessageBox.information(self, _("Semantic search"), _("Stored embeddings deleted."))
+
+    def _reset_adaptive(self) -> None:
+        settings.put(settings.SEARCH_ADAPTIVE_STATE, "")
+        QMessageBox.information(self, _("Adaptive ranking"), _("Learned preferences reset."))
 
     def _suggestions(self, lay: QVBoxLayout) -> None:
         self.suggest_on = QCheckBox(_("Suggest links while I write"))
@@ -1034,6 +1203,16 @@ class OptionsDialog(QDialog):
 
     def apply(self) -> bool:
         settings.put(settings.THEME, self.theme.currentData())
+        settings.put(settings.SEARCH_FUZZY_WEIGHT, self.w_fuzzy.value())
+        settings.put(settings.SEARCH_LEXICAL_WEIGHT, self.w_lexical.value())
+        settings.put(settings.SEARCH_SEMANTIC_WEIGHT, self.w_semantic.value())
+        settings.put(settings.SEARCH_ONTOLOGY_WEIGHT, self.w_ontology.value())
+        settings.put(settings.SEARCH_SEMANTIC_ENABLED, self.semantic_on.isChecked())
+        settings.put(settings.SEARCH_SEMANTIC_MODEL, self.semantic_model.currentData() or "")
+        settings.put(settings.SEARCH_SEMANTIC_THREADS, self.semantic_threads.value())
+        settings.put(settings.SEARCH_SEMANTIC_INDEXING, self.semantic_indexing.isChecked())
+        settings.put(settings.SEARCH_ADAPTIVE_ENABLED, self.adaptive_on.isChecked())
+        settings.put(settings.SEARCH_ADAPTIVE_EPSILON, self.adaptive_epsilon.value())
         if self.language.currentData() != self._language_before:
             settings.put(settings.UI_LANGUAGE, self.language.currentData())
             self._language_before = self.language.currentData()

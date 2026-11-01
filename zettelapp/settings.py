@@ -44,6 +44,19 @@ QUEST_STATE = "quest/state"  # "" (never offered) | declined | active | paused |
 QUEST_CHAPTER = "quest/chapter"  # key of the adventure's current chapter
 QUEST_CLUES = "quest/clues"  # chapters solved by doing them (not skipped)
 
+# Search ---------------------------------------------------------------------
+SEARCH_FUZZY_WEIGHT = "search/fuzzyWeight"
+SEARCH_LEXICAL_WEIGHT = "search/lexicalWeight"
+SEARCH_SEMANTIC_WEIGHT = "search/semanticWeight"
+SEARCH_ONTOLOGY_WEIGHT = "search/ontologyWeight"
+SEARCH_SEMANTIC_ENABLED = "search/semanticEnabled"
+SEARCH_SEMANTIC_MODEL = "search/semanticModel"
+SEARCH_SEMANTIC_THREADS = "search/semanticThreads"
+SEARCH_SEMANTIC_INDEXING = "search/semanticIndexing"
+SEARCH_ADAPTIVE_ENABLED = "search/adaptiveEnabled"
+SEARCH_ADAPTIVE_EPSILON = "search/adaptiveEpsilon"
+SEARCH_ADAPTIVE_STATE = "search/adaptiveState"
+
 DEFAULTS: dict[str, Any] = {
     THEME: "system",
     UI_LANGUAGE: "system",
@@ -67,6 +80,17 @@ DEFAULTS: dict[str, Any] = {
     UPDATE_NOTIFIED: "",
     QUEST_STATE: "",
     QUEST_CHAPTER: "",
+    SEARCH_FUZZY_WEIGHT: 0.25,
+    SEARCH_LEXICAL_WEIGHT: 0.45,
+    SEARCH_SEMANTIC_WEIGHT: 0.20,
+    SEARCH_ONTOLOGY_WEIGHT: 0.10,
+    SEARCH_SEMANTIC_ENABLED: False,
+    SEARCH_SEMANTIC_MODEL: "",
+    SEARCH_SEMANTIC_THREADS: 2,
+    SEARCH_SEMANTIC_INDEXING: True,
+    SEARCH_ADAPTIVE_ENABLED: False,
+    SEARCH_ADAPTIVE_EPSILON: 0.10,
+    SEARCH_ADAPTIVE_STATE: "",
 }
 
 
