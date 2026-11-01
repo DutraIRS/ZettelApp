@@ -7,7 +7,7 @@ from collections.abc import Callable
 from datetime import UTC, date, datetime, timedelta
 from pathlib import Path
 
-from PySide6.QtCore import QDateTime, QLocale, QSize, Qt, QUrl
+from PySide6.QtCore import QDateTime, QLocale, QSize, Qt, QUrl, Signal
 from PySide6.QtGui import QDesktopServices, QPixmap
 from PySide6.QtWidgets import (
     QButtonGroup,
@@ -23,6 +23,7 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QListWidget,
     QListWidgetItem,
+    QMessageBox,
     QPlainTextEdit,
     QPushButton,
     QRadioButton,
@@ -34,7 +35,7 @@ from PySide6.QtWidgets import (
 from zettelapp import APP_NAME, DOCS_URL, HOMEPAGE_URL, REPO_URL, SPONSOR_URL, __version__
 from zettelapp.core.export import FORMATS, FORMATS_BY_KEY
 from zettelapp.core.models import Flashcard
-from zettelapp.core.storage import Vault
+from zettelapp.core.storage import Vault, VaultError
 from zettelapp.core.textutil import fold
 from zettelapp.i18n import N_, _
 from zettelapp.paths import documents_dir, resource_path
@@ -54,6 +55,103 @@ def _buttons(dialog: QDialog, ok_text: str | None = None) -> QDialogButtonBox:
     box.accepted.connect(dialog.accept)
     box.rejected.connect(dialog.reject)
     return box
+
+
+class TagOntologyDialog(QDialog):
+    """Create, remove, and navigate explicit relationships between tags."""
+
+    tagSelected = Signal(str)
+    changed = Signal()
+
+    def __init__(self, vault: Vault, parent=None):
+        super().__init__(parent)
+        self.vault = vault
+        self.setWindowTitle(_("Tag ontology"))
+        self.resize(600, 460)
+        layout = QVBoxLayout(self)
+        layout.addWidget(
+            label(
+                _("Organize tags with parent, synonym, and related-concept relationships."),
+                "secondary",
+                wrap=True,
+            )
+        )
+        form = QFormLayout()
+        self.source = QComboBox()
+        self.target = QComboBox()
+        for combo in (self.source, self.target):
+            combo.setEditable(True)
+            combo.setInsertPolicy(QComboBox.InsertPolicy.NoInsert)
+        self.relation = QComboBox()
+        self.relation.addItem(_("Parent → child"), "parent")
+        self.relation.addItem(_("Synonym / alias"), "synonym")
+        self.relation.addItem(_("Related concept"), "related")
+        form.addRow(_("From"), self.source)
+        form.addRow(_("To"), self.target)
+        form.addRow(_("Relationship"), self.relation)
+        layout.addLayout(form)
+        add = QPushButton(_("Add relationship"))
+        add.setProperty("accent", True)
+        add.clicked.connect(self._add)
+        layout.addWidget(add)
+        self.relationships = QListWidget()
+        self.relationships.setAccessibleName(_("Tag relationships"))
+        self.relationships.itemDoubleClicked.connect(self._navigate)
+        layout.addWidget(self.relationships, 1)
+        actions = QHBoxLayout()
+        remove = QPushButton(_("Remove selected"))
+        remove.clicked.connect(self._remove)
+        actions.addWidget(remove)
+        actions.addStretch(1)
+        close = QDialogButtonBox(QDialogButtonBox.StandardButton.Close)
+        close.rejected.connect(self.reject)
+        close.accepted.connect(self.accept)
+        actions.addWidget(close)
+        layout.addLayout(actions)
+        self._refresh()
+
+    def _refresh(self) -> None:
+        names = self.vault.all_tag_names()
+        for combo in (self.source, self.target):
+            current = combo.currentText()
+            combo.blockSignals(True)
+            combo.clear()
+            combo.addItems(names)
+            combo.setEditText(current)
+            combo.blockSignals(False)
+        self.relationships.clear()
+        for relationship in self.vault.tag_relationships():
+            item = QListWidgetItem(
+                f"{relationship.source}  ·  {relationship.relation_type}  ·  {relationship.target}"
+            )
+            item.setData(Qt.ItemDataRole.UserRole, relationship)
+            self.relationships.addItem(item)
+
+    def _add(self) -> None:
+        try:
+            self.vault.add_tag_relationship(
+                self.source.currentText(), self.target.currentText(), self.relation.currentData()
+            )
+        except (ValueError, VaultError) as error:
+            QMessageBox.warning(self, _("Cannot add relationship"), str(error))
+            return
+        self._refresh()
+        self.changed.emit()
+
+    def _remove(self) -> None:
+        item = self.relationships.currentItem()
+        if item is None:
+            return
+        relationship = item.data(Qt.ItemDataRole.UserRole)
+        self.vault.remove_tag_relationship(
+            relationship.source, relationship.target, relationship.relation_type
+        )
+        self._refresh()
+        self.changed.emit()
+
+    def _navigate(self, item: QListWidgetItem) -> None:
+        relationship = item.data(Qt.ItemDataRole.UserRole)
+        self.tagSelected.emit(relationship.source)
 
 
 class LinkPickerDialog(QDialog):

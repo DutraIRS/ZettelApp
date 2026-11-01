@@ -76,6 +76,35 @@ def test_search_with_fts_and_tags(sample, vault):
     assert vault.count_notes() == 5
 
 
+def test_tag_ontology_supports_multiple_parents_and_expands_search(vault):
+    note = vault.create_note("Bayesian", tags=["bayesian-inference"])
+    vault.add_tag_relationship("mathematics", "bayesian-inference", "parent")
+    vault.add_tag_relationship("statistics", "bayesian-inference", "parent")
+
+    assert vault.tag_descendants("mathematics") == {"bayesian-inference"}
+    assert vault.tag_ancestors("bayesian-inference") == {"mathematics", "statistics"}
+    assert vault.search("tag:mathematics") == [note.id]
+
+
+def test_tag_ontology_synonyms_and_opt_in_related_search(vault):
+    synonym_note = vault.create_note("Bayesian", tags=["bayes"])
+    related_note = vault.create_note("Probability", tags=["probability"])
+    vault.add_tag_relationship("bayesian", "bayes", "synonym")
+    vault.add_tag_relationship("bayesian", "probability", "related")
+
+    assert vault.search("tag:bayesian") == [synonym_note.id]
+    assert vault.search("tag:bayesian", include_related_tags=True) == [
+        synonym_note.id,
+        related_note.id,
+    ]
+
+
+def test_tag_ontology_rejects_hierarchical_cycles(vault):
+    vault.add_tag_relationship("a", "b", "parent")
+    with pytest.raises(VaultError, match="cycle"):
+        vault.add_tag_relationship("b", "a", "parent")
+
+
 def test_trash_restore_and_purge(sample, vault):
     vault.trash_note(sample["a"].id)
     assert sample["a"].id not in {n.id for n in vault.all_notes()}
@@ -146,7 +175,7 @@ def test_upgrade_from_schema_2_keeps_how_links_looked(tmp_path):
     _rewind_to_schema_2(folder)
     v = Vault.open(folder)
     try:
-        assert v.get_meta("schema_version") == "4"
+        assert v.get_meta("schema_version") == "5"
         looks = {t.id: (t.line_style, t.arrow) for t in v.link_types()}
         # Schema 2 took the dash from the type's place in the list and drew open arrows.
         assert looks == {

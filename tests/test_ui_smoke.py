@@ -77,7 +77,12 @@ def test_full_workflow(window):
 
 
 def test_dialogs_construct(window):
-    from zettelapp.ui.dialogs import AboutDialog, ExportDialog, LinkPickerDialog, ShortcutsDialog
+    from zettelapp.ui.dialogs import (
+        AboutDialog,
+        ExportDialog,
+        LinkPickerDialog,
+        ShortcutsDialog,
+    )
     from zettelapp.ui.settings_dialog import OptionsDialog
 
     window.vault.create_note("One", "text")
@@ -88,6 +93,22 @@ def test_dialogs_construct(window):
     options = OptionsDialog(window)
     assert options.pages.count() == options.nav.count() == 9
     options.close()
+
+
+def test_tag_ontology_dialog_edits_relationships(window):
+    from zettelapp.ui.dialogs import TagOntologyDialog
+
+    window.vault.create_note("Child", tags=["child"])
+    dialog = TagOntologyDialog(window.vault, window)
+    dialog.source.setEditText("parent")
+    dialog.target.setEditText("child")
+    dialog._add()
+    assert window.vault.tag_descendants("parent") == {"child"}
+    assert dialog.relationships.count() == 1
+    dialog.relationships.setCurrentRow(0)
+    dialog._remove()
+    assert not window.vault.tag_relationships()
+    dialog.close()
 
 
 def test_options_page_edits_link_types_and_their_styles(window, monkeypatch):

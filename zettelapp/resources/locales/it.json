@@ -967,5 +967,24 @@
  "{n} note restored.": [
   "{n} nota ripristinata.",
   "{n} note ripristinate."
- ]
+ ],
+ "A tag cannot be related to itself.": "A tag cannot be related to itself.",
+ "Add relationship": "Add relationship",
+ "Cannot add relationship": "Cannot add relationship",
+ "From": "From",
+ "Include associative tag relationships in tag filters": "Include associative tag relationships in tag filters",
+ "Manage tag ontology": "Manage tag ontology",
+ "Ontology": "Ontology",
+ "Organize tags with parent, synonym, and related-concept relationships.": "Organize tags with parent, synonym, and related-concept relationships.",
+ "Parent → child": "Parent → child",
+ "Related concept": "Related concept",
+ "Related tags": "Related tags",
+ "Relationship": "Relationship",
+ "Remove selected": "Remove selected",
+ "Synonym / alias": "Synonym / alias",
+ "Tag ontology": "Tag ontology",
+ "Tag relationships": "Tag relationships",
+ "That parent relationship would create a cycle.": "That parent relationship would create a cycle.",
+ "To": "To",
+ "Unknown tag relationship type.": "Unknown tag relationship type."
 }
