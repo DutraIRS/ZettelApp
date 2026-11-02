@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import uuid
+from collections import defaultdict
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
@@ -49,6 +51,43 @@ class TagRelationship:
     source: str
     target: str
     relation_type: str
+
+
+class TagGraph:
+    """The tag ontology in memory, so many tags can be expanded after a single read."""
+
+    def __init__(self, relationships: Iterable[TagRelationship]):
+        self._edges: dict[str, dict[str, set[str]]] = {
+            kind: defaultdict(set) for kind in TAG_RELATION_TYPES
+        }
+        for r in relationships:
+            edges = self._edges[r.relation_type]
+            edges[r.source].add(r.target)
+            if r.relation_type != "parent":  # synonyms and related tags go both ways
+                edges[r.target].add(r.source)
+
+    def _reach(self, start: set[str], *kinds: str) -> set[str]:
+        seen, pending = set(start), list(start)
+        while pending:
+            tag = pending.pop()
+            for kind in kinds:
+                for other in self._edges[kind].get(tag, ()):
+                    if other not in seen:
+                        seen.add(other)
+                        pending.append(other)
+        return seen
+
+    def descendants(self, tag: str) -> set[str]:
+        return self._reach({tag}, "parent") - {tag}
+
+    def expand(self, tag: str, include_related: bool = False) -> set[str]:
+        """*tag* and what a filter on it also finds: its children and synonyms. Related tags
+        are opt-in, one step away, so that an ordinary filter stays precise."""
+        found = self._reach({tag}, "parent", "synonym")
+        if include_related:
+            related = {other for t in found for other in self._edges["related"].get(t, ())}
+            found = self._reach(found | related, "parent", "synonym")
+        return found
 
 
 # How a link type is drawn. Dashes are a second cue besides colour (for colour-blind

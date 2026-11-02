@@ -28,6 +28,7 @@ from zettelapp.core.models import (
     sanitize_mindmap,
 )
 from zettelapp.core.security import (
+    MAX_ARCHIVE_MANIFEST_BYTES,
     MAX_IMAGE_BYTES,
     UnsafeInputError,
     check_zip,
@@ -36,11 +37,11 @@ from zettelapp.core.security import (
     resolve_inside,
     safe_member_path,
 )
-from zettelapp.core.storage import MAX_BODY, MAX_TITLE, Vault
+from zettelapp.core.storage import MAX_BODY, MAX_TITLE, Vault, VaultError
 from zettelapp.core.textutil import WIKILINK_RE, fold, normalize_tag
 from zettelapp.i18n import _
 
-MAX_JSON_BYTES = 300 * 1024 * 1024
+MAX_JSON_BYTES = MAX_ARCHIVE_MANIFEST_BYTES
 MAX_MARKDOWN_FILES = 20_000
 MAX_MARKDOWN_BYTES = 5 * 1024 * 1024
 
@@ -107,7 +108,7 @@ def _extract(zf: zipfile.ZipFile, dest: Path) -> None:
             while remaining:
                 chunk = src.read(min(1024 * 1024, remaining))
                 if not chunk:
-                    raise UnsafeInputError("A file in the archive ended unexpectedly.")
+                    raise UnsafeInputError(_("A file in the archive ended unexpectedly."))
                 out.write(chunk)
                 remaining -= len(chunk)
 
@@ -181,7 +182,7 @@ def _validate_import_data(data) -> None:
         raise UnsafeInputError(_("This is not a ZettelApp export."))
     if not isinstance(data.get("version"), int) or data["version"] > 1:
         raise UnsafeInputError(_("This export was made by a newer version of ZettelApp."))
-    for field_name in ("link_types", "notes", "links", "flashcards", "assets"):
+    for field_name in ("link_types", "notes", "links", "flashcards", "assets", "tag_relationships"):
         value = data.get(field_name)
         if value is not None and not isinstance(value, list):
             raise UnsafeInputError(
@@ -314,6 +315,19 @@ def _import_data(
                 )
             )
             result.cards += 1
+
+    for raw in data.get("tag_relationships") or []:
+        if not isinstance(raw, dict):
+            continue
+        source, target = _str(raw.get("source"), 60), _str(raw.get("target"), 60)
+        try:
+            vault.add_tag_relationship(source, target, _str(raw.get("type"), 20))
+        except VaultError as exc:
+            result.warn(
+                _("Skipped the tag relationship {source} → {target}: {error}").format(
+                    source=source, target=target, error=exc
+                )
+            )
     return result
 
 

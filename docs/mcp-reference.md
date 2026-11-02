@@ -163,8 +163,9 @@ in the Trash, and links to or from them, are never returned.
 
 **Search notes.** Full-text search over note titles, text and tags. Words match the start of words
 (`forget` finds *forgetting*), accents are ignored, and results come in order of relevance: matches in
-titles count most, then tags, then text. `tag:name` keeps only notes with that tag or a tag nested under
-it (`tag:math` also finds `math/algebra`). A query with no words, such as an empty one, lists notes by
+titles count most, then tags, then text. `tag:name` keeps only notes with that tag, a tag nested under
+it (`tag:math` also finds `math/algebra`), or one the vault's tag ontology covers: its children and
+synonyms, whatever their names. A query with no words, such as an empty one, lists notes by
 when they were last edited, newest first.
 
 | Argument | Type | Required | Default | Limits |
@@ -205,11 +206,16 @@ Result:
 
 ### `list_tags`
 
-**List tags.** Every tag in the vault, in alphabetical order, with the number of notes that use it. No
-arguments.
+**List tags.** Every tag in the vault, in alphabetical order, with the number of notes that use it, and
+the vault's tag ontology. No arguments.
 
-Result: `tags`, a list of `{"tag": "learning", "count": 3}` entries. Nested tags such as `math/algebra`
-are listed as they are; their notes aren't added to the parent's count.
+Result:
+
+- `tags`: a list of `{"tag": "learning", "count": 3}` entries. Nested tags such as `math/algebra` are
+  listed as they are; their notes aren't added to the parent's count.
+- `relationships`: a list of `{"source": "math", "target": "algebra", "type": "parent"}` entries. `type`
+  is `parent` (`source` is the parent of `target`), `synonym` or `related`; the last two have no
+  direction. A name here may not be used on any note.
 
 ### `get_subgraph`
 

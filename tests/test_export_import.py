@@ -1,4 +1,5 @@
 import json
+import os
 import sqlite3
 import zipfile
 
@@ -58,6 +59,70 @@ def test_archive_roundtrip(vault, sample, tmp_path):
     again = import_path(other, dest)  # identical notes are skipped, not duplicated
     assert again.skipped == 3 and other.count_notes() == 3
     other.close()
+
+
+def test_the_tag_ontology_survives_an_archive_roundtrip(vault, tmp_path):
+    note = vault.create_note("Priors", tags=["bayes"])
+    vault.add_tag_relationship("statistics", "bayes", "parent")
+    vault.add_tag_relationship("mathematics", "statistics", "parent")
+    vault.add_tag_relationship("bayes", "bayesian", "synonym")
+    dest = tmp_path / "archive.zip"
+    ex.export(vault, "archive", {note.id}, dest)
+
+    other = Vault.open(tmp_path / "other")
+    import_path(other, dest)
+    assert other.tag_relationships() == vault.tag_relationships()
+    assert other.notes_with_tags(["mathematics"]) == {note.id}
+    import_path(other, dest)  # importing twice changes nothing
+    assert other.tag_relationships() == vault.tag_relationships()
+    other.close()
+
+
+def test_exporting_a_few_notes_does_not_reveal_other_tags_in_the_ontology(vault, tmp_path):
+    shared = vault.create_note("Shared", tags=["public"])
+    vault.create_note("Private", tags=["secret-project"])
+    vault.add_tag_relationship("topics", "public", "parent")
+    vault.add_tag_relationship("topics", "secret-project", "parent")
+    vault.add_tag_relationship("secret-project", "secret-alias", "synonym")
+    data = ex.bundle_to_dict(ex.collect(vault, {shared.id}))
+    assert data["tag_relationships"] == [{"source": "topics", "target": "public", "type": "parent"}]
+
+
+def test_bad_tag_relationships_in_an_export_are_skipped_with_a_warning(vault):
+    result = import_data(
+        vault,
+        {
+            "format": "zettelapp",
+            "version": 1,
+            "tag_relationships": [
+                "junk",
+                {"source": "a", "target": "b", "type": "parent"},
+                {"source": "b", "target": "a", "type": "parent"},  # a cycle
+                {"source": "a", "target": "c", "type": "unknown"},
+                {"source": 3, "target": None, "type": "related"},
+            ],
+        },
+    )
+    assert [(r.source, r.target) for r in vault.tag_relationships()] == [("a", "b")]
+    assert len(result.warnings) == 3
+
+
+def test_an_export_field_for_tag_relationships_must_be_a_list(vault):
+    with pytest.raises(UnsafeInputError):
+        import_data(vault, {"format": "zettelapp", "version": 1, "tag_relationships": "x"})
+
+
+def test_an_archive_larger_than_any_single_image_can_still_be_imported(vault, tmp_path):
+    notes = [
+        {"id": f"2026010112{i:04d}", "title": f"N{i}", "body": "x" * 500_000} for i in range(70)
+    ]
+    dest = tmp_path / "large.zip"
+    manifest = json.dumps({"format": "zettelapp", "version": 1, "notes": notes})
+    assert len(manifest) > 32 * 1024**2
+    with zipfile.ZipFile(dest, "w", zipfile.ZIP_DEFLATED, compresslevel=1) as zf:
+        zf.writestr("manifest.json", manifest)
+        zf.writestr("padding.bin", os.urandom(1_000_000))  # keeps the ratio check out of this
+    assert import_path(vault, dest).notes == 70
 
 
 def _styled_type(vault):

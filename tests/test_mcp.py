@@ -134,6 +134,13 @@ def test_graph_tools(vault, sample):
     server = ZettelMcpServer(vault)
     tags = call(server, "list_tags", {})["result"]["structuredContent"]["tags"]
     assert {"tag": "learning", "count": 3} in tags
+    vault.add_tag_relationship("science", "learning", "parent")
+    result = call(server, "list_tags", {})["result"]["structuredContent"]
+    assert result["relationships"] == [
+        {"source": "science", "target": "learning", "type": "parent"}
+    ]
+    found = call(server, "search_notes", {"query": "tag:science"})["result"]["structuredContent"]
+    assert {n["id"] for n in found["results"]} >= {sample["a"].id, sample["c"].id}
     sub = call(server, "get_subgraph", {"id": sample["c"].id, "depth": 2})["result"][
         "structuredContent"
     ]

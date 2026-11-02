@@ -31,10 +31,6 @@ PROTOCOL_VERSIONS = ("2025-11-25", "2025-06-18", "2025-03-26", "2024-11-05")
 MAX_MESSAGE_BYTES = 10 * 1024 * 1024
 
 
-def _reject_json_constant(value: str):
-    raise ValueError(f"non-standard JSON constant: {value}")
-
-
 MAX_BODY_RETURNED = 200_000
 MAX_SUBGRAPH_NODES = 500
 
@@ -63,6 +59,10 @@ class RpcError(Exception):
         super().__init__(message)
         self.code = code
         self.message = message
+
+
+def _reject_json_constant(value: str):
+    raise ValueError(f"non-standard JSON constant: {value}")
 
 
 class ToolInputError(ValueError):
@@ -316,7 +316,8 @@ class ZettelMcpServer:
             Tool(
                 "search_notes",
                 "Search notes",
-                "Full-text search over note titles, text and tags. Add tag:name to filter by tag. "
+                "Full-text search over note titles, text and tags. Add tag:name to filter by tag "
+                "(the vault's tag ontology also adds that tag's children and synonyms). "
                 "An empty query lists recently edited notes.",
                 {
                     "query": {
@@ -340,7 +341,8 @@ class ZettelMcpServer:
             Tool(
                 "list_tags",
                 "List tags",
-                "All tags in the vault with the number of notes using each.",
+                "All tags in the vault with the number of notes using each, and the tag "
+                "ontology: which tags are parents, synonyms or related concepts of others.",
                 {},
                 self._list_tags,
             ),
@@ -474,7 +476,13 @@ class ZettelMcpServer:
         return data
 
     def _list_tags(self, args: dict) -> dict:
-        return {"tags": [{"tag": t, "count": n} for t, n in self.vault.all_tags()]}
+        return {
+            "tags": [{"tag": t, "count": n} for t, n in self.vault.all_tags()],
+            "relationships": [
+                {"source": r.source, "target": r.target, "type": r.relation_type}
+                for r in self.vault.tag_relationships()
+            ],
+        }
 
     def _get_subgraph(self, args: dict) -> dict:
         root = self._require_note(_note_id(args)).id
