@@ -35,7 +35,6 @@ MAX_CONTEXT_CHARS = 120_000
 MAX_QUESTION_CHARS = 8_000
 MAX_STREAM_BYTES = 8 * 1024 * 1024
 TRUNCATED_MARKER = "\n\n[note truncated]"
-_DEFAULT_URLOPEN = urllib.request.urlopen
 
 
 class LLMError(Exception):
@@ -51,6 +50,10 @@ class _SameOriginRedirectHandler(urllib.request.HTTPRedirectHandler):
         if (old.scheme.lower(), old.netloc.lower()) != (new.scheme.lower(), new.netloc.lower()):
             return None
         return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+def _urlopen(request: urllib.request.Request, timeout: float):
+    return urllib.request.build_opener(_SameOriginRedirectHandler).open(request, timeout=timeout)
 
 
 @dataclass(frozen=True)
@@ -419,11 +422,7 @@ class OpenAICompatibleAdapter:
     ):
         label = settings.info.label
         try:
-            # Keep transport injection possible for tests and embedded clients.
-            if urllib.request.urlopen is not _DEFAULT_URLOPEN:
-                return urllib.request.urlopen(request, timeout=timeout)
-            opener = urllib.request.build_opener(_SameOriginRedirectHandler)
-            return opener.open(request, timeout=timeout)
+            return _urlopen(request, timeout)
         except urllib.error.HTTPError as exc:
             detail = ""
             try:
