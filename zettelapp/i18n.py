@@ -98,10 +98,6 @@ def n_(singular: str, plural: str, n: int) -> str:
     return singular if n == 1 else plural
 
 
-def current_language() -> str:
-    return _language
-
-
 def is_right_to_left() -> bool:
     return _language in RIGHT_TO_LEFT
 

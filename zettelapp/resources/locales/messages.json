@@ -1314,7 +1314,7 @@
  "Could not download the language model: {error}": {
   "plural": null,
   "where": [
-   "zettelapp/core/embeddings.py:110"
+   "zettelapp/core/embeddings.py:109"
   ]
  },
  "Could not draw the graph: {error}": {
@@ -4682,13 +4682,13 @@
  "The download was cancelled.": {
   "plural": null,
   "where": [
-   "zettelapp/core/embeddings.py:98"
+   "zettelapp/core/embeddings.py:97"
   ]
  },
  "The downloaded model is damaged. Please try again.": {
   "plural": null,
   "where": [
-   "zettelapp/core/embeddings.py:106"
+   "zettelapp/core/embeddings.py:105"
   ]
  },
  "The end": {

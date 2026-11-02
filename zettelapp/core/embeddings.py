@@ -25,7 +25,6 @@ from zettelapp.core.models import Note
 from zettelapp.core.storage import Vault
 from zettelapp.i18n import _
 
-MODEL_NAME = "multilingual-e5-small"
 _MODEL_URL = (
     "https://huggingface.co/intfloat/multilingual-e5-small/resolve/"
     "614241f622f53c4eeff9890bdc4f31cfecc418b3/onnx/"

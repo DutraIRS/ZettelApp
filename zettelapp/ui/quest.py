@@ -463,7 +463,7 @@ class Quest(QObject):
 
     # --- entry points ------------------------------------------------------------------
 
-    def start_up(self, first_run: bool | None = None) -> None:
+    def start_up(self) -> None:
         """Offer the adventure once, on the first launch whose quest state is still empty
         (an upgraded user gets it too), or bring back one that was in progress."""
         if not self.state():
