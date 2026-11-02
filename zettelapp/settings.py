@@ -50,11 +50,9 @@ SEARCH_LEXICAL_WEIGHT = "search/lexicalWeight"
 SEARCH_SEMANTIC_WEIGHT = "search/semanticWeight"
 SEARCH_ONTOLOGY_WEIGHT = "search/ontologyWeight"
 SEARCH_SEMANTIC_ENABLED = "search/semanticEnabled"
-SEARCH_SEMANTIC_MODEL = "search/semanticModel"
 SEARCH_SEMANTIC_THREADS = "search/semanticThreads"
 SEARCH_SEMANTIC_INDEXING = "search/semanticIndexing"
 SEARCH_ADAPTIVE_ENABLED = "search/adaptiveEnabled"
-SEARCH_ADAPTIVE_EPSILON = "search/adaptiveEpsilon"
 SEARCH_ADAPTIVE_STATE = "search/adaptiveState"
 
 DEFAULTS: dict[str, Any] = {
@@ -85,11 +83,9 @@ DEFAULTS: dict[str, Any] = {
     SEARCH_SEMANTIC_WEIGHT: 0.20,
     SEARCH_ONTOLOGY_WEIGHT: 0.10,
     SEARCH_SEMANTIC_ENABLED: False,
-    SEARCH_SEMANTIC_MODEL: "",
     SEARCH_SEMANTIC_THREADS: 2,
     SEARCH_SEMANTIC_INDEXING: True,
     SEARCH_ADAPTIVE_ENABLED: False,
-    SEARCH_ADAPTIVE_EPSILON: 0.10,
     SEARCH_ADAPTIVE_STATE: "",
 }
 
@@ -124,6 +120,16 @@ def put(key: str, value: Any) -> None:
     s = store()
     s.setValue(key, value)
     s.sync()
+
+
+def search_weights() -> dict[str, float]:
+    """What each search signal counts for; only their proportions matter."""
+    return {
+        "fuzzy": get(SEARCH_FUZZY_WEIGHT),
+        "lexical": get(SEARCH_LEXICAL_WEIGHT),
+        "semantic": get(SEARCH_SEMANTIC_WEIGHT),
+        "ontology": get(SEARCH_ONTOLOGY_WEIGHT),
+    }
 
 
 def get_list(key: str) -> list[str]:

@@ -1,212 +1,134 @@
-"""Hybrid search: fuzzy, lexical (FTS5/BM25) and fused ranking.
+"""Hybrid search for the note list: full text, typo-tolerant titles and tags, the tag ontology
+and, when switched on, the meaning of the text, fused into one ranking.
 
-The ontology layer (tag_relationships, expand_tag) lives in storage; search
-consumes it through vault.expand_tag only.
+`tag:` filters and the set of notes being searched (the Trash or the rest) bind every signal.
 """
 
 from __future__ import annotations
 
-import re
+from collections import defaultdict
+from collections.abc import Iterable
 from dataclasses import dataclass
 
-from rapidfuzz import fuzz
+from rapidfuzz import fuzz, process
 
-from zettelapp.core.storage import Vault
+from zettelapp.core.models import Note
+from zettelapp.core.storage import Vault, split_query
+from zettelapp.core.textutil import tokenize
 
 SIGNALS = ("fuzzy", "lexical", "semantic", "ontology")
-
-DEFAULT_WEIGHTS = {"fuzzy": 0.25, "lexical": 0.45, "semantic": 0.20, "ontology": 0.10}
-DEFAULT_FUZZY_THRESHOLD = 70.0
-
-
-def normalize_weights(weights: dict[str, float]) -> dict[str, float]:
-    """Drop unavailable signals and renormalize so the weights sum to 1."""
-    usable = {k: float(v) for k, v in weights.items() if k in SIGNALS and v > 0}
-    total = sum(usable.values())
-    if total <= 0:
-        n = len(usable) or 1
-        return {k: 1.0 / n for k in usable}
-    return {k: v / total for k, v in usable.items()}
+MIN_FUZZY_LENGTH = 3
+# How alike two whole words must be: a typo finds the word meant ("quantom" finds "quantum"),
+# but one wrong letter in a short word finds nothing ("math" must not find "path").
+FUZZY_CUTOFF = 85.0
 
 
-@dataclass
+@dataclass(frozen=True)
 class SearchResult:
     note_id: str
-    title: str
-    snippet: str
     score: float
-    signals: dict[str, float]
-    matched_via: tuple[str, ...]
+    signals: dict[str, float]  # each signal's share of the score, from 0 to 1
 
 
-def _tokens(query: str) -> list[str]:
-    return re.findall(r"\w+", query, flags=re.UNICODE)
+def _long_words(text: str) -> list[str]:
+    return [word for word in tokenize(text) if len(word) >= MIN_FUZZY_LENGTH]
 
 
-class FuzzySearchProvider:
-    """Approximate matching over note titles and tags (indexed candidates)."""
-
-    def __init__(self, threshold: float = DEFAULT_FUZZY_THRESHOLD):
-        self.threshold = threshold
-
-    def search(self, query: str, vault: Vault, limit: int = 200) -> dict[str, float]:
-        token = query.strip()
-        if len(token) < 2:
-            return {}
-        folded = token.casefold()
-        scores: dict[str, float] = {}
-        for note in vault.all_notes():
-            best = 0.0
-            for candidate in (note.display_title, *note.tags):
-                if not candidate:
-                    continue
-                score = max(
-                    fuzz.ratio(folded, candidate.casefold()),
-                    fuzz.partial_ratio(folded, candidate.casefold()),
-                )
-                best = max(best, score)
-            if best >= self.threshold:
-                scores[note.id] = best / 100.0
-        if len(scores) > limit:
-            top = sorted(scores.items(), key=lambda kv: kv[1], reverse=True)[:limit]
-            scores = dict(top)
-        return scores
+def fuzzy_scores(text: str, notes: Iterable[Note]) -> dict[str, float]:
+    """Notes with every word of the text, or nearly, in their title or tags."""
+    words = _long_words(text)
+    if not words:
+        return {}
+    vocabulary: dict[str, set[str]] = defaultdict(set)
+    for note in notes:
+        for word in tokenize(" ".join((note.display_title, *note.tags))):
+            vocabulary[word].add(note.id)
+    known = list(vocabulary)
+    found: dict[str, float] = {}
+    for position, word in enumerate(words):
+        near: dict[str, float] = {}
+        for match, score, _index in process.extract(
+            word, known, scorer=fuzz.ratio, score_cutoff=FUZZY_CUTOFF, limit=None
+        ):
+            for note_id in vocabulary[match]:
+                near[note_id] = max(near.get(note_id, 0.0), score / 100)
+        found = near if position == 0 else {i: found[i] + s for i, s in near.items() if i in found}
+    return {note_id: total / len(words) for note_id, total in found.items()}
 
 
-class FullTextSearchProvider:
-    """BM25 retrieval through the existing notes_fts index (LIKE fallback)."""
-
-    def search(self, query: str, vault: Vault) -> dict[str, float]:
-        ids = vault.search(query)
-        if not ids:
-            return {}
-        rank = 1.0
-        scores: dict[str, float] = {}
-        for note_id in ids:
-            scores[note_id] = rank
-            rank = max(0.05, rank * 0.995)
-        return scores
+def lexical_scores(ranked_ids: list[str]) -> dict[str, float]:
+    """BM25 values can't be compared between queries, so a hit scores by its place in the list."""
+    return {note_id: max(0.05, 0.995**place) for place, note_id in enumerate(ranked_ids)}
 
 
-class OntologySignal:
-    """Scores notes whose tags are ontology-close to the query terms."""
-
-    def __init__(self, vault: Vault):
-        self.vault = vault
-
-    def tag_matches(self, query: str, include_related: bool = False) -> dict[str, float]:
-        """Tag-name similarity per query token, expanded by the ontology."""
-        tokens = _tokens(query)
-        if not tokens:
-            return {}
-        names = self.vault.all_tag_names()
-        out: dict[str, float] = {}
-        for token in tokens:
-            folded = token.casefold()
-            best_name, best = "", 0.0
-            for name in names:
-                score = fuzz.partial_ratio(folded, name.casefold())
-                if score > best:
-                    best_name, best = name, score
-            if best < 70.0 or not best_name:
-                continue
-            expanded = self.vault.expand_tag(best_name, include_related=include_related)
-            for tag in expanded:
-                out[tag] = max(out.get(tag, 0.0), best / 100.0)
-        return out
-
-    def search(self, query: str, vault: Vault) -> dict[str, float]:
-        tag_scores = self.tag_matches(query)
-        if not tag_scores:
-            return {}
-        scores: dict[str, float] = {}
-        for tag, tag_score in tag_scores.items():
-            for note_id in vault.notes_with_tags([tag]):
-                scores[note_id] = max(scores.get(note_id, 0.0), tag_score)
-        return scores
+def ontology_scores(vault: Vault, text: str, include_related: bool = False) -> dict[str, float]:
+    """Notes filed under a tag that a word of the text names, or that the tag ontology links
+    to one: searching for a parent finds its children's notes, whatever they are called."""
+    words = _long_words(text)
+    names = vault.all_tag_names()
+    if not words or not names:
+        return {}
+    notes = vault.notes_by_tag()
+    graph = vault.tag_graph()
+    scores: dict[str, float] = {}
+    for name in names:
+        parts = tokenize(name)
+        best = [
+            process.extractOne(word, parts, scorer=fuzz.ratio, score_cutoff=FUZZY_CUTOFF)
+            for word in words
+        ]
+        match = max((b[1] for b in best if b), default=0.0)
+        if not match:
+            continue
+        for tag in graph.expand(name, include_related):
+            for note_id in notes.get(tag, ()):
+                scores[note_id] = max(scores.get(note_id, 0.0), match / 100)
+    return scores
 
 
-class RankingEngine:
-    """Weighted fusion of normalized signal scores (deterministic by default)."""
-
-    def __init__(self, weights: dict[str, float] | None = None):
-        self.weights = normalize_weights(weights or DEFAULT_WEIGHTS)
-
-    def rank(self, signal_scores: dict[str, dict[str, float]]) -> list[SearchResult]:
-        weights = normalize_weights(self.weights)
-        fused: dict[str, dict[str, float]] = {}
-        for signal, scores in signal_scores.items():
-            if signal not in weights:
-                continue
-            peak = max(scores.values(), default=0.0)
-            if peak <= 0:
-                continue
-            for note_id, score in scores.items():
-                fused.setdefault(note_id, {})[signal] = score / peak
-        results = []
-        for note_id, signals in fused.items():
-            score = sum(weights[s] * v for s, v in signals.items())
-            results.append(
-                SearchResult(
-                    note_id=note_id,
-                    title="",
-                    snippet="",
-                    score=score,
-                    signals=signals,
-                    matched_via=tuple(sorted(s for s in weights if s in signals)),
-                )
-            )
-        results.sort(key=lambda r: (-r.score, r.note_id))
-        return results
+def rank(signals: dict[str, dict[str, float]], weights: dict[str, float]) -> list[SearchResult]:
+    """Fuse the signals' scores, each scaled so that its best hit counts 1; best first."""
+    fused: dict[str, dict[str, float]] = {}
+    for signal, scores in signals.items():
+        peak = max(scores.values(), default=0.0)
+        for note_id, score in scores.items():
+            fused.setdefault(note_id, {})[signal] = score / peak
+    results = [
+        SearchResult(note_id, sum(weights[s] * v for s, v in parts.items()), parts)
+        for note_id, parts in fused.items()
+    ]
+    results.sort(key=lambda r: (-r.score, r.note_id))
+    return results
 
 
-class SearchService:
-    """Facade wiring providers, optional semantic scores and the ranker."""
-
-    def __init__(self, vault: Vault, weights: dict[str, float] | None = None):
-        self.vault = vault
-        self.fuzzy = FuzzySearchProvider()
-        self.full_text = FullTextSearchProvider()
-        self.ontology = OntologySignal(vault)
-        self.ranker = RankingEngine(weights)
-
-    def search(
-        self,
-        query: str,
-        semantic_scores: dict[str, float] | None = None,
-        include_related_tags: bool = False,
-    ) -> list[SearchResult]:
-        signals: dict[str, dict[str, float]] = {
-            "fuzzy": self.fuzzy.search(query, self.vault),
-            "lexical": self.full_text.search(query, self.vault),
-            "ontology": self.ontology.search(query, self.vault),
-        }
-        if semantic_scores:
-            signals["semantic"] = semantic_scores
-        results = self.ranker.rank(signals)
-        notes = {n.id: n for n in self.vault.all_notes(include_deleted=True)}
-        for r in results:
-            note = notes.get(r.note_id)
-            if note is None:
-                continue
-            r.title = note.display_title
-            r.snippet = highlight_snippet(note.body, query)
-        return results
-
-
-def highlight_snippet(body: str, query: str, length: int = 160) -> str:
-    """Contextual snippet centred on the first query token match."""
-    tokens = _tokens(query)
-    text = body.replace("\n", " ").strip()
-    if not tokens:
-        return text[:length]
-    lowered = text.casefold()
-    pos = min(
-        (p for p in (lowered.find(t.casefold()) for t in tokens) if p >= 0),
-        default=-1,
+def hybrid_search(
+    vault: Vault,
+    query: str,
+    notes: Iterable[Note],
+    weights: dict[str, float],
+    semantic: dict[str, float] | None = None,
+    include_related: bool = False,
+    include_deleted: bool = False,
+) -> list[SearchResult]:
+    """Rank *notes* for a query. A signal with no weight is off and finds nothing, unless all
+    of them are off: then plain full-text search still works."""
+    weights = {s: w for s, w in weights.items() if s in SIGNALS and w > 0} or {"lexical": 1.0}
+    text, tags = split_query(query)
+    allowed = {n.id: n for n in notes}
+    if tags:
+        tagged = vault.notes_with_tags(tags, include_related=include_related)
+        allowed = {i: n for i, n in allowed.items() if i in tagged}
+    found: dict[str, dict[str, float]] = {}
+    if "lexical" in weights:
+        ids = vault.search(query, include_deleted, include_related)
+        found["lexical"] = lexical_scores([i for i in ids if i in allowed])
+    if "fuzzy" in weights:
+        found["fuzzy"] = fuzzy_scores(text, allowed.values())
+    if "ontology" in weights:
+        found["ontology"] = ontology_scores(vault, text, include_related)
+    if semantic and "semantic" in weights:
+        found["semantic"] = semantic
+    return rank(
+        {s: {i: v for i, v in scores.items() if i in allowed} for s, scores in found.items()},
+        weights,
     )
-    if pos < 0:
-        return text[:length]
-    start = max(0, pos - length // 3)
-    out = text[start : start + length]
-    return ("…" if start else "") + out + ("…" if start + length < len(text) else "")

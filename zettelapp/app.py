@@ -129,6 +129,8 @@ def _self_test(argv: list[str]) -> int:
 
     for module in pkgutil.walk_packages(zettelapp.__path__, "zettelapp."):
         importlib.import_module(module.name)
+    for module in ("onnxruntime", "tokenizers"):  # imported only when semantic search runs
+        importlib.import_module(module)
     app = QApplication([argv[0], "-platform", "offscreen"])
     theme.apply_theme(app, "light")
     from zettelapp.ui.main_window import MainWindow
@@ -186,8 +188,8 @@ def _delete_vault(folder: Path) -> None:
 
 def remove_user_data() -> int:
     """Run by the uninstaller when the user ticks "Also delete my ZettelApp settings and data":
-    removes settings, saved API keys, logs, cache, automatic backups and the notes of every
-    vault the app has used (its database and images; other files in those folders are kept)."""
+    removes settings, saved API keys, logs, cache, automatic backups, the semantic search
+    model and index, and the notes of every vault the app has used (its database and images; other files in those folders are kept)."""
     from zettelapp.core import secrets
     from zettelapp.paths import local_data_dir
 

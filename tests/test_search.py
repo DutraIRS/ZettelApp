@@ -1,320 +1,533 @@
-"""Tests for hybrid search, adaptive ranking and (optional) embeddings."""
+"""Hybrid search, adaptive ranking and semantic search (with stand-ins for the language model)."""
 
-from __future__ import annotations
-
+import hashlib
+import io
 import json
-import random
-import sqlite3
+import sys
+import types
+import urllib.error
 
+import numpy as np
 import pytest
 
-from zettelapp.core.adaptive import (
-    AdaptiveRanker,
-    AdaptiveState,
-    BayesianWeightModel,
-    candidate_arms,
+from zettelapp.core import embeddings
+from zettelapp.core.adaptive import FeedbackModel
+from zettelapp.core.embeddings import (
+    MAX_CHUNKS,
+    MIN_SIMILARITY,
+    MODEL_FILES,
+    Embedder,
+    ModelError,
+    VectorIndex,
+    chunk_text,
+    clear_index,
+    download_model,
+    model_installed,
+    remove_all,
+    semantic_scores,
+    storage_bytes,
+    sync_index,
 )
-from zettelapp.core.embedding_service import EmbeddingService
-from zettelapp.core.embeddings import VectorIndex, chunk_text
-from zettelapp.core.search import (
-    DEFAULT_WEIGHTS,
-    FuzzySearchProvider,
-    OntologySignal,
-    RankingEngine,
-    SearchService,
-    normalize_weights,
-)
-from zettelapp.core.storage import Vault
+from zettelapp.core.search import fuzzy_scores, hybrid_search, ontology_scores, rank
+from zettelapp.core.storage import Vault, split_query
+from zettelapp.core.textutil import snippet_around
+
+WEIGHTS = {"fuzzy": 0.25, "lexical": 0.45, "semantic": 0.20, "ontology": 0.10}
 
 
 @pytest.fixture
-def vault(tmp_path):
-    v = Vault.open(tmp_path / "vault")
-    v.create_note(
-        title="Bayesian inference",
-        body="Posterior probability and priors.",
-        tags=["math/probability"],
+def library(vault):
+    vault.create_note(
+        "Bayesian inference", "Posterior probability and priors.", tags=["math/probability"]
     )
-    v.create_note(title="Grocery list", body="bread, cheese, wine", tags=["daily"])
-    v.create_note(
-        title="Camus - L'Étranger", body="Aujourd'hui, maman est morte.", tags=["books/french"]
+    vault.create_note("Grocery list", "bread, cheese, wine", tags=["daily"])
+    vault.create_note("Camus - L'Étranger", "Aujourd'hui, maman est morte.", tags=["books/french"])
+    return vault
+
+
+def titles(vault, results):
+    return [vault.get_note(r.note_id).title for r in results]
+
+
+def search(vault, query, **kwargs):
+    return hybrid_search(vault, query, vault.all_notes(), WEIGHTS, **kwargs)
+
+
+# --- query parsing ---------------------------------------------------------------
+
+
+def test_split_query_separates_words_and_tag_filters():
+    assert split_query("memory tag:Psychology recall") == ("memory recall", ["psychology"])
+    assert split_query("tag:a tag:b") == ("", ["a", "b"])
+
+
+# --- fuzzy -----------------------------------------------------------------------
+
+
+def test_fuzzy_tolerates_typos_and_accents(library):
+    notes = library.all_notes()
+    assert len(fuzzy_scores("Bayesan infrence", notes)) == 1
+    assert len(fuzzy_scores("etranger", notes)) == 1
+
+
+def test_fuzzy_ignores_very_short_text(library):
+    assert fuzzy_scores("ba", library.all_notes()) == {}
+
+
+def test_fuzzy_needs_every_word(vault):
+    both = vault.create_note("Quantum mechanics")
+    vault.create_note("Quantum computing")
+    vault.create_note("Classical mechanics")
+    assert list(fuzzy_scores("quantom mechanics", vault.all_notes())) == [both.id]
+
+
+def test_fuzzy_does_not_confuse_short_words(vault):
+    for title in ("Math", "Path", "Cat", "At home", "Bat"):
+        vault.create_note(title)
+    found = {vault.get_note(i).title for i in fuzzy_scores("math", vault.all_notes())}
+    assert found == {"Math"}
+    found = {vault.get_note(i).title for i in fuzzy_scores("cat", vault.all_notes())}
+    assert found == {"Cat"}
+
+
+# --- the hybrid ranking ------------------------------------------------------------
+
+
+def test_rank_merges_signals_and_puts_the_best_first():
+    results = rank(
+        {"fuzzy": {"a": 0.8, "b": 0.4}, "lexical": {"a": 0.9, "c": 0.7}, "semantic": {}}, WEIGHTS
     )
-    return v
+    assert [r.note_id for r in results] == ["a", "c", "b"]
+    assert results[0].signals == {"fuzzy": 1.0, "lexical": 1.0}
+    assert results == rank(
+        {"fuzzy": {"a": 0.8, "b": 0.4}, "lexical": {"a": 0.9, "c": 0.7}, "semantic": {}}, WEIGHTS
+    )
 
 
-# --- fuzzy ---------------------------------------------------------------------
+def test_a_search_finds_text_and_titles_with_typos(library):
+    assert titles(library, search(library, "priors")) == ["Bayesian inference"]
+    assert titles(library, search(library, "Bayesan")) == ["Bayesian inference"]
 
 
-def test_fuzzy_tolerates_typos(vault):
-    scores = FuzzySearchProvider().search("Bayesan infrence", vault)
-    assert any("Bayesian" in vault.get_note(i).display_title for i in scores)
+def test_search_works_without_the_full_text_index(library):
+    library.has_fts = False
+    assert titles(library, search(library, "cheese")) == ["Grocery list"]
 
 
-def test_fuzzy_handles_diacritics(vault):
-    scores = FuzzySearchProvider().search("etranger", vault)
-    assert scores, "diacritic-folded fuzzy match expected"
+def test_tag_filters_bind_every_signal(vault):
+    tagged = vault.create_note("Algebra", tags=["math"])
+    vault.create_note("Math", "not tagged")
+    semantic = {n.id: 0.9 for n in vault.all_notes()}
+    assert [r.note_id for r in search(vault, "tag:math", semantic=semantic)] == [tagged.id]
+    assert [r.note_id for r in search(vault, "math tag:math", semantic=semantic)] == [tagged.id]
 
 
-def test_fuzzy_rejects_short_queries(vault):
-    assert FuzzySearchProvider().search("b", vault) == {}
+def test_only_the_notes_being_searched_are_returned(vault):
+    live = vault.create_note("Cat", "feline")
+    trashed = vault.create_note("Cat in the trash", "feline")
+    vault.trash_note(trashed.id)
+    assert [r.note_id for r in search(vault, "cat")] == [live.id]
+    in_trash = [n for n in vault.all_notes(include_deleted=True) if n.deleted]
+    results = hybrid_search(vault, "feline", in_trash, WEIGHTS, include_deleted=True)
+    assert [r.note_id for r in results] == [trashed.id]
 
 
-# --- lexical -------------------------------------------------------------------
+def test_a_weight_of_zero_turns_a_signal_off(library):
+    only_fuzzy = {"fuzzy": 1.0, "lexical": 0.0, "semantic": 0.0, "ontology": 0.0}
+    assert hybrid_search(library, "priors", library.all_notes(), only_fuzzy) == []
 
 
-def test_fts_bm25_ranking(vault):
-    service = SearchService(vault)
-    results = service.search("priors")
-    assert [r.note_id for r in results]
-    assert results[0].title == "Bayesian inference"
+def test_all_weights_at_zero_leave_plain_full_text_search(library):
+    nothing = dict.fromkeys(WEIGHTS, 0.0)
+    results = hybrid_search(library, "priors", library.all_notes(), nothing)
+    assert titles(library, results) == ["Bayesian inference"]
 
 
-def test_fts_unavailable_falls_back(vault, monkeypatch):
-    vault.has_fts = False
-    service = SearchService(vault)
-    results = service.search("cheese")
-    assert any(r.title == "Grocery list" for r in results)
+def test_semantic_scores_add_notes_with_no_word_in_common(library):
+    grocery = library.search("cheese")[0]
+    results = search(library, "shopping", semantic={grocery: 0.86})
+    assert [r.note_id for r in results] == [grocery]
+    assert set(results[0].signals) == {"semantic"}
 
 
-# --- ranking fusion --------------------------------------------------------------
+def test_words_common_to_many_notes_do_not_hide_tagged_ones(vault):
+    with vault.transaction():
+        for i in range(1100):
+            vault.create_note(f"Common {i}", "shared word")
+        tagged = vault.create_note("Old tagged note", "shared word", tags=["rare"])
+    assert vault.search("shared tag:rare") == [tagged.id]
+    assert len(vault.search("shared")) == 1101
 
 
-def test_weight_normalization_drops_unavailable():
-    w = normalize_weights({"fuzzy": 1.0, "semantic": 0.5})
-    assert "semantic" in w  # semantic is a valid signal key; zero weights drop
-    w2 = normalize_weights({"fuzzy": 0.0, "lexical": 3.0})
-    assert set(w2) == {"lexical"} and abs(sum(w2.values()) - 1.0) < 1e-9
+# --- the ontology -------------------------------------------------------------------
 
 
-def test_ranking_dedupes_and_is_deterministic():
-    engine = RankingEngine(DEFAULT_WEIGHTS)
-    signals = {
-        "fuzzy": {"a": 0.8, "b": 0.4},
-        "lexical": {"a": 0.9, "c": 0.7},
-        "semantic": {},  # unavailable
-        "ontology": {},
-    }
-    r1 = engine.rank(signals)
-    r2 = engine.rank(signals)
-    assert [r.note_id for r in r1] == [r.note_id for r in r2]
-    ids = {r.note_id for r in r1}
-    assert ids == {"a", "b", "c"}  # deduplicated across signals
-    assert r1[0].note_id == "a"
+def test_searching_for_a_parent_finds_notes_filed_under_its_children(vault):
+    note = vault.create_note("Priors", tags=["bayes"])
+    vault.add_tag_relationship("statistics", "bayes", "parent")
+    assert set(ontology_scores(vault, "statistics")) == {note.id}
+    assert [r.note_id for r in search(vault, "statistics")] == [note.id]
 
 
-def test_search_result_carries_signal_info(vault):
-    results = SearchService(vault).search("Bayesian")
-    assert results
-    assert results[0].matched_via
-    assert results[0].snippet
+def test_related_tags_count_only_when_asked(vault):
+    note = vault.create_note("Chance", tags=["probability"])
+    vault.add_tag_relationship("statistics", "probability", "related")
+    assert ontology_scores(vault, "statistics") == {}
+    assert set(ontology_scores(vault, "statistics", include_related=True)) == {note.id}
 
 
-def test_snippet_highlights_context():
-    from zettelapp.core.search import highlight_snippet
-
-    body = "lorem ipsum " * 30 + "needle here" + " dolor sit" * 30
-    snippet = highlight_snippet(body, "needle")
-    assert "needle" in snippet and snippet.startswith("…")
+def test_tag_names_are_not_matched_loosely(vault):
+    vault.create_note("Walk", tags=["path"])
+    assert ontology_scores(vault, "math") == {}
 
 
-# --- ontology signal --------------------------------------------------------------
+# --- snippets ------------------------------------------------------------------------
 
 
-def test_ontology_signal_uses_tag_hierarchy(vault):
-    vault.add_tag_relationship("math", "math/probability", "parent")
-    signal = OntologySignal(vault)
-    scores = signal.search("probability", vault)
-    assert scores, "ontology expansion should surface the tagged note"
+def test_snippet_moves_to_the_search_word_only_when_it_would_be_cut_off():
+    body = "lorem ipsum " * 30 + "needle here " + "dolor sit " * 30
+    moved = snippet_around(body, "needle", 160)
+    assert "needle" in moved and moved.startswith("…")
+    assert snippet_around("needle at the start. " + body, "needle", 160).startswith("needle")
+    assert snippet_around(body, "absent", 160).startswith("lorem")
+    assert snippet_around(body, "", 160).startswith("lorem")
 
 
-# --- adaptive ranking ---------------------------------------------------------------
+# --- adaptive ranking ------------------------------------------------------------------
 
 
-def test_bandit_exploits_best_arm():
-    rng = random.Random(42)
-    ranker = AdaptiveRanker(rng=rng)
-    ranker.state.epsilon = 0.0
-    for _ in range(30):
-        arm = ranker.select_arm()
-        ranker.state.current_arm = arm
-        ranker.record_feedback(arm == 1)
-    assert ranker.state.arm_stats[1].wins > ranker.state.arm_stats[0].wins
-    assert ranker.state.current_arm == 1
-
-
-def test_bandit_explores_with_epsilon():
-    rng = random.Random(1)
-    ranker = AdaptiveRanker(rng=rng)
-    ranker.state.epsilon = 1.0  # always explore
-    picks = {ranker.select_arm() for _ in range(30)}
-    assert len(picks) > 1
-
-
-def test_effective_epsilon_shrinks():
-    ranker = AdaptiveRanker(rng=random.Random(0))
-    assert ranker.effective_epsilon() == pytest.approx(ranker.state.epsilon)
-    ranker.state.feedback_count = 500
-    assert ranker.effective_epsilon() < ranker.state.epsilon
-
-
-def test_feedback_updates_only_current_arm():
-    ranker = AdaptiveRanker(rng=random.Random(0))
-    before = [(a.wins, a.losses) for a in ranker.state.arm_stats]
-    ranker.record_feedback(True)
-    after = [(a.wins, a.losses) for a in ranker.state.arm_stats]
-    changed = [i for i in range(len(before)) if before[i] != after[i]]
-    assert changed == [ranker.state.current_arm]
-
-
-def test_weights_normalized_in_arms():
-    for arm in candidate_arms(DEFAULT_WEIGHTS):
-        w = {k: v for k, v in arm.items()}
-        assert all(v >= 0 for v in w.values())
-
-
-def test_state_roundtrip():
-    state = AdaptiveState()
-    state.feedback_count = 7
-    state.arm_stats[2].wins = 5
-    clone = AdaptiveState.from_json(state.to_json())
-    assert clone.feedback_count == 7
-    assert clone.arm_stats[2].wins == 5
-    assert clone.epsilon == state.epsilon
-
-
-def test_bayesian_model_shifts_weights_toward_relevant_signal():
-    model = BayesianWeightModel()
-    for _ in range(10):
+def test_feedback_moves_weight_to_the_signals_of_relevant_results():
+    model = FeedbackModel()
+    for _unused in range(10):
         model.update({"semantic": 0.9, "lexical": 0.1}, relevant=True)
         model.update({"semantic": 0.1, "lexical": 0.9}, relevant=False)
-    w = model.weights()
-    assert w["semantic"] > w["lexical"]
+    weights = model.adjust(WEIGHTS)
+    assert weights["semantic"] / weights["lexical"] > WEIGHTS["semantic"] / WEIGHTS["lexical"]
 
 
-def test_bayesian_model_handles_missing_features():
-    model = BayesianWeightModel()
-    model.update({"lexical": 0.8}, relevant=True)  # no semantic feature at all
-    w = model.weights()
-    assert set(w) == set(DEFAULT_WEIGHTS)
+def test_no_feedback_changes_nothing():
+    assert FeedbackModel().adjust(WEIGHTS) == pytest.approx(WEIGHTS)
 
 
-def test_reset_restores_defaults():
-    ranker = AdaptiveRanker(rng=random.Random(0))
-    ranker.record_feedback(True)
-    ranker.reset()
-    assert ranker.state.feedback_count == 0
-    assert all(a.wins == 0 and a.losses == 0 for a in ranker.state.arm_stats)
+def test_feedback_cannot_move_a_weight_without_limit():
+    model = FeedbackModel()
+    for _unused in range(10_000):
+        model.update({"lexical": 1.0}, relevant=True)
+    assert model.adjust({"lexical": 1.0})["lexical"] <= 4.0
+    assert model.adjust({"fuzzy": 1.0})["fuzzy"] >= 0.25
 
 
-def test_no_learning_without_explicit_feedback():
-    ranker = AdaptiveRanker(rng=random.Random(0))
-    ranker.select_arm()  # browsing-equivalent: selection alone must not learn
-    assert all(a.wins == 0 and a.losses == 0 for a in ranker.state.arm_stats)
+def test_feedback_survives_saving_and_bad_saved_data_means_nothing_learned():
+    model = FeedbackModel()
+    model.update({"fuzzy": 0.5, "unknown": 9.0}, relevant=False)
+    assert FeedbackModel.from_json(model.to_json()) == model
+    for damaged in ("", "not json", "[]", '{"relevant": 3}', '{"relevant": {"fuzzy": "x"}}'):
+        assert FeedbackModel.from_json(damaged) == FeedbackModel()
 
 
-# --- embeddings ------------------------------------------------------------------
+def test_only_totals_are_saved(library):
+    model = FeedbackModel()
+    model.update(search(library, "priors")[0].signals, relevant=True)
+    saved = json.loads(model.to_json())
+    assert set(saved) == {"relevant", "irrelevant"}
+    assert "Bayesian" not in model.to_json() and library.all_notes()[0].id not in model.to_json()
 
 
-def test_chunk_text():
-    text = "x" * 3000
-    chunks = chunk_text(text)
-    assert len(chunks) > 1
-    assert len(chunks[0]) == 1200
-    short = chunk_text("hello")
-    assert short == ["hello"]
+# --- semantic search: chunks and vectors ---------------------------------------------------
 
 
-def test_vector_index_roundtrip(tmp_path):
-    conn = sqlite3.connect(tmp_path / "e.db")
-    index = VectorIndex(conn)
-    index.upsert("m1", "note1", "hash1", [[1.0, 0.0], [0.0, 1.0]])
-    assert index.count("m1") == 2
-    assert index.stored_hash("m1", "note1") == "hash1"
-    assert index.note_ids("m1") == {"note1"}
-    scores = index.search("m1", [1.0, 0.1])
-    assert scores and scores["note1"] == pytest.approx(1.0 / (1.0 + 0.01) ** 0.5, abs=1e-5)
-    index.remove("m1", "note1")
-    assert index.count("m1") == 0
-    conn.close()
+def unit(*values):
+    vector = np.array(values, dtype=np.float32)
+    return vector / np.linalg.norm(vector)
 
 
-def test_embeddings_never_mix_models(tmp_path):
-    conn = sqlite3.connect(tmp_path / "e.db")
-    index = VectorIndex(conn)
-    index.upsert("model-a", "n1", "h", [[0.5, 0.5]])
-    index.upsert("model-b", "n1", "h", [[1.0, 0.0]])
-    assert index.count("model-a") == 1 and index.count("model-b") == 1
-    conn.close()
+def test_chunk_text_splits_long_notes_and_stops_at_the_limit():
+    assert chunk_text("hello") == ["hello"]
+    assert chunk_text("   ") == []
+    chunks = chunk_text("x" * 3000)
+    assert len(chunks) > 1 and len(chunks[0]) == embeddings.CHUNK_CHARS
+    assert len(chunk_text("x" * 5_000_000)) == MAX_CHUNKS
 
 
-def test_service_validates_model_before_activation(tmp_path):
-    service = EmbeddingService(tmp_path / "search")
-    assert service.installed_models() == []
-    with pytest.raises(FileNotFoundError):
-        service.switch_model("intfloat/multilingual-e5-small")
-    with pytest.raises(FileNotFoundError):
-        service.acquire_model("missing/model")
-    service.close()
+def test_vector_index_keeps_only_close_notes(tmp_path):
+    index = VectorIndex(tmp_path, "vault")
+    index.replace("close", "h1", [unit(1.0, 0.0), unit(0.0, 1.0)])
+    index.replace("near", "h2", [unit(1.0, 0.1)])
+    index.replace("far", "h3", [unit(0.0, 1.0)])
+    assert index.hashes() == {"close": "h1", "near": "h2", "far": "h3"}
+    hits = index.search(unit(1.0, 0.0))
+    assert list(hits) == ["close", "near"]  # best chunk counts; "far" is below the floor
+    assert hits["close"] == pytest.approx(1.0)
+    assert all(score >= MIN_SIMILARITY for score in hits.values())
+    index.remove(["near"])
+    assert set(index.hashes()) == {"close", "far"}
+    index.close()
 
 
-def test_service_stub_indexing_and_search(tmp_path, vault, monkeypatch):
-    """Index/search with a stub backend (no onnxruntime required)."""
-    service = EmbeddingService(tmp_path / "search")
-    model_id = "stub/model"
+def test_a_weak_best_match_is_no_match(tmp_path):
+    index = VectorIndex(tmp_path, "vault")
+    index.replace("weak", "h", [unit(1.0, 1.0)])
+    assert index.search(unit(1.0, 0.0)) == {}  # cosine 0.71: unrelated texts score this much
+    index.close()
 
-    class StubBackend:
-        model = type("M", (), {"passage_prefix": "passage: ", "query_prefix": "query: "})()
-        loaded = True
 
-        def load(self):
-            pass
+def test_only_hits_close_to_the_best_one_count(tmp_path):
+    index = VectorIndex(tmp_path, "vault")
+    index.replace("best", "h", [unit(1.0, 0.0)])
+    index.replace("second", "h", [unit(1.0, 0.5)])  # cosine 0.89, above the floor
+    assert list(index.search(unit(1.0, 0.0))) == ["best"]
+    index.close()
 
-        def close(self):
-            pass
 
-        def embed(self, texts, prefix="", max_tokens=512):
-            import hashlib
+def test_each_vault_has_its_own_vectors_and_its_id_cannot_escape(tmp_path):
+    # Note ids are timestamps, so two vaults can both have a note with the same id.
+    first, second = VectorIndex(tmp_path, "one"), VectorIndex(tmp_path, "two")
+    first.replace("20260101120000", "h1", [unit(1.0, 0.0)])
+    second.replace("20260101120000", "h2", [unit(0.0, 1.0)])
+    assert first.hashes() == {"20260101120000": "h1"}
+    assert second.hashes() == {"20260101120000": "h2"}
+    first.close()
+    second.close()
+    evil = VectorIndex(tmp_path / "root", "..\\..\\evil")
+    evil.close()
+    assert [p.parent.name for p in (tmp_path / "root").rglob("*.sqlite")] == ["index"]
+    assert not list(tmp_path.glob("evil*"))
 
-            out = []
-            for t in texts:
-                h = hashlib.sha256(t.encode()).digest()
-                vec = [b / 255.0 for b in h[:8]]
-                norm = sum(v * v for v in vec) ** 0.5 or 1.0
-                out.append([v / norm for v in vec])
-            return out
 
-    import zettelapp.core.embedding_service as es
+class StubEmbedder:
+    """A stand-in for the language model: a text's vector comes from its hash."""
 
-    monkeypatch.setattr(es, "EmbeddingBackend", lambda info, directory: StubBackend())
-    # install a fake validated model dir
-    model_root = service.root / "models" / model_id.replace("/", "__")
-    model_root.mkdir(parents=True)
-    (model_root / "model.onnx").write_bytes(b"stub")
-    (model_root / "tokenizer.json").write_text("{}")
-    (model_root / "zettelapp-model.json").write_text(
-        json.dumps({"model_id": model_id, "dimensions": 8, "version": "1"})
+    def __init__(self):
+        self.texts = []
+
+    def embed(self, text, prefix):
+        self.texts.append(prefix + text)
+        digest = hashlib.sha256(text.encode()).digest()
+        vector = np.array(list(digest[:8]), dtype=np.float32) + 1
+        return vector / np.linalg.norm(vector)
+
+
+def sync(root, vault, embedder, cancelled=lambda: False, progress=None):
+    sync_index(root, vault.folder, lambda: embedder, progress or (lambda *_a: None), cancelled)
+
+
+def test_indexing_covers_new_and_edited_notes_and_forgets_the_rest(vault, tmp_path):
+    root = tmp_path / "search"
+    first = vault.create_note("First", "one")
+    second = vault.create_note("Second", "two")
+    trashed = vault.create_note("Trashed", "three")
+    embedder = StubEmbedder()
+    seen = []
+    sync(root, vault, embedder, progress=lambda done, total: seen.append((done, total)))
+    assert len(embedder.texts) == 3 and all(t.startswith("passage: ") for t in embedder.texts)
+    assert seen == [(1, 3), (2, 3), (3, 3)]
+
+    embedder.texts.clear()
+    sync(root, vault, embedder)
+    assert embedder.texts == []  # nothing changed, nothing to do
+
+    second.body = "two, edited"
+    vault.save_note(second)
+    vault.trash_note(trashed.id)
+    sync(root, vault, embedder)
+    assert len(embedder.texts) == 1 and "two, edited" in embedder.texts[0]
+    index = VectorIndex(root, vault.vault_id)
+    assert set(index.hashes()) == {first.id, second.id}
+    index.close()
+
+
+def test_indexing_can_stop_midway_and_continue_later(vault, tmp_path):
+    root = tmp_path / "search"
+    for i in range(3):
+        vault.create_note(f"Note {i}", "text")
+    embedder = StubEmbedder()
+    sync(root, vault, embedder, cancelled=lambda: len(embedder.texts) >= 1)
+    assert len(embedder.texts) == 1
+    sync(root, vault, embedder)
+    assert len(embedder.texts) == 3
+
+
+def test_semantic_scores_read_the_vault_index(vault, tmp_path):
+    root = tmp_path / "search"
+    note = vault.create_note("Only note", "text")
+    embedder = StubEmbedder()
+    sync(root, vault, embedder)
+    query = f"{note.display_title}\n\n{note.body}"  # the same text gives the same vector
+    assert list(semantic_scores(root, vault.vault_id, embedder, query)) == [note.id]
+    assert embedder.texts[-1] == "query: " + query
+    clear_index(root, vault.vault_id)
+    assert semantic_scores(root, vault.vault_id, embedder, query) == {}
+
+
+def test_a_damaged_index_can_be_cleared(vault, tmp_path):
+    root = tmp_path / "search"
+    VectorIndex(root, "vault").close()
+    (index_file,) = (root / "index").glob("*.sqlite")
+    index_file.write_bytes(b"this is not a database" * 100)
+    clear_index(root, "vault")
+    index = VectorIndex(root, "vault")
+    assert index.hashes() == {}
+    index.close()
+
+
+def test_indexing_does_not_load_the_model_when_nothing_changed(vault, tmp_path):
+    root = tmp_path / "search"
+    vault.create_note("Note", "text")
+    embedder = StubEmbedder()
+    sync(root, vault, embedder)
+
+    def must_not_load():
+        raise AssertionError("the model was loaded for nothing")
+
+    sync_index(root, vault.folder, must_not_load, lambda *_a: None, lambda: False)
+
+
+def test_embedder_gives_the_model_every_input_and_a_unit_vector(tmp_path, monkeypatch):
+    """The real model refuses to run unless it gets all three inputs."""
+    seen = {}
+
+    class Session:
+        def __init__(self, path, sess_options, providers):
+            seen.update(path=path, threads=sess_options.intra_op_num_threads)
+
+        def run(self, _outputs, feed):
+            seen["feed"] = feed
+            return [np.full((1, feed["input_ids"].shape[1], 4), 3.0, dtype=np.float32)]
+
+    class Options:
+        intra_op_num_threads = inter_op_num_threads = 0
+
+    class Tokenizer:
+        @classmethod
+        def from_file(cls, path):
+            seen["tokenizer"] = path
+            return cls()
+
+        def enable_truncation(self, length):
+            seen["truncation"] = length
+
+        def encode(self, text):
+            seen["text"] = text
+            return types.SimpleNamespace(ids=[5, 6, 7])
+
+    monkeypatch.setitem(
+        sys.modules,
+        "onnxruntime",
+        types.SimpleNamespace(SessionOptions=Options, InferenceSession=Session),
     )
+    monkeypatch.setitem(sys.modules, "tokenizers", types.SimpleNamespace(Tokenizer=Tokenizer))
 
-    n = service.index_note(vault, vault.all_notes()[0].id, model_id)
-    assert n >= 1
-    assert service.pending_note_ids(vault, model_id) == [
-        i.id for i in vault.all_notes() if i.id != vault.all_notes()[0].id
-    ]
-    scores = service.search("anything", model_id)
-    assert isinstance(scores, dict)
-    service.release_model()
-    service.close()
+    vector = Embedder(tmp_path, threads=3).embed("hello", "query: ")
 
-
-def test_semantic_unavailable_keeps_search_working(vault):
-    """Core requirement: no AI component, search still fine."""
-    service = SearchService(vault)  # no semantic scores passed
-    results = service.search("Bayesian")
-    assert results
+    assert seen["text"] == "query: hello" and seen["threads"] == 3
+    assert seen["truncation"] == embeddings.MAX_TOKENS
+    assert set(seen["feed"]) == {"input_ids", "attention_mask", "token_type_ids"}
+    assert seen["feed"]["input_ids"].tolist() == [[5, 6, 7]]
+    assert seen["feed"]["attention_mask"].tolist() == [[1, 1, 1]]
+    assert seen["feed"]["token_type_ids"].tolist() == [[0, 0, 0]]
+    assert np.linalg.norm(vector) == pytest.approx(1.0)
 
 
-def test_deleted_embeddings_frees_storage(tmp_path):
-    service = EmbeddingService(tmp_path / "search")
-    service.index.drop_all()
-    assert service.index.count() == 0
-    service.close()
+# --- semantic search: the download ------------------------------------------------------------
+
+
+@pytest.fixture
+def small_model(monkeypatch):
+    """Two tiny files stand for the model; returns what the server hands out."""
+    served = {"model.bin": b"weights" * 1000, "tok.json": b"{}"}
+    monkeypatch.setattr(
+        embeddings,
+        "MODEL_FILES",
+        {
+            "model.onnx": ("model.bin", len(served["model.bin"]), _sha(served["model.bin"])),
+            "tokenizer.json": ("tok.json", len(served["tok.json"]), _sha(served["tok.json"])),
+        },
+    )
+    monkeypatch.setattr(embeddings, "MODEL_BYTES", sum(map(len, served.values())))
+    requests = []
+
+    def urlopen(request, timeout):
+        requests.append(request)
+        return io.BytesIO(served[request.full_url.rsplit("/", 1)[1]])
+
+    monkeypatch.setattr(embeddings.urllib.request, "urlopen", urlopen)
+    served["requests"] = requests
+    return served
+
+
+def _sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def _no_progress(_done, _total):
+    pass
+
+
+def test_download_installs_the_verified_model(tmp_path, small_model):
+    assert not model_installed(tmp_path)
+    seen = []
+    download_model(tmp_path, lambda done, total: seen.append((done, total)), lambda: False)
+    assert model_installed(tmp_path)
+    assert (tmp_path / "model" / "model.onnx").read_bytes() == small_model["model.bin"]
+    assert seen[-1][0] == seen[-1][1]
+    assert not list(tmp_path.rglob("*.part"))
+    assert all(r.full_url.startswith("https://") for r in small_model["requests"])
+
+
+def test_download_refuses_a_damaged_file(tmp_path, small_model):
+    small_model["model.bin"] = b"X" * len(small_model["model.bin"])
+    with pytest.raises(ModelError, match="damaged"):
+        download_model(tmp_path, _no_progress, lambda: False)
+    assert not model_installed(tmp_path)
+    assert not list(tmp_path.rglob("*.part")) and not list(tmp_path.rglob("model.onnx"))
+
+
+def test_download_does_not_store_more_than_the_expected_size(tmp_path, small_model):
+    expected = len(small_model["model.bin"])
+    small_model["model.bin"] = small_model["model.bin"] * 100
+    with pytest.raises(ModelError):
+        download_model(tmp_path, _no_progress, lambda: False)
+    assert not list(tmp_path.rglob("model.onnx")) and expected
+
+
+def test_download_can_be_cancelled_and_resumed(tmp_path, small_model):
+    with pytest.raises(ModelError, match="cancelled"):
+        download_model(tmp_path, _no_progress, lambda: True)
+    assert not model_installed(tmp_path) and not list(tmp_path.rglob("*.part"))
+    download_model(tmp_path, _no_progress, lambda: False)
+    assert model_installed(tmp_path)
+    small_model["requests"].clear()
+    download_model(tmp_path, _no_progress, lambda: False)
+    assert small_model["requests"] == []  # what is already there is not fetched again
+
+
+def test_a_network_failure_leaves_nothing_behind(tmp_path, small_model, monkeypatch):
+    def fail(request, timeout):
+        raise urllib.error.URLError("offline")
+
+    monkeypatch.setattr(embeddings.urllib.request, "urlopen", fail)
+    with pytest.raises(ModelError, match="offline"):
+        download_model(tmp_path, _no_progress, lambda: False)
+    assert not model_installed(tmp_path) and not list(tmp_path.rglob("*.part"))
+
+
+def test_the_model_is_pinned_to_exact_files():
+    assert "/resolve/614241f" in embeddings._MODEL_URL
+    for _remote, size, digest in MODEL_FILES.values():
+        assert size > 0 and len(digest) == 64
+
+
+def test_removing_the_data_deletes_model_and_vectors(tmp_path, small_model):
+    root = tmp_path / "search"
+    download_model(root, _no_progress, lambda: False)
+    VectorIndex(root, "vault").close()
+    assert storage_bytes(root) > 0
+    remove_all(root)
+    assert not root.exists() and storage_bytes(root) == 0
+    assert not model_installed(root)
+
+
+def test_opening_a_vault_read_only_for_indexing_leaves_it_writable(vault, tmp_path):
+    vault.create_note("Note", "text")
+    sync(tmp_path / "search", vault, StubEmbedder())
+    assert vault.create_note("Another", "text") and Vault.is_vault(vault.folder)

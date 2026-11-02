@@ -97,6 +97,7 @@ class TagOntologyDialog(QDialog):
         layout.addWidget(add)
         self.relationships = QListWidget()
         self.relationships.setAccessibleName(_("Tag relationships"))
+        self.relationships.setToolTip(_("Double-click to show that tag's notes"))
         self.relationships.itemDoubleClicked.connect(self._navigate)
         layout.addWidget(self.relationships, 1)
         actions = QHBoxLayout()
@@ -122,8 +123,15 @@ class TagOntologyDialog(QDialog):
             combo.blockSignals(False)
         self.relationships.clear()
         for relationship in self.vault.tag_relationships():
+            sentences = {
+                "parent": _("{source} is the parent of {target}"),
+                "synonym": _("{source} is a synonym of {target}"),
+                "related": _("{source} is related to {target}"),
+            }
             item = QListWidgetItem(
-                f"{relationship.source}  ·  {relationship.relation_type}  ·  {relationship.target}"
+                sentences[relationship.relation_type].format(
+                    source=relationship.source, target=relationship.target
+                )
             )
             item.setData(Qt.ItemDataRole.UserRole, relationship)
             self.relationships.addItem(item)
@@ -133,7 +141,7 @@ class TagOntologyDialog(QDialog):
             self.vault.add_tag_relationship(
                 self.source.currentText(), self.target.currentText(), self.relation.currentData()
             )
-        except (ValueError, VaultError) as error:
+        except VaultError as error:
             QMessageBox.warning(self, _("Cannot add relationship"), str(error))
             return
         self._refresh()
@@ -151,8 +159,8 @@ class TagOntologyDialog(QDialog):
         self.changed.emit()
 
     def _navigate(self, item: QListWidgetItem) -> None:
-        relationship = item.data(Qt.ItemDataRole.UserRole)
-        self.tagSelected.emit(relationship.source)
+        self.tagSelected.emit(item.data(Qt.ItemDataRole.UserRole).source)
+        self.accept()
 
 
 class LinkPickerDialog(QDialog):
@@ -401,7 +409,10 @@ SHORTCUTS = [
             (N_("Add flashcard"), "Ctrl+Shift+F"),
             (N_("Cite a Zotero reference"), N_("Insert ▸ Zotero Reference")),
             (N_("Toggle edit / preview"), "Ctrl+E"),
+            (N_("Duplicate note"), "Ctrl+D"),
             (N_("Move note to Trash"), "Ctrl+Delete"),
+            (N_("Move selected notes to Trash (in the note list)"), N_("Del")),
+            (N_("Select several notes"), N_("Ctrl+click, Shift+click, Shift+arrows")),
             (N_("Bold / italic"), "Ctrl+B / Ctrl+I"),
         ],
     ),
