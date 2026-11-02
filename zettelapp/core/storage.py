@@ -745,7 +745,6 @@ class Vault:
         sets = []
         for t in tags:
             expanded = self.expand_tag(t, include_related=include_related)
-
             sets.append(
                 {
                     r["note_id"]
@@ -829,19 +828,19 @@ class Vault:
         changed = True
         while changed:
             changed = False
-            for relation in self.tag_relationships():
-                if relation.relation_type == "synonym" and (
-                    relation.source in expanded or relation.target in expanded
+            for relationship in self.tag_relationships():
+                if relationship.relation_type == "synonym" and (
+                    relationship.source in expanded or relationship.target in expanded
                 ):
                     before = len(expanded)
-                    expanded.update((relation.source, relation.target))
+                    expanded.update((relationship.source, relationship.target))
                     changed |= len(expanded) != before
         if include_related:
-            for relation in self.tag_relationships():
-                if relation.relation_type == "related" and (
-                    relation.source in expanded or relation.target in expanded
+            for relationship in self.tag_relationships():
+                if relationship.relation_type == "related" and (
+                    relationship.source in expanded or relationship.target in expanded
                 ):
-                    expanded.update((relation.source, relation.target))
+                    expanded.update((relationship.source, relationship.target))
         return expanded | {
             child for name in tuple(expanded) for child in self.tag_descendants(name)
         }
@@ -854,16 +853,13 @@ class Vault:
             raise VaultError(_("Unknown tag relationship type."))
         if relation_type == "parent" and source in self.tag_descendants(target):
             raise VaultError(_("That parent relationship would create a cycle."))
+        if relation_type in {"related", "synonym"}:
+            source, target = sorted((source, target))
         with self.transaction():
             self.conn.execute(
                 "INSERT OR IGNORE INTO tag_relationships (source, target, relation_type) VALUES (?, ?, ?)",
                 (source, target, relation_type),
             )
-            if relation_type in {"related", "synonym"}:
-                self.conn.execute(
-                    "INSERT OR IGNORE INTO tag_relationships (source, target, relation_type) VALUES (?, ?, ?)",
-                    (target, source, relation_type),
-                )
         self._changed("tags")
         return TagRelationship(source, target, relation_type)
 
@@ -871,16 +867,13 @@ class Vault:
         source, target = normalize_tag(source), normalize_tag(target)
         if relation_type not in TAG_RELATION_TYPES:
             raise VaultError(_("Unknown tag relationship type."))
+        if relation_type in {"related", "synonym"}:
+            source, target = sorted((source, target))
         with self.transaction():
             self.conn.execute(
                 "DELETE FROM tag_relationships WHERE source = ? AND target = ? AND relation_type = ?",
                 (source, target, relation_type),
             )
-            if relation_type in {"related", "synonym"}:
-                self.conn.execute(
-                    "DELETE FROM tag_relationships WHERE source = ? AND target = ? AND relation_type = ?",
-                    (target, source, relation_type),
-                )
         self._changed("tags")
 
     # --- link types -------------------------------------------------------

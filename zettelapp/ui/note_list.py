@@ -24,6 +24,7 @@ from PySide6.QtGui import (
     QPixmap,
 )
 from PySide6.QtWidgets import (
+    QCheckBox,
     QComboBox,
     QHBoxLayout,
     QListView,
@@ -244,6 +245,8 @@ class NoteListPanel(QWidget):
         filters = QHBoxLayout()
         self.tag_filter = QComboBox()
         self.tag_filter.setAccessibleName(_("Filter by tag"))
+        self.related_tags = QCheckBox(_("Related tags"))
+        self.related_tags.setToolTip(_("Include associative tag relationships in tag filters"))
         self.ontology_button = tool_button(
             "tag", _("Manage tag ontology"), self.ontologyRequested.emit, text=_("Ontology")
         )
@@ -262,6 +265,7 @@ class NoteListPanel(QWidget):
                 QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
             )
         filters.addWidget(self.tag_filter, 1)
+        filters.addWidget(self.related_tags)
         filters.addWidget(self.ontology_button)
         filters.addWidget(self.sort)
         layout.addLayout(filters)
@@ -297,6 +301,7 @@ class NoteListPanel(QWidget):
         self._timer = QTimer(self, singleShot=True, interval=180, timeout=self.refresh)
         self.search.textChanged.connect(lambda _unused: self._timer.start())
         self.tag_filter.currentIndexChanged.connect(lambda _unused: self.refresh())
+        self.related_tags.toggled.connect(lambda _unused: self.refresh())
         self.sort.currentIndexChanged.connect(lambda _unused: self.refresh())
 
     def set_vault(self, vault: Vault | None) -> None:
@@ -339,7 +344,13 @@ class NoteListPanel(QWidget):
         }
         if query.strip():
             ids = [
-                i for i in self.vault.search(query, include_deleted=self.trash_mode) if i in notes
+                i
+                for i in self.vault.search(
+                    query,
+                    include_deleted=self.trash_mode,
+                    include_related_tags=self.related_tags.isChecked(),
+                )
+                if i in notes
             ]
             try:
                 from zettelapp import settings as prefs

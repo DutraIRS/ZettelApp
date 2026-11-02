@@ -86,7 +86,7 @@ def test_tag_ontology_supports_multiple_parents_and_expands_search(vault):
     assert vault.search("tag:mathematics") == [note.id]
 
 
-def test_tag_ontology_synonyms_expand_search_but_related_tags_are_opt_in(vault):
+def test_tag_ontology_synonyms_and_opt_in_related_search(vault):
     synonym_note = vault.create_note("Bayesian", tags=["bayes"])
     related_note = vault.create_note("Probability", tags=["probability"])
     vault.add_tag_relationship("bayesian", "bayes", "synonym")
