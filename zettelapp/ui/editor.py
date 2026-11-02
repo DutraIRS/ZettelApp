@@ -40,7 +40,14 @@ from zettelapp.ui.dialogs import AlarmDialog, CardDialog, FormulaDialog, TextPro
 from zettelapp.ui.markdown_editor import MarkdownEditor, referenced_assets
 from zettelapp.ui.mindmap import MindMapView
 from zettelapp.ui.preview import NotePreview
-from zettelapp.ui.widgets import FlowLayout, TagEditor, accent_button, label, tool_button
+from zettelapp.ui.widgets import (
+    FlowLayout,
+    TagEditor,
+    accent_button,
+    label,
+    run_dialog,
+    tool_button,
+)
 
 
 def friendly_time(iso: str) -> str:
@@ -520,7 +527,7 @@ class NoteEditor(QWidget):
             return
         selected = self.body.textCursor().selectedText().strip("$ ")
         dialog = FormulaDialog(self, selected)
-        if dialog.exec():
+        if run_dialog(dialog):
             _latex, display = dialog.value()
             if display:
                 self.body.insert_block(dialog.markdown() + "\n")
@@ -532,7 +539,7 @@ class NoteEditor(QWidget):
         if self.note is None:
             return
         dialog = AlarmDialog(self, self.note.alarm)
-        if not dialog.exec():
+        if not run_dialog(dialog):
             return
         self.note.alarm = "" if dialog.removed else dialog.iso()
         self._dirty = True
@@ -565,7 +572,7 @@ class NoteEditor(QWidget):
         dialog = TextPromptDialog(
             _("Insert web link"), _("Address (http, https or mailto):"), "", self, _("Insert")
         )
-        if dialog.exec():
+        if run_dialog(dialog):
             url = normalize_web_url(dialog.value())
             if url is None:
                 QMessageBox.warning(
@@ -758,7 +765,7 @@ class NoteEditor(QWidget):
             return
         self.flush()
         card = Flashcard(None, self.note.id, "")
-        if CardDialog(card, self).exec():
+        if run_dialog(CardDialog(card, self)):
             self.window.vault.save_card(card)
             self._refresh_cards()
             self.tabs.setCurrentIndex(2)
@@ -774,7 +781,7 @@ class NoteEditor(QWidget):
                 _("This card comes from the note text (Q:/A: or {{c1::…}}). Edit it there."),
             )
             return
-        if CardDialog(card, self).exec():
+        if run_dialog(CardDialog(card, self)):
             self.window.vault.save_card(card)
             self._refresh_cards()
 

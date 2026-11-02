@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
     QAbstractButton,
     QComboBox,
     QCompleter,
+    QDialog,
     QFrame,
     QHBoxLayout,
     QLabel,
@@ -60,6 +61,14 @@ class ToggleSwitch(QAbstractButton):
         painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(t.q("on_accent") if on else t.q("text_secondary"))
         painter.drawEllipse(QPointF(x, track.center().y()), radius, radius)
+
+
+def run_dialog(dialog: QDialog) -> int:
+    """Show a modal dialog, then free it: it would otherwise last as long as its parent.
+    The caller can still read its answers until returning to the event loop."""
+    result = dialog.exec()
+    dialog.deleteLater()
+    return result
 
 
 def label(text: str = "", role: str | None = None, wrap: bool = False) -> QLabel:
