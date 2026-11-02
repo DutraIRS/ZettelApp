@@ -15,7 +15,7 @@ Größe hängt von der Anzahl ihrer Links ab, und jede Linie ist ein Link.
 | **2D / 3D** | Wechselt zwischen einer flachen, verschiebbaren Anordnung und einer 3D-Ansicht, die Sie umlaufen können. |
 | **Färben nach** | Tags, *Cluster: k-means*, *Cluster: hierarchisch* oder keine Einfärbung. |
 | **k** | Anzahl der Cluster. *k automatisch* wählt den Wert selbst aus (siehe unten). |
-| **Gruppieren** | Zieht Notizen derselben Gruppe zusammen und schattiert den Bereich der jeweiligen Gruppe. |
+| **Gruppieren** | Zieht Notizen derselben Gruppe zusammen und schattiert den Bereich der jeweiligen Gruppe. In 2D klicken Sie auf einen Bereich, um ihn auszuwählen, und ziehen ihn, um alle seine Notizen zu verschieben. |
 | **Beschriftungen** | Zeigt Notiztitel. In großen Graphen werden zunächst nur die am stärksten verknüpften Notizen beschriftet; weitere Beschriftungen erscheinen beim Darüberfahren. |
 | **Linktypen** | Blendet einzelne Linktypen ein oder aus. |
 | **Im Graph suchen** | Geben Sie einen Teil eines Titels ein und drücken Sie Enter, um zur Notiz zu springen. |

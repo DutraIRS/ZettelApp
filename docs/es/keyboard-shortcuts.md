@@ -13,7 +13,10 @@ y luego la letra subrayada.
 | Insertar imagen | Ctrl+Shift+I |
 | Añadir tarjeta | Ctrl+Shift+F |
 | Alternar edición / dividida / vista previa | Ctrl+E |
+| Duplicar nota | Ctrl+D |
 | Mover nota a la papelera | Ctrl+Supr |
+| Mover las notas seleccionadas a la papelera (en la lista de notas) | Supr |
+| Seleccionar varias notas | Ctrl+clic, Shift+clic, Shift+flechas |
 | Negrita / cursiva | Ctrl+B / Ctrl+I |
 | Deshacer / rehacer | Ctrl+Z / Ctrl+Y |
 | Completar un `[[enlace]]` | Escribe `[[`, elige un título y pulsa Enter |

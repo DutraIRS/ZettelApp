@@ -15,7 +15,7 @@ que ela tem, e cada linha é um link.
 | **2D / 3D** | Alterna entre um layout plano e arrastável e uma visão 3D que você pode orbitar. |
 | **Cor por** | Tags, *Clusters: k-means*, *Clusters: hierárquico* ou nada. |
 | **k** | Número de clusters. *k automático* escolhe por você (veja abaixo). |
-| **Grupo** | Junta notas do mesmo grupo e sombreia a área de cada grupo. |
+| **Grupo** | Junta notas do mesmo grupo e sombreia a área de cada grupo. Em 2D, clique em uma área para selecioná-la e arraste-a para mover todas as suas notas. |
 | **Rótulos** | Mostra os títulos das notas. Em grafos grandes, somente as notas mais conectadas recebem rótulo até você passar o mouse. |
 | **Tipos de link** | Oculta ou mostra tipos de link individuais. |
 | **Buscar no grafo** | Digite parte de um título e pressione Enter para ir até a nota. |

@@ -132,12 +132,28 @@ Les types intégrés peuvent être renommés et redéfinis, mais pas supprimés.
 Ajoutez des tags dans le champ sous le titre (appuyez sur Entrée après chacun) ou écrivez-les **dans le texte** avec
 un signe dièse, par exemple `#welcome` ou `#math/algebra`. Les tags sont en minuscules et peuvent être imbriqués
 avec une barre oblique, comme `math/algebra`. Un filtre sur `math` trouve également les notes portant `math/algebra`.
-Utilisez le filtre de tags au-dessus de la liste des notes ou saisissez `tag:name` dans le champ de recherche.
+Utilisez le filtre de tags au-dessus de la liste des notes ou saisissez `tag:name` dans le champ de recherche. Le nombre à côté de chaque tag indique les notes affichées par ce filtre.
 
 Les tags écrits dans le texte sont de vrais tags, affichés sous forme de **pastilles au contour** près du champ *Ajouter un tag*.
 Ils disparaissent lorsque vous supprimez le `#tag` du texte. Un `#tag` est ignoré dans le code, les cibles de liens et
 les `[[#titres]]`. Les tags saisis dans le champ *Ajouter un tag* sont distincts : ils restent jusqu’à ce que vous les supprimiez
 avec leur ✕. Dans l’éditeur, faites Ctrl+clic sur un `#tag` pour répertorier les notes qui le portent.
+
+### Ontologie des tags
+
+Vous pouvez aussi indiquer comment les tags sont liés entre eux, sans les renommer. Ouvrez *Outils ▸ Ontologie
+des tags…*, ou le petit bouton à côté du filtre de tags, et ajoutez des relations :
+
+| Relation | Exemple | Un filtre sur le premier tag trouve aussi… |
+|---|---|---|
+| **Parent → enfant** | `statistiques` est le parent de `bayes` | les notes portant `bayes` et, à leur tour, celles de ses enfants. Un tag peut avoir plusieurs parents. |
+| **Synonyme / alias** | `ml` est un synonyme de `apprentissage-automatique` | les notes portant l’un ou l’autre, quel que soit celui du filtre. |
+| **Concept associé** | `mémoire` est associé à `sommeil` | rien de plus, tant que vous ne cochez pas *Trouver aussi les notes aux tags associés* dans le menu du petit bouton. |
+
+Un tag d’une relation n’a pas besoin de figurer sur une note : `statistiques` peut exister uniquement pour
+rassembler d’autres tags. Les relations changent seulement ce que trouvent les filtres et les recherches : vos
+notes et leurs tags restent tels quels. Double-cliquez sur une relation pour voir les notes de son premier tag.
+Les archives ZettelApp contiennent l’ontologie, et les clients MCP peuvent la lire.
 
 ## Lien source
 
@@ -224,10 +240,53 @@ dans la note. Les cartes provenant du texte portent la mention *depuis le texte 
 
 ## Recherche
 
-Le champ de recherche (Ctrl+F) effectue une recherche intégrale dans les titres, le texte et les tags, ignore les accents
-et reconnaît les préfixes de mots : `forget` trouve ainsi *forgetting*. Ajoutez `tag:name` pour filtrer par tag, par
-exemple `memory tag:psychology`. Les résultats sont triés par pertinence ; sans requête, les notes suivent le tri choisi
-(*Dernière modification*, *Créée*, *Titre* ou *Les plus liées*).
+Le champ de recherche (Ctrl+F) parcourt les titres, le texte et les tags, ignore les accents et reconnaît les
+préfixes de mots : `forget` trouve ainsi *forgetting*. Ajoutez `tag:name` pour ne garder que les notes portant un
+tag, par exemple `memory tag:psychology`. Les meilleures correspondances viennent en premier et chacune montre
+le passage de la note autour de votre mot ; sans requête, les notes suivent le tri choisi (*Dernière
+modification*, *Créée*, *Titre* ou *Les plus liées*).
+
+Plusieurs types de correspondance travaillent ensemble, et *Outils ▸ Options ▸ Recherche* règle le poids de chacun :
+
+- **Plein texte** : vos mots n’importe où dans la note.
+- **Approximative** : de petites fautes de frappe dans les titres et les tags, ainsi `quantom` trouve *Quantum*.
+- **Tags et ontologie** : un mot qui nomme un tag trouve les notes de ce tag, ainsi que celles de ses enfants et
+  de ses synonymes.
+- **Sémantique** (facultative) : des notes de sens proche, comme expliqué ci-dessous.
+
+### Recherche sémantique
+
+La recherche sémantique trouve les notes d’après leur sens, même si elles n’ont aucun mot en commun avec votre
+recherche : *comment les plantes se nourrissent* peut trouver une note sur la photosynthèse, et cela fonctionne
+d’une langue à l’autre. Elle reste désactivée tant que vous ne l’avez pas configurée :
+
+1. Dans *Outils ▸ Options ▸ Recherche*, cliquez sur **Télécharger le modèle** (135 Mo, une seule fois, depuis Hugging Face).
+2. Cochez **Utiliser la recherche sémantique** et validez.
+
+ZettelApp indexe alors vos notes en arrière-plan et suit vos modifications. Les résultats pour les mots saisis
+apparaissent aussitôt ; les notes trouvées d’après leur sens les rejoignent un instant plus tard. Le modèle
+s’exécute sur votre ordinateur et vos notes n’en sortent jamais. Lorsqu’il est utilisé, il occupe environ 500 Mo
+de mémoire, libérés deux minutes après votre dernière recherche. **Supprimer le modèle et l’index**, sur la même
+page, efface le tout.
+
+### De meilleurs résultats grâce à vos évaluations
+
+Cochez **Améliorer le classement à partir de mes évaluations explicites** dans *Outils ▸ Options ▸ Recherche*,
+puis faites un clic droit sur un résultat de recherche et choisissez **Résultat pertinent** ou **Résultat non
+pertinent**. Les types de correspondance à l’origine des résultats que vous indiquez comptent ensuite plus ou
+moins. Seuls ces clics sont utilisés. ZettelApp conserve un total cumulé par type de correspondance, sur cet
+ordinateur, et rien sur les notes indiquées ni sur ce que vous avez cherché. **Réinitialiser les préférences
+apprises** oublie tout.
+
+## Sélectionner plusieurs notes
+
+Dans la liste des notes, Ctrl+clic, Shift+clic ou Shift+flèches sélectionnent plusieurs notes. Faites un clic
+droit sur la sélection pour les dupliquer ou les mettre à la Corbeille (dans la Corbeille, pour les restaurer ou
+les supprimer), ou appuyez sur Del pour les mettre à la Corbeille.
+
+*Édition ▸ Dupliquer la note* (Ctrl+D) copie une note : son texte, ses tags, son lien source, son image, sa carte
+mentale, les liens qu’elle établit et les cartes mémoire écrites à la main. Les liens vers elle, son alarme et son
+historique de révision ne sont pas copiés.
 
 ## Corbeille
 

@@ -13,7 +13,10 @@ then the underlined letter.
 | Insert image | Ctrl+Shift+I |
 | Add flashcard | Ctrl+Shift+F |
 | Toggle edit / split / preview | Ctrl+E |
+| Duplicate note | Ctrl+D |
 | Move note to Trash | Ctrl+Delete |
+| Move selected notes to Trash (in the note list) | Del |
+| Select several notes | Ctrl+click, Shift+click, Shift+arrows |
 | Bold / italic | Ctrl+B / Ctrl+I |
 | Undo / redo | Ctrl+Z / Ctrl+Y |
 | Complete a `[[link]]` | Type `[[`, then pick a title and press Enter |

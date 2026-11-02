@@ -11,6 +11,7 @@ que puede hacer:
 | Unos 4 segundos después de iniciar ZettelApp (se puede desactivar) | `https://dutrairs.github.io/ZettelApp/version.json` | Una solicitud HTTPS de ese archivo, con la cabecera `User-Agent: ZettelApp/<version>`. Nada más: ni notas, ni ajustes, ni identificadores. Cualquier fallo es silencioso. Consulta [Actualizaciones](getting-started.md#updates). |
 | Haces una pregunta en la página **Preguntar** | El proveedor de IA que configuraste (Anthropic, OpenAI, Z.ai o tu propio punto de acceso) | Tu pregunta y las notas indicadas en *Fuentes enviadas* |
 | Pruebas la conexión de IA o actualizas la lista de modelos | El mismo proveedor | Tu clave de API, para autenticarte |
+| Pulsas **Descargar el modelo** en *Herramientas ▸ Opciones ▸ Búsqueda* y confirmas | `huggingface.co`, que puede redirigir a sus servidores de descarga | Una solicitud HTTPS por cada archivo del modelo de búsqueda semántica, con la cabecera `User-Agent: ZettelApp/<version>`. Nada sobre tus notas. Cada archivo se comprueba con un SHA-256 fijo antes de usarlo. Consulta [Notas y enlaces](notes-and-links.md#busqueda-semantica). |
 | **Sincronizas con Anki** | AnkiConnect en **este equipo** (`127.0.0.1`) | Las tarjetas del alcance elegido |
 | Usas **Insertar ▸ Referencia de Zotero** o *Probar conexión* en las opciones de Zotero | Zotero en **este equipo** (`127.0.0.1`) | Tus palabras de búsqueda (solo lectura) |
 | Haces clic en un enlace web, o usas *Ayuda ▸ Sitio web de ZettelApp / Documentación / Buscar actualizaciones*, o el botón **Descargar** del aviso de actualización | Tu navegador web abre la página | Nada de ZettelApp |
@@ -32,6 +33,7 @@ El servidor MCP no hace ninguna solicitud de red.
 | Registros | `%LOCALAPPDATA%\ZettelApp\Logs` (rotados, como máximo unos pocos MB). Registran errores, no tus notas, y nunca incluyen claves de API. |
 | Copias de seguridad automáticas | `%LOCALAPPDATA%\ZettelApp\Backups` |
 | Pequeña caché de la interfaz | `%LOCALAPPDATA%\ZettelApp\Cache` |
+| Modelo e índice de la búsqueda semántica, si la configuras | `%LOCALAPPDATA%\ZettelApp\Search`. El índice se deriva de tus notas y nunca está en la bóveda, así que no se sincroniza con ella. *Eliminar modelo e índice* en *Herramientas ▸ Opciones ▸ Búsqueda* lo borra. |
 
 La bóveda es una carpeta normal: puedes copiarla, respaldarla o mantenerla en OneDrive. ZettelApp escribe la
 base de datos con sincronización completa, un ajuste elegido para adaptarse a carpetas sincronizadas. Evita abrir la misma bóveda en dos
@@ -87,7 +89,7 @@ Las notas pueden venir de importaciones, de la web o de respuestas de IA, así q
 
 Desinstala desde *Configuración de Windows ▸ Aplicaciones ▸ Aplicaciones instaladas ▸ ZettelApp ▸ Desinstalar*. El desinstalador ofrece
 una opción sin marcar, **Eliminar también mi configuración y mis datos de ZettelApp**. Si la marcas, elimina tu
-configuración, las claves de API guardadas en el Administrador de credenciales, los registros, la caché y las copias de seguridad automáticas
+configuración, las claves de API guardadas en el Administrador de credenciales, los registros, la caché, las copias de seguridad automáticas y el modelo e índice de la búsqueda semántica
 (`%LOCALAPPDATA%\ZettelApp`) **y todas tus notas** (la base de datos y los adjuntos de tus bóvedas). Sin marcar,
 tus notas se quedan donde están.
 

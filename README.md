@@ -24,6 +24,9 @@ Atomic notes, typed links, mind maps, flashcards, a 2D/3D knowledge graph, and l
 - **Typed, optionally directed links**: `supports:: [[Claim]]`, *contradicts*, *extends*, *example of*,
   *part of*, *cites*, or your own types. Backlinks read naturally (*Supported by*), and every type can
   have its own line style and arrow tip.
+- **Search that forgives typos**, with an optional **tag ontology** (parents, synonyms, related concepts)
+  and optional **semantic search** by a language model that runs on your computer, in any language. It
+  can learn from your feedback.
 - **Link suggestions that learn**: a Naive Bayes classifier combines semantic (LSA), keyword (TF-IDF),
   Levenshtein and Jaro-Winkler string similarity, shared tags and shared links. Accept or dismiss a
   suggestion and the model learns; hover to see *why* it was suggested.

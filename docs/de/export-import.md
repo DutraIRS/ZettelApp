@@ -19,7 +19,7 @@ eines Graphknotens.
 
 | Format | Datei | Inhalt |
 |---|---|---|
-| **ZettelApp-Archiv** | `.zip` | Alles, einschließlich Bildern: Notizen, typisierte Links, Linktypen (mit Farben, Linienstilen und Pfeilspitzen), Lernkarten und Mindmaps. Importieren Sie das Archiv auf einem beliebigen Computer wieder in ZettelApp. Am besten für Sicherungen und zum Verschieben von Tresoren. |
+| **ZettelApp-Archiv** | `.zip` | Alles, einschließlich Bildern: Notizen, typisierte Links, Linktypen (mit Farben, Linienstilen und Pfeilspitzen), Lernkarten, Mindmaps und die Tag-Ontologie. Importieren Sie das Archiv auf einem beliebigen Computer wieder in ZettelApp. Am besten für Sicherungen und zum Verschieben von Tresoren. |
 | **Markdown-Dateien** | `.zip` | Eine `.md`-Datei pro Notiz mit YAML-Frontmatter (ID, Titel, Tags, Quellenlink, Daten, typisierte Links, Mindmap) und `[[Wiki-Links]]` zwischen den Dateien. Links, die nicht im Text stehen, sind unter *Links* im Format `type:: [[Note]]` aufgeführt; manuelle Lernkarten unter *Lernkarten* im Format `Q:`/`A:`. Bilder liegen in `assets/`. Lässt sich in Obsidian und anderen Markdown-Editoren öffnen. |
 | **Website** | `.zip` | Eine eigenständige statische Website: ein Index mit Graphübersicht, ein Tagindex und eine Seite pro Notiz. Links sind in den Farben und Linienstilen ihrer Typen dargestellt; hinzu kommen Mindmaps und Lernkarten (Antworten werden per Klick eingeblendet). Keine Skripte; funktioniert offline, indem Sie `index.html` öffnen. Helle und dunkle Designs. |
 | **JSON** | `.json` | Strukturierte Daten für Skripte und andere Tools (Bilder werden referenziert, aber nicht mitgeliefert). |

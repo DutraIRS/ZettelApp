@@ -13,7 +13,10 @@ depois a letra sublinhada.
 | Inserir imagem | Ctrl+Shift+I |
 | Adicionar flashcard | Ctrl+Shift+F |
 | Alternar edição / divisão / pré-visualização | Ctrl+E |
+| Duplicar nota | Ctrl+D |
 | Mover nota para a lixeira | Ctrl+Delete |
+| Mover as notas selecionadas para a lixeira (na lista de notas) | Del |
+| Selecionar várias notas | Ctrl+clique, Shift+clique, Shift+setas |
 | Negrito / itálico | Ctrl+B / Ctrl+I |
 | Desfazer / refazer | Ctrl+Z / Ctrl+Y |
 | Completar um `[[link]]` | Digite `[[`, depois escolha um título e pressione Enter |

@@ -9,6 +9,7 @@
 | Environ 4 secondes après le démarrage (désactivable) | `https://dutrairs.github.io/ZettelApp/version.json` | Une requête HTTPS pour ce fichier, avec l’en-tête `User-Agent: ZettelApp/<version>`. Rien d’autre : ni notes, ni paramètres, ni identifiants. Les échecs sont silencieux. Consultez [Mises à jour](getting-started.md#updates). |
 | Vous posez une question dans la page **Ask** | Le fournisseur d’IA configuré (Anthropic, OpenAI, Z.ai ou votre propre adresse) | Votre question et les notes sous *Sources envoyées* |
 | Vous testez la connexion à l’IA ou actualisez la liste des modèles | Le même fournisseur | Votre clé API, pour l’authentification |
+| Vous cliquez sur **Télécharger le modèle** dans *Outils ▸ Options ▸ Recherche* et confirmez | `huggingface.co`, qui peut rediriger vers ses serveurs de téléchargement | Une requête HTTPS par fichier du modèle de recherche sémantique, avec l’en-tête `User-Agent: ZettelApp/<version>`. Rien sur vos notes. Chaque fichier est vérifié par rapport à un SHA-256 fixe avant d’être utilisé. Voir [Notes et liens](notes-and-links.md#recherche-semantique). |
 | Vous cliquez sur **Synchroniser avec Anki** | AnkiConnect sur **cet ordinateur** (`127.0.0.1`) | Les cartes mémoire du périmètre choisi |
 | Vous utilisez *Insertion ▸ Zotero Reference* ou *Tester la connexion* dans les options Zotero | Zotero sur **cet ordinateur** (`127.0.0.1`) | Les termes recherchés (lecture seule) |
 | Vous cliquez sur un lien Web, utilisez *Aide ▸ Website / Documentation / Rechercher des mises à jour* ou cliquez sur **Télécharger** dans la notification | Votre navigateur ouvre la page | Aucune donnée provenant de ZettelApp |
@@ -28,6 +29,7 @@ Les connexions locales à Anki et Zotero n’utilisent jamais de proxy et ne peu
 | Journaux | `%LOCALAPPDATA%\ZettelApp\Logs` (rotation, quelques Mo au maximum). Ils consignent les erreurs, pas vos notes, et ne contiennent jamais de clés API. |
 | Sauvegardes automatiques | `%LOCALAPPDATA%\ZettelApp\Backups` |
 | Petit cache de l’interface | `%LOCALAPPDATA%\ZettelApp\Cache` |
+| Modèle et index de la recherche sémantique, si vous la configurez | `%LOCALAPPDATA%\ZettelApp\Search`. L’index est dérivé de vos notes et n’est jamais dans le coffre : il n’est donc pas synchronisé avec lui. *Supprimer le modèle et l’index* dans *Outils ▸ Options ▸ Recherche* l’efface. |
 
 Le coffre est un dossier ordinaire : vous pouvez le copier, le sauvegarder ou le placer dans OneDrive. ZettelApp écrit dans la base de données avec une synchronisation complète, adaptée aux dossiers synchronisés. Évitez d’ouvrir le même coffre simultanément sur deux ordinateurs.
 
@@ -55,6 +57,6 @@ Les notes peuvent provenir d’importations, du Web ou de réponses d’IA. Zett
 
 ## Désinstallation
 
-Désinstallez via *Paramètres Windows ▸ Applications ▸ Applications installées ▸ ZettelApp ▸ Désinstaller*. Le programme propose l’option décochée **Supprimer aussi mes paramètres et données ZettelApp**. Si vous la cochez, elle supprime vos paramètres, les clés API enregistrées dans le Gestionnaire d’identifiants, les journaux, le cache et les sauvegardes automatiques (`%LOCALAPPDATA%\ZettelApp`), **ainsi que toutes vos notes** (bases de données et pièces jointes de vos coffres). Si elle reste décochée, vos notes restent à leur emplacement.
+Désinstallez via *Paramètres Windows ▸ Applications ▸ Applications installées ▸ ZettelApp ▸ Désinstaller*. Le programme propose l’option décochée **Supprimer aussi mes paramètres et données ZettelApp**. Si vous la cochez, elle supprime vos paramètres, les clés API enregistrées dans le Gestionnaire d’identifiants, les journaux, le cache, les sauvegardes automatiques et le modèle et l’index de la recherche sémantique (`%LOCALAPPDATA%\ZettelApp`), **ainsi que toutes vos notes** (bases de données et pièces jointes de vos coffres). Si elle reste décochée, vos notes restent à leur emplacement.
 
 Vous avez trouvé un problème de sécurité ? Signalez-le de façon confidentielle ; consultez [SECURITY.md](https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md).

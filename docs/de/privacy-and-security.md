@@ -11,6 +11,7 @@ Netzwerkanfragen kann die App stellen:
 | Etwa 4 Sekunden nach dem Start von ZettelApp (kann deaktiviert werden) | `https://dutrairs.github.io/ZettelApp/version.json` | Eine HTTPS-Anfrage für diese Datei mit dem Header `User-Agent: ZettelApp/<version>`. Sonst nichts: keine Notizen, Einstellungen oder Kennungen. Fehler bleiben unsichtbar. Siehe [Aktualisierungen](getting-started.md#updates). |
 | Sie eine Frage auf der Seite **Fragen** stellen | Den von Ihnen eingerichteten KI-Anbieter (Anthropic, OpenAI, Z.ai oder Ihren eigenen Endpunkt) | Ihre Frage und die Notizen in der Liste *Gesendete Quellen* |
 | Sie die KI-Verbindung testen oder die Modellliste aktualisieren | Denselben Anbieter | Ihren API-Schlüssel zur Authentifizierung |
+| Sie klicken unter *Extras ▸ Optionen ▸ Suche* auf **Modell herunterladen** und bestätigen | `huggingface.co`, das auf seine Download-Server weiterleiten kann | Eine HTTPS-Anfrage pro Datei des Modells für die semantische Suche, mit dem Header `User-Agent: ZettelApp/<version>`. Nichts über Ihre Notizen. Jede Datei wird vor der Verwendung anhand eines festen SHA-256 geprüft. Siehe [Notizen und Links](notes-and-links.md#semantische-suche). |
 | Sie **Mit Anki synchronisieren** verwenden | AnkiConnect auf **diesem Computer** (`127.0.0.1`) | Die Lernkarten im ausgewählten Bereich |
 | Sie **Einfügen ▸ Zotero-Referenz** oder *Verbindung testen* in den Zotero-Optionen verwenden | Zotero auf **diesem Computer** (`127.0.0.1`) | Ihre Suchbegriffe (nur lesender Zugriff) |
 | Sie auf einen Weblink klicken oder *Hilfe ▸ Website / Dokumentation / Nach Aktualisierungen suchen* oder auf **Herunterladen** im Aktualisierungshinweis klicken | Ihr Webbrowser öffnet die Seite | Nichts von ZettelApp |
@@ -33,6 +34,7 @@ weggeleitet werden. Der MCP-Server stellt überhaupt keine Netzwerkanfragen.
 | Protokolle | `%LOCALAPPDATA%\ZettelApp\Logs` (rotierte Protokolle, höchstens einige MB). Sie enthalten Fehler, aber keine Notizen und niemals API-Schlüssel. |
 | Automatische Sicherungen | `%LOCALAPPDATA%\ZettelApp\Backups` |
 | Kleiner UI-Cache | `%LOCALAPPDATA%\ZettelApp\Cache` |
+| Modell und Index der semantischen Suche, falls Sie sie einrichten | `%LOCALAPPDATA%\ZettelApp\Search`. Der Index wird aus Ihren Notizen abgeleitet und liegt nie im Tresor, wird also nicht mit ihm synchronisiert. *Modell und Index entfernen* unter *Extras ▸ Optionen ▸ Suche* löscht ihn. |
 
 Der Tresor ist ein gewöhnlicher Ordner: Sie können ihn kopieren, sichern oder in OneDrive aufbewahren.
 ZettelApp schreibt die Datenbank mit vollständiger Synchronisierung, einer Einstellung für synchronisierte
@@ -66,7 +68,7 @@ nicht vertrauenswürdig:
 Deinstallieren Sie ZettelApp unter *Windows-Einstellungen ▸ Apps ▸ Installierte Apps ▸ ZettelApp ▸
 Deinstallieren*. Das Deinstallationsprogramm bietet die standardmäßig deaktivierte Option **Auch meine
 ZettelApp-Einstellungen und -Daten löschen**. Wenn Sie sie aktivieren, werden Ihre Einstellungen, die im
-Anmeldeinformations-Manager gespeicherten API-Schlüssel, Protokolle, der Cache und automatische Sicherungen
+Anmeldeinformations-Manager gespeicherten API-Schlüssel, Protokolle, der Cache, automatische Sicherungen sowie Modell und Index der semantischen Suche
 (`%LOCALAPPDATA%\ZettelApp`) **sowie alle Ihre Notizen** (die Datenbank und Anhänge Ihrer Tresore) entfernt.
 Wenn Sie die Option nicht aktivieren, bleiben Ihre Notizen an ihrem Speicherort.
 

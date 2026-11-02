@@ -15,7 +15,7 @@ tiene, y cada línea es un enlace.
 | **2D / 3D** | Cambia entre una disposición plana que se puede arrastrar y una vista 3D que puedes orbitar. |
 | **Colorear por** | Etiquetas, *Grupos: k-means*, *Grupos: jerárquico*, o nada. |
 | **k** | Número de grupos. *k automático* lo elige por ti (ver más abajo). |
-| **Agrupar** | Junta las notas del mismo grupo y sombrea el área de cada grupo. |
+| **Agrupar** | Junta las notas del mismo grupo y sombrea el área de cada grupo. En 2D, haz clic en un área para seleccionarla y arrástrala para mover todas sus notas. |
 | **Etiquetas** | Muestra los títulos de las notas. En grafos grandes, solo se rotulan las notas mejor conectadas hasta que pasas el cursor. |
 | **Tipos de enlace** | Oculta o muestra tipos de enlace individuales. |
 | **Buscar en el grafo** | Escribe parte de un título y pulsa Enter para saltar a la nota. |

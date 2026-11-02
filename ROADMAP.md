@@ -69,8 +69,8 @@ is open on two machines.
 
 ## 6. More ideas
 
-- **Local embedding models** for semantic similarity and *Ask your notes*, fully offline (for example
-  through Ollama or ONNX Runtime). They would be optional additions alongside LSA.
+- **More uses for the local language model** that semantic search can download: link suggestions and
+  *Ask your notes*, fully offline. They would be optional additions alongside LSA.
 - **Import PDF annotations** from Zotero into literature notes.
 - **Zotero group libraries** in the reference search.
 - **Plugins**: a small extension API for custom link-suggestion features, exporters and importers.

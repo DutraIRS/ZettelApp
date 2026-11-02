@@ -13,7 +13,10 @@ Tastenzugriffstasten: Drücken Sie **Alt** und danach den unterstrichenen Buchst
 | Bild einfügen | Ctrl+Shift+I |
 | Lernkarte hinzufügen | Ctrl+Shift+F |
 | Bearbeiten / Geteilte Ansicht / Vorschau umschalten | Ctrl+E |
+| Notiz duplizieren | Ctrl+D |
 | Notiz in den Papierkorb verschieben | Ctrl+Delete |
+| Ausgewählte Notizen in den Papierkorb verschieben (in der Notizliste) | Del |
+| Mehrere Notizen auswählen | Ctrl+Klick, Shift+Klick, Shift+Pfeiltasten |
 | Fett / kursiv | Ctrl+B / Ctrl+I |
 | Rückgängig / Wiederholen | Ctrl+Z / Ctrl+Y |
 | Einen `[[Link]]` vervollständigen | `[[` eingeben, einen Titel auswählen und Enter drücken |

@@ -18,7 +18,7 @@ exporta las notas en pantalla) y desde el menú de un nodo del grafo.
 
 | Formato | Archivo | Contenido |
 |---|---|---|
-| **Archivo de ZettelApp** | `.zip` | Todo, incluidas las imágenes: notas, enlaces con tipo, tipos de enlace (con sus colores, estilos de línea y puntas de flecha), tarjetas, mapas mentales. Vuelve a importarlo en ZettelApp en cualquier equipo. Lo mejor para copias de seguridad y para mover bóvedas. |
+| **Archivo de ZettelApp** | `.zip` | Todo, incluidas las imágenes: notas, enlaces con tipo, tipos de enlace (con sus colores, estilos de línea y puntas de flecha), tarjetas, mapas mentales, la ontología de etiquetas. Vuelve a importarlo en ZettelApp en cualquier equipo. Lo mejor para copias de seguridad y para mover bóvedas. |
 | **Archivos Markdown** | `.zip` | Un archivo `.md` por nota con front matter YAML (id, título, etiquetas, enlace de la fuente, fechas, enlaces con tipo, mapa mental) y `[[enlaces wiki]]` entre archivos. Los enlaces no escritos en el texto se listan bajo *Links* como `type:: [[Nota]]`, y las tarjetas manuales bajo *Flashcards* como `Q:`/`A:`. Las imágenes están en `assets/`. Se abre en Obsidian y otros editores Markdown. |
 | **Sitio web** | `.zip` | Un sitio web estático autónomo: un índice con una vista general del grafo, un índice de etiquetas y una página por nota, con enlaces dibujados con los colores y estilos de línea de sus tipos de enlace, mapas mentales y tarjetas (respuestas reveladas al hacer clic). Sin scripts; funciona sin conexión abriendo `index.html`. Temas claro y oscuro. |
 | **JSON** | `.json` | Datos estructurados para scripts y otras herramientas (las imágenes se referencian, no se incluyen). |

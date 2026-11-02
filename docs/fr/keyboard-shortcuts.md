@@ -12,7 +12,10 @@
 | Insérer une image | Ctrl+Shift+I |
 | Ajouter une carte mémoire | Ctrl+Shift+F |
 | Basculer entre édition / vue partagée / aperçu | Ctrl+E |
+| Dupliquer la note | Ctrl+D |
 | Déplacer la note dans la Corbeille | Ctrl+Delete |
+| Mettre les notes sélectionnées à la Corbeille (dans la liste des notes) | Del |
+| Sélectionner plusieurs notes | Ctrl+clic, Shift+clic, Shift+flèches |
 | Gras / italique | Ctrl+B / Ctrl+I |
 | Annuler / rétablir | Ctrl+Z / Ctrl+Y |
 | Compléter un `[[lien]]` | Saisissez `[[`, choisissez un titre, puis appuyez sur Entrée |

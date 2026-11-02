@@ -15,7 +15,7 @@ ha, e ogni linea è un collegamento.
 | **2D / 3D** | Passa da una disposizione piatta e trascinabile a una vista 3D intorno a cui puoi orbitare. |
 | **Colora per** | Tag, *Cluster: k-means*, *Cluster: gerarchico*, oppure nulla. |
 | **k** | Numero di cluster. *k automatico* lo sceglie per te (vedi sotto). |
-| **Raggruppa** | Avvicina le note dello stesso gruppo e ombreggia l'area di ciascun gruppo. |
+| **Raggruppa** | Avvicina le note dello stesso gruppo e ombreggia l'area di ciascun gruppo. In 2D, fai clic su un'area per selezionarla e trascinala per spostare tutte le sue note. |
 | **Etichette** | Mostra i titoli delle note. Nei grafi grandi, solo le note meglio collegate sono etichettate finché non ci passi sopra con il mouse. |
 | **Tipi di collegamento** | Nascondi o mostra i singoli tipi di collegamento. |
 | **Trova nel grafo** | Scrivi parte di un titolo e premi Enter per saltare alla nota. |

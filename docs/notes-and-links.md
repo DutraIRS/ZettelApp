@@ -128,12 +128,29 @@ nothing is lost. Built-in types can be renamed and restyled but not removed.
 Add tags in the tag field under the title (press Enter after each), or write them **in the text** with a
 hash sign, like `#welcome` or `#math/algebra`. Tags are lower-case and may be nested with a slash, such as
 `math/algebra`. Filtering by `math` also finds notes tagged `math/algebra`.
-Use the tag filter above the note list, or type `tag:name` in the search box.
+Use the tag filter above the note list, or type `tag:name` in the search box. The number beside each tag
+counts the notes that filter shows.
 
 Tags written in the text are real tags, shown as **outlined chips** next to the *Add tag* box. They
 disappear when you delete the `#tag` from the text. A `#tag` is ignored inside code, inside link targets
 and in `[[#headings]]`. Tags typed in the *Add tag* box are separate: they stay until you remove them with
 their ✕. Ctrl+click a `#tag` in the editor to list the notes that have it.
+
+### Tag ontology
+
+You can also say how tags relate to each other, without renaming them. Open *Tools ▸ Tag Ontology…*, or
+the small button beside the tag filter, and add relationships:
+
+| Relationship | Example | A filter on the first tag also finds… |
+|---|---|---|
+| **Parent → child** | `statistics` is the parent of `bayes` | notes tagged `bayes`, and its children in turn. A tag can have several parents. |
+| **Synonym / alias** | `ml` is a synonym of `machine-learning` | notes with either tag, whichever you filter by. |
+| **Related concept** | `memory` is related to `sleep` | nothing more, until you tick *Also find notes with related tags* in the small button's menu. |
+
+A tag in a relationship doesn't have to be on any note, so `statistics` can exist just to gather other
+tags. Relationships only change what filters and searches find: your notes and their tags stay as they
+are. Double-click a relationship to see its first tag's notes. ZettelApp archives carry the ontology, and
+MCP clients can read it.
 
 ## Source link
 
@@ -219,10 +236,50 @@ the note. Cards from the text are marked *from note text* and are edited in the 
 
 ## Search
 
-The search box (Ctrl+F) uses full-text search over titles, text and tags, ignores accents, and matches
-word prefixes, so `forget` finds *forgetting*. Add `tag:name` to filter by tag, for example
-`memory tag:psychology`. Results are ordered by relevance; without a query, notes follow the chosen sort
-order (*Last edited*, *Created*, *Title* or *Most linked*).
+The search box (Ctrl+F) looks through titles, text and tags, ignores accents, and matches word prefixes,
+so `forget` finds *forgetting*. Add `tag:name` to keep only the notes with a tag, for example
+`memory tag:psychology`. The best matches come first and each one shows the part of the note around your
+word; without a query, notes follow the chosen sort order (*Last edited*, *Created*, *Title* or *Most
+linked*).
+
+Several kinds of match work together, and *Tools ▸ Options ▸ Search* sets how much each one counts:
+
+- **Full text**: your words anywhere in the note.
+- **Fuzzy**: small typos in titles and tags, so `quantom` finds *Quantum*.
+- **Tags and ontology**: a word that names a tag finds that tag's notes, plus those of its children and
+  synonyms.
+- **Semantic** (optional): notes that mean something similar, as below.
+
+### Semantic search
+
+Semantic search finds notes by what they mean, even when they share no words with your search:
+*how do plants make food* can find a note on photosynthesis, and it works across languages. It stays off
+until you set it up:
+
+1. In *Tools ▸ Options ▸ Search*, click **Download model** (135 MB, once, from Hugging Face).
+2. Tick **Use semantic search** and click **OK**.
+
+ZettelApp then indexes your notes in the background, and keeps up as you edit them. Results from the words
+you typed appear at once; notes found by meaning join them a moment later. The model runs on your computer
+and your notes never leave it. While in use it takes about 500 MB of memory, which is freed two minutes
+after your last search. **Remove model and index** on the same page deletes all of it.
+
+### Better results from your feedback
+
+Tick **Improve ranking from my explicit feedback** in *Tools ▸ Options ▸ Search*, then right-click a search
+result and choose **Relevant result** or **Not a relevant result**. The kinds of match behind the results
+you mark count for more or less from then on. Only those clicks are used. ZettelApp keeps a running total
+per kind of match, on this computer, and nothing about which notes you marked or what you searched for.
+**Reset learned preferences** forgets it all.
+
+## Selecting several notes
+
+In the note list, Ctrl+click, Shift+click or Shift+arrows select several notes. Right-click the selection
+to duplicate them or move them to the Trash (in the Trash, to restore or delete them), or press Delete to
+move them to the Trash.
+
+*Edit ▸ Duplicate Note* (Ctrl+D) copies a note: its text, tags, source link, picture, mind map, the links it
+makes and the flashcards you wrote by hand. Links to it, its alarm and its review history aren't copied.
 
 ## Trash
 
