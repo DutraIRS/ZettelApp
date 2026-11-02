@@ -265,8 +265,9 @@ in the Trash, and links to or from them, are never returned.</p>
 <h3 id="search_notes"><code>search_notes</code></h3>
 <p><strong>Search notes.</strong> Full-text search over note titles, text and tags. Words match the start of words
 (<code>forget</code> finds <em>forgetting</em>), accents are ignored, and results come in order of relevance: matches in
-titles count most, then tags, then text. <code>tag:name</code> keeps only notes with that tag or a tag nested under
-it (<code>tag:math</code> also finds <code>math/algebra</code>). A query with no words, such as an empty one, lists notes by
+titles count most, then tags, then text. <code>tag:name</code> keeps only notes with that tag, a tag nested under
+it (<code>tag:math</code> also finds <code>math/algebra</code>), or one the vault's tag ontology covers: its children and
+synonyms, whatever their names. A query with no words, such as an empty one, lists notes by
 when they were last edited, newest first.</p>
 <div class="table-wrap"><table>
 <thead>
@@ -341,10 +342,16 @@ outgoing <em>supports</em> link reads <em>Supports</em>, an incoming one <em>Sup
 appear as <code>[[id|text]]</code>.</li>
 </ul>
 <h3 id="list_tags"><code>list_tags</code></h3>
-<p><strong>List tags.</strong> Every tag in the vault, in alphabetical order, with the number of notes that use it. No
-arguments.</p>
-<p>Result: <code>tags</code>, a list of <code>{&quot;tag&quot;: &quot;learning&quot;, &quot;count&quot;: 3}</code> entries. Nested tags such as <code>math/algebra</code>
-are listed as they are; their notes aren't added to the parent's count.</p>
+<p><strong>List tags.</strong> Every tag in the vault, in alphabetical order, with the number of notes that use it, and
+the vault's tag ontology. No arguments.</p>
+<p>Result:</p>
+<ul>
+<li><code>tags</code>: a list of <code>{&quot;tag&quot;: &quot;learning&quot;, &quot;count&quot;: 3}</code> entries. Nested tags such as <code>math/algebra</code> are
+listed as they are; their notes aren't added to the parent's count.</li>
+<li><code>relationships</code>: a list of <code>{&quot;source&quot;: &quot;math&quot;, &quot;target&quot;: &quot;algebra&quot;, &quot;type&quot;: &quot;parent&quot;}</code> entries. <code>type</code>
+is <code>parent</code> (<code>source</code> is the parent of <code>target</code>), <code>synonym</code> or <code>related</code>; the last two have no
+direction. A name here may not be used on any note.</li>
+</ul>
 <h3 id="get_subgraph"><code>get_subgraph</code></h3>
 <p><strong>Explore connections.</strong> The notes within a number of links of a note, following links in both
 directions, and the links between them.</p>

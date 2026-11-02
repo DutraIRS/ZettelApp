@@ -161,12 +161,45 @@ gestaltet, aber nicht entfernt werden.</p>
 <strong>im Text</strong> mit einem Rautezeichen, etwa <code>#welcome</code> oder <code>#math/algebra</code>. Tags werden kleingeschrieben und
 können mit einem Schrägstrich verschachtelt werden, zum Beispiel <code>math/algebra</code>. Eine Suche nach <code>math</code>
 findet auch Notizen mit dem Tag <code>math/algebra</code>.
-Verwenden Sie den Tagfilter über der Notizliste oder geben Sie <code>tag:name</code> in das Suchfeld ein.</p>
+Verwenden Sie den Tagfilter über der Notizliste oder geben Sie <code>tag:name</code> in das Suchfeld ein. Die Zahl neben jedem Tag gibt an, wie viele Notizen dieser Filter zeigt.</p>
 <p>Im Text geschriebene Tags sind echte Tags und erscheinen als <strong>umrandete Chips</strong> neben dem Feld <em>Tag
 hinzufügen</em>. Wenn Sie <code>#tag</code> aus dem Text löschen, verschwinden sie. Ein <code>#tag</code> wird innerhalb von Code,
 in Linkzielen und in <code>[[#headings]]</code> ignoriert. Tags aus dem Feld <em>Tag hinzufügen</em> sind davon unabhängig:
 Sie bleiben erhalten, bis Sie sie mit ✕ entfernen. Mit Ctrl+Klick auf ein <code>#tag</code> im Editor listen Sie die
 Notizen mit diesem Tag auf.</p>
+<h3 id="tag-ontologie">Tag-Ontologie</h3>
+<p>Sie können auch festlegen, wie Tags zueinander stehen, ohne sie umzubenennen. Öffnen Sie <em>Extras ▸ Tag-Ontologie…</em>
+oder die kleine Schaltfläche neben dem Tagfilter und fügen Sie Beziehungen hinzu:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Beziehung</th>
+<th>Beispiel</th>
+<th>Ein Filter auf den ersten Tag findet auch …</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Übergeordnet → untergeordnet</strong></td>
+<td><code>statistik</code> ist <code>bayes</code> übergeordnet</td>
+<td>Notizen mit <code>bayes</code> und wiederum mit dessen untergeordneten Tags. Ein Tag kann mehrere übergeordnete Tags haben.</td>
+</tr>
+<tr>
+<td><strong>Synonym / Alias</strong></td>
+<td><code>ml</code> ist ein Synonym von <code>maschinelles-lernen</code></td>
+<td>Notizen mit einem der beiden Tags, egal nach welchem Sie filtern.</td>
+</tr>
+<tr>
+<td><strong>Verwandtes Konzept</strong></td>
+<td><code>gedächtnis</code> ist verwandt mit <code>schlaf</code></td>
+<td>nichts weiter, bis Sie im Menü der kleinen Schaltfläche <em>Auch Notizen mit verwandten Tags finden</em> aktivieren.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Ein Tag in einer Beziehung muss an keiner Notiz hängen, <code>statistik</code> kann also nur dazu dienen, andere Tags zu
+bündeln. Beziehungen ändern nur, was Filter und Suchen finden: Ihre Notizen und deren Tags bleiben, wie sie sind.
+Doppelklicken Sie auf eine Beziehung, um die Notizen ihres ersten Tags zu sehen. ZettelApp-Archive enthalten die
+Ontologie, und MCP-Clients können sie lesen.</p>
 <h2 id="quellenlink">Quellenlink</h2>
 <p>Das Feld mit dem Globussymbol enthält die <strong>Quelle</strong> der Notiz: eine Webseite (<code>https://…</code>), eine
 E-Mail-Adresse oder einen Zotero-Eintrag (<code>zotero://select/library/items/…</code>). Die Schaltfläche daneben
@@ -260,10 +293,46 @@ zeigt einen Hinweis statt <code>[…]</code>.</p>
 die nicht in der Notiz erscheinen sollen. Karten aus dem Text sind mit <em>aus Notiztext</em> gekennzeichnet und
 werden im Text bearbeitet.</p>
 <h2 id="suche">Suche</h2>
-<p>Das Suchfeld (Ctrl+F) durchsucht Titel, Text und Tags im Volltext, ignoriert Akzente und findet
-Wortanfänge: <code>forget</code> findet also <em>forgetting</em>. Mit <code>tag:name</code> filtern Sie nach Tags, zum Beispiel
-<code>memory tag:psychology</code>. Ergebnisse werden nach Relevanz sortiert; ohne Suchbegriff folgen die Notizen der
-ausgewählten Sortierung (<em>Zuletzt bearbeitet</em>, <em>Erstellt</em>, <em>Titel</em> oder <em>Am stärksten verknüpft</em>).</p>
+<p>Das Suchfeld (Ctrl+F) durchsucht Titel, Text und Tags, ignoriert Akzente und findet Wortanfänge: <code>forget</code> findet
+also <em>forgetting</em>. Mit <code>tag:name</code> behalten Sie nur Notizen mit diesem Tag, zum Beispiel <code>memory tag:psychology</code>.
+Die besten Treffer stehen oben, und jeder zeigt die Stelle der Notiz rund um Ihr Wort; ohne Suchbegriff folgen
+die Notizen der ausgewählten Sortierung (<em>Zuletzt bearbeitet</em>, <em>Erstellt</em>, <em>Titel</em> oder <em>Am stärksten verknüpft</em>).</p>
+<p>Mehrere Arten von Treffern arbeiten zusammen, und unter <em>Extras ▸ Optionen ▸ Suche</em> legen Sie fest, wie viel jede zählt:</p>
+<ul>
+<li><strong>Volltext</strong>: Ihre Wörter irgendwo in der Notiz.</li>
+<li><strong>Unscharf</strong>: kleine Tippfehler in Titeln und Tags, sodass <code>quantom</code> <em>Quantum</em> findet.</li>
+<li><strong>Tags und Ontologie</strong>: Ein Wort, das einen Tag benennt, findet dessen Notizen sowie die seiner untergeordneten
+Tags und Synonyme.</li>
+<li><strong>Semantisch</strong> (optional): Notizen mit ähnlicher Bedeutung, wie unten beschrieben.</li>
+</ul>
+<h3 id="semantische-suche">Semantische Suche</h3>
+<p>Die semantische Suche findet Notizen nach ihrer Bedeutung, auch wenn sie kein Wort mit Ihrer Suche gemeinsam
+haben: <em>wie ernähren sich Pflanzen</em> kann eine Notiz über Photosynthese finden, und das funktioniert auch
+sprachübergreifend. Sie bleibt aus, bis Sie sie einrichten:</p>
+<ol>
+<li>Klicken Sie unter <em>Extras ▸ Optionen ▸ Suche</em> auf <strong>Modell herunterladen</strong> (135 MB, einmalig, von Hugging Face).</li>
+<li>Aktivieren Sie <strong>Semantische Suche verwenden</strong> und bestätigen Sie.</li>
+</ol>
+<p>ZettelApp indiziert Ihre Notizen dann im Hintergrund und hält beim Bearbeiten Schritt. Ergebnisse zu den
+eingegebenen Wörtern erscheinen sofort; nach Bedeutung gefundene Notizen kommen einen Moment später hinzu. Das
+Modell läuft auf Ihrem Computer, und Ihre Notizen verlassen ihn nie. Während der Nutzung belegt es etwa 500 MB
+Arbeitsspeicher, die zwei Minuten nach Ihrer letzten Suche wieder frei werden. <strong>Modell und Index entfernen</strong> auf
+derselben Seite löscht alles.</p>
+<h3 id="bessere-ergebnisse-durch-ihr-feedback">Bessere Ergebnisse durch Ihr Feedback</h3>
+<p>Aktivieren Sie <strong>Ranking anhand meines expliziten Feedbacks verbessern</strong> unter <em>Extras ▸ Optionen ▸ Suche</em>, klicken
+Sie dann mit der rechten Maustaste auf ein Suchergebnis und wählen Sie <strong>Relevantes Ergebnis</strong> oder <strong>Kein
+relevantes Ergebnis</strong>. Die Trefferarten hinter den markierten Ergebnissen zählen danach mehr oder weniger. Nur
+diese Klicks werden verwendet. ZettelApp speichert pro Trefferart eine laufende Summe auf diesem Computer und
+nichts darüber, welche Notizen Sie markiert oder wonach Sie gesucht haben. <strong>Gelernte Einstellungen zurücksetzen</strong>
+vergisst alles.</p>
+<h2 id="mehrere-notizen-auswahlen">Mehrere Notizen auswählen</h2>
+<p>In der Notizliste wählen Sie mit Ctrl+Klick, Shift+Klick oder Shift+Pfeiltasten mehrere Notizen aus. Klicken Sie
+mit der rechten Maustaste auf die Auswahl, um sie zu duplizieren oder in den Papierkorb zu verschieben (im
+Papierkorb, um sie wiederherzustellen oder zu löschen), oder drücken Sie Del, um sie in den Papierkorb zu
+verschieben.</p>
+<p><em>Bearbeiten ▸ Notiz duplizieren</em> (Ctrl+D) kopiert eine Notiz: Text, Tags, Quellenlink, Bild, Mindmap, die von ihr
+ausgehenden Links und die von Hand geschriebenen Lernkarten. Links auf sie, ihr Alarm und ihr Wiederholungsverlauf
+werden nicht kopiert.</p>
 <h2 id="papierkorb">Papierkorb</h2>
 <p><em>In den Papierkorb verschieben</em> (Ctrl+Delete) blendet eine Notiz aus, ohne sie zu löschen. Sofort erscheint
 eine Schaltfläche zum Rückgängigmachen. Über die Schaltfläche <strong>Papierkorb</strong> unter der Notizliste sehen Sie

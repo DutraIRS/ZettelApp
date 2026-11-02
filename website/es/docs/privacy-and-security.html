@@ -28,6 +28,11 @@ que puede hacer:</p>
 <td>Tu clave de API, para autenticarte</td>
 </tr>
 <tr>
+<td>Pulsas <strong>Descargar el modelo</strong> en <em>Herramientas ▸ Opciones ▸ Búsqueda</em> y confirmas</td>
+<td><code>huggingface.co</code>, que puede redirigir a sus servidores de descarga</td>
+<td>Una solicitud HTTPS por cada archivo del modelo de búsqueda semántica, con la cabecera <code>User-Agent: ZettelApp/&lt;version&gt;</code>. Nada sobre tus notas. Cada archivo se comprueba con un SHA-256 fijo antes de usarlo. Consulta <a href="notes-and-links.html#busqueda-semantica">Notas y enlaces</a>.</td>
+</tr>
+<tr>
 <td><strong>Sincronizas con Anki</strong></td>
 <td>AnkiConnect en <strong>este equipo</strong> (<code>127.0.0.1</code>)</td>
 <td>Las tarjetas del alcance elegido</td>
@@ -85,6 +90,10 @@ El servidor MCP no hace ninguna solicitud de red.</p>
 <td>Pequeña caché de la interfaz</td>
 <td><code>%LOCALAPPDATA%\ZettelApp\Cache</code></td>
 </tr>
+<tr>
+<td>Modelo e índice de la búsqueda semántica, si la configuras</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Search</code>. El índice se deriva de tus notas y nunca está en la bóveda, así que no se sincroniza con ella. <em>Eliminar modelo e índice</em> en <em>Herramientas ▸ Opciones ▸ Búsqueda</em> lo borra.</td>
+</tr>
 </tbody>
 </table></div>
 <p>La bóveda es una carpeta normal: puedes copiarla, respaldarla o mantenerla en OneDrive. ZettelApp escribe la
@@ -138,7 +147,7 @@ estándar sin puerto de red. Consulta <a href="mcp-server.html">Servidor MCP</a>
 <h2 id="desinstalacion">Desinstalación</h2>
 <p>Desinstala desde <em>Configuración de Windows ▸ Aplicaciones ▸ Aplicaciones instaladas ▸ ZettelApp ▸ Desinstalar</em>. El desinstalador ofrece
 una opción sin marcar, <strong>Eliminar también mi configuración y mis datos de ZettelApp</strong>. Si la marcas, elimina tu
-configuración, las claves de API guardadas en el Administrador de credenciales, los registros, la caché y las copias de seguridad automáticas
+configuración, las claves de API guardadas en el Administrador de credenciales, los registros, la caché, las copias de seguridad automáticas y el modelo e índice de la búsqueda semántica
 (<code>%LOCALAPPDATA%\ZettelApp</code>) <strong>y todas tus notas</strong> (la base de datos y los adjuntos de tus bóvedas). Sin marcar,
 tus notas se quedan donde están.</p>
 <p>¿Encontraste un problema de seguridad? Infórmalo de forma privada; consulta

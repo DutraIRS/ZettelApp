@@ -159,11 +159,45 @@ nothing is lost. Built-in types can be renamed and restyled but not removed.</p>
 <p>Add tags in the tag field under the title (press Enter after each), or write them <strong>in the text</strong> with a
 hash sign, like <code>#welcome</code> or <code>#math/algebra</code>. Tags are lower-case and may be nested with a slash, such as
 <code>math/algebra</code>. Filtering by <code>math</code> also finds notes tagged <code>math/algebra</code>.
-Use the tag filter above the note list, or type <code>tag:name</code> in the search box.</p>
+Use the tag filter above the note list, or type <code>tag:name</code> in the search box. The number beside each tag
+counts the notes that filter shows.</p>
 <p>Tags written in the text are real tags, shown as <strong>outlined chips</strong> next to the <em>Add tag</em> box. They
 disappear when you delete the <code>#tag</code> from the text. A <code>#tag</code> is ignored inside code, inside link targets
 and in <code>[[#headings]]</code>. Tags typed in the <em>Add tag</em> box are separate: they stay until you remove them with
 their ✕. Ctrl+click a <code>#tag</code> in the editor to list the notes that have it.</p>
+<h3 id="tag-ontology">Tag ontology</h3>
+<p>You can also say how tags relate to each other, without renaming them. Open <em>Tools ▸ Tag Ontology…</em>, or
+the small button beside the tag filter, and add relationships:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Relationship</th>
+<th>Example</th>
+<th>A filter on the first tag also finds…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Parent → child</strong></td>
+<td><code>statistics</code> is the parent of <code>bayes</code></td>
+<td>notes tagged <code>bayes</code>, and its children in turn. A tag can have several parents.</td>
+</tr>
+<tr>
+<td><strong>Synonym / alias</strong></td>
+<td><code>ml</code> is a synonym of <code>machine-learning</code></td>
+<td>notes with either tag, whichever you filter by.</td>
+</tr>
+<tr>
+<td><strong>Related concept</strong></td>
+<td><code>memory</code> is related to <code>sleep</code></td>
+<td>nothing more, until you tick <em>Also find notes with related tags</em> in the small button's menu.</td>
+</tr>
+</tbody>
+</table></div>
+<p>A tag in a relationship doesn't have to be on any note, so <code>statistics</code> can exist just to gather other
+tags. Relationships only change what filters and searches find: your notes and their tags stay as they
+are. Double-click a relationship to see its first tag's notes. ZettelApp archives carry the ontology, and
+MCP clients can read it.</p>
 <h2 id="source-link">Source link</h2>
 <p>The field with the globe icon holds the note's <strong>source</strong>: a web page (<code>https://…</code>), an e-mail address,
 or a Zotero item (<code>zotero://select/library/items/…</code>). The button next to it opens the link. Other kinds of
@@ -248,10 +282,43 @@ A: Hermann Ebbinghaus
 <p><strong>In the Flashcards tab.</strong> Use <em>Insert ▸ Flashcard…</em> (Ctrl+Shift+F) for cards that shouldn't appear in
 the note. Cards from the text are marked <em>from note text</em> and are edited in the text.</p>
 <h2 id="search">Search</h2>
-<p>The search box (Ctrl+F) uses full-text search over titles, text and tags, ignores accents, and matches
-word prefixes, so <code>forget</code> finds <em>forgetting</em>. Add <code>tag:name</code> to filter by tag, for example
-<code>memory tag:psychology</code>. Results are ordered by relevance; without a query, notes follow the chosen sort
-order (<em>Last edited</em>, <em>Created</em>, <em>Title</em> or <em>Most linked</em>).</p>
+<p>The search box (Ctrl+F) looks through titles, text and tags, ignores accents, and matches word prefixes,
+so <code>forget</code> finds <em>forgetting</em>. Add <code>tag:name</code> to keep only the notes with a tag, for example
+<code>memory tag:psychology</code>. The best matches come first and each one shows the part of the note around your
+word; without a query, notes follow the chosen sort order (<em>Last edited</em>, <em>Created</em>, <em>Title</em> or <em>Most
+linked</em>).</p>
+<p>Several kinds of match work together, and <em>Tools ▸ Options ▸ Search</em> sets how much each one counts:</p>
+<ul>
+<li><strong>Full text</strong>: your words anywhere in the note.</li>
+<li><strong>Fuzzy</strong>: small typos in titles and tags, so <code>quantom</code> finds <em>Quantum</em>.</li>
+<li><strong>Tags and ontology</strong>: a word that names a tag finds that tag's notes, plus those of its children and
+synonyms.</li>
+<li><strong>Semantic</strong> (optional): notes that mean something similar, as below.</li>
+</ul>
+<h3 id="semantic-search">Semantic search</h3>
+<p>Semantic search finds notes by what they mean, even when they share no words with your search:
+<em>how do plants make food</em> can find a note on photosynthesis, and it works across languages. It stays off
+until you set it up:</p>
+<ol>
+<li>In <em>Tools ▸ Options ▸ Search</em>, click <strong>Download model</strong> (135 MB, once, from Hugging Face).</li>
+<li>Tick <strong>Use semantic search</strong> and click <strong>OK</strong>.</li>
+</ol>
+<p>ZettelApp then indexes your notes in the background, and keeps up as you edit them. Results from the words
+you typed appear at once; notes found by meaning join them a moment later. The model runs on your computer
+and your notes never leave it. While in use it takes about 500 MB of memory, which is freed two minutes
+after your last search. <strong>Remove model and index</strong> on the same page deletes all of it.</p>
+<h3 id="better-results-from-your-feedback">Better results from your feedback</h3>
+<p>Tick <strong>Improve ranking from my explicit feedback</strong> in <em>Tools ▸ Options ▸ Search</em>, then right-click a search
+result and choose <strong>Relevant result</strong> or <strong>Not a relevant result</strong>. The kinds of match behind the results
+you mark count for more or less from then on. Only those clicks are used. ZettelApp keeps a running total
+per kind of match, on this computer, and nothing about which notes you marked or what you searched for.
+<strong>Reset learned preferences</strong> forgets it all.</p>
+<h2 id="selecting-several-notes">Selecting several notes</h2>
+<p>In the note list, Ctrl+click, Shift+click or Shift+arrows select several notes. Right-click the selection
+to duplicate them or move them to the Trash (in the Trash, to restore or delete them), or press Delete to
+move them to the Trash.</p>
+<p><em>Edit ▸ Duplicate Note</em> (Ctrl+D) copies a note: its text, tags, source link, picture, mind map, the links it
+makes and the flashcards you wrote by hand. Links to it, its alarm and its review history aren't copied.</p>
 <h2 id="trash">Trash</h2>
 <p><em>Move to Trash</em> (Ctrl+Delete) hides a note without deleting it. An undo button appears right away, and
 the <strong>Trash</strong> button under the note list shows trashed notes: right-click to <strong>Restore</strong> or <strong>Delete

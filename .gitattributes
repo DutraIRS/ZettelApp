@@ -1,2 +1,5 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Written by tools/build_site.py, with LF on every system.
+website/** text eol=lf

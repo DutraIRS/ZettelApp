@@ -28,6 +28,11 @@ requests it can make:</p>
 <td>Your API key, to authenticate</td>
 </tr>
 <tr>
+<td>You click <strong>Download model</strong> in <em>Tools ▸ Options ▸ Search</em> and confirm</td>
+<td><code>huggingface.co</code>, which may redirect to its download servers</td>
+<td>One HTTPS request per file of the semantic search model, with the header <code>User-Agent: ZettelApp/&lt;version&gt;</code>. Nothing about your notes. Each file is checked against a fixed SHA-256 before it is used. See <a href="notes-and-links.html#semantic-search">Semantic search</a>.</td>
+</tr>
+<tr>
 <td>You <strong>Sync to Anki</strong></td>
 <td>AnkiConnect on <strong>this computer</strong> (<code>127.0.0.1</code>)</td>
 <td>The flashcards in the chosen scope</td>
@@ -85,6 +90,10 @@ The MCP server makes no network requests at all.</p>
 <td>Small UI cache</td>
 <td><code>%LOCALAPPDATA%\ZettelApp\Cache</code></td>
 </tr>
+<tr>
+<td>Semantic search model and index, if you set it up</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Search</code>. The index is derived from your notes and is never in the vault, so it isn't synced with it. <em>Remove model and index</em> in <em>Tools ▸ Options ▸ Search</em> deletes it.</td>
+</tr>
 </tbody>
 </table></div>
 <p>The vault is an ordinary folder: you can copy it, back it up or keep it in OneDrive. ZettelApp writes the
@@ -138,8 +147,8 @@ input/output with no network port. See <a href="mcp-server.html">MCP server</a>.
 <h2 id="uninstalling">Uninstalling</h2>
 <p>Uninstall from <em>Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall</em>. The uninstaller offers
 an unticked option, <strong>Also delete my ZettelApp settings and data</strong>. If you tick it, it removes your
-settings, the API keys saved in Credential Manager, logs, the cache and automatic backups
-(<code>%LOCALAPPDATA%\ZettelApp</code>) <strong>and all your notes</strong> (the database and attachments of your vaults). Unticked,
+settings, the API keys saved in Credential Manager, logs, the cache, automatic backups and the semantic
+search model and index (<code>%LOCALAPPDATA%\ZettelApp</code>) <strong>and all your notes</strong> (the database and attachments of your vaults). Unticked,
 your notes stay where they are.</p>
 <p>Found a security problem? Please report it privately; see
 <a href="https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md">SECURITY.md</a>.</p>

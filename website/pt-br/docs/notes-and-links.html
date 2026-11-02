@@ -159,11 +159,44 @@ nada se perde. Os tipos embutidos podem ser renomeados e ter o estilo alterado, 
 <p>Adicione tags no campo de tags abaixo do título (pressione Enter após cada uma) ou escreva-as <strong>no texto</strong> com um
 sinal de cerquilha, como <code>#welcome</code> ou <code>#math/algebra</code>. As tags são em minúsculas e podem ser aninhadas com uma barra, como
 <code>math/algebra</code>. Filtrar por <code>math</code> também encontra as notas com a tag <code>math/algebra</code>.
-Use o filtro de tags acima da lista de notas ou digite <code>tag:nome</code> na caixa de busca.</p>
+Use o filtro de tags acima da lista de notas ou digite <code>tag:nome</code> na caixa de busca. O número ao lado de cada tag conta as notas que esse filtro mostra.</p>
 <p>As tags escritas no texto são tags de verdade, exibidas como <strong>chips com contorno</strong> ao lado da caixa <em>Adicionar tag</em>. Elas
 desaparecem quando você apaga a <code>#tag</code> do texto. Uma <code>#tag</code> é ignorada dentro de código, dentro de destinos de link
 e em <code>[[#headings]]</code>. As tags digitadas na caixa <em>Adicionar tag</em> são independentes: permanecem até você removê-las com
 o ✕ delas. Ctrl+clique em uma <code>#tag</code> no editor para listar as notas que a têm.</p>
+<h3 id="ontologia-de-tags">Ontologia de tags</h3>
+<p>Você também pode dizer como as tags se relacionam entre si, sem renomeá-las. Abra <em>Ferramentas ▸ Ontologia de
+tags…</em>, ou o pequeno botão ao lado do filtro de tags, e adicione relações:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Relação</th>
+<th>Exemplo</th>
+<th>Um filtro pela primeira tag também encontra…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pai → filho</strong></td>
+<td><code>estatística</code> é a tag pai de <code>bayes</code></td>
+<td>notas com a tag <code>bayes</code> e, por sua vez, as das filhas dela. Uma tag pode ter vários pais.</td>
+</tr>
+<tr>
+<td><strong>Sinônimo / alias</strong></td>
+<td><code>ml</code> é sinônimo de <code>aprendizado-de-máquina</code></td>
+<td>notas com qualquer uma das duas, seja qual for a do filtro.</td>
+</tr>
+<tr>
+<td><strong>Conceito relacionado</strong></td>
+<td><code>memória</code> está relacionada a <code>sono</code></td>
+<td>nada mais, até você marcar <em>Encontrar também notas com tags relacionadas</em> no menu do pequeno botão.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Uma tag em uma relação não precisa estar em nenhuma nota, então <code>estatística</code> pode existir só para reunir
+outras tags. As relações só mudam o que os filtros e as buscas encontram: suas notas e as tags delas continuam
+como estão. Clique duas vezes em uma relação para ver as notas da primeira tag. Os arquivos do ZettelApp levam
+a ontologia, e os clientes MCP podem lê-la.</p>
 <h2 id="link-da-fonte">Link da fonte</h2>
 <p>O campo com o ícone de globo guarda a <strong>fonte</strong> da nota: uma página web (<code>https://…</code>), um endereço de e-mail
 ou um item do Zotero (<code>zotero://select/library/items/…</code>). O botão ao lado dele abre o link. Outros tipos de
@@ -248,10 +281,43 @@ A: Hermann Ebbinghaus
 <p><strong>Na aba Flashcards.</strong> Use <em>Inserir ▸ Flashcard…</em> (Ctrl+Shift+F) para cartões que não devem aparecer na
 nota. Os cartões do texto são marcados como <em>do texto da nota</em> e são editados no texto.</p>
 <h2 id="busca">Busca</h2>
-<p>A caixa de busca (Ctrl+F) usa busca de texto completo em títulos, textos e tags, ignora acentos e corresponde a
-prefixos de palavras, então <code>esquec</code> encontra <em>esquecimento</em>. Adicione <code>tag:nome</code> para filtrar por tag, por exemplo
-<code>memory tag:psychology</code>. Os resultados são ordenados por relevância; sem uma consulta, as notas seguem a ordenação
-escolhida (<em>Última edição</em>, <em>Criada</em>, <em>Título</em> ou <em>Mais ligadas</em>).</p>
+<p>A caixa de busca (Ctrl+F) procura em títulos, textos e tags, ignora acentos e corresponde a prefixos de
+palavras, então <code>esquec</code> encontra <em>esquecimento</em>. Adicione <code>tag:nome</code> para manter só as notas com uma tag, por
+exemplo <code>memory tag:psychology</code>. As melhores correspondências vêm primeiro e cada uma mostra o trecho da nota em
+torno da sua palavra; sem uma consulta, as notas seguem a ordenação escolhida (<em>Última edição</em>, <em>Criada</em>,
+<em>Título</em> ou <em>Mais ligadas</em>).</p>
+<p>Vários tipos de correspondência trabalham juntos, e <em>Ferramentas ▸ Opções ▸ Busca</em> define quanto cada um conta:</p>
+<ul>
+<li><strong>Texto completo</strong>: suas palavras em qualquer parte da nota.</li>
+<li><strong>Difusa</strong>: pequenos erros de digitação em títulos e tags, então <code>quantom</code> encontra <em>Quantum</em>.</li>
+<li><strong>Tags e ontologia</strong>: uma palavra que nomeia uma tag encontra as notas dessa tag e as das filhas e sinônimos dela.</li>
+<li><strong>Semântica</strong> (opcional): notas que significam algo parecido, como explicado abaixo.</li>
+</ul>
+<h3 id="busca-semantica">Busca semântica</h3>
+<p>A busca semântica encontra notas pelo que significam, mesmo que não tenham nenhuma palavra em comum com a sua
+busca: <em>como as plantas se alimentam</em> pode encontrar uma nota sobre fotossíntese, e funciona entre idiomas. Ela
+fica desligada até você configurá-la:</p>
+<ol>
+<li>Em <em>Ferramentas ▸ Opções ▸ Busca</em>, clique em <strong>Baixar o modelo</strong> (135 MB, uma única vez, do Hugging Face).</li>
+<li>Marque <strong>Usar a busca semântica</strong> e confirme.</li>
+</ol>
+<p>O ZettelApp então indexa suas notas em segundo plano e acompanha as edições. Os resultados das palavras que você
+digitou aparecem na hora; as notas encontradas pelo significado se juntam a eles um instante depois. O modelo
+roda no seu computador e suas notas nunca saem dele. Em uso, ocupa cerca de 500 MB de memória, liberados dois
+minutos depois da sua última busca. <strong>Remover modelo e índice</strong>, na mesma página, apaga tudo isso.</p>
+<h3 id="resultados-melhores-com-o-seu-feedback">Resultados melhores com o seu feedback</h3>
+<p>Marque <strong>Melhorar o ranking com meu feedback explícito</strong> em <em>Ferramentas ▸ Opções ▸ Busca</em>; depois clique com o
+botão direito em um resultado de busca e escolha <strong>Resultado relevante</strong> ou <strong>Resultado não relevante</strong>. Os
+tipos de correspondência por trás dos resultados que você marca passam a contar mais ou menos. Só esses cliques
+são usados. O ZettelApp guarda um total acumulado por tipo de correspondência, neste computador, e nada sobre
+quais notas você marcou ou o que buscou. <strong>Redefinir preferências aprendidas</strong> esquece tudo.</p>
+<h2 id="selecionar-varias-notas">Selecionar várias notas</h2>
+<p>Na lista de notas, Ctrl+clique, Shift+clique ou Shift+setas selecionam várias notas. Clique com o botão direito
+na seleção para duplicá-las ou movê-las para a lixeira (na lixeira, para restaurá-las ou excluí-las), ou
+pressione Del para movê-las para a lixeira.</p>
+<p><em>Editar ▸ Duplicar nota</em> (Ctrl+D) copia uma nota: texto, tags, link da fonte, imagem, mapa mental, os links que
+ela faz e os flashcards que você escreveu à mão. Os links para ela, o alarme e o histórico de revisão não são
+copiados.</p>
 <h2 id="lixeira">Lixeira</h2>
 <p><em>Mover para a lixeira</em> (Ctrl+Delete) oculta uma nota sem excluí-la. Um botão de desfazer aparece imediatamente, e
 o botão <strong>Lixeira</strong> abaixo da lista de notas mostra as notas na lixeira: clique com o botão direito para <strong>Restaurar</strong> ou <strong>Excluir

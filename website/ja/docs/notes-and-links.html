@@ -126,8 +126,37 @@ part_of:: [[Zettelkasten method]]
 <p>プレビューには、そのリンクでつながれた 2 つのノートと、リンクの名前、相手側からの読み方が表示されます。このスタイルは、グラフ、その凡例、サイドパネル、リンクピッカー、Web サイト / GraphML / Graphviz へのエクスポートなど、リンクが現れるあらゆる場所で使われます。色覚に特性のある方や紙に印刷する場合にも種類を区別しやすいよう、種類ごとに色だけでなく線も別にしてください。新しい種類は、他の種類があまり使っていない色と線で始まります。</p>
 <p>テキストでは、プレビューの下に表示される種類の id を使います (たとえば「Inspired by」という種類は <code>inspired_by::</code> になります)。id は種類の作成時に決まるので、種類の名前を変更しても、ノートに書かれたリンクが壊れることはありません。独自の種類を削除すると、そのリンクは<em>関連</em>リンクになるので、何も失われません。組み込みの種類は名前変更とスタイル変更はできますが、削除はできません。</p>
 <h2 id="タク">タグ</h2>
-<p>タイトルの下のタグ欄にタグを追加します (各タグの後に Enter を押します)。または、<code>#welcome</code> や <code>#math/algebra</code> のように、ハッシュ記号を付けて<strong>テキスト内</strong>に書きます。タグは小文字で、<code>math/algebra</code> のようにスラッシュで階層化できます。<code>math</code> で絞り込むと、<code>math/algebra</code> のタグが付いたノートも見つかります。ノート一覧の上のタグフィルターを使うか、検索ボックスに <code>tag:名前</code> と入力します。</p>
+<p>タイトルの下のタグ欄にタグを追加します (各タグの後に Enter を押します)。または、<code>#welcome</code> や <code>#math/algebra</code> のように、ハッシュ記号を付けて<strong>テキスト内</strong>に書きます。タグは小文字で、<code>math/algebra</code> のようにスラッシュで階層化できます。<code>math</code> で絞り込むと、<code>math/algebra</code> のタグが付いたノートも見つかります。ノート一覧の上のタグフィルターを使うか、検索ボックスに <code>tag:名前</code> と入力します。各タグの横の数字は、そのフィルターで表示されるノートの数です。</p>
 <p>テキスト内に書いたタグは本物のタグで、<em>タグを追加</em>ボックスの横に<strong>輪郭だけのチップ</strong>として表示されます。テキストから <code>#tag</code> を削除すると消えます。<code>#tag</code> は、コード内、リンク先内、<code>[[#見出し]]</code> 内では無視されます。<em>タグを追加</em>ボックスに入力したタグは別扱いで、✕ で削除するまで残ります。エディターで <code>#tag</code> を Ctrl+クリックすると、そのタグが付いたノートが一覧表示されます。</p>
+<h3 id="タクオントロシー">タグオントロジー</h3>
+<p>タグの名前を変えずに、タグどうしの関係を示すこともできます。<em>ツール ▸ タグオントロジー…</em> またはタグフィルターの横の小さなボタンを開き、関係を追加します:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>関係</th>
+<th>例</th>
+<th>最初のタグで絞り込むと、ほかに見つかるもの</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>親 → 子</strong></td>
+<td><code>統計</code> は <code>ベイズ</code> の親</td>
+<td><code>ベイズ</code> のタグが付いたノートと、さらにその子のノート。タグには複数の親を持たせられます。</td>
+</tr>
+<tr>
+<td><strong>同義語 / 別名</strong></td>
+<td><code>ml</code> は <code>機械学習</code> の同義語</td>
+<td>どちらかのタグが付いたノート。どちらで絞り込んでも同じです。</td>
+</tr>
+<tr>
+<td><strong>関連概念</strong></td>
+<td><code>記憶</code> は <code>睡眠</code> に関連</td>
+<td>小さなボタンのメニューで<em>関連タグのノートも検索</em>をオンにするまでは、増えません。</td>
+</tr>
+</tbody>
+</table></div>
+<p>関係の中のタグは、どのノートにも付いていなくてかまいません。<code>統計</code> のように、ほかのタグをまとめるためだけに置くこともできます。関係が変えるのはフィルターと検索で見つかるものだけで、ノートとそのタグはそのままです。関係をダブルクリックすると、最初のタグのノートが表示されます。ZettelApp アーカイブにはオントロジーも含まれ、MCP クライアントからも読み取れます。</p>
 <h2 id="情報源リンク">情報源リンク</h2>
 <p>地球儀アイコンのフィールドには、ノートの<strong>情報源</strong>を入力します。Web ページ (<code>https://…</code>)、メールアドレス、Zotero アイテム (<code>zotero://select/library/items/…</code>) が使えます。横のボタンでそのリンクを開きます。それ以外の種類のリンクは拒否されます。Zotero ライブラリから直接ノートを作成する方法は <a href="zotero.html">Zotero</a> を参照してください。</p>
 <h2 id="画像">画像</h2>
@@ -190,7 +219,26 @@ A: Hermann Ebbinghaus
 <p>質問は <code>A:</code> 行まで複数行にわたって書けます。<code>{{c1::…}}</code> を含む段落は<strong>穴埋め</strong>カードになり、削除箇所を順に隠します。<code>{{c1::text::hint}}</code> は、<code>[…]</code> の代わりにヒントを表示します。</p>
 <p><strong>フラッシュカードタブで。</strong> ノートに表示したくないカードには、<em>挿入 ▸ フラッシュカード…</em> (Ctrl+Shift+F) を使います。テキストから作られたカードには<em>ノート本文から</em>と表示され、テキストで編集します。</p>
 <h2 id="検索">検索</h2>
-<p>検索ボックス (Ctrl+F) は、タイトル、本文、タグを対象とした全文検索を使い、アクセントを無視し、単語の先頭一致で検索するので、<code>forget</code> で <em>forgetting</em> が見つかります。<code>tag:名前</code> を付けるとタグで絞り込めます (たとえば <code>memory tag:psychology</code>)。結果は関連度順です。クエリがない場合、ノートは選択した並べ替え順 (<em>最終編集</em>、<em>作成日時</em>、<em>タイトル</em>、<em>最もリンクされたノート</em>) になります。</p>
+<p>検索ボックス (Ctrl+F) は、タイトル、本文、タグを検索し、アクセントを無視し、単語の先頭一致で検索するので、<code>forget</code> で <em>forgetting</em> が見つかります。<code>tag:名前</code> を付けると、そのタグのノートだけに絞り込めます (たとえば <code>memory tag:psychology</code>)。一致度の高いものが先に表示され、それぞれ言葉の周辺の部分が表示されます。クエリがない場合、ノートは選択した並べ替え順 (<em>最終編集</em>、<em>作成日時</em>、<em>タイトル</em>、<em>最もリンクされたノート</em>) になります。</p>
+<p>複数の種類の一致が組み合わさって働きます。それぞれの重みは <em>ツール ▸ オプション ▸ 検索</em> で設定できます:</p>
+<ul>
+<li><strong>全文</strong>: ノート内のどこかにある言葉。</li>
+<li><strong>あいまい</strong>: タイトルとタグの小さな入力ミス。<code>quantom</code> で <em>Quantum</em> が見つかります。</li>
+<li><strong>タグとオントロジー</strong>: タグの名前にあたる言葉で、そのタグのノートと、その子や同義語のノートが見つかります。</li>
+<li><strong>意味</strong> (オプション): 意味の近いノート。詳しくは次の節をご覧ください。</li>
+</ul>
+<h3 id="意味検索">意味検索</h3>
+<p>意味検索は、検索語と同じ言葉がなくても、意味からノートを見つけます。たとえば<em>植物はどうやって栄養を作るのか</em>で光合成のノートが見つかり、言語をまたいでも機能します。設定するまではオフのままです:</p>
+<ol>
+<li><em>ツール ▸ オプション ▸ 検索</em> で<strong>モデルをダウンロード</strong>をクリックします (135 MB、一度だけ、Hugging Face から)。</li>
+<li><strong>意味検索を使う</strong>をオンにして確定します。</li>
+</ol>
+<p>その後、ZettelApp はノートをバックグラウンドでインデックス化し、編集にも追従します。入力した言葉の結果はすぐに表示され、意味で見つかったノートは少し遅れて加わります。モデルはお使いのコンピューター上で動き、ノートが外部に送られることはありません。使用中は約 500 MB のメモリを使い、最後の検索の 2 分後に解放されます。同じページの<strong>モデルとインデックスを削除</strong>ですべて削除できます。</p>
+<h3 id="フィートハックて結果を改善する">フィードバックで結果を改善する</h3>
+<p><em>ツール ▸ オプション ▸ 検索</em> で<strong>明示的なフィードバックでランキングを改善</strong>をオンにし、検索結果を右クリックして<strong>関連性のある結果</strong>または<strong>関連性のない結果</strong>を選びます。指定した結果の背後にある一致の種類の重みが、以後増減します。使われるのはこのクリックだけです。ZettelApp が保存するのは、このコンピューター上の一致の種類ごとの累計だけで、どのノートを指定したかや何を検索したかは保存しません。<strong>学習した設定をリセット</strong>ですべて忘れます。</p>
+<h2 id="複数のノートを選択する">複数のノートを選択する</h2>
+<p>ノート一覧では、Ctrl+クリック、Shift+クリック、Shift+方向キーで複数のノートを選択できます。選択範囲を右クリックすると、複製やごみ箱への移動 (ごみ箱では復元や削除) ができます。Del を押してもごみ箱に移動します。</p>
+<p><em>編集 ▸ ノートを複製</em> (Ctrl+D) はノートをコピーします: 本文、タグ、情報源リンク、画像、マインドマップ、そのノートから出ているリンク、手書きのフラッシュカードです。そのノートへのリンク、アラーム、復習履歴はコピーされません。</p>
 <h2 id="こみ箱">ごみ箱</h2>
 <p><em>ごみ箱に移動</em> (Ctrl+Delete) は、ノートを削除せずに非表示にします。すぐに元に戻すボタンが表示され、ノート一覧の下の<strong>ごみ箱</strong>ボタンでごみ箱に入ったノートが表示されます。右クリックで<strong>復元</strong>または<strong>完全に削除</strong>ができます。<strong>ごみ箱を空にする</strong>は、確認の後に中のすべてを削除します。ごみ箱にあるノートへのリンクは非表示になり、ノートが復元されると元に戻ります。</p>
 <p class="doc-footer">誤りを見つけたら：<a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ja/notes-and-links.md">GitHub でこのページを編集</a>。</p></main></div><footer class="site-footer"><div class="wrap footer-row"><p><img src="../../assets/favicon.png" alt="" width="20" height="20"> <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p><ul class="nav"><li><a href="../">ホーム</a></li><li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li><li><a href="https://ko-fi.com/dutrairs" rel="noopener">寄付</a></li></ul></div><ul class="nav lang-row" aria-label="言語"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja" aria-current="true">日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul><p class="made-with">Proudly developed with <a href="https://github.com/DutraIRS/Rational-Web">RationalWeb</a></p></footer></div></body></html>
