@@ -2,4 +2,6 @@
 * text=auto
 
 # Written by tools/build_site.py, with LF on every system.
-website/** text eol=lf
+website/**/*.html text eol=lf
+website/assets/lang.js text eol=lf
+website/version.json text eol=lf
