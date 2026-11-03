@@ -269,6 +269,8 @@ sprachübergreifend. Sie bleibt aus, bis Sie sie einrichten:
 1. Klicken Sie unter *Extras ▸ Optionen ▸ Suche* auf **Modell herunterladen** (135 MB, einmalig, von Hugging Face).
 2. Aktivieren Sie **Semantische Suche verwenden** und bestätigen Sie.
 
+Sie können auch im Installationsprogramm *Semantische Suche einrichten* aktivieren: ZettelApp lädt das Modell dann beim ersten Start herunter und schaltet sie ein.
+
 ZettelApp indiziert Ihre Notizen dann im Hintergrund und hält beim Bearbeiten Schritt. Ergebnisse zu den
 eingegebenen Wörtern erscheinen sofort; nach Bedeutung gefundene Notizen kommen einen Moment später hinzu. Das
 Modell läuft auf Ihrem Computer, und Ihre Notizen verlassen ihn nie. Während der Nutzung belegt es etwa 500 MB

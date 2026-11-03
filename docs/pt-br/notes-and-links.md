@@ -257,6 +257,8 @@ fica desligada até você configurá-la:
 1. Em *Ferramentas ▸ Opções ▸ Busca*, clique em **Baixar o modelo** (135 MB, uma única vez, do Hugging Face).
 2. Marque **Usar a busca semântica** e confirme.
 
+Você também pode marcar *Configurar a busca semântica* no instalador: o ZettelApp baixa o modelo na primeira vez que abrir e a ativa.
+
 O ZettelApp então indexa suas notas em segundo plano e acompanha as edições. Os resultados das palavras que você
 digitou aparecem na hora; as notas encontradas pelo significado se juntam a eles um instante depois. O modelo
 roda no seu computador e suas notas nunca saem dele. Em uso, ocupa cerca de 500 MB de memória, liberados dois
