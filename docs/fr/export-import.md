@@ -34,7 +34,9 @@ Les cartes mentales disposent également de leur propre exportation (PNG, SVG ou
 
 - les **archives ZettelApp** (`.zip`) et les exportations **JSON** ;
 - les **fichiers Markdown** (`.md`) ou une **archive `.zip` de fichiers Markdown** ;
+- les **exports Evernote** (`.enex`) ;
 - *Fichier ▸ Importer un dossier Markdown…* pour importer un dossier de fichiers Markdown, par exemple un **coffre Obsidian**.
+- Les autres applications qui exportent en Markdown, comme **Notion**, Joplin, Bear ou Logseq, s’importent de la même façon.
 
 Éléments conservés :
 
@@ -45,8 +47,15 @@ Les cartes mentales disposent également de leur propre exportation (PNG, SVG ou
   - le lien source provient de `url` ou `source`, et la date de création de `created` ;
   - les `[[liens wiki]]` (y compris les liens de nom de fichier d’Obsidian) et les `type:: [[liens]]` deviennent des liens ;
   - les images référencées par `![](path)` ou `![[image.png]]` dans Obsidian sont copiées dans le coffre ;
+  - les liens vers d’autres fichiers Markdown (`[texte](Note.md)`, comme les écrit Notion), les noms
+    listés sous `aliases` dans le front matter et les notes intégrées (`![[Note]]`) deviennent des liens ;
+    les longs identifiants de Notion ne figurent pas dans les titres ;
   - les dossiers masqués tels que `.obsidian` et `.trash` sont ignorés ;
   - l’export Markdown de ZettelApp peut être réimporté avec ses liens typés, cartes mémoire et cartes mentales.
+- **Depuis Evernote :** chaque note garde son titre, son texte (titres, listes, cases à cocher, gras,
+  italique, liens et tableaux en lignes de texte), ses tags, son lien source et sa date de création. Les
+  images sont copiées dans le coffre ; les autres pièces jointes non, et leur nom reste dans le texte. Le
+  texte chiffré est omis.
 
 ### Sécurité
 

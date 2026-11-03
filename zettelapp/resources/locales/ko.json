@@ -274,8 +274,6 @@
  "idea": "아이디어",
  "Image not added": "이미지를 추가하지 않았어요",
  "Images (*.png *.jpg *.jpeg *.gif *.webp *.bmp)": "이미지(*.png *.jpg *.jpeg *.gif *.webp *.bmp)",
- "Import a folder of Markdown files, such as an Obsidian vault": "Obsidian 볼트 같은 Markdown 파일 폴더 가져오기",
- "Import a ZettelApp archive, JSON or Markdown files": "ZettelApp 보관 파일, JSON 또는 Markdown 파일 가져오기",
  "Import Markdown &Folder…": "Markdown 폴더 가져오기(&F)…",
  "In a note, write {example}.": "노트에 {example}처럼 쓰세요.",
  "Inline, inside a sentence": "문장 안에 인라인으로",
@@ -853,7 +851,6 @@
  "Some items were skipped:": "일부 항목을 건너뛰었어요:",
  "Suggest links while I write": "글을 쓰는 동안 링크 제안",
  "Suggested links": "제안된 링크",
- "Supported files (*.zip *.json *.md);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md)": "지원되는 파일 (*.zip *.json *.md);;ZettelApp 보관 파일 또는 Markdown (*.zip);;JSON (*.json);;Markdown (*.md)",
  "Testing…": "테스트 중…",
  "Text similarity (Levenshtein)": "본문 유사도(레벤슈타인)",
  "That note no longer exists.": "그 노트는 더 이상 없어요.",
@@ -1002,5 +999,15 @@
  "{source} is a synonym of {target}": "{source}은(는) {target}의 동의어",
  "{source} is related to {target}": "{source}은(는) {target}와(과) 관련됨",
  "{source} is the parent of {target}": "{source}은(는) {target}의 상위 태그",
- "Could not download the language model: {error}": "언어 모델을 다운로드하지 못했어요: {error}"
+ "Could not download the language model: {error}": "언어 모델을 다운로드하지 못했어요: {error}",
+ "Supported files (*.zip *.json *.md *.enex);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md);;Evernote export (*.enex)": "지원되는 파일 (*.zip *.json *.md *.enex);;ZettelApp 보관 파일 또는 Markdown (*.zip);;JSON (*.json);;Markdown (*.md);;Evernote 내보내기 (*.enex)",
+ "[encrypted text]": "[암호화된 텍스트]",
+ "Import a folder of Markdown files, such as an Obsidian vault or a Notion export": "Obsidian 볼트나 Notion 내보내기 같은 Markdown 파일 폴더를 가져와요",
+ "Import a ZettelApp archive, JSON, Markdown files or an Evernote export": "ZettelApp 보관 파일, JSON, Markdown 파일 또는 Evernote 내보내기를 가져와요",
+ "The file contains too many notes.": "파일에 노트가 너무 많아요.",
+ "This file declares XML entities, which an Evernote export never does.": "이 파일은 XML 엔터티를 선언해요. Evernote 내보내기는 절대 그러지 않아요.",
+ "This is not a readable Evernote export: {error}": "읽을 수 있는 Evernote 내보내기가 아니에요: {error}",
+ "{n} attachment that isn't a picture was not imported; its name stays in the text.": [
+  "그림이 아닌 첨부 파일 {n}개는 가져오지 않았어요. 이름은 본문에 남아 있어요."
+ ]
 }

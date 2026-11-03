@@ -275,8 +275,6 @@
  "idea": "idea",
  "Image not added": "Immagine non aggiunta",
  "Images (*.png *.jpg *.jpeg *.gif *.webp *.bmp)": "Immagini (*.png *.jpg *.jpeg *.gif *.webp *.bmp)",
- "Import a folder of Markdown files, such as an Obsidian vault": "Importa una cartella di file Markdown, come un vault di Obsidian",
- "Import a ZettelApp archive, JSON or Markdown files": "Importa un archivio ZettelApp, file JSON o Markdown",
  "Import Markdown &Folder…": "Importa &cartella Markdown…",
  "In a note, write {example}.": "In una nota, scrivi {example}.",
  "Inline, inside a sentence": "In linea, dentro una frase",
@@ -868,7 +866,6 @@
  "Some items were skipped:": "Alcuni elementi sono stati saltati:",
  "Suggest links while I write": "Suggerisci collegamenti mentre scrivo",
  "Suggested links": "Collegamenti suggeriti",
- "Supported files (*.zip *.json *.md);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md)": "File supportati (*.zip *.json *.md);;Archivio ZettelApp o Markdown (*.zip);;JSON (*.json);;Markdown (*.md)",
  "Testing…": "Prova in corso…",
  "Text similarity (Levenshtein)": "Similarità del testo (Levenshtein)",
  "That note no longer exists.": "Quella nota non esiste più.",
@@ -1032,5 +1029,16 @@
  "{source} is a synonym of {target}": "{source} è sinonimo di {target}",
  "{source} is related to {target}": "{source} è correlato a {target}",
  "{source} is the parent of {target}": "{source} è il tag padre di {target}",
- "Could not download the language model: {error}": "Impossibile scaricare il modello linguistico: {error}"
+ "Could not download the language model: {error}": "Impossibile scaricare il modello linguistico: {error}",
+ "Supported files (*.zip *.json *.md *.enex);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md);;Evernote export (*.enex)": "File supportati (*.zip *.json *.md *.enex);;Archivio ZettelApp o Markdown (*.zip);;JSON (*.json);;Markdown (*.md);;Esportazione di Evernote (*.enex)",
+ "[encrypted text]": "[testo cifrato]",
+ "Import a folder of Markdown files, such as an Obsidian vault or a Notion export": "Importa una cartella di file Markdown, come un vault di Obsidian o un'esportazione di Notion",
+ "Import a ZettelApp archive, JSON, Markdown files or an Evernote export": "Importa un archivio ZettelApp, JSON, file Markdown o un'esportazione di Evernote",
+ "The file contains too many notes.": "Il file contiene troppe note.",
+ "This file declares XML entities, which an Evernote export never does.": "Questo file dichiara entità XML, cosa che un'esportazione di Evernote non fa mai.",
+ "This is not a readable Evernote export: {error}": "Non è un'esportazione di Evernote leggibile: {error}",
+ "{n} attachment that isn't a picture was not imported; its name stays in the text.": [
+  "{n} allegato che non è un'immagine non è stato importato; il suo nome resta nel testo.",
+  "{n} allegati che non sono immagini non sono stati importati; i loro nomi restano nel testo."
+ ]
 }

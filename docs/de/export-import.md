@@ -40,7 +40,9 @@ exportiert werden. Der Graph lässt sich als PNG-Bild speichern.
 
 - **ZettelApp-Archive** (`.zip`) und **JSON**-Exporte;
 - **Markdown-Dateien** (`.md`) oder ein **`.zip`-Archiv mit Markdown-Dateien**;
+- **Evernote-Exporte** (`.enex`);
 - *Datei ▸ Markdown-Ordner importieren…* für einen Ordner mit Markdown-Dateien, zum Beispiel einen **Obsidian-Tresor**.
+- Andere Apps, die Markdown exportieren, etwa **Notion**, Joplin, Bear oder Logseq, werden genauso importiert.
 
 Was erhalten bleibt:
 
@@ -51,8 +53,14 @@ Was erhalten bleibt:
   - Der Quellenlink stammt aus `url` oder `source`, das Erstellungsdatum aus `created`.
   - `[[Wiki-Links]]` (einschließlich Obsidian-Links mit Dateinamen) und `type:: [[Links]]` werden zu Links.
   - Bilder, die mit `![](path)` oder Obsidian-`![[image.png]]` referenziert werden, werden in den Tresor kopiert.
+  - Links auf andere Markdown-Dateien (`[Text](Notiz.md)`, wie Notion sie schreibt), Namen unter
+    `aliases` im Frontmatter und eingebettete Notizen (`![[Notiz]]`) werden zu Links; die langen IDs
+    von Notion landen nicht in den Titeln.
   - Versteckte Ordner wie `.obsidian` und `.trash` werden übersprungen.
   - ZettelApps eigener Markdown-Export wird mit typisierten Links, Lernkarten und Mindmaps wieder importiert.
+- **Aus Evernote**: Jede Notiz behält Titel, Text (Überschriften, Listen, Checklisten, Fett, Kursiv,
+  Links und Tabellen als Textzeilen), Tags, Quellenlink und Erstellungsdatum. Bilder werden in den Tresor
+  kopiert; andere Anhänge nicht, ihre Dateinamen bleiben im Text. Verschlüsselter Text wird ausgelassen.
 
 ### Sicherheit
 

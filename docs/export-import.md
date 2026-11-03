@@ -39,7 +39,9 @@ can be saved as a PNG image.
 
 - **ZettelApp archives** (`.zip`) and **JSON** exports;
 - **Markdown files** (`.md`) or a **`.zip` of Markdown files**;
+- **Evernote exports** (`.enex`);
 - *File ▸ Import Markdown Folder…* for a folder of Markdown files, such as an **Obsidian vault**.
+- Other apps that export Markdown, such as **Notion**, Joplin, Bear or Logseq, import the same way.
 
 What is kept:
 
@@ -53,8 +55,14 @@ What is kept:
   - the source link comes from `url` or `source`, and the creation date from `created`;
   - `[[wiki links]]` (including Obsidian's file-name links) and `type:: [[links]]` become links;
   - images referenced with `![](path)` or Obsidian's `![[image.png]]` are copied into the vault;
+  - links to other Markdown files (`[text](Note.md)`, as Notion writes them), names listed under
+    `aliases` in the front matter and embedded notes (`![[Note]]`) become links; Notion's long IDs
+    are left out of titles;
   - hidden folders such as `.obsidian` and `.trash` are skipped;
   - ZettelApp's own Markdown export imports back with its typed links, flashcards and mind maps.
+- **From Evernote:** each note keeps its title, text (headings, lists, checklists, bold, italics,
+  links and tables as plain rows), tags, source link and creation date. Pictures are copied into the
+  vault; other attachments aren't, and their file names stay in the text. Encrypted text is left out.
 
 ### Safety
 

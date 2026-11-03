@@ -78,7 +78,9 @@
 <ul>
 <li>les <strong>archives ZettelApp</strong> (<code>.zip</code>) et les exportations <strong>JSON</strong> ;</li>
 <li>les <strong>fichiers Markdown</strong> (<code>.md</code>) ou une <strong>archive <code>.zip</code> de fichiers Markdown</strong> ;</li>
+<li>les <strong>exports Evernote</strong> (<code>.enex</code>) ;</li>
 <li><em>Fichier ▸ Importer un dossier Markdown…</em> pour importer un dossier de fichiers Markdown, par exemple un <strong>coffre Obsidian</strong>.</li>
+<li>Les autres applications qui exportent en Markdown, comme <strong>Notion</strong>, Joplin, Bear ou Logseq, s’importent de la même façon.</li>
 </ul>
 <p>Éléments conservés :</p>
 <ul>
@@ -90,10 +92,17 @@
 <li>le lien source provient de <code>url</code> ou <code>source</code>, et la date de création de <code>created</code> ;</li>
 <li>les <code>[[liens wiki]]</code> (y compris les liens de nom de fichier d’Obsidian) et les <code>type:: [[liens]]</code> deviennent des liens ;</li>
 <li>les images référencées par <code>![](path)</code> ou <code>![[image.png]]</code> dans Obsidian sont copiées dans le coffre ;</li>
+<li>les liens vers d’autres fichiers Markdown (<code>[texte](Note.md)</code>, comme les écrit Notion), les noms
+listés sous <code>aliases</code> dans le front matter et les notes intégrées (<code>![[Note]]</code>) deviennent des liens ;
+les longs identifiants de Notion ne figurent pas dans les titres ;</li>
 <li>les dossiers masqués tels que <code>.obsidian</code> et <code>.trash</code> sont ignorés ;</li>
 <li>l’export Markdown de ZettelApp peut être réimporté avec ses liens typés, cartes mémoire et cartes mentales.</li>
 </ul>
 </li>
+<li><strong>Depuis Evernote :</strong> chaque note garde son titre, son texte (titres, listes, cases à cocher, gras,
+italique, liens et tableaux en lignes de texte), ses tags, son lien source et sa date de création. Les
+images sont copiées dans le coffre ; les autres pièces jointes non, et leur nom reste dans le texte. Le
+texte chiffré est omis.</li>
 </ul>
 <h3 id="securite">Sécurité</h3>
 <p>Les fichiers importés sont considérés comme non fiables :</p>

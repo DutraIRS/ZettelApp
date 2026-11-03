@@ -279,8 +279,6 @@
  "idea": "فكرة",
  "Image not added": "لم تُضف الصورة",
  "Images (*.png *.jpg *.jpeg *.gif *.webp *.bmp)": "الصور (*.png *.jpg *.jpeg *.gif *.webp *.bmp)",
- "Import a folder of Markdown files, such as an Obsidian vault": "استيراد مجلد من ملفات Markdown، مثل مستودع Obsidian",
- "Import a ZettelApp archive, JSON or Markdown files": "استيراد أرشيف ZettelApp أو ملفات JSON أو Markdown",
  "Import Markdown &Folder…": "استيراد &مجلد Markdown… (&F)",
  "In a note, write {example}.": "في ملاحظة، اكتب {example}.",
  "Inline, inside a sentence": "ضمن السطر، داخل جملة",
@@ -928,7 +926,6 @@
  "Some items were skipped:": "تم تخطي بعض العناصر:",
  "Suggest links while I write": "اقتراح روابط أثناء الكتابة",
  "Suggested links": "الروابط المقترحة",
- "Supported files (*.zip *.json *.md);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md)": "الملفات المدعومة (*.zip *.json *.md);;أرشيف ZettelApp أو Markdown (*.zip);;JSON (*.json);;Markdown (*.md)",
  "Testing…": "جارٍ الاختبار…",
  "Text similarity (Levenshtein)": "تشابه النص (ليفنشتاين)",
  "That note no longer exists.": "لم تعد تلك الملاحظة موجودة.",
@@ -1152,5 +1149,20 @@
  "{source} is a synonym of {target}": "{source} مرادف لـ {target}",
  "{source} is related to {target}": "{source} مرتبط بـ {target}",
  "{source} is the parent of {target}": "{source} أب لـ {target}",
- "Could not download the language model: {error}": "تعذّر تنزيل النموذج اللغوي: {error}"
+ "Could not download the language model: {error}": "تعذّر تنزيل النموذج اللغوي: {error}",
+ "Supported files (*.zip *.json *.md *.enex);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md);;Evernote export (*.enex)": "الملفات المدعومة (*.zip *.json *.md *.enex);;أرشيف ZettelApp أو Markdown (*.zip);;JSON (*.json);;Markdown (*.md);;تصدير Evernote (*.enex)",
+ "[encrypted text]": "[نص مشفر]",
+ "Import a folder of Markdown files, such as an Obsidian vault or a Notion export": "استيراد مجلد من ملفات Markdown، مثل مستودع Obsidian أو تصدير من Notion",
+ "Import a ZettelApp archive, JSON, Markdown files or an Evernote export": "استيراد أرشيف ZettelApp أو JSON أو ملفات Markdown أو تصدير من Evernote",
+ "The file contains too many notes.": "يحتوي الملف على ملاحظات أكثر من اللازم.",
+ "This file declares XML entities, which an Evernote export never does.": "يعلن هذا الملف عن كيانات XML، وهو ما لا يفعله تصدير Evernote أبدًا.",
+ "This is not a readable Evernote export: {error}": "هذا ليس تصديرًا مقروءًا من Evernote: {error}",
+ "{n} attachment that isn't a picture was not imported; its name stays in the text.": [
+  "لم يُستورد أي مرفق ليس صورة؛ تبقى الأسماء في النص.",
+  "لم يُستورد مرفق واحد ليس صورة؛ يبقى اسمه في النص.",
+  "لم يُستورد مرفقان ليسا صورتين؛ يبقى اسماهما في النص.",
+  "لم تُستورد {n} مرفقات ليست صورًا؛ تبقى أسماؤها في النص.",
+  "لم يُستورد {n} مرفقًا ليست صورًا؛ تبقى أسماؤها في النص.",
+  "لم يُستورد {n} مرفق ليست صورًا؛ تبقى أسماؤها في النص."
+ ]
 }

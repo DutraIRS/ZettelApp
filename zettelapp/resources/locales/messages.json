@@ -323,10 +323,16 @@
    "zettelapp/ui/graph_page.py:114"
   ]
  },
+ "[encrypted text]": {
+  "plural": null,
+  "where": [
+   "zettelapp/core/enex.py:127"
+  ]
+ },
  "A file in the archive ended unexpectedly.": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:111"
+   "zettelapp/core/importer.py:123"
   ]
  },
  "A file in the archive is too large to import.": {
@@ -1381,7 +1387,7 @@
  "Could not switch MCP on.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1375"
+   "zettelapp/ui/main_window.py:1376"
   ]
  },
  "Could not update the configuration: {error}": {
@@ -2316,16 +2322,16 @@
  "Import a folder of Markdown files": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1152"
+   "zettelapp/ui/main_window.py:1153"
   ]
  },
- "Import a folder of Markdown files, such as an Obsidian vault": {
+ "Import a folder of Markdown files, such as an Obsidian vault or a Notion export": {
   "plural": null,
   "where": [
    "zettelapp/ui/main_window.py:291"
   ]
  },
- "Import a ZettelApp archive, JSON or Markdown files": {
+ "Import a ZettelApp archive, JSON, Markdown files or an Evernote export": {
   "plural": null,
   "where": [
    "zettelapp/ui/main_window.py:283"
@@ -2334,13 +2340,13 @@
  "Import failed": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1166"
+   "zettelapp/ui/main_window.py:1167"
   ]
  },
  "Import finished": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1191"
+   "zettelapp/ui/main_window.py:1192"
   ]
  },
  "Import Markdown &Folder…": {
@@ -2352,7 +2358,7 @@
  "Imported {items}.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1180"
+   "zettelapp/ui/main_window.py:1181"
   ]
  },
  "Improve ranking from my explicit feedback": {
@@ -2376,7 +2382,7 @@
  "Indexing notes for semantic search: {done} of {total}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1246"
+   "zettelapp/ui/main_window.py:1247"
   ]
  },
  "Ink spreads across your note and forms words that aren't yours: “Follow the silver threads. — Z.”": {
@@ -2587,7 +2593,7 @@
  "Let AI agents use ZettelApp through MCP": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1345"
+   "zettelapp/ui/main_window.py:1346"
   ]
  },
  "Let the title state the idea, like the title of this note. When a note grows a second idea, split it: press **Ctrl+N** for a new note, move the text there and link the two.": {
@@ -2719,13 +2725,13 @@
  "Link type “{name}” has an unknown arrow tip: {value}": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:173"
+   "zettelapp/core/importer.py:185"
   ]
  },
  "Link type “{name}” has an unknown line style: {value}": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:172"
+   "zettelapp/core/importer.py:184"
   ]
  },
  "Link types": {
@@ -2840,38 +2846,38 @@
  "MCP is off: AI agents can no longer reach your notes.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1393"
+   "zettelapp/ui/main_window.py:1394"
   ]
  },
  "MCP is on: AI agents connected to ZettelApp can read and add to your notes until you switch it off or close ZettelApp.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1380"
+   "zettelapp/ui/main_window.py:1381"
   ]
  },
  "MCP is on: AI agents connected to ZettelApp can read your notes until you switch it off or close ZettelApp.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1385"
+   "zettelapp/ui/main_window.py:1386"
   ]
  },
  "MCP lets AI agents such as Claude Desktop or Claude Code search and read your notes.\nIt works only while ZettelApp is open and this switch is on. The switch is off\nwhenever ZettelApp starts, and the agent's connection stops when you switch it\noff or close ZettelApp. Set it up in Tools ▸ Options ▸ MCP server.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1355"
+   "zettelapp/ui/main_window.py:1356"
   ]
  },
  "MCP off": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1347",
-   "zettelapp/ui/main_window.py:1377"
+   "zettelapp/ui/main_window.py:1348",
+   "zettelapp/ui/main_window.py:1378"
   ]
  },
  "MCP on": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1377"
+   "zettelapp/ui/main_window.py:1378"
   ]
  },
  "MCP server": {
@@ -2917,7 +2923,7 @@
  "Missing image {name}": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:134"
+   "zettelapp/core/importer.py:146"
   ]
  },
  "Model": {
@@ -4120,7 +4126,7 @@
  "Semantic search failed: {error}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1257"
+   "zettelapp/ui/main_window.py:1258"
   ]
  },
  "Semantic similarity (LSA)": {
@@ -4216,7 +4222,7 @@
  "Show in folder": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1202"
+   "zettelapp/ui/main_window.py:1203"
   ]
  },
  "Show in graph": {
@@ -4277,26 +4283,27 @@
  "Skipped image {name}: {error}": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:143",
-   "zettelapp/core/importer.py:420"
+   "zettelapp/core/importer.py:155",
+   "zettelapp/core/importer.py:442",
+   "zettelapp/core/importer.py:527"
   ]
  },
  "Skipped oversized image {name}": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:137"
+   "zettelapp/core/importer.py:149"
   ]
  },
  "Skipped the tag relationship {source} → {target}: {error}": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:327"
+   "zettelapp/core/importer.py:339"
   ]
  },
  "Skipped {name}: file too large": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:373"
+   "zettelapp/core/importer.py:386"
   ]
  },
  "Solid": {
@@ -4308,7 +4315,7 @@
  "Some items were skipped:": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1192"
+   "zettelapp/ui/main_window.py:1193"
   ]
  },
  "Something went wrong. Your notes are saved automatically, so nothing should be lost.": {
@@ -4432,7 +4439,7 @@
    "zettelapp/core/models.py:156"
   ]
  },
- "Supported files (*.zip *.json *.md);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md)": {
+ "Supported files (*.zip *.json *.md *.enex);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md);;Evernote export (*.enex)": {
   "plural": null,
   "where": [
    "zettelapp/ui/main_window.py:1143"
@@ -4658,7 +4665,7 @@
  "The archive manifest is too large.": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:122"
+   "zettelapp/core/importer.py:134"
   ]
  },
  "The Archivist's Journal": {
@@ -4712,13 +4719,19 @@
  "The export field “{field}” must be a list.": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:189"
+   "zettelapp/core/importer.py:201"
+  ]
+ },
+ "The file contains too many notes.": {
+  "plural": null,
+  "where": [
+   "zettelapp/core/enex.py:69"
   ]
  },
  "The file is too large to import.": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:76"
+   "zettelapp/core/importer.py:86"
   ]
  },
  "The Fog can't swallow a note that is tied to others.": {
@@ -4736,7 +4749,7 @@
  "The folder contains too many Markdown files.": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:345"
+   "zettelapp/core/importer.py:358"
   ]
  },
  "The graph and Insights": {
@@ -4760,7 +4773,7 @@
  "The language model is ready.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1253"
+   "zettelapp/ui/main_window.py:1254"
   ]
  },
  "The last 12 months": {
@@ -4959,7 +4972,7 @@
  "This archive contains neither a ZettelApp export nor Markdown files.": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:94"
+   "zettelapp/core/importer.py:106"
   ]
  },
  "This card comes from the note text (Q:/A: or {{c1::…}}). Edit it there.": {
@@ -4971,7 +4984,13 @@
  "This export was made by a newer version of ZettelApp.": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:184"
+   "zettelapp/core/importer.py:196"
+  ]
+ },
+ "This file declares XML entities, which an Evernote export never does.": {
+  "plural": null,
+  "where": [
+   "zettelapp/core/enex.py:60"
   ]
  },
  "This habit is part of the method:": {
@@ -4980,10 +4999,16 @@
    "zettelapp/core/starter.py:136"
   ]
  },
+ "This is not a readable Evernote export: {error}": {
+  "plural": null,
+  "where": [
+   "zettelapp/core/enex.py:97"
+  ]
+ },
  "This is not a ZettelApp export.": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:182"
+   "zettelapp/core/importer.py:194"
   ]
  },
  "This note has no links yet. Link it to other notes first.": {
@@ -5184,7 +5209,7 @@
  "Unsupported file type: {name}": {
   "plural": null,
   "where": [
-   "zettelapp/core/importer.py:96"
+   "zettelapp/core/importer.py:108"
   ]
  },
  "Unsupported image format. Use PNG, JPEG, GIF, WebP or BMP.": {
@@ -5559,6 +5584,12 @@
    "zettelapp/ui/main_window.py:708"
   ]
  },
+ "{n} attachment that isn't a picture was not imported; its name stays in the text.": {
+  "plural": "{n} attachments that aren't pictures were not imported; their names stay in the text.",
+  "where": [
+   "zettelapp/core/importer.py:550"
+  ]
+ },
  "{n} card": {
   "plural": "{n} cards",
   "where": [
@@ -5580,7 +5611,7 @@
  "{n} flashcard": {
   "plural": "{n} flashcards",
   "where": [
-   "zettelapp/ui/main_window.py:1177",
+   "zettelapp/ui/main_window.py:1178",
    "zettelapp/ui/main_window.py:1128"
   ]
  },
@@ -5593,7 +5624,7 @@
  "{n} image": {
   "plural": "{n} images",
   "where": [
-   "zettelapp/ui/main_window.py:1178"
+   "zettelapp/ui/main_window.py:1179"
   ]
  },
  "{n} in Trash": {
@@ -5619,7 +5650,7 @@
   "where": [
    "zettelapp/ui/graph_page.py:410",
    "zettelapp/ui/insights.py:82",
-   "zettelapp/ui/main_window.py:1176",
+   "zettelapp/ui/main_window.py:1177",
    "zettelapp/ui/main_window.py:1124",
    "zettelapp/ui/main_window.py:795",
    "zettelapp/ui/note_list.py:154"
@@ -5642,7 +5673,7 @@
   "where": [
    "zettelapp/ui/graph_page.py:409",
    "zettelapp/ui/insights.py:80",
-   "zettelapp/ui/main_window.py:1175",
+   "zettelapp/ui/main_window.py:1176",
    "zettelapp/ui/main_window.py:1123",
    "zettelapp/ui/main_window.py:793"
   ]
@@ -5680,7 +5711,7 @@
  "{n} unchanged note was skipped.": {
   "plural": "{n} unchanged notes were skipped.",
   "where": [
-   "zettelapp/ui/main_window.py:1182"
+   "zettelapp/ui/main_window.py:1183"
   ]
  },
  "{provider} is having trouble right now (error {code}). Try again later.": {

@@ -78,7 +78,9 @@
 <ul>
 <li><strong>ZettelApp アーカイブ</strong> (<code>.zip</code>) と <strong>JSON</strong> のエクスポート</li>
 <li><strong>Markdown ファイル</strong> (<code>.md</code>)、または <strong>Markdown ファイルの <code>.zip</code></strong></li>
+<li><strong>Evernote のエクスポート</strong> (<code>.enex</code>)</li>
 <li><strong>Obsidian の保管庫</strong>のような Markdown ファイルのフォルダーには、<em>ファイル ▸ Markdown フォルダーをインポート…</em></li>
+<li>Markdown をエクスポートできるほかのアプリ (<strong>Notion</strong>、Joplin、Bear、Logseq など) も同じようにインポートできます。</li>
 </ul>
 <p>保持されるもの:</p>
 <ul>
@@ -90,10 +92,12 @@
 <li>情報源リンクは <code>url</code> または <code>source</code> から、作成日は <code>created</code> から取得されます。</li>
 <li><code>[[wiki links]]</code> (Obsidian のファイル名リンクを含む) と <code>type:: [[links]]</code> はリンクになります。</li>
 <li><code>![](path)</code> または Obsidian の <code>![[image.png]]</code> で参照された画像は、保管庫にコピーされます。</li>
+<li>ほかの Markdown ファイルへのリンク (Notion が書く <code>[テキスト](ノート.md)</code> 形式)、フロントマターの <code>aliases</code> にある名前、埋め込まれたノート (<code>![[ノート]]</code>) はリンクになります。Notion の長い ID はタイトルに含まれません。</li>
 <li><code>.obsidian</code> や <code>.trash</code> などの隠しフォルダーはスキップされます。</li>
 <li>ZettelApp 自身の Markdown エクスポートは、種類付きリンク、フラッシュカード、マインドマップごとインポートし直せます。</li>
 </ul>
 </li>
+<li><strong>Evernote から:</strong> 各ノートは、タイトル、本文 (見出し、リスト、チェックリスト、太字、斜体、リンク、テキスト行としての表)、タグ、情報源リンク、作成日を保持します。画像は保管庫にコピーされます。ほかの添付ファイルはコピーされず、ファイル名が本文に残ります。暗号化されたテキストは省かれます。</li>
 </ul>
 <h3 id="安全性">安全性</h3>
 <p>インポートされるファイルは信頼できないものとして扱われます。</p>

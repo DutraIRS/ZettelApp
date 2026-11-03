@@ -83,7 +83,9 @@ can be saved as a PNG image.</p>
 <ul>
 <li><strong>ZettelApp archives</strong> (<code>.zip</code>) and <strong>JSON</strong> exports;</li>
 <li><strong>Markdown files</strong> (<code>.md</code>) or a <strong><code>.zip</code> of Markdown files</strong>;</li>
+<li><strong>Evernote exports</strong> (<code>.enex</code>);</li>
 <li><em>File ▸ Import Markdown Folder…</em> for a folder of Markdown files, such as an <strong>Obsidian vault</strong>.</li>
+<li>Other apps that export Markdown, such as <strong>Notion</strong>, Joplin, Bear or Logseq, import the same way.</li>
 </ul>
 <p>What is kept:</p>
 <ul>
@@ -98,10 +100,16 @@ used by a different note, the import gets a new ID and the links are updated.</l
 <li>the source link comes from <code>url</code> or <code>source</code>, and the creation date from <code>created</code>;</li>
 <li><code>[[wiki links]]</code> (including Obsidian's file-name links) and <code>type:: [[links]]</code> become links;</li>
 <li>images referenced with <code>![](path)</code> or Obsidian's <code>![[image.png]]</code> are copied into the vault;</li>
+<li>links to other Markdown files (<code>[text](Note.md)</code>, as Notion writes them), names listed under
+<code>aliases</code> in the front matter and embedded notes (<code>![[Note]]</code>) become links; Notion's long IDs
+are left out of titles;</li>
 <li>hidden folders such as <code>.obsidian</code> and <code>.trash</code> are skipped;</li>
 <li>ZettelApp's own Markdown export imports back with its typed links, flashcards and mind maps.</li>
 </ul>
 </li>
+<li><strong>From Evernote:</strong> each note keeps its title, text (headings, lists, checklists, bold, italics,
+links and tables as plain rows), tags, source link and creation date. Pictures are copied into the
+vault; other attachments aren't, and their file names stay in the text. Encrypted text is left out.</li>
 </ul>
 <h3 id="safety">Safety</h3>
 <p>Imported files are treated as untrusted:</p>

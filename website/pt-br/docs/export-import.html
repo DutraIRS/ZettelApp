@@ -83,7 +83,9 @@ pode ser salvo como uma imagem PNG.</p>
 <ul>
 <li><strong>Arquivos do ZettelApp</strong> (<code>.zip</code>) e exportações <strong>JSON</strong>;</li>
 <li><strong>Arquivos Markdown</strong> (<code>.md</code>) ou um <strong><code>.zip</code> de arquivos Markdown</strong>;</li>
+<li><strong>Exportações do Evernote</strong> (<code>.enex</code>);</li>
 <li><em>Arquivo ▸ Importar pasta Markdown…</em> para uma pasta de arquivos Markdown, como um <strong>cofre do Obsidian</strong>.</li>
+<li>Outros apps que exportam Markdown, como <strong>Notion</strong>, Joplin, Bear ou Logseq, são importados do mesmo jeito.</li>
 </ul>
 <p>O que é mantido:</p>
 <ul>
@@ -98,10 +100,16 @@ em uso por outra nota, a importação recebe um novo ID e os links são atualiza
 <li>o link de fonte vem de <code>url</code> ou <code>source</code>, e a data de criação de <code>created</code>;</li>
 <li><code>[[links wiki]]</code> (incluindo os links por nome de arquivo do Obsidian) e <code>type:: [[links]]</code> viram links;</li>
 <li>as imagens referenciadas com <code>![](path)</code> ou <code>![[image.png]]</code> do Obsidian são copiadas para o cofre;</li>
+<li>links para outros arquivos Markdown (<code>[texto](Nota.md)</code>, como o Notion os escreve), nomes em
+<code>aliases</code> no front matter e notas incorporadas (<code>![[Nota]]</code>) viram links; os longos IDs do Notion
+ficam fora dos títulos;</li>
 <li>pastas ocultas como <code>.obsidian</code> e <code>.trash</code> são ignoradas;</li>
 <li>a própria exportação Markdown do ZettelApp é importada de volta com seus links tipados, flashcards e mapas mentais.</li>
 </ul>
 </li>
+<li><strong>Do Evernote:</strong> cada nota mantém título, texto (títulos, listas, checklists, negrito, itálico, links e
+tabelas como linhas de texto), tags, link da fonte e data de criação. As imagens são copiadas para o
+cofre; os demais anexos não, e os nomes deles ficam no texto. Texto criptografado é omitido.</li>
 </ul>
 <h3 id="seguranca">Segurança</h3>
 <p>Os arquivos importados são tratados como não confiáveis:</p>

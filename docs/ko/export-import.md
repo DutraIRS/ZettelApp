@@ -36,7 +36,9 @@
 
 - **ZettelApp 보관 파일**(`.zip`)과 **JSON** 내보내기
 - **Markdown 파일**(`.md`) 또는 **Markdown 파일의 `.zip`**
+- **Evernote 내보내기**(`.enex`)
 - **Obsidian 볼트**처럼 Markdown 파일이 든 폴더에는 *파일 ▸ Markdown 폴더 가져오기…*
+- Markdown을 내보내는 다른 앱(**Notion**, Joplin, Bear, Logseq 등)도 같은 방식으로 가져와요.
 
 유지되는 것:
 
@@ -49,8 +51,10 @@
   - 출처 링크는 `url` 또는 `source`에서, 생성 날짜는 `created`에서 가져와요.
   - `[[위키 링크]]`(Obsidian의 파일 이름 링크 포함)와 `type:: [[links]]`가 링크가 돼요.
   - `![](path)` 또는 Obsidian의 `![[image.png]]`로 참조된 이미지는 볼트로 복사돼요.
+  - 다른 Markdown 파일로의 링크(Notion이 쓰는 `[텍스트](노트.md)` 형식), 프런트 매터의 `aliases`에 있는 이름, 삽입된 노트(`![[노트]]`)는 링크가 돼요. Notion의 긴 ID는 제목에서 빠져요.
   - `.obsidian`, `.trash` 같은 숨김 폴더는 건너뛰어요.
   - ZettelApp 자체의 Markdown 내보내기는 유형이 있는 링크, 플래시카드, 마인드맵과 함께 다시 가져올 수 있어요.
+- **Evernote에서:** 각 노트는 제목, 본문(제목, 목록, 체크리스트, 굵게, 기울임, 링크, 텍스트 행으로 된 표), 태그, 출처 링크, 생성일을 유지해요. 그림은 볼트로 복사되고, 다른 첨부 파일은 복사되지 않으며 파일 이름이 본문에 남아요. 암호화된 텍스트는 빠져요.
 
 ### 안전
 

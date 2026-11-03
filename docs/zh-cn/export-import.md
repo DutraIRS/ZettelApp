@@ -34,7 +34,9 @@
 
 - **ZettelApp 归档**(`.zip`)和 **JSON** 导出文件;
 - **Markdown 文件**(`.md`)或**由 Markdown 文件组成的 `.zip`**;
+- **Evernote 导出文件**(`.enex`);
 - 对于 Markdown 文件夹(例如 **Obsidian 库**),使用*文件 ▸ 导入 Markdown 文件夹…*。
+- 其他能导出 Markdown 的应用,例如 **Notion**、Joplin、Bear 或 Logseq,也可以同样导入。
 
 会保留的内容:
 
@@ -45,8 +47,10 @@
   - 来源链接来自 `url` 或 `source`,创建日期来自 `created`;
   - `[[wiki links]]`(包括 Obsidian 的文件名链接)和 `type:: [[links]]` 会变成链接;
   - 通过 `![](path)` 或 Obsidian 的 `![[image.png]]` 引用的图片会被复制到库中;
+  - 指向其他 Markdown 文件的链接(`[文字](笔记.md)`,Notion 就这样写)、前置元数据中 `aliases` 列出的名称以及嵌入的笔记(`![[笔记]]`)都会变成链接;Notion 的长 ID 不会出现在标题中;
   - 诸如 `.obsidian` 和 `.trash` 之类的隐藏文件夹会被跳过;
   - ZettelApp 自己导出的 Markdown 可连同其类型链接、闪卡和思维导图一起导回。
+- **从 Evernote:** 每条笔记保留标题、正文(标题、列表、清单、粗体、斜体、链接,以及作为文本行的表格)、标签、来源链接和创建日期。图片会复制到库中;其他附件不会,其文件名保留在正文中。加密文本会被省略。
 
 ### 安全
 

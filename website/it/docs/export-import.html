@@ -83,7 +83,9 @@ può essere salvato come immagine PNG.</p>
 <ul>
 <li><strong>archivi ZettelApp</strong> (<code>.zip</code>) ed esportazioni <strong>JSON</strong>;</li>
 <li><strong>file Markdown</strong> (<code>.md</code>) o uno <strong><code>.zip</code> di file Markdown</strong>;</li>
+<li><strong>esportazioni di Evernote</strong> (<code>.enex</code>);</li>
 <li><em>File ▸ Importa cartella Markdown…</em> per una cartella di file Markdown, come un <strong>vault di Obsidian</strong>.</li>
+<li>Le altre app che esportano in Markdown, come <strong>Notion</strong>, Joplin, Bear o Logseq, si importano allo stesso modo.</li>
 </ul>
 <p>Cosa viene mantenuto:</p>
 <ul>
@@ -98,10 +100,17 @@ usato da un'altra nota, l'importazione riceve un nuovo ID e i collegamenti vengo
 <li>il collegamento alla fonte proviene da <code>url</code> o <code>source</code> e la data di creazione da <code>created</code>;</li>
 <li><code>[[collegamenti wiki]]</code> (compresi i collegamenti per nome di file di Obsidian) e <code>type:: [[collegamenti]]</code> diventano collegamenti;</li>
 <li>le immagini referenziate con <code>![](path)</code> o con <code>![[image.png]]</code> di Obsidian vengono copiate nel vault;</li>
+<li>i collegamenti ad altri file Markdown (<code>[testo](Nota.md)</code>, come li scrive Notion), i nomi in
+<code>aliases</code> nel front matter e le note incorporate (<code>![[Nota]]</code>) diventano collegamenti; i lunghi ID
+di Notion restano fuori dai titoli;</li>
 <li>le cartelle nascoste come <code>.obsidian</code> e <code>.trash</code> vengono saltate;</li>
 <li>l'esportazione Markdown di ZettelApp si reimporta con i suoi collegamenti tipizzati, flashcard e mappe mentali.</li>
 </ul>
 </li>
+<li><strong>Da Evernote:</strong> ogni nota conserva titolo, testo (titoli, elenchi, liste di controllo, grassetto,
+corsivo, collegamenti e tabelle come righe di testo), tag, collegamento alla fonte e data di creazione.
+Le immagini vengono copiate nel vault; gli altri allegati no, e i loro nomi restano nel testo. Il testo
+cifrato viene omesso.</li>
 </ul>
 <h3 id="sicurezza">Sicurezza</h3>
 <p>I file importati sono trattati come non attendibili:</p>
