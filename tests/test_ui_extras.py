@@ -265,3 +265,13 @@ def test_shift_arrows_extend_the_selection_and_delete_trashes_it(window):
     QTest.keyClick(view, Qt.Key.Key_Delete)
     assert all(window.vault.get_note(i).deleted for i in chosen)
     assert len(window.list.model.rows) == 1
+
+
+def test_a_note_time_without_a_zone_does_not_crash_the_editor():
+    from PySide6.QtWidgets import QApplication
+
+    from zettelapp.ui.editor import friendly_time
+
+    QApplication.instance() or QApplication(["test"])
+    assert "2024" in friendly_time("2024-01-01T12:00:00")
+    assert "2024" in friendly_time("2024-01-01T12:00:00+00:00")

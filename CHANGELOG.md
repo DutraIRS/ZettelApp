@@ -4,6 +4,12 @@ All notable changes to ZettelApp are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [1.2.1] - 2026-11-03
+
+### Fixed
+
+- Opening a note whose stored time has no time zone no longer crashes the app.
+
 ## [1.2.0] - 2026-11-02
 
 ### Added

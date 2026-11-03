@@ -55,7 +55,8 @@ def friendly_time(iso: str) -> str:
         when = datetime.fromisoformat(iso)
     except ValueError:
         return iso
-    delta = datetime.now(UTC) - when
+    # astimezone() reads a time without a zone as local, as imports do.
+    delta = datetime.now(UTC) - when.astimezone()
     seconds = delta.total_seconds()
     if seconds < 60:
         return _("just now")
