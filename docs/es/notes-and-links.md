@@ -257,6 +257,8 @@ idiomas. Está desactivada hasta que la configures:
 1. En *Herramientas ▸ Opciones ▸ Búsqueda*, pulsa **Descargar el modelo** (135 MB, una sola vez, desde Hugging Face).
 2. Marca **Usar la búsqueda semántica** y confirma.
 
+También puedes marcar *Configurar la búsqueda semántica* en el instalador: ZettelApp descarga entonces el modelo la primera vez que se abre y la activa.
+
 ZettelApp indexa entonces tus notas en segundo plano y se mantiene al día mientras las editas. Los resultados
 de las palabras que escribiste aparecen al instante; las notas encontradas por su significado se añaden un
 momento después. El modelo se ejecuta en tu equipo y tus notas nunca salen de él. Mientras se usa ocupa unos

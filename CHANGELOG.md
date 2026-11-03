@@ -8,6 +8,8 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Added
 
+- An unticked installer option, *Set up semantic search*: ZettelApp then downloads the language
+  model the first time it starts and turns semantic search on.
 - In the 3D graph, Ctrl+drag a note to move it.
 - A **Graph** tab in *Tools ▸ Tag Ontology…* draws the ontology.
 
@@ -38,6 +40,7 @@ All notable changes to ZettelApp are documented here. The format follows
   note around your word.
 - **Semantic search** (optional, off by default): after a one-time 135 MB download you ask for, a language
   model on your computer finds notes by meaning, across languages. Your notes never leave your computer.
+- An unticked installer option, *Set up semantic search*, downloads the model on the first start.
 - **Adaptive ranking** (optional, off by default): right-click a search result to mark it as relevant or
   not, and the kinds of match you prefer count for more.
 - Vaults move to schema 5 when opened; older versions of ZettelApp can't open them afterwards.

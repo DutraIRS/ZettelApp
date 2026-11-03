@@ -1387,7 +1387,7 @@
  "Could not switch MCP on.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1375"
+   "zettelapp/ui/main_window.py:1388"
   ]
  },
  "Could not update the configuration: {error}": {
@@ -2600,7 +2600,7 @@
  "Let AI agents use ZettelApp through MCP": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1345"
+   "zettelapp/ui/main_window.py:1358"
   ]
  },
  "Let the title state the idea, like the title of this note. When a note grows a second idea, split it: press **Ctrl+N** for a new note, move the text there and link the two.": {
@@ -2859,38 +2859,38 @@
  "MCP is off: AI agents can no longer reach your notes.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1393"
+   "zettelapp/ui/main_window.py:1406"
   ]
  },
  "MCP is on: AI agents connected to ZettelApp can read and add to your notes until you switch it off or close ZettelApp.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1380"
+   "zettelapp/ui/main_window.py:1393"
   ]
  },
  "MCP is on: AI agents connected to ZettelApp can read your notes until you switch it off or close ZettelApp.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1385"
+   "zettelapp/ui/main_window.py:1398"
   ]
  },
  "MCP lets AI agents such as Claude Desktop or Claude Code search and read your notes.\nIt works only while ZettelApp is open and this switch is on. The switch is off\nwhenever ZettelApp starts, and the agent's connection stops when you switch it\noff or close ZettelApp. Set it up in Tools ▸ Options ▸ MCP server.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1355"
+   "zettelapp/ui/main_window.py:1368"
   ]
  },
  "MCP off": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1347",
-   "zettelapp/ui/main_window.py:1377"
+   "zettelapp/ui/main_window.py:1360",
+   "zettelapp/ui/main_window.py:1390"
   ]
  },
  "MCP on": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1377"
+   "zettelapp/ui/main_window.py:1390"
   ]
  },
  "MCP server": {
@@ -4147,7 +4147,7 @@
  "Semantic search failed: {error}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1257"
+   "zettelapp/ui/main_window.py:1270"
   ]
  },
  "Semantic similarity (LSA)": {
@@ -4795,7 +4795,7 @@
  "The language model is ready.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1253"
+   "zettelapp/ui/main_window.py:1266"
   ]
  },
  "The last 12 months": {

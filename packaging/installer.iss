@@ -84,6 +84,30 @@ russian.RegisterLinks=Открывать ссылки zettelapp:// (исполь
 japanese.RegisterLinks=zettelapp:// リンク (Anki のカードで使用) を ZettelApp で開く
 korean.RegisterLinks=zettelapp:// 링크(Anki 카드에서 사용)를 ZettelApp으로 열기
 arabic.RegisterLinks=فتح روابط zettelapp:// (المستخدمة في بطاقات Anki) باستخدام ZettelApp
+SemanticSearch=Set up semantic search (downloads a 135 MB language model from Hugging Face the first time ZettelApp starts)
+brazilianportuguese.SemanticSearch=Configurar a busca semântica (baixa um modelo de linguagem de 135 MB do Hugging Face na primeira vez que o ZettelApp abrir)
+portuguese.SemanticSearch=Configurar a pesquisa semântica (transfere um modelo de linguagem de 135 MB do Hugging Face na primeira vez que o ZettelApp abrir)
+spanish.SemanticSearch=Configurar la búsqueda semántica (descarga un modelo de lenguaje de 135 MB desde Hugging Face la primera vez que se abra ZettelApp)
+french.SemanticSearch=Configurer la recherche sémantique (télécharge un modèle de langue de 135 Mo depuis Hugging Face au premier démarrage de ZettelApp)
+german.SemanticSearch=Semantische Suche einrichten (lädt beim ersten Start von ZettelApp ein Sprachmodell von 135 MB von Hugging Face herunter)
+italian.SemanticSearch=Configura la ricerca semantica (scarica un modello linguistico di 135 MB da Hugging Face al primo avvio di ZettelApp)
+dutch.SemanticSearch=Semantisch zoeken instellen (downloadt bij de eerste start van ZettelApp een taalmodel van 135 MB van Hugging Face)
+russian.SemanticSearch=Настроить семантический поиск (при первом запуске ZettelApp скачивает языковую модель 135 МБ с Hugging Face)
+japanese.SemanticSearch=意味検索を設定する (ZettelApp の初回起動時に Hugging Face から 135 MB の言語モデルをダウンロード)
+korean.SemanticSearch=의미 검색 설정(ZettelApp을 처음 시작할 때 Hugging Face에서 135MB 언어 모델을 다운로드)
+arabic.SemanticSearch=إعداد البحث الدلالي (ينزّل نموذجًا لغويًا بحجم 135 ميغابايت من Hugging Face عند أول تشغيل لـ ZettelApp)
+SearchGroup=Search:
+brazilianportuguese.SearchGroup=Busca:
+portuguese.SearchGroup=Pesquisa:
+spanish.SearchGroup=Búsqueda:
+french.SearchGroup=Recherche :
+german.SearchGroup=Suche:
+italian.SearchGroup=Ricerca:
+dutch.SearchGroup=Zoeken:
+russian.SearchGroup=Поиск:
+japanese.SearchGroup=検索:
+korean.SearchGroup=검색:
+arabic.SearchGroup=البحث:
 Integration=Integration:
 brazilianportuguese.Integration=Integração:
 portuguese.Integration=Integração:
@@ -149,6 +173,8 @@ arabic.DeleteDataContinue=متابعة
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 Name: "urlprotocol"; Description: "{cm:RegisterLinks}"; GroupDescription: "{cm:Integration}"
+; Unticked: nothing is downloaded unless the user asks. The app does the download (and checks it).
+Name: "semanticsearch"; Description: "{cm:SemanticSearch}"; GroupDescription: "{cm:SearchGroup}"; Flags: unchecked
 
 [Files]
 Source: "..\dist\ZettelApp\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
@@ -168,6 +194,7 @@ Root: HKA; Subkey: "Software\Classes\zettelapp\shell\open\command"; ValueType: s
 ; The language chosen in this installer, for the app's interface language. Only written when
 ; there is none yet, so an update doesn't undo a language picked later in Options.
 Root: HKCU; Subkey: "Software\ZettelApp\ZettelApp\ui"; ValueType: string; ValueName: "language"; ValueData: "{code:AppLanguage}"; Flags: uninsdeletevalue createvalueifdoesntexist
+Root: HKCU; Subkey: "Software\ZettelApp\ZettelApp\search"; ValueType: string; ValueName: "setUpSemantic"; ValueData: "true"; Tasks: semanticsearch
 
 [Run]
 Filename: "{app}\ZettelApp.exe"; Description: "{cm:LaunchProgram,ZettelApp}"; Flags: nowait postinstall skipifsilent

@@ -253,6 +253,7 @@ def main(argv: list[str] | None = None) -> int:
         window.handle_message(message)
     # Look for a newer version once start-up has settled; it never interrupts anything.
     QTimer.singleShot(UPDATE_CHECK_DELAY_MS, window.check_for_updates)
+    QTimer.singleShot(UPDATE_CHECK_DELAY_MS, window.set_up_semantic_search)
 
     def follow_system_theme(*_args) -> None:
         if settings.get(settings.THEME) == "system":
