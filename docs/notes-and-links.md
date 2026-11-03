@@ -254,7 +254,8 @@ Several kinds of match work together, and *Tools ▸ Options ▸ Search* sets ho
 
 Semantic search finds notes by what they mean, even when they share no words with your search:
 *how do plants make food* can find a note on photosynthesis, and it works across languages. It stays off
-until you set it up:
+until you set it up, either by ticking *Set up semantic search* in the installer (ZettelApp then
+downloads the model the first time it starts) or here:
 
 1. In *Tools ▸ Options ▸ Search*, click **Download model** (135 MB, once, from Hugging Face).
 2. Tick **Use semantic search** and click **OK**.
