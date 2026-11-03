@@ -28,6 +28,11 @@ rete che può effettuare:</p>
 <td>La tua chiave API, per l'autenticazione</td>
 </tr>
 <tr>
+<td>Fai clic su <strong>Scarica il modello</strong> in <em>Strumenti ▸ Opzioni ▸ Ricerca</em> e confermi</td>
+<td><code>huggingface.co</code>, che può reindirizzare ai suoi server di download</td>
+<td>Una richiesta HTTPS per ogni file del modello di ricerca semantica, con l'intestazione <code>User-Agent: ZettelApp/&lt;version&gt;</code>. Nulla sulle tue note. Ogni file viene verificato con uno SHA-256 fisso prima di essere usato. Vedi <a href="notes-and-links.html#ricerca-semantica">Note e collegamenti</a>.</td>
+</tr>
+<tr>
 <td>Usi <strong>Sincronizza con Anki</strong></td>
 <td>AnkiConnect su <strong>questo computer</strong> (<code>127.0.0.1</code>)</td>
 <td>Le flashcard dell'ambito scelto</td>
@@ -85,6 +90,10 @@ Il server MCP non effettua alcuna richiesta di rete.</p>
 <td>Piccola cache dell'interfaccia</td>
 <td><code>%LOCALAPPDATA%\ZettelApp\Cache</code></td>
 </tr>
+<tr>
+<td>Modello e indice della ricerca semantica, se la configuri</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Search</code>. L'indice deriva dalle tue note e non è mai nel vault, quindi non viene sincronizzato con esso. <em>Rimuovi modello e indice</em> in <em>Strumenti ▸ Opzioni ▸ Ricerca</em> lo elimina.</td>
+</tr>
 </tbody>
 </table></div>
 <p>Il vault è una normale cartella: puoi copiarla, farne il backup o tenerla in OneDrive. ZettelApp scrive il
@@ -138,7 +147,7 @@ input/output senza alcuna porta di rete. Vedi <a href="mcp-server.html">Server M
 <h2 id="disinstallazione">Disinstallazione</h2>
 <p>Disinstalla da <em>Impostazioni di Windows ▸ App ▸ App installate ▸ ZettelApp ▸ Disinstalla</em>. Il programma di disinstallazione offre
 un'opzione non selezionata, <strong>Elimina anche le impostazioni e i dati di ZettelApp</strong>. Se la selezioni, rimuove le tue
-impostazioni, le chiavi API salvate in Gestione credenziali, i log, la cache e i backup automatici
+impostazioni, le chiavi API salvate in Gestione credenziali, i log, la cache, i backup automatici e il modello e l'indice della ricerca semantica
 (<code>%LOCALAPPDATA%\ZettelApp</code>) <strong>e tutte le tue note</strong> (il database e gli allegati dei tuoi vault). Se non la selezioni,
 le tue note restano dove sono.</p>
 <p>Hai trovato un problema di sicurezza? Segnalalo in privato; vedi

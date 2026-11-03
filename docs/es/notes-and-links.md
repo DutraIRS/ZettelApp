@@ -128,12 +128,28 @@ no se pierde nada. Los tipos integrados se pueden renombrar y cambiar de estilo,
 Añade etiquetas en el campo de etiquetas bajo el título (pulsa Enter tras cada una) o escríbelas **en el texto** con una
 almohadilla, como `#welcome` o `#math/algebra`. Las etiquetas van en minúsculas y pueden anidarse con una barra, como
 `math/algebra`. Filtrar por `math` también encuentra las notas con la etiqueta `math/algebra`.
-Usa el filtro de etiquetas sobre la lista de notas o escribe `tag:name` en el cuadro de búsqueda.
+Usa el filtro de etiquetas sobre la lista de notas o escribe `tag:name` en el cuadro de búsqueda. El número junto a cada etiqueta cuenta las notas que muestra ese filtro.
 
 Las etiquetas escritas en el texto son etiquetas reales, que se muestran como **pastillas con contorno** junto al cuadro *Añadir etiqueta*. Desaparecen
 cuando borras la `#etiqueta` del texto. Una `#etiqueta` se ignora dentro de código, dentro de destinos de enlace
 y en `[[#encabezados]]`. Las etiquetas escritas en el cuadro *Añadir etiqueta* son independientes: permanecen hasta que las quitas con
 su ✕. Ctrl+clic en una `#etiqueta` del editor para listar las notas que la tienen.
+
+### Ontología de etiquetas
+
+También puedes indicar cómo se relacionan las etiquetas entre sí, sin cambiarles el nombre. Abre
+*Herramientas ▸ Ontología de etiquetas…*, o el pequeño botón junto al filtro de etiquetas, y añade relaciones:
+
+| Relación | Ejemplo | Un filtro por la primera etiqueta también encuentra… |
+|---|---|---|
+| **Padre → hijo** | `estadística` es la etiqueta padre de `bayes` | las notas con la etiqueta `bayes`, y a su vez las de sus hijas. Una etiqueta puede tener varios padres. |
+| **Sinónimo / alias** | `ml` es sinónimo de `aprendizaje-automático` | las notas con cualquiera de las dos, filtres por la que filtres. |
+| **Concepto relacionado** | `memoria` está relacionada con `sueño` | nada más, hasta que marques *Buscar también notas con etiquetas relacionadas* en el menú del pequeño botón. |
+
+Una etiqueta de una relación no tiene por qué estar en ninguna nota, así que `estadística` puede existir solo
+para reunir otras etiquetas. Las relaciones solo cambian lo que encuentran los filtros y las búsquedas: tus
+notas y sus etiquetas siguen como están. Haz doble clic en una relación para ver las notas de su primera
+etiqueta. Los archivos de ZettelApp incluyen la ontología y los clientes MCP pueden leerla.
 
 ## Enlace de la fuente
 
@@ -218,10 +234,52 @@ la nota. Las tarjetas del texto se marcan como *del texto de la nota* y se edita
 
 ## Búsqueda
 
-El cuadro de búsqueda (Ctrl+F) usa búsqueda de texto completo en títulos, texto y etiquetas, ignora los acentos y coincide con
-prefijos de palabra, así que `olvid` encuentra *olvidando*. Añade `tag:name` para filtrar por etiqueta, por ejemplo
-`memoria tag:psicologia`. Los resultados se ordenan por relevancia; sin consulta, las notas siguen el orden elegido
+El cuadro de búsqueda (Ctrl+F) busca en títulos, texto y etiquetas, ignora los acentos y coincide con
+prefijos de palabra, así que `olvid` encuentra *olvidando*. Añade `tag:name` para quedarte solo con las notas
+que tengan una etiqueta, por ejemplo `memoria tag:psicologia`. Las mejores coincidencias aparecen primero y
+cada una muestra la parte de la nota que rodea tu palabra; sin consulta, las notas siguen el orden elegido
 (*Última edición*, *Creada*, *Título* o *Más enlazadas*).
+
+Varios tipos de coincidencia trabajan juntos, y *Herramientas ▸ Opciones ▸ Búsqueda* define cuánto cuenta cada uno:
+
+- **Texto completo**: tus palabras en cualquier parte de la nota.
+- **Difusa**: pequeñas erratas en títulos y etiquetas, así que `quantom` encuentra *Quantum*.
+- **Etiquetas y ontología**: una palabra que nombra una etiqueta encuentra las notas de esa etiqueta y las de
+  sus hijas y sinónimos.
+- **Semántica** (opcional): notas que significan algo parecido, como se explica a continuación.
+
+### Búsqueda semántica
+
+La búsqueda semántica encuentra notas por lo que significan, aunque no compartan ninguna palabra con tu
+búsqueda: *cómo se alimentan las plantas* puede encontrar una nota sobre la fotosíntesis, y funciona entre
+idiomas. Está desactivada hasta que la configures:
+
+1. En *Herramientas ▸ Opciones ▸ Búsqueda*, pulsa **Descargar el modelo** (135 MB, una sola vez, desde Hugging Face).
+2. Marca **Usar la búsqueda semántica** y confirma.
+
+ZettelApp indexa entonces tus notas en segundo plano y se mantiene al día mientras las editas. Los resultados
+de las palabras que escribiste aparecen al instante; las notas encontradas por su significado se añaden un
+momento después. El modelo se ejecuta en tu equipo y tus notas nunca salen de él. Mientras se usa ocupa unos
+500 MB de memoria, que se liberan dos minutos después de tu última búsqueda. **Eliminar modelo e índice**, en
+la misma página, lo borra todo.
+
+### Mejores resultados con tus comentarios
+
+Marca **Mejorar el ranking con mis comentarios explícitos** en *Herramientas ▸ Opciones ▸ Búsqueda*; después
+haz clic derecho en un resultado de búsqueda y elige **Resultado relevante** o **Resultado no relevante**. Los
+tipos de coincidencia que hay detrás de los resultados que marcas cuentan más o menos a partir de entonces.
+Solo se usan esos clics. ZettelApp guarda un total acumulado por tipo de coincidencia, en este equipo, y nada
+sobre qué notas marcaste ni qué buscaste. **Restablecer preferencias aprendidas** lo olvida todo.
+
+## Seleccionar varias notas
+
+En la lista de notas, Ctrl+clic, Shift+clic o Shift+flechas seleccionan varias notas. Haz clic derecho en la
+selección para duplicarlas o moverlas a la papelera (en la papelera, para restaurarlas o eliminarlas), o pulsa
+Supr para moverlas a la papelera.
+
+*Editar ▸ Duplicar nota* (Ctrl+D) copia una nota: su texto, etiquetas, enlace de la fuente, imagen, mapa mental,
+los enlaces que hace y las tarjetas que escribiste a mano. No se copian los enlaces hacia ella, su alarma ni su
+historial de repaso.
 
 ## Papelera
 

@@ -77,14 +77,14 @@ unless the repository variable `ALLOW_UNSIGNED_RELEASE` is set to `true` to appr
 
 The CI workflow (`.github/workflows/ci.yml`) runs each check as its own step: lint, formatting, the
 dependency audit and a check that the generated website files are up to date (it fails when
-`website/docs` or `website/version.json` differ from what `tools/build_site.py` writes), then the tests
+any generated file under `website/` differs from what `tools/build_site.py` writes), then the tests
 and a build of the packaged app with its self-test.
 
 `packaging/build.ps1` finds Inno Setup on `PATH`, installed for the current user
 (`%LOCALAPPDATA%\Programs\Inno Setup 6`) or for everyone.
 
-The vault database has a **schema version** (currently 2: the `tags.source` column tells tags added by
-hand from `#tags` written in the text). Older vaults are upgraded automatically when opened.
+The vault database has a **schema version** (currently 5: migrations add tag provenance, link styles, alarms
+and the tag ontology). Older vaults are upgraded automatically when opened.
 
 The website (`website/`) is deployed to GitHub Pages by `.github/workflows/pages.yml` whenever `docs/` or
 `website/` change on `main`.
@@ -97,6 +97,8 @@ zettelapp/
     storage.py     the vault: SQLite schema, notes, typed links, tags, assets, cards, backups
     similarity.py  Levenshtein, Jaro-Winkler, Jaccard, TF-IDF and LSA
     suggest.py     Naive Bayes link suggester
+    search.py      hybrid search for the note list; adaptive.py: learning from feedback
+    embeddings.py  optional semantic search: model download, vectors, inference
     cluster.py     k-means, hierarchical clustering, silhouette, cluster keywords
     graph.py       subgraphs and force-directed layout (2D/3D)
     render.py      safe Markdown rendering (notes, exports, Anki)

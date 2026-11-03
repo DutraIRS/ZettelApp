@@ -11,6 +11,7 @@ requests it can make:
 | About 4 seconds after ZettelApp starts (can be turned off) | `https://dutrairs.github.io/ZettelApp/version.json` | One HTTPS request for that file, with the header `User-Agent: ZettelApp/<version>`. Nothing else: no notes, settings or identifiers. Any failure is silent. See [Updates](getting-started.md#updates). |
 | You ask a question on the **Ask** page | The AI provider you configured (Anthropic, OpenAI, Z.ai or your own endpoint) | Your question and the notes listed under *Sources sent* |
 | You test the AI connection or refresh the model list | The same provider | Your API key, to authenticate |
+| You click **Download model** in *Tools ▸ Options ▸ Search* and confirm | `huggingface.co`, which may redirect to its download servers | One HTTPS request per file of the semantic search model, with the header `User-Agent: ZettelApp/<version>`. Nothing about your notes. Each file is checked against a fixed SHA-256 before it is used. See [Semantic search](notes-and-links.md#semantic-search). |
 | You **Sync to Anki** | AnkiConnect on **this computer** (`127.0.0.1`) | The flashcards in the chosen scope |
 | You use **Insert ▸ Zotero Reference** or *Test connection* in the Zotero options | Zotero on **this computer** (`127.0.0.1`) | Your search words (read-only) |
 | You click a web link, or use *Help ▸ Website / Documentation / Check for Updates*, or the update notice's **Download** button | Your web browser opens the page | Nothing from ZettelApp |
@@ -32,6 +33,7 @@ The MCP server makes no network requests at all.
 | Logs | `%LOCALAPPDATA%\ZettelApp\Logs` (rotated, at most a few MB). They record errors, not your notes, and never include API keys. |
 | Automatic backups | `%LOCALAPPDATA%\ZettelApp\Backups` |
 | Small UI cache | `%LOCALAPPDATA%\ZettelApp\Cache` |
+| Semantic search model and index, if you set it up | `%LOCALAPPDATA%\ZettelApp\Search`. The index is derived from your notes and is never in the vault, so it isn't synced with it. *Remove model and index* in *Tools ▸ Options ▸ Search* deletes it. |
 
 The vault is an ordinary folder: you can copy it, back it up or keep it in OneDrive. ZettelApp writes the
 database with full synchronisation, a setting chosen to suit synced folders. Avoid opening the same vault on two
@@ -87,8 +89,8 @@ Notes can come from imports, the web or AI answers, so ZettelApp treats their co
 
 Uninstall from *Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall*. The uninstaller offers
 an unticked option, **Also delete my ZettelApp settings and data**. If you tick it, it removes your
-settings, the API keys saved in Credential Manager, logs, the cache and automatic backups
-(`%LOCALAPPDATA%\ZettelApp`) **and all your notes** (the database and attachments of your vaults). Unticked,
+settings, the API keys saved in Credential Manager, logs, the cache, automatic backups and the semantic
+search model and index (`%LOCALAPPDATA%\ZettelApp`) **and all your notes** (the database and attachments of your vaults). Unticked,
 your notes stay where they are.
 
 Found a security problem? Please report it privately; see

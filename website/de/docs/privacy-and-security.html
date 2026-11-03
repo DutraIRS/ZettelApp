@@ -28,6 +28,11 @@ Netzwerkanfragen kann die App stellen:</p>
 <td>Ihren API-Schlüssel zur Authentifizierung</td>
 </tr>
 <tr>
+<td>Sie klicken unter <em>Extras ▸ Optionen ▸ Suche</em> auf <strong>Modell herunterladen</strong> und bestätigen</td>
+<td><code>huggingface.co</code>, das auf seine Download-Server weiterleiten kann</td>
+<td>Eine HTTPS-Anfrage pro Datei des Modells für die semantische Suche, mit dem Header <code>User-Agent: ZettelApp/&lt;version&gt;</code>. Nichts über Ihre Notizen. Jede Datei wird vor der Verwendung anhand eines festen SHA-256 geprüft. Siehe <a href="notes-and-links.html#semantische-suche">Notizen und Links</a>.</td>
+</tr>
+<tr>
 <td>Sie <strong>Mit Anki synchronisieren</strong> verwenden</td>
 <td>AnkiConnect auf <strong>diesem Computer</strong> (<code>127.0.0.1</code>)</td>
 <td>Die Lernkarten im ausgewählten Bereich</td>
@@ -86,6 +91,10 @@ weggeleitet werden. Der MCP-Server stellt überhaupt keine Netzwerkanfragen.</p>
 <td>Kleiner UI-Cache</td>
 <td><code>%LOCALAPPDATA%\ZettelApp\Cache</code></td>
 </tr>
+<tr>
+<td>Modell und Index der semantischen Suche, falls Sie sie einrichten</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Search</code>. Der Index wird aus Ihren Notizen abgeleitet und liegt nie im Tresor, wird also nicht mit ihm synchronisiert. <em>Modell und Index entfernen</em> unter <em>Extras ▸ Optionen ▸ Suche</em> löscht ihn.</td>
+</tr>
 </tbody>
 </table></div>
 <p>Der Tresor ist ein gewöhnlicher Ordner: Sie können ihn kopieren, sichern oder in OneDrive aufbewahren.
@@ -117,7 +126,7 @@ nicht vertrauenswürdig:</p>
 <p>Deinstallieren Sie ZettelApp unter <em>Windows-Einstellungen ▸ Apps ▸ Installierte Apps ▸ ZettelApp ▸
 Deinstallieren</em>. Das Deinstallationsprogramm bietet die standardmäßig deaktivierte Option <strong>Auch meine
 ZettelApp-Einstellungen und -Daten löschen</strong>. Wenn Sie sie aktivieren, werden Ihre Einstellungen, die im
-Anmeldeinformations-Manager gespeicherten API-Schlüssel, Protokolle, der Cache und automatische Sicherungen
+Anmeldeinformations-Manager gespeicherten API-Schlüssel, Protokolle, der Cache, automatische Sicherungen sowie Modell und Index der semantischen Suche
 (<code>%LOCALAPPDATA%\ZettelApp</code>) <strong>sowie alle Ihre Notizen</strong> (die Datenbank und Anhänge Ihrer Tresore) entfernt.
 Wenn Sie die Option nicht aktivieren, bleiben Ihre Notizen an ihrem Speicherort.</p>
 <p>Haben Sie ein Sicherheitsproblem gefunden? Melden Sie es bitte vertraulich; siehe

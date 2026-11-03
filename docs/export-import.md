@@ -18,7 +18,7 @@ button exports the notes on screen) and from a graph node's menu.
 
 | Format | File | Contents |
 |---|---|---|
-| **ZettelApp archive** | `.zip` | Everything, including images: notes, typed links, link types (with their colours, line styles and arrow tips), flashcards, mind maps. Re-import it into ZettelApp on any computer. Best for backups and moving vaults. |
+| **ZettelApp archive** | `.zip` | Everything, including images: notes, typed links, link types (with their colours, line styles and arrow tips), flashcards, mind maps, the tag ontology. Re-import it into ZettelApp on any computer. Best for backups and moving vaults. |
 | **Markdown files** | `.zip` | One `.md` file per note with YAML front matter (id, title, tags, source link, dates, typed links, mind map) and `[[wiki links]]` between files. Links not written in the text are listed under *Links* as `type:: [[Note]]`, and manual flashcards under *Flashcards* as `Q:`/`A:`. Images are in `assets/`. Opens in Obsidian and other Markdown editors. |
 | **Website** | `.zip` | A self-contained static website: an index with a graph overview, a tag index and one page per note, with links drawn in their link types' colours and line styles, mind maps and flashcards (answers revealed on click). No scripts; it works offline by opening `index.html`. Light and dark themes. |
 | **JSON** | `.json` | Structured data for scripts and other tools (images referenced, not included). |

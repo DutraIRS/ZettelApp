@@ -33,6 +33,7 @@ from zettelapp import (
     settings,
     winintegration,
 )
+from zettelapp.core.embeddings import model_installed
 from zettelapp.core.export import export as run_export
 from zettelapp.core.graph import subgraph
 from zettelapp.core.importer import import_path
@@ -50,10 +51,16 @@ from zettelapp.core.textutil import strip_markdown
 from zettelapp.core.updates import available_update
 from zettelapp.i18n import N_, _, n_
 from zettelapp.mcp_switch import McpSwitch
-from zettelapp.paths import backups_dir, default_vault_dir, documents_dir
+from zettelapp.paths import backups_dir, default_vault_dir, documents_dir, local_data_dir
 from zettelapp.ui import icons, theme
 from zettelapp.ui.ask_page import AskPage
-from zettelapp.ui.dialogs import AboutDialog, ExportDialog, LinkPickerDialog, ShortcutsDialog
+from zettelapp.ui.dialogs import (
+    AboutDialog,
+    ExportDialog,
+    LinkPickerDialog,
+    ShortcutsDialog,
+    TagOntologyDialog,
+)
 from zettelapp.ui.editor import NoteEditor
 from zettelapp.ui.graph_page import GraphPage
 from zettelapp.ui.insights import InsightsPage
@@ -63,8 +70,8 @@ from zettelapp.ui.review_page import ReviewPage
 from zettelapp.ui.settings_dialog import OptionsDialog
 from zettelapp.ui.side_panel import SidePanel
 from zettelapp.ui.update_notice import UpdateNotice
-from zettelapp.ui.widgets import InfoBar, ToggleSwitch, label
-from zettelapp.ui.workers import SuggestionService, run_task
+from zettelapp.ui.widgets import InfoBar, ToggleSwitch, label, run_dialog
+from zettelapp.ui.workers import SemanticService, SuggestionService, run_task
 
 log = logging.getLogger(__name__)
 
@@ -181,6 +188,11 @@ class MainWindow(QMainWindow):
         self.refresh_timer = QTimer(
             self, singleShot=True, interval=400, timeout=self._refresh_after_save
         )
+        self.semantic = SemanticService(local_data_dir() / "Search", self)
+        # Index once editing has paused, not on every autosave.
+        self.semantic_timer = QTimer(
+            self, singleShot=True, interval=10_000, timeout=self._sync_semantic_index
+        )
         self.watch_timer = QTimer(self, interval=3000, timeout=self._check_external_changes)
         self.watch_timer.start()
         self.alarm_timer = QTimer(self, interval=20000, timeout=self.check_alarms)
@@ -201,6 +213,12 @@ class MainWindow(QMainWindow):
     # --- wiring -----------------------------------------------------------
 
     def _wire(self) -> None:
+        self.list.ontologyRequested.connect(self.open_tag_ontology)
+        self.list.semanticRequested.connect(self._semantic_search)
+        self.semantic.scored.connect(self.list.set_semantic_scores)
+        self.semantic.indexing.connect(self._semantic_indexing)
+        self.semantic.downloaded.connect(self._semantic_downloaded)
+        self.semantic.failed.connect(self._semantic_failed)
         self.list.noteSelected.connect(self.open_note)
         self.list.newNoteRequested.connect(self.new_note)
         self.list.linkToCurrent.connect(lambda dst, t: self._add_manual_link(dst, t))
@@ -362,6 +380,7 @@ class MainWindow(QMainWindow):
         self._action(
             t, "&Sync with Anki", lambda: (self.show_page(3), self.review.sync_anki()), None, "sync"
         )
+        self._action(t, "&Tag Ontology…", self.open_tag_ontology, None, "tag")
         t.addSeparator()
         self._action(t, "&Options…", lambda: self.open_options(), "Ctrl+,", "settings")
 
@@ -373,7 +392,7 @@ class MainWindow(QMainWindow):
             QKeySequence.StandardKey.HelpContents,
             "help",
         )
-        self._action(h, "&Keyboard Shortcuts", lambda: ShortcutsDialog(self).exec(), None)
+        self._action(h, "&Keyboard Shortcuts", lambda: run_dialog(ShortcutsDialog(self)), None)
         h.addSeparator()
         self.quest.add_menu_actions(h)
         h.addSeparator()
@@ -406,7 +425,7 @@ class MainWindow(QMainWindow):
         self._action(
             h,
             _("&About {app}").format(app=APP_NAME),
-            lambda: AboutDialog(self).exec(),
+            lambda: run_dialog(AboutDialog(self)),
             None,
             "info",
         )
@@ -510,6 +529,8 @@ class MainWindow(QMainWindow):
             return False
         self.close_vault()
         self.vault = vault
+        vault.listeners.append(self._vault_changed)
+        self.semantic_timer.start()
         self.quest.attach(vault)
         self._data_version = self._read_data_version()
         self._maybe_backup()
@@ -539,6 +560,8 @@ class MainWindow(QMainWindow):
             return
         self.editor.flush()
         self.editor.load(None)
+        self.semantic_timer.stop()
+        self.semantic.cancel_sync()
         self.vault.close()
         self.vault = None
 
@@ -636,9 +659,11 @@ class MainWindow(QMainWindow):
         if version is None or version == self._data_version:
             return
         self._data_version = version
+        self.semantic_timer.start()
         self.list.refresh()
         self.list.refresh_tags()
         self.suggestions.invalidate()
+        self.suggest_timer.start()  # asks again: an answer on its way was just dropped
         self.graph.invalidate()
         self._update_counts()
         note_id = self.current_note_id()
@@ -733,6 +758,14 @@ class MainWindow(QMainWindow):
             return
         self.show_page(0)
         self.list.tag_filter.setCurrentIndex(index)
+
+    def open_tag_ontology(self) -> None:
+        if self.vault is None:
+            return
+        dialog = TagOntologyDialog(self.vault, self)
+        dialog.changed.connect(self._refresh_after_save)
+        dialog.tagSelected.connect(self.show_tag)
+        run_dialog(dialog)
 
     def _refresh_after_save(self) -> None:
         self.list.refresh()
@@ -900,7 +933,7 @@ class MainWindow(QMainWindow):
         if note is None:
             return
         dialog = LinkPickerDialog(self.vault, {note.id}, self, _("Link to note"))
-        if dialog.exec() and dialog.selected():
+        if run_dialog(dialog) and dialog.selected():
             dst, link_type = dialog.selected()
             target = self.vault.get_note(dst)
             title = (
@@ -916,7 +949,7 @@ class MainWindow(QMainWindow):
             return
         exclude = {note.id}
         dialog = LinkPickerDialog(self.vault, exclude, self, _("Add link"))
-        if dialog.exec() and dialog.selected():
+        if run_dialog(dialog) and dialog.selected():
             dst, link_type = dialog.selected()
             self._add_manual_link(dst, link_type)
 
@@ -948,7 +981,7 @@ class MainWindow(QMainWindow):
 
     def _mindmap_link(self, node_id: str) -> None:
         dialog = LinkPickerDialog(self.vault, set(), self, _("Link idea to note"), show_types=False)
-        if dialog.exec() and dialog.selected():
+        if run_dialog(dialog) and dialog.selected():
             dst, _unused = dialog.selected()
             note = self.vault.get_note(dst)
             self.editor.mindmap.set_node_note(node_id, dst, note.display_title if note else None)
@@ -1023,7 +1056,7 @@ class MainWindow(QMainWindow):
         if self.vault is None:
             return
         dialog = ZoteroDialog(self)
-        if not dialog.exec() or dialog.result_item is None:
+        if not run_dialog(dialog) or dialog.result_item is None:
             return
         item = dialog.result_item
         if dialog.action == "cite" and self.editor.note is not None:
@@ -1069,7 +1102,7 @@ class MainWindow(QMainWindow):
                     button.setChecked(True)
         if preset:
             dialog.scope.setEnabled(False)
-        if not dialog.exec():
+        if not run_dialog(dialog):
             return
         dest = dialog.destination()
         if dest is None:
@@ -1175,13 +1208,61 @@ class MainWindow(QMainWindow):
     def autosave_ms(self) -> int:
         return settings.get(settings.AUTOSAVE_MS)
 
+    # --- semantic search --------------------------------------------------------
+
+    def _semantic_active(self) -> bool:
+        return settings.get(settings.SEARCH_SEMANTIC_ENABLED) and model_installed(
+            self.semantic.root
+        )
+
+    def _semantic_search(self, words: str) -> None:
+        if self.vault is not None and self._semantic_active():
+            self.semantic.search(self.vault.vault_id, words)
+
+    def _vault_changed(self, kind: str) -> None:
+        if kind == "notes":
+            self.semantic_timer.start()
+
+    def _sync_semantic_index(self) -> None:
+        if (
+            self.vault is not None
+            and self._semantic_active()
+            and settings.get(settings.SEARCH_SEMANTIC_INDEXING)
+        ):
+            self.semantic.sync(self.vault.folder)
+
+    def _configure_semantic(self) -> None:
+        threads = settings.get(settings.SEARCH_SEMANTIC_THREADS)
+        if not self._semantic_active() or threads != self.semantic.threads:
+            self.semantic.cancel_sync()
+            self.semantic.release()
+        self.semantic.threads = threads
+        self.list.forget_semantic_scores()
+        self.semantic_timer.start()
+
+    def _semantic_indexing(self, done: int, total: int) -> None:
+        if total >= 10:  # a single edited note is no news
+            self.statusBar().showMessage(
+                _("Indexing notes for semantic search: {done} of {total}").format(
+                    done=done, total=total
+                ),
+                3000,
+            )
+
+    def _semantic_downloaded(self, error: str) -> None:
+        self.statusBar().showMessage(error or _("The language model is ready."), 6000)
+        self.semantic_timer.start()
+
+    def _semantic_failed(self, error: str) -> None:
+        self.statusBar().showMessage(_("Semantic search failed: {error}").format(error=error), 8000)
+
     def _configure_suggestions(self) -> None:
         enabled = settings.get_list(settings.SUGGEST_FEATURES) or [f.key for f in FEATURES]
         self.suggestions.configure(enabled, settings.get(settings.SUGGEST_PRIOR))
 
     def open_options(self, page: str = "General") -> None:
         self.editor.flush()
-        OptionsDialog(self, page).exec()
+        run_dialog(OptionsDialog(self, page))
 
     def _set_theme(self, mode: str) -> None:
         settings.put(settings.THEME, mode)
@@ -1193,8 +1274,10 @@ class MainWindow(QMainWindow):
         self.editor.body.set_font_size(settings.get(settings.EDITOR_FONT_SIZE))
         self.editor.refresh_style()
         self._configure_suggestions()
+        self._configure_semantic()
         if self.vault:
             types = self.vault.link_types()
+            self.list.refresh()
             self.side.set_link_types(types)
             self.list.link_types = types
             self._refresh_side()
@@ -1318,6 +1401,7 @@ class MainWindow(QMainWindow):
         store.setValue("window/splitter", self.splitter.saveState())
         store.sync()
         self.close_vault()
+        self.semantic.shutdown()
         if self._tray is not None:
             self._tray.hide()
         super().closeEvent(event)

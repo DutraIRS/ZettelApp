@@ -11,6 +11,7 @@ rete che può effettuare:
 | Circa 4 secondi dopo l'avvio di ZettelApp (può essere disattivato) | `https://dutrairs.github.io/ZettelApp/version.json` | Una richiesta HTTPS per quel file, con l'intestazione `User-Agent: ZettelApp/<version>`. Nient'altro: niente note, impostazioni o identificatori. Qualsiasi errore è silenzioso. Vedi [Aggiornamenti](getting-started.md#updates). |
 | Fai una domanda nella pagina **Chiedi** | Il provider di IA che hai configurato (Anthropic, OpenAI, Z.ai o il tuo endpoint) | La tua domanda e le note elencate sotto *Fonti inviate* |
 | Provi la connessione IA o aggiorni l'elenco dei modelli | Lo stesso provider | La tua chiave API, per l'autenticazione |
+| Fai clic su **Scarica il modello** in *Strumenti ▸ Opzioni ▸ Ricerca* e confermi | `huggingface.co`, che può reindirizzare ai suoi server di download | Una richiesta HTTPS per ogni file del modello di ricerca semantica, con l'intestazione `User-Agent: ZettelApp/<version>`. Nulla sulle tue note. Ogni file viene verificato con uno SHA-256 fisso prima di essere usato. Vedi [Note e collegamenti](notes-and-links.md#ricerca-semantica). |
 | Usi **Sincronizza con Anki** | AnkiConnect su **questo computer** (`127.0.0.1`) | Le flashcard dell'ambito scelto |
 | Usi **Inserisci ▸ Riferimento Zotero** o *Prova connessione* nelle opzioni di Zotero | Zotero su **questo computer** (`127.0.0.1`) | Le parole della tua ricerca (sola lettura) |
 | Clicchi un collegamento web, usi *Aiuto ▸ Sito web / Documentazione / Cerca aggiornamenti* oppure il pulsante **Scarica** dell'avviso di aggiornamento | Il tuo browser web apre la pagina | Niente da ZettelApp |
@@ -32,6 +33,7 @@ Il server MCP non effettua alcuna richiesta di rete.
 | Log | `%LOCALAPPDATA%\ZettelApp\Logs` (a rotazione, al massimo pochi MB). Registrano errori, non le tue note, e non includono mai le chiavi API. |
 | Backup automatici | `%LOCALAPPDATA%\ZettelApp\Backups` |
 | Piccola cache dell'interfaccia | `%LOCALAPPDATA%\ZettelApp\Cache` |
+| Modello e indice della ricerca semantica, se la configuri | `%LOCALAPPDATA%\ZettelApp\Search`. L'indice deriva dalle tue note e non è mai nel vault, quindi non viene sincronizzato con esso. *Rimuovi modello e indice* in *Strumenti ▸ Opzioni ▸ Ricerca* lo elimina. |
 
 Il vault è una normale cartella: puoi copiarla, farne il backup o tenerla in OneDrive. ZettelApp scrive il
 database con sincronizzazione completa, un'impostazione scelta per adattarsi alle cartelle sincronizzate. Evita di aprire lo stesso vault su due
@@ -87,7 +89,7 @@ Le note possono provenire da importazioni, dal web o da risposte dell'IA, quindi
 
 Disinstalla da *Impostazioni di Windows ▸ App ▸ App installate ▸ ZettelApp ▸ Disinstalla*. Il programma di disinstallazione offre
 un'opzione non selezionata, **Elimina anche le impostazioni e i dati di ZettelApp**. Se la selezioni, rimuove le tue
-impostazioni, le chiavi API salvate in Gestione credenziali, i log, la cache e i backup automatici
+impostazioni, le chiavi API salvate in Gestione credenziali, i log, la cache, i backup automatici e il modello e l'indice della ricerca semantica
 (`%LOCALAPPDATA%\ZettelApp`) **e tutte le tue note** (il database e gli allegati dei tuoi vault). Se non la selezioni,
 le tue note restano dove sono.
 

@@ -30,7 +30,6 @@ ARROW_TIP_NAMES = {
     "circle": N_("Circle"),
     "bar": N_("Bar"),
 }
-FILLED_TIPS = frozenset({"triangle", "diamond", "circle"})
 ARROW_SIZE = 7.0  # length of a triangle tip, in the same units as the line
 LIST_ICON = QSize(36, 16)  # wide enough to show a whole dash pattern
 MENU_ICON = QSize(16, 16)

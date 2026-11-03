@@ -7,9 +7,18 @@ import logging
 import threading
 import time
 from collections.abc import Callable
+from pathlib import Path
 
-from PySide6.QtCore import QObject, QRunnable, QThread, QThreadPool, Signal
+from PySide6.QtCore import QObject, QRunnable, QThread, QThreadPool, QTimer, Signal
 
+from zettelapp.core.embeddings import (
+    Embedder,
+    clear_index,
+    download_model,
+    remove_all,
+    semantic_scores,
+    sync_index,
+)
 from zettelapp.core.storage import Vault
 from zettelapp.core.suggest import LinkSuggester, NoteData, Suggestion
 
@@ -101,9 +110,11 @@ class SuggestionService(QObject):
         with self._lock:
             self.suggester = LinkSuggester(prior_strength=prior_strength, enabled=enabled_features)
             self._signature = None
+            self._request += 1  # discard work started with the previous configuration
 
     def invalidate(self) -> None:
         self._signature = None
+        self._request += 1  # pending results belong to the previous vault or settings
 
     def request(self, vault: Vault, note: NoteData, limit: int, min_probability: float) -> None:
         self._request += 1
@@ -137,6 +148,139 @@ class SuggestionService(QObject):
     def report(self) -> dict:
         with self._lock:
             return self.suggester.report()
+
+
+class SemanticService(QObject):
+    """Semantic search off the GUI thread. The language model takes a few hundred MB of memory,
+    so it loads on first use and is let go of soon after the last one."""
+
+    IDLE_MS = 120_000
+
+    scored = Signal(str, dict)  # the search words; note id -> similarity
+    indexing = Signal(int, int)  # notes done, notes to do
+    downloading = Signal(int, int)  # bytes done, bytes to do
+    downloaded = Signal(str)  # the download ended: empty, or what went wrong
+    failed = Signal(str)
+
+    def __init__(self, root: Path, parent: QObject | None = None):
+        super().__init__(parent)
+        self.root = root
+        self.threads = 2
+        self.pool = QThreadPool(self)
+        self.pool.setMaxThreadCount(3)  # a search needn't wait for indexing or for a download
+        self._model_lock = threading.Lock()
+        self._embedder: Embedder | None = None
+        self._running = 0
+        self._indexing_stop: threading.Event | None = None
+        self._index_again: Path | None = None
+        self._download_stop: threading.Event | None = None
+        self._idle = QTimer(self, singleShot=True, interval=self.IDLE_MS, timeout=self.release)
+
+    @property
+    def is_downloading(self) -> bool:
+        return self._download_stop is not None
+
+    def _model(self) -> Embedder:  # called from worker threads
+        with self._model_lock:
+            if self._embedder is None:
+                self._embedder = Embedder(self.root, self.threads)
+            return self._embedder
+
+    def _run(self, work: Callable, on_done: Callable, on_error: Callable) -> None:
+        def finished(handler: Callable, result) -> None:
+            self._running -= 1
+            self._idle.start()
+            handler(result)
+
+        self._running += 1
+        run_task(
+            work,
+            on_done=lambda result: finished(on_done, result),
+            on_error=lambda message: finished(on_error, message),
+            pool=self.pool,
+        )
+
+    def release(self) -> None:
+        """Let go of the model, unless it is at work."""
+        if self._running:
+            self._idle.start()
+            return
+        with self._model_lock:
+            self._embedder = None
+
+    def search(self, vault_id: str, words: str) -> None:
+        self._run(
+            lambda: semantic_scores(self.root, vault_id, self._model(), words),
+            lambda scores: self.scored.emit(words, scores),
+            self.failed.emit,
+        )
+
+    def sync(self, folder: Path) -> None:
+        """Bring a vault's index up to date. One pass runs at a time; asking during a pass
+        means one more after it, for what changed in the meantime."""
+        if self._indexing_stop is not None:
+            self._index_again = folder
+            return
+        stop = self._indexing_stop = threading.Event()
+
+        def finished(error: str | None) -> None:
+            self._indexing_stop = None
+            again, self._index_again = self._index_again, None
+            if error:
+                self.failed.emit(error)
+            elif again:
+                self.sync(again)
+
+        self._run(
+            lambda: sync_index(self.root, folder, self._model, self.indexing.emit, stop.is_set),
+            finished,
+            finished,
+        )
+
+    def rebuild(self, folder: Path, vault_id: str) -> None:
+        """Index a vault from scratch."""
+        self.cancel_sync()
+        self.pool.waitForDone(5000)  # at most a moment: it stops between pieces of text
+        clear_index(self.root, vault_id)
+        self.sync(folder)
+
+    def cancel_sync(self) -> None:
+        self._index_again = None
+        if self._indexing_stop is not None:
+            self._indexing_stop.set()
+
+    def download(self) -> None:
+        if self.is_downloading:
+            return
+        stop = self._download_stop = threading.Event()
+
+        def finished(error: str | None) -> None:
+            self._download_stop = None
+            self.downloaded.emit(error or "")
+
+        self._run(
+            lambda: download_model(self.root, self.downloading.emit, stop.is_set),
+            finished,
+            finished,
+        )
+
+    def cancel_download(self) -> None:
+        if self._download_stop is not None:
+            self._download_stop.set()
+
+    def shutdown(self, wait_ms: int = 5000) -> None:
+        """Stop everything in the background and free the model."""
+        self.cancel_sync()
+        self.cancel_download()
+        self.pool.waitForDone(wait_ms)
+        self._idle.stop()
+        with self._model_lock:
+            self._embedder = None
+
+    def remove_data(self) -> None:
+        """Delete the model and every vault's vectors."""
+        self.shutdown()
+        remove_all(self.root)
 
 
 class StreamThread(QThread):

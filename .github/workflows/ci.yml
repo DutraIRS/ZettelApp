@@ -32,7 +32,7 @@ jobs:
         shell: bash
         run: |
           python tools/build_site.py
-          git diff --exit-code -- website/docs website/version.json || {
+          git diff --exit-code -- website || {
             echo "::error::The generated website is stale. Regenerate with: python tools/build_site.py"
             exit 1
           }

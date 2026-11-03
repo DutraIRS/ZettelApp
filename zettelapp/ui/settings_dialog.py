@@ -26,6 +26,7 @@ from PySide6.QtWidgets import (
     QListWidgetItem,
     QMessageBox,
     QPlainTextEdit,
+    QProgressBar,
     QPushButton,
     QSlider,
     QSpinBox,
@@ -36,6 +37,11 @@ from PySide6.QtWidgets import (
 
 from zettelapp import i18n, settings, winintegration
 from zettelapp.core import apikeys
+from zettelapp.core.embeddings import (
+    MODEL_BYTES,
+    model_installed,
+    storage_bytes,
+)
 from zettelapp.core.llm import (
     EFFORTS,
     PROVIDERS,
@@ -77,6 +83,7 @@ def _merge_mcp_entry(config: dict, entry: dict) -> dict:
 # Page names are also their keys (open_options("AI assistant")); they are translated where shown.
 PAGES = [
     N_("General"),
+    N_("Search"),
     N_("Link suggestions"),
     N_("Link types"),
     N_("AI assistant"),
@@ -88,6 +95,7 @@ PAGES = [
 ]
 PAGE_ICONS = {
     "General": "settings",
+    "Search": "search",
     "Link suggestions": "lightbulb",
     "Link types": "relationship",
     "AI assistant": "chat",
@@ -202,6 +210,7 @@ class OptionsDialog(QDialog):
         self.pages = QStackedWidget()
         builders = [
             self._general,
+            self._search,
             self._suggestions,
             self._link_types,
             self._ai,
@@ -292,6 +301,192 @@ class OptionsDialog(QDialog):
                 wrap=True,
             )
         )
+
+    def _search(self, lay: QVBoxLayout) -> None:
+        lay.addWidget(label(_("Ranking"), "section"))
+        form = QFormLayout()
+        self.w_fuzzy = QDoubleSpinBox()
+        self.w_lexical = QDoubleSpinBox()
+        self.w_semantic = QDoubleSpinBox()
+        self.w_ontology = QDoubleSpinBox()
+        for box, key in (
+            (self.w_fuzzy, settings.SEARCH_FUZZY_WEIGHT),
+            (self.w_lexical, settings.SEARCH_LEXICAL_WEIGHT),
+            (self.w_semantic, settings.SEARCH_SEMANTIC_WEIGHT),
+            (self.w_ontology, settings.SEARCH_ONTOLOGY_WEIGHT),
+        ):
+            box.setRange(0.0, 1.0)
+            box.setSingleStep(0.05)
+            box.setDecimals(2)
+            box.setValue(settings.get(key))
+        form.addRow(_("Fuzzy match weight"), self.w_fuzzy)
+        form.addRow(_("Full-text weight"), self.w_lexical)
+        form.addRow(_("Semantic weight"), self.w_semantic)
+        form.addRow(_("Tag and ontology weight"), self.w_ontology)
+        lay.addLayout(form)
+        lay.addWidget(
+            label(
+                _(
+                    "Only the proportions between the weights matter. A weight of 0 turns that "
+                    "kind of match off."
+                ),
+                "caption",
+                wrap=True,
+            )
+        )
+        self.rebuild_fts = QPushButton(_("Rebuild full-text index"))
+        self.rebuild_fts.clicked.connect(self._rebuild_fts)
+        self.rebuild_fts.setEnabled(self.window.vault is not None and self.window.vault.has_fts)
+        lay.addWidget(self.rebuild_fts, 0, Qt.AlignmentFlag.AlignLeft)
+
+        lay.addWidget(label(_("Semantic search"), "section"))
+        lay.addWidget(
+            label(
+                _(
+                    "Finds notes by what they mean, even when they share no words with your "
+                    "search. A language model does this on your computer and your notes never "
+                    "leave it. The model is a one-time download from Hugging Face."
+                ),
+                "caption",
+                wrap=True,
+            )
+        )
+        self.semantic_status = label("", "secondary", wrap=True)
+        lay.addWidget(self.semantic_status)
+        self.semantic_progress = QProgressBar()
+        self.semantic_progress.setVisible(False)
+        lay.addWidget(self.semantic_progress)
+        sem_buttons = QHBoxLayout()
+        self.semantic_download = QPushButton()
+        self.semantic_download.clicked.connect(self._download_model)
+        self.semantic_rebuild = QPushButton(_("Rebuild semantic index"))
+        self.semantic_rebuild.clicked.connect(self._rebuild_semantic)
+        self.semantic_remove = QPushButton(_("Remove model and index"))
+        self.semantic_remove.clicked.connect(self._remove_semantic)
+        sem_buttons.addWidget(self.semantic_download)
+        sem_buttons.addWidget(self.semantic_rebuild)
+        sem_buttons.addWidget(self.semantic_remove)
+        sem_buttons.addStretch(1)
+        lay.addLayout(sem_buttons)
+        self.semantic_on = QCheckBox(_("Use semantic search"))
+        self.semantic_on.setChecked(settings.get(settings.SEARCH_SEMANTIC_ENABLED))
+        lay.addWidget(self.semantic_on)
+        self.semantic_indexing = QCheckBox(_("Index notes for semantic search in the background"))
+        self.semantic_indexing.setChecked(settings.get(settings.SEARCH_SEMANTIC_INDEXING))
+        lay.addWidget(self.semantic_indexing)
+        self.semantic_form = QFormLayout()
+        self.semantic_threads = QSpinBox()
+        self.semantic_threads.setRange(1, 8)
+        self.semantic_threads.setValue(settings.get(settings.SEARCH_SEMANTIC_THREADS))
+        self.semantic_form.addRow(_("CPU threads for indexing"), self.semantic_threads)
+        lay.addLayout(self.semantic_form)
+        service = self.window.semantic
+        service.downloading.connect(self._download_progress)
+        service.downloaded.connect(self._download_ended)
+        self._update_semantic()
+
+        lay.addWidget(label(_("Adaptive ranking"), "section"))
+        self.adaptive_on = QCheckBox(_("Improve ranking from my explicit feedback"))
+        self.adaptive_on.setChecked(settings.get(settings.SEARCH_ADAPTIVE_ENABLED))
+        lay.addWidget(self.adaptive_on)
+        lay.addWidget(
+            label(
+                _(
+                    "When this is on, right-click a search result to mark it as relevant or not, "
+                    "and the kinds of match you prefer count for more. Only those clicks are "
+                    "used and they stay on this computer: no searches are logged and browsing is "
+                    "never tracked."
+                ),
+                "caption",
+                wrap=True,
+            )
+        )
+        self.adaptive_reset = QPushButton(_("Reset learned preferences"))
+        self.adaptive_reset.clicked.connect(self._reset_adaptive)
+        lay.addWidget(self.adaptive_reset, 0, Qt.AlignmentFlag.AlignLeft)
+
+    def _rebuild_fts(self) -> None:
+        vault = self.window.vault
+        if vault is None:
+            return
+        vault.rebuild_search_index()
+        QMessageBox.information(self, _("Search"), _("Full-text index rebuilt."))
+
+    def _update_semantic(self) -> None:
+        service = self.window.semantic
+        installed = model_installed(service.root)
+        downloading = service.is_downloading
+        self.semantic_status.setText(
+            _("The language model is installed. With the index it takes {size} MB.").format(
+                size=round(storage_bytes(service.root) / 1e6)
+            )
+            if installed
+            else _("The language model is not installed.")
+        )
+        self.semantic_progress.setVisible(downloading)
+        self.semantic_download.setVisible(downloading or not installed)
+        self.semantic_download.setText(
+            _("Cancel download")
+            if downloading
+            else _("Download model ({size} MB)").format(size=round(MODEL_BYTES / 1e6))
+        )
+        self.semantic_rebuild.setVisible(installed)
+        self.semantic_remove.setVisible(installed)
+        self.semantic_on.setVisible(installed)
+        self.semantic_indexing.setVisible(installed)
+        self.semantic_form.setRowVisible(0, installed)
+
+    def _download_model(self) -> None:
+        service = self.window.semantic
+        if service.is_downloading:
+            service.cancel_download()
+        elif (
+            QMessageBox.question(
+                self,
+                _("Semantic search"),
+                _(
+                    "Download the language model ({size} MB) from huggingface.co? Only the "
+                    "request for the model is sent, nothing about your notes."
+                ).format(size=round(MODEL_BYTES / 1e6)),
+            )
+            == QMessageBox.StandardButton.Yes
+        ):
+            service.download()
+            self._update_semantic()
+
+    def _download_progress(self, done: int, total: int) -> None:
+        self.semantic_progress.setRange(0, 100)
+        self.semantic_progress.setValue(done * 100 // total)
+
+    def _download_ended(self, error: str) -> None:
+        self._update_semantic()
+        if error:
+            self.semantic_status.setText(error)
+
+    def _rebuild_semantic(self) -> None:
+        vault = self.window.vault
+        if vault is not None:
+            self.window.semantic.rebuild(vault.folder, vault.vault_id)
+            self._update_semantic()
+
+    def _remove_semantic(self) -> None:
+        if (
+            QMessageBox.question(
+                self,
+                _("Semantic search"),
+                _("Delete the language model and the semantic index of every vault?"),
+            )
+            == QMessageBox.StandardButton.Yes
+        ):
+            self.window.semantic.remove_data()
+            settings.put(settings.SEARCH_SEMANTIC_ENABLED, False)
+            self.semantic_on.setChecked(False)
+            self._update_semantic()
+
+    def _reset_adaptive(self) -> None:
+        settings.put(settings.SEARCH_ADAPTIVE_STATE, "")
+        self.window.list.refresh()
+        QMessageBox.information(self, _("Adaptive ranking"), _("Learned preferences reset."))
 
     def _suggestions(self, lay: QVBoxLayout) -> None:
         self.suggest_on = QCheckBox(_("Suggest links while I write"))
@@ -1034,6 +1229,14 @@ class OptionsDialog(QDialog):
 
     def apply(self) -> bool:
         settings.put(settings.THEME, self.theme.currentData())
+        settings.put(settings.SEARCH_FUZZY_WEIGHT, self.w_fuzzy.value())
+        settings.put(settings.SEARCH_LEXICAL_WEIGHT, self.w_lexical.value())
+        settings.put(settings.SEARCH_SEMANTIC_WEIGHT, self.w_semantic.value())
+        settings.put(settings.SEARCH_ONTOLOGY_WEIGHT, self.w_ontology.value())
+        settings.put(settings.SEARCH_SEMANTIC_ENABLED, self.semantic_on.isChecked())
+        settings.put(settings.SEARCH_SEMANTIC_THREADS, self.semantic_threads.value())
+        settings.put(settings.SEARCH_SEMANTIC_INDEXING, self.semantic_indexing.isChecked())
+        settings.put(settings.SEARCH_ADAPTIVE_ENABLED, self.adaptive_on.isChecked())
         if self.language.currentData() != self._language_before:
             settings.put(settings.UI_LANGUAGE, self.language.currentData())
             self._language_before = self.language.currentData()

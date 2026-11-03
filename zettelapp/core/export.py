@@ -16,7 +16,7 @@ import re
 import zipfile
 from collections import defaultdict
 from collections.abc import Iterable, Iterator
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
 from xml.etree import ElementTree as ET
@@ -24,7 +24,14 @@ from xml.etree import ElementTree as ET
 from zettelapp import __version__
 from zettelapp.core.anki import anki_renderer, build_payloads, write_apkg
 from zettelapp.core.graph import force_layout
-from zettelapp.core.models import Flashcard, Link, LinkType, Note, stroke_dashes
+from zettelapp.core.models import (
+    Flashcard,
+    Link,
+    LinkType,
+    Note,
+    TagRelationship,
+    stroke_dashes,
+)
 from zettelapp.core.render import NoteRenderer, mindmap_to_freemind, mindmap_to_html
 from zettelapp.core.security import is_openable_url, safe_filename
 from zettelapp.core.storage import Vault
@@ -95,6 +102,7 @@ class Bundle:
     link_types: list[LinkType]
     cards: list[Flashcard]
     assets: list[str]
+    tag_relationships: list[TagRelationship] = field(default_factory=list)
 
     @property
     def note_map(self) -> dict[str, Note]:
@@ -125,7 +133,36 @@ def collect(vault: Vault, note_ids: Iterable[str]) -> Bundle:
     for c in cards:
         refs.update(ASSET_REF_RE.findall(c.front + c.back))
     assets = sorted(r for r in refs if vault.asset_path(r) is not None)
-    return Bundle(vault.name, vault.vault_id, notes, links, vault.link_types(), cards, assets)
+    return Bundle(
+        vault.name,
+        vault.vault_id,
+        notes,
+        links,
+        vault.link_types(),
+        cards,
+        assets,
+        _relationships_for(notes, vault.tag_relationships()),
+    )
+
+
+def _relationships_for(
+    notes: list[Note], relationships: list[TagRelationship]
+) -> list[TagRelationship]:
+    """What the ontology says about these notes' tags, walking up to their parents, so
+    that exporting a few notes doesn't reveal the names of the vault's other tags."""
+    reached = {t for n in notes for t in n.tags}
+    kept: list[TagRelationship] = []
+    while True:
+        found = [
+            r
+            for r in relationships
+            if r not in kept
+            and (r.target in reached or (r.relation_type != "parent" and r.source in reached))
+        ]
+        if not found:
+            return kept
+        kept += found
+        reached.update(tag for r in found for tag in (r.source, r.target))
 
 
 @contextlib.contextmanager
@@ -223,6 +260,10 @@ def bundle_to_dict(bundle: Bundle) -> dict:
             for c in bundle.cards
         ],
         "assets": bundle.assets,
+        "tag_relationships": [
+            {"source": r.source, "target": r.target, "type": r.relation_type}
+            for r in bundle.tag_relationships
+        ],
     }
 
 

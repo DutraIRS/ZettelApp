@@ -28,6 +28,7 @@ from zettelapp.core.models import (
     sanitize_mindmap,
 )
 from zettelapp.core.security import (
+    MAX_ARCHIVE_MANIFEST_BYTES,
     MAX_IMAGE_BYTES,
     UnsafeInputError,
     check_zip,
@@ -36,11 +37,11 @@ from zettelapp.core.security import (
     resolve_inside,
     safe_member_path,
 )
-from zettelapp.core.storage import MAX_BODY, MAX_TITLE, Vault
+from zettelapp.core.storage import MAX_BODY, MAX_TITLE, Vault, VaultError
 from zettelapp.core.textutil import WIKILINK_RE, fold, normalize_tag
 from zettelapp.i18n import _
 
-MAX_JSON_BYTES = 300 * 1024 * 1024
+MAX_JSON_BYTES = MAX_ARCHIVE_MANIFEST_BYTES
 MAX_MARKDOWN_FILES = 20_000
 MAX_MARKDOWN_BYTES = 5 * 1024 * 1024
 
@@ -103,7 +104,13 @@ def _extract(zf: zipfile.ZipFile, dest: Path) -> None:
         target = resolve_inside(dest, str(member))
         target.parent.mkdir(parents=True, exist_ok=True)
         with zf.open(info) as src, open(target, "wb") as out:
-            out.write(src.read(info.file_size + 1)[: info.file_size])
+            remaining = info.file_size
+            while remaining:
+                chunk = src.read(min(1024 * 1024, remaining))
+                if not chunk:
+                    raise UnsafeInputError(_("A file in the archive ended unexpectedly."))
+                out.write(chunk)
+                remaining -= len(chunk)
 
 
 # --- ZettelApp archive / JSON -----------------------------------------------
@@ -143,7 +150,7 @@ def _str(value, limit: int) -> str:
 
 def _timestamp(value) -> str | None:
     if isinstance(value, datetime):
-        return value.isoformat(timespec="seconds")
+        return (value if value.tzinfo else value.astimezone()).isoformat(timespec="seconds")
     if isinstance(value, date):  # YAML turns bare dates into date objects
         return (
             datetime(value.year, value.month, value.day).astimezone().isoformat(timespec="seconds")
@@ -151,7 +158,8 @@ def _timestamp(value) -> str | None:
     if not isinstance(value, str):
         return None
     try:
-        return datetime.fromisoformat(value.replace("Z", "+00:00")).isoformat(timespec="seconds")
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        return (parsed if parsed.tzinfo else parsed.astimezone()).isoformat(timespec="seconds")
     except ValueError:
         return None
 
@@ -174,7 +182,7 @@ def _validate_import_data(data) -> None:
         raise UnsafeInputError(_("This is not a ZettelApp export."))
     if not isinstance(data.get("version"), int) or data["version"] > 1:
         raise UnsafeInputError(_("This export was made by a newer version of ZettelApp."))
-    for field_name in ("link_types", "notes", "links", "flashcards", "assets"):
+    for field_name in ("link_types", "notes", "links", "flashcards", "assets", "tag_relationships"):
         value = data.get(field_name)
         if value is not None and not isinstance(value, list):
             raise UnsafeInputError(
@@ -266,7 +274,12 @@ def _import_data(
         note.url = _str(raw.get("url"), 2048)
         image = raw.get("image")
         note.image = asset_map.get(image, image) if isinstance(image, str) else ""
-        note.tags = [t for t in (raw.get("tags") or []) if isinstance(t, str)][:200]
+        raw_tags = raw.get("tags")
+        note.tags = (
+            [tag for tag in raw_tags if isinstance(tag, str)][:200]
+            if isinstance(raw_tags, list)
+            else []
+        )
         note.mindmap = sanitize_mindmap(raw.get("mindmap")) if raw.get("mindmap") else None
         note.alarm = _str(raw.get("alarm"), 40)
         vault.save_note(note, touch=False)
@@ -302,6 +315,19 @@ def _import_data(
                 )
             )
             result.cards += 1
+
+    for raw in data.get("tag_relationships") or []:
+        if not isinstance(raw, dict):
+            continue
+        source, target = _str(raw.get("source"), 60), _str(raw.get("target"), 60)
+        try:
+            vault.add_tag_relationship(source, target, _str(raw.get("type"), 20))
+        except VaultError as exc:
+            result.warn(
+                _("Skipped the tag relationship {source} → {target}: {error}").format(
+                    source=source, target=target, error=exc
+                )
+            )
     return result
 
 

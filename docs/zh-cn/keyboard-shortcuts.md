@@ -12,7 +12,10 @@
 | 插入图片 | Ctrl+Shift+I |
 | 添加闪卡 | Ctrl+Shift+F |
 | 切换编辑 / 分屏 / 预览 | Ctrl+E |
+| 复制笔记 | Ctrl+D |
 | 将笔记移到回收站 | Ctrl+Delete |
+| 将所选笔记移到回收站(在笔记列表中) | Del |
+| 选择多条笔记 | Ctrl+单击、Shift+单击、Shift+方向键 |
 | 粗体 / 斜体 | Ctrl+B / Ctrl+I |
 | 撤销 / 重做 | Ctrl+Z / Ctrl+Y |
 | 补全 `[[link]]` | 输入 `[[`,然后选择标题并按 Enter |

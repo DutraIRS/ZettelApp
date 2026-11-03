@@ -83,12 +83,12 @@ unless the repository variable <code>ALLOW_UNSIGNED_RELEASE</code> is set to <co
 (see <code>.github/workflows/release.yml</code>).</p>
 <p>The CI workflow (<code>.github/workflows/ci.yml</code>) runs each check as its own step: lint, formatting, the
 dependency audit and a check that the generated website files are up to date (it fails when
-<code>website/docs</code> or <code>website/version.json</code> differ from what <code>tools/build_site.py</code> writes), then the tests
+any generated file under <code>website/</code> differs from what <code>tools/build_site.py</code> writes), then the tests
 and a build of the packaged app with its self-test.</p>
 <p><code>packaging/build.ps1</code> finds Inno Setup on <code>PATH</code>, installed for the current user
 (<code>%LOCALAPPDATA%\Programs\Inno Setup 6</code>) or for everyone.</p>
-<p>The vault database has a <strong>schema version</strong> (currently 2: the <code>tags.source</code> column tells tags added by
-hand from <code>#tags</code> written in the text). Older vaults are upgraded automatically when opened.</p>
+<p>The vault database has a <strong>schema version</strong> (currently 5: migrations add tag provenance, link styles, alarms
+and the tag ontology). Older vaults are upgraded automatically when opened.</p>
 <p>The website (<code>website/</code>) is deployed to GitHub Pages by <code>.github/workflows/pages.yml</code> whenever <code>docs/</code> or
 <code>website/</code> change on <code>main</code>.</p>
 <h2 id="project-layout">Project layout</h2>
@@ -97,6 +97,8 @@ hand from <code>#tags</code> written in the text). Older vaults are upgraded aut
     storage.py     the vault: SQLite schema, notes, typed links, tags, assets, cards, backups
     similarity.py  Levenshtein, Jaro-Winkler, Jaccard, TF-IDF and LSA
     suggest.py     Naive Bayes link suggester
+    search.py      hybrid search for the note list; adaptive.py: learning from feedback
+    embeddings.py  optional semantic search: model download, vectors, inference
     cluster.py     k-means, hierarchical clustering, silhouette, cluster keywords
     graph.py       subgraphs and force-directed layout (2D/3D)
     render.py      safe Markdown rendering (notes, exports, Anki)

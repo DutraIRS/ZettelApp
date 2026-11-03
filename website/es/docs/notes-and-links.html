@@ -159,11 +159,44 @@ no se pierde nada. Los tipos integrados se pueden renombrar y cambiar de estilo,
 <p>Añade etiquetas en el campo de etiquetas bajo el título (pulsa Enter tras cada una) o escríbelas <strong>en el texto</strong> con una
 almohadilla, como <code>#welcome</code> o <code>#math/algebra</code>. Las etiquetas van en minúsculas y pueden anidarse con una barra, como
 <code>math/algebra</code>. Filtrar por <code>math</code> también encuentra las notas con la etiqueta <code>math/algebra</code>.
-Usa el filtro de etiquetas sobre la lista de notas o escribe <code>tag:name</code> en el cuadro de búsqueda.</p>
+Usa el filtro de etiquetas sobre la lista de notas o escribe <code>tag:name</code> en el cuadro de búsqueda. El número junto a cada etiqueta cuenta las notas que muestra ese filtro.</p>
 <p>Las etiquetas escritas en el texto son etiquetas reales, que se muestran como <strong>pastillas con contorno</strong> junto al cuadro <em>Añadir etiqueta</em>. Desaparecen
 cuando borras la <code>#etiqueta</code> del texto. Una <code>#etiqueta</code> se ignora dentro de código, dentro de destinos de enlace
 y en <code>[[#encabezados]]</code>. Las etiquetas escritas en el cuadro <em>Añadir etiqueta</em> son independientes: permanecen hasta que las quitas con
 su ✕. Ctrl+clic en una <code>#etiqueta</code> del editor para listar las notas que la tienen.</p>
+<h3 id="ontologia-de-etiquetas">Ontología de etiquetas</h3>
+<p>También puedes indicar cómo se relacionan las etiquetas entre sí, sin cambiarles el nombre. Abre
+<em>Herramientas ▸ Ontología de etiquetas…</em>, o el pequeño botón junto al filtro de etiquetas, y añade relaciones:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Relación</th>
+<th>Ejemplo</th>
+<th>Un filtro por la primera etiqueta también encuentra…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Padre → hijo</strong></td>
+<td><code>estadística</code> es la etiqueta padre de <code>bayes</code></td>
+<td>las notas con la etiqueta <code>bayes</code>, y a su vez las de sus hijas. Una etiqueta puede tener varios padres.</td>
+</tr>
+<tr>
+<td><strong>Sinónimo / alias</strong></td>
+<td><code>ml</code> es sinónimo de <code>aprendizaje-automático</code></td>
+<td>las notas con cualquiera de las dos, filtres por la que filtres.</td>
+</tr>
+<tr>
+<td><strong>Concepto relacionado</strong></td>
+<td><code>memoria</code> está relacionada con <code>sueño</code></td>
+<td>nada más, hasta que marques <em>Buscar también notas con etiquetas relacionadas</em> en el menú del pequeño botón.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Una etiqueta de una relación no tiene por qué estar en ninguna nota, así que <code>estadística</code> puede existir solo
+para reunir otras etiquetas. Las relaciones solo cambian lo que encuentran los filtros y las búsquedas: tus
+notas y sus etiquetas siguen como están. Haz doble clic en una relación para ver las notas de su primera
+etiqueta. Los archivos de ZettelApp incluyen la ontología y los clientes MCP pueden leerla.</p>
 <h2 id="enlace-de-la-fuente">Enlace de la fuente</h2>
 <p>El campo con el icono de globo contiene la <strong>fuente</strong> de la nota: una página web (<code>https://…</code>), una dirección de correo
 o un elemento de Zotero (<code>zotero://select/library/items/…</code>). El botón junto a él abre el enlace. Otros tipos de
@@ -247,10 +280,45 @@ tarjeta <strong>cloze</strong>, que oculta cada omisión por turno. <code>{{c1::
 <p><strong>En la pestaña Tarjetas.</strong> Usa <em>Insertar ▸ Tarjeta de estudio…</em> (Ctrl+Shift+F) para tarjetas que no deban aparecer en
 la nota. Las tarjetas del texto se marcan como <em>del texto de la nota</em> y se editan en el texto.</p>
 <h2 id="busqueda">Búsqueda</h2>
-<p>El cuadro de búsqueda (Ctrl+F) usa búsqueda de texto completo en títulos, texto y etiquetas, ignora los acentos y coincide con
-prefijos de palabra, así que <code>olvid</code> encuentra <em>olvidando</em>. Añade <code>tag:name</code> para filtrar por etiqueta, por ejemplo
-<code>memoria tag:psicologia</code>. Los resultados se ordenan por relevancia; sin consulta, las notas siguen el orden elegido
+<p>El cuadro de búsqueda (Ctrl+F) busca en títulos, texto y etiquetas, ignora los acentos y coincide con
+prefijos de palabra, así que <code>olvid</code> encuentra <em>olvidando</em>. Añade <code>tag:name</code> para quedarte solo con las notas
+que tengan una etiqueta, por ejemplo <code>memoria tag:psicologia</code>. Las mejores coincidencias aparecen primero y
+cada una muestra la parte de la nota que rodea tu palabra; sin consulta, las notas siguen el orden elegido
 (<em>Última edición</em>, <em>Creada</em>, <em>Título</em> o <em>Más enlazadas</em>).</p>
+<p>Varios tipos de coincidencia trabajan juntos, y <em>Herramientas ▸ Opciones ▸ Búsqueda</em> define cuánto cuenta cada uno:</p>
+<ul>
+<li><strong>Texto completo</strong>: tus palabras en cualquier parte de la nota.</li>
+<li><strong>Difusa</strong>: pequeñas erratas en títulos y etiquetas, así que <code>quantom</code> encuentra <em>Quantum</em>.</li>
+<li><strong>Etiquetas y ontología</strong>: una palabra que nombra una etiqueta encuentra las notas de esa etiqueta y las de
+sus hijas y sinónimos.</li>
+<li><strong>Semántica</strong> (opcional): notas que significan algo parecido, como se explica a continuación.</li>
+</ul>
+<h3 id="busqueda-semantica">Búsqueda semántica</h3>
+<p>La búsqueda semántica encuentra notas por lo que significan, aunque no compartan ninguna palabra con tu
+búsqueda: <em>cómo se alimentan las plantas</em> puede encontrar una nota sobre la fotosíntesis, y funciona entre
+idiomas. Está desactivada hasta que la configures:</p>
+<ol>
+<li>En <em>Herramientas ▸ Opciones ▸ Búsqueda</em>, pulsa <strong>Descargar el modelo</strong> (135 MB, una sola vez, desde Hugging Face).</li>
+<li>Marca <strong>Usar la búsqueda semántica</strong> y confirma.</li>
+</ol>
+<p>ZettelApp indexa entonces tus notas en segundo plano y se mantiene al día mientras las editas. Los resultados
+de las palabras que escribiste aparecen al instante; las notas encontradas por su significado se añaden un
+momento después. El modelo se ejecuta en tu equipo y tus notas nunca salen de él. Mientras se usa ocupa unos
+500 MB de memoria, que se liberan dos minutos después de tu última búsqueda. <strong>Eliminar modelo e índice</strong>, en
+la misma página, lo borra todo.</p>
+<h3 id="mejores-resultados-con-tus-comentarios">Mejores resultados con tus comentarios</h3>
+<p>Marca <strong>Mejorar el ranking con mis comentarios explícitos</strong> en <em>Herramientas ▸ Opciones ▸ Búsqueda</em>; después
+haz clic derecho en un resultado de búsqueda y elige <strong>Resultado relevante</strong> o <strong>Resultado no relevante</strong>. Los
+tipos de coincidencia que hay detrás de los resultados que marcas cuentan más o menos a partir de entonces.
+Solo se usan esos clics. ZettelApp guarda un total acumulado por tipo de coincidencia, en este equipo, y nada
+sobre qué notas marcaste ni qué buscaste. <strong>Restablecer preferencias aprendidas</strong> lo olvida todo.</p>
+<h2 id="seleccionar-varias-notas">Seleccionar varias notas</h2>
+<p>En la lista de notas, Ctrl+clic, Shift+clic o Shift+flechas seleccionan varias notas. Haz clic derecho en la
+selección para duplicarlas o moverlas a la papelera (en la papelera, para restaurarlas o eliminarlas), o pulsa
+Supr para moverlas a la papelera.</p>
+<p><em>Editar ▸ Duplicar nota</em> (Ctrl+D) copia una nota: su texto, etiquetas, enlace de la fuente, imagen, mapa mental,
+los enlaces que hace y las tarjetas que escribiste a mano. No se copian los enlaces hacia ella, su alarma ni su
+historial de repaso.</p>
 <h2 id="papelera">Papelera</h2>
 <p><em>Mover a la papelera</em> (Ctrl+Supr) oculta una nota sin eliminarla. Aparece de inmediato un botón de deshacer, y
 el botón <strong>Papelera</strong> bajo la lista de notas muestra las notas eliminadas: haz clic derecho para <strong>Restaurar</strong> o <strong>Eliminar

@@ -16,7 +16,7 @@ La boîte de dialogue indique le nombre de notes, de liens et de cartes mémoire
 
 | Format | Fichier | Contenu |
 |---|---|---|
-| **Archive ZettelApp** | `.zip` | Tout, y compris les images : notes, liens typés, types de liens (avec leurs couleurs, styles de ligne et pointes de flèche), cartes mémoire et cartes mentales. Réimportez-la dans ZettelApp sur n’importe quel ordinateur. Idéale pour les sauvegardes et le transfert de coffres. |
+| **Archive ZettelApp** | `.zip` | Tout, y compris les images : notes, liens typés, types de liens (avec leurs couleurs, styles de ligne et pointes de flèche), cartes mémoire, cartes mentales et l’ontologie des tags. Réimportez-la dans ZettelApp sur n’importe quel ordinateur. Idéale pour les sauvegardes et le transfert de coffres. |
 | **Fichiers Markdown** | `.zip` | Un fichier `.md` par note, avec front matter YAML (id, titre, tags, lien source, dates, liens typés, carte mentale) et des `[[liens wiki]]` entre fichiers. Les liens absents du texte sont répertoriés sous *Liens* sous la forme `type:: [[Note]]`, et les cartes mémoire manuelles sous *Cartes mémoire* au format `Q:`/`A:`. Les images se trouvent dans `assets/`. Ouvrable dans Obsidian et d’autres éditeurs Markdown. |
 | **Site Web** | `.zip` | Un site statique autonome : un index avec un aperçu du graphe, un index des tags et une page par note. Les liens y sont dessinés avec les couleurs et styles de ligne de leur type ; le site comprend aussi les cartes mentales et cartes mémoire (réponses révélées au clic). Aucun script : il fonctionne hors ligne en ouvrant `index.html`. Thèmes clair et sombre. |
 | **JSON** | `.json` | Données structurées destinées aux scripts et autres outils (les images sont référencées, mais pas incluses). |

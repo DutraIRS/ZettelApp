@@ -73,3 +73,13 @@ def test_only_a_newer_version_is_an_update(monkeypatch):
     assert updates.available_update() == "999.0.0"
     monkeypatch.setattr(updates, "latest_version", lambda: updates.__version__)
     assert updates.available_update() is None
+
+
+def test_the_notice_offers_the_installer_only_to_installed_copies(tmp_path, monkeypatch):
+    from zettelapp import DOWNLOAD_URL, RELEASES_URL
+    from zettelapp.ui import update_notice
+
+    monkeypatch.setattr(update_notice.sys, "executable", str(tmp_path / "ZettelApp.exe"))
+    assert update_notice.download_url() == RELEASES_URL
+    (tmp_path / "unins000.exe").touch()
+    assert update_notice.download_url() == DOWNLOAD_URL

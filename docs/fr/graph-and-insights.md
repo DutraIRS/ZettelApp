@@ -14,7 +14,7 @@ La page **Graphe** (Ctrl+2) représente vos notes en réseau : chaque cercle cor
 | **2D / 3D** | Passer d’une disposition plane déplaçable à une vue 3D pivotante. |
 | **Couleur by** | Colorer par tag, par *Clusters: k-means*, par *Clusters: hierarchical* ou sans coloration. |
 | **k** | Nombre de clusters. *Auto k* le choisit automatiquement (voir ci-dessous). |
-| **Groupe** | Rapprocher les notes d’un même groupe et ombrer la zone de chaque groupe. |
+| **Groupe** | Rapprocher les notes d’un même groupe et ombrer la zone de chaque groupe. En 2D, cliquez sur une zone pour la sélectionner et faites-la glisser pour déplacer toutes ses notes. |
 | **Libellés** | Afficher les titres des notes. Dans les grands graphes, seuls les titres des notes les plus connectées apparaissent jusqu’au survol. |
 | **Types de lien** | Masquer ou afficher certains types de liens. |
 | **Rechercher dans le graphe** | Saisir une partie d’un titre et appuyer sur Entrée pour accéder à la note. |

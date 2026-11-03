@@ -17,8 +17,16 @@ separate files: libraries are dynamically linked, not merged into ZettelApp's co
 | markdown-it-py | MIT | https://github.com/executablebooks/markdown-it-py |
 | mdurl | MIT | https://github.com/executablebooks/mdurl |
 | PyYAML | MIT | https://github.com/yaml/pyyaml |
+| ONNX Runtime (semantic search) | MIT | https://github.com/microsoft/onnxruntime |
+| Tokenizers (semantic search) | Apache-2.0 | https://github.com/huggingface/tokenizers |
 | Anthropic Python SDK | MIT | https://github.com/anthropics/anthropic-sdk-python |
 | httpx2, httpcore2, h11, anyio, sniffio, idna, jiter, pydantic, pydantic-core, typing-extensions, typing-inspection, annotated-types, docstring-parser, opentelemetry-api (dependencies of the Anthropic SDK) | BSD / MIT / Apache-2.0 | see each project on https://pypi.org/ |
+
+## Semantic search model
+
+Semantic search uses [multilingual-e5-small](https://huggingface.co/intfloat/multilingual-e5-small) (MIT
+licence). It isn't part of the download: ZettelApp fetches it from Hugging Face only if you ask for it in
+*Tools ▸ Options ▸ Search*.
 
 ## Qt and the LGPL
 

@@ -72,11 +72,25 @@ def strip_markdown(text: str) -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def _cut(plain: str, length: int) -> str:
+    return plain if len(plain) <= length else plain[: length - 1].rsplit(" ", 1)[0] + "…"
+
+
 def snippet(body: str, length: int = 140) -> str:
+    return _cut(strip_markdown(body), length)
+
+
+def snippet_around(body: str, words: str, length: int = 140) -> str:
+    """Like snippet(), but moved along the text to show the first of the words if it would
+    otherwise be cut off."""
     plain = strip_markdown(body)
-    if len(plain) <= length:
-        return plain
-    return plain[: length - 1].rsplit(" ", 1)[0] + "…"
+    found = re.findall(r"\w+", words)
+    match = re.search("|".join(map(re.escape, found)), plain, re.IGNORECASE) if found else None
+    if match is None or match.end() < length:
+        return _cut(plain, length)
+    around = max(0, match.start() - length // 3)
+    start = plain.rfind(" ", max(0, around - 20), around) + 1 or around  # at a word if possible
+    return "…" + _cut(plain[start:], length)
 
 
 # --- checklists -------------------------------------------------------------

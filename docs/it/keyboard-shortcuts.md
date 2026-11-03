@@ -13,7 +13,10 @@ poi la lettera sottolineata.
 | Inserisci immagine | Ctrl+Shift+I |
 | Aggiungi flashcard | Ctrl+Shift+F |
 | Alterna modifica / divisa / anteprima | Ctrl+E |
+| Duplica nota | Ctrl+D |
 | Sposta nota nel cestino | Ctrl+Delete |
+| Sposta le note selezionate nel cestino (nell'elenco delle note) | Del |
+| Seleziona più note | Ctrl+clic, Shift+clic, Shift+frecce |
 | Grassetto / corsivo | Ctrl+B / Ctrl+I |
 | Annulla / ripeti | Ctrl+Z / Ctrl+Y |
 | Completa un `[[collegamento]]` | Scrivi `[[`, poi scegli un titolo e premi Enter |

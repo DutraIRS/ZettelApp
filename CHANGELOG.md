@@ -4,6 +4,38 @@ All notable changes to ZettelApp are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [1.2.0] - 2026-11-02
+
+### Added
+
+- **Tag ontology** (*Tools ▸ Tag Ontology…*): say that a tag is the parent, a synonym or a related concept
+  of another, and tag filters and searches follow. ZettelApp archives carry it, and MCP's `list_tags`
+  returns it.
+- **Hybrid search** in the note list: full text, typo-tolerant titles and tags, and the tag ontology, fused
+  into one ranking whose weights can be set in *Tools ▸ Options ▸ Search*. Results show the part of the
+  note around your word.
+- **Semantic search** (optional, off by default): after a one-time 135 MB download you ask for, a language
+  model on your computer finds notes by meaning, across languages. Your notes never leave your computer.
+- **Adaptive ranking** (optional, off by default): right-click a search result to mark it as relevant or
+  not, and the kinds of match you prefer count for more.
+- Vaults move to schema 5 when opened; older versions of ZettelApp can't open them afterwards.
+
+### Changed
+
+- The update notice's **Download** button fetches the installer directly on installed copies; portable
+  copies still open the release page.
+- The MCP server is stricter about malformed requests, and `tag:name` also follows the tag ontology.
+- The 3D graph stops rotating while it isn't visible.
+
+### Fixed
+
+- Searching Chinese, Japanese or Korean text now finds words inside longer runs of characters.
+- A search combining a tag filter and a very common word could miss tagged notes.
+- API keys are never sent to another site when a provider redirects a request.
+- A timestamp without a time zone in an imported file is read as local time.
+- Dialogs are freed when closed; each one used to stay in memory until the app closed.
+- *Computing layout…* and *Analysing…* no longer stay on screen when another program changes the vault.
+
 ## [1.1.1] - 2026-10-29
 
 ### Added

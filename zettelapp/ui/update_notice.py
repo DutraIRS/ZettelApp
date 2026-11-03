@@ -6,6 +6,9 @@ be closed or silenced for good ("Don't check for updates").
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path
+
 from PySide6.QtCore import QEvent, Qt, QUrl
 from PySide6.QtGui import QColor, QDesktopServices
 from PySide6.QtWidgets import (
@@ -18,12 +21,19 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
 )
 
-from zettelapp import RELEASES_URL, settings
+from zettelapp import DOWNLOAD_URL, RELEASES_URL, settings
 from zettelapp.i18n import _
 from zettelapp.ui import icons, theme
 from zettelapp.ui.widgets import accent_button, label, link_button, tool_button
 
 MARGIN = 16
+
+
+def download_url() -> str:
+    """The latest installer for an installed copy; a portable one, which has no uninstaller
+    beside it, gets the release page and its zip."""
+    installed = (Path(sys.executable).parent / "unins000.exe").exists()
+    return DOWNLOAD_URL if installed else RELEASES_URL
 
 
 class UpdateNotice(QFrame):
@@ -83,7 +93,7 @@ class UpdateNotice(QFrame):
         return False
 
     def _download(self) -> None:
-        QDesktopServices.openUrl(QUrl(RELEASES_URL))  # always the fixed releases page
+        QDesktopServices.openUrl(QUrl(download_url()))
         self.close()
 
     def _silence(self) -> None:

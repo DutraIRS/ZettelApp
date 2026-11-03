@@ -26,6 +26,11 @@
 <td>認証のための API キー</td>
 </tr>
 <tr>
+<td><em>ツール ▸ オプション ▸ 検索</em> で<strong>モデルをダウンロード</strong>をクリックして確定する</td>
+<td><code>huggingface.co</code> (ダウンロード用サーバーにリダイレクトされる場合があります)</td>
+<td>意味検索モデルのファイルごとに 1 回の HTTPS リクエスト。ヘッダーは <code>User-Agent: ZettelApp/&lt;version&gt;</code> です。ノートに関する情報は含まれません。各ファイルは使用前に固定の SHA-256 で検証されます。<a href="notes-and-links.html#%E6%84%8F%E5%91%B3%E6%A4%9C%E7%B4%A2">ノートとリンク</a> を参照してください。</td>
+</tr>
+<tr>
 <td><strong>Anki に同期</strong>する</td>
 <td><strong>このコンピューター上の</strong> AnkiConnect (<code>127.0.0.1</code>)</td>
 <td>選択した範囲のフラッシュカード</td>
@@ -81,6 +86,10 @@
 <td>小さな UI キャッシュ</td>
 <td><code>%LOCALAPPDATA%\ZettelApp\Cache</code></td>
 </tr>
+<tr>
+<td>意味検索のモデルとインデックス (設定した場合)</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Search</code>。インデックスはノートから作られ、保管庫には置かれないので、保管庫と一緒に同期されません。<em>ツール ▸ オプション ▸ 検索</em> の<em>モデルとインデックスを削除</em>で削除できます。</td>
+</tr>
 </tbody>
 </table></div>
 <p>保管庫は通常のフォルダーなので、コピー、バックアップ、OneDrive での保管ができます。ZettelApp は、同期フォルダーに適した設定として、データベースをフル同期で書き込みます。同じ保管庫を 2 台のコンピューターで同時に開くのは避けてください。</p>
@@ -106,6 +115,6 @@
 <li><strong>MCP サーバーとそのスイッチ。</strong> MCP クライアントがノートにアクセスできるのは、ZettelApp が開いていて、<strong>かつ</strong>ステータスバーの MCP スイッチがオンの間だけです。スイッチは ZettelApp を起動するたびにオフになり、保存されることはありません。サーバーは既定で読み取り専用で、MCP クライアントが起動したときだけ実行され、ネットワークポートなしで標準入出力を使います。<a href="mcp-server.html">MCP サーバー</a>を参照してください。</li>
 </ul>
 <h2 id="アンインストール">アンインストール</h2>
-<p><em>Windows の設定 ▸ アプリ ▸ インストールされているアプリ ▸ ZettelApp ▸ アンインストール</em>からアンインストールします。アンインストーラーには、チェックの入っていない<strong>ZettelApp の設定とデータも削除する</strong>オプションがあります。チェックを入れると、設定、資格情報マネージャーに保存された API キー、ログ、キャッシュ、自動バックアップ (<code>%LOCALAPPDATA%\ZettelApp</code>) <strong>と、すべてのノート</strong> (保管庫のデータベースと添付ファイル) が削除されます。チェックを入れなければ、ノートはそのまま残ります。</p>
+<p><em>Windows の設定 ▸ アプリ ▸ インストールされているアプリ ▸ ZettelApp ▸ アンインストール</em>からアンインストールします。アンインストーラーには、チェックの入っていない<strong>ZettelApp の設定とデータも削除する</strong>オプションがあります。チェックを入れると、設定、資格情報マネージャーに保存された API キー、ログ、キャッシュ、自動バックアップ、意味検索のモデルとインデックス (<code>%LOCALAPPDATA%\ZettelApp</code>) <strong>と、すべてのノート</strong> (保管庫のデータベースと添付ファイル) が削除されます。チェックを入れなければ、ノートはそのまま残ります。</p>
 <p>セキュリティ上の問題を見つけましたか? 非公開で報告してください。<a href="https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md">SECURITY.md</a>を参照してください。</p>
 <p class="doc-footer">誤りを見つけたら：<a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/ja/privacy-and-security.md">GitHub でこのページを編集</a>。</p></main></div><footer class="site-footer"><div class="wrap footer-row"><p><img src="../../assets/favicon.png" alt="" width="20" height="20"> <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p><ul class="nav"><li><a href="../">ホーム</a></li><li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li><li><a href="https://ko-fi.com/dutrairs" rel="noopener">寄付</a></li></ul></div><ul class="nav lang-row" aria-label="言語"><li><a href="../../docs/privacy-and-security.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/privacy-and-security.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/privacy-and-security.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/privacy-and-security.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/privacy-and-security.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/privacy-and-security.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/privacy-and-security.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/privacy-and-security.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/privacy-and-security.html" lang="ja" hreflang="ja" aria-current="true">日本語</a></li><li><a href="../../ko/docs/privacy-and-security.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/privacy-and-security.html" lang="ar" hreflang="ar">العربية</a></li></ul><p class="made-with">Proudly developed with <a href="https://github.com/DutraIRS/Rational-Web">RationalWeb</a></p></footer></div></body></html>

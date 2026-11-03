@@ -41,6 +41,21 @@ class LLMError(Exception):
     """A user-presentable failure. Messages never contain the API key."""
 
 
+class _SameOriginRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """Never send provider credentials to a different origin or scheme."""
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        old = urlsplit(req.full_url)
+        new = urlsplit(newurl)
+        if (old.scheme.lower(), old.netloc.lower()) != (new.scheme.lower(), new.netloc.lower()):
+            return None
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+def _urlopen(request: urllib.request.Request, timeout: float):
+    return urllib.request.build_opener(_SameOriginRedirectHandler).open(request, timeout=timeout)
+
+
 @dataclass(frozen=True)
 class ProviderInfo:
     id: str
@@ -407,7 +422,7 @@ class OpenAICompatibleAdapter:
     ):
         label = settings.info.label
         try:
-            return urllib.request.urlopen(request, timeout=timeout)
+            return _urlopen(request, timeout)
         except urllib.error.HTTPError as exc:
             detail = ""
             try:

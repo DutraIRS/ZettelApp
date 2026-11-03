@@ -13,7 +13,10 @@
 | 이미지 삽입 | Ctrl+Shift+I |
 | 플래시카드 추가 | Ctrl+Shift+F |
 | 편집 / 분할 / 미리 보기 전환 | Ctrl+E |
+| 노트 복제 | Ctrl+D |
 | 노트를 휴지통으로 이동 | Ctrl+Delete |
+| 선택한 노트를 휴지통으로 이동(노트 목록에서) | Del |
+| 여러 노트 선택 | Ctrl+클릭, Shift+클릭, Shift+화살표 키 |
 | 굵게 / 기울임 | Ctrl+B / Ctrl+I |
 | 실행 취소 / 다시 실행 | Ctrl+Z / Ctrl+Y |
 | `[[link]]` 완성 | `[[`를 입력하고 제목을 고른 다음 Enter |

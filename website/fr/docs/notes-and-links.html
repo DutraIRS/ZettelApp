@@ -163,11 +163,44 @@ Les types intégrés peuvent être renommés et redéfinis, mais pas supprimés.
 <p>Ajoutez des tags dans le champ sous le titre (appuyez sur Entrée après chacun) ou écrivez-les <strong>dans le texte</strong> avec
 un signe dièse, par exemple <code>#welcome</code> ou <code>#math/algebra</code>. Les tags sont en minuscules et peuvent être imbriqués
 avec une barre oblique, comme <code>math/algebra</code>. Un filtre sur <code>math</code> trouve également les notes portant <code>math/algebra</code>.
-Utilisez le filtre de tags au-dessus de la liste des notes ou saisissez <code>tag:name</code> dans le champ de recherche.</p>
+Utilisez le filtre de tags au-dessus de la liste des notes ou saisissez <code>tag:name</code> dans le champ de recherche. Le nombre à côté de chaque tag indique les notes affichées par ce filtre.</p>
 <p>Les tags écrits dans le texte sont de vrais tags, affichés sous forme de <strong>pastilles au contour</strong> près du champ <em>Ajouter un tag</em>.
 Ils disparaissent lorsque vous supprimez le <code>#tag</code> du texte. Un <code>#tag</code> est ignoré dans le code, les cibles de liens et
 les <code>[[#titres]]</code>. Les tags saisis dans le champ <em>Ajouter un tag</em> sont distincts : ils restent jusqu’à ce que vous les supprimiez
 avec leur ✕. Dans l’éditeur, faites Ctrl+clic sur un <code>#tag</code> pour répertorier les notes qui le portent.</p>
+<h3 id="ontologie-des-tags">Ontologie des tags</h3>
+<p>Vous pouvez aussi indiquer comment les tags sont liés entre eux, sans les renommer. Ouvrez <em>Outils ▸ Ontologie
+des tags…</em>, ou le petit bouton à côté du filtre de tags, et ajoutez des relations :</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Relation</th>
+<th>Exemple</th>
+<th>Un filtre sur le premier tag trouve aussi…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Parent → enfant</strong></td>
+<td><code>statistiques</code> est le parent de <code>bayes</code></td>
+<td>les notes portant <code>bayes</code> et, à leur tour, celles de ses enfants. Un tag peut avoir plusieurs parents.</td>
+</tr>
+<tr>
+<td><strong>Synonyme / alias</strong></td>
+<td><code>ml</code> est un synonyme de <code>apprentissage-automatique</code></td>
+<td>les notes portant l’un ou l’autre, quel que soit celui du filtre.</td>
+</tr>
+<tr>
+<td><strong>Concept associé</strong></td>
+<td><code>mémoire</code> est associé à <code>sommeil</code></td>
+<td>rien de plus, tant que vous ne cochez pas <em>Trouver aussi les notes aux tags associés</em> dans le menu du petit bouton.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Un tag d’une relation n’a pas besoin de figurer sur une note : <code>statistiques</code> peut exister uniquement pour
+rassembler d’autres tags. Les relations changent seulement ce que trouvent les filtres et les recherches : vos
+notes et leurs tags restent tels quels. Double-cliquez sur une relation pour voir les notes de son premier tag.
+Les archives ZettelApp contiennent l’ontologie, et les clients MCP peuvent la lire.</p>
 <h2 id="lien-source">Lien source</h2>
 <p>Le champ avec l’icône de globe contient la <strong>source</strong> de la note : une page Web (<code>https://…</code>), une adresse e-mail ou un
 élément Zotero (<code>zotero://select/library/items/…</code>). Le bouton voisin ouvre le lien. Les autres types de lien sont refusés.
@@ -253,10 +286,46 @@ carte <strong>à trous</strong>, qui masque tour à tour chaque suppression. <co
 <p><strong>Dans l’onglet Cartes mémoire.</strong> Utilisez <em>Insertion ▸ Carte mémoire…</em> (Ctrl+Shift+F) pour les cartes qui ne doivent pas apparaître
 dans la note. Les cartes provenant du texte portent la mention <em>depuis le texte de la note</em> et se modifient dans le texte.</p>
 <h2 id="recherche">Recherche</h2>
-<p>Le champ de recherche (Ctrl+F) effectue une recherche intégrale dans les titres, le texte et les tags, ignore les accents
-et reconnaît les préfixes de mots : <code>forget</code> trouve ainsi <em>forgetting</em>. Ajoutez <code>tag:name</code> pour filtrer par tag, par
-exemple <code>memory tag:psychology</code>. Les résultats sont triés par pertinence ; sans requête, les notes suivent le tri choisi
-(<em>Dernière modification</em>, <em>Créée</em>, <em>Titre</em> ou <em>Les plus liées</em>).</p>
+<p>Le champ de recherche (Ctrl+F) parcourt les titres, le texte et les tags, ignore les accents et reconnaît les
+préfixes de mots : <code>forget</code> trouve ainsi <em>forgetting</em>. Ajoutez <code>tag:name</code> pour ne garder que les notes portant un
+tag, par exemple <code>memory tag:psychology</code>. Les meilleures correspondances viennent en premier et chacune montre
+le passage de la note autour de votre mot ; sans requête, les notes suivent le tri choisi (<em>Dernière
+modification</em>, <em>Créée</em>, <em>Titre</em> ou <em>Les plus liées</em>).</p>
+<p>Plusieurs types de correspondance travaillent ensemble, et <em>Outils ▸ Options ▸ Recherche</em> règle le poids de chacun :</p>
+<ul>
+<li><strong>Plein texte</strong> : vos mots n’importe où dans la note.</li>
+<li><strong>Approximative</strong> : de petites fautes de frappe dans les titres et les tags, ainsi <code>quantom</code> trouve <em>Quantum</em>.</li>
+<li><strong>Tags et ontologie</strong> : un mot qui nomme un tag trouve les notes de ce tag, ainsi que celles de ses enfants et
+de ses synonymes.</li>
+<li><strong>Sémantique</strong> (facultative) : des notes de sens proche, comme expliqué ci-dessous.</li>
+</ul>
+<h3 id="recherche-semantique">Recherche sémantique</h3>
+<p>La recherche sémantique trouve les notes d’après leur sens, même si elles n’ont aucun mot en commun avec votre
+recherche : <em>comment les plantes se nourrissent</em> peut trouver une note sur la photosynthèse, et cela fonctionne
+d’une langue à l’autre. Elle reste désactivée tant que vous ne l’avez pas configurée :</p>
+<ol>
+<li>Dans <em>Outils ▸ Options ▸ Recherche</em>, cliquez sur <strong>Télécharger le modèle</strong> (135 Mo, une seule fois, depuis Hugging Face).</li>
+<li>Cochez <strong>Utiliser la recherche sémantique</strong> et validez.</li>
+</ol>
+<p>ZettelApp indexe alors vos notes en arrière-plan et suit vos modifications. Les résultats pour les mots saisis
+apparaissent aussitôt ; les notes trouvées d’après leur sens les rejoignent un instant plus tard. Le modèle
+s’exécute sur votre ordinateur et vos notes n’en sortent jamais. Lorsqu’il est utilisé, il occupe environ 500 Mo
+de mémoire, libérés deux minutes après votre dernière recherche. <strong>Supprimer le modèle et l’index</strong>, sur la même
+page, efface le tout.</p>
+<h3 id="de-meilleurs-resultats-grace-a-vos-evaluations">De meilleurs résultats grâce à vos évaluations</h3>
+<p>Cochez <strong>Améliorer le classement à partir de mes évaluations explicites</strong> dans <em>Outils ▸ Options ▸ Recherche</em>,
+puis faites un clic droit sur un résultat de recherche et choisissez <strong>Résultat pertinent</strong> ou <strong>Résultat non
+pertinent</strong>. Les types de correspondance à l’origine des résultats que vous indiquez comptent ensuite plus ou
+moins. Seuls ces clics sont utilisés. ZettelApp conserve un total cumulé par type de correspondance, sur cet
+ordinateur, et rien sur les notes indiquées ni sur ce que vous avez cherché. <strong>Réinitialiser les préférences
+apprises</strong> oublie tout.</p>
+<h2 id="selectionner-plusieurs-notes">Sélectionner plusieurs notes</h2>
+<p>Dans la liste des notes, Ctrl+clic, Shift+clic ou Shift+flèches sélectionnent plusieurs notes. Faites un clic
+droit sur la sélection pour les dupliquer ou les mettre à la Corbeille (dans la Corbeille, pour les restaurer ou
+les supprimer), ou appuyez sur Del pour les mettre à la Corbeille.</p>
+<p><em>Édition ▸ Dupliquer la note</em> (Ctrl+D) copie une note : son texte, ses tags, son lien source, son image, sa carte
+mentale, les liens qu’elle établit et les cartes mémoire écrites à la main. Les liens vers elle, son alarme et son
+historique de révision ne sont pas copiés.</p>
 <h2 id="corbeille">Corbeille</h2>
 <p><em>Mettre à la corbeille</em> (Ctrl+Delete) masque une note sans la supprimer. Un bouton d’annulation apparaît immédiatement ; le bouton
 <strong>Corbeille</strong> sous la liste des notes affiche les notes mises à la corbeille. Faites un clic droit pour <strong>Restaurer</strong> ou

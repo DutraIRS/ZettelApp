@@ -128,12 +128,28 @@ nada se perde. Os tipos embutidos podem ser renomeados e ter o estilo alterado, 
 Adicione tags no campo de tags abaixo do título (pressione Enter após cada uma) ou escreva-as **no texto** com um
 sinal de cerquilha, como `#welcome` ou `#math/algebra`. As tags são em minúsculas e podem ser aninhadas com uma barra, como
 `math/algebra`. Filtrar por `math` também encontra as notas com a tag `math/algebra`.
-Use o filtro de tags acima da lista de notas ou digite `tag:nome` na caixa de busca.
+Use o filtro de tags acima da lista de notas ou digite `tag:nome` na caixa de busca. O número ao lado de cada tag conta as notas que esse filtro mostra.
 
 As tags escritas no texto são tags de verdade, exibidas como **chips com contorno** ao lado da caixa *Adicionar tag*. Elas
 desaparecem quando você apaga a `#tag` do texto. Uma `#tag` é ignorada dentro de código, dentro de destinos de link
 e em `[[#headings]]`. As tags digitadas na caixa *Adicionar tag* são independentes: permanecem até você removê-las com
 o ✕ delas. Ctrl+clique em uma `#tag` no editor para listar as notas que a têm.
+
+### Ontologia de tags
+
+Você também pode dizer como as tags se relacionam entre si, sem renomeá-las. Abra *Ferramentas ▸ Ontologia de
+tags…*, ou o pequeno botão ao lado do filtro de tags, e adicione relações:
+
+| Relação | Exemplo | Um filtro pela primeira tag também encontra… |
+|---|---|---|
+| **Pai → filho** | `estatística` é a tag pai de `bayes` | notas com a tag `bayes` e, por sua vez, as das filhas dela. Uma tag pode ter vários pais. |
+| **Sinônimo / alias** | `ml` é sinônimo de `aprendizado-de-máquina` | notas com qualquer uma das duas, seja qual for a do filtro. |
+| **Conceito relacionado** | `memória` está relacionada a `sono` | nada mais, até você marcar *Encontrar também notas com tags relacionadas* no menu do pequeno botão. |
+
+Uma tag em uma relação não precisa estar em nenhuma nota, então `estatística` pode existir só para reunir
+outras tags. As relações só mudam o que os filtros e as buscas encontram: suas notas e as tags delas continuam
+como estão. Clique duas vezes em uma relação para ver as notas da primeira tag. Os arquivos do ZettelApp levam
+a ontologia, e os clientes MCP podem lê-la.
 
 ## Link da fonte
 
@@ -219,10 +235,50 @@ nota. Os cartões do texto são marcados como *do texto da nota* e são editados
 
 ## Busca
 
-A caixa de busca (Ctrl+F) usa busca de texto completo em títulos, textos e tags, ignora acentos e corresponde a
-prefixos de palavras, então `esquec` encontra *esquecimento*. Adicione `tag:nome` para filtrar por tag, por exemplo
-`memory tag:psychology`. Os resultados são ordenados por relevância; sem uma consulta, as notas seguem a ordenação
-escolhida (*Última edição*, *Criada*, *Título* ou *Mais ligadas*).
+A caixa de busca (Ctrl+F) procura em títulos, textos e tags, ignora acentos e corresponde a prefixos de
+palavras, então `esquec` encontra *esquecimento*. Adicione `tag:nome` para manter só as notas com uma tag, por
+exemplo `memory tag:psychology`. As melhores correspondências vêm primeiro e cada uma mostra o trecho da nota em
+torno da sua palavra; sem uma consulta, as notas seguem a ordenação escolhida (*Última edição*, *Criada*,
+*Título* ou *Mais ligadas*).
+
+Vários tipos de correspondência trabalham juntos, e *Ferramentas ▸ Opções ▸ Busca* define quanto cada um conta:
+
+- **Texto completo**: suas palavras em qualquer parte da nota.
+- **Difusa**: pequenos erros de digitação em títulos e tags, então `quantom` encontra *Quantum*.
+- **Tags e ontologia**: uma palavra que nomeia uma tag encontra as notas dessa tag e as das filhas e sinônimos dela.
+- **Semântica** (opcional): notas que significam algo parecido, como explicado abaixo.
+
+### Busca semântica
+
+A busca semântica encontra notas pelo que significam, mesmo que não tenham nenhuma palavra em comum com a sua
+busca: *como as plantas se alimentam* pode encontrar uma nota sobre fotossíntese, e funciona entre idiomas. Ela
+fica desligada até você configurá-la:
+
+1. Em *Ferramentas ▸ Opções ▸ Busca*, clique em **Baixar o modelo** (135 MB, uma única vez, do Hugging Face).
+2. Marque **Usar a busca semântica** e confirme.
+
+O ZettelApp então indexa suas notas em segundo plano e acompanha as edições. Os resultados das palavras que você
+digitou aparecem na hora; as notas encontradas pelo significado se juntam a eles um instante depois. O modelo
+roda no seu computador e suas notas nunca saem dele. Em uso, ocupa cerca de 500 MB de memória, liberados dois
+minutos depois da sua última busca. **Remover modelo e índice**, na mesma página, apaga tudo isso.
+
+### Resultados melhores com o seu feedback
+
+Marque **Melhorar o ranking com meu feedback explícito** em *Ferramentas ▸ Opções ▸ Busca*; depois clique com o
+botão direito em um resultado de busca e escolha **Resultado relevante** ou **Resultado não relevante**. Os
+tipos de correspondência por trás dos resultados que você marca passam a contar mais ou menos. Só esses cliques
+são usados. O ZettelApp guarda um total acumulado por tipo de correspondência, neste computador, e nada sobre
+quais notas você marcou ou o que buscou. **Redefinir preferências aprendidas** esquece tudo.
+
+## Selecionar várias notas
+
+Na lista de notas, Ctrl+clique, Shift+clique ou Shift+setas selecionam várias notas. Clique com o botão direito
+na seleção para duplicá-las ou movê-las para a lixeira (na lixeira, para restaurá-las ou excluí-las), ou
+pressione Del para movê-las para a lixeira.
+
+*Editar ▸ Duplicar nota* (Ctrl+D) copia uma nota: texto, tags, link da fonte, imagem, mapa mental, os links que
+ela faz e os flashcards que você escreveu à mão. Os links para ela, o alarme e o histórico de revisão não são
+copiados.
 
 ## Lixeira
 

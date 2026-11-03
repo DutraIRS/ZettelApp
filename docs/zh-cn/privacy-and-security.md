@@ -9,6 +9,7 @@
 | ZettelApp 启动约 4 秒后(可以关闭) | `https://dutrairs.github.io/ZettelApp/version.json` | 对该文件的一次 HTTPS 请求,带有标头 `User-Agent: ZettelApp/<version>`。不含其他任何内容:没有笔记、设置或标识符。任何失败都是静默的。参见[更新](getting-started.md#updates)。 |
 | 你在**提问**页面提出问题 | 你配置的 AI 服务商(Anthropic、OpenAI、Z.ai 或你自己的端点) | 你的问题以及*已发送的来源*下列出的笔记 |
 | 你测试 AI 连接或刷新模型列表 | 同一服务商 | 你的 API 密钥,用于身份验证 |
+| 你在*工具 ▸ 选项 ▸ 搜索*中点击**下载模型**并确认 | `huggingface.co`,它可能重定向到其下载服务器 | 语义搜索模型的每个文件一次 HTTPS 请求,带有请求头 `User-Agent: ZettelApp/<version>`。不含任何关于你笔记的内容。每个文件在使用前都会与固定的 SHA-256 校验。参见 [笔记与链接](notes-and-links.md#语义搜索)。 |
 | 你**同步到 Anki** | **本机**上的 AnkiConnect(`127.0.0.1`) | 所选范围内的闪卡 |
 | 你使用**插入 ▸ Zotero 引用**或 Zotero 选项中的*测试连接* | **本机**上的 Zotero(`127.0.0.1`) | 你的搜索词(只读) |
 | 你点击网页链接,或使用*帮助 ▸ 网站 / 文档 / 检查更新*,或更新通知上的**下载**按钮 | 你的网页浏览器打开该页面 | ZettelApp 不发送任何内容 |
@@ -28,6 +29,7 @@
 | 日志 | `%LOCALAPPDATA%\ZettelApp\Logs`(轮转,最多几 MB)。它们记录错误而不是你的笔记,并且绝不包含 API 密钥。 |
 | 自动备份 | `%LOCALAPPDATA%\ZettelApp\Backups` |
 | 小型界面缓存 | `%LOCALAPPDATA%\ZettelApp\Cache` |
+| 语义搜索的模型和索引(如果你设置了它) | `%LOCALAPPDATA%\ZettelApp\Search`。索引由你的笔记生成,绝不在库中,因此不会随库同步。*工具 ▸ 选项 ▸ 搜索*中的*移除模型和索引*可删除它。 |
 
 库就是一个普通文件夹:你可以复制它、备份它,或把它放在 OneDrive 中。ZettelApp 以完全同步的方式写入数据库,这一设置适合同步文件夹。请避免在两台电脑上同时打开同一个库。
 
@@ -55,6 +57,6 @@
 
 ## 卸载
 
-通过 *Windows 设置 ▸ 应用 ▸ 已安装的应用 ▸ ZettelApp ▸ 卸载*进行卸载。卸载程序提供一个未勾选的选项**同时删除我的 ZettelApp 设置和数据**。如果你勾选它,它会删除你的设置、保存在凭据管理器中的 API 密钥、日志、缓存和自动备份(`%LOCALAPPDATA%\ZettelApp`),**以及你的所有笔记**(你各个库的数据库和附件)。不勾选时,你的笔记会留在原处。
+通过 *Windows 设置 ▸ 应用 ▸ 已安装的应用 ▸ ZettelApp ▸ 卸载*进行卸载。卸载程序提供一个未勾选的选项**同时删除我的 ZettelApp 设置和数据**。如果你勾选它,它会删除你的设置、保存在凭据管理器中的 API 密钥、日志、缓存、自动备份以及语义搜索的模型和索引(`%LOCALAPPDATA%\ZettelApp`),**以及你的所有笔记**(你各个库的数据库和附件)。不勾选时,你的笔记会留在原处。
 
 发现了安全问题?请私下报告;参见 [SECURITY.md](https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md)。

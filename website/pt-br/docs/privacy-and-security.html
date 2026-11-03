@@ -28,6 +28,11 @@ de rede que ele pode fazer:</p>
 <td>Sua chave de API, para autenticação</td>
 </tr>
 <tr>
+<td>Você clica em <strong>Baixar o modelo</strong> em <em>Ferramentas ▸ Opções ▸ Busca</em> e confirma</td>
+<td><code>huggingface.co</code>, que pode redirecionar para seus servidores de download</td>
+<td>Uma requisição HTTPS por arquivo do modelo de busca semântica, com o cabeçalho <code>User-Agent: ZettelApp/&lt;version&gt;</code>. Nada sobre suas notas. Cada arquivo é verificado com um SHA-256 fixo antes de ser usado. Veja <a href="notes-and-links.html#busca-semantica">Notas e links</a>.</td>
+</tr>
+<tr>
 <td>Você usa <strong>Sincronizar com o Anki</strong></td>
 <td>O AnkiConnect <strong>neste computador</strong> (<code>127.0.0.1</code>)</td>
 <td>Os flashcards do escopo escolhido</td>
@@ -85,6 +90,10 @@ O servidor MCP não faz nenhuma requisição de rede.</p>
 <td>Pequeno cache da interface</td>
 <td><code>%LOCALAPPDATA%\ZettelApp\Cache</code></td>
 </tr>
+<tr>
+<td>Modelo e índice da busca semântica, se você a configurar</td>
+<td><code>%LOCALAPPDATA%\ZettelApp\Search</code>. O índice é derivado das suas notas e nunca fica no cofre, então não é sincronizado com ele. <em>Remover modelo e índice</em> em <em>Ferramentas ▸ Opções ▸ Busca</em> o apaga.</td>
+</tr>
 </tbody>
 </table></div>
 <p>O cofre é uma pasta comum: você pode copiá-la, fazer backup dela ou mantê-la no OneDrive. O ZettelApp grava o
@@ -138,7 +147,7 @@ padrão, sem porta de rede. Veja <a href="mcp-server.html">Servidor MCP</a>.</li
 <h2 id="desinstalacao">Desinstalação</h2>
 <p>Desinstale em <em>Configurações do Windows ▸ Aplicativos ▸ Aplicativos instalados ▸ ZettelApp ▸ Desinstalar</em>. O desinstalador oferece
 uma opção desmarcada, <strong>Excluir também minhas configurações e dados do ZettelApp</strong>. Se você marcá-la, ela remove suas
-configurações, as chaves de API salvas no Gerenciador de Credenciais, os logs, o cache e os backups automáticos
+configurações, as chaves de API salvas no Gerenciador de Credenciais, os logs, o cache, os backups automáticos e o modelo e o índice da busca semântica
 (<code>%LOCALAPPDATA%\ZettelApp</code>) <strong>e todas as suas notas</strong> (o banco de dados e os anexos dos seus cofres). Desmarcada,
 suas notas permanecem onde estão.</p>
 <p>Encontrou um problema de segurança? Por favor, relate-o em particular; veja

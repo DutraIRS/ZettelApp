@@ -126,8 +126,37 @@ part_of:: [[Zettelkasten method]]
 <p>预览会显示由该链接连接的两条笔记,以及它的名称和从另一侧读起来的样子。该样式会用在链接出现的所有地方:图谱、图例、侧边栏、链接选择器,以及网站、GraphML 和 Graphviz 导出。请给每种类型分配独立的线条以及独立的颜色,这样色盲读者和纸质打印时也能轻松区分各类型。新类型会从很少有其他类型使用的颜色和线条开始。</p>
 <p>在正文中,请使用类型的 id,它显示在预览下方(例如名为“Inspired by”的类型会变成 <code>inspired_by::</code>)。id 在创建类型时确定,因此重命名类型不会破坏写在你笔记中的链接。移除你自己的某个类型会把它的链接变成<em>相关于</em>链接,因此不会丢失任何内容。内置类型可以重命名和重新设置样式,但不能移除。</p>
 <h2 id="标签">标签</h2>
-<p>在标题下方的标签字段中添加标签(每个之后按 Enter),或者用井号<strong>在正文中</strong>书写,例如 <code>#welcome</code> 或 <code>#math/algebra</code>。标签为小写,可用斜杠嵌套,例如 <code>math/algebra</code>。按 <code>math</code> 筛选时也会找到带有 <code>math/algebra</code> 标签的笔记。使用笔记列表上方的标签筛选器,或在搜索框中输入 <code>tag:name</code>。</p>
+<p>在标题下方的标签字段中添加标签(每个之后按 Enter),或者用井号<strong>在正文中</strong>书写,例如 <code>#welcome</code> 或 <code>#math/algebra</code>。标签为小写,可用斜杠嵌套,例如 <code>math/algebra</code>。按 <code>math</code> 筛选时也会找到带有 <code>math/algebra</code> 标签的笔记。使用笔记列表上方的标签筛选器,或在搜索框中输入 <code>tag:name</code>。每个标签旁的数字表示该筛选器显示的笔记数量。</p>
 <p>写在正文中的标签是真正的标签,显示为<em>添加标签</em>框旁边的<strong>描边标签块</strong>。当你从正文中删除该 <code>#tag</code> 时,它们会随之消失。<code>#tag</code> 在代码内、链接目标内以及 <code>[[#headings]]</code> 中会被忽略。在<em>添加标签</em>框中输入的标签是独立的:它们会一直保留,直到你用其 ✕ 移除。在编辑器中 Ctrl+点击某个 <code>#tag</code>,可列出带有它的笔记。</p>
+<h3 id="标签本体">标签本体</h3>
+<p>你还可以说明标签之间的关系,而无需重命名它们。打开<em>工具 ▸ 标签本体…</em>,或标签筛选器旁的小按钮,然后添加关系:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>关系</th>
+<th>示例</th>
+<th>按第一个标签筛选时还会找到…</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>父级 → 子级</strong></td>
+<td><code>统计学</code> 是 <code>贝叶斯</code> 的父级</td>
+<td>带 <code>贝叶斯</code> 标签的笔记,以及其子级的笔记。一个标签可以有多个父级。</td>
+</tr>
+<tr>
+<td><strong>同义词 / 别名</strong></td>
+<td><code>ml</code> 是 <code>机器学习</code> 的同义词</td>
+<td>带有其中任一标签的笔记,无论你按哪个筛选。</td>
+</tr>
+<tr>
+<td><strong>相关概念</strong></td>
+<td><code>记忆</code> 与 <code>睡眠</code> 相关</td>
+<td>不会多找到什么,除非你在小按钮的菜单中勾选<em>同时查找带有相关标签的笔记</em>。</td>
+</tr>
+</tbody>
+</table></div>
+<p>关系中的标签不必出现在任何笔记上,所以 <code>统计学</code> 可以只用来汇集其他标签。关系只改变筛选和搜索能找到的内容:你的笔记及其标签保持原样。双击一条关系可查看其第一个标签的笔记。ZettelApp 归档包含本体,MCP 客户端也可以读取它。</p>
 <h2 id="来源链接">来源链接</h2>
 <p>带有地球图标的字段保存笔记的<strong>来源</strong>:一个网页(<code>https://…</code>)、一个电子邮件地址,或一个 Zotero 条目(<code>zotero://select/library/items/…</code>)。它旁边的按钮可打开该链接。其他类型的链接会被拒绝。参见 <a href="zotero.html">Zotero</a>,了解如何直接从你的 Zotero 文献库创建笔记。</p>
 <h2 id="图片">图片</h2>
@@ -190,7 +219,26 @@ A: Hermann Ebbinghaus
 <p>问题可以跨越多行,直到 <code>A:</code> 行为止。任何带有 <code>{{c1::…}}</code> 的段落都会变成<strong>填空</strong>卡片,依次隐藏每处挖空。<code>{{c1::text::hint}}</code> 会显示提示而不是 <code>[…]</code>。</p>
 <p>**在闪卡标签页中。**对于不应出现在笔记中的卡片,使用<em>插入 ▸ 闪卡…</em>(Ctrl+Shift+F)。来自正文的卡片标记为<em>来自笔记文本</em>,需在正文中编辑。</p>
 <h2 id="搜索">搜索</h2>
-<p>搜索框(Ctrl+F)对标题、正文和标签使用全文搜索,忽略重音符号,并匹配单词前缀,因此 <code>forget</code> 能找到 <em>forgetting</em>。添加 <code>tag:name</code> 可按标签筛选,例如 <code>memory tag:psychology</code>。结果按相关性排序;没有查询词时,笔记按所选排序方式排列(<em>最后编辑</em>、<em>创建于</em>、<em>标题</em>或<em>被链接最多</em>)。</p>
+<p>搜索框(Ctrl+F)在标题、正文和标签中查找,忽略重音符号,并匹配单词前缀,因此 <code>forget</code> 能找到 <em>forgetting</em>。添加 <code>tag:name</code> 可只保留带某个标签的笔记,例如 <code>memory tag:psychology</code>。最佳匹配排在最前,每条结果都显示笔记中你的词语周围的片段;没有查询词时,笔记按所选排序方式排列(<em>最后编辑</em>、<em>创建于</em>、<em>标题</em>或<em>被链接最多</em>)。</p>
+<p>多种匹配方式协同工作,<em>工具 ▸ 选项 ▸ 搜索</em>可设置每种方式的权重:</p>
+<ul>
+<li><strong>全文</strong>:笔记中任意位置的词语。</li>
+<li><strong>模糊</strong>:标题和标签中的小拼写错误,例如 <code>quantom</code> 能找到 <em>Quantum</em>。</li>
+<li><strong>标签与本体</strong>:与标签同名的词语会找到该标签的笔记,以及其子级和同义词的笔记。</li>
+<li><strong>语义</strong>(可选):含义相近的笔记,详见下文。</li>
+</ul>
+<h3 id="语义搜索">语义搜索</h3>
+<p>语义搜索按含义查找笔记,即使它们与搜索内容没有相同的词:<em>植物如何制造养分</em> 可以找到关于光合作用的笔记,并且可以跨语言使用。在你设置之前它一直关闭:</p>
+<ol>
+<li>在<em>工具 ▸ 选项 ▸ 搜索</em>中,点击<strong>下载模型</strong>(135 MB,只需一次,来自 Hugging Face)。</li>
+<li>勾选<strong>使用语义搜索</strong>并确认。</li>
+</ol>
+<p>之后 ZettelApp 会在后台索引你的笔记,并随你的编辑保持更新。所输入词语的结果会立即出现;按含义找到的笔记稍后加入。模型在你的电脑上运行,你的笔记绝不会离开电脑。使用时它占用约 500 MB 内存,在你最后一次搜索两分钟后释放。同一页面上的<strong>移除模型和索引</strong>会删除这一切。</p>
+<h3 id="通过反馈获得更好的结果">通过反馈获得更好的结果</h3>
+<p>在<em>工具 ▸ 选项 ▸ 搜索</em>中勾选<strong>根据我的明确反馈改进排序</strong>,然后右键单击搜索结果,选择<strong>相关的结果</strong>或<strong>不相关的结果</strong>。你标记的结果背后的匹配方式,此后的权重会增加或减少。只使用这些点击。ZettelApp 在这台电脑上只保存每种匹配方式的累计值,不保存你标记了哪些笔记或搜索了什么。<strong>重置学习到的偏好</strong>会忘记这一切。</p>
+<h2 id="选择多条笔记">选择多条笔记</h2>
+<p>在笔记列表中,Ctrl+单击、Shift+单击或 Shift+方向键可选择多条笔记。右键单击所选内容可复制它们或移到回收站(在回收站中则可恢复或删除),也可按 Del 将它们移到回收站。</p>
+<p><em>编辑 ▸ 复制笔记</em>(Ctrl+D)会复制一条笔记:正文、标签、来源链接、图片、思维导图、它发出的链接以及你手写的闪卡。指向它的链接、它的闹钟和复习记录不会被复制。</p>
 <h2 id="回收站">回收站</h2>
 <p><em>移到回收站</em>(Ctrl+Delete)会隐藏笔记而不删除它。撤销按钮会立即出现,笔记列表下方的<strong>回收站</strong>按钮会显示被丢弃的笔记:右键点击可<strong>还原</strong>或<strong>永久删除</strong>。<strong>清空回收站</strong>会在询问后删除其中的所有内容。指向回收站中笔记的链接会被隐藏,并在笔记还原后恢复。</p>
 <p class="doc-footer">发现错误？<a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/zh-cn/notes-and-links.md">在 GitHub 上编辑此页</a>。</p></main></div><footer class="site-footer"><div class="wrap footer-row"><p><img src="../../assets/favicon.png" alt="" width="20" height="20"> <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p><ul class="nav"><li><a href="../">首页</a></li><li><a href="https://github.com/DutraIRS/ZettelApp/issues">问题</a></li><li><a href="https://ko-fi.com/dutrairs" rel="noopener">捐赠</a></li></ul></div><ul class="nav lang-row" aria-label="语言"><li><a href="../../docs/notes-and-links.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/notes-and-links.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/notes-and-links.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/notes-and-links.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/notes-and-links.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../../it/docs/notes-and-links.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/notes-and-links.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/notes-and-links.html" lang="zh-CN" hreflang="zh-CN" aria-current="true">简体中文</a></li><li><a href="../../ja/docs/notes-and-links.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/notes-and-links.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/notes-and-links.html" lang="ar" hreflang="ar">العربية</a></li></ul><p class="made-with">Proudly developed with <a href="https://github.com/DutraIRS/Rational-Web">RationalWeb</a></p></footer></div></body></html>

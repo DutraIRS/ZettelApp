@@ -30,12 +30,17 @@ from PySide6.QtWidgets import (
     QMenu,
     QStyle,
     QStyledItemDelegate,
+    QToolButton,
     QVBoxLayout,
     QWidget,
 )
 
-from zettelapp.core.storage import Vault
-from zettelapp.core.textutil import fold, snippet
+from zettelapp import settings
+from zettelapp.core.adaptive import FeedbackModel
+from zettelapp.core.models import Note
+from zettelapp.core.search import hybrid_search
+from zettelapp.core.storage import Vault, split_query
+from zettelapp.core.textutil import fold, snippet_around
 from zettelapp.i18n import _, n_
 from zettelapp.ui import icons, theme
 from zettelapp.ui.widgets import SearchBox, accent_button, label, tool_button
@@ -205,6 +210,8 @@ def _short_date(iso: str) -> str:
 
 
 class NoteListPanel(QWidget):
+    ontologyRequested = Signal()
+    semanticRequested = Signal(str)  # the search words
     noteSelected = Signal(str)
     newNoteRequested = Signal()
     linkToCurrent = Signal(str, str)
@@ -224,6 +231,9 @@ class NoteListPanel(QWidget):
         self.vault: Vault | None = None
         self.trash_mode = False
         self.link_types: list = []
+        self._signals: dict[str, dict[str, float]] = {}  # why each search result was found
+        self._semantic_words = ""  # the words the semantic scores were asked for
+        self._semantic_scores: dict[str, float] = {}
         layout = QVBoxLayout(self)
         layout.setContentsMargins(10, 14, 6, 8)
         layout.setSpacing(8)
@@ -242,6 +252,14 @@ class NoteListPanel(QWidget):
         filters = QHBoxLayout()
         self.tag_filter = QComboBox()
         self.tag_filter.setAccessibleName(_("Filter by tag"))
+        self.tag_options = tool_button("relationship", _("Tag options"))
+        self.tag_options.setProperty("noindicator", True)
+        self.tag_options.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+        tag_menu = QMenu(self.tag_options)
+        self.related_tags = tag_menu.addAction(_("Also find notes with related tags"))
+        self.related_tags.setCheckable(True)
+        tag_menu.addAction(_("Manage tag ontology…"), self.ontologyRequested.emit)
+        self.tag_options.setMenu(tag_menu)
         self.sort = QComboBox()
         self.sort.setAccessibleName(_("Sort notes"))
         for text, key in (
@@ -257,6 +275,7 @@ class NoteListPanel(QWidget):
                 QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
             )
         filters.addWidget(self.tag_filter, 1)
+        filters.addWidget(self.tag_options)
         filters.addWidget(self.sort)
         layout.addLayout(filters)
         self.model = NoteListModel()
@@ -291,10 +310,12 @@ class NoteListPanel(QWidget):
         self._timer = QTimer(self, singleShot=True, interval=180, timeout=self.refresh)
         self.search.textChanged.connect(lambda _unused: self._timer.start())
         self.tag_filter.currentIndexChanged.connect(lambda _unused: self.refresh())
+        self.related_tags.toggled.connect(lambda _unused: self._related_toggled())
         self.sort.currentIndexChanged.connect(lambda _unused: self.refresh())
 
     def set_vault(self, vault: Vault | None) -> None:
         self.vault = vault
+        self.forget_semantic_scores()
         self.refresh_tags()
         self.refresh()
 
@@ -304,10 +325,15 @@ class NoteListPanel(QWidget):
         self.tag_filter.clear()
         self.tag_filter.addItem(icons.icon("tag"), _("All tags"), None)
         if self.vault:
-            for tag, n in self.vault.all_tags():
+            related = self.related_tags.isChecked()
+            for tag, n in self.vault.tag_filter_counts(related):
                 self.tag_filter.addItem(f"#{tag}  ({n})", tag)
         self.tag_filter.setCurrentIndex(max(0, self.tag_filter.findData(current)))
         self.tag_filter.blockSignals(False)
+
+    def _related_toggled(self) -> None:
+        self.refresh_tags()
+        self.refresh()
 
     def toggle_trash(self) -> None:
         self.trash_mode = self.trash_button.isChecked()
@@ -330,9 +356,19 @@ class NoteListPanel(QWidget):
             for n in self.vault.all_notes(include_deleted=True)
             if n.deleted == self.trash_mode
         }
-        if query.strip():
+        words = split_query(query)[0]
+        self._signals = {}
+        if words:
+            ids = self._ranked_ids(query, words, notes)
+        elif query:
             ids = [
-                i for i in self.vault.search(query, include_deleted=self.trash_mode) if i in notes
+                i
+                for i in self.vault.search(
+                    query,
+                    include_deleted=self.trash_mode,
+                    include_related_tags=self.related_tags.isChecked(),
+                )
+                if i in notes
             ]
         else:
             ids = list(notes)
@@ -354,7 +390,7 @@ class NoteListPanel(QWidget):
             {
                 "id": i,
                 "title": notes[i].display_title,
-                "snippet": snippet(notes[i].body, 160),
+                "snippet": snippet_around(notes[i].body, words, 160),
                 "date": _short_date(notes[i].modified),
                 "tags": notes[i].tags,
                 "links": degree.get(i, 0),
@@ -369,6 +405,46 @@ class NoteListPanel(QWidget):
         self.count.setText(f"{len(rows)} of {total}" if len(rows) != total else f"{total}")
         if selected:
             self.select(selected, emit=False)
+
+    def _ranked_ids(self, query: str, words: str, notes: dict[str, Note]) -> list[str]:
+        weights = settings.search_weights()
+        if settings.get(settings.SEARCH_ADAPTIVE_ENABLED):
+            model = FeedbackModel.from_json(settings.get(settings.SEARCH_ADAPTIVE_STATE))
+            weights = model.adjust(weights)
+        semantic = (
+            settings.get(settings.SEARCH_SEMANTIC_ENABLED)
+            and weights["semantic"] > 0
+            and not self.trash_mode
+        )
+        if semantic and words != self._semantic_words:
+            self._semantic_words, self._semantic_scores = words, {}
+            self.semanticRequested.emit(words)
+        results = hybrid_search(
+            self.vault,
+            query,
+            notes.values(),
+            weights,
+            self._semantic_scores if semantic else None,
+            self.related_tags.isChecked(),
+            self.trash_mode,
+        )
+        self._signals = {r.note_id: r.signals for r in results}
+        return [r.note_id for r in results]
+
+    def set_semantic_scores(self, words: str, scores: dict[str, float]) -> None:
+        """The semantic scores have arrived; they count only if the search is still the same."""
+        if words == self._semantic_words:
+            self._semantic_scores = scores
+            self.refresh()
+
+    def forget_semantic_scores(self) -> None:
+        self._semantic_words, self._semantic_scores = "", {}
+
+    def _record_feedback(self, note_id: str, relevant: bool) -> None:
+        model = FeedbackModel.from_json(settings.get(settings.SEARCH_ADAPTIVE_STATE))
+        model.update(self._signals.get(note_id, {}), relevant)
+        settings.put(settings.SEARCH_ADAPTIVE_STATE, model.to_json())
+        self.refresh()
 
     def _image_path(self, asset: str) -> str | None:
         path = self.vault.asset_path(asset) if asset and self.vault else None
@@ -480,6 +556,18 @@ class NoteListPanel(QWidget):
             menu.addAction(
                 icons.icon("copy"), _("Duplicate"), lambda: self.duplicateRequested.emit(ids)
             )
+            if note_id in self._signals and settings.get(settings.SEARCH_ADAPTIVE_ENABLED):
+                menu.addSeparator()
+                menu.addAction(
+                    icons.icon("accept"),
+                    _("Relevant result"),
+                    lambda: self._record_feedback(note_id, True),
+                )
+                menu.addAction(
+                    icons.icon("cancel"),
+                    _("Not a relevant result"),
+                    lambda: self._record_feedback(note_id, False),
+                )
             menu.addSeparator()
             menu.addAction(
                 icons.icon("delete"), _("Move to Trash"), lambda: self.trashRequested.emit(ids)

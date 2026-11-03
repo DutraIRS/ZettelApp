@@ -2,6 +2,7 @@ import io
 import json
 import sys
 import urllib.error
+import urllib.request
 import uuid
 from types import SimpleNamespace
 
@@ -133,6 +134,20 @@ def test_parse_sse():
     assert cut.startswith("x") and "cut off" in cut
 
 
+def test_redirects_never_take_the_api_key_to_another_site():
+    handler = llm._SameOriginRedirectHandler()
+    request = urllib.request.Request(
+        "https://api.example.com/v1/models", headers={"Authorization": "Bearer secret"}
+    )
+
+    def follow(url):
+        return handler.redirect_request(request, None, 302, "Found", {}, url)
+
+    assert follow("https://api.example.com/v2/models") is not None
+    assert follow("https://evil.example.com/v1/models") is None
+    assert follow("http://api.example.com/v1/models") is None
+
+
 def test_openai_compatible_request(monkeypatch):
     seen = {}
 
@@ -146,7 +161,7 @@ def test_openai_compatible_request(monkeypatch):
             b'data: {"choices":[{"delta":{"content":"Hi [[20261027120000]]"}}]}\n\ndata: [DONE]\n'
         )
 
-    monkeypatch.setattr(llm.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(llm, "_urlopen", fake_urlopen)
     answer = "".join(stream_answer(LLMSettings(provider="zai"), "secret-key", "Question?", [NOTE]))
     assert answer == "Hi [[20261027120000]]"
     assert seen["url"] == "https://api.z.ai/api/paas/v4/chat/completions"
@@ -158,8 +173,8 @@ def test_openai_compatible_request(monkeypatch):
 
 def test_openai_models_and_local_endpoint_without_key(monkeypatch):
     monkeypatch.setattr(
-        llm.urllib.request,
-        "urlopen",
+        llm,
+        "_urlopen",
         lambda request, timeout: io.BytesIO(b'{"data":[{"id":"gpt-6.1-sol"},{"id":"gpt-6-luna"}]}'),
     )
     assert llm.list_models(LLMSettings(provider="openai"), "k") == ["gpt-6-luna", "gpt-6.1-sol"]
@@ -188,7 +203,7 @@ def test_http_errors_are_friendly_and_never_leak_the_key(monkeypatch, status, ph
             io.BytesIO(b'{"error":{"message":"bad key secret-key"}}'),
         )
 
-    monkeypatch.setattr(llm.urllib.request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(llm, "_urlopen", fake_urlopen)
     with pytest.raises(LLMError) as err:
         list(stream_answer(LLMSettings(provider="openai"), "secret-key", "q", [NOTE]))
     assert phrase in str(err.value)

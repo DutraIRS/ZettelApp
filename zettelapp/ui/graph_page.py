@@ -71,6 +71,7 @@ class GraphPage(QWidget):
         self._layouts: dict[tuple, dict] = {}
         self._clusters: dict[tuple, object] = {}
         self._request = 0
+        self._computing = False
         self.hidden_types: set[str] = set()
         layout = QVBoxLayout(self)
         layout.setContentsMargins(16, 12, 16, 12)
@@ -251,8 +252,12 @@ class GraphPage(QWidget):
         self.refresh()
 
     def invalidate(self) -> None:
+        computing, self._computing = self._computing, False
+        self._request += 1  # what is being computed is for the previous data or settings
         self._layouts.clear()
         self._clusters.clear()
+        if computing:
+            self.refresh()  # start over, or the page would stay on "Computing layout…"
 
     # --- data --------------------------------------------------------------
 
@@ -312,6 +317,7 @@ class GraphPage(QWidget):
         grouping = self.group_box.isChecked() and mode != "none"
         self._request += 1
         request = self._request
+        self._computing = True
         self.info.setText(_("Computing layout…"))
         self.status.emit(_("Computing graph layout…"))
 
@@ -389,6 +395,7 @@ class GraphPage(QWidget):
         def done(result) -> None:
             if request != self._request:
                 return
+            self._computing = False
             group_of, names, quality, positions, cluster_result = result
             if mode in ("kmeans", "hierarchical"):
                 _remember(self._clusters, cluster_key, cluster_result)

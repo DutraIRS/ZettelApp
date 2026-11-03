@@ -28,6 +28,7 @@ def window(tmp_path, monkeypatch):
     QThreadPool.globalInstance().waitForDone(20000)
     w.suggestions.pool.waitForDone(20000)
     w.close()
+    w.deleteLater()
 
 
 def pump(ms=300):
@@ -77,8 +78,13 @@ def test_full_workflow(window):
 
 
 def test_dialogs_construct(window):
-    from zettelapp.ui.dialogs import AboutDialog, ExportDialog, LinkPickerDialog, ShortcutsDialog
-    from zettelapp.ui.settings_dialog import OptionsDialog
+    from zettelapp.ui.dialogs import (
+        AboutDialog,
+        ExportDialog,
+        LinkPickerDialog,
+        ShortcutsDialog,
+    )
+    from zettelapp.ui.settings_dialog import PAGES, OptionsDialog
 
     window.vault.create_note("One", "text")
     AboutDialog(window).close()
@@ -86,8 +92,307 @@ def test_dialogs_construct(window):
     LinkPickerDialog(window.vault, set(), window).close()
     ExportDialog(window.vault, None, window.resolve_scope, window).close()
     options = OptionsDialog(window)
-    assert options.pages.count() == options.nav.count() == 9
+    assert options.pages.count() == options.nav.count() == len(PAGES)
     options.close()
+
+
+def test_the_tag_options_menu_opens_the_ontology_and_toggles_related_tags(window, monkeypatch):
+    from zettelapp.ui import main_window
+    from zettelapp.ui.dialogs import TagOntologyDialog
+
+    opened = []
+    monkeypatch.setattr(main_window, "run_dialog", opened.append)
+    panel = window.list
+    related, manage = panel.tag_options.menu().actions()
+    manage.trigger()
+    assert isinstance(opened[0], TagOntologyDialog)
+    opened[0].deleteLater()
+
+    window.vault.create_note("Near", tags=["near"])
+    window.vault.add_tag_relationship("start", "near", "related")
+    panel.refresh_tags()
+    assert panel.tag_filter.findData("start") < 0  # finds nothing yet
+    related.setChecked(True)
+    assert panel.tag_filter.findData("start") > 0
+    panel.tag_filter.setCurrentIndex(panel.tag_filter.findData("start"))
+    assert [row["title"] for row in panel.model.rows] == ["Near"]
+
+
+def test_a_semantic_weight_of_zero_does_not_run_the_model(window):
+    from zettelapp import settings
+
+    settings.put(settings.SEARCH_SEMANTIC_ENABLED, True)
+    settings.put(settings.SEARCH_SEMANTIC_WEIGHT, 0.0)
+    asked = []
+    window.list.semanticRequested.connect(asked.append)
+    window.list.search.setText("words")
+    window.list.refresh()
+    assert asked == []
+
+
+def test_tag_ontology_dialog_edits_relationships(window):
+    from zettelapp.ui.dialogs import TagOntologyDialog
+
+    window.vault.create_note("Child", tags=["child"])
+    dialog = TagOntologyDialog(window.vault, window)
+    dialog.source.setEditText("parent")
+    dialog.target.setEditText("child")
+    dialog._add()
+    assert window.vault.tag_graph().descendants("parent") == {"child"}
+    assert dialog.relationships.count() == 1
+    dialog.relationships.setCurrentRow(0)
+    dialog._remove()
+    assert not window.vault.tag_relationships()
+    dialog.close()
+
+
+def test_note_list_search_respects_tag_filters_and_the_trash(window):
+    vault, panel = window.vault, window.list
+    vault.create_note("Math", "not tagged")
+    vault.create_note("Algebra", "groups", tags=["math"])
+    gone = vault.create_note("Math in the trash", "gone")
+    vault.trash_note(gone.id)
+    panel.refresh_tags()
+
+    def titles(text):
+        panel.search.setText(text)
+        panel.refresh()
+        return {row["title"] for row in panel.model.rows}
+
+    assert titles("tag:math") == {"Algebra"}
+    assert titles("math") == {"Math", "Algebra"}
+    assert titles("zzz") == set()
+    panel.trash_button.setChecked(True)
+    panel.toggle_trash()
+    assert titles("math") == {"Math in the trash"}
+
+
+def test_search_results_show_the_part_of_the_note_that_matches(window):
+    window.vault.create_note("Long", "lorem ipsum " * 40 + "needle at last " + "dolor " * 40)
+    panel = window.list
+    panel.search.setText("needle")
+    panel.refresh()
+    assert "needle" in panel.model.rows[0]["snippet"]
+    panel.search.setText("")
+    panel.refresh()
+    assert panel.model.rows[0]["snippet"].startswith("lorem")
+
+
+def test_adaptive_feedback_is_offered_only_when_on_and_changes_the_ranking(window):
+    from PySide6.QtCore import QTimer
+    from PySide6.QtWidgets import QApplication
+
+    from zettelapp import settings
+
+    vault, panel = window.vault, window.list
+    vault.create_note("Note about chess", "chess")
+    panel.search.setText("chess")
+    panel.refresh()
+    position = panel.view.visualRect(panel.model.index(0)).center()
+
+    def menu_entries() -> list[str]:
+        entries = []
+
+        def read_and_close():
+            menu = QApplication.activePopupWidget()
+            entries.extend(action.text() for action in menu.actions())
+            menu.close()
+
+        QTimer.singleShot(50, read_and_close)
+        panel._menu(position)
+        return entries
+
+    assert "Relevant result" not in menu_entries()
+    settings.put(settings.SEARCH_ADAPTIVE_ENABLED, True)
+    assert {"Relevant result", "Not a relevant result"} <= set(menu_entries())
+
+    note_id = panel.model.rows[0]["id"]
+    panel._record_feedback(note_id, True)
+    saved = settings.get(settings.SEARCH_ADAPTIVE_STATE)
+    assert note_id not in saved and "chess" not in saved
+    assert '"lexical": 1.0' in saved
+
+
+def test_semantic_scores_arrive_later_and_outdated_ones_are_ignored(window):
+    from zettelapp import settings
+
+    vault, panel = window.vault, window.list
+    settings.put(settings.SEARCH_SEMANTIC_ENABLED, True)
+    grocery = vault.create_note("Grocery list", "bread and cheese")
+    vault.create_note("Unrelated", "nothing to see")
+    asked = []
+    panel.semanticRequested.connect(asked.append)
+
+    panel.search.setText("shopping")
+    panel.refresh()
+    panel.refresh()
+    assert asked == ["shopping"]  # the same words aren't asked for again
+    assert panel.model.rows == []
+
+    panel.set_semantic_scores("older words", {grocery.id: 0.9})
+    assert panel.model.rows == []
+    panel.set_semantic_scores("shopping", {grocery.id: 0.9})
+    assert [row["title"] for row in panel.model.rows] == ["Grocery list"]
+
+    settings.put(settings.SEARCH_SEMANTIC_ENABLED, False)
+    panel.refresh()
+    assert panel.model.rows == []
+
+
+def test_a_new_vault_never_uses_the_previous_ones_semantic_scores(window, tmp_path):
+    from zettelapp import settings
+
+    settings.put(settings.SEARCH_SEMANTIC_ENABLED, True)
+    panel = window.list
+    note = window.vault.create_note("Note", "text")
+    panel.search.setText("shopping")
+    panel.refresh()
+    panel.set_semantic_scores("shopping", {note.id: 0.9})
+    assert window.open_vault(tmp_path / "second")
+    assert panel._semantic_scores == {} and panel.model.rows == []
+
+
+def test_notes_changing_schedule_indexing_only_when_semantic_search_is_on(window, monkeypatch):
+    from zettelapp import settings
+    from zettelapp.ui import main_window
+
+    synced = []
+    monkeypatch.setattr(window.semantic, "sync", synced.append)
+    window.vault.create_note("Note", "text")
+    assert window.semantic_timer.isActive()
+    window._sync_semantic_index()
+    assert synced == []  # off by default: nothing runs, nothing loads
+
+    monkeypatch.setattr(main_window, "model_installed", lambda _root: True)
+    settings.put(settings.SEARCH_SEMANTIC_ENABLED, True)
+    window._sync_semantic_index()
+    assert synced == [window.vault.folder]
+    settings.put(settings.SEARCH_SEMANTIC_INDEXING, False)
+    window._sync_semantic_index()
+    assert len(synced) == 1
+
+
+def test_semantic_search_is_not_used_without_the_model(window, monkeypatch):
+    from zettelapp import settings
+
+    settings.put(settings.SEARCH_SEMANTIC_ENABLED, True)
+    asked = []
+    monkeypatch.setattr(window.semantic, "search", lambda *args: asked.append(args))
+    window.list.search.setText("words")
+    window.list.refresh()
+    assert asked == []
+
+
+def test_options_offer_the_model_download_only_with_consent(window, monkeypatch):
+    from PySide6.QtWidgets import QMessageBox
+
+    from zettelapp.ui.settings_dialog import OptionsDialog
+
+    started = []
+    monkeypatch.setattr(window.semantic, "download", lambda: started.append(True))
+    options = OptionsDialog(window, "Search")
+    assert options.semantic_download.isVisibleTo(options)
+    assert not options.semantic_on.isVisibleTo(options)
+    assert not options.semantic_remove.isVisibleTo(options)
+
+    monkeypatch.setattr(QMessageBox, "question", lambda *_a, **_k: QMessageBox.StandardButton.No)
+    options.semantic_download.click()
+    assert started == []
+    monkeypatch.setattr(QMessageBox, "question", lambda *_a, **_k: QMessageBox.StandardButton.Yes)
+    options.semantic_download.click()
+    assert started == [True]
+    options.close()
+
+
+def test_options_with_the_model_installed_can_remove_it(window, monkeypatch):
+    from PySide6.QtWidgets import QMessageBox
+
+    from zettelapp import settings
+    from zettelapp.ui import settings_dialog
+
+    monkeypatch.setattr(settings_dialog, "model_installed", lambda _root: True)
+    removed = []
+    monkeypatch.setattr(window.semantic, "remove_data", lambda: removed.append(True))
+    monkeypatch.setattr(QMessageBox, "question", lambda *_a, **_k: QMessageBox.StandardButton.Yes)
+    settings.put(settings.SEARCH_SEMANTIC_ENABLED, True)
+    options = settings_dialog.OptionsDialog(window, "Search")
+    assert options.semantic_on.isVisibleTo(options) and options.semantic_on.isChecked()
+    assert not options.semantic_download.isVisibleTo(options)
+    monkeypatch.setattr(settings_dialog, "model_installed", lambda _root: False)
+    options.semantic_remove.click()
+    assert removed == [True]
+    assert not settings.get(settings.SEARCH_SEMANTIC_ENABLED)
+    assert not options.semantic_on.isChecked() and not options.semantic_on.isVisibleTo(options)
+    options.close()
+
+
+def test_options_save_the_search_settings(window):
+    from zettelapp import settings
+    from zettelapp.ui.settings_dialog import OptionsDialog
+
+    options = OptionsDialog(window, "Search")
+    options.w_fuzzy.setValue(0.5)
+    options.semantic_threads.setValue(3)
+    options.adaptive_on.setChecked(True)
+    assert options.apply()
+    assert settings.search_weights()["fuzzy"] == 0.5
+    assert settings.get(settings.SEARCH_SEMANTIC_THREADS) == 3
+    assert settings.get(settings.SEARCH_ADAPTIVE_ENABLED)
+    assert window.semantic.threads == 3
+    options.close()
+
+
+def test_the_search_page_rebuilds_the_full_text_index(window, monkeypatch):
+    from PySide6.QtWidgets import QMessageBox
+
+    from zettelapp.ui.settings_dialog import OptionsDialog
+
+    monkeypatch.setattr(QMessageBox, "information", lambda *_a, **_k: None)
+    note = window.vault.create_note("Findable", "needle")
+    with window.vault.transaction():
+        window.vault.conn.execute("DELETE FROM notes_fts")
+    options = OptionsDialog(window, "Search")
+    options.rebuild_fts.click()
+    assert window.vault.search("needle") == [note.id]
+    options.close()
+
+
+def test_finished_dialogs_are_freed(window):
+    from PySide6.QtCore import QCoreApplication, QEvent, QTimer
+    from PySide6.QtWidgets import QDialog
+
+    from zettelapp.ui.dialogs import ShortcutsDialog
+    from zettelapp.ui.widgets import run_dialog
+
+    before = len(window.findChildren(QDialog))
+    dialog = ShortcutsDialog(window)
+    QTimer.singleShot(0, dialog.accept)
+    assert run_dialog(dialog) == QDialog.DialogCode.Accepted
+    QCoreApplication.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+    pump(20)
+    assert len(window.findChildren(QDialog)) == before
+
+
+def test_graph_starts_over_when_the_data_changes_during_a_layout(window, monkeypatch):
+    from zettelapp.ui import graph_page
+
+    window.vault.create_note("One", "text")
+    pending = []
+    monkeypatch.setattr(
+        graph_page, "run_task", lambda *_args, **kwargs: pending.append(kwargs["on_done"])
+    )
+    window.show_page(1)
+    assert len(pending) == 1 and window.graph.info.text() == "Computing layout…"
+    window.graph.invalidate()
+    assert len(pending) == 2  # asked again, so the page doesn't stay on "Computing layout…"
+
+
+def test_suggestions_are_asked_for_again_when_another_program_changed_the_vault(window):
+    window.vault.create_note("One", "text")
+    window.suggest_timer.stop()
+    window._data_version = -1
+    window._check_external_changes()
+    assert window.suggest_timer.isActive()
 
 
 def test_options_page_edits_link_types_and_their_styles(window, monkeypatch):

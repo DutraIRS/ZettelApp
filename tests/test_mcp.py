@@ -134,6 +134,13 @@ def test_graph_tools(vault, sample):
     server = ZettelMcpServer(vault)
     tags = call(server, "list_tags", {})["result"]["structuredContent"]["tags"]
     assert {"tag": "learning", "count": 3} in tags
+    vault.add_tag_relationship("science", "learning", "parent")
+    result = call(server, "list_tags", {})["result"]["structuredContent"]
+    assert result["relationships"] == [
+        {"source": "science", "target": "learning", "type": "parent"}
+    ]
+    found = call(server, "search_notes", {"query": "tag:science"})["result"]["structuredContent"]
+    assert {n["id"] for n in found["results"]} >= {sample["a"].id, sample["c"].id}
     sub = call(server, "get_subgraph", {"id": sample["c"].id, "depth": 2})["result"][
         "structuredContent"
     ]
@@ -182,6 +189,57 @@ def test_protocol_errors(vault):
     assert replies[6]["result"]["isError"] is True
     assert "No note" in replies[7]["result"]["content"][0]["text"]
     assert replies[8]["error"]["code"] == -32600
+
+
+def test_invalid_method_and_request_id_types_are_rejected(vault):
+    server = ZettelMcpServer(vault)
+
+    for method in (None, 1, [], {}):
+        (reply,) = run(server, {"jsonrpc": "2.0", "id": 1, "method": method})
+        assert reply["id"] is None
+        assert reply["error"] == {"code": -32600, "message": "Invalid request"}
+
+    for request_id in (True, [], {}):
+        (reply,) = run(server, {"jsonrpc": "2.0", "id": request_id, "method": "ping"})
+        assert reply["id"] is None
+        assert reply["error"] == {"code": -32600, "message": "Invalid request"}
+
+
+def test_falsey_non_object_params_and_arguments_are_rejected(vault):
+    server = ZettelMcpServer(vault)
+
+    for params in ([], "", 0, False):
+        (reply,) = run(server, req(1, "ping", params))
+        assert reply["error"] == {"code": -32602, "message": "params must be an object"}
+
+    for arguments in ([], "", 0, False):
+        (reply,) = run(server, req(1, "tools/call", {"name": "list_tags", "arguments": arguments}))
+        assert reply["error"] == {"code": -32602, "message": "arguments must be an object"}
+
+
+def test_declared_required_tool_arguments_are_enforced(vault):
+    server = ZettelMcpServer(vault)
+
+    reply = call(server, "search_notes", {})
+
+    assert reply["result"]["isError"] is True
+    assert reply["result"]["content"][0]["text"] == "Missing required argument(s): query"
+
+
+def test_empty_json_rpc_batch_is_an_invalid_request(vault):
+    server = ZettelMcpServer(vault)
+
+    (reply,) = run(server, [])
+
+    assert reply["error"] == {"code": -32600, "message": "Invalid request"}
+
+
+def test_non_json_numeric_constants_are_parse_errors(vault):
+    server = ZettelMcpServer(vault)
+
+    for constant in (b"NaN", b"Infinity", b"-Infinity"):
+        reply = server.handle_raw(b'{"jsonrpc":"2.0","id":' + constant + b',"method":"ping"}')
+        assert reply["error"] == {"code": -32700, "message": "Parse error"}
 
 
 def test_oversized_message_is_skipped(vault, monkeypatch):

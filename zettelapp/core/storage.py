@@ -25,11 +25,14 @@ from zettelapp.core.models import (
     LEGACY_ARROW,
     LEGACY_LINE_STYLES,
     LINE_STYLES,
+    TAG_RELATION_TYPES,
     Flashcard,
     Link,
     LinkType,
     Note,
     ReviewState,
+    TagGraph,
+    TagRelationship,
     sanitize_mindmap,
     utc_now,
 )
@@ -54,7 +57,8 @@ from zettelapp.i18n import _
 # 2: tags.source tells tags added by hand from #tags written in the text
 # 3: link_types.line_style and link_types.arrow store how each link type is drawn
 # 4: notes.alarm and notes.alarm_fired remind the user of a note at a chosen time
-SCHEMA_VERSION = 4
+# 5: tag_relationships stores the optional tag ontology
+SCHEMA_VERSION = 5
 MAX_TITLE = 500
 MAX_BODY = 5_000_000
 
@@ -80,6 +84,14 @@ CREATE TABLE IF NOT EXISTS tags (
     PRIMARY KEY (note_id, tag)
 );
 CREATE INDEX IF NOT EXISTS idx_tags_tag ON tags(tag);
+CREATE TABLE IF NOT EXISTS tag_relationships (
+    source TEXT NOT NULL,
+    target TEXT NOT NULL,
+    relation_type TEXT NOT NULL CHECK (relation_type IN ('parent', 'related', 'synonym')),
+    PRIMARY KEY (source, target, relation_type),
+    CHECK (source <> target)
+);
+CREATE INDEX IF NOT EXISTS idx_tag_relationships_target ON tag_relationships(target);
 CREATE TABLE IF NOT EXISTS link_types (
     id TEXT PRIMARY KEY,
     label TEXT NOT NULL,
@@ -141,8 +153,19 @@ CREATE VIRTUAL TABLE IF NOT EXISTS notes_fts USING fts5(
 """
 
 
+# The full-text index treats a run of these characters as one word, so a word inside a run
+# can't be found through it.
+_UNSPACED_SCRIPT_RE = re.compile(r"[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]")
+
+
 class VaultError(RuntimeError):
     pass
+
+
+def split_query(query: str) -> tuple[str, list[str]]:
+    """A search query's words and its `tag:name` filters."""
+    tags = [normalize_tag(t) for t in re.findall(r"(?:^|\s)tag:(\S+)", query)]
+    return " ".join(re.sub(r"(?:^|\s)tag:\S+", " ", query).split()), tags
 
 
 def _clean_alarm(value: str | None) -> str:
@@ -253,7 +276,9 @@ class Vault:
                     self._upgrade_to_v2()
                 if int(version) < 3:
                     self._upgrade_to_v3()
-                self._upgrade_to_v4()
+                if int(version) < 4:
+                    self._upgrade_to_v4()
+                # 5 only adds tag_relationships, which _SCHEMA has just created.
                 self._set_meta("schema_version", str(SCHEMA_VERSION))
 
     def _upgrade_to_v4(self) -> None:
@@ -649,10 +674,14 @@ class Vault:
 
     # --- search -----------------------------------------------------------
 
-    def search(self, query: str, include_deleted: bool = False) -> list[str]:
+    def search(
+        self,
+        query: str,
+        include_deleted: bool = False,
+        include_related_tags: bool = False,
+    ) -> list[str]:
         """Ids of notes matching *query*; supports `tag:name` filters."""
-        tag_filters = [normalize_tag(t) for t in re.findall(r"(?:^|\s)tag:(\S+)", query)]
-        text = re.sub(r"(?:^|\s)tag:\S+", " ", query)
+        text, tag_filters = split_query(query)
         tokens = re.findall(r"\w+", text)
         deleted_clause = "" if include_deleted else " AND n.deleted = 0"
         if not tokens:
@@ -664,7 +693,7 @@ class Vault:
                     + " ORDER BY modified DESC"
                 )
             ]
-        elif self.has_fts:
+        elif self.has_fts and not _UNSPACED_SCRIPT_RE.search(text):
             match = " ".join(f'"{t}"*' for t in tokens)
             ids = [
                 r["note_id"]
@@ -672,7 +701,7 @@ class Vault:
                     "SELECT f.note_id FROM notes_fts f JOIN notes n ON n.id = f.note_id "
                     "WHERE notes_fts MATCH ?"
                     + deleted_clause
-                    + " ORDER BY bm25(notes_fts, 0.0, 6.0, 1.0, 3.0) LIMIT 1000",
+                    + " ORDER BY bm25(notes_fts, 0.0, 6.0, 1.0, 3.0)",
                     (match,),
                 )
             ]
@@ -681,13 +710,29 @@ class Vault:
             params: list[str] = []
             for t in tokens:
                 like = "%" + t.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
-                sql += " AND (n.title LIKE ? ESCAPE '\\' OR n.body LIKE ? ESCAPE '\\')"
-                params += [like, like]
+                sql += (
+                    " AND (n.title LIKE ? ESCAPE '\\' OR n.body LIKE ? ESCAPE '\\' OR EXISTS "
+                    "(SELECT 1 FROM tags t WHERE t.note_id = n.id AND t.tag LIKE ? ESCAPE '\\'))"
+                )
+                params += [like, like, like]
             ids = [r["id"] for r in self.conn.execute(sql + " ORDER BY modified DESC", params)]
         if tag_filters:
-            tagged = self.notes_with_tags(tag_filters)
+            tagged = self.notes_with_tags(tag_filters, include_related=include_related_tags)
             ids = [i for i in ids if i in tagged]
         return ids
+
+    def rebuild_search_index(self) -> None:
+        """Recreate the full-text index from the notes."""
+        if not self.has_fts:
+            return
+        with self.transaction():
+            self.conn.execute("DELETE FROM notes_fts")
+            self.conn.execute(
+                "INSERT INTO notes_fts (note_id, title, body, tags) "
+                "SELECT n.id, n.title, n.body, "
+                "COALESCE((SELECT group_concat(tag, ' ') FROM tags WHERE note_id = n.id), '') "
+                "FROM notes n"
+            )
 
     # --- tags -------------------------------------------------------------
 
@@ -700,23 +745,105 @@ class Vault:
             )
         ]
 
-    def notes_with_tags(self, tags: Iterable[str], match_all: bool = True) -> set[str]:
-        tags = [t for t in tags if t]
-        if not tags:
+    def notes_by_tag(self, include_deleted: bool = True) -> dict[str, set[str]]:
+        """The notes under each tag; a tag also holds its nested tags' notes, so "math" has
+        those of "math/algebra"."""
+        sql = "SELECT t.note_id, t.tag FROM tags t"
+        if not include_deleted:
+            sql += " JOIN notes n ON n.id = t.note_id WHERE n.deleted = 0"
+        notes: dict[str, set[str]] = defaultdict(set)
+        for r in self.conn.execute(sql):
+            parts = r["tag"].split("/")
+            for depth in range(1, len(parts) + 1):
+                notes["/".join(parts[:depth])].add(r["note_id"])
+        return notes
+
+    def notes_with_tags(
+        self,
+        tags: Iterable[str],
+        match_all: bool = True,
+        include_related: bool = False,
+    ) -> set[str]:
+        """Notes filed under the tags, or under what they cover in the tag ontology."""
+        wanted = [t for t in map(normalize_tag, tags) if t]
+        if not wanted:
             return set()
-        sets = []
-        for t in tags:
-            # A tag also matches its nested children, e.g. "math" matches "math/algebra".
-            sets.append(
-                {
-                    r["note_id"]
-                    for r in self.conn.execute(
-                        "SELECT note_id FROM tags WHERE tag = ? OR tag LIKE ? ESCAPE '\\'",
-                        (t, t.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "/%"),
-                    )
-                }
-            )
+        notes = self.notes_by_tag()
+        graph = self.tag_graph()
+        sets = [
+            set().union(*(notes.get(name, ()) for name in graph.expand(tag, include_related)))
+            for tag in wanted
+        ]
         return set.intersection(*sets) if match_all else set.union(*sets)
+
+    def tag_filter_counts(self, include_related: bool = False) -> list[tuple[str, int]]:
+        """Each tag or ontology concept that finds live notes, with how many a filter on it
+        shows: its own, its nested tags' and those the ontology adds."""
+        notes = self.notes_by_tag(include_deleted=False)
+        graph = self.tag_graph()
+        counts = (
+            (name, set().union(*(notes.get(t, ()) for t in graph.expand(name, include_related))))
+            for name in self.all_tag_names()
+        )
+        return [(name, len(found)) for name, found in counts if found]
+
+    # --- tag ontology -----------------------------------------------------
+
+    def all_tag_names(self) -> list[str]:
+        """Tags on notes and concepts that exist only in the ontology, in display order."""
+        names = {r["tag"] for r in self.conn.execute("SELECT tag FROM tags")}
+        names.update(
+            r["name"]
+            for r in self.conn.execute(
+                "SELECT source AS name FROM tag_relationships "
+                "UNION SELECT target FROM tag_relationships"
+            )
+        )
+        return sorted(names, key=fold)
+
+    def tag_relationships(self) -> list[TagRelationship]:
+        return [
+            TagRelationship(r["source"], r["target"], r["relation_type"])
+            for r in self.conn.execute(
+                "SELECT source, target, relation_type FROM tag_relationships "
+                "ORDER BY source, target, relation_type"
+            )
+        ]
+
+    def tag_graph(self) -> TagGraph:
+        return TagGraph(self.tag_relationships())
+
+    def _relationship_key(self, source: str, target: str, relation_type: str) -> tuple[str, str]:
+        if relation_type not in TAG_RELATION_TYPES:
+            raise VaultError(_("Unknown tag relationship type."))
+        source, target = normalize_tag(source), normalize_tag(target)
+        # Synonyms and related tags have no direction: each pair is stored one way only.
+        return (source, target) if relation_type == "parent" else tuple(sorted((source, target)))
+
+    def add_tag_relationship(self, source: str, target: str, relation_type: str) -> TagRelationship:
+        source, target = self._relationship_key(source, target, relation_type)
+        if not source or not target or source == target:
+            raise VaultError(_("Enter two different tags."))
+        if relation_type == "parent" and source in self.tag_graph().descendants(target):
+            raise VaultError(_("That parent relationship would create a cycle."))
+        with self.transaction():
+            self.conn.execute(
+                "INSERT OR IGNORE INTO tag_relationships (source, target, relation_type) "
+                "VALUES (?, ?, ?)",
+                (source, target, relation_type),
+            )
+        self._changed("tags")
+        return TagRelationship(source, target, relation_type)
+
+    def remove_tag_relationship(self, source: str, target: str, relation_type: str) -> None:
+        source, target = self._relationship_key(source, target, relation_type)
+        with self.transaction():
+            self.conn.execute(
+                "DELETE FROM tag_relationships "
+                "WHERE source = ? AND target = ? AND relation_type = ?",
+                (source, target, relation_type),
+            )
+        self._changed("tags")
 
     # --- link types -------------------------------------------------------
 

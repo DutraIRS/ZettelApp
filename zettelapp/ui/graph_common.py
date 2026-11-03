@@ -76,10 +76,6 @@ class GraphData:
                     out[other].append(text)
         return {other: " · ".join(texts) for other, texts in out.items()}
 
-    def link_directed(self, link: Link) -> bool:
-        lt = self.types.get(link.type)
-        return bool(lt and lt.directed)
-
     def members(self) -> dict[int, list[str]]:
         out: dict[int, list[str]] = {}
         for node, g in self.group_of.items():

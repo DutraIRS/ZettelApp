@@ -80,9 +80,10 @@ The result has four fields:
 - A message without an `id` is a notification. It is handled and never answered, even when it fails.
 - The server never sends requests, so responses from the client (messages with `result` or `error` and
   no `method`) are ignored.
-- A JSON array is handled as a JSON-RPC batch (as in protocol `2025-03-26`), whatever version was
-  chosen. Its messages are handled in order, and the replies to its requests are written together as one
-  array on one line. A batch that holds only notifications gets no reply.
+- A non-empty JSON array is handled as a JSON-RPC batch (as in protocol `2025-03-26`), whatever version
+  was chosen. Its messages are handled in order, and the replies to its requests are written together as
+  one array on one line. A batch that holds only notifications gets no reply; an empty batch is an invalid
+  request.
 
 ## Errors
 
@@ -95,6 +96,7 @@ Protocol problems are JSON-RPC errors. Problems with a tool's arguments are tool
 | The message isn't a JSON object, or `jsonrpc` isn't `"2.0"` | Error `-32600` *Invalid request*, `id` `null` |
 | The message is larger than 10 MiB | Error `-32600` *Message too large.*, `id` `null` |
 | A message without `method` that isn't a response | Error `-32600` *Invalid request* |
+| An empty JSON-RPC batch | Error `-32600` *Invalid request*, `id` `null` |
 | An unknown method | Error `-32601` *Method not found: …* |
 | `params` isn't an object | Error `-32602` *params must be an object* |
 | `tools/call` names an unknown tool, or a write tool while writes aren't allowed | Error `-32602` *Unknown tool: …* |
@@ -130,6 +132,7 @@ Every tool's `inputSchema` is a JSON Schema object with `additionalProperties: f
 every argument again itself:
 
 - **Unknown names** are refused: *Unknown argument(s): …*.
+- **Required names** must be present, even when an empty string is a valid value: *Missing required argument(s): …*.
 - **Numbers** must be JSON numbers (`true` and `false` are refused). Decimals are cut to whole numbers,
   and values outside a tool's range are moved to the nearest limit, not refused.
 - **Strings** must be strings within the length limit given for each argument.
@@ -160,8 +163,9 @@ in the Trash, and links to or from them, are never returned.
 
 **Search notes.** Full-text search over note titles, text and tags. Words match the start of words
 (`forget` finds *forgetting*), accents are ignored, and results come in order of relevance: matches in
-titles count most, then tags, then text. `tag:name` keeps only notes with that tag or a tag nested under
-it (`tag:math` also finds `math/algebra`). A query with no words, such as an empty one, lists notes by
+titles count most, then tags, then text. `tag:name` keeps only notes with that tag, a tag nested under
+it (`tag:math` also finds `math/algebra`), or one the vault's tag ontology covers: its children and
+synonyms, whatever their names. A query with no words, such as an empty one, lists notes by
 when they were last edited, newest first.
 
 | Argument | Type | Required | Default | Limits |
@@ -202,11 +206,16 @@ Result:
 
 ### `list_tags`
 
-**List tags.** Every tag in the vault, in alphabetical order, with the number of notes that use it. No
-arguments.
+**List tags.** Every tag in the vault, in alphabetical order, with the number of notes that use it, and
+the vault's tag ontology. No arguments.
 
-Result: `tags`, a list of `{"tag": "learning", "count": 3}` entries. Nested tags such as `math/algebra`
-are listed as they are; their notes aren't added to the parent's count.
+Result:
+
+- `tags`: a list of `{"tag": "learning", "count": 3}` entries. Nested tags such as `math/algebra` are
+  listed as they are; their notes aren't added to the parent's count.
+- `relationships`: a list of `{"source": "math", "target": "algebra", "type": "parent"}` entries. `type`
+  is `parent` (`source` is the parent of `target`), `synonym` or `related`; the last two have no
+  direction. A name here may not be used on any note.
 
 ### `get_subgraph`
 

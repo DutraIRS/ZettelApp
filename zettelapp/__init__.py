@@ -1,6 +1,6 @@
 """ZettelApp: a Zettelkasten note-taking app for Windows."""
 
-__version__ = "1.1.1"
+__version__ = "1.2.0"
 
 APP_NAME = "ZettelApp"
 ORG_NAME = "ZettelApp"
@@ -13,4 +13,5 @@ HOMEPAGE_URL = "https://dutrairs.github.io/ZettelApp/"
 DOCS_URL = HOMEPAGE_URL + "docs/"
 ISSUES_URL = REPO_URL + "/issues"
 RELEASES_URL = REPO_URL + "/releases/latest"
+DOWNLOAD_URL = REPO_URL + "/releases/latest/download/ZettelApp-Setup.exe"
 SPONSOR_URL = "https://ko-fi.com/dutrairs"

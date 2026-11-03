@@ -26,6 +26,8 @@ dependencies = [
     "markdown-it-py>=3.0",
     "PyYAML>=6.0",
     "anthropic>=2.0",
+    "onnxruntime>=1.24",
+    "tokenizers>=0.21",
 ]
 
 [project.optional-dependencies]
@@ -35,6 +37,7 @@ dev = [
     "pyinstaller>=6.10",
     "pip-audit>=2.10",
     "ruff>=0.17",
+    "rational==0.3.0a1",
 ]
 
 [project.urls]

@@ -76,6 +76,124 @@ def test_search_with_fts_and_tags(sample, vault):
     assert vault.count_notes() == 5
 
 
+def test_tag_ontology_supports_multiple_parents_and_expands_search(vault):
+    note = vault.create_note("Bayesian", tags=["bayesian-inference"])
+    vault.add_tag_relationship("mathematics", "bayesian-inference", "parent")
+    vault.add_tag_relationship("statistics", "bayesian-inference", "parent")
+
+    assert vault.tag_graph().descendants("mathematics") == {"bayesian-inference"}
+    assert vault.search("tag:mathematics") == vault.search("tag:statistics") == [note.id]
+
+
+def test_tag_ontology_synonyms_and_opt_in_related_search(vault):
+    synonym_note = vault.create_note("Bayesian", tags=["bayes"])
+    related_note = vault.create_note("Probability", tags=["probability"])
+    vault.add_tag_relationship("bayesian", "bayes", "synonym")
+    vault.add_tag_relationship("bayesian", "probability", "related")
+
+    assert vault.search("tag:bayesian") == [synonym_note.id]
+    assert vault.search("tag:bayesian", include_related_tags=True) == [
+        synonym_note.id,
+        related_note.id,
+    ]
+
+
+def test_tag_ontology_rejects_hierarchical_cycles(vault):
+    vault.add_tag_relationship("a", "b", "parent")
+    with pytest.raises(VaultError, match="cycle"):
+        vault.add_tag_relationship("b", "a", "parent")
+
+
+def test_tag_ontology_reaches_nested_tags_and_chains(vault):
+    nested = vault.create_note("Nested", tags=["bayes/priors"])
+    chained = vault.create_note("Chained", tags=["alias-of-child"])
+    vault.add_tag_relationship("bayesian", "bayes", "synonym")
+    vault.add_tag_relationship("stats", "bayesian", "parent")
+    vault.add_tag_relationship("bayesian", "child", "parent")
+    vault.add_tag_relationship("child", "alias-of-child", "synonym")
+
+    assert vault.notes_with_tags(["stats"]) == {nested.id, chained.id}
+    assert vault.notes_with_tags(["child"]) == {chained.id}
+
+
+def test_related_tags_are_one_step_away(vault):
+    near = vault.create_note("Near", tags=["near"])
+    vault.create_note("Far", tags=["far"])
+    vault.add_tag_relationship("start", "near", "related")
+    vault.add_tag_relationship("near", "far", "related")
+
+    assert vault.notes_with_tags(["start"]) == set()
+    assert vault.notes_with_tags(["start"], include_related=True) == {near.id}
+
+
+def test_tag_relationships_have_no_duplicates_and_can_be_removed_either_way(vault):
+    vault.add_tag_relationship("b", "a", "synonym")
+    vault.add_tag_relationship("a", "b", "synonym")
+    assert [(r.source, r.target) for r in vault.tag_relationships()] == [("a", "b")]
+    vault.remove_tag_relationship("b", "a", "synonym")
+    assert vault.tag_relationships() == []
+
+
+@pytest.mark.parametrize(
+    "source, target, relation",
+    [("same", "same", "parent"), ("", "tag", "parent"), ("a", "b", "unknown")],
+)
+def test_bad_tag_relationships_are_refused(vault, source, target, relation):
+    with pytest.raises(VaultError):
+        vault.add_tag_relationship(source, target, relation)
+    assert vault.tag_relationships() == []
+
+
+def test_tag_filter_counts_what_the_filter_shows(vault):
+    live = vault.create_note("Live", tags=["math/algebra"])
+    gone = vault.create_note("Gone", tags=["math/algebra"])
+    vault.trash_note(gone.id)
+    vault.create_note("Only trash", tags=["unused"])
+    vault.trash_note(vault.search("tag:unused")[0])
+    vault.create_note("Other", tags=["bayes"])
+    vault.add_tag_relationship("sciences", "math/algebra", "parent")
+    vault.add_tag_relationship("empty-concept", "nothing-here", "parent")
+
+    assert vault.tag_filter_counts() == [
+        ("bayes", 1),
+        ("math/algebra", 1),
+        ("sciences", 1),
+    ]
+    assert vault.notes_with_tags(["sciences"]) >= {live.id}
+
+
+def test_refreshing_tag_counts_needs_few_queries_however_large_the_ontology(vault):
+    vault.create_note("Note", tags=["tag0"])
+    with vault.transaction():
+        for i in range(200):
+            vault.add_tag_relationship(f"tag{i}", f"tag{i + 1}", "parent")
+    queries = []
+    vault.conn.set_trace_callback(queries.append)
+    vault.tag_filter_counts()
+    vault.conn.set_trace_callback(None)
+    assert len(queries) < 10  # used to be thousands: a filter over them froze the app
+
+
+def test_rebuilding_the_search_index_restores_it(vault):
+    note = vault.create_note("Findable", "needle", tags=["tagged"])
+    with vault.transaction():
+        vault.conn.execute("DELETE FROM notes_fts")
+    assert vault.search("needle") == []
+    vault.rebuild_search_index()
+    assert vault.search("needle") == vault.search("findable") == vault.search("tagged") == [note.id]
+
+
+def test_search_finds_words_inside_chinese_japanese_and_korean_text(vault):
+    chinese = vault.create_note("知识管理系统", "笔记")
+    japanese = vault.create_note("メモ", "知識を整理するノート")
+    korean = vault.create_note("연결된 노트를 작성", "내용")
+    assert vault.search("管理") == [chinese.id]
+    assert vault.search("整理") == [japanese.id]
+    assert vault.search("노트") == [korean.id]
+    tagged = vault.create_note("Tagged only", "text", tags=["数学"])
+    assert vault.search("数学") == [tagged.id]
+
+
 def test_trash_restore_and_purge(sample, vault):
     vault.trash_note(sample["a"].id)
     assert sample["a"].id not in {n.id for n in vault.all_notes()}
@@ -146,7 +264,7 @@ def test_upgrade_from_schema_2_keeps_how_links_looked(tmp_path):
     _rewind_to_schema_2(folder)
     v = Vault.open(folder)
     try:
-        assert v.get_meta("schema_version") == "4"
+        assert v.get_meta("schema_version") == "5"
         looks = {t.id: (t.line_style, t.arrow) for t in v.link_types()}
         # Schema 2 took the dash from the type's place in the list and drew open arrows.
         assert looks == {
