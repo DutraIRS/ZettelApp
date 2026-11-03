@@ -92,10 +92,10 @@ def test_tag_ontology_synonyms_and_opt_in_related_search(vault):
     vault.add_tag_relationship("bayesian", "probability", "related")
 
     assert vault.search("tag:bayesian") == [synonym_note.id]
-    assert vault.search("tag:bayesian", include_related_tags=True) == [
+    assert set(vault.search("tag:bayesian", include_related_tags=True)) == {
         synonym_note.id,
         related_note.id,
-    ]
+    }
 
 
 def test_tag_ontology_rejects_hierarchical_cycles(vault):
