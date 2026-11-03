@@ -32,7 +32,7 @@ acompanhando a curva, de modo que nenhuma esconde outra. Passar o mouse sobre um
 cores de seus tipos de link e rotula cada vizinha com os tipos de link **como lidos a partir dessa nota**, por exemplo
 *Apoia · Estendida por*. Isso funciona igual em 2D e 3D.
 
-**Em 3D**, arraste para orbitar, use a roda para dar zoom e clique duas vezes em uma nota para abri-la. **Girar
+**Em 3D**, arraste para orbitar, use a roda para dar zoom e clique duas vezes em uma nota para abri-la. Ctrl+arrastar move uma nota. **Girar
 automaticamente** faz a visão girar. Notas mais próximas são maiores e mais brilhantes, então a profundidade é fácil de ler, e cada
 grupo aparece como um halo colorido suave.
 

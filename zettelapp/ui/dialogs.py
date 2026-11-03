@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 import platform
 from collections.abc import Callable
 from datetime import UTC, date, datetime, timedelta
@@ -29,17 +30,22 @@ from PySide6.QtWidgets import (
     QRadioButton,
     QTableWidget,
     QTableWidgetItem,
+    QTabWidget,
     QVBoxLayout,
+    QWidget,
 )
 
 from zettelapp import APP_NAME, DOCS_URL, HOMEPAGE_URL, REPO_URL, SPONSOR_URL, __version__
 from zettelapp.core.export import FORMATS, FORMATS_BY_KEY
-from zettelapp.core.models import Flashcard
+from zettelapp.core.graph import force_layout
+from zettelapp.core.models import Flashcard, Link, LinkType
 from zettelapp.core.storage import Vault, VaultError
 from zettelapp.core.textutil import fold
 from zettelapp.i18n import N_, _
 from zettelapp.paths import documents_dir, resource_path
 from zettelapp.ui import icons, theme
+from zettelapp.ui.graph2d import Graph2DView
+from zettelapp.ui.graph_common import GraphData
 from zettelapp.ui.link_style import LIST_ICON, type_icon
 from zettelapp.ui.widgets import ScopePicker, SearchBox, label
 
@@ -57,6 +63,29 @@ def _buttons(dialog: QDialog, ok_text: str | None = None) -> QDialogButtonBox:
     return box
 
 
+def _relation_types() -> dict[str, LinkType]:
+    """How each kind of tag relationship is drawn in the ontology graph."""
+    return {
+        "parent": LinkType("parent", _("Parent of"), _("Child of"), "#2A78D6"),
+        "synonym": LinkType(
+            "synonym",
+            _("Synonym / alias"),
+            _("Synonym / alias"),
+            "#6250D6",
+            directed=False,
+            line_style="dashed",
+        ),
+        "related": LinkType(
+            "related",
+            _("Related concept"),
+            _("Related concept"),
+            "#898781",
+            directed=False,
+            line_style="dotted",
+        ),
+    }
+
+
 class TagOntologyDialog(QDialog):
     """Create, remove, and navigate explicit relationships between tags."""
 
@@ -67,7 +96,7 @@ class TagOntologyDialog(QDialog):
         super().__init__(parent)
         self.vault = vault
         self.setWindowTitle(_("Tag ontology"))
-        self.resize(600, 460)
+        self.resize(760, 640)
         layout = QVBoxLayout(self)
         layout.addWidget(
             label(
@@ -99,7 +128,27 @@ class TagOntologyDialog(QDialog):
         self.relationships.setAccessibleName(_("Tag relationships"))
         self.relationships.setToolTip(_("Double-click to show that tag's notes"))
         self.relationships.itemDoubleClicked.connect(self._navigate)
-        layout.addWidget(self.relationships, 1)
+        self.graph = Graph2DView()
+        self.graph.setAccessibleName(_("Tag ontology graph"))
+        self.graph.nodeActivated.connect(self._show_tag)
+        graph_page = QWidget()
+        graph_layout = QVBoxLayout(graph_page)
+        graph_layout.setContentsMargins(0, 0, 0, 0)
+        graph_layout.addWidget(self.graph, 1)
+        graph_layout.addWidget(
+            label(
+                _(
+                    "Grey tags are only in the ontology, on no note. Double-click a tag to "
+                    "show its notes."
+                ),
+                "caption",
+                wrap=True,
+            )
+        )
+        self.tabs = QTabWidget()
+        self.tabs.addTab(self.relationships, _("List"))
+        self.tabs.addTab(graph_page, _("Graph"))
+        layout.addWidget(self.tabs, 1)
         actions = QHBoxLayout()
         remove = QPushButton(_("Remove selected"))
         remove.clicked.connect(self._remove)
@@ -122,7 +171,9 @@ class TagOntologyDialog(QDialog):
             combo.setEditText(current)
             combo.blockSignals(False)
         self.relationships.clear()
-        for relationship in self.vault.tag_relationships():
+        relationships = self.vault.tag_relationships()
+        self._refresh_graph(relationships)
+        for relationship in relationships:
             sentences = {
                 "parent": _("{source} is the parent of {target}"),
                 "synonym": _("{source} is a synonym of {target}"),
@@ -159,8 +210,35 @@ class TagOntologyDialog(QDialog):
         self.changed.emit()
 
     def _navigate(self, item: QListWidgetItem) -> None:
-        self.tagSelected.emit(item.data(Qt.ItemDataRole.UserRole).source)
+        self._show_tag(item.data(Qt.ItemDataRole.UserRole).source)
+
+    def _show_tag(self, tag: str) -> None:
+        self.tagSelected.emit(tag)
         self.accept()
+
+    def _refresh_graph(self, relationships: list) -> None:
+        """Tags as nodes, relationships as typed links; tags on notes get the first group
+        colour and those only in the ontology stay grey."""
+        used = {tag for tag, _count in self.vault.all_tags()}
+        ids = sorted({tag for r in relationships for tag in (r.source, r.target)}, key=fold)
+        links = [Link(r.source, r.target, r.relation_type) for r in relationships]
+        degree: dict[str, int] = {}
+        for link in links:
+            degree[link.src] = degree.get(link.src, 0) + 1
+            degree[link.dst] = degree.get(link.dst, 0) + 1
+        data = GraphData(
+            ids,
+            {tag: f"#{tag}" for tag in ids},
+            links,
+            degree,
+            group_of={tag: 0 if tag in used else None for tag in ids},
+            group_names=[""],
+            types=_relation_types(),
+        )
+        # Spread to suit the number of tags, so a small ontology isn't drawn tiny.
+        size = min(1000.0, 90.0 * math.sqrt(len(ids)))
+        positions = force_layout(ids, [(link.src, link.dst) for link in links], size=size)
+        self.graph.set_graph(data, positions, show_groups=False, show_labels=True)
 
 
 class LinkPickerDialog(QDialog):

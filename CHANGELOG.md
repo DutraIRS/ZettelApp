@@ -10,6 +10,17 @@ All notable changes to ZettelApp are documented here. The format follows
 
 - An unticked installer option, *Set up semantic search*: ZettelApp then downloads the language
   model the first time it starts and turns semantic search on.
+- In the 3D graph, Ctrl+drag a note to move it.
+- A **Graph** tab in *Tools ▸ Tag Ontology…* draws the ontology.
+
+### Changed
+
+- Notes in the 3D graph are shaded like spheres instead of flat discs.
+- The website's screenshots show the current version, with English dates on any computer.
+
+### Fixed
+
+- Group names in the 3D graph no longer overlap.
 
 ## [1.2.1] - 2026-11-03
 

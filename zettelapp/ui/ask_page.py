@@ -217,12 +217,7 @@ class AskPage(QWidget):
             else []
         )
         context = retrieve_context(notes, question, self.limit.value(), focus_ids=focus)
-        self.sources = context
-        self.sources_list.clear()
-        for note in context:
-            item = QListWidgetItem(icons.icon("document"), note.title or "Untitled")
-            item.setData(Qt.ItemDataRole.UserRole, note.id)
-            self.sources_list.addItem(item)
+        self.show_sources(context)
         self.question_text = question
         self.answer_text = ""
         self.answer.set_renderer(self._renderer())
@@ -241,6 +236,14 @@ class AskPage(QWidget):
         thread.finished.connect(self._cleanup)
         self.stream_thread = thread
         thread.start()
+
+    def show_sources(self, notes: list) -> None:
+        self.sources = notes
+        self.sources_list.clear()
+        for note in notes:
+            item = QListWidgetItem(icons.icon("document"), note.title or "Untitled")
+            item.setData(Qt.ItemDataRole.UserRole, note.id)
+            self.sources_list.addItem(item)
 
     def _chunk(self, text: str) -> None:
         self.answer_text += text

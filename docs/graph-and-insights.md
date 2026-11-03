@@ -32,7 +32,7 @@ following the curve, so none hides another. Hovering or selecting a note **dims 
 link-type colours, and labels each neighbour with the link types **as read from that note**, for example
 *Supports · Extended by*. This works the same in 2D and 3D.
 
-**In 3D**, drag to orbit, use the wheel to zoom, and double-click a note to open it. **Rotate
+**In 3D**, drag to orbit, use the wheel to zoom, and double-click a note to open it. Ctrl+drag a note to move it. **Rotate
 automatically** spins the view. Nearer notes are larger and brighter, so depth is easy to read, and each
 group appears as a soft coloured halo.
 

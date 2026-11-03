@@ -6,7 +6,7 @@ import math
 
 import numpy as np
 from PySide6.QtCore import QPointF, QRectF, Qt, QTimer, Signal
-from PySide6.QtGui import QColor, QFontMetricsF, QPainter, QPainterPath, QPen
+from PySide6.QtGui import QColor, QFontMetricsF, QPainter, QPainterPath, QPen, QRadialGradient
 from PySide6.QtWidgets import QWidget
 
 from zettelapp.i18n import _
@@ -45,6 +45,7 @@ class Graph3DView(QWidget):
         self._drag_from: QPointF | None = None
         self._dragged = False
         self._group_drag: tuple[object, QPointF] | None = None  # group, last screen point
+        self._node_drag: tuple[int, QPointF] | None = None  # note index, last screen point
         self._neighbors: dict[str, set[str]] = {}
         self._lanes: list[float] = []
         self._index: dict[str, int] = {}
@@ -116,12 +117,15 @@ class Graph3DView(QWidget):
 
     # --- projection -----------------------------------------------------------
 
-    def _project(self) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    def _rotation(self) -> np.ndarray:
         cy, sy = math.cos(self.yaw), math.sin(self.yaw)
         cp, sp = math.cos(self.pitch), math.sin(self.pitch)
         rot_y = np.array([[cy, 0, sy], [0, 1, 0], [-sy, 0, cy]])
         rot_x = np.array([[1, 0, 0], [0, cp, -sp], [0, sp, cp]])
-        q = self.points @ (rot_x @ rot_y).T
+        return rot_x @ rot_y
+
+    def _project(self) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+        q = self.points @ self._rotation().T
         camera = 3.2
         f = min(self.width(), self.height()) * 0.36 * self.zoom_level
         scale = f * camera / (camera - q[:, 2])
@@ -149,6 +153,7 @@ class Graph3DView(QWidget):
         if self.show_groups:
             label_font = theme.ui_font(9, theme.QFont.Weight.DemiBold)
             label_metrics = QFontMetricsF(label_font)
+            taken: list[QRectF] = []  # group names already placed, so none covers another
             for group, _idx, d, region in self._group_regions(screen, depth):
                 fill = QColor(self.data.group_color(group))
                 fill.setAlphaF(0.18)
@@ -159,14 +164,22 @@ class Graph3DView(QWidget):
                 painter.drawPath(region)
                 top = region.boundingRect()
                 label = self.data.group_label(group)
+                width = label_metrics.horizontalAdvance(label)
+                box = QRectF(
+                    top.center().x() - width / 2,
+                    top.top() - 8 - label_metrics.ascent(),
+                    width,
+                    label_metrics.height(),
+                )
+                for _try in range(6):  # step up past names already there
+                    clash = next((r for r in taken if r.intersects(box)), None)
+                    if clash is None:
+                        break
+                    box.moveBottom(clash.top() - 2)
+                taken.append(box)
                 painter.setFont(label_font)
                 painter.setPen(t.q("text_secondary"))
-                painter.drawText(
-                    QPointF(
-                        top.center().x() - label_metrics.horizontalAdvance(label) / 2, top.top() - 8
-                    ),
-                    label,
-                )
+                painter.drawText(QPointF(box.left(), box.top() + label_metrics.ascent()), label)
 
         focus = self.hovered or self.selected
         neighbors = self._neighbors.get(focus, set()) if focus else set()
@@ -221,8 +234,13 @@ class Graph3DView(QWidget):
             dim = focus is not None and node != focus and node not in neighbors
             color.setAlphaF((0.35 + 0.65 * d) * (0.3 if dim else 1.0))
             painter.setPen(QPen(t.q("surface"), 1.5))
-            painter.setBrush(color)
             p = QPointF(*screen[i])
+            # Lit from the upper left, so each note reads as a sphere, not a flat disc.
+            shade = QRadialGradient(p.x() - r * 0.35, p.y() - r * 0.4, r * 1.35)
+            shade.setColorAt(0.0, color.lighter(165))
+            shade.setColorAt(0.55, color)
+            shade.setColorAt(1.0, color.darker(150))
+            painter.setBrush(shade)
             painter.drawEllipse(p, r, r)
             if node in (self.selected, self.data.focus):
                 painter.setBrush(Qt.BrushStyle.NoBrush)
@@ -279,7 +297,10 @@ class Graph3DView(QWidget):
         painter.drawText(
             QRectF(10, self.height() - 24, self.width() - 20, 18),
             Qt.AlignmentFlag.AlignLeft,
-            _("Drag to orbit · wheel to zoom · double-click a note to open it"),
+            _(
+                "Drag to orbit · Ctrl+drag a note to move it · wheel to zoom · "
+                "double-click a note to open it"
+            ),
         )
 
     # --- interaction ----------------------------------------------------------
@@ -294,11 +315,13 @@ class Graph3DView(QWidget):
     def mousePressEvent(self, event) -> None:  # noqa: N802
         self._drag_from = event.position()
         self._dragged = False
-        if (
-            event.button() == Qt.MouseButton.LeftButton
-            and self.show_groups
-            and self._node_at(event.position()) is None
-        ):
+        if event.button() != Qt.MouseButton.LeftButton:
+            return
+        node = self._node_at(event.position())
+        if node is not None and event.modifiers() & Qt.KeyboardModifier.ControlModifier:
+            self._node_drag = (self._index[node], self._drag_from)
+            self.setCursor(Qt.CursorShape.ClosedHandCursor)
+        elif node is None and self.show_groups:
             group = self._group_at(event.position())
             if group is not None:
                 self._group_drag = (group, self._drag_from)
@@ -333,30 +356,26 @@ class Graph3DView(QWidget):
                 return group
         return None
 
+    def _move(self, idx: list[int], delta: QPointF) -> None:
+        """Move notes parallel to the screen so they track the cursor: the screen delta
+        becomes a world offset by undoing the camera rotation and their mean depth scale."""
+        if not idx or not (delta.x() or delta.y()):
+            return
+        s = float(np.mean(self._scale[idx])) if len(self._scale) == len(self.points) else 1.0
+        self.points[idx] += self._rotation().T @ np.array([delta.x() / s, -delta.y() / s, 0.0])
+        self.update()
+
     def mouseMoveEvent(self, event) -> None:  # noqa: N802
-        if self._group_drag is not None and self._drag_from is not None:
+        here = event.position()
+        if self._node_drag is not None:
+            i, last = self._node_drag
+            self._move([i], here - last)
+            self._node_drag = (i, here)
+            return
+        if self._group_drag is not None:
             group, last = self._group_drag
-            here = event.position()
-            delta = here - last
-            if abs(delta.x()) + abs(delta.y()) > 0:
-                idx = [
-                    self._index[m] for m in self.data.members().get(group, ()) if m in self._index
-                ]
-                if idx:
-                    # Screen delta to a world-space offset: undo the camera rotation and
-                    # the group's mean depth scale, so the notes track the cursor.
-                    s = (
-                        float(np.mean(self._scale[idx]))
-                        if len(self._scale) == len(self.points)
-                        else 1.0
-                    )
-                    dq = np.array([delta.x() / s, -delta.y() / s, 0.0])
-                    cy, sy = math.cos(self.yaw), math.sin(self.yaw)
-                    cp, sp = math.cos(self.pitch), math.sin(self.pitch)
-                    rot_y = np.array([[cy, 0, sy], [0, 1, 0], [-sy, 0, cy]])
-                    rot_x = np.array([[1, 0, 0], [0, cp, -sp], [0, sp, cp]])
-                    self.points[idx] += (rot_x @ rot_y).T @ dq
-                    self.update()
+            members = self.data.members().get(group, ())
+            self._move([self._index[m] for m in members if m in self._index], here - last)
             self._group_drag = (group, here)
             return
         if self._drag_from is not None and event.buttons() & Qt.MouseButton.LeftButton:
@@ -378,8 +397,9 @@ class Graph3DView(QWidget):
             self.update()
 
     def mouseReleaseEvent(self, event) -> None:  # noqa: N802
-        if self._group_drag is not None:
-            self._group_drag = None
+        if self._group_drag is not None or self._node_drag is not None:
+            self._group_drag = self._node_drag = None
+            self._drag_from = None
             self.unsetCursor()
             return
         if not self._dragged and event.button() == Qt.MouseButton.LeftButton:
