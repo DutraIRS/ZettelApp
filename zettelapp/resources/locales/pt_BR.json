@@ -275,8 +275,6 @@
  "idea": "ideia",
  "Image not added": "Imagem não adicionada",
  "Images (*.png *.jpg *.jpeg *.gif *.webp *.bmp)": "Imagens (*.png *.jpg *.jpeg *.gif *.webp *.bmp)",
- "Import a folder of Markdown files, such as an Obsidian vault": "Importar uma pasta de arquivos Markdown, como um cofre do Obsidian",
- "Import a ZettelApp archive, JSON or Markdown files": "Importar um arquivo do ZettelApp, JSON ou arquivos Markdown",
  "Import Markdown &Folder…": "Importar &pasta Markdown…",
  "In a note, write {example}.": "Em uma nota, escreva {example}.",
  "Inline, inside a sentence": "Em linha, dentro de uma frase",
@@ -867,7 +865,6 @@
  "Some items were skipped:": "Alguns itens foram ignorados:",
  "Suggest links while I write": "Sugerir links enquanto escrevo",
  "Suggested links": "Links sugeridos",
- "Supported files (*.zip *.json *.md);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md)": "Arquivos compatíveis (*.zip *.json *.md);;Arquivo do ZettelApp ou Markdown (*.zip);;JSON (*.json);;Markdown (*.md)",
  "Testing…": "Testando…",
  "Text similarity (Levenshtein)": "Similaridade do texto (Levenshtein)",
  "That note no longer exists.": "Essa nota não existe mais.",
@@ -1037,5 +1034,16 @@
  "Child of": "Filha de",
  "List": "Lista",
  "Tag ontology graph": "Grafo da ontologia de tags",
- "Grey tags are only in the ontology, on no note. Double-click a tag to show its notes.": "As tags cinza estão só na ontologia, em nenhuma nota. Clique duas vezes em uma tag para ver as notas dela."
+ "Grey tags are only in the ontology, on no note. Double-click a tag to show its notes.": "As tags cinza estão só na ontologia, em nenhuma nota. Clique duas vezes em uma tag para ver as notas dela.",
+ "Supported files (*.zip *.json *.md *.enex);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md);;Evernote export (*.enex)": "Arquivos compatíveis (*.zip *.json *.md *.enex);;Arquivo do ZettelApp ou Markdown (*.zip);;JSON (*.json);;Markdown (*.md);;Exportação do Evernote (*.enex)",
+ "[encrypted text]": "[texto criptografado]",
+ "Import a folder of Markdown files, such as an Obsidian vault or a Notion export": "Importar uma pasta de arquivos Markdown, como um cofre do Obsidian ou uma exportação do Notion",
+ "Import a ZettelApp archive, JSON, Markdown files or an Evernote export": "Importar um arquivo do ZettelApp, JSON, arquivos Markdown ou uma exportação do Evernote",
+ "The file contains too many notes.": "O arquivo contém notas demais.",
+ "This file declares XML entities, which an Evernote export never does.": "Este arquivo declara entidades XML, algo que uma exportação do Evernote nunca faz.",
+ "This is not a readable Evernote export: {error}": "Esta não é uma exportação do Evernote legível: {error}",
+ "{n} attachment that isn't a picture was not imported; its name stays in the text.": [
+  "{n} anexo que não é imagem não foi importado; o nome dele fica no texto.",
+  "{n} anexos que não são imagens não foram importados; os nomes deles ficam no texto."
+ ]
 }

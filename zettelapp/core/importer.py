@@ -1,4 +1,5 @@
-"""Import ZettelApp archives/JSON and Markdown folders (e.g. Obsidian vaults).
+"""Import ZettelApp archives/JSON, Markdown folders (Obsidian, Notion, Joplin, Logseq and other
+apps export Markdown) and Evernote exports.
 
 Imported files are untrusted: archive paths are validated (no zip-slip),
 sizes are bounded, every field is type-checked, and images are re-verified
@@ -15,9 +16,11 @@ import zipfile
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from pathlib import Path
+from urllib.parse import unquote
 
 import yaml
 
+from zettelapp.core.enex import enml_to_markdown, read_enex
 from zettelapp.core.models import (
     ARROW_TIPS,
     LINE_STYLES,
@@ -32,6 +35,7 @@ from zettelapp.core.security import (
     MAX_IMAGE_BYTES,
     UnsafeInputError,
     check_zip,
+    is_openable_url,
     is_valid_asset_name,
     is_valid_note_id,
     resolve_inside,
@@ -39,7 +43,7 @@ from zettelapp.core.security import (
 )
 from zettelapp.core.storage import MAX_BODY, MAX_TITLE, Vault, VaultError
 from zettelapp.core.textutil import WIKILINK_RE, fold, normalize_tag
-from zettelapp.i18n import _
+from zettelapp.i18n import _, n_
 
 MAX_JSON_BYTES = MAX_ARCHIVE_MANIFEST_BYTES
 MAX_MARKDOWN_FILES = 20_000
@@ -49,6 +53,12 @@ _FRONT_MATTER_RE = re.compile(r"\A---[ \t]*\r?\n(.*?)\r?\n---[ \t]*(?:\r?\n|\Z)"
 _HEADING_RE = re.compile(r"^#\s+(.+)$", re.M)
 _MD_IMAGE_RE = re.compile(r"!\[([^\]]*)\]\(<?([^)>\s]+)>?(?:\s+\"[^\"]*\")?\)")
 _EMBED_RE = re.compile(r"!\[\[([^\]|]+?\.(?:png|jpe?g|gif|webp|bmp))(?:\|[^\]]*)?\]\]", re.I)
+# An embedded note (![[Other note]]): ZettelApp links to it instead.
+_NOTE_EMBED_RE = re.compile(r"!(?=\[\[(?![^\]|]+?\.(?:png|jpe?g|gif|webp|bmp)[\]|]))", re.I)
+# A relative link to another Markdown file, as Notion writes them and Obsidian can.
+_MD_LINK_RE = re.compile(r"(?<!!)\[([^\]\n]*)\]\(<?([^)<>\s:]+\.md)>?\)", re.I)
+# Notion adds a 32-digit ID to every file name: "Reading list 0a1b….md".
+_NOTION_ID_RE = re.compile(r"\s+[0-9a-f]{32}$")
 _ASSET_REF_RE = re.compile(r"asset:([0-9a-f]{20}\.(?:png|jpg|gif|webp|bmp))")
 
 
@@ -75,10 +85,12 @@ def import_path(vault: Vault, path: str | Path) -> ImportResult:
         if path.stat().st_size > MAX_JSON_BYTES:
             raise UnsafeInputError(_("The file is too large to import."))
         return import_data(vault, json.loads(path.read_text(encoding="utf-8")))
+    if suffix == ".enex":
+        return import_enex(vault, path)
     if suffix == ".md":
         result = ImportResult()
         with vault.transaction():
-            _import_markdown_files(vault, path.parent, [path], result)
+            _import_markdown_files(vault, path.parent.resolve(), [path.resolve()], result)
         return result
     if suffix == ".zip":
         with zipfile.ZipFile(path) as zf:
@@ -336,6 +348,7 @@ def _import_data(
 
 def import_markdown_folder(vault: Vault, folder: Path) -> ImportResult:
     result = ImportResult()
+    folder = folder.resolve()  # one spelling of every path, for links between the files
     files = []
     for path in sorted(folder.rglob("*.md")):
         if any(part.startswith(".") for part in path.relative_to(folder).parts):
@@ -377,7 +390,7 @@ def _import_markdown_files(
         title = meta.get("title") if isinstance(meta.get("title"), str) else None
         if not title:
             heading = _HEADING_RE.search(body)
-            title = heading.group(1).strip() if heading else path.stem
+            title = heading.group(1).strip() if heading else _NOTION_ID_RE.sub("", path.stem)
         parsed.append((path, meta, body, title[:MAX_TITLE]))
 
     # Map file stems (how Obsidian links) and titles to the new notes.
@@ -396,7 +409,16 @@ def _import_markdown_files(
             created=_timestamp(meta.get("created"))
             or when.astimezone().isoformat(timespec="seconds"),
         )
-    stems = {fold(Path(p).stem): n for p, n in created.items()}
+    # How other files may name each note: its file name (with or without Notion's ID) and the
+    # aliases in its front matter.
+    stems: dict[str, Note] = {}
+    for path, meta, _body, _title in parsed:
+        note = created[str(path)]
+        aliases = meta.get("aliases") or meta.get("alias") or []
+        aliases = [aliases] if isinstance(aliases, str) else aliases
+        for name in (path.stem, _NOTION_ID_RE.sub("", path.stem), *aliases):
+            if isinstance(name, str) and name.strip():
+                stems.setdefault(fold(name.strip()), note)
 
     def image_ref(source: Path, target: str) -> str | None:
         target = target.split("#")[0].split("?")[0]
@@ -443,8 +465,23 @@ def _import_markdown_files(
             name = image_ref(path, m.group(2))
             return f"![{m.group(1)}](asset:{name})" if name else m.group(0)
 
+        def md_link(m: re.Match) -> str:
+            target = Path(unquote(m.group(2)))
+            try:
+                linked = created.get(str((path.parent / target).resolve()))
+            except (OSError, ValueError):
+                linked = None
+            linked = linked or stems.get(fold(target.stem))
+            if linked is None:
+                return m.group(0)
+            text = m.group(1).strip()
+            alias = text if text and fold(text) != fold(linked.title) else None
+            return f"[[{linked.title or linked.id}{'|' + alias if alias else ''}]]"
+
         body = _EMBED_RE.sub(embed, body)
         body = _MD_IMAGE_RE.sub(md_image, body)
+        body = _NOTE_EMBED_RE.sub("", body)
+        body = _MD_LINK_RE.sub(md_link, body)
         body = WIKILINK_RE.sub(relink, body)
 
         tags = meta.get("tags") or []
@@ -464,3 +501,56 @@ def _import_markdown_files(
         vault.save_note(note, touch=False)
         result.notes += 1
         result.links += len(vault.links_from(note.id))
+
+
+# --- Evernote -----------------------------------------------------------------------
+
+
+def import_enex(vault: Vault, path: Path) -> ImportResult:
+    """Import an Evernote export. Pictures come along; other attachments keep their name in
+    the text, since a vault stores only pictures."""
+    result = ImportResult()
+    attachments = 0
+    with vault.transaction():
+        for raw in read_enex(path):
+
+            def media(md5: str, mime: str, raw=raw) -> str:
+                nonlocal attachments
+                resource = raw.resources.get(md5)
+                if resource is None:
+                    return ""
+                if mime.startswith("image/"):
+                    try:
+                        name = vault.add_image(resource.data, resource.name)
+                    except UnsafeInputError as exc:
+                        result.warn(
+                            _("Skipped image {name}: {error}").format(
+                                name=resource.name or md5, error=exc
+                            )
+                        )
+                        return ""
+                    result.images += 1
+                    return f"![](asset:{name})"
+                attachments += 1
+                return f"*{resource.name or mime}*"
+
+            when = datetime.fromisoformat(raw.created) if raw.created else datetime.now()
+            note = vault.create_note(
+                title=_str(raw.title, MAX_TITLE),
+                note_id=vault.new_note_id(when.astimezone()),
+                created=raw.created,
+            )
+            note.body = _str(enml_to_markdown(raw.content, media), MAX_BODY) + "\n"
+            note.tags = [t for t in (normalize_tag(tag) for tag in raw.tags) if t][:200]
+            note.url = raw.url[:2048] if is_openable_url(raw.url) else ""
+            vault.save_note(note, touch=False)
+            result.notes += 1
+    if attachments:
+        result.warn(
+            n_(
+                "{n} attachment that isn't a picture was not imported; its name stays in the text.",
+                "{n} attachments that aren't pictures were not imported; their names stay in the text.",
+                attachments,
+            ).format(n=attachments)
+        )
+    return result

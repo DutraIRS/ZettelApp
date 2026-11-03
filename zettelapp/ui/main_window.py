@@ -286,7 +286,7 @@ class MainWindow(QMainWindow):
             self.import_dialog,
             None,
             "import",
-            "Import a ZettelApp archive, JSON or Markdown files",
+            "Import a ZettelApp archive, JSON, Markdown files or an Evernote export",
         )
         self._action(
             f,
@@ -294,7 +294,7 @@ class MainWindow(QMainWindow):
             self.import_folder_dialog,
             None,
             None,
-            "Import a folder of Markdown files, such as an Obsidian vault",
+            "Import a folder of Markdown files, such as an Obsidian vault or a Notion export",
         )
         self._action(f, "&Export…", lambda: self.export_dialog("all"), "Ctrl+Shift+E", "export")
         f.addSeparator()
@@ -1141,7 +1141,8 @@ class MainWindow(QMainWindow):
             _("Import"),
             str(documents_dir()),
             _(
-                "Supported files (*.zip *.json *.md);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md)"
+                "Supported files (*.zip *.json *.md *.enex);;ZettelApp archive or Markdown (*.zip);;"
+                "JSON (*.json);;Markdown (*.md);;Evernote export (*.enex)"
             ),
         )
         if path:

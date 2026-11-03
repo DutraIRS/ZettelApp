@@ -83,7 +83,9 @@
 <ul>
 <li><strong>архивы ZettelApp</strong> (<code>.zip</code>) и экспорт <strong>JSON</strong>;</li>
 <li><strong>файлы Markdown</strong> (<code>.md</code>) или <strong><code>.zip</code> с файлами Markdown</strong>;</li>
+<li><strong>экспорт Evernote</strong> (<code>.enex</code>);</li>
 <li><em>Файл ▸ Импорт папки Markdown…</em> для папки с файлами Markdown, например <strong>хранилища Obsidian</strong>.</li>
+<li>Другие приложения, экспортирующие Markdown, например <strong>Notion</strong>, Joplin, Bear или Logseq, импортируются так же.</li>
 </ul>
 <p>Что сохраняется:</p>
 <ul>
@@ -98,10 +100,17 @@
 <li>ссылка на источник берётся из <code>url</code> или <code>source</code>, а дата создания — из <code>created</code>;</li>
 <li><code>[[вики-ссылки]]</code> (включая ссылки по имени файла в Obsidian) и <code>type:: [[ссылки]]</code> становятся связями;</li>
 <li>изображения, указанные через <code>![](path)</code> или <code>![[image.png]]</code> Obsidian, копируются в хранилище;</li>
+<li>ссылки на другие файлы Markdown (<code>[текст](Заметка.md)</code>, как их пишет Notion), имена из <code>aliases</code> во
+front matter и встроенные заметки (<code>![[Заметка]]</code>) становятся связями; длинные идентификаторы Notion
+не попадают в заголовки;</li>
 <li>скрытые папки вроде <code>.obsidian</code> и <code>.trash</code> пропускаются;</li>
 <li>собственный экспорт ZettelApp в Markdown импортируется обратно с типизированными связями, карточками и ментальными картами.</li>
 </ul>
 </li>
+<li><strong>Из Evernote:</strong> каждая заметка сохраняет заголовок, текст (заголовки, списки, чек-листы, жирный,
+курсив, ссылки и таблицы в виде строк текста), теги, ссылку на источник и дату создания. Изображения
+копируются в хранилище; другие вложения — нет, их имена остаются в тексте. Зашифрованный текст
+пропускается.</li>
 </ul>
 <h3 id="безопасность">Безопасность</h3>
 <p>Импортируемые файлы считаются недоверенными:</p>

@@ -83,7 +83,9 @@
 <ul>
 <li><strong>أرشيفات ZettelApp</strong> (<code>.zip</code>) وصادرات <strong>JSON</strong>؛</li>
 <li><strong>ملفات Markdown</strong> (<code>.md</code>) أو <strong>ملف <code>.zip</code> يحوي ملفات Markdown</strong>؛</li>
+<li><strong>صادرات Evernote</strong> (<code>.enex</code>)؛</li>
 <li><em>ملف ▸ استيراد مجلد Markdown…</em> لاستيراد مجلد ملفات Markdown مثل <strong>مستودع Obsidian</strong>.</li>
+<li>تُستورد التطبيقات الأخرى التي تصدّر Markdown، مثل <strong>Notion</strong> أو Joplin أو Bear أو Logseq، بالطريقة نفسها.</li>
 </ul>
 <p>ما الذي يُحتفظ به:</p>
 <ul>
@@ -98,10 +100,16 @@
 <li>يأتي رابط المصدر من <code>url</code> أو <code>source</code>، وتاريخ الإنشاء من <code>created</code>؛</li>
 <li>تتحول <code>[[wiki links]]</code> (بما فيها روابط أسماء ملفات Obsidian) و<code>type:: [[links]]</code> إلى روابط؛</li>
 <li>تُنسخ الصور المشار إليها بـ <code>![](path)</code> أو <code>![[image.png]]</code> في Obsidian إلى المستودع؛</li>
+<li>تصبح الروابط إلى ملفات Markdown أخرى (<code>[نص](ملاحظة.md)</code> كما يكتبها Notion) والأسماء المذكورة تحت
+<code>aliases</code> في الرأس الأمامي والملاحظات المضمّنة (<code>![[ملاحظة]]</code>) روابط؛ ولا تظهر معرّفات Notion
+الطويلة في العناوين؛</li>
 <li>تُتخطى المجلدات المخفية مثل <code>.obsidian</code> و<code>.trash</code>؛</li>
 <li>يعيد استيراد تصدير ZettelApp بصيغة Markdown روابطه المصنّفة وبطاقاته التعليمية وخرائطه الذهنية.</li>
 </ul>
 </li>
+<li><strong>من Evernote:</strong> تحتفظ كل ملاحظة بعنوانها ونصها (العناوين والقوائم وقوائم المهام والخط العريض والمائل
+والروابط والجداول كأسطر نصية) ووسومها ورابط مصدرها وتاريخ إنشائها. تُنسخ الصور إلى المستودع؛ أما
+المرفقات الأخرى فلا، وتبقى أسماؤها في النص. يُحذف النص المشفّر.</li>
 </ul>
 <h3 id="السلامة">السلامة</h3>
 <p>تُعامل الملفات المستوردة على أنها غير موثوقة:</p>

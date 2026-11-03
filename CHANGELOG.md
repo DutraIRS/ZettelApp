@@ -4,10 +4,14 @@ All notable changes to ZettelApp are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [1.3.0] - 2026-11-03
 
 ### Added
 
+- Import Evernote exports (`.enex`): text, tags, pictures, checklists, source links and dates.
+- Markdown imports turn links to other Markdown files (as Notion and some Obsidian vaults write them),
+  `aliases` in the front matter and embedded notes (`![[Note]]`) into note links, and leave Notion's
+  long IDs out of titles.
 - An unticked installer option, *Set up semantic search*: ZettelApp then downloads the language
   model the first time it starts and turns semantic search on.
 - In the 3D graph, Ctrl+drag a note to move it.

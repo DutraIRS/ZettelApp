@@ -83,7 +83,9 @@ puede guardarse como imagen PNG.</p>
 <ul>
 <li><strong>archivos de ZettelApp</strong> (<code>.zip</code>) y exportaciones <strong>JSON</strong>;</li>
 <li><strong>archivos Markdown</strong> (<code>.md</code>) o un <strong><code>.zip</code> de archivos Markdown</strong>;</li>
+<li><strong>Exportaciones de Evernote</strong> (<code>.enex</code>);</li>
 <li><em>Archivo ▸ Importar carpeta de Markdown…</em> para una carpeta de archivos Markdown, como una <strong>bóveda de Obsidian</strong>.</li>
+<li>Otras apps que exportan Markdown, como <strong>Notion</strong>, Joplin, Bear o Logseq, se importan igual.</li>
 </ul>
 <p>Qué se conserva:</p>
 <ul>
@@ -98,10 +100,17 @@ usa una nota distinta, la importación recibe un ID nuevo y se actualizan los en
 <li>el enlace de la fuente proviene de <code>url</code> o <code>source</code>, y la fecha de creación de <code>created</code>;</li>
 <li>los <code>[[enlaces wiki]]</code> (incluidos los enlaces por nombre de archivo de Obsidian) y los <code>type:: [[enlaces]]</code> se convierten en enlaces;</li>
 <li>las imágenes referenciadas con <code>![](path)</code> o con <code>![[image.png]]</code> de Obsidian se copian a la bóveda;</li>
+<li>los enlaces a otros archivos Markdown (<code>[texto](Nota.md)</code>, como los escribe Notion), los nombres de
+<code>aliases</code> en el front matter y las notas incrustadas (<code>![[Nota]]</code>) se convierten en enlaces; los
+largos IDs de Notion no pasan a los títulos;</li>
 <li>las carpetas ocultas como <code>.obsidian</code> y <code>.trash</code> se omiten;</li>
 <li>la propia exportación Markdown de ZettelApp se importa de vuelta con sus enlaces con tipo, tarjetas y mapas mentales.</li>
 </ul>
 </li>
+<li><strong>De Evernote:</strong> cada nota conserva su título, su texto (encabezados, listas, listas de tareas, negritas,
+cursivas, enlaces y tablas como filas de texto), sus etiquetas, su enlace de la fuente y su fecha de
+creación. Las imágenes se copian a la bóveda; los demás adjuntos no, y sus nombres quedan en el texto.
+El texto cifrado se omite.</li>
 </ul>
 <h3 id="seguridad">Seguridad</h3>
 <p>Los archivos importados se tratan como no confiables:</p>

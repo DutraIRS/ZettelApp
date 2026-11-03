@@ -39,7 +39,9 @@ puede guardarse como imagen PNG.
 
 - **archivos de ZettelApp** (`.zip`) y exportaciones **JSON**;
 - **archivos Markdown** (`.md`) o un **`.zip` de archivos Markdown**;
+- **Exportaciones de Evernote** (`.enex`);
 - *Archivo ▸ Importar carpeta de Markdown…* para una carpeta de archivos Markdown, como una **bóveda de Obsidian**.
+- Otras apps que exportan Markdown, como **Notion**, Joplin, Bear o Logseq, se importan igual.
 
 Qué se conserva:
 
@@ -53,8 +55,15 @@ Qué se conserva:
   - el enlace de la fuente proviene de `url` o `source`, y la fecha de creación de `created`;
   - los `[[enlaces wiki]]` (incluidos los enlaces por nombre de archivo de Obsidian) y los `type:: [[enlaces]]` se convierten en enlaces;
   - las imágenes referenciadas con `![](path)` o con `![[image.png]]` de Obsidian se copian a la bóveda;
+  - los enlaces a otros archivos Markdown (`[texto](Nota.md)`, como los escribe Notion), los nombres de
+    `aliases` en el front matter y las notas incrustadas (`![[Nota]]`) se convierten en enlaces; los
+    largos IDs de Notion no pasan a los títulos;
   - las carpetas ocultas como `.obsidian` y `.trash` se omiten;
   - la propia exportación Markdown de ZettelApp se importa de vuelta con sus enlaces con tipo, tarjetas y mapas mentales.
+- **De Evernote:** cada nota conserva su título, su texto (encabezados, listas, listas de tareas, negritas,
+  cursivas, enlaces y tablas como filas de texto), sus etiquetas, su enlace de la fuente y su fecha de
+  creación. Las imágenes se copian a la bóveda; los demás adjuntos no, y sus nombres quedan en el texto.
+  El texto cifrado se omite.
 
 ### Seguridad
 

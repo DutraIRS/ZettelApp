@@ -39,7 +39,9 @@ può essere salvato come immagine PNG.
 
 - **archivi ZettelApp** (`.zip`) ed esportazioni **JSON**;
 - **file Markdown** (`.md`) o uno **`.zip` di file Markdown**;
+- **esportazioni di Evernote** (`.enex`);
 - *File ▸ Importa cartella Markdown…* per una cartella di file Markdown, come un **vault di Obsidian**.
+- Le altre app che esportano in Markdown, come **Notion**, Joplin, Bear o Logseq, si importano allo stesso modo.
 
 Cosa viene mantenuto:
 
@@ -53,8 +55,15 @@ Cosa viene mantenuto:
   - il collegamento alla fonte proviene da `url` o `source` e la data di creazione da `created`;
   - `[[collegamenti wiki]]` (compresi i collegamenti per nome di file di Obsidian) e `type:: [[collegamenti]]` diventano collegamenti;
   - le immagini referenziate con `![](path)` o con `![[image.png]]` di Obsidian vengono copiate nel vault;
+  - i collegamenti ad altri file Markdown (`[testo](Nota.md)`, come li scrive Notion), i nomi in
+    `aliases` nel front matter e le note incorporate (`![[Nota]]`) diventano collegamenti; i lunghi ID
+    di Notion restano fuori dai titoli;
   - le cartelle nascoste come `.obsidian` e `.trash` vengono saltate;
   - l'esportazione Markdown di ZettelApp si reimporta con i suoi collegamenti tipizzati, flashcard e mappe mentali.
+- **Da Evernote:** ogni nota conserva titolo, testo (titoli, elenchi, liste di controllo, grassetto,
+  corsivo, collegamenti e tabelle come righe di testo), tag, collegamento alla fonte e data di creazione.
+  Le immagini vengono copiate nel vault; gli altri allegati no, e i loro nomi restano nel testo. Il testo
+  cifrato viene omesso.
 
 ### Sicurezza
 

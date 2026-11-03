@@ -84,7 +84,9 @@ exportiert werden. Der Graph lässt sich als PNG-Bild speichern.</p>
 <ul>
 <li><strong>ZettelApp-Archive</strong> (<code>.zip</code>) und <strong>JSON</strong>-Exporte;</li>
 <li><strong>Markdown-Dateien</strong> (<code>.md</code>) oder ein <strong><code>.zip</code>-Archiv mit Markdown-Dateien</strong>;</li>
+<li><strong>Evernote-Exporte</strong> (<code>.enex</code>);</li>
 <li><em>Datei ▸ Markdown-Ordner importieren…</em> für einen Ordner mit Markdown-Dateien, zum Beispiel einen <strong>Obsidian-Tresor</strong>.</li>
+<li>Andere Apps, die Markdown exportieren, etwa <strong>Notion</strong>, Joplin, Bear oder Logseq, werden genauso importiert.</li>
 </ul>
 <p>Was erhalten bleibt:</p>
 <ul>
@@ -96,10 +98,16 @@ exportiert werden. Der Graph lässt sich als PNG-Bild speichern.</p>
 <li>Der Quellenlink stammt aus <code>url</code> oder <code>source</code>, das Erstellungsdatum aus <code>created</code>.</li>
 <li><code>[[Wiki-Links]]</code> (einschließlich Obsidian-Links mit Dateinamen) und <code>type:: [[Links]]</code> werden zu Links.</li>
 <li>Bilder, die mit <code>![](path)</code> oder Obsidian-<code>![[image.png]]</code> referenziert werden, werden in den Tresor kopiert.</li>
+<li>Links auf andere Markdown-Dateien (<code>[Text](Notiz.md)</code>, wie Notion sie schreibt), Namen unter
+<code>aliases</code> im Frontmatter und eingebettete Notizen (<code>![[Notiz]]</code>) werden zu Links; die langen IDs
+von Notion landen nicht in den Titeln.</li>
 <li>Versteckte Ordner wie <code>.obsidian</code> und <code>.trash</code> werden übersprungen.</li>
 <li>ZettelApps eigener Markdown-Export wird mit typisierten Links, Lernkarten und Mindmaps wieder importiert.</li>
 </ul>
 </li>
+<li><strong>Aus Evernote</strong>: Jede Notiz behält Titel, Text (Überschriften, Listen, Checklisten, Fett, Kursiv,
+Links und Tabellen als Textzeilen), Tags, Quellenlink und Erstellungsdatum. Bilder werden in den Tresor
+kopiert; andere Anhänge nicht, ihre Dateinamen bleiben im Text. Verschlüsselter Text wird ausgelassen.</li>
 </ul>
 <h3 id="sicherheit">Sicherheit</h3>
 <p>Importierte Dateien werden als nicht vertrauenswürdig behandelt:</p>

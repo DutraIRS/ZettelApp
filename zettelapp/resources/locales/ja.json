@@ -274,8 +274,6 @@
  "idea": "アイデア",
  "Image not added": "画像は追加されませんでした",
  "Images (*.png *.jpg *.jpeg *.gif *.webp *.bmp)": "画像 (*.png *.jpg *.jpeg *.gif *.webp *.bmp)",
- "Import a folder of Markdown files, such as an Obsidian vault": "Obsidian 保管庫など、Markdown ファイルのフォルダーをインポートします",
- "Import a ZettelApp archive, JSON or Markdown files": "ZettelApp アーカイブ、JSON、または Markdown ファイルをインポートします",
  "Import Markdown &Folder…": "Markdown フォルダーをインポート(&F)…",
  "In a note, write {example}.": "ノートに {example} と書きます。",
  "Inline, inside a sentence": "文中にインライン",
@@ -852,7 +850,6 @@
  "Some items were skipped:": "一部の項目はスキップされました:",
  "Suggest links while I write": "書いている間にリンクを提案する",
  "Suggested links": "提案されたリンク",
- "Supported files (*.zip *.json *.md);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md)": "対応しているファイル (*.zip *.json *.md);;ZettelApp アーカイブまたは Markdown (*.zip);;JSON (*.json);;Markdown (*.md)",
  "Testing…": "テスト中…",
  "Text similarity (Levenshtein)": "本文の類似度 (レーベンシュタイン)",
  "That note no longer exists.": "そのノートはもう存在しません。",
@@ -1007,5 +1004,15 @@
  "Child of": "子",
  "List": "一覧",
  "Tag ontology graph": "タグオントロジーのグラフ",
- "Grey tags are only in the ontology, on no note. Double-click a tag to show its notes.": "灰色のタグはオントロジーにだけあり、どのノートにも付いていません。タグをダブルクリックするとそのノートが表示されます。"
+ "Grey tags are only in the ontology, on no note. Double-click a tag to show its notes.": "灰色のタグはオントロジーにだけあり、どのノートにも付いていません。タグをダブルクリックするとそのノートが表示されます。",
+ "Supported files (*.zip *.json *.md *.enex);;ZettelApp archive or Markdown (*.zip);;JSON (*.json);;Markdown (*.md);;Evernote export (*.enex)": "対応しているファイル (*.zip *.json *.md *.enex);;ZettelApp アーカイブまたは Markdown (*.zip);;JSON (*.json);;Markdown (*.md);;Evernote エクスポート (*.enex)",
+ "[encrypted text]": "[暗号化されたテキスト]",
+ "Import a folder of Markdown files, such as an Obsidian vault or a Notion export": "Obsidian 保管庫や Notion のエクスポートなど、Markdown ファイルのフォルダーをインポートします",
+ "Import a ZettelApp archive, JSON, Markdown files or an Evernote export": "ZettelApp アーカイブ、JSON、Markdown ファイル、または Evernote のエクスポートをインポートします",
+ "The file contains too many notes.": "ファイルに含まれるノートが多すぎます。",
+ "This file declares XML entities, which an Evernote export never does.": "このファイルは XML エンティティを宣言しています。Evernote のエクスポートがそうすることはありません。",
+ "This is not a readable Evernote export: {error}": "読み取れる Evernote のエクスポートではありません: {error}",
+ "{n} attachment that isn't a picture was not imported; its name stays in the text.": [
+  "画像以外の添付ファイル {n} 件はインポートされませんでした。名前は本文に残ります。"
+ ]
 }
