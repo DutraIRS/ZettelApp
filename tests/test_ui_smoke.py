@@ -140,6 +140,15 @@ def test_tag_ontology_dialog_edits_relationships(window):
     dialog._add()
     assert window.vault.tag_graph().descendants("parent") == {"child"}
     assert dialog.relationships.count() == 1
+    graph = dialog.graph.data
+    assert sorted(graph.ids) == ["child", "parent"]
+    assert graph.group_of == {"child": 0, "parent": None}  # "parent" is on no note
+    assert [(l.src, l.dst, l.type) for l in graph.links] == [("parent", "child", "parent")]
+    shown = []
+    dialog.tagSelected.connect(shown.append)
+    dialog.graph.nodeActivated.emit("child")
+    assert shown == ["child"]
+    dialog = TagOntologyDialog(window.vault, window)
     dialog.relationships.setCurrentRow(0)
     dialog._remove()
     assert not window.vault.tag_relationships()
