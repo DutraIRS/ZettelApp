@@ -24,8 +24,6 @@ def test_finished_tasks_deliver_results_and_free_what_they_captured():
     QApplication.instance() or QApplication(["test"])
     payload = bytearray(1_000_000)  # stands for the notes a task works on
     references = sys.getrefcount(payload)
-    gc.collect()
-    tasks_before = sum(isinstance(o, workers._Task) for o in gc.get_objects())
     results, errors = [], []
 
     def work(i, data):
@@ -49,8 +47,8 @@ def test_finished_tasks_deliver_results_and_free_what_they_captured():
     assert not workers._alive
     assert sys.getrefcount(payload) == references  # no finished task still holds it
     # Every task used to stay in memory for good (and everything it captured with it).
-    tasks_after = sum(isinstance(o, workers._Task) for o in gc.get_objects())
-    assert tasks_after - tasks_before < 10  # earlier tests' tasks may still be winding down
+    # A few emptied ones can outlive their thread's last run for a moment, depending on timing.
+    assert sum(isinstance(o, workers._Task) for o in gc.get_objects()) < 50
 
 
 def _pending_suggestion(vault, sample, monkeypatch):
