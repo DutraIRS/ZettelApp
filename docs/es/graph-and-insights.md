@@ -32,7 +32,7 @@ siguiendo la curva, para que ninguna oculte a otra. Al pasar el cursor o selecci
 colores de su tipo de enlace y se rotula cada vecina con los tipos de enlace **tal como se leen desde esa nota**, por ejemplo
 *Apoya a · Ampliada por*. Funciona igual en 2D y en 3D.
 
-**En 3D**, arrastra para orbitar, usa la rueda para hacer zoom y haz doble clic en una nota para abrirla. **Rotar
+**En 3D**, arrastra para orbitar, usa la rueda para hacer zoom y haz doble clic en una nota para abrirla. Ctrl+arrastrar mueve una nota. **Rotar
 automáticamente** hace girar la vista. Las notas más cercanas son más grandes y brillantes, así que la profundidad se lee con facilidad, y cada
 grupo aparece como un halo de color suave.
 

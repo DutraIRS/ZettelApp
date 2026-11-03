@@ -153,7 +153,7 @@ des tags…*, ou le petit bouton à côté du filtre de tags, et ajoutez des rel
 Un tag d’une relation n’a pas besoin de figurer sur une note : `statistiques` peut exister uniquement pour
 rassembler d’autres tags. Les relations changent seulement ce que trouvent les filtres et les recherches : vos
 notes et leurs tags restent tels quels. Double-cliquez sur une relation pour voir les notes de son premier tag.
-Les archives ZettelApp contiennent l’ontologie, et les clients MCP peuvent la lire.
+Les archives ZettelApp contiennent l’ontologie, et les clients MCP peuvent la lire. L’onglet **Graphe** de la fenêtre dessine l’ontologie : les flèches vont des parents aux enfants, les tirets relient les synonymes et les pointillés les tags associés.
 
 ## Lien source
 

@@ -149,7 +149,7 @@ También puedes indicar cómo se relacionan las etiquetas entre sí, sin cambiar
 Una etiqueta de una relación no tiene por qué estar en ninguna nota, así que `estadística` puede existir solo
 para reunir otras etiquetas. Las relaciones solo cambian lo que encuentran los filtros y las búsquedas: tus
 notas y sus etiquetas siguen como están. Haz doble clic en una relación para ver las notas de su primera
-etiqueta. Los archivos de ZettelApp incluyen la ontología y los clientes MCP pueden leerla.
+etiqueta. Los archivos de ZettelApp incluyen la ontología y los clientes MCP pueden leerla. La pestaña **Gráfico** del cuadro dibuja la ontología: las flechas van de padres a hijas, las líneas discontinuas unen sinónimos y las punteadas, etiquetas relacionadas.
 
 ## Enlace de la fuente
 

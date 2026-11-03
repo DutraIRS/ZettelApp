@@ -149,7 +149,7 @@ tags…*, ou o pequeno botão ao lado do filtro de tags, e adicione relações:
 Uma tag em uma relação não precisa estar em nenhuma nota, então `estatística` pode existir só para reunir
 outras tags. As relações só mudam o que os filtros e as buscas encontram: suas notas e as tags delas continuam
 como estão. Clique duas vezes em uma relação para ver as notas da primeira tag. Os arquivos do ZettelApp levam
-a ontologia, e os clientes MCP podem lê-la.
+a ontologia, e os clientes MCP podem lê-la. A aba **Gráfico** da janela desenha a ontologia: as setas vão dos pais às filhas, linhas tracejadas ligam sinônimos e pontilhadas, tags relacionadas.
 
 ## Link da fonte
 

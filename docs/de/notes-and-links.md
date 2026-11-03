@@ -152,7 +152,7 @@ oder die kleine Schaltfläche neben dem Tagfilter und fügen Sie Beziehungen hin
 Ein Tag in einer Beziehung muss an keiner Notiz hängen, `statistik` kann also nur dazu dienen, andere Tags zu
 bündeln. Beziehungen ändern nur, was Filter und Suchen finden: Ihre Notizen und deren Tags bleiben, wie sie sind.
 Doppelklicken Sie auf eine Beziehung, um die Notizen ihres ersten Tags zu sehen. ZettelApp-Archive enthalten die
-Ontologie, und MCP-Clients können sie lesen.
+Ontologie, und MCP-Clients können sie lesen. Der Reiter **Graph** im Dialog zeichnet die Ontologie: Pfeile führen von übergeordneten zu untergeordneten Tags, gestrichelte Linien verbinden Synonyme und gepunktete verwandte Tags.
 
 ## Quellenlink
 

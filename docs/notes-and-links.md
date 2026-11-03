@@ -150,7 +150,7 @@ the small button beside the tag filter, and add relationships:
 A tag in a relationship doesn't have to be on any note, so `statistics` can exist just to gather other
 tags. Relationships only change what filters and searches find: your notes and their tags stay as they
 are. Double-click a relationship to see its first tag's notes. ZettelApp archives carry the ontology, and
-MCP clients can read it.
+MCP clients can read it. The dialog's **Graph** tab draws the ontology: arrows go from parents to children, dashed lines join synonyms and dotted lines related tags.
 
 ## Source link
 

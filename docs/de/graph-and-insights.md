@@ -35,7 +35,7 @@ ihre Linktypfarben und die Nachbarn werden mit den Linktypen **aus Sicht dieser 
 Beispiel *Unterstützt · Wird erweitert von*. Das funktioniert in 2D und 3D gleich.
 
 **In 3D** ziehen Sie zum Umlaufen, verwenden das Mausrad zum Zoomen und doppelklicken eine Notiz, um sie zu
-öffnen. **Automatisch drehen** lässt die Ansicht rotieren. Näher gelegene Notizen sind größer und heller,
+öffnen. Strg+Ziehen verschiebt eine Notiz. **Automatisch drehen** lässt die Ansicht rotieren. Näher gelegene Notizen sind größer und heller,
 sodass sich die Tiefe leicht ablesen lässt; jede Gruppe erscheint als weich eingefärbter Lichtschein.
 
 Das Layout ist kraftgerichtet (Fruchterman–Reingold): Links ziehen Notizen zusammen, alle Notizen stoßen

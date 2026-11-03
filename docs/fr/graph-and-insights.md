@@ -25,7 +25,7 @@ En bas à droite se trouvent les commandes de zoom et d’ajustement, **recalcul
 
 Plusieurs liens entre deux mêmes notes sont dessinés sous forme de **courbes distinctes**, chacune avec sa propre pointe de flèche le long de la courbe, afin qu’aucune ne masque les autres. Le survol ou la sélection d’une note **atténue les autres liens**, conserve les couleurs de type des liens de cette note et étiquette chaque voisine avec le type de lien **tel qu’il se lit depuis cette note**, par exemple *Soutient · Étendu par*. Le comportement est identique en 2D et en 3D.
 
-**En 3D**, faites glisser pour pivoter, utilisez la molette pour zoomer et double-cliquez sur une note pour l’ouvrir. **Rotation automatique** fait tourner la vue. Les notes les plus proches sont plus grandes et plus lumineuses, ce qui facilite la perception de la profondeur ; chaque groupe apparaît comme un halo coloré diffus.
+**En 3D**, faites glisser pour pivoter, utilisez la molette pour zoomer et double-cliquez sur une note pour l’ouvrir. Ctrl+glisser déplace une note. **Rotation automatique** fait tourner la vue. Les notes les plus proches sont plus grandes et plus lumineuses, ce qui facilite la perception de la profondeur ; chaque groupe apparaît comme un halo coloré diffus.
 
 La disposition utilise un algorithme à forces (Fruchterman–Reingold) : les liens rapprochent les notes, toutes les notes se repoussent et une légère gravité maintient les composantes distinctes à l’écran. Le calcul s’exécute en arrière-plan et le résultat est mis en cache pour chaque vue.
 
