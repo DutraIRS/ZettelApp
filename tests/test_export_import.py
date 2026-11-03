@@ -114,14 +114,14 @@ def test_an_export_field_for_tag_relationships_must_be_a_list(vault):
 
 def test_an_archive_larger_than_any_single_image_can_still_be_imported(vault, tmp_path):
     notes = [
-        {"id": f"2026010112{i:04d}", "title": f"N{i}", "body": "x" * 500_000} for i in range(70)
+        {"id": f"2026010112{i:04d}", "title": f"N{i}", "body": os.urandom(250_000).hex()}
+        for i in range(70)
     ]
     dest = tmp_path / "large.zip"
     manifest = json.dumps({"format": "zettelapp", "version": 1, "notes": notes})
     assert len(manifest) > 32 * 1024**2
     with zipfile.ZipFile(dest, "w", zipfile.ZIP_DEFLATED, compresslevel=1) as zf:
         zf.writestr("manifest.json", manifest)
-        zf.writestr("padding.bin", os.urandom(1_000_000))  # keeps the ratio check out of this
     assert import_path(vault, dest).notes == 70
 
 
