@@ -464,3 +464,100 @@ def test_markdown_import_skips_a_bad_image_and_keeps_the_rest(vault, tmp_path):
     assert len(result.warnings) == 1 and "fake.png" in result.warnings[0]
     assert vault.resolve_title("First") is not None
     assert not any(vault.assets_dir.iterdir())
+
+
+ENEX = """<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE en-export SYSTEM "http://xml.evernote.com/pub/evernote-export4.dtd">
+<en-export>
+<note>
+<title>Trip planning</title>
+<content><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE en-note SYSTEM "http://xml.evernote.com/pub/enml2.dtd">
+<en-note><h2>Packing</h2><div><en-todo checked="true"/>Passport</div><div><en-todo/>Charger</div>
+<ul><li>One <b>bold</b> item</li><li>Another <a href="https://example.com/x">link</a></li></ul>
+<div>Map: <en-media hash="{img}" type="image/png"/></div>
+<div>Ticket: <en-media hash="{pdf}" type="application/pdf"/></div>
+<div><a href="javascript:alert(1)">bad</a></div>
+<en-crypt>secret</en-crypt></en-note>]]></content>
+<created>20240131T120000Z</created>
+<tag>travel</tag><tag>Summer 2024</tag>
+<note-attributes><source-url>https://example.com/source</source-url></note-attributes>
+<resource><data encoding="base64">{img_data}</data><mime>image/png</mime>
+<resource-attributes><file-name>map.png</file-name></resource-attributes></resource>
+<resource><data encoding="base64">{pdf_data}</data><mime>application/pdf</mime>
+<resource-attributes><file-name>ticket.pdf</file-name></resource-attributes></resource>
+</note>
+<note><title>Second</title><content><![CDATA[<en-note>Plain text</en-note>]]></content></note>
+</en-export>
+"""
+
+
+def _enex(tmp_path, text=None):
+    import base64
+    import hashlib
+
+    png, pdf = tiny_png(), b"%PDF-1.4 fake"
+    path = tmp_path / "export.enex"
+    path.write_text(
+        text
+        or ENEX.replace("{img}", hashlib.md5(png).hexdigest())
+        .replace("{pdf}", hashlib.md5(pdf).hexdigest())
+        .replace("{img_data}", base64.b64encode(png).decode())
+        .replace("{pdf_data}", base64.b64encode(pdf).decode()),
+        encoding="utf-8",
+    )
+    return path
+
+
+def test_an_evernote_export_imports_text_tags_pictures_and_checklists(vault, tmp_path):
+    result = import_path(vault, _enex(tmp_path))
+    assert result.notes == 2 and result.images == 1
+    assert any("ticket.pdf" in w or "attachment" in w for w in result.warnings)
+    note = next(n for n in vault.all_notes() if n.title == "Trip planning")
+    assert "## Packing" in note.body
+    assert "- [x] Passport" in note.body and "- [ ] Charger" in note.body
+    assert "- One **bold** item" in note.body
+    assert "[link](https://example.com/x)" in note.body
+    assert "![](asset:" in note.body and "*ticket.pdf*" in note.body
+    assert "javascript" not in note.body and "secret" not in note.body
+    assert sorted(note.tags) == ["summer-2024", "travel"]
+    assert note.url == "https://example.com/source"
+    assert note.created.startswith("2024-01-31T12:00:00")
+
+
+def test_an_evernote_export_with_entity_declarations_is_refused(vault, tmp_path):
+    bomb = '<?xml version="1.0"?><!DOCTYPE x [<!ENTITY a "aaaa">]><en-export></en-export>'
+    with pytest.raises(UnsafeInputError):
+        import_path(vault, _enex(tmp_path, bomb))
+    assert vault.count_notes() == 0
+
+
+def test_a_broken_evernote_export_changes_nothing(vault, tmp_path):
+    with pytest.raises(UnsafeInputError):
+        import_path(vault, _enex(tmp_path, "<en-export><note><title>A</title>"))
+    assert vault.count_notes() == 0
+
+
+def test_markdown_links_note_embeds_aliases_and_notion_names_become_note_links(vault, tmp_path):
+    folder = tmp_path / "export"
+    (folder / "sub").mkdir(parents=True)
+    notion = "Reading list 0123456789abcdef0123456789abcdef"
+    (folder / f"{notion}.md").write_text("Books to read.\n", encoding="utf-8")
+    (folder / "sub" / "Target.md").write_text(
+        "---\naliases: [Goal]\n---\nThe target.\n", encoding="utf-8"
+    )
+    (folder / "Source.md").write_text(
+        "See [the list](Reading%20list%200123456789abcdef0123456789abcdef.md), "
+        "[target](sub/Target.md), [[Goal]] and ![[Target]]. Missing: [x](Nowhere.md).\n",
+        encoding="utf-8",
+    )
+    import_path(vault, folder)
+    titles = {n.title: n for n in vault.all_notes()}
+    assert "Reading list" in titles  # Notion's ID is not part of the title
+    body = titles["Source"].body
+    assert "[[Reading list|the list]]" in body
+    assert "[[Target]]" in body and "![[" not in body
+    assert "[[Target|Goal]]" in body
+    assert "[x](Nowhere.md)" in body  # a link to nothing that was imported stays as it was
+    linked = {vault.get_note(l.dst).title for l in vault.links_from(titles["Source"].id)}
+    assert linked == {"Reading list", "Target"}
