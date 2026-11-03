@@ -150,7 +150,7 @@ the small button beside the tag filter, and add relationships:
 A tag in a relationship doesn't have to be on any note, so `statistics` can exist just to gather other
 tags. Relationships only change what filters and searches find: your notes and their tags stay as they
 are. Double-click a relationship to see its first tag's notes. ZettelApp archives carry the ontology, and
-MCP clients can read it.
+MCP clients can read it. The dialog's **Graph** tab draws the ontology: arrows go from parents to children, dashed lines join synonyms and dotted lines related tags.
 
 ## Source link
 
@@ -254,7 +254,8 @@ Several kinds of match work together, and *Tools ▸ Options ▸ Search* sets ho
 
 Semantic search finds notes by what they mean, even when they share no words with your search:
 *how do plants make food* can find a note on photosynthesis, and it works across languages. It stays off
-until you set it up:
+until you set it up, either by ticking *Set up semantic search* in the installer (ZettelApp then
+downloads the model the first time it starts) or here:
 
 1. In *Tools ▸ Options ▸ Search*, click **Download model** (135 MB, once, from Hugging Face).
 2. Tick **Use semantic search** and click **OK**.

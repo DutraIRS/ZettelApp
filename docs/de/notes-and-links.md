@@ -152,7 +152,7 @@ oder die kleine Schaltfläche neben dem Tagfilter und fügen Sie Beziehungen hin
 Ein Tag in einer Beziehung muss an keiner Notiz hängen, `statistik` kann also nur dazu dienen, andere Tags zu
 bündeln. Beziehungen ändern nur, was Filter und Suchen finden: Ihre Notizen und deren Tags bleiben, wie sie sind.
 Doppelklicken Sie auf eine Beziehung, um die Notizen ihres ersten Tags zu sehen. ZettelApp-Archive enthalten die
-Ontologie, und MCP-Clients können sie lesen.
+Ontologie, und MCP-Clients können sie lesen. Der Reiter **Graph** im Dialog zeichnet die Ontologie: Pfeile führen von übergeordneten zu untergeordneten Tags, gestrichelte Linien verbinden Synonyme und gepunktete verwandte Tags.
 
 ## Quellenlink
 
@@ -268,6 +268,8 @@ sprachübergreifend. Sie bleibt aus, bis Sie sie einrichten:
 
 1. Klicken Sie unter *Extras ▸ Optionen ▸ Suche* auf **Modell herunterladen** (135 MB, einmalig, von Hugging Face).
 2. Aktivieren Sie **Semantische Suche verwenden** und bestätigen Sie.
+
+Sie können auch im Installationsprogramm *Semantische Suche einrichten* aktivieren: ZettelApp lädt das Modell dann beim ersten Start herunter und schaltet sie ein.
 
 ZettelApp indiziert Ihre Notizen dann im Hintergrund und hält beim Bearbeiten Schritt. Ergebnisse zu den
 eingegebenen Wörtern erscheinen sofort; nach Bedeutung gefundene Notizen kommen einen Moment später hinzu. Das

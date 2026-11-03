@@ -197,7 +197,7 @@ the small button beside the tag filter, and add relationships:</p>
 <p>A tag in a relationship doesn't have to be on any note, so <code>statistics</code> can exist just to gather other
 tags. Relationships only change what filters and searches find: your notes and their tags stay as they
 are. Double-click a relationship to see its first tag's notes. ZettelApp archives carry the ontology, and
-MCP clients can read it.</p>
+MCP clients can read it. The dialog's <strong>Graph</strong> tab draws the ontology: arrows go from parents to children, dashed lines join synonyms and dotted lines related tags.</p>
 <h2 id="source-link">Source link</h2>
 <p>The field with the globe icon holds the note's <strong>source</strong>: a web page (<code>https://…</code>), an e-mail address,
 or a Zotero item (<code>zotero://select/library/items/…</code>). The button next to it opens the link. Other kinds of
@@ -298,7 +298,8 @@ synonyms.</li>
 <h3 id="semantic-search">Semantic search</h3>
 <p>Semantic search finds notes by what they mean, even when they share no words with your search:
 <em>how do plants make food</em> can find a note on photosynthesis, and it works across languages. It stays off
-until you set it up:</p>
+until you set it up, either by ticking <em>Set up semantic search</em> in the installer (ZettelApp then
+downloads the model the first time it starts) or here:</p>
 <ol>
 <li>In <em>Tools ▸ Options ▸ Search</em>, click <strong>Download model</strong> (135 MB, once, from Hugging Face).</li>
 <li>Tick <strong>Use semantic search</strong> and click <strong>OK</strong>.</li>

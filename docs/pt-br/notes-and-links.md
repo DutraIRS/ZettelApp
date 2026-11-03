@@ -149,7 +149,7 @@ tags…*, ou o pequeno botão ao lado do filtro de tags, e adicione relações:
 Uma tag em uma relação não precisa estar em nenhuma nota, então `estatística` pode existir só para reunir
 outras tags. As relações só mudam o que os filtros e as buscas encontram: suas notas e as tags delas continuam
 como estão. Clique duas vezes em uma relação para ver as notas da primeira tag. Os arquivos do ZettelApp levam
-a ontologia, e os clientes MCP podem lê-la.
+a ontologia, e os clientes MCP podem lê-la. A aba **Gráfico** da janela desenha a ontologia: as setas vão dos pais às filhas, linhas tracejadas ligam sinônimos e pontilhadas, tags relacionadas.
 
 ## Link da fonte
 
@@ -256,6 +256,8 @@ fica desligada até você configurá-la:
 
 1. Em *Ferramentas ▸ Opções ▸ Busca*, clique em **Baixar o modelo** (135 MB, uma única vez, do Hugging Face).
 2. Marque **Usar a busca semântica** e confirme.
+
+Você também pode marcar *Configurar a busca semântica* no instalador: o ZettelApp baixa o modelo na primeira vez que abrir e a ativa.
 
 O ZettelApp então indexa suas notas em segundo plano e acompanha as edições. Os resultados das palavras que você
 digitou aparecem na hora; as notas encontradas pelo significado se juntam a eles um instante depois. O modelo

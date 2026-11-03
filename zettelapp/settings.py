@@ -50,6 +50,9 @@ SEARCH_LEXICAL_WEIGHT = "search/lexicalWeight"
 SEARCH_SEMANTIC_WEIGHT = "search/semanticWeight"
 SEARCH_ONTOLOGY_WEIGHT = "search/ontologyWeight"
 SEARCH_SEMANTIC_ENABLED = "search/semanticEnabled"
+SEARCH_SEMANTIC_SET_UP = (
+    "search/setUpSemantic"  # asked for in the installer: download, then turn on
+)
 SEARCH_SEMANTIC_THREADS = "search/semanticThreads"
 SEARCH_SEMANTIC_INDEXING = "search/semanticIndexing"
 SEARCH_ADAPTIVE_ENABLED = "search/adaptiveEnabled"
@@ -83,6 +86,7 @@ DEFAULTS: dict[str, Any] = {
     SEARCH_SEMANTIC_WEIGHT: 0.20,
     SEARCH_ONTOLOGY_WEIGHT: 0.10,
     SEARCH_SEMANTIC_ENABLED: False,
+    SEARCH_SEMANTIC_SET_UP: False,
     SEARCH_SEMANTIC_THREADS: 2,
     SEARCH_SEMANTIC_INDEXING: True,
     SEARCH_ADAPTIVE_ENABLED: False,

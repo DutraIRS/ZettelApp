@@ -1250,7 +1250,20 @@ class MainWindow(QMainWindow):
                 3000,
             )
 
+    def set_up_semantic_search(self) -> None:
+        """Finish what the installer's "Set up semantic search" option asked for."""
+        if not settings.get(settings.SEARCH_SEMANTIC_SET_UP):
+            return
+        if model_installed(self.semantic.root):
+            settings.put(settings.SEARCH_SEMANTIC_SET_UP, False)
+            settings.put(settings.SEARCH_SEMANTIC_ENABLED, True)
+            self._configure_semantic()
+        elif not self.semantic.is_downloading:
+            self.semantic.download()
+
     def _semantic_downloaded(self, error: str) -> None:
+        if not error and settings.get(settings.SEARCH_SEMANTIC_SET_UP):
+            self.set_up_semantic_search()  # a failed download is tried again at the next start
         self.statusBar().showMessage(error or _("The language model is ready."), 6000)
         self.semantic_timer.start()
 

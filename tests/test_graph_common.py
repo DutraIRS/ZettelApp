@@ -231,3 +231,43 @@ def test_dragging_a_3d_group_area_moves_only_its_notes():
     still = [view._index[m] for m in data.ids[2:]]
     assert np.any(view.points[moved] != before[moved])
     assert np.array_equal(view.points[still], before[still])
+
+
+def test_ctrl_dragging_a_3d_note_moves_only_that_note_and_plain_dragging_orbits():
+    import numpy as np
+    from PySide6.QtCore import QPoint, Qt
+    from PySide6.QtTest import QTest
+    from PySide6.QtWidgets import QApplication
+
+    from zettelapp.ui.graph3d import Graph3DView
+
+    QApplication.instance() or QApplication(["test"])
+    data = _styled_graph()
+    positions = {i: (0.4 * k - 0.4, 0.1 * k, 0.0) for k, i in enumerate(data.ids)}
+    view = Graph3DView()
+    view.resize(800, 600)
+    view.show()
+    view.set_graph(data, positions, show_groups=False, show_labels=False)
+    QApplication.processEvents()
+    view.grab()  # populate projected positions and scales
+
+    target = data.ids[0]
+    start = QPoint(*map(int, view._screen[view._index[target]]))
+    before = view.points.copy()
+    ctrl = Qt.KeyboardModifier.ControlModifier
+    QTest.mousePress(view, Qt.MouseButton.LeftButton, ctrl, start)
+    QTest.mouseMove(view, start + QPoint(60, 30))
+    QTest.mouseRelease(view, Qt.MouseButton.LeftButton, ctrl, start + QPoint(60, 30))
+    view.grab()
+
+    others = [view._index[i] for i in data.ids[1:]]
+    assert not np.array_equal(view.points[view._index[target]], before[view._index[target]])
+    assert np.array_equal(view.points[others], before[others])
+    landed = view._screen[view._index[target]]
+    assert abs(landed[0] - (start.x() + 60)) < 6 and abs(landed[1] - (start.y() + 30)) < 6
+
+    yaw = view.yaw
+    QTest.mousePress(view, Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier, start)
+    QTest.mouseMove(view, start + QPoint(60, 0))
+    QTest.mouseRelease(view, Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier, start)
+    assert view.yaw != yaw  # a plain drag still orbits, even from a note

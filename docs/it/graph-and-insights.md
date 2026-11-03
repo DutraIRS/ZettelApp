@@ -32,7 +32,7 @@ che segue la curva, così nessuna ne nasconde un'altra. Passare il mouse o selez
 colori del loro tipo ed etichetta ogni vicina con i tipi di collegamento **letti da quella nota**, per esempio
 *Supporta · Esteso da*. Funziona allo stesso modo in 2D e 3D.
 
-**In 3D**, trascina per orbitare, usa la rotellina per lo zoom e fai doppio clic su una nota per aprirla. **Ruota
+**In 3D**, trascina per orbitare, usa la rotellina per lo zoom e fai doppio clic su una nota per aprirla. Ctrl+trascina sposta una nota. **Ruota
 automaticamente** fa girare la vista. Le note più vicine sono più grandi e luminose, quindi la profondità si legge facilmente, e ogni
 gruppo appare come un morbido alone colorato.
 

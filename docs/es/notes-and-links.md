@@ -149,7 +149,7 @@ También puedes indicar cómo se relacionan las etiquetas entre sí, sin cambiar
 Una etiqueta de una relación no tiene por qué estar en ninguna nota, así que `estadística` puede existir solo
 para reunir otras etiquetas. Las relaciones solo cambian lo que encuentran los filtros y las búsquedas: tus
 notas y sus etiquetas siguen como están. Haz doble clic en una relación para ver las notas de su primera
-etiqueta. Los archivos de ZettelApp incluyen la ontología y los clientes MCP pueden leerla.
+etiqueta. Los archivos de ZettelApp incluyen la ontología y los clientes MCP pueden leerla. La pestaña **Gráfico** del cuadro dibuja la ontología: las flechas van de padres a hijas, las líneas discontinuas unen sinónimos y las punteadas, etiquetas relacionadas.
 
 ## Enlace de la fuente
 
@@ -256,6 +256,8 @@ idiomas. Está desactivada hasta que la configures:
 
 1. En *Herramientas ▸ Opciones ▸ Búsqueda*, pulsa **Descargar el modelo** (135 MB, una sola vez, desde Hugging Face).
 2. Marca **Usar la búsqueda semántica** y confirma.
+
+También puedes marcar *Configurar la búsqueda semántica* en el instalador: ZettelApp descarga entonces el modelo la primera vez que se abre y la activa.
 
 ZettelApp indexa entonces tus notas en segundo plano y se mantiene al día mientras las editas. Los resultados
 de las palabras que escribiste aparecen al instante; las notas encontradas por su significado se añaden un

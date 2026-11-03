@@ -9,7 +9,7 @@
 | ZettelApp 启动约 4 秒后(可以关闭) | `https://dutrairs.github.io/ZettelApp/version.json` | 对该文件的一次 HTTPS 请求,带有标头 `User-Agent: ZettelApp/<version>`。不含其他任何内容:没有笔记、设置或标识符。任何失败都是静默的。参见[更新](getting-started.md#updates)。 |
 | 你在**提问**页面提出问题 | 你配置的 AI 服务商(Anthropic、OpenAI、Z.ai 或你自己的端点) | 你的问题以及*已发送的来源*下列出的笔记 |
 | 你测试 AI 连接或刷新模型列表 | 同一服务商 | 你的 API 密钥,用于身份验证 |
-| 你在*工具 ▸ 选项 ▸ 搜索*中点击**下载模型**并确认 | `huggingface.co`,它可能重定向到其下载服务器 | 语义搜索模型的每个文件一次 HTTPS 请求,带有请求头 `User-Agent: ZettelApp/<version>`。不含任何关于你笔记的内容。每个文件在使用前都会与固定的 SHA-256 校验。参见 [笔记与链接](notes-and-links.md#语义搜索)。 |
+| 你在*工具 ▸ 选项 ▸ 搜索*中点击**下载模型**并确认(或在安装程序中勾选了 *Set up semantic search*:则在首次启动时) | `huggingface.co`,它可能重定向到其下载服务器 | 语义搜索模型的每个文件一次 HTTPS 请求,带有请求头 `User-Agent: ZettelApp/<version>`。不含任何关于你笔记的内容。每个文件在使用前都会与固定的 SHA-256 校验。参见 [笔记与链接](notes-and-links.md#语义搜索)。 |
 | 你**同步到 Anki** | **本机**上的 AnkiConnect(`127.0.0.1`) | 所选范围内的闪卡 |
 | 你使用**插入 ▸ Zotero 引用**或 Zotero 选项中的*测试连接* | **本机**上的 Zotero(`127.0.0.1`) | 你的搜索词(只读) |
 | 你点击网页链接,或使用*帮助 ▸ 网站 / 文档 / 检查更新*,或更新通知上的**下载**按钮 | 你的网页浏览器打开该页面 | ZettelApp 不发送任何内容 |

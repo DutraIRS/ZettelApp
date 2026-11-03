@@ -18,7 +18,7 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 os.environ.setdefault("QT_QPA_FONTDIR", str(Path(os.environ.get("WINDIR", "C:/Windows")) / "Fonts"))
 os.environ["ZETTELAPP_SETTINGS_FILE"] = str(TMP / "settings.ini")
 
-from PySide6.QtCore import QEventLoop, QThreadPool, QTimer  # noqa: E402
+from PySide6.QtCore import QEventLoop, QLocale, QThreadPool, QTimer  # noqa: E402
 from PySide6.QtWidgets import QApplication  # noqa: E402
 
 from tools.demo_vault import build_demo  # noqa: E402
@@ -43,6 +43,8 @@ def main() -> None:
     out = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "website" / "assets" / "screenshots"
     out.mkdir(parents=True, exist_ok=True)
     app = QApplication(sys.argv)
+    # Dates as an English reader sees them, whatever this computer's own language.
+    QLocale.setDefault(QLocale(QLocale.Language.English, QLocale.Country.UnitedStates))
     vault_dir = TMP / "Demo vault"
     vault = Vault.open(vault_dir)
     ids = build_demo(vault)
@@ -100,6 +102,13 @@ def main() -> None:
         window.show_page(4)
         window.ask.question.setPlainText("How do spacing and retrieval work together?")
         window.ask.answer.set_renderer(window.ask._renderer())
+        sources = (
+            "Spaced repetition",
+            "Active recall",
+            "Illusion of competence",
+            "Forgetting curve",
+        )
+        window.ask.show_sources([window.vault.get_note(ids[title]) for title in sources])
         window.ask.answer.show_markdown(
             "Spacing and retrieval reinforce each other. **Spaced repetition** schedules reviews just before "
             f"forgetting [[{ids['Spaced repetition']}]], and each review is an act of **active recall** "
@@ -107,6 +116,8 @@ def main() -> None:
             f"[[{ids['Illusion of competence']}]]. The forgetting curve flattens after each successful "
             f"retrieval [[{ids['Forgetting curve']}]]."
         )
+        window.ask.copy_button.setEnabled(True)  # as after a real answer
+        window.ask.save_button.setEnabled(True)
         settle(app)
         window.grab().save(str(out / f"ask-{mode}.png"))
         window.close()

@@ -140,6 +140,15 @@ def test_tag_ontology_dialog_edits_relationships(window):
     dialog._add()
     assert window.vault.tag_graph().descendants("parent") == {"child"}
     assert dialog.relationships.count() == 1
+    graph = dialog.graph.data
+    assert sorted(graph.ids) == ["child", "parent"]
+    assert graph.group_of == {"child": 0, "parent": None}  # "parent" is on no note
+    assert [(l.src, l.dst, l.type) for l in graph.links] == [("parent", "child", "parent")]
+    shown = []
+    dialog.tagSelected.connect(shown.append)
+    dialog.graph.nodeActivated.emit("child")
+    assert shown == ["child"]
+    dialog = TagOntologyDialog(window.vault, window)
     dialog.relationships.setCurrentRow(0)
     dialog._remove()
     assert not window.vault.tag_relationships()
@@ -729,3 +738,27 @@ def test_every_screen_paints_with_data(window):
         dialog.nav.setCurrentRow(row)
         dialog.grab()
     dialog.close()
+
+
+def test_the_installer_option_downloads_the_model_then_turns_semantic_search_on(
+    window, monkeypatch
+):
+    from zettelapp import settings
+    from zettelapp.ui import main_window
+
+    started = []
+    monkeypatch.setattr(window.semantic, "download", lambda: started.append(True))
+    window.set_up_semantic_search()
+    assert started == []  # not asked for: nothing is downloaded
+
+    settings.put(settings.SEARCH_SEMANTIC_SET_UP, True)
+    window.set_up_semantic_search()
+    assert started == [True] and not settings.get(settings.SEARCH_SEMANTIC_ENABLED)
+
+    window._semantic_downloaded("network down")
+    assert settings.get(settings.SEARCH_SEMANTIC_SET_UP)  # tried again next time
+
+    monkeypatch.setattr(main_window, "model_installed", lambda _root: True)
+    window._semantic_downloaded("")
+    assert settings.get(settings.SEARCH_SEMANTIC_ENABLED)
+    assert not settings.get(settings.SEARCH_SEMANTIC_SET_UP)
