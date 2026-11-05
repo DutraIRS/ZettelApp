@@ -795,7 +795,6 @@
  "Missing image {name}": "画像 {name} がありません",
  "Model details…": "モデルの詳細…",
  "Naive Bayes estimate: {p}": "ナイーブベイズによる推定: {p}",
- "Naive Bayes over semantic, Levenshtein and tag similarity. Learns from the links you make and dismiss.": "意味、レーベンシュタイン距離、タグの類似度に基づくナイーブベイズです。作成・却下したリンクから学習します。",
  "No links yet": "まだリンクはありません",
  "No note in the graph matches that title.": "そのタイトルに一致するノートはグラフにありません。",
  "No notes are tagged #{tag} yet.": "#{tag} のタグが付いたノートはまだありません。",
@@ -975,7 +974,6 @@
  "Download the language model ({size} MB) from huggingface.co? Only the request for the model is sent, nothing about your notes.": "huggingface.co から言語モデル ({size} MB) をダウンロードしますか? 送信されるのはモデルの要求だけで、ノートに関する情報は送信されません。",
  "Duplicate note": "ノートを複製",
  "Enter two different tags.": "異なるタグを 2 つ入力してください。",
- "Finds notes by what they mean, even when they share no words with your search. A language model does this on your computer and your notes never leave it. The model is a one-time download from Hugging Face.": "検索語と同じ言葉がなくても、意味からノートを見つけます。処理はお使いのコンピューター上の言語モデルが行い、ノートが外部に送られることはありません。モデルは Hugging Face から一度だけダウンロードします。",
  "Indexing notes for semantic search: {done} of {total}": "意味検索用にノートをインデックス化しています: {done}/{total}",
  "Manage tag ontology…": "タグオントロジーを管理…",
  "Move selected notes to Trash (in the note list)": "選択したノートをごみ箱に移動 (ノート一覧で)",
@@ -1014,5 +1012,14 @@
  "This is not a readable Evernote export: {error}": "読み取れる Evernote のエクスポートではありません: {error}",
  "{n} attachment that isn't a picture was not imported; its name stays in the text.": [
   "画像以外の添付ファイル {n} 件はインポートされませんでした。名前は本文に残ります。"
- ]
+ ],
+ "strong": "強い",
+ "likely": "有力",
+ "possible": "可能性あり",
+ "Sort notes: {order}": "ノートを並べ替え: {order}",
+ "Lets the search box (Ctrl+F) also find notes by what they mean, even when they share no words with your search. A language model does this on your computer and your notes never leave it. The model is a one-time download from Hugging Face.": "検索ボックス (Ctrl+F) で、検索語と同じ言葉がなくても意味からノートを見つけられるようになります。処理はお使いのコンピューター上の言語モデルが行い、ノートが外部に送られることはありません。モデルは Hugging Face から一度だけダウンロードします。",
+ "Naive Bayes over semantic (LSA), Levenshtein and tag similarity. Learns from the links you make and dismiss.": "意味 (LSA)、レーベンシュタイン距離、タグの類似度に基づくナイーブベイズです。作成・却下したリンクから学習します。",
+ "≈ similar meaning": "≈ 意味が近い",
+ "Found by semantic search: by what the note means, not by the words you typed.": "意味検索で見つかりました。入力した言葉ではなく、ノートの意味から見つけています。",
+ "{shown} of {total}": "{total} 件中 {shown} 件"
 }

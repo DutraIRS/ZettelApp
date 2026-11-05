@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable
 
 from PySide6.QtCore import QPoint, QPointF, QRect, QRectF, QSize, Qt, QTimer, Signal
-from PySide6.QtGui import QAction, QFontMetrics, QPainter, QPen
+from PySide6.QtGui import QAction, QFontMetrics, QPainter, QPalette, QPen
 from PySide6.QtWidgets import (
     QAbstractButton,
     QComboBox,
@@ -18,6 +18,9 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QPushButton,
     QSpinBox,
+    QStyle,
+    QStyleOptionComboBox,
+    QStylePainter,
     QToolButton,
     QVBoxLayout,
     QWidget,
@@ -310,6 +313,28 @@ class ElidedLabel(QLabel):
         painter.setPen(self.palette().color(self.foregroundRole()))
         text = metrics.elidedText(self.text(), Qt.TextElideMode.ElideRight, self.width())
         painter.drawText(self.rect(), int(self.alignment()), text)
+
+
+class ElidedComboBox(QComboBox):
+    """A combo box that ends text too long for it with "…" instead of cutting it off, and
+    shows the whole text when hovered."""
+
+    def paintEvent(self, event) -> None:  # noqa: N802 - Qt API
+        painter = QStylePainter(self)
+        painter.setPen(self.palette().color(QPalette.ColorRole.Text))
+        option = QStyleOptionComboBox()
+        self.initStyleOption(option)
+        painter.drawComplexControl(QStyle.ComplexControl.CC_ComboBox, option)
+        field = self.style().subControlRect(
+            QStyle.ComplexControl.CC_ComboBox, option, QStyle.SubControl.SC_ComboBoxEditField, self
+        )
+        room = field.width() - (0 if option.currentIcon.isNull() else option.iconSize.width() + 4)
+        full = option.currentText
+        option.currentText = self.fontMetrics().elidedText(full, Qt.TextElideMode.ElideRight, room)
+        tip = full if option.currentText != full else ""
+        if self.toolTip() != tip:
+            self.setToolTip(tip)
+        painter.drawControl(QStyle.ControlElement.CE_ComboBoxLabel, option)
 
 
 class InfoBar(QFrame):

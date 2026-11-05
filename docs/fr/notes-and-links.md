@@ -243,7 +243,7 @@ dans la note. Les cartes provenant du texte portent la mention *depuis le texte 
 Le champ de recherche (Ctrl+F) parcourt les titres, le texte et les tags, ignore les accents et reconnaît les
 préfixes de mots : `forget` trouve ainsi *forgetting*. Ajoutez `tag:name` pour ne garder que les notes portant un
 tag, par exemple `memory tag:psychology`. Les meilleures correspondances viennent en premier et chacune montre
-le passage de la note autour de votre mot ; sans requête, les notes suivent le tri choisi (*Dernière
+le passage de la note autour de votre mot ; sans requête, les notes suivent le tri choisi avec le bouton de tri, à côté du filtre de tags (*Dernière
 modification*, *Créée*, *Titre* ou *Les plus liées*).
 
 Plusieurs types de correspondance travaillent ensemble, et *Outils ▸ Options ▸ Recherche* règle le poids de chacun :
@@ -266,7 +266,7 @@ d’une langue à l’autre. Elle reste désactivée tant que vous ne l’avez p
 Vous pouvez aussi cocher *Configurer la recherche sémantique* dans le programme d’installation : ZettelApp télécharge alors le modèle à son premier démarrage et l’active.
 
 ZettelApp indexe alors vos notes en arrière-plan et suit vos modifications. Les résultats pour les mots saisis
-apparaissent aussitôt ; les notes trouvées d’après leur sens les rejoignent un instant plus tard. Le modèle
+apparaissent aussitôt ; les notes trouvées d’après leur sens les rejoignent un instant plus tard, avec la mention *≈ sens proche*. Le modèle
 s’exécute sur votre ordinateur et vos notes n’en sortent jamais. Lorsqu’il est utilisé, il occupe environ 500 Mo
 de mémoire, libérés deux minutes après votre dernière recherche. **Supprimer le modèle et l’index**, sur la même
 page, efface le tout.

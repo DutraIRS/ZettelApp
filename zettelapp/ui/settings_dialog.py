@@ -343,9 +343,10 @@ class OptionsDialog(QDialog):
         lay.addWidget(
             label(
                 _(
-                    "Finds notes by what they mean, even when they share no words with your "
-                    "search. A language model does this on your computer and your notes never "
-                    "leave it. The model is a one-time download from Hugging Face."
+                    "Lets the search box (Ctrl+F) also find notes by what they mean, even when "
+                    "they share no words with your search. A language model does this on your "
+                    "computer and your notes never leave it. The model is a one-time download "
+                    "from Hugging Face."
                 ),
                 "caption",
                 wrap=True,

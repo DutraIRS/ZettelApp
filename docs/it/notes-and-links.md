@@ -238,7 +238,7 @@ testo della nota. Le schede dal testo sono contrassegnate come *dal testo della 
 La casella di ricerca (Ctrl+F) cerca in titoli, testi e tag, ignora gli accenti e trova i prefissi delle parole,
 quindi `forget` trova *forgetting*. Aggiungi `tag:nome` per tenere solo le note con un tag, per esempio
 `memory tag:psychology`. Le corrispondenze migliori vengono prima e ognuna mostra la parte della nota intorno alla
-tua parola; senza una query, le note seguono l'ordinamento scelto (*Ultima modifica*, *Creata*, *Titolo* o *Più
+tua parola; senza una query, le note seguono l'ordinamento scelto con il pulsante di ordinamento, accanto al filtro dei tag (*Ultima modifica*, *Creata*, *Titolo* o *Più
 collegate*).
 
 Più tipi di corrispondenza lavorano insieme, e *Strumenti ▸ Opzioni ▸ Ricerca* stabilisce quanto conta ciascuno:
@@ -260,7 +260,7 @@ disattivata finché non la configuri:
 Puoi anche selezionare *Configura la ricerca semantica* nel programma di installazione: ZettelApp scarica il modello al primo avvio e la attiva.
 
 ZettelApp indicizza quindi le tue note in background e resta aggiornato mentre le modifichi. I risultati per le
-parole digitate appaiono subito; le note trovate in base al significato si aggiungono un attimo dopo. Il modello
+parole digitate appaiono subito; le note trovate in base al significato si aggiungono un attimo dopo, con l'indicazione *≈ significato simile*. Il modello
 gira sul tuo computer e le tue note non lo lasciano mai. Durante l'uso occupa circa 500 MB di memoria, liberati due
 minuti dopo l'ultima ricerca. **Rimuovi modello e indice**, nella stessa pagina, cancella tutto.
 

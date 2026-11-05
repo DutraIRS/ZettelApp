@@ -237,7 +237,7 @@ la nota. Las tarjetas del texto se marcan como *del texto de la nota* y se edita
 El cuadro de búsqueda (Ctrl+F) busca en títulos, texto y etiquetas, ignora los acentos y coincide con
 prefijos de palabra, así que `olvid` encuentra *olvidando*. Añade `tag:name` para quedarte solo con las notas
 que tengan una etiqueta, por ejemplo `memoria tag:psicologia`. Las mejores coincidencias aparecen primero y
-cada una muestra la parte de la nota que rodea tu palabra; sin consulta, las notas siguen el orden elegido
+cada una muestra la parte de la nota que rodea tu palabra; sin consulta, las notas siguen el orden elegido con el botón de ordenar, junto al filtro de etiquetas
 (*Última edición*, *Creada*, *Título* o *Más enlazadas*).
 
 Varios tipos de coincidencia trabajan juntos, y *Herramientas ▸ Opciones ▸ Búsqueda* define cuánto cuenta cada uno:
@@ -261,7 +261,7 @@ También puedes marcar *Configurar la búsqueda semántica* en el instalador: Ze
 
 ZettelApp indexa entonces tus notas en segundo plano y se mantiene al día mientras las editas. Los resultados
 de las palabras que escribiste aparecen al instante; las notas encontradas por su significado se añaden un
-momento después. El modelo se ejecuta en tu equipo y tus notas nunca salen de él. Mientras se usa ocupa unos
+momento después, marcadas con *≈ significado parecido*. El modelo se ejecuta en tu equipo y tus notas nunca salen de él. Mientras se usa ocupa unos
 500 MB de memoria, que se liberan dos minutos después de tu última búsqueda. **Eliminar modelo e índice**, en
 la misma página, lo borra todo.
 

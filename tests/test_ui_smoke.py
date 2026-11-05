@@ -248,6 +248,61 @@ def test_semantic_scores_arrive_later_and_outdated_ones_are_ignored(window):
     assert panel.model.rows == []
 
 
+def test_notes_found_only_by_meaning_say_so(window):
+    from PySide6.QtCore import Qt
+
+    from zettelapp import settings
+
+    vault, panel = window.vault, window.list
+    settings.put(settings.SEARCH_SEMANTIC_ENABLED, True)
+    grocery = vault.create_note("Grocery list", "bread and cheese")
+    trip = vault.create_note("Saturday", "the shopping trip")
+    panel.search.setText("shopping")
+    panel.refresh()
+    panel.set_semantic_scores("shopping", {grocery.id: 0.9, trip.id: 0.95})
+    titles = [row["title"] for row in panel.model.rows]
+    rows = dict(zip(titles, panel.model.rows, strict=True))
+    assert rows["Grocery list"]["meaning"]  # no word in common: found by meaning alone
+    assert not rows["Saturday"]["meaning"]
+    tip = panel.model.data(
+        panel.model.index(titles.index("Grocery list")), Qt.ItemDataRole.ToolTipRole
+    )
+    assert "semantic search" in tip
+    assert (
+        panel.model.data(panel.model.index(titles.index("Saturday")), Qt.ItemDataRole.ToolTipRole)
+        is None
+    )
+    panel.view.viewport().grab()  # the label is drawn without trouble
+
+
+def test_the_sort_menu_orders_the_list_and_names_the_order(window):
+    vault, panel = window.vault, window.list
+    for title in ("Banana", "Apple", "Cherry"):
+        vault.create_note(title, "text")
+    panel.refresh()
+    by_title = next(a for a in panel.sort_button.menu().actions() if a.data() == "title")
+    by_title.trigger()
+    fruit = [r["title"] for r in panel.model.rows if r["title"] in ("Apple", "Banana", "Cherry")]
+    assert fruit == ["Apple", "Banana", "Cherry"]
+    assert by_title.isChecked() and panel.sort_button.toolTip() == "Sort notes: Title"
+
+
+def test_a_long_tag_ends_with_an_ellipsis_and_shows_in_full_on_hover():
+    from PySide6.QtWidgets import QApplication
+
+    from zettelapp.ui.widgets import ElidedComboBox
+
+    QApplication.instance() or QApplication(["test"])
+    combo = ElidedComboBox()
+    combo.addItems(["#a-really-long-tag-that-cannot-fit-here  (12)", "#short"])
+    combo.resize(120, 30)
+    combo.grab()  # paints it
+    assert combo.toolTip() == "#a-really-long-tag-that-cannot-fit-here  (12)"
+    combo.setCurrentIndex(1)
+    combo.grab()
+    assert combo.toolTip() == ""
+
+
 def test_a_new_vault_never_uses_the_previous_ones_semantic_scores(window, tmp_path):
     from zettelapp import settings
 
@@ -623,9 +678,7 @@ def test_a_new_vault_opens_on_the_start_here_hub(window):
     assert note.title == "Welcome to ZettelApp"
     assert window.list.current_id() == note.id
     assert len(window.vault.links_from(note.id)) == 10  # the hub lists every starter note
-    assert (
-        "Welcome to ZettelApp" in window.editor.body.titles_model.stringList()
-    )  # [[ completes titles
+    assert "Welcome to ZettelApp" in window.editor.body._matches("welcome")  # [[ completes titles
 
 
 @pytest.mark.parametrize("dialog", ["new_vault_dialog", "open_vault_dialog"])

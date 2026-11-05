@@ -164,6 +164,117 @@ def find_wikilinks(text: str) -> list[WikiLink]:
     return links
 
 
+# --- bold and italics -------------------------------------------------------
+
+# Where * and _ mean nothing: a link's address and an <autolink>.
+_LINK_ADDRESS_RE = re.compile(r"\]\([^)\n]*\)|<[A-Za-z][\w+.-]{1,31}:[^\s<>]*>")
+
+
+def code_spans(line: str) -> list[tuple[int, int]]:
+    """Where the `code` in one line is, backticks included: a run of backticks up to the
+    next run of the same length, as CommonMark reads them."""
+    runs = [(m.start(), m.end()) for m in re.finditer(r"`+", line)]
+    spans, i = [], 0
+    while i < len(runs):
+        start, end = runs[i]
+        i += 1
+        for j in range(i, len(runs)):
+            if runs[j][1] - runs[j][0] == end - start:
+                spans.append((start, runs[j][1]))
+                i = j + 1
+                break
+    return spans
+
+
+@dataclass
+class _Markers:
+    char: str
+    pos: int  # where the markers not paired yet start
+    count: int  # how many are not paired yet
+    size: int  # how many the run had
+    can_open: bool
+    can_close: bool
+
+
+def _punctuation(ch: str) -> bool:
+    return unicodedata.category(ch)[0] in "PS"
+
+
+def _pairs(opener: _Markers, closer: _Markers) -> bool:
+    if opener.char != closer.char:
+        return False
+    # CommonMark's rule of three: in *a**b* the ** neither opens nor closes.
+    if (opener.can_close or closer.can_open) and (opener.size + closer.size) % 3 == 0:
+        return opener.size % 3 == 0 and closer.size % 3 == 0
+    return True
+
+
+def emphasis_spans(line: str) -> list[tuple[int, int, bool]]:
+    """Each *italic* or **bold** stretch of one line of Markdown, as (start, end, bold) with its
+    markers included. The markers pair up the way CommonMark (and so the preview) pairs them:
+    *a **b** c* nests, ***both*** is both, and snake_case_names or 2 * 3 stay plain. Code,
+    formulas, [[links]] and link addresses are left alone."""
+    if "*" not in line and "_" not in line:
+        return []
+    blocked = bytearray(len(line))
+    covered = [*code_spans(line)]
+    for pattern in (MATH_RE, WIKILINK_RE, _LINK_ADDRESS_RE):
+        covered += [m.span() for m in pattern.finditer(line)]
+    for start, end in covered:
+        blocked[start:end] = b"\x01" * (end - start)
+    runs: list[_Markers] = []
+    i, n = 0, len(line)
+    while i < n:
+        ch = line[i]
+        if blocked[i]:
+            i += 1
+        elif ch == "\\":  # \* is a plain asterisk
+            i += 2
+        elif ch in "*_":
+            j = i
+            while j < n and line[j] == ch and not blocked[j]:
+                j += 1
+            before = line[i - 1] if i else " "
+            after = line[j] if j < n else " "
+            left = not after.isspace() and (
+                not _punctuation(after) or before.isspace() or _punctuation(before)
+            )
+            right = not before.isspace() and (
+                not _punctuation(before) or after.isspace() or _punctuation(after)
+            )
+            if ch == "*":
+                can_open, can_close = left, right
+            else:  # _ inside a word is just an underscore
+                can_open = left and (not right or _punctuation(before))
+                can_close = right and (not left or _punctuation(after))
+            if can_open or can_close:
+                runs.append(_Markers(ch, i, j - i, j - i, can_open, can_close))
+            i = j
+        else:
+            i += 1
+    spans: list[tuple[int, int, bool]] = []
+    openers: list[_Markers] = []
+    for run in runs:
+        while run.can_close and run.count:
+            k = len(openers) - 1
+            while k >= 0 and not _pairs(openers[k], run):
+                k -= 1
+            if k < 0:
+                break
+            opener = openers[k]
+            used = 2 if opener.count >= 2 and run.count >= 2 else 1
+            opener.count -= used
+            spans.append((opener.pos + opener.count, run.pos + used, used == 2))
+            run.pos += used
+            run.count -= used
+            del openers[k + 1 :]  # markers between the pair stay plain text
+            if not opener.count:
+                del openers[k]
+        if run.can_open and run.count:
+            openers.append(run)
+    return spans
+
+
 # --- inline flashcards ------------------------------------------------------
 
 CLOZE_RE = re.compile(r"\{\{c(\d+)::(.+?)(?:::([^}]*))?\}\}", re.S)

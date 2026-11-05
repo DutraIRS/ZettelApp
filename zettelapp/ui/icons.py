@@ -87,7 +87,34 @@ GLYPHS = {
     "checklist": 0xE73A,
     "alarm": 0xE121,
     "formula": 0xE8EF,
+    "sort": 0xE8CB,
+    # Word and WordPad label Bold and Italic with each language's own letter (N for negrito,
+    # G for gras, F for fett, Ж for жирный…), and the Windows icon fonts have them.
+    "bold_n": 0xE1B7,
+    "bold_g": 0xE1B1,
+    "bold_f": 0xE1B3,
+    "bold_ru": 0xE1B9,
+    "bold_ko": 0xE1BD,
+    "italic_k": 0xE1B4,
+    "italic_c": 0xE1B0,
+    "italic_ru": 0xE1EA,
+    "italic_ko": 0xE1BC,
 }
+
+_FORMAT_GLYPHS = {
+    "pt_BR": ("bold_n", "italic"),
+    "es": ("bold_n", "italic_k"),
+    "fr": ("bold_g", "italic"),
+    "de": ("bold_f", "italic_k"),
+    "it": ("bold_g", "italic_c"),
+    "ru": ("bold_ru", "italic_ru"),
+    "ko": ("bold_ko", "italic_ko"),
+}
+
+
+def format_glyphs(language: str) -> tuple[str, str]:
+    """The glyphs for the Bold and Italic buttons in *language*; B and I where Windows uses them."""
+    return _FORMAT_GLYPHS.get(language, ("bold", "italic"))
 
 
 @cache

@@ -823,7 +823,6 @@
  "Missing image {name}": "Нет изображения {name}",
  "Model details…": "Сведения о модели…",
  "Naive Bayes estimate: {p}": "Оценка наивного Байеса: {p}",
- "Naive Bayes over semantic, Levenshtein and tag similarity. Learns from the links you make and dismiss.": "Наивный Байес по семантическому сходству, расстоянию Левенштейна и тегам. Учится на связях, которые вы создаёте и отклоняете.",
  "No links yet": "Связей пока нет",
  "No note in the graph matches that title.": "В графе нет заметки с таким названием.",
  "No notes are tagged #{tag} yet.": "Заметок с тегом #{tag} пока нет.",
@@ -1035,7 +1034,6 @@
  "Download the language model ({size} MB) from huggingface.co? Only the request for the model is sent, nothing about your notes.": "Скачать языковую модель ({size} МБ) с huggingface.co? Отправляется только запрос модели, ничего о ваших заметках.",
  "Duplicate note": "Дублировать заметку",
  "Enter two different tags.": "Введите два разных тега.",
- "Finds notes by what they mean, even when they share no words with your search. A language model does this on your computer and your notes never leave it. The model is a one-time download from Hugging Face.": "Находит заметки по смыслу, даже если в них нет ни одного слова из запроса. Это делает языковая модель на вашем компьютере, и заметки никогда его не покидают. Модель скачивается один раз с Hugging Face.",
  "Indexing notes for semantic search: {done} of {total}": "Индексация заметок для семантического поиска: {done} из {total}",
  "Manage tag ontology…": "Управление онтологией тегов…",
  "Move selected notes to Trash (in the note list)": "Переместить выбранные заметки в корзину (в списке заметок)",
@@ -1076,5 +1074,14 @@
   "{n} вложение, которое не является изображением, не импортировано; его имя осталось в тексте.",
   "{n} вложения, которые не являются изображениями, не импортированы; их имена остались в тексте.",
   "{n} вложений, которые не являются изображениями, не импортировано; их имена остались в тексте."
- ]
+ ],
+ "strong": "сильная",
+ "likely": "вероятная",
+ "possible": "возможная",
+ "Sort notes: {order}": "Сортировка заметок: {order}",
+ "Lets the search box (Ctrl+F) also find notes by what they mean, even when they share no words with your search. A language model does this on your computer and your notes never leave it. The model is a one-time download from Hugging Face.": "Поле поиска (Ctrl+F) начинает находить заметки и по смыслу, даже если в них нет ни одного слова из запроса. Это делает языковая модель на вашем компьютере, и заметки никогда его не покидают. Модель скачивается один раз с Hugging Face.",
+ "Naive Bayes over semantic (LSA), Levenshtein and tag similarity. Learns from the links you make and dismiss.": "Наивный Байес по семантическому сходству (LSA), расстоянию Левенштейна и тегам. Учится на связях, которые вы создаёте и отклоняете.",
+ "≈ similar meaning": "≈ близко по смыслу",
+ "Found by semantic search: by what the note means, not by the words you typed.": "Найдено семантическим поиском: по смыслу заметки, а не по введённым словам.",
+ "{shown} of {total}": "{shown} из {total}"
 }

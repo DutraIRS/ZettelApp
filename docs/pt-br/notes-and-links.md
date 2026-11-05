@@ -238,7 +238,7 @@ nota. Os cartões do texto são marcados como *do texto da nota* e são editados
 A caixa de busca (Ctrl+F) procura em títulos, textos e tags, ignora acentos e corresponde a prefixos de
 palavras, então `esquec` encontra *esquecimento*. Adicione `tag:nome` para manter só as notas com uma tag, por
 exemplo `memory tag:psychology`. As melhores correspondências vêm primeiro e cada uma mostra o trecho da nota em
-torno da sua palavra; sem uma consulta, as notas seguem a ordenação escolhida (*Última edição*, *Criada*,
+torno da sua palavra; sem uma consulta, as notas seguem a ordenação escolhida no botão de ordenar, ao lado do filtro de tags (*Última edição*, *Criada*,
 *Título* ou *Mais ligadas*).
 
 Vários tipos de correspondência trabalham juntos, e *Ferramentas ▸ Opções ▸ Busca* define quanto cada um conta:
@@ -260,7 +260,7 @@ fica desligada até você configurá-la:
 Você também pode marcar *Configurar a busca semântica* no instalador: o ZettelApp baixa o modelo na primeira vez que abrir e a ativa.
 
 O ZettelApp então indexa suas notas em segundo plano e acompanha as edições. Os resultados das palavras que você
-digitou aparecem na hora; as notas encontradas pelo significado se juntam a eles um instante depois. O modelo
+digitou aparecem na hora; as notas encontradas pelo significado se juntam a eles um instante depois, marcadas com *≈ significado parecido*. O modelo
 roda no seu computador e suas notas nunca saem dele. Em uso, ocupa cerca de 500 MB de memória, liberados dois
 minutos depois da sua última busca. **Remover modelo e índice**, na mesma página, apaga tudo isso.
 
