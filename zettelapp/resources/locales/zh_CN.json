@@ -795,7 +795,6 @@
  "Missing image {name}": "缺少图片 {name}",
  "Model details…": "模型详情…",
  "Naive Bayes estimate: {p}": "朴素贝叶斯估计：{p}",
- "Naive Bayes over semantic, Levenshtein and tag similarity. Learns from the links you make and dismiss.": "基于语义、Levenshtein 和标签相似度的朴素贝叶斯。会从你建立和忽略的链接中学习。",
  "No links yet": "还没有链接",
  "No note in the graph matches that title.": "图谱中没有与该标题匹配的笔记。",
  "No notes are tagged #{tag} yet.": "还没有带 #{tag} 标签的笔记。",
@@ -975,7 +974,6 @@
  "Download the language model ({size} MB) from huggingface.co? Only the request for the model is sent, nothing about your notes.": "从 huggingface.co 下载语言模型（{size} MB）？只会发送获取模型的请求，不含你的笔记的任何内容。",
  "Duplicate note": "复制笔记",
  "Enter two different tags.": "请输入两个不同的标签。",
- "Finds notes by what they mean, even when they share no words with your search. A language model does this on your computer and your notes never leave it. The model is a one-time download from Hugging Face.": "按含义查找笔记，即使它们与搜索内容没有相同的词。这由你电脑上的语言模型完成，你的笔记绝不会离开电脑。模型只需从 Hugging Face 下载一次。",
  "Indexing notes for semantic search: {done} of {total}": "正在为语义搜索索引笔记：{done}/{total}",
  "Manage tag ontology…": "管理标签本体…",
  "Move selected notes to Trash (in the note list)": "将所选笔记移到回收站（在笔记列表中）",
@@ -1014,5 +1012,14 @@
  "This is not a readable Evernote export: {error}": "这不是可读取的 Evernote 导出文件:{error}",
  "{n} attachment that isn't a picture was not imported; its name stays in the text.": [
   "{n} 个非图片附件未导入,其名称保留在正文中。"
- ]
+ ],
+ "strong": "强",
+ "likely": "较可能",
+ "possible": "可能",
+ "Sort notes: {order}": "排序笔记:{order}",
+ "Lets the search box (Ctrl+F) also find notes by what they mean, even when they share no words with your search. A language model does this on your computer and your notes never leave it. The model is a one-time download from Hugging Face.": "让搜索框 (Ctrl+F) 也能按含义查找笔记，即使它们与搜索内容没有相同的词。这由你电脑上的语言模型完成，你的笔记绝不会离开电脑。模型只需从 Hugging Face 下载一次。",
+ "Naive Bayes over semantic (LSA), Levenshtein and tag similarity. Learns from the links you make and dismiss.": "基于语义 (LSA)、Levenshtein 和标签相似度的朴素贝叶斯。会从你建立和忽略的链接中学习。",
+ "≈ similar meaning": "≈ 含义相近",
+ "Found by semantic search: by what the note means, not by the words you typed.": "由语义搜索找到：依据笔记的含义，而不是你输入的词语。",
+ "{shown} of {total}": "{shown} / {total}"
 }

@@ -4,6 +4,32 @@ All notable changes to ZettelApp are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [1.3.1] - 2026-11-05
+
+### Changed
+
+- Bold and Italic (buttons, Ctrl+B and Ctrl+I) work like a word processor's: pressing again removes them,
+  spaces and list, heading or quote marks at the edges of the selection stay outside the markers, each
+  selected line is formatted on its own, and the text stays selected so both can be combined.
+- The Bold and Italic buttons show the letters Windows uses in each language: N in Portuguese and
+  Spanish, G in French and Italian, F in German, Ж in Russian, and so on.
+- After `[[`, the best match is highlighted, so Enter or Tab takes it. Titles that start with what
+  you typed come first, and accents don't matter.
+- Search results that only semantic search found say *≈ similar meaning*, and *Options ▸ Search*
+  says that semantic search works in the search box. The link suggestions name their own semantic
+  similarity (LSA), which doesn't use the language model.
+- The note list's sort order is a menu behind an icon, next to the tag options, so *All tags* fits in
+  every language. A tag too long for its box ends in "…" and shows in full on hover.
+
+### Fixed
+
+- Bold inside italics, and bold italics, show as bold in the editor and the preview.
+- An autosave while the `[[` list is open no longer clears the highlighted note.
+- The match strength of suggested links ("possible", "likely", "strong") and the "3 of 8" note
+  count are translated.
+- Tests and the screenshot tool no longer write backups, search indexes or caches into the real
+  ZettelApp data folder.
+
 ## [1.3.0] - 2026-11-03
 
 ### Added

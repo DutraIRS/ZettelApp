@@ -250,7 +250,7 @@ werden im Text bearbeitet.
 Das Suchfeld (Ctrl+F) durchsucht Titel, Text und Tags, ignoriert Akzente und findet Wortanfänge: `forget` findet
 also *forgetting*. Mit `tag:name` behalten Sie nur Notizen mit diesem Tag, zum Beispiel `memory tag:psychology`.
 Die besten Treffer stehen oben, und jeder zeigt die Stelle der Notiz rund um Ihr Wort; ohne Suchbegriff folgen
-die Notizen der ausgewählten Sortierung (*Zuletzt bearbeitet*, *Erstellt*, *Titel* oder *Am stärksten verknüpft*).
+die Notizen der Sortierung, die Sie mit der Sortier-Schaltfläche neben dem Tag-Filter wählen (*Zuletzt bearbeitet*, *Erstellt*, *Titel* oder *Am stärksten verknüpft*).
 
 Mehrere Arten von Treffern arbeiten zusammen, und unter *Extras ▸ Optionen ▸ Suche* legen Sie fest, wie viel jede zählt:
 
@@ -272,7 +272,7 @@ sprachübergreifend. Sie bleibt aus, bis Sie sie einrichten:
 Sie können auch im Installationsprogramm *Semantische Suche einrichten* aktivieren: ZettelApp lädt das Modell dann beim ersten Start herunter und schaltet sie ein.
 
 ZettelApp indiziert Ihre Notizen dann im Hintergrund und hält beim Bearbeiten Schritt. Ergebnisse zu den
-eingegebenen Wörtern erscheinen sofort; nach Bedeutung gefundene Notizen kommen einen Moment später hinzu. Das
+eingegebenen Wörtern erscheinen sofort; nach Bedeutung gefundene Notizen kommen einen Moment später hinzu, markiert mit *≈ ähnliche Bedeutung*. Das
 Modell läuft auf Ihrem Computer, und Ihre Notizen verlassen ihn nie. Während der Nutzung belegt es etwa 500 MB
 Arbeitsspeicher, die zwei Minuten nach Ihrer letzten Suche wieder frei werden. **Modell und Index entfernen** auf
 derselben Seite löscht alles.

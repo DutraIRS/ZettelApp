@@ -36,12 +36,14 @@ def math_href(latex: str, display: bool) -> str:
 
 def preview_css() -> str:
     t = theme.current()
+    italic = ", ".join(f"'{family}'" for family in theme.ITALIC_FONTS)
     return f"""
 body {{ color: {t.text}; }}
 h1 {{ font-size: 20pt; font-weight: 600; margin: 14px 0 6px 0; }}
 h2 {{ font-size: 15pt; font-weight: 600; margin: 14px 0 6px 0; }}
 h3, h4, h5, h6 {{ font-size: 12pt; font-weight: 600; margin: 12px 0 4px 0; }}
 p {{ margin: 0 0 9px 0; line-height: 150%; }}
+em, i {{ font-family: {italic}; }}
 a {{ color: {t.accent}; text-decoration: none; }}
 a.new-note {{ color: {t.text_muted}; text-decoration: underline; }}
 a.file {{ color: {t.accent}; text-decoration: underline; }}

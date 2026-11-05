@@ -38,6 +38,9 @@ CATEGORICAL_DARK = [
 _DARK_STEP = {light.lower(): dark for light, dark in zip(CATEGORICAL_LIGHT, CATEGORICAL_DARK)}
 
 UI_FONTS = ["Segoe UI Variable Text", "Segoe UI", "Arial"]
+# Segoe UI Variable has no italic faces, and Qt draws its bold italic as a regular-weight
+# slant, so **bold** inside *italics* would look plain. Segoe UI has real italic faces.
+ITALIC_FONTS = ["Segoe UI", "Arial"]
 
 
 @dataclass(frozen=True)

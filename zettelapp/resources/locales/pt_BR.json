@@ -809,7 +809,6 @@
  "Missing image {name}": "Imagem ausente: {name}",
  "Model details…": "Detalhes do modelo…",
  "Naive Bayes estimate: {p}": "Estimativa do Naive Bayes: {p}",
- "Naive Bayes over semantic, Levenshtein and tag similarity. Learns from the links you make and dismiss.": "Naive Bayes sobre similaridade semântica, de Levenshtein e de tags. Aprende com os links que você cria e dispensa.",
  "No links yet": "Ainda não há links",
  "No note in the graph matches that title.": "Nenhuma nota do grafo corresponde a esse título.",
  "No notes are tagged #{tag} yet.": "Ainda não há notas com a tag #{tag}.",
@@ -1005,7 +1004,6 @@
  "Download the language model ({size} MB) from huggingface.co? Only the request for the model is sent, nothing about your notes.": "Baixar o modelo de linguagem ({size} MB) de huggingface.co? Só é enviado o pedido do modelo, nada sobre suas notas.",
  "Duplicate note": "Duplicar nota",
  "Enter two different tags.": "Digite duas tags diferentes.",
- "Finds notes by what they mean, even when they share no words with your search. A language model does this on your computer and your notes never leave it. The model is a one-time download from Hugging Face.": "Encontra notas pelo que significam, mesmo que não tenham nenhuma palavra em comum com a sua busca. Um modelo de linguagem faz isso no seu computador e suas notas nunca saem dele. O modelo é baixado uma única vez do Hugging Face.",
  "Indexing notes for semantic search: {done} of {total}": "Indexando notas para a busca semântica: {done} de {total}",
  "Manage tag ontology…": "Gerenciar a ontologia de tags…",
  "Move selected notes to Trash (in the note list)": "Mover as notas selecionadas para a lixeira (na lista de notas)",
@@ -1045,5 +1043,14 @@
  "{n} attachment that isn't a picture was not imported; its name stays in the text.": [
   "{n} anexo que não é imagem não foi importado; o nome dele fica no texto.",
   "{n} anexos que não são imagens não foram importados; os nomes deles ficam no texto."
- ]
+ ],
+ "strong": "forte",
+ "likely": "provável",
+ "possible": "possível",
+ "Sort notes: {order}": "Ordenar notas: {order}",
+ "Lets the search box (Ctrl+F) also find notes by what they mean, even when they share no words with your search. A language model does this on your computer and your notes never leave it. The model is a one-time download from Hugging Face.": "Faz a caixa de busca (Ctrl+F) encontrar notas também pelo que significam, mesmo que não tenham nenhuma palavra em comum com a sua busca. Um modelo de linguagem faz isso no seu computador e suas notas nunca saem dele. O modelo é baixado uma única vez do Hugging Face.",
+ "Naive Bayes over semantic (LSA), Levenshtein and tag similarity. Learns from the links you make and dismiss.": "Naive Bayes sobre similaridade semântica (LSA), de Levenshtein e de tags. Aprende com os links que você cria e dispensa.",
+ "≈ similar meaning": "≈ significado parecido",
+ "Found by semantic search: by what the note means, not by the words you typed.": "Encontrada pela busca semântica: pelo que a nota significa, não pelas palavras que você digitou.",
+ "{shown} of {total}": "{shown} de {total}"
 }

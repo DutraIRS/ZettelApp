@@ -795,7 +795,6 @@
  "Missing image {name}": "이미지 {name}이(가) 없어요",
  "Model details…": "모델 세부 정보…",
  "Naive Bayes estimate: {p}": "나이브 베이즈 추정치: {p}",
- "Naive Bayes over semantic, Levenshtein and tag similarity. Learns from the links you make and dismiss.": "의미, 레벤슈타인, 태그 유사도를 바탕으로 한 나이브 베이즈예요. 만들고 거절한 링크에서 배워요.",
  "No links yet": "아직 링크가 없어요",
  "No note in the graph matches that title.": "그래프에 그 제목과 맞는 노트가 없어요.",
  "No notes are tagged #{tag} yet.": "아직 #{tag} 태그가 달린 노트가 없어요.",
@@ -975,7 +974,6 @@
  "Download the language model ({size} MB) from huggingface.co? Only the request for the model is sent, nothing about your notes.": "huggingface.co에서 언어 모델({size}MB)을 다운로드할까요? 모델 요청만 보내며 노트에 관한 내용은 보내지 않아요.",
  "Duplicate note": "노트 복제",
  "Enter two different tags.": "서로 다른 태그 두 개를 입력하세요.",
- "Finds notes by what they mean, even when they share no words with your search. A language model does this on your computer and your notes never leave it. The model is a one-time download from Hugging Face.": "검색어와 같은 단어가 없어도 의미로 노트를 찾아요. 언어 모델이 컴퓨터 안에서 처리하므로 노트는 밖으로 나가지 않아요. 모델은 Hugging Face에서 한 번만 다운로드해요.",
  "Indexing notes for semantic search: {done} of {total}": "의미 검색용으로 노트를 색인하는 중: {done}/{total}",
  "Manage tag ontology…": "태그 온톨로지 관리…",
  "Move selected notes to Trash (in the note list)": "선택한 노트를 휴지통으로 이동(노트 목록에서)",
@@ -1014,5 +1012,14 @@
  "This is not a readable Evernote export: {error}": "읽을 수 있는 Evernote 내보내기가 아니에요: {error}",
  "{n} attachment that isn't a picture was not imported; its name stays in the text.": [
   "그림이 아닌 첨부 파일 {n}개는 가져오지 않았어요. 이름은 본문에 남아 있어요."
- ]
+ ],
+ "strong": "강함",
+ "likely": "유력",
+ "possible": "가능성 있음",
+ "Sort notes: {order}": "노트 정렬: {order}",
+ "Lets the search box (Ctrl+F) also find notes by what they mean, even when they share no words with your search. A language model does this on your computer and your notes never leave it. The model is a one-time download from Hugging Face.": "검색 상자(Ctrl+F)가 검색어와 같은 단어가 없어도 의미로 노트를 찾아요. 언어 모델이 컴퓨터 안에서 처리하므로 노트는 밖으로 나가지 않아요. 모델은 Hugging Face에서 한 번만 다운로드해요.",
+ "Naive Bayes over semantic (LSA), Levenshtein and tag similarity. Learns from the links you make and dismiss.": "의미(LSA), 레벤슈타인, 태그 유사도를 바탕으로 한 나이브 베이즈예요. 만들고 거절한 링크에서 배워요.",
+ "≈ similar meaning": "≈ 비슷한 의미",
+ "Found by semantic search: by what the note means, not by the words you typed.": "의미 검색으로 찾았어요. 입력한 단어가 아니라 노트의 의미로 찾은 결과예요.",
+ "{shown} of {total}": "{total}개 중 {shown}개"
 }

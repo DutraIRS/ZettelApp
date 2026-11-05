@@ -46,9 +46,12 @@ class _SuggestionRow(QWidget):
         bar.setTextVisible(False)
         bar.setFixedHeight(4)
         bar.setAccessibleName(_("Match {p}").format(p=f"{s.probability:.0%}"))
-        strength = (
-            "strong" if s.probability >= 0.5 else "likely" if s.probability >= 0.25 else "possible"
-        )
+        if s.probability >= 0.5:
+            strength = _("strong")
+        elif s.probability >= 0.25:
+            strength = _("likely")
+        else:
+            strength = _("possible")
         meta = label(f"{s.probability:.0%} · {strength}", "caption")
         text.addWidget(title)
         text.addWidget(bar)
@@ -132,7 +135,7 @@ class SidePanel(QWidget):
         layout.addWidget(
             label(
                 _(
-                    "Naive Bayes over semantic, Levenshtein and tag similarity. "
+                    "Naive Bayes over semantic (LSA), Levenshtein and tag similarity. "
                     "Learns from the links you make and dismiss."
                 ),
                 "caption",

@@ -16,6 +16,8 @@ from PySide6.QtCore import (
     Signal,
 )
 from PySide6.QtGui import (
+    QAction,
+    QActionGroup,
     QFontMetrics,
     QImage,
     QPainter,
@@ -43,7 +45,13 @@ from zettelapp.core.storage import Vault, split_query
 from zettelapp.core.textutil import fold, snippet_around
 from zettelapp.i18n import _, n_
 from zettelapp.ui import icons, theme
-from zettelapp.ui.widgets import SearchBox, accent_button, label, tool_button
+from zettelapp.ui.widgets import (
+    ElidedComboBox,
+    SearchBox,
+    accent_button,
+    label,
+    tool_button,
+)
 
 ROW_HEIGHT = 78
 
@@ -65,7 +73,13 @@ class NoteListModel(QAbstractListModel):
         if role == Qt.ItemDataRole.UserRole:
             return row
         if role == Qt.ItemDataRole.AccessibleTextRole:
-            return f"{row['title']}. {row['snippet']}"
+            return f"{row['title']}. {row['snippet']}" + (
+                f". {_('≈ similar meaning')}" if row.get("meaning") else ""
+            )
+        if role == Qt.ItemDataRole.ToolTipRole and row.get("meaning"):
+            return _(
+                "Found by semantic search: by what the note means, not by the words you typed."
+            )
         return None
 
     def set_rows(self, rows: list[dict]) -> None:
@@ -171,10 +185,16 @@ class NoteDelegate(QStyledItemDelegate):
             )
             foot_rect.setWidth(foot_rect.width() - icon_size - 4)
         painter.setFont(date_font)
+        foot_metrics = QFontMetrics(date_font)
+        foot = "  ·  ".join(extras)
+        if row.get("meaning"):  # only semantic search found it: say why it is in the list
+            mark = _("≈ similar meaning")
+            painter.setPen(t.q("accent"))
+            painter.drawText(foot_rect, Qt.AlignmentFlag.AlignLeft, mark)
+            foot_rect.setLeft(foot_rect.left() + foot_metrics.horizontalAdvance(mark))
+            foot = "  ·  " + foot if foot else ""
         painter.setPen(t.q("text_muted"))
-        foot = QFontMetrics(date_font).elidedText(
-            "  ·  ".join(extras), Qt.TextElideMode.ElideRight, int(foot_rect.width())
-        )
+        foot = foot_metrics.elidedText(foot, Qt.TextElideMode.ElideRight, int(foot_rect.width()))
         painter.drawText(foot_rect, Qt.AlignmentFlag.AlignLeft, foot)
         painter.restore()
 
@@ -250,8 +270,13 @@ class NoteListPanel(QWidget):
         self.search = SearchBox(_("Search notes (Ctrl+F) · tag:name filters"))
         layout.addWidget(self.search)
         filters = QHBoxLayout()
-        self.tag_filter = QComboBox()
+        self.tag_filter = ElidedComboBox()
         self.tag_filter.setAccessibleName(_("Filter by tag"))
+        # Long tags mustn't widen the list.
+        self.tag_filter.setMinimumContentsLength(6)
+        self.tag_filter.setSizeAdjustPolicy(
+            QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
+        )
         self.tag_options = tool_button("relationship", _("Tag options"))
         self.tag_options.setProperty("noindicator", True)
         self.tag_options.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
@@ -260,23 +285,31 @@ class NoteListPanel(QWidget):
         self.related_tags.setCheckable(True)
         tag_menu.addAction(_("Manage tag ontology…"), self.ontologyRequested.emit)
         self.tag_options.setMenu(tag_menu)
-        self.sort = QComboBox()
-        self.sort.setAccessibleName(_("Sort notes"))
+        # The order is a menu behind an icon, like the tag options: as a list of words it
+        # left no room for "All tags" in most languages.
+        self.sort_key = "modified"
+        self.sort_button = tool_button("sort", "")
+        self.sort_button.setAccessibleName(_("Sort notes"))
+        self.sort_button.setProperty("noindicator", True)
+        self.sort_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+        sort_menu = QMenu(self.sort_button)
+        orders = QActionGroup(sort_menu)
         for text, key in (
             (_("Last edited"), "modified"),
             (_("Created"), "created"),
             (_("Title"), "title"),
             (_("Most linked"), "links"),
         ):
-            self.sort.addItem(text, key)
-        for combo in (self.tag_filter, self.sort):  # long tags or words mustn't widen the list
-            combo.setMinimumContentsLength(6)
-            combo.setSizeAdjustPolicy(
-                QComboBox.SizeAdjustPolicy.AdjustToMinimumContentsLengthWithIcon
-            )
+            action = sort_menu.addAction(text)
+            action.setData(key)
+            action.setCheckable(True)
+            orders.addAction(action)
+        orders.triggered.connect(self._sort_chosen)
+        self.sort_button.setMenu(sort_menu)
+        self._show_sort(sort_menu.actions()[0])
         filters.addWidget(self.tag_filter, 1)
         filters.addWidget(self.tag_options)
-        filters.addWidget(self.sort)
+        filters.addWidget(self.sort_button)
         layout.addLayout(filters)
         self.model = NoteListModel()
         self.view = QListView()
@@ -311,7 +344,6 @@ class NoteListPanel(QWidget):
         self.search.textChanged.connect(lambda _unused: self._timer.start())
         self.tag_filter.currentIndexChanged.connect(lambda _unused: self.refresh())
         self.related_tags.toggled.connect(lambda _unused: self._related_toggled())
-        self.sort.currentIndexChanged.connect(lambda _unused: self.refresh())
 
     def set_vault(self, vault: Vault | None) -> None:
         self.vault = vault
@@ -333,6 +365,15 @@ class NoteListPanel(QWidget):
 
     def _related_toggled(self) -> None:
         self.refresh_tags()
+        self.refresh()
+
+    def _show_sort(self, action: QAction) -> None:
+        action.setChecked(True)
+        self.sort_key = action.data()
+        self.sort_button.setToolTip(_("Sort notes: {order}").format(order=action.text()))
+
+    def _sort_chosen(self, action: QAction) -> None:
+        self._show_sort(action)
         self.refresh()
 
     def toggle_trash(self) -> None:
@@ -377,7 +418,7 @@ class NoteListPanel(QWidget):
             degree[l.src] = degree.get(l.src, 0) + 1
             degree[l.dst] = degree.get(l.dst, 0) + 1
         cards = self.vault.card_counts()
-        key = self.sort.currentData()
+        key = self.sort_key
         if not query.strip() or key != "modified":
             sorters = {
                 "modified": lambda i: notes[i].modified,
@@ -397,12 +438,17 @@ class NoteListPanel(QWidget):
                 "cards": cards.get(i, 0),
                 "alarm": bool(notes[i].alarm),
                 "image": self._image_path(notes[i].image),
+                "meaning": set(self._signals.get(i, ())) == {"semantic"},
             }
             for i in ids
         ]
         self.model.set_rows(rows)
         total = len(notes)
-        self.count.setText(f"{len(rows)} of {total}" if len(rows) != total else f"{total}")
+        self.count.setText(
+            _("{shown} of {total}").format(shown=len(rows), total=total)
+            if len(rows) != total
+            else str(total)
+        )
         if selected:
             self.select(selected, emit=False)
 

@@ -6,6 +6,13 @@ import pytest
 from zettelapp.core.storage import Vault
 
 
+@pytest.fixture(autouse=True)
+def _own_local_data(tmp_path_factory, monkeypatch):
+    """Point %LOCALAPPDATA% at a temporary folder, so tests never write backups, search indexes
+    or caches into the real ZettelApp folder, or find a language model downloaded there."""
+    monkeypatch.setenv("LOCALAPPDATA", str(tmp_path_factory.mktemp("local")))
+
+
 @pytest.fixture
 def vault(tmp_path):
     v = Vault.open(tmp_path / "vault")

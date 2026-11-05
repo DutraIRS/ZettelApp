@@ -28,17 +28,54 @@ from PySide6.QtGui import (
 from PySide6.QtWidgets import QCompleter, QPlainTextEdit, QToolTip
 
 from zettelapp.core.security import file_url, local_file_path
-from zettelapp.core.textutil import HASHTAG_RE, MATH_RE, find_wikilinks, normalize_tag
+from zettelapp.core.textutil import (
+    HASHTAG_RE,
+    MATH_RE,
+    emphasis_spans,
+    find_wikilinks,
+    fold,
+    normalize_tag,
+)
 from zettelapp.i18n import _
 from zettelapp.ui import theme
 
 _IMAGE_SUFFIXES = (".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp")
+MAX_COMPLETIONS = 100
 _ASSET_IMAGE_RE = re.compile(r"!\[[^\]\n]*\]\(asset:([^)\s]+)\)")
 
 
 def referenced_assets(text: str) -> set[str]:
     """Every asset name a ![image](asset:…) in *text* points at."""
     return set(_ASSET_IMAGE_RE.findall(text))
+
+
+# Quote, list, checklist, heading and flashcard marks, which bold and italics leave outside.
+_LINE_MARKS_RE = re.compile(
+    r"[ \t]*(?:>[ \t]?)*"
+    r"(?:(?:[-*+]|\d+[.)])[ \t]+(?:\[[ xX]\][ \t]+)?|#{1,6}[ \t]+)?"
+    r"(?:(?:Q|A|Question|Answer)[ \t]*:[ \t]*)?",
+    re.I,
+)
+
+
+def _emphasis_around(text: str, a: int, b: int, size: int) -> tuple[int, int] | None:
+    """If text[a:b] is already bold (*size* 2) or italic (1), where its text starts and ends
+    inside the markers; they may sit outside the selection, inside it or across its edges."""
+    spans = emphasis_spans(text)
+    selected = text[a:b]
+    for ch in "*_":
+        out_left = a - len(text[:a].rstrip(ch))
+        in_left = len(selected) - len(selected.lstrip(ch))
+        in_right = len(selected) - len(selected.rstrip(ch))
+        out_right = len(text[b:]) - len(text[b:].lstrip(ch))
+        start, end = a + in_left, b - in_right
+        if start >= end:
+            continue
+        count = min(out_left + in_left, in_right + out_right)
+        if count >= 2 if size == 2 else count % 2 == 1:  # ** is bold, * italic, *** both
+            if any(a - out_left <= s < start and end < e <= b + out_right for s, e, _b in spans):
+                return start, end
+    return None
 
 
 _MD_LINK_RE = re.compile(r"(?<!!)\[[^\]\n]*\]\((?:<([^>\n]+)>|([^)\s]+))(?:\s+\"[^\"\n]*\")?\)")
@@ -61,6 +98,7 @@ def _fmt(
         f.setFontWeight(QFont.Weight.DemiBold)
     if italic:
         f.setFontItalic(True)
+        f.setFontFamilies(theme.ITALIC_FONTS)
     if size:
         f.setFontPointSize(size)
     if background:
@@ -85,11 +123,6 @@ class MarkdownHighlighter(QSyntaxHighlighter):
             (re.compile(r"^\s*(?:[-*+]|\d+[.)])\s(?:\[[ xX]\]\s)?"), _fmt("accent", bold=True)),
             (MATH_RE, _fmt("accent")),
             (re.compile(r"^>.*$"), _fmt("text_secondary", italic=True)),
-            (re.compile(r"\*\*[^*\n]+\*\*|__[^_\n]+__"), _fmt(bold=True)),
-            (
-                re.compile(r"(?<![*\w])\*[^*\n]+\*(?!\*)|(?<![_\w])_[^_\n]+_(?!_)"),
-                _fmt(italic=True),
-            ),
             (re.compile(r"`[^`\n]+`"), _fmt("text_secondary", background="hover")),
             (re.compile(r"!?\[[^\]\n]*\]\([^)\n]*\)"), _fmt("accent")),
             (
@@ -117,6 +150,31 @@ class MarkdownHighlighter(QSyntaxHighlighter):
         for pattern, fmt in self.rules:
             for m in pattern.finditer(text):
                 self.setFormat(m.start(), m.end() - m.start(), fmt)
+        self._emphasis(text)
+
+    def _emphasis(self, text: str) -> None:
+        """Bold and italics are added to what the rules above set, so they nest
+        (*a **b** c*) and also show in headings, quotes and links."""
+        style = [0] * len(text)  # 1 bold, 2 italic
+        for start, end, bold in emphasis_spans(text):
+            for i in range(start, end):
+                style[i] |= 1 if bold else 2
+        i = 0
+        while i < len(text):
+            if not style[i]:
+                i += 1
+                continue
+            base, j = self.format(i), i + 1
+            while j < len(text) and style[j] == style[i] and self.format(j) == base:
+                j += 1
+            fmt = QTextCharFormat(base)
+            if style[i] & 1 and fmt.fontWeight() < QFont.Weight.DemiBold.value:
+                fmt.setFontWeight(QFont.Weight.DemiBold)
+            if style[i] & 2:
+                fmt.setFontItalic(True)
+                fmt.setFontFamilies(theme.ITALIC_FONTS)
+            self.setFormat(i, j - i, fmt)
+            i = j
 
 
 class MarkdownEditor(QPlainTextEdit):
@@ -157,12 +215,13 @@ class MarkdownEditor(QPlainTextEdit):
         self.setFont(font)
         self.setTabStopDistance(self.fontMetrics().horizontalAdvance(" ") * 4)
         self.highlighter = MarkdownHighlighter(self.document(), size)
-        self.titles_model = QStringListModel(self)
-        self.completer = QCompleter(self.titles_model, self)
+        self.titles: list[tuple[str, str]] = []  # (title, folded title), sorted
+        # The popup lists only what _maybe_complete puts here, so refreshing the titles after
+        # an autosave can't reset it while someone is picking a note.
+        self.matches_model = QStringListModel(self)
+        self.completer = QCompleter(self.matches_model, self)
         self.completer.setWidget(self)
-        self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
-        self.completer.setFilterMode(Qt.MatchFlag.MatchContains)
-        self.completer.setCompletionMode(QCompleter.CompletionMode.PopupCompletion)
+        self.completer.setCompletionMode(QCompleter.CompletionMode.UnfilteredPopupCompletion)
         self.completer.activated.connect(self._insert_completion)
         self.textChanged.connect(self._maybe_complete)
 
@@ -172,7 +231,8 @@ class MarkdownEditor(QPlainTextEdit):
         self.highlighter.rebuild()
 
     def set_titles(self, titles: list[str]) -> None:
-        self.titles_model.setStringList(sorted({t for t in titles if t.strip()}, key=str.casefold))
+        names = sorted({t for t in titles if t.strip()}, key=str.casefold)
+        self.titles = [(t, fold(t)) for t in names]
 
     # --- [[ completion ------------------------------------------------------
 
@@ -185,19 +245,34 @@ class MarkdownEditor(QPlainTextEdit):
         prefix = block[start + 2 :]
         return prefix if len(prefix) <= 80 and "\n" not in prefix else None
 
+    def _matches(self, typed: str) -> list[str]:
+        """Titles containing *typed*, ignoring case and accents: those that start with it
+        first, then those with a word that does."""
+        key = fold(typed).strip()
+        ranked = []
+        for title, folded in self.titles:
+            at = folded.find(key)
+            if at == 0:
+                ranked.append((0, title))
+            elif at > 0:
+                word = any(w.startswith(key) for w in re.split(r"[\W_]+", folded))
+                ranked.append((1 if word else 2, title))
+        ranked.sort(key=lambda r: r[0])  # stable: alphabetical within each group
+        return [title for _rank, title in ranked[:MAX_COMPLETIONS]]
+
     def _maybe_complete(self) -> None:
         prefix = self._link_prefix()
         popup = self.completer.popup()
-        if prefix is None:
+        matches = self._matches(prefix) if prefix is not None else []
+        if not matches:
             popup.hide()
             return
-        self.completer.setCompletionPrefix(prefix)
-        if self.completer.completionCount() == 0:
-            popup.hide()
-            return
+        self.matches_model.setStringList(matches)
         rect = self.cursorRect()
         rect.setWidth(max(280, popup.sizeHintForColumn(0) + 30))
         self.completer.complete(rect)
+        # The best match starts highlighted, so Enter or Tab takes it.
+        popup.setCurrentIndex(self.matches_model.index(0, 0))
 
     def _insert_completion(self, title: str) -> None:
         prefix = self._link_prefix() or ""
@@ -218,10 +293,10 @@ class MarkdownEditor(QPlainTextEdit):
             event.ignore()
             return
         if event.matches(QKeySequence.StandardKey.Bold):
-            self.wrap_selection("**")
+            self.toggle_emphasis("**")
             return
         if event.matches(QKeySequence.StandardKey.Italic):
-            self.wrap_selection("*")
+            self.toggle_emphasis("*")
             return
         if event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter) and not event.modifiers():
             self._continue_list()
@@ -367,6 +442,69 @@ class MarkdownEditor(QPlainTextEdit):
         menu.exec(event.globalPos())
 
     # --- formatting helpers ---------------------------------------------------
+
+    def toggle_emphasis(self, marker: str) -> None:
+        """Make the selected text bold (marker "**") or italic ("*"), or plain again if it
+        already is, like the buttons in a word processor. Each line is formatted on its own,
+        since Markdown can't carry bold across lines; spaces and list, heading or quote marks
+        at the edges stay outside the markers, or the Markdown wouldn't work. The text stays
+        selected, so bold and italics can be combined."""
+        cursor = self.textCursor()
+        start, end = cursor.selectionStart(), cursor.selectionEnd()
+        size = len(marker)
+        if start == end:
+            text, col = cursor.block().text(), cursor.positionInBlock()
+            if col >= size and text[col - size : col + size] == marker * 2:
+                cursor.movePosition(QTextCursor.MoveOperation.Left, n=size)
+                cursor.movePosition(
+                    QTextCursor.MoveOperation.Right, QTextCursor.MoveMode.KeepAnchor, 2 * size
+                )
+                cursor.removeSelectedText()  # pressed twice: take the empty markers back out
+            else:
+                cursor.insertText(marker * 2)
+                cursor.movePosition(QTextCursor.MoveOperation.Left, n=size)
+            self.setTextCursor(cursor)
+            return
+        parts = []  # (block, start, end in the block, how the markers sit there)
+        block = self.document().findBlock(start)
+        while block.isValid() and block.position() <= end:
+            text = block.text()
+            a = max(start - block.position(), len(_LINE_MARKS_RE.match(text).group(0)))
+            b = min(end - block.position(), len(text))
+            while a < b and text[a].isspace():
+                a += 1
+            while b > a and text[b - 1].isspace():
+                b -= 1
+            if a < b:
+                parts.append((block, a, b, _emphasis_around(text, a, b, size)))
+            block = block.next()
+        if not parts:
+            return
+        remove = all(found is not None for *_unused, found in parts)
+        selected = []
+        cursor.beginEditBlock()
+        for block, a, b, found in reversed(parts):  # later lines first: positions stay valid
+            at = block.position()
+            if remove:
+                text_start, text_end = found
+                for pos in (text_end, text_start - size):  # the markers nearest the text
+                    cursor.setPosition(at + pos)
+                    cursor.setPosition(at + pos + size, QTextCursor.MoveMode.KeepAnchor)
+                    cursor.removeSelectedText()
+                selected.append((block, text_start - size, text_end - size))
+            elif found is None:
+                cursor.setPosition(at + b)
+                cursor.insertText(marker)
+                cursor.setPosition(at + a)
+                cursor.insertText(marker)
+                selected.append((block, a + size, b + size))
+            else:
+                selected.append((block, *found))
+        cursor.endEditBlock()
+        last, first = selected[0], selected[-1]
+        cursor.setPosition(first[0].position() + first[1])
+        cursor.setPosition(last[0].position() + last[2], QTextCursor.MoveMode.KeepAnchor)
+        self.setTextCursor(cursor)
 
     def wrap_selection(self, before: str, after: str | None = None) -> None:
         after = before if after is None else after

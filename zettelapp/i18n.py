@@ -98,6 +98,11 @@ def n_(singular: str, plural: str, n: int) -> str:
     return singular if n == 1 else plural
 
 
+def language() -> str:
+    """The code of the interface language in use ("en", "pt_BR"…)."""
+    return _language
+
+
 def is_right_to_left() -> bool:
     return _language in RIGHT_TO_LEFT
 

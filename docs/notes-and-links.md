@@ -239,7 +239,7 @@ the note. Cards from the text are marked *from note text* and are edited in the 
 The search box (Ctrl+F) looks through titles, text and tags, ignores accents, and matches word prefixes,
 so `forget` finds *forgetting*. Add `tag:name` to keep only the notes with a tag, for example
 `memory tag:psychology`. The best matches come first and each one shows the part of the note around your
-word; without a query, notes follow the chosen sort order (*Last edited*, *Created*, *Title* or *Most
+word; without a query, notes follow the order picked with the sort button next to the tag filter (*Last edited*, *Created*, *Title* or *Most
 linked*).
 
 Several kinds of match work together, and *Tools ▸ Options ▸ Search* sets how much each one counts:
@@ -261,7 +261,7 @@ downloads the model the first time it starts) or here:
 2. Tick **Use semantic search** and click **OK**.
 
 ZettelApp then indexes your notes in the background, and keeps up as you edit them. Results from the words
-you typed appear at once; notes found by meaning join them a moment later. The model runs on your computer
+you typed appear at once; notes found by meaning join them a moment later, marked *≈ similar meaning*. The model runs on your computer
 and your notes never leave it. While in use it takes about 500 MB of memory, which is freed two minutes
 after your last search. **Remove model and index** on the same page deletes all of it.
 

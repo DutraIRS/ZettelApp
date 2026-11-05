@@ -865,7 +865,6 @@
  "Missing image {name}": "الصورة {name} مفقودة",
  "Model details…": "تفاصيل النموذج…",
  "Naive Bayes estimate: {p}": "تقدير بايز الساذج: {p}",
- "Naive Bayes over semantic, Levenshtein and tag similarity. Learns from the links you make and dismiss.": "بايز الساذج على التشابه الدلالي وتشابه ليفنشتاين وتشابه الوسوم. يتعلّم من الروابط التي تنشئها وترفضها.",
  "No links yet": "لا روابط بعد",
  "No note in the graph matches that title.": "لا توجد ملاحظة في الرسم البياني تطابق هذا العنوان.",
  "No notes are tagged #{tag} yet.": "لا توجد ملاحظات موسومة بـ #{tag} بعد.",
@@ -1125,7 +1124,6 @@
  "Download the language model ({size} MB) from huggingface.co? Only the request for the model is sent, nothing about your notes.": "هل تريد تنزيل النموذج اللغوي ({size} ميغابايت) من huggingface.co؟ لا يُرسل سوى طلب النموذج، ولا شيء عن ملاحظاتك.",
  "Duplicate note": "تكرار الملاحظة",
  "Enter two different tags.": "أدخل وسمين مختلفين.",
- "Finds notes by what they mean, even when they share no words with your search. A language model does this on your computer and your notes never leave it. The model is a one-time download from Hugging Face.": "يجد الملاحظات بحسب معناها، حتى إن لم تشترك مع بحثك في أي كلمة. يقوم بذلك نموذج لغوي على حاسوبك، ولا تغادره ملاحظاتك أبدًا. يُنزَّل النموذج مرة واحدة من Hugging Face.",
  "Indexing notes for semantic search: {done} of {total}": "جارٍ فهرسة الملاحظات للبحث الدلالي: {done} من {total}",
  "Manage tag ontology…": "إدارة أنطولوجيا الوسوم…",
  "Move selected notes to Trash (in the note list)": "نقل الملاحظات المحددة إلى سلة المحذوفات (في قائمة الملاحظات)",
@@ -1169,5 +1167,14 @@
   "لم تُستورد {n} مرفقات ليست صورًا؛ تبقى أسماؤها في النص.",
   "لم يُستورد {n} مرفقًا ليست صورًا؛ تبقى أسماؤها في النص.",
   "لم يُستورد {n} مرفق ليست صورًا؛ تبقى أسماؤها في النص."
- ]
+ ],
+ "strong": "قوي",
+ "likely": "مرجّح",
+ "possible": "محتمل",
+ "Sort notes: {order}": "ترتيب الملاحظات: {order}",
+ "Lets the search box (Ctrl+F) also find notes by what they mean, even when they share no words with your search. A language model does this on your computer and your notes never leave it. The model is a one-time download from Hugging Face.": "يتيح لمربع البحث (Ctrl+F) أن يجد الملاحظات بحسب معناها أيضًا، حتى إن لم تشترك مع بحثك في أي كلمة. يقوم بذلك نموذج لغوي على حاسوبك، ولا تغادره ملاحظاتك أبدًا. يُنزَّل النموذج مرة واحدة من Hugging Face.",
+ "Naive Bayes over semantic (LSA), Levenshtein and tag similarity. Learns from the links you make and dismiss.": "بايز الساذج على التشابه الدلالي (LSA) وتشابه ليفنشتاين وتشابه الوسوم. يتعلّم من الروابط التي تنشئها وترفضها.",
+ "≈ similar meaning": "≈ معنى مشابه",
+ "Found by semantic search: by what the note means, not by the words you typed.": "عُثر عليها بالبحث الدلالي: بحسب معنى الملاحظة، لا بالكلمات التي كتبتها.",
+ "{shown} of {total}": "{shown} من {total}"
 }

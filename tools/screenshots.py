@@ -1,7 +1,8 @@
 """Render screenshots of the real app (offscreen) for the website and docs.
 
 Run with:  python tools/screenshots.py [output-folder]
-Settings go to a temporary INI file, so your own preferences are untouched.
+Settings and local data (backups, caches) go to a temporary folder, so your own
+preferences and data are untouched.
 """
 
 from __future__ import annotations
@@ -17,6 +18,7 @@ TMP = Path(tempfile.mkdtemp(prefix="zettelapp-shots-"))
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 os.environ.setdefault("QT_QPA_FONTDIR", str(Path(os.environ.get("WINDIR", "C:/Windows")) / "Fonts"))
 os.environ["ZETTELAPP_SETTINGS_FILE"] = str(TMP / "settings.ini")
+os.environ["LOCALAPPDATA"] = str(TMP / "local")
 
 from PySide6.QtCore import QEventLoop, QLocale, QThreadPool, QTimer  # noqa: E402
 from PySide6.QtWidgets import QApplication  # noqa: E402

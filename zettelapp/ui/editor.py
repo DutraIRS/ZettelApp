@@ -25,6 +25,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from zettelapp import i18n
 from zettelapp.core.models import Flashcard, Note, new_mindmap_node
 from zettelapp.core.security import (
     UnsafeInputError,
@@ -145,9 +146,10 @@ class NoteEditor(QWidget):
             flow.addWidget(box)
 
         group(tool_button("trash", _("Move note to Trash"), lambda: self.window.trash_current()))
+        bold, italic = icons.format_glyphs(i18n.language())
         self.fmt_buttons = [
-            tool_button("bold", _("Bold (Ctrl+B)"), lambda: self.body.wrap_selection("**")),
-            tool_button("italic", _("Italic (Ctrl+I)"), lambda: self.body.wrap_selection("*")),
+            tool_button(bold, _("Bold (Ctrl+B)"), lambda: self.body.toggle_emphasis("**")),
+            tool_button(italic, _("Italic (Ctrl+I)"), lambda: self.body.toggle_emphasis("*")),
             tool_button("heading", _("Heading"), lambda: self.body.prefix_lines("## ")),
             tool_button("bullets", _("Bulleted list"), lambda: self.body.prefix_lines("- ")),
             tool_button("checklist", _("Checklist"), lambda: self.body.prefix_lines("- [ ] ")),

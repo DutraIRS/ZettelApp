@@ -809,7 +809,6 @@
  "Missing image {name}": "Image manquante : {name}",
  "Model details…": "Détails du modèle…",
  "Naive Bayes estimate: {p}": "Estimation bayésienne naïve : {p}",
- "Naive Bayes over semantic, Levenshtein and tag similarity. Learns from the links you make and dismiss.": "Bayésien naïf sur la similarité sémantique, de Levenshtein et des tags. Apprend des liens que vous créez et ignorez.",
  "No links yet": "Aucun lien pour l’instant",
  "No note in the graph matches that title.": "Aucune note du graphe ne correspond à ce titre.",
  "No notes are tagged #{tag} yet.": "Aucune note n’a encore le tag #{tag}.",
@@ -1005,7 +1004,6 @@
  "Download the language model ({size} MB) from huggingface.co? Only the request for the model is sent, nothing about your notes.": "Télécharger le modèle de langue ({size} Mo) depuis huggingface.co ? Seule la demande du modèle est envoyée, rien sur vos notes.",
  "Duplicate note": "Dupliquer la note",
  "Enter two different tags.": "Saisissez deux tags différents.",
- "Finds notes by what they mean, even when they share no words with your search. A language model does this on your computer and your notes never leave it. The model is a one-time download from Hugging Face.": "Trouve les notes d’après leur sens, même si elles n’ont aucun mot en commun avec votre recherche. Un modèle de langue s’en charge sur votre ordinateur et vos notes n’en sortent jamais. Le modèle se télécharge une seule fois depuis Hugging Face.",
  "Indexing notes for semantic search: {done} of {total}": "Indexation des notes pour la recherche sémantique : {done} sur {total}",
  "Manage tag ontology…": "Gérer l’ontologie des tags…",
  "Move selected notes to Trash (in the note list)": "Mettre les notes sélectionnées à la corbeille (dans la liste des notes)",
@@ -1045,5 +1043,14 @@
  "{n} attachment that isn't a picture was not imported; its name stays in the text.": [
   "{n} pièce jointe qui n’est pas une image n’a pas été importée ; son nom reste dans le texte.",
   "{n} pièces jointes qui ne sont pas des images n’ont pas été importées ; leurs noms restent dans le texte."
- ]
+ ],
+ "strong": "fort",
+ "likely": "probable",
+ "possible": "possible",
+ "Sort notes: {order}": "Trier les notes : {order}",
+ "Lets the search box (Ctrl+F) also find notes by what they mean, even when they share no words with your search. A language model does this on your computer and your notes never leave it. The model is a one-time download from Hugging Face.": "Permet au champ de recherche (Ctrl+F) de trouver aussi les notes d’après leur sens, même si elles n’ont aucun mot en commun avec votre recherche. Un modèle de langue s’en charge sur votre ordinateur et vos notes n’en sortent jamais. Le modèle se télécharge une seule fois depuis Hugging Face.",
+ "Naive Bayes over semantic (LSA), Levenshtein and tag similarity. Learns from the links you make and dismiss.": "Bayésien naïf sur la similarité sémantique (LSA), de Levenshtein et des tags. Apprend des liens que vous créez et ignorez.",
+ "≈ similar meaning": "≈ sens proche",
+ "Found by semantic search: by what the note means, not by the words you typed.": "Trouvée par la recherche sémantique : d’après le sens de la note, pas d’après les mots saisis.",
+ "{shown} of {total}": "{shown} sur {total}"
 }
