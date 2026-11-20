@@ -60,13 +60,37 @@ step.
 A universal `.app` bundle and `.dmg`, after the Linux work: icon fallback, Keychain for API keys and
 platform paths.
 
-## 5. Sync between devices
+## 5. Android (mobile app)
+
+**Status: in progress.** The core (storage, models, Markdown rendering, Anki
+export, security) is plain Python and runs on Android through
+[Chaquopy](https://chaquo.com/chaquopy/); a native Kotlin/Compose screen calls
+it through the small, Qt-free `zettelapp.mobile` facade (`android/` holds the
+Gradle project).
+
+What works:
+
+- Notes list, search over titles, editing and creating notes. The vault lives
+  in the app's private storage, with shared `Documents/ZettelApp` used when
+  that view is mounted on the device.
+- `zettelapp://note/<id>` deep links open the matching note.
+- API keys stay in memory for the session (Android has no shared secret store
+  the app could use yet).
+- AnkiDroid availability checks and `zotero://` links through Android intents.
+
+Still to do:
+
+- Semantic search and *Ask your notes* on device (needs onnxruntime/tokenizers
+  Android wheels), on-device flashcard export to AnkiDroid, a release pipeline
+  with signing, and store listings.
+
+## 6. Sync between devices
 
 Optional sync of a vault between computers. Options include a change log in the database merged through
 a folder you already sync, or a self-hosted service. The goal is to avoid conflicts when the same vault
 is open on two machines.
 
-## 6. More ideas
+## 7. More ideas
 
 - **More uses for the local language model** that semantic search can download: link suggestions and
   *Ask your notes*, fully offline. They would be optional additions alongside LSA.

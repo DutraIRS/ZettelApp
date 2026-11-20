@@ -8,6 +8,13 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Added
 
+- **Android (alpha)** (roadmap item 5): a native Kotlin/Compose app in `android/` runs the Qt-free
+  Python core on device through Chaquopy, with a notes list, title search, editing and creating
+  notes, and `zettelapp://note/<id>` deep links. The vault lives in the app's private storage
+  (shared `Documents/ZettelApp` when it is visible), API keys stay in memory for the session, and
+  AnkiDroid detection plus `zotero://` links go through Android intents. The desktop apps are
+  unchanged; `paths` and `core.secrets` gained explicit Android branches so the platform dispatch
+  stays correct (`sys.platform` is `linux` on Android).
 - **Linux support** (roadmap item 2): ZettelApp now runs on 64-bit Linux desktops, on X11 and Wayland.
   - New install options: a `.deb` for Debian-based distributions and a portable `.tar.gz`, built by
     `packaging/build-linux.sh`. A Flatpak manifest (`packaging/flatpak/`, freedesktop 24.08) and a Snap

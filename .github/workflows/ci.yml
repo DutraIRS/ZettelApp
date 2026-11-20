@@ -85,6 +85,29 @@ jobs:
           path: dist/ZettelApp-Portable.zip
           retention-days: 7
 
+  build-android:
+    needs: [quality, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.9"
+      # The Android SDK ships with the ubuntu runners; Chaquopy pip-installs the
+      # pure-Python core dependencies during the build.
+      - name: Build the Android app
+        working-directory: android
+        run: gradle assembleDebug
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ZettelApp-Android-debug
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 7
+
   build-linux:
     needs: [quality, test]
     runs-on: ubuntu-latest

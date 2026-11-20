@@ -7,8 +7,9 @@ KWallet and others implement it) through libsecret, as items with the
 attributes ``application=ZettelApp`` and ``name=ZettelApp/<name>``.
 
 Nothing is written to the registry, settings or vault by this module, and
-secret values are never logged. When no secret store is available, secrets
-live in memory for the current session only.
+secret values are never logged. When no secret store is available (including
+Android, which has no shared secret service yet), secrets live in memory for
+the current session only.
 """
 
 from __future__ import annotations
@@ -25,8 +26,9 @@ _MAX_BLOB = 5 * 512  # CRED_MAX_CREDENTIAL_BLOB_SIZE (Windows Credential Manager
 _MAX_LINUX_CHARS = 4096  # generous: D-Bus carries far more than any API key
 _memory: dict[str, str] = {}
 
+IS_ANDROID = sys.platform == "android" or hasattr(sys, "getandroidapilevel")
 IS_WINDOWS = sys.platform == "win32"
-IS_LINUX = sys.platform.startswith("linux")
+IS_LINUX = sys.platform.startswith("linux") and not IS_ANDROID
 
 if IS_WINDOWS:
     from ctypes import wintypes

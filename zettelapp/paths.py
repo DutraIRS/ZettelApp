@@ -14,6 +14,13 @@ Linux follows the XDG base directories:
 - the small UI cache lives under $XDG_CACHE_HOME/ZettelApp (default
   ~/.cache/ZettelApp);
 - preferences are stored by QSettings as ~/.config/ZettelApp/ZettelApp.conf.
+
+Android keeps everything app-private (scoped storage):
+- notes default to Documents/ZettelApp on shared storage when it is visible,
+  otherwise under the app's private files directory;
+- logs, backups and preferences live under the app's private data directory,
+  which the Android shell hands over at startup (Chaquopy: files dir);
+- the small UI cache lives under the app's private cache directory.
 """
 
 from __future__ import annotations
@@ -26,6 +33,36 @@ from pathlib import Path
 from zettelapp import APP_NAME
 
 IS_WINDOWS = sys.platform == "win32"
+IS_ANDROID = sys.platform == "android" or hasattr(sys, "getandroidapilevel")
+
+# The Android shell registers its private directories at startup (Python inside
+# Chaquopy cannot discover them on its own); they override the env fallbacks.
+_ANDROID_BASE: Path | None = None
+_ANDROID_CACHE: Path | None = None
+
+
+def set_android_dirs(base: str | Path | None, cache: str | Path | None) -> None:
+    """Register the app's private data and cache directories (Android shell)."""
+    global _ANDROID_BASE, _ANDROID_CACHE
+    _ANDROID_BASE = Path(base) if base else None
+    _ANDROID_CACHE = Path(cache) if cache else None
+
+
+def _android_base() -> Path:
+    """The app's private storage root, as handed over by the shell or env."""
+    if _ANDROID_BASE:
+        return _ANDROID_BASE
+    for var in ("ANDROID_PRIVATE", "ANDROID_ARGUMENT"):
+        value = os.environ.get(var)
+        if value:
+            return Path(value)
+    return Path.home()
+
+
+def _android_documents() -> Path | None:
+    """The shared Documents folder, when its view is mounted on the device."""
+    shared = Path("/storage/emulated/0/Documents")
+    return shared if shared.is_dir() else None
 
 
 def _known_folder_documents() -> Path | None:
@@ -65,6 +102,8 @@ def _known_folder_documents() -> Path | None:
 
 
 def documents_dir() -> Path:
+    if IS_ANDROID:
+        return _android_documents() or _android_base() / "Documents"
     if IS_WINDOWS:
         return _known_folder_documents() or Path.home() / "Documents"
     return _xdg_documents() or Path.home() / "Documents"
@@ -92,6 +131,8 @@ def _xdg_documents() -> Path | None:
 
 def local_data_dir() -> Path:
     """Machine-local data: logs, backups, the semantic search model."""
+    if IS_ANDROID:
+        return _android_base() / APP_NAME
     if IS_WINDOWS:
         base = os.environ.get("LOCALAPPDATA")
         root = Path(base) if base else Path.home() / "AppData" / "Local"
@@ -103,6 +144,9 @@ def local_data_dir() -> Path:
 
 def cache_dir() -> Path:
     """Non-essential files the app can rebuild (theme indicator images)."""
+    if IS_ANDROID:
+        base = _ANDROID_CACHE or Path(os.environ.get("CACHE_DIR") or str(_android_base() / "cache"))
+        return base / APP_NAME
     if IS_WINDOWS:
         return local_data_dir() / "Cache"
     base = os.environ.get("XDG_CACHE_HOME") or str(Path.home() / ".cache")

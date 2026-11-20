@@ -705,8 +705,8 @@
  "Anki sent an unexpected response.": {
   "plural": null,
   "where": [
-   "zettelapp/core/anki.py:215",
-   "zettelapp/core/anki.py:213"
+   "zettelapp/core/anki.py:218",
+   "zettelapp/core/anki.py:216"
   ]
  },
  "Anki sync finished: {added} added, {updated} updated": {
@@ -1351,7 +1351,7 @@
  "Could not reach Anki. Make sure Anki is running with the AnkiConnect add-on installed.": {
   "plural": null,
   "where": [
-   "zettelapp/core/anki.py:208"
+   "zettelapp/core/anki.py:211"
   ]
  },
  "Could not reach Anthropic. Check your internet connection.": {
@@ -1375,38 +1375,38 @@
  "Could not read from the system keyring.": {
   "plural": null,
   "where": [
-   "zettelapp/core/secrets.py:316",
-   "zettelapp/core/secrets.py:393"
+   "zettelapp/core/secrets.py:318",
+   "zettelapp/core/secrets.py:395"
   ]
  },
  "Could not read from Windows Credential Manager.": {
   "plural": null,
   "where": [
-   "zettelapp/core/secrets.py:291"
+   "zettelapp/core/secrets.py:293"
   ]
  },
  "Could not remove from the system keyring.": {
   "plural": null,
   "where": [
-   "zettelapp/core/secrets.py:349"
+   "zettelapp/core/secrets.py:351"
   ]
  },
  "Could not remove from Windows Credential Manager.": {
   "plural": null,
   "where": [
-   "zettelapp/core/secrets.py:333"
+   "zettelapp/core/secrets.py:335"
   ]
  },
  "Could not save to the system keyring.": {
   "plural": null,
   "where": [
-   "zettelapp/core/secrets.py:278"
+   "zettelapp/core/secrets.py:280"
   ]
  },
  "Could not save to Windows Credential Manager.": {
   "plural": null,
   "where": [
-   "zettelapp/core/secrets.py:256"
+   "zettelapp/core/secrets.py:258"
   ]
  },
  "Could not switch MCP on.": {
@@ -1418,7 +1418,7 @@
  "Could not talk to the system keyring.": {
   "plural": null,
   "where": [
-   "zettelapp/core/secrets.py:192"
+   "zettelapp/core/secrets.py:194"
   ]
  },
  "Could not update the configuration: {error}": {
@@ -2515,7 +2515,7 @@
  "Invalid secret name.": {
   "plural": null,
   "where": [
-   "zettelapp/core/secrets.py:221"
+   "zettelapp/core/secrets.py:223"
   ]
  },
  "It learns from every answer you give.": {
@@ -4965,14 +4965,14 @@
  "The secret is empty.": {
   "plural": null,
   "where": [
-   "zettelapp/core/secrets.py:228"
+   "zettelapp/core/secrets.py:230"
   ]
  },
  "The secret is too long.": {
   "plural": null,
   "where": [
-   "zettelapp/core/secrets.py:232",
-   "zettelapp/core/secrets.py:234"
+   "zettelapp/core/secrets.py:234",
+   "zettelapp/core/secrets.py:236"
   ]
  },
  "The selected key is the one used for questions. Keys are kept in the system keyring.": {
