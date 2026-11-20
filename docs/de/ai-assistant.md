@@ -33,8 +33,7 @@ bedeutet, dass vor der Antwort mehr nachgedacht wird, und verursacht höhere Kos
 ## Eigenes LLM verwenden
 
 „Fragen“ verwendet **Ihr eigenes Konto** beim ausgewählten Anbieter; dieser rechnet die Nutzung direkt mit
-Ihnen ab. ZettelApp hat keinen eigenen KI-Dienst. Ihr API-Schlüssel wird im **Windows-Anmeldeinformations-
-Manager** gespeichert, niemals in Einstellungsdateien.
+Ihnen ab. ZettelApp hat keinen eigenen KI-Dienst. Ihr API-Schlüssel wird im **Schlüsselbund des Systems** gespeichert — dem Windows-Anmeldeinformations-Manager unter Windows oder dem Secret Service (GNOME Keyring oder KWallet) unter Linux —, niemals in Einstellungsdateien.
 
 - **Anbieter**: Anthropic Claude, OpenAI und Z.ai (GLM) unter *Werkzeuge ▸ Optionen ▸ KI-Assistent ▸ Anbieter*. Wählen Sie ein **Modell** aus der Liste (*Liste aktualisieren* fragt ab, welche Modelle Ihr Schlüssel verwenden darf) oder geben Sie eine beliebige erreichbare Modell-ID ein.
 - **Eigener Server**: Jeder Dienst mit einer **OpenAI-kompatiblen Chat-Completions-API** funktioniert. Wählen Sie **OpenAI** und geben Sie unter **Endpunkt (optional)** die Basisadresse ein, etwa `https://my-proxy.example.com/v1`, `http://localhost:11434/v1` (Ollama) oder `http://localhost:1234/v1` (LM Studio). `http://` wird nur für `localhost`, `127.0.0.1` und `::1` akzeptiert; alle anderen Adressen müssen `https://` verwenden. Bei diesen lokalen Adressen darf das Feld **API-Schlüssel** leer bleiben.
@@ -60,7 +59,7 @@ Notiz mit dem Tag `ai-answer` und `cites::`-Links zu ihren Quellen ab.
 ## Datenschutz und Sicherheit
 
 - **Nur Ihre Anfrage wird gesendet**: Ihre Frage und die Notizen unter *Gesendete Quellen*. Vor dem Senden erinnert Sie ein Hinweis daran (aktivieren Sie *Nicht erneut anzeigen*, um ihn zu überspringen).
-- Ihr **API-Schlüssel** wird im **Windows-Anmeldeinformations-Manager** (`ZettelApp/llm/<provider>`, weitere Schlüssel als `ZettelApp/llm/<provider>/<Schlüssel-ID>`) gespeichert, niemals in Einstellungsdateien oder Protokollen. Er wird aus jeder angezeigten Fehlermeldung entfernt. Mit *Löschen* entfernen Sie ihn von diesem Computer.
+- Ihr **API-Schlüssel** wird im **Schlüsselbund des Systems** gespeichert (dem Windows-Anmeldeinformations-Manager unter Windows oder dem Secret Service unter Linux; `ZettelApp/llm/<provider>`, weitere Schlüssel als `ZettelApp/llm/<provider>/<Schlüssel-ID>`) gespeichert, niemals in Einstellungsdateien oder Protokollen. Er wird aus jeder angezeigten Fehlermeldung entfernt. Mit *Löschen* entfernen Sie ihn von diesem Computer.
 - **Das Modell hat keine Tools.** Es kann weder im Web suchen noch Code ausführen oder Ihre Notizen ändern. In einer Notiz (oder importierten Datei) versteckte Anweisungen können deshalb nichts auslösen. Die Antwort wird mit demselben sicheren Renderer wie Notizen angezeigt, ohne HTML oder Skripte.
 - Bei Claude verwendet ZettelApp das offizielle Anthropic-SDK und aktiviert **serverseitigen Ausweichmechanismus bei Ablehnung**: Lehnt ein Sicherheitsklassifikator eine Anfrage ab, wiederholt Anthropic sie mit dem empfohlenen Ausweichmodell. Dies gilt für Claude Opus 5.5, Opus 5, Sonnet 5.5 und Fable 5.1.
 - Für die von Ihnen gesendeten Daten gelten die Nutzungsbedingungen und Datenschutzrichtlinien des jeweiligen Anbieters.

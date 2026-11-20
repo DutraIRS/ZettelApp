@@ -56,16 +56,18 @@ matters most, and the estimates improve as you link and dismiss. See
 <a href="https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md">roadmap</a>.</p>
 <h3 id="is-the-app-available-in-other-languages">Is the app available in other languages?</h3>
 <p>Yes. The installer and the app are translated into Spanish, Portuguese (Brazil), French, German, Italian,
-Russian, Simplified Chinese, Japanese, Korean and Arabic. The app follows your Windows language by default;
+Russian, Simplified Chinese, Japanese, Korean and Arabic. The app follows your system language by default;
 change it in <em>Options</em>. Missing text falls back to English.</p>
 <h3 id="how-do-i-uninstall-and-what-happens-to-my-data">How do I uninstall, and what happens to my data?</h3>
-<p><em>Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall</em>. The uninstaller offers an unticked <strong>Also
+<p>On Windows, use <em>Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall</em>. The uninstaller offers an unticked <strong>Also
 delete my ZettelApp settings and data</strong> option that removes preferences, saved API keys, logs, cache and
-automatic backups, <strong>and all your notes</strong> (vault databases and attachments). Unticked, your notes are kept. For the
-portable version, delete its folder; its preferences live in the registry under
-<code>HKEY_CURRENT_USER\Software\ZettelApp</code>, and logs and backups in <code>%LOCALAPPDATA%\ZettelApp</code>.</p>
+automatic backups, <strong>and all your notes</strong> (vault databases and attachments). Unticked, your notes are kept. On Linux, remove the package (<code>sudo apt remove zettelapp</code>, or uninstall
+it in your software centre); your notes and your settings in <code>~/.config/ZettelApp</code> stay unless you delete
+them yourself. For the portable version, delete its folder; its preferences live in the registry under
+<code>HKEY_CURRENT_USER\Software\ZettelApp</code> on Windows, or in <code>~/.config/ZettelApp/ZettelApp.conf</code> on Linux, and
+logs and backups in <code>%LOCALAPPDATA%\ZettelApp</code> on Windows or <code>~/.local/share/ZettelApp</code> on Linux.</p>
 <h3 id="something-went-wrong-where-are-the-logs">Something went wrong. Where are the logs?</h3>
-<p>In <code>%LOCALAPPDATA%\ZettelApp\Logs</code>. Please include the relevant part when you
+<p>In <code>%LOCALAPPDATA%\ZettelApp\Logs</code> on Windows, or <code>~/.local/share/ZettelApp/Logs</code> on Linux. Please include the relevant part when you
 <a href="https://github.com/DutraIRS/ZettelApp/issues">report an issue</a>. Check that it contains nothing private
 first.</p>
 <p class="doc-footer">Found a mistake? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/faq.md">Edit this page on GitHub</a>.</p></main></div><footer class="site-footer"><div class="wrap footer-row"><p><img src="../assets/favicon.png" alt="" width="20" height="20"> <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p><ul class="nav"><li><a href="../">Home</a></li><li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li><li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li></ul></div><ul class="nav lang-row" aria-label="Languages"><li><a href="faq.html" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="../es/docs/faq.html" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/docs/faq.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/docs/faq.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/docs/faq.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/docs/faq.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/docs/faq.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/docs/faq.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/docs/faq.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/docs/faq.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/docs/faq.html" lang="ar" hreflang="ar">العربية</a></li></ul><p class="made-with">Proudly developed with <a href="https://github.com/DutraIRS/Rational-Web">RationalWeb</a></p></footer></div></body></html>

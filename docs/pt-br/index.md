@@ -1,6 +1,6 @@
 # Documentação do ZettelApp
 
-O ZettelApp é um Zettelkasten para Windows: uma rede de notas pequenas, cada uma com uma única ideia, conectadas por
+O ZettelApp é um Zettelkasten para Windows e Linux: uma rede de notas pequenas, cada uma com uma única ideia, conectadas por
 links que dizem *como* as ideias se relacionam. Ele sugere links enquanto você escreve, desenha seu conhecimento como um
 grafo 2D ou 3D, transforma notas em flashcards e quizzes e funciona com o Anki, o Zotero e assistentes de IA.
 

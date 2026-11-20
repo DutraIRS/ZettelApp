@@ -56,7 +56,7 @@ computador (<code>http://localhost:…</code>). Os endereços devem usar <code>h
 custa mais. O padrão é <em>médio</em>.</p>
 <h2 id="traga-seu-proprio-llm">Traga seu próprio LLM</h2>
 <p>O Perguntar usa <strong>a sua própria conta</strong> no provedor que você escolher, então qualquer uso é cobrado a você por esse provedor.
-O ZettelApp não tem um serviço de IA próprio. Sua chave de API é salva no <strong>Gerenciador de Credenciais do Windows</strong>, nunca em
+O ZettelApp não tem um serviço de IA próprio. Sua chave de API é salva no <strong>chaveiro do sistema</strong> (o Gerenciador de Credenciais do Windows no Windows, ou o Serviço de Segredos — GNOME Keyring ou KWallet — no Linux), nunca em
 arquivos de configuração.</p>
 <ul>
 <li><strong>Provedores</strong>: Anthropic Claude, OpenAI e Z.ai (GLM), em <em>Ferramentas ▸ Opções ▸ Assistente de IA ▸ Provedor</em>.
@@ -94,7 +94,7 @@ para suas fontes.</p>
 <ul>
 <li><strong>Somente o que você pergunta é enviado</strong>: sua pergunta e as notas listadas em <em>Fontes enviadas</em>. Um aviso
 lembra você disso antes de perguntar (marque <em>Não mostrar novamente</em> para ignorá-lo).</li>
-<li><strong>Sua chave de API</strong> é armazenada no <strong>Gerenciador de Credenciais do Windows</strong> (como <code>ZettelApp/llm/&lt;provider&gt;</code>, ou <code>ZettelApp/llm/&lt;provider&gt;/&lt;id da chave&gt;</code> para as demais chaves), nunca em
+<li><strong>Sua chave de API</strong> é armazenada no <strong>chaveiro do sistema</strong> (o Gerenciador de Credenciais do Windows no Windows, ou o Serviço de Segredos no Linux; como <code>ZettelApp/llm/&lt;provider&gt;</code>, ou <code>ZettelApp/llm/&lt;provider&gt;/&lt;id da chave&gt;</code> para as demais chaves), nunca em
 arquivos de configuração nem em logs, e é removida de qualquer mensagem de erro exibida a você. <em>Excluir</em> a remove deste computador.</li>
 <li><strong>O modelo não tem ferramentas.</strong> Ele não pode pesquisar na web, executar código nem alterar suas notas, então instruções
 escondidas em uma nota (ou em um arquivo importado) não conseguem fazê-lo fazer nada. A resposta é exibida pelo mesmo

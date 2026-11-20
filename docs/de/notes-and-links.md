@@ -11,7 +11,7 @@ Vorschau nebeneinander) und **Vorschau**.
 
 Aus Sicherheitsgründen wird rohes HTML in einer Notiz als Text angezeigt und nie dargestellt. Links in der
 Vorschau öffnen nur Webseiten (`http`, `https`), E-Mail-Adressen (`mailto`), Notizen, Zotero-Einträge und
-lokale Dateien (werden im Datei-Explorer angezeigt, siehe [Links zu lokalen Dateien](#links-to-local-files)).
+lokale Dateien (werden in Ihrem Dateimanager angezeigt, siehe [Links zu lokalen Dateien](#links-to-local-files)).
 Siehe [Datenschutz und Sicherheit](privacy-and-security.md).
 
 ### Links folgen
@@ -27,9 +27,9 @@ eine Datei, die kein Bild ist, in den Notiztext ziehen, passiert dasselbe. Die D
 Speicherort; in den Tresor wird keine Kopie eingefügt.
 
 Wenn Sie in der Vorschau auf den Link oder im Editor bei gedrückter Ctrl-Taste darauf klicken, wird **der
-Datei-Explorer mit ausgewählter Datei geöffnet**. Die Datei selbst wird weder geöffnet noch ausgeführt.
+Ihr Dateimanager mit ausgewählter Datei geöffnet**. Die Datei selbst wird weder geöffnet noch ausgeführt.
 Erlaubt sind nur Pfade auf einem lokalen Laufwerk: Netzwerkpfade (UNC) wie `\\server\share\file.pdf` werden
-abgelehnt, denn deren Abfrage könnte Ihre Windows-Anmeldedaten an den Server senden.
+abgelehnt, denn deren Abfrage könnte Ihre Netzwerk-Anmeldedaten an den Server senden.
 
 Jede Notiz hat:
 

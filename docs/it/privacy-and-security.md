@@ -29,11 +29,15 @@ Il server MCP non effettua alcuna richiesta di rete.
 | Note, collegamenti, flashcard, cronologia dei ripassi | La cartella del tuo vault: `zettel.db` (SQLite). Per impostazione predefinita **Documenti\ZettelApp**. |
 | Immagini | La cartella `assets` del vault. |
 | Preferenze | Il registro di sistema, sotto `HKEY_CURRENT_USER\Software\ZettelApp\ZettelApp`. |
-| Chiavi API | **Gestione credenziali di Windows** (`ZettelApp/llm/…`), mai in file o nel registro. |
+| Chiavi API | **Il portachiavi di sistema** — Gestione credenziali di Windows su Windows, o Secret Service (GNOME Keyring o KWallet) su Linux (`ZettelApp/llm/…`) —, mai in file o nel registro. |
 | Log | `%LOCALAPPDATA%\ZettelApp\Logs` (a rotazione, al massimo pochi MB). Registrano errori, non le tue note, e non includono mai le chiavi API. |
 | Backup automatici | `%LOCALAPPDATA%\ZettelApp\Backups` |
 | Piccola cache dell'interfaccia | `%LOCALAPPDATA%\ZettelApp\Cache` |
 | Modello e indice della ricerca semantica, se la configuri | `%LOCALAPPDATA%\ZettelApp\Search`. L'indice deriva dalle tue note e non è mai nel vault, quindi non viene sincronizzato con esso. *Rimuovi modello e indice* in *Strumenti ▸ Opzioni ▸ Ricerca* lo elimina. |
+
+Su Linux, gli stessi elementi vivono nelle cartelle XDG: le note per impostazione predefinita in
+**Documents/ZettelApp**, le preferenze in `~/.config/ZettelApp/ZettelApp.conf`, e log, backup e modello di
+ricerca in `~/.local/share/ZettelApp`, con la piccola cache dell’interfaccia in `~/.cache/ZettelApp`.
 
 Il vault è una normale cartella: puoi copiarla, farne il backup o tenerla in OneDrive. ZettelApp scrive il
 database con sincronizzazione completa, un'impostazione scelta per adattarsi alle cartelle sincronizzate. Evita di aprire lo stesso vault su due
@@ -58,10 +62,10 @@ Le note possono provenire da importazioni, dal web o da risposte dell'IA, quindi
 - **Elenco di collegamenti consentiti.** Cliccare un collegamento apre solo pagine web (`http`/`https`), e-mail (`mailto`), note,
   collegamenti Zotero *seleziona elemento* / *apri PDF* e collegamenti a file locali (sotto). `javascript:` e altri
   schemi vengono rifiutati.
-- **I collegamenti a file locali rivelano soltanto il file.** Un collegamento `file:///` apre **Esplora file con il file
+- **I collegamenti a file locali rivelano soltanto il file.** Un collegamento `file:///` apre **il tuo gestore di file con il file
   selezionato**; il file in sé non viene mai aperto né eseguito. Sono consentiti solo percorsi su un'unità locale. I percorsi
   di rete (UNC) come `\\server\share` vengono rifiutati, perché cercarne uno può inviare le tue credenziali
-  Windows a quel server.
+  di rete a quel server.
 - **Le immagini sono verificate in base al contenuto**, non al nome del file. Sono accettati solo PNG, JPEG, GIF, WebP e BMP fino a 25 MB;
   SVG è rifiutato perché può contenere script. La verifica riguarda la firma del file e la
   dimensione compressa; le dimensioni in pixel vengono controllate quando l'immagine è mostrata per la prima volta.
@@ -75,7 +79,7 @@ Le note possono provenire da importazioni, dal web o da risposte dell'IA, quindi
   sintassi di query.
 - **I collegamenti `zettelapp://`** (usati dalle schede Anki) possono solo *aprire una nota tramite il suo ID*. Qualsiasi altra richiesta viene
   ignorata.
-- **Una sola istanza per utente.** Un secondo avvio passa la sua richiesta all'app in esecuzione tramite una named pipe di Windows
+- **Una sola istanza per utente.** Un secondo avvio passa la sua richiesta all'app in esecuzione tramite una named pipe di Windows (o un socket locale riservato al tuo utente, su Linux)
   accessibile solo dal tuo account utente.
 - **Sicurezza dell'IA.** Il modello di IA non ha strumenti, quindi le istruzioni nascoste in una nota non possono farlo agire, e la sua
   risposta viene mostrata con lo stesso renderer sicuro. Le chiavi API restano in Gestione credenziali e sono rimosse dai
@@ -87,7 +91,9 @@ Le note possono provenire da importazioni, dal web o da risposte dell'IA, quindi
 
 ## Disinstallazione
 
-Disinstalla da *Impostazioni di Windows ▸ App ▸ App installate ▸ ZettelApp ▸ Disinstalla*. Il programma di disinstallazione offre
+Su Windows, disinstalla da *Impostazioni di Windows ▸ App ▸ App installate ▸ ZettelApp ▸ Disinstalla*.
+Su Linux, rimuovi il pacchetto (`sudo apt remove zettelapp`, o disinstallalo dal tuo software center); le tue note e le
+tue impostazioni in `~/.config/ZettelApp` restano al loro posto, a meno che tu non le elimini. Il programma di disinstallazione offre
 un'opzione non selezionata, **Elimina anche le impostazioni e i dati di ZettelApp**. Se la selezioni, rimuove le tue
 impostazioni, le chiavi API salvate in Gestione credenziali, i log, la cache, i backup automatici e il modello e l'indice della ricerca semantica
 (`%LOCALAPPDATA%\ZettelApp`) **e tutte le tue note** (il database e gli allegati dei tuoi vault). Se non la selezioni,

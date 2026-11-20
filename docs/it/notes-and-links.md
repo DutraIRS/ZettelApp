@@ -10,7 +10,7 @@ L'editor ha tre modalità (Ctrl+E le alterna): **Modifica**, **Divisa** (testo e
 e **Anteprima**.
 
 Per sicurezza, l'HTML grezzo in una nota viene mostrato come testo e non viene mai interpretato. I collegamenti nell'anteprima aprono solo pagine
-web (`http`, `https`), e-mail (`mailto`), note, elementi di Zotero e file locali (mostrati in Esplora file,
+web (`http`, `https`), e-mail (`mailto`), note, elementi di Zotero e file locali (mostrati nel tuo gestore di file,
 vedi [Collegamenti a file locali](#links-to-local-files)). Vedi [Privacy e sicurezza](privacy-and-security.md).
 
 ### Seguire i collegamenti
@@ -27,10 +27,10 @@ vedi [Collegamenti a file locali](#links-to-local-files)). Vedi [Privacy e sicur
 come `[report.pdf](file:///C:/Users/me/Documents/report.pdf)`. Trascinare nel testo della nota un file che non è un'immagine
 ottiene lo stesso risultato. Il file resta collegato dov'è; nulla viene copiato nel vault.
 
-Cliccando il collegamento nell'anteprima, o con Ctrl+clic nell'editor, si apre **Esplora file con il file
+Cliccando il collegamento nell'anteprima, o con Ctrl+clic nell'editor, si apre **il tuo gestore di file con il file
 selezionato**. Il file in sé non viene mai aperto né eseguito. Sono consentiti solo percorsi su un'unità locale: i percorsi
 di rete (UNC) come `\\server\share\file.pdf` vengono rifiutati, perché cercarli può inviare le tue credenziali
-Windows a quel server.
+di rete a quel server.
 
 Ogni nota ha:
 

@@ -1,6 +1,6 @@
 # ZettelApp 설명서
 
-ZettelApp은 Windows용 Zettelkasten이에요. 아이디어 하나씩을 담은 작은 노트들이 아이디어가 *어떻게* 이어지는지
+ZettelApp은 Windows와 Linux용 Zettelkasten이에요. 아이디어 하나씩을 담은 작은 노트들이 아이디어가 *어떻게* 이어지는지
 말해 주는 링크로 연결된 네트워크예요. 글을 쓰는 동안 링크를 제안하고, 지식을 2D 또는 3D 그래프로 그려 주며,
 노트를 플래시카드와 퀴즈로 바꿔 주고, Anki, Zotero, AI 어시스턴트와 함께 쓸 수 있어요.
 

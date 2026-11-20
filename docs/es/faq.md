@@ -86,7 +86,7 @@ Todavía no. Los paquetes para Linux (.deb, AppImage) y macOS están en la
 ### ¿Está disponible la aplicación en otros idiomas?
 
 Sí. El instalador y la aplicación están traducidos al español, portugués (Brasil), francés, alemán, italiano,
-ruso, chino simplificado, japonés, coreano y árabe. La aplicación sigue por defecto el idioma de tu Windows;
+ruso, chino simplificado, japonés, coreano y árabe. La aplicación sigue por defecto el idioma de tu sistema;
 cámbialo en *Opciones*. El texto que falte recurre al inglés.
 
 ### ¿Cómo desinstalo y qué pasa con mis datos?
@@ -95,9 +95,10 @@ cámbialo en *Opciones*. El texto que falte recurre al inglés.
 también mi configuración y mis datos de ZettelApp** que elimina las preferencias, las claves de API guardadas, los registros, la caché y las
 copias de seguridad automáticas, **y todas tus notas** (bases de datos de bóvedas y adjuntos). Sin marcar, tus notas se conservan. En la
 versión portable, elimina su carpeta; sus preferencias viven en el registro, en
-`HKEY_CURRENT_USER\Software\ZettelApp`, y los registros y copias de seguridad en `%LOCALAPPDATA%\ZettelApp`.
+`HKEY_CURRENT_USER\Software\ZettelApp` en Windows, o en `~/.config/ZettelApp/ZettelApp.conf` en Linux; los
+registros y copias de seguridad en `%LOCALAPPDATA%\ZettelApp` en Windows, o `~/.local/share/ZettelApp` en Linux.
 
 ### Algo salió mal. ¿Dónde están los registros?
 
-En `%LOCALAPPDATA%\ZettelApp\Logs`. Incluye la parte relevante cuando
+En `%LOCALAPPDATA%\ZettelApp\Logs` en Windows, o `~/.local/share/ZettelApp/Logs` en Linux. Incluye la parte relevante cuando
 [informes un problema](https://github.com/DutraIRS/ZettelApp/issues). Comprueba antes que no contenga nada privado.

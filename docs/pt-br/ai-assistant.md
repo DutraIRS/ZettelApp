@@ -33,7 +33,7 @@ custa mais. O padrão é *médio*.
 ## Traga seu próprio LLM
 
 O Perguntar usa **a sua própria conta** no provedor que você escolher, então qualquer uso é cobrado a você por esse provedor.
-O ZettelApp não tem um serviço de IA próprio. Sua chave de API é salva no **Gerenciador de Credenciais do Windows**, nunca em
+O ZettelApp não tem um serviço de IA próprio. Sua chave de API é salva no **chaveiro do sistema** (o Gerenciador de Credenciais do Windows no Windows, ou o Serviço de Segredos — GNOME Keyring ou KWallet — no Linux), nunca em
 arquivos de configuração.
 
 - **Provedores**: Anthropic Claude, OpenAI e Z.ai (GLM), em *Ferramentas ▸ Opções ▸ Assistente de IA ▸ Provedor*.
@@ -74,7 +74,7 @@ para suas fontes.
 
 - **Somente o que você pergunta é enviado**: sua pergunta e as notas listadas em *Fontes enviadas*. Um aviso
   lembra você disso antes de perguntar (marque *Não mostrar novamente* para ignorá-lo).
-- **Sua chave de API** é armazenada no **Gerenciador de Credenciais do Windows** (como `ZettelApp/llm/<provider>`, ou `ZettelApp/llm/<provider>/<id da chave>` para as demais chaves), nunca em
+- **Sua chave de API** é armazenada no **chaveiro do sistema** (o Gerenciador de Credenciais do Windows no Windows, ou o Serviço de Segredos no Linux; como `ZettelApp/llm/<provider>`, ou `ZettelApp/llm/<provider>/<id da chave>` para as demais chaves), nunca em
   arquivos de configuração nem em logs, e é removida de qualquer mensagem de erro exibida a você. *Excluir* a remove deste computador.
 - **O modelo não tem ferramentas.** Ele não pode pesquisar na web, executar código nem alterar suas notas, então instruções
   escondidas em uma nota (ou em um arquivo importado) não conseguem fazê-lo fazer nada. A resposta é exibida pelo mesmo

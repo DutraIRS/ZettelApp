@@ -73,6 +73,6 @@ stable, so importing a newer export **updates** the cards you imported before.
 ### From Anki back to your notes
 
 Every card's **Source** is a `zettelapp://note/<id>` link. Click it in Anki and the note opens in
-ZettelApp. The installer sets this up. With the portable version, use *Options ▸ Windows integration ▸
+ZettelApp. The installer sets this up. With the portable version, use *Options ▸ Desktop integration ▸
 Register links*. The link handler only accepts *open note* links; see
 [Privacy and security](privacy-and-security.md).

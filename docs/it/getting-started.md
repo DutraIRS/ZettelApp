@@ -2,7 +2,7 @@
 
 ## Installazione
 
-ZettelApp funziona su **Windows 10 (21H2 o successivo) e Windows 11, a 64 bit**. Scaricalo dall'
+ZettelApp funziona su **Windows 10 (21H2 o successivo), Windows 11 e desktop Linux a 64 bit recenti**. Scaricalo dall'
 [ultima versione](https://github.com/DutraIRS/ZettelApp/releases/latest):
 
 | Download | Usalo quando |
@@ -18,6 +18,24 @@ Ogni versione elenca i checksum SHA-256 (`SHA256SUMS.txt`). Per verificare un do
 ```powershell
 Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 ```
+
+### Linux
+
+| Download | Usalo quando |
+|---|---|
+| `zettelapp_<versione>_amd64.deb` | Debian, Ubuntu, Mint o un'altra distribuzione basata su `.deb`. Installalo con `sudo apt install ./zettelapp_*.deb`, oppure aprilo nel tuo software center, che poi proporrà gli aggiornamenti. |
+| `ZettelApp-<versione>-linux-x86_64.tar.gz` | Qualsiasi altra distribuzione, o senza installazione: estrailo dove vuoi ed esegui `ZettelApp/zettelapp`. |
+
+Entrambi includono Python e Qt; richiedono un desktop a 64 bit (X11 o Wayland — GNOME, KDE e altri) con
+le sue librerie grafiche standard. Per verificare un download in un terminale:
+
+```bash
+sha256sum zettelapp_1.3.1_amd64.deb
+```
+
+Le chiavi API sono salvate nel Secret Service (GNOME Keyring o KWallet); senza un portachiavi restano
+solo in memoria. I collegamenti `zettelapp://` delle schede di Anki aprono le note subito con il `.deb`;
+le altre installazioni configurano il gestore in *Opzioni ▸ Integrazione con il desktop*.
 
 ### «Windows ha protetto il PC»
 
@@ -54,9 +72,9 @@ La **barra di navigazione** a sinistra passa da una pagina all'altra (Ctrl+1 –
 - **Chiedi**: fai domande sulle tue note usando un provider di IA a tua scelta (facoltativo).
 
 **Opzioni** (in fondo alla barra, oppure *Strumenti ▸ Opzioni…*, Ctrl+,) contiene le preferenze: tema, dimensione
-del testo dell'editor, suggerimenti di collegamento, tipi di collegamento, IA, server MCP, Anki, Zotero, integrazione con Windows e backup.
+del testo dell'editor, suggerimenti di collegamento, tipi di collegamento, IA, server MCP, Anki, Zotero, integrazione con il desktop e backup.
 
-L'app segue l'impostazione **chiaro/scuro** e il **colore di accento** di Windows. Puoi forzare un tema in
+L'app segue l'impostazione **chiaro/scuro** e il **colore di accento** di sistema. Puoi forzare un tema in
 *Visualizza ▸ Tema*.
 
 ## Aggiornamenti
@@ -72,7 +90,9 @@ nulla da solo.
 
 ## Disinstallazione
 
-Usa *Impostazioni di Windows ▸ App ▸ App installate ▸ ZettelApp ▸ Disinstalla*. Dopo la conferma, una finestra di dialogo offre
+Su Windows, usa *Impostazioni di Windows ▸ App ▸ App installate ▸ ZettelApp ▸ Disinstalla*.
+Su Linux, rimuovi il pacchetto (`sudo apt remove zettelapp`, o disinstallalo dal tuo software center); le tue note e le
+tue impostazioni in `~/.config/ZettelApp` restano al loro posto, a meno che tu non le elimini. Dopo la conferma, una finestra di dialogo offre
 un'opzione, non selezionata, **Elimina anche le impostazioni e i dati di ZettelApp**. Rimuove le tue impostazioni, le chiavi
 API salvate, i log, la cache e i backup automatici (`%LOCALAPPDATA%\ZettelApp`) **e tutte le tue note** (il database
 e gli allegati dei tuoi vault). Lasciala deselezionata per conservare le note. Per la versione portatile, elimina la sua cartella.

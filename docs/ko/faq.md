@@ -77,7 +77,7 @@ ID로 한 링크는 절대 깨지지 않아요. ID를 볼 일은 거의 없어�
 ### 앱을 다른 언어로 쓸 수 있나요?
 
 네. 설치 프로그램과 앱은 스페인어, 포르투갈어(브라질), 프랑스어, 독일어, 이탈리아어, 러시아어, 중국어 간체, 일본어,
-한국어, 아랍어로 번역되어 있어요. 앱은 기본적으로 Windows 언어를 따르며, *옵션*에서 바꿀 수 있어요. 번역되지 않은 텍스트는
+한국어, 아랍어로 번역되어 있어요. 앱은 기본적으로 시스템 언어를 따르며, *옵션*에서 바꿀 수 있어요. 번역되지 않은 텍스트는
 영어로 표시돼요.
 
 ### 제거하려면 어떻게 하고, 데이터는 어떻게 되나요?
@@ -85,9 +85,10 @@ ID로 한 링크는 절대 깨지지 않아요. ID를 볼 일은 거의 없어�
 *설정 ▸ 앱 ▸ 설치된 앱 ▸ ZettelApp ▸ 제거*예요. 제거 프로그램에는 환경설정, 저장된 API 키, 로그, 캐시, 자동 백업과
 **모든 노트**(볼트 데이터베이스와 첨부 파일)를 삭제하는, 선택되지 않은 **내 ZettelApp 설정과 데이터도 삭제** 옵션이 있어요.
 선택하지 않으면 노트는 보관돼요. 포터블 버전은 폴더를 삭제하세요. 환경설정은 레지스트리의
-`HKEY_CURRENT_USER\Software\ZettelApp`에, 로그와 백업은 `%LOCALAPPDATA%\ZettelApp`에 있어요.
+`HKEY_CURRENT_USER\Software\ZettelApp`(Windows), `~/.config/ZettelApp/ZettelApp.conf`(Linux)에, 로그와
+백업은 `%LOCALAPPDATA%\ZettelApp`(Windows), `~/.local/share/ZettelApp`(Linux)에 있어요.
 
 ### 문제가 생겼어요. 로그는 어디에 있나요?
 
-`%LOCALAPPDATA%\ZettelApp\Logs`에 있어요. [문제를 신고](https://github.com/DutraIRS/ZettelApp/issues)할 때 관련
+Windows에서는 `%LOCALAPPDATA%\ZettelApp\Logs`에, Linux에서는 `~/.local/share/ZettelApp/Logs`에 있어요. [문제를 신고](https://github.com/DutraIRS/ZettelApp/issues)할 때 관련
 부분을 포함해 주세요. 먼저 개인적인 내용이 없는지 확인하세요.

@@ -96,10 +96,12 @@ anything by itself.
 
 ## Uninstalling
 
-Use *Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall*. After you confirm, a dialog offers
+On Windows, uninstall from *Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall*. After you confirm, a dialog offers
 an unticked **Also delete my ZettelApp settings and data** option. It removes your settings, saved API
 keys, logs, cache and automatic backups (`%LOCALAPPDATA%\ZettelApp`) **and all your notes** (the database
-and attachments of your vaults). Leave it unticked to keep your notes. For the portable version, delete its folder.
+and attachments of your vaults). Leave it unticked to keep your notes. For the portable version, delete its folder. On Linux, remove
+the package (`sudo apt remove zettelapp`, or uninstall it in your software centre); your notes and your
+settings in `~/.config/ZettelApp` stay unless you delete them yourself.
 
 ## Next steps
 

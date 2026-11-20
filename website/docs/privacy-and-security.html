@@ -96,6 +96,9 @@ The MCP server makes no network requests at all.</p>
 </tr>
 </tbody>
 </table></div>
+<p>On Linux, the same items live in the XDG folders: notes default to <strong>Documents/ZettelApp</strong>, preferences in
+<code>~/.config/ZettelApp/ZettelApp.conf</code>, logs, backups and the search model under <code>~/.local/share/ZettelApp</code>, and the
+small UI cache in <code>~/.cache/ZettelApp</code>.</p>
 <p>The vault is an ordinary folder: you can copy it, back it up or keep it in OneDrive. ZettelApp writes the
 database with full synchronisation, a setting chosen to suit synced folders. Avoid opening the same vault on two
 computers at the same time.</p>
@@ -117,9 +120,9 @@ web or elsewhere on disk.</li>
 <li><strong>Link allowlist.</strong> Clicking a link opens only web pages (<code>http</code>/<code>https</code>), e-mail (<code>mailto</code>), notes,
 Zotero <em>select item</em> / <em>open PDF</em> links, and links to local files (below). <code>javascript:</code> and other
 schemes are refused.</li>
-<li><strong>Local file links only reveal the file.</strong> A <code>file:///</code> link opens <strong>File Explorer with the file
+<li><strong>Local file links only reveal the file.</strong> A <code>file:///</code> link opens <strong>your file manager with the file
 selected</strong>; the file itself is never opened or run. Only paths on a local drive are allowed. Network
-(UNC) paths such as <code>\\server\share</code> are refused, because looking one up can send your Windows
+(UNC) paths such as <code>\\server\share</code> are refused, because looking one up can send your network
 credentials to that server.</li>
 <li><strong>Images are verified by content</strong>, not by file name. Only PNG, JPEG, GIF, WebP and BMP up to 25 MB are
 accepted; SVG is refused because it can carry scripts. Verification covers the file signature and

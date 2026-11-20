@@ -58,12 +58,12 @@ Pas encore. Les paquets Linux (.deb, AppImage) et macOS figurent dans la [feuill
 
 ### L’application est-elle disponible dans d’autres langues ?
 
-Oui. L’installateur et l’application sont traduits en espagnol, portugais (Brésil), français, allemand, italien, russe, chinois simplifié, japonais, coréen et arabe. Par défaut, l’application suit la langue de Windows ; vous pouvez la modifier dans *Options*. Les textes non traduits s’affichent en anglais.
+Oui. L’installateur et l’application sont traduits en espagnol, portugais (Brésil), français, allemand, italien, russe, chinois simplifié, japonais, coréen et arabe. Par défaut, l’application suit la langue de votre système ; vous pouvez la modifier dans *Options*. Les textes non traduits s’affichent en anglais.
 
 ### Comment désinstaller l’application et qu’adviendra-t-il de mes données ?
 
-*Paramètres ▸ Applications ▸ Applications installées ▸ ZettelApp ▸ Désinstaller*. Le programme de désinstallation propose l’option **Supprimer aussi mes paramètres et données ZettelApp**, décochée par défaut. Si vous la cochez, elle supprime les préférences, les clés API enregistrées, les journaux, le cache et les sauvegardes automatiques, **ainsi que toutes vos notes** (bases de données et pièces jointes des coffres). Si elle reste décochée, vos notes sont conservées. Pour la version portable, supprimez son dossier ; les préférences se trouvent dans le registre sous `HKEY_CURRENT_USER\Software\ZettelApp`, et les journaux et sauvegardes dans `%LOCALAPPDATA%\ZettelApp`.
+*Paramètres ▸ Applications ▸ Applications installées ▸ ZettelApp ▸ Désinstaller*. Le programme de désinstallation propose l’option **Supprimer aussi mes paramètres et données ZettelApp**, décochée par défaut. Si vous la cochez, elle supprime les préférences, les clés API enregistrées, les journaux, le cache et les sauvegardes automatiques, **ainsi que toutes vos notes** (bases de données et pièces jointes des coffres). Si elle reste décochée, vos notes sont conservées. Pour la version portable, supprimez son dossier ; les préférences se trouvent dans le registre sous `HKEY_CURRENT_USER\Software\ZettelApp` sous Windows, ou dans `~/.config/ZettelApp/ZettelApp.conf` sous Linux, et les journaux et sauvegardes dans `%LOCALAPPDATA%\ZettelApp` sous Windows, ou `~/.local/share/ZettelApp` sous Linux.
 
 ### Un problème est survenu. Où trouver les journaux ?
 
-Dans `%LOCALAPPDATA%\ZettelApp\Logs`. Veuillez joindre la partie pertinente lorsque vous [signalez un problème](https://github.com/DutraIRS/ZettelApp/issues). Vérifiez d’abord qu’elle ne contient aucune information privée.
+Dans `%LOCALAPPDATA%\ZettelApp\Logs` sous Windows, ou `~/.local/share/ZettelApp/Logs` sous Linux. Veuillez joindre la partie pertinente lorsque vous [signalez un problème](https://github.com/DutraIRS/ZettelApp/issues). Vérifiez d’abord qu’elle ne contient aucune information privée.

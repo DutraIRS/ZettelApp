@@ -99,10 +99,12 @@ takes focus. <strong>Download</strong> opens the releases page in your browser, 
 <em>Tools ▸ Options ▸ General ▸ Check for updates when ZettelApp starts</em>. ZettelApp never installs
 anything by itself.</p>
 <h2 id="uninstalling">Uninstalling</h2>
-<p>Use <em>Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall</em>. After you confirm, a dialog offers
+<p>On Windows, uninstall from <em>Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall</em>. After you confirm, a dialog offers
 an unticked <strong>Also delete my ZettelApp settings and data</strong> option. It removes your settings, saved API
 keys, logs, cache and automatic backups (<code>%LOCALAPPDATA%\ZettelApp</code>) <strong>and all your notes</strong> (the database
-and attachments of your vaults). Leave it unticked to keep your notes. For the portable version, delete its folder.</p>
+and attachments of your vaults). Leave it unticked to keep your notes. For the portable version, delete its folder. On Linux, remove
+the package (<code>sudo apt remove zettelapp</code>, or uninstall it in your software centre); your notes and your
+settings in <code>~/.config/ZettelApp</code> stay unless you delete them yourself.</p>
 <h2 id="next-steps">Next steps</h2>
 <ul>
 <li>Learn the note syntax in <a href="notes-and-links.html">Notes and links</a>.</li>

@@ -10,7 +10,7 @@ The editor has three modes (Ctrl+E cycles through them): **Edit**, **Split** (te
 side) and **Preview**.
 
 For safety, raw HTML in a note is shown as text and never rendered. Links in the preview open only web
-pages (`http`, `https`), e-mail (`mailto`), notes, Zotero items and local files (shown in File Explorer,
+pages (`http`, `https`), e-mail (`mailto`), notes, Zotero items and local files (shown in your file manager,
 see [Links to local files](#links-to-local-files)). See [Privacy and security](privacy-and-security.md).
 
 ### Following links
@@ -27,9 +27,9 @@ see [Links to local files](#links-to-local-files)). See [Privacy and security](p
 such as `[report.pdf](file:///C:/Users/me/Documents/report.pdf)`. Dragging a file that isn't an image into
 the note text does the same. The file is linked where it is; nothing is copied into the vault.
 
-Clicking the link in the preview, or Ctrl+clicking it in the editor, opens **File Explorer with the file
+Clicking the link in the preview, or Ctrl+clicking it in the editor, opens **your file manager with the file
 selected**. The file itself is never opened or run. Only paths on a local drive are allowed: network
-(UNC) paths such as `\\server\share\file.pdf` are refused, because looking them up can send your Windows
+(UNC) paths such as `\\server\share\file.pdf` are refused, because looking them up can send your network
 credentials to that server.
 
 Every note has:

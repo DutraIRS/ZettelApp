@@ -35,6 +35,10 @@ The MCP server makes no network requests at all.
 | Small UI cache | `%LOCALAPPDATA%\ZettelApp\Cache` |
 | Semantic search model and index, if you set it up | `%LOCALAPPDATA%\ZettelApp\Search`. The index is derived from your notes and is never in the vault, so it isn't synced with it. *Remove model and index* in *Tools ▸ Options ▸ Search* deletes it. |
 
+On Linux, the same items live in the XDG folders: notes default to **Documents/ZettelApp**, preferences in
+`~/.config/ZettelApp/ZettelApp.conf`, logs, backups and the search model under `~/.local/share/ZettelApp`, and the
+small UI cache in `~/.cache/ZettelApp`.
+
 The vault is an ordinary folder: you can copy it, back it up or keep it in OneDrive. ZettelApp writes the
 database with full synchronisation, a setting chosen to suit synced folders. Avoid opening the same vault on two
 computers at the same time.
@@ -58,9 +62,9 @@ Notes can come from imports, the web or AI answers, so ZettelApp treats their co
 - **Link allowlist.** Clicking a link opens only web pages (`http`/`https`), e-mail (`mailto`), notes,
   Zotero *select item* / *open PDF* links, and links to local files (below). `javascript:` and other
   schemes are refused.
-- **Local file links only reveal the file.** A `file:///` link opens **File Explorer with the file
+- **Local file links only reveal the file.** A `file:///` link opens **your file manager with the file
   selected**; the file itself is never opened or run. Only paths on a local drive are allowed. Network
-  (UNC) paths such as `\\server\share` are refused, because looking one up can send your Windows
+  (UNC) paths such as `\\server\share` are refused, because looking one up can send your network
   credentials to that server.
 - **Images are verified by content**, not by file name. Only PNG, JPEG, GIF, WebP and BMP up to 25 MB are
   accepted; SVG is refused because it can carry scripts. Verification covers the file signature and
