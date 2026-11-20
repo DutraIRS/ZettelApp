@@ -1,7 +1,9 @@
-"""Icons drawn from the Windows icon fonts (Segoe Fluent Icons / MDL2 Assets).
+"""Icons drawn from the Windows icon fonts (Segoe Fluent Icons / MDL2 Assets),
+with a painted vector fallback when they are absent (see iconshapes).
 
 Using the system icon fonts keeps the app consistent with Windows itself and
-lets icons follow the theme colour at any DPI.
+lets icons follow the theme colour at any DPI; the fallback keeps every icon
+available on Linux and other systems without those fonts.
 """
 
 from __future__ import annotations
@@ -11,7 +13,7 @@ from functools import cache
 from PySide6.QtCore import QRect, QSize, Qt
 from PySide6.QtGui import QColor, QFont, QFontDatabase, QIcon, QPainter, QPixmap
 
-from zettelapp.ui import theme
+from zettelapp.ui import iconshapes, theme
 
 GLYPHS = {
     "add": 0xE710,
@@ -135,18 +137,27 @@ def _pixmap(name: str, color: str, size: int, ratio: float) -> QPixmap:
     px = QPixmap(QSize(round(size * ratio), round(size * ratio)))
     px.setDevicePixelRatio(ratio)
     px.fill(Qt.GlobalColor.transparent)
-    family = _icon_family()
-    if family is None or name not in GLYPHS:
-        return px
     painter = QPainter(px)
-    painter.setRenderHint(QPainter.RenderHint.TextAntialiasing)
-    font = QFont(family)
-    font.setPixelSize(round(size * 0.8))
-    painter.setFont(font)
-    painter.setPen(QColor(color))
-    painter.drawText(QRect(0, 0, size, size), Qt.AlignmentFlag.AlignCenter, chr(GLYPHS[name]))
-    painter.end()
-    return px
+    try:
+        family = _icon_family()
+        if family is None:
+            # No Windows icon font (Linux, some sandboxes): draw the vector fallback.
+            if name in GLYPHS:
+                iconshapes.draw(name, painter, size, QColor(color))
+            return px
+        if name not in GLYPHS:
+            return px
+        painter.setRenderHint(QPainter.RenderHint.TextAntialiasing)
+        font = QFont(family)
+        font.setPixelSize(round(size * 0.8))
+        painter.setFont(font)
+        painter.setPen(QColor(color))
+        painter.drawText(QRect(0, 0, size, size), Qt.AlignmentFlag.AlignCenter, chr(GLYPHS[name]))
+        return px
+    finally:
+        # Always detach the painter: the pixmap is cached and must never be
+        # destroyed while still being painted (corrupts the heap otherwise).
+        painter.end()
 
 
 def icon(name: str, color: str | None = None, size: int = 20) -> QIcon:
@@ -162,6 +173,9 @@ def icon(name: str, color: str | None = None, size: int = 20) -> QIcon:
 
 
 def glyph(name: str) -> str:
+    """The character of *name* in the icon font, or "" where there is none (Linux)."""
+    if _icon_family() is None:
+        return ""  # icons come from the painted fallback instead
     return chr(GLYPHS.get(name, 0x20))
 
 

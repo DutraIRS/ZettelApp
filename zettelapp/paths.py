@@ -1,19 +1,31 @@
-"""Standard Windows locations for user data.
+"""Standard per-platform locations for user data.
 
-Follows Windows conventions:
+Windows follows its own conventions:
 - notes (user documents) live in the Documents known folder, which may be
   redirected to OneDrive, so it is resolved through SHGetKnownFolderPath;
 - logs, backups and caches are machine-local, under %LOCALAPPDATA%;
 - preferences are stored by QSettings in the registry (HKCU\\Software).
+
+Linux follows the XDG base directories:
+- notes live in ~/Documents (or xdg-user-dir DOCUMENT, which follows the
+  desktop's localisation and redirections);
+- logs, backups and the semantic search model live under
+  $XDG_DATA_HOME/ZettelApp (default ~/.local/share/ZettelApp);
+- the small UI cache lives under $XDG_CACHE_HOME/ZettelApp (default
+  ~/.cache/ZettelApp);
+- preferences are stored by QSettings as ~/.config/ZettelApp/ZettelApp.conf.
 """
 
 from __future__ import annotations
 
 import os
+import subprocess
 import sys
 from pathlib import Path
 
 from zettelapp import APP_NAME
+
+IS_WINDOWS = sys.platform == "win32"
 
 
 def _known_folder_documents() -> Path | None:
@@ -53,13 +65,48 @@ def _known_folder_documents() -> Path | None:
 
 
 def documents_dir() -> Path:
-    return _known_folder_documents() or Path.home() / "Documents"
+    if IS_WINDOWS:
+        return _known_folder_documents() or Path.home() / "Documents"
+    return _xdg_documents() or Path.home() / "Documents"
+
+
+def _xdg_documents() -> Path | None:
+    """The desktop's Documents folder (localised or redirected), via xdg-user-dir."""
+    try:
+        result = subprocess.run(  # noqa: S603 - fixed argument list
+            ["xdg-user-dir", "DOCUMENT"],  # noqa: S607 - always on PATH on Linux desktops
+            capture_output=True,
+            text=True,
+            timeout=2,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return None
+    path = result.stdout.strip()
+    # xdg-user-dir answers the fallback ~ itself when unset; treat that as "no answer"
+    # so a redirected folder is preferred but the default is built by the caller.
+    if not path or path == str(Path.home() / "Documents"):
+        return None
+    return Path(path)
 
 
 def local_data_dir() -> Path:
-    base = os.environ.get("LOCALAPPDATA")
-    root = Path(base) if base else Path.home() / "AppData" / "Local"
+    """Machine-local data: logs, backups, the semantic search model."""
+    if IS_WINDOWS:
+        base = os.environ.get("LOCALAPPDATA")
+        root = Path(base) if base else Path.home() / "AppData" / "Local"
+    else:
+        base = os.environ.get("XDG_DATA_HOME") or str(Path.home() / ".local" / "share")
+        root = Path(base)
     return root / APP_NAME
+
+
+def cache_dir() -> Path:
+    """Non-essential files the app can rebuild (theme indicator images)."""
+    if IS_WINDOWS:
+        return local_data_dir() / "Cache"
+    base = os.environ.get("XDG_CACHE_HOME") or str(Path.home() / ".cache")
+    return Path(base) / APP_NAME
 
 
 def default_vault_dir() -> Path:

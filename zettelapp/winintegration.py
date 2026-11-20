@@ -1,10 +1,11 @@
-"""Windows shell integration (no-ops on other platforms).
+"""Shell integration (Windows-specific here, Linux in linuxintegration.py).
 
-- AppUserModelID so the taskbar groups windows and shows the app icon;
+- AppUserModelID so the Windows taskbar groups windows and shows the app icon;
 - dark/light window frames that match the app theme;
 - the per-user zettelapp:// URL protocol, which lets links on Anki cards
-  open the matching note. Registration lives under HKCU (no admin rights) and
-  the handler only accepts zettelapp://note/<id> (see core.security).
+  open the matching note. On Windows registration lives under HKCU (no admin
+  rights); on Linux it is a user-local desktop file (see linuxintegration).
+  The registration only accepts zettelapp://note/<id> (see core.security).
 """
 
 from __future__ import annotations
@@ -14,9 +15,10 @@ import subprocess
 import sys
 from pathlib import Path
 
-from zettelapp import APP_NAME, APP_USER_MODEL_ID, URL_SCHEME
+from zettelapp import APP_NAME, APP_USER_MODEL_ID, URL_SCHEME, linuxintegration
 
 IS_WINDOWS = sys.platform == "win32"
+IS_LINUX = linuxintegration.IS_LINUX
 _PROTOCOL_KEY = rf"Software\Classes\{URL_SCHEME}"
 
 
@@ -72,49 +74,51 @@ def launch_command() -> str:
 
 
 def register_url_protocol() -> None:
-    if not IS_WINDOWS:
-        return
-    import winreg
+    if IS_WINDOWS:
+        import winreg
 
-    command = launch_command()
-    icon_source = sys.executable if getattr(sys, "frozen", False) else command.split('"')[1]
-    with winreg.CreateKey(winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY) as key:
-        winreg.SetValueEx(key, "", 0, winreg.REG_SZ, f"URL:{APP_NAME} note link")
-        winreg.SetValueEx(key, "URL Protocol", 0, winreg.REG_SZ, "")
-    with winreg.CreateKey(winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + r"\DefaultIcon") as key:
-        winreg.SetValueEx(key, "", 0, winreg.REG_SZ, f'"{icon_source}",0')
-    with winreg.CreateKey(winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + r"\shell\open\command") as key:
-        winreg.SetValueEx(key, "", 0, winreg.REG_SZ, command)
+        command = launch_command()
+        icon_source = sys.executable if getattr(sys, "frozen", False) else command.split('"')[1]
+        with winreg.CreateKey(winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY) as key:
+            winreg.SetValueEx(key, "", 0, winreg.REG_SZ, f"URL:{APP_NAME} note link")
+            winreg.SetValueEx(key, "URL Protocol", 0, winreg.REG_SZ, "")
+        with winreg.CreateKey(winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + r"\DefaultIcon") as key:
+            winreg.SetValueEx(key, "", 0, winreg.REG_SZ, f'"{icon_source}",0')
+        with winreg.CreateKey(winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + r"\shell\open\command") as key:
+            winreg.SetValueEx(key, "", 0, winreg.REG_SZ, command)
+    else:
+        linuxintegration.register_url_protocol()
 
 
 def unregister_url_protocol() -> None:
-    if not IS_WINDOWS:
-        return
-    import winreg
+    if IS_WINDOWS:
+        import winreg
 
-    for sub in (r"\shell\open\command", r"\shell\open", r"\shell", r"\DefaultIcon", ""):
-        try:
-            winreg.DeleteKey(winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + sub)
-        except OSError:
-            pass
+        for sub in (r"\shell\open\command", r"\shell\open", r"\shell", r"\DefaultIcon", ""):
+            try:
+                winreg.DeleteKey(winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + sub)
+            except OSError:
+                pass
+    else:
+        linuxintegration.unregister_url_protocol()
 
 
 def registered_command() -> str | None:
-    if not IS_WINDOWS:
-        return None
-    import winreg
+    if IS_WINDOWS:
+        import winreg
 
-    try:
-        with winreg.OpenKey(
-            winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + r"\shell\open\command"
-        ) as key:
-            return winreg.QueryValueEx(key, "")[0]
-    except OSError:
-        return None
+        try:
+            with winreg.OpenKey(
+                winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + r"\shell\open\command"
+            ) as key:
+                return winreg.QueryValueEx(key, "")[0]
+        except OSError:
+            return None
+    return linuxintegration.registered_command()
 
 
 def reveal_in_explorer(path: str | Path) -> None:
-    """Open File Explorer with *path* selected (or open the folder)."""
+    """Open the file manager with *path* selected (or open the folder)."""
     path = Path(path)
     if IS_WINDOWS:
         if path.is_file():
@@ -123,8 +127,5 @@ def reveal_in_explorer(path: str | Path) -> None:
             subprocess.Popen([str(explorer), "/select,", str(path)])  # noqa: S603 - list args
         else:
             os.startfile(str(path if path.is_dir() else path.parent))  # noqa: S606
-    else:  # pragma: no cover
-        from PySide6.QtCore import QUrl
-        from PySide6.QtGui import QDesktopServices
-
-        QDesktopServices.openUrl(QUrl.fromLocalFile(str(path if path.is_dir() else path.parent)))
+    else:
+        linuxintegration.reveal_in_file_manager(path)

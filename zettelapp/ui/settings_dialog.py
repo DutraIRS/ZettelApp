@@ -90,7 +90,7 @@ PAGES = [
     N_("MCP server"),
     N_("Anki"),
     N_("Zotero"),
-    N_("Windows integration"),
+    N_("Desktop integration"),
     N_("Backups"),
 ]
 PAGE_ICONS = {
@@ -102,7 +102,7 @@ PAGE_ICONS = {
     "MCP server": "server",
     "Anki": "cards",
     "Zotero": "library",
-    "Windows integration": "link",
+    "Desktop integration": "link",
     "Backups": "history",
 }
 NAV_ROW_HEIGHT = 34
@@ -114,17 +114,20 @@ def mcp_command(vault: Path | None, allow_writes: bool) -> tuple[str, list[str],
     if allow_writes:
         args.append("--allow-writes")
     if getattr(sys, "frozen", False):
-        return str(Path(sys.executable).with_name("zettelapp-mcp.exe")), args, {}
+        suffix = ".exe" if sys.platform == "win32" else ""
+        return str(Path(sys.executable).with_name(f"zettelapp-mcp{suffix}")), args, {}
     root = str(Path(__file__).resolve().parents[2])
     return sys.executable, ["-m", "zettelapp.mcp_main", *args], {"PYTHONPATH": root}
 
 
 def claude_desktop_config_path() -> Path:
-    return (
-        Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming"))
-        / "Claude"
-        / "claude_desktop_config.json"
-    )
+    if sys.platform == "win32":
+        base = Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming"))
+    else:
+        base = Path(
+            os.environ.get("XDG_CONFIG_HOME") or (Path.home() / ".config")
+        )
+    return base / "Claude" / "claude_desktop_config.json"
 
 
 class _LinkSample(QWidget):
@@ -1167,8 +1170,8 @@ class OptionsDialog(QDialog):
             label(
                 _(
                     "Register zettelapp:// links so that links on Anki cards (and elsewhere) open the "
-                    "matching note. The installer does this for you; use this for the portable version. "
-                    "Only “open note” links are accepted."
+                    "matching note. Your installer or package does this for you; use this for the "
+                    "portable version or when running from source. Only “open note” links are accepted."
                 ),
                 "caption",
                 wrap=True,
