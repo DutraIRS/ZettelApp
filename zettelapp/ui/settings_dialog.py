@@ -124,9 +124,7 @@ def claude_desktop_config_path() -> Path:
     if sys.platform == "win32":
         base = Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming"))
     else:
-        base = Path(
-            os.environ.get("XDG_CONFIG_HOME") or (Path.home() / ".config")
-        )
+        base = Path(os.environ.get("XDG_CONFIG_HOME") or (Path.home() / ".config"))
     return base / "Claude" / "claude_desktop_config.json"
 
 

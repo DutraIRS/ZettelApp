@@ -84,7 +84,9 @@ def register_url_protocol() -> None:
             winreg.SetValueEx(key, "URL Protocol", 0, winreg.REG_SZ, "")
         with winreg.CreateKey(winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + r"\DefaultIcon") as key:
             winreg.SetValueEx(key, "", 0, winreg.REG_SZ, f'"{icon_source}",0')
-        with winreg.CreateKey(winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + r"\shell\open\command") as key:
+        with winreg.CreateKey(
+            winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + r"\shell\open\command"
+        ) as key:
             winreg.SetValueEx(key, "", 0, winreg.REG_SZ, command)
     else:
         linuxintegration.register_url_protocol()

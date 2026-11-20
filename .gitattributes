@@ -1,6 +1,13 @@
 # Auto detect text files and perform LF normalization
 * text=auto
 
+# Shell scripts and the Linux packaging files must keep LF on every system: CRLF breaks bash
+# and strict YAML/desktop-entry parsers on Linux.
+*.sh text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.desktop text eol=lf
+
 # Written by tools/build_site.py, with LF on every system.
 website/**/*.html text eol=lf
 website/assets/lang.js text eol=lf

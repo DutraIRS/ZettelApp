@@ -1,0 +1,24 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=ZettelApp
+GenericName=Zettelkasten
+Comment=A Zettelkasten that helps you connect ideas
+Comment[es]=Un Zettelkasten que te ayuda a conectar ideas
+Comment[pt_BR]=Um Zettelkasten que ajuda você a conectar ideias
+Comment[fr]=Un Zettelkasten qui vous aide à relier vos idées
+Comment[de]=Ein Zettelkasten, der Ihnen hilft, Ideen zu verbinden
+Comment[it]=Uno Zettelkasten che ti aiuta a collegare le idee
+Comment[ru]=Цеттелькастен, который помогает связывать идеи
+Comment[ja]=アイデアをつなぐためのツェッテルカステン
+Comment[ko]=아이디어를 연결하는 체텔카스텐
+Comment[zh_CN]=帮助你连接想法的卡片盒笔记应用
+Comment[ar]=صندوق ملاحظات يساعدك على ربط الأفكار
+Exec=zettelapp %u
+Icon=io.github.dutairs.zettelapp
+Terminal=false
+Categories=Office;ProjectManagement;
+MimeType=x-scheme-handler/zettelapp;
+StartupWMClass=ZettelApp
+StartupNotify=true
+Keywords=notes;zettelkasten;knowledge;links;notas;ideen; Gedanken;ノート; 메모; 笔记; ملاحظات;

@@ -1,0 +1,51 @@
+name: zettelapp
+base: core24
+adopt-info: zettelapp # version, summary and description come from the AppStream metainfo
+title: ZettelApp
+grade: stable
+confinement: strict
+website: https://dutrairs.github.io/ZettelApp/
+contact: https://github.com/DutraIRS/ZettelApp/issues
+issues: https://github.com/DutraIRS/ZettelApp/issues
+summary: A Zettelkasten that helps you connect ideas
+description: |
+  ZettelApp is a Zettelkasten note-taking app: atomic notes in Markdown, typed and optionally
+  directed links, mind maps, flashcards and quizzes, and a 2D/3D knowledge graph.
+
+  It offers typo-tolerant and optional semantic search, a tag ontology, link suggestions that
+  learn from you, Anki sync, Zotero citations, an AI assistant that answers from your own notes
+  with your own API key, and an MCP server for Claude Desktop and Claude Code. Everything stays
+  on your computer; API keys are stored in the system keyring.
+
+  The zettelapp:// scheme handler lets links on Anki cards open the matching note.
+
+apps:
+  zettelapp:
+    command: bin/zettelapp
+    extensions: [gnome]
+    plugs:
+      - home
+      - network
+      - removable-media
+  zettelapp-mcp:
+    command: bin/zettelapp-mcp
+    plugs:
+      - home
+      - network
+
+parts:
+  zettelapp:
+    plugin: python
+    source: .
+    python-requirements: [requirements.txt]
+    # The gnome extension provides the desktop interfaces and the session bus (the keyring and
+    # the file manager service talk to it); PySide6's wheels bundle their own Qt.
+    override-build: |
+      craftctl default
+      install -Dm644 packaging/io.github.dutairs.zettelapp.desktop \
+        "$CRAFT_PART_INSTALL/usr/share/applications/io.github.dutairs.zettelapp.desktop"
+      install -Dm644 packaging/io.github.dutairs.zettelapp.metainfo.xml \
+        "$CRAFT_PART_INSTALL/usr/share/metainfo/io.github.dutairs.zettelapp.metainfo.xml"
+      install -m644 zettelapp/resources/icon-256.png \
+        "$CRAFT_PART_INSTALL/usr/share/icons/hicolor/256x256/apps/io.github.dutairs.zettelapp.png"
+    parse-info: [usr/share/metainfo/io.github.dutairs.zettelapp.metainfo.xml]

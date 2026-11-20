@@ -370,7 +370,9 @@ def delete_all() -> int:
         finally:
             _CredFree(found)
         return sum(
-            1 for t in targets if t and t.startswith(PREFIX) and _CredDelete(t, CRED_TYPE_GENERIC, 0)
+            1
+            for t in targets
+            if t and t.startswith(PREFIX) and _CredDelete(t, CRED_TYPE_GENERIC, 0)
         )
     schema = _schema()
     error = ctypes.POINTER(_GError)()

@@ -4,7 +4,9 @@ ZettelApp is written in Python with [Qt for Python (PySide6)](https://doc.qt.io/
 
 ## Set up
 
-You need Python 3.12 or later on Windows, and Git.
+You need Python 3.12 or later on Windows or Linux, and Git.
+
+Windows:
 
 ```powershell
 git clone https://github.com/DutraIRS/ZettelApp.git
@@ -15,10 +17,27 @@ pip install -r requirements-dev.txt
 python -m zettelapp
 ```
 
+Linux:
+
+```bash
+git clone https://github.com/DutraIRS/ZettelApp.git
+cd ZettelApp
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements-dev.txt
+python -m zettelapp
+```
+
 ## Tests
 
 ```powershell
-pytest
+pytest   # Windows
+```
+
+On Linux, run the suite with Qt's offscreen platform:
+
+```bash
+QT_QPA_PLATFORM=offscreen pytest
 ```
 
 The tests cover:
@@ -59,6 +78,32 @@ This produces:
 The executables carry Windows version information and the app icon. One-folder builds start faster and
 trigger fewer antivirus false positives than single-file builds.
 
+## Build the Linux app
+
+```bash
+bash packaging/build-linux.sh
+```
+
+This produces:
+
+- `dist/ZettelApp/`: the app folder (PyInstaller, one-folder mode) with the desktop app `zettelapp` and
+  the console MCP server `zettelapp-mcp`;
+- `dist/ZettelApp-<version>-linux-x86_64.tar.gz`: the same folder, portable archive;
+- `dist/zettelapp_<version>_amd64.deb`: the package for Debian-based distributions (needs `dpkg-deb`),
+  which installs the folder under `/usr/lib/ZettelApp`, `zettelapp` and `zettelapp-mcp` on `PATH`, the
+  application entry with the `zettelapp://` scheme handler, the AppStream metadata and the icon;
+- `dist/SHA256SUMS-linux.txt`.
+
+Both executables are self-tested offscreen as part of the build (the script fails otherwise). The
+metadata is validated in CI: `desktop-file-validate`, `appstreamcli validate` and a YAML/XML parse of
+the Flatpak manifest (`packaging/flatpak/`) and the Snap recipe (`packaging/snap/`). To build those:
+
+```bash
+flatpak-builder --force-clean --install-deps-from=flathub --install --user \
+    build/flatpak packaging/flatpak/io.github.DutraIRS.ZettelApp.yml
+snapcraft  # in packaging/snap/, or pass -d snapcraft.yaml; snap install --dangerous zettelapp_*.snap
+```
+
 ## Release
 
 1. Update `__version__` in `zettelapp/__init__.py` and `CHANGELOG.md`, run `python tools/build_site.py`
@@ -66,9 +111,11 @@ trigger fewer antivirus false positives than single-file builds.
    learn about new versions) and commit the result.
 2. Commit, then tag and push: `git tag v1.0.1; git push origin v1.0.1`.
 3. GitHub Actions checks that the tag matches the app version, runs lint, formatting, the tests and the
-   dependency audit, builds the app on Windows and publishes a GitHub release with
-   `ZettelApp-Setup.exe`, `ZettelApp-Portable.zip` and `SHA256SUMS.txt`. The website's download buttons
-   always point to the latest release.
+    dependency audit, builds the app on Windows and Linux and publishes a GitHub release with
+    `ZettelApp-Setup.exe`, `ZettelApp-Portable.zip`, the Linux `.deb` and portable `.tar.gz`, and a
+    combined `SHA256SUMS.txt`. The website's download buttons always point to the latest release. A
+    final job builds the Snap from the tagged commit, attaches it to the release and — when the
+    repository secret `SNAPCRAFT_STORE_CREDENTIALS` is set — publishes it to the Snap Store.
 
 A release needs a **code-signing certificate**, stored in the repository secrets
 `WINDOWS_SIGNING_CERT_BASE64` and `WINDOWS_SIGNING_CERT_PASSWORD`. Without it the release job stops,
@@ -107,7 +154,7 @@ zettelapp/
     quiz.py        SM-2 scheduling and quiz generation
     zotero.py      Zotero local API client
     llm.py         AI providers (registry + adapters) and retrieval
-    secrets.py     Windows Credential Manager
+    secrets.py     keyrings: Windows Credential Manager, the Linux Secret Service (libsecret)
     security.py    validation of URLs, file names, images, archives
   ui/              PySide6 widgets: main window, editor, graph views, pages, dialogs, theme
   resources/       icon, adventure illustrations, translation catalogues (locales/)
@@ -115,10 +162,12 @@ zettelapp/
   mcp_server.py    MCP server; mcp_main.py: its entry point (zettelapp-mcp.exe)
   app.py           startup, single instance, logging
   settings.py      preferences (QSettings)
-  winintegration.py  taskbar identity, dark title bars, zettelapp:// protocol
+  winintegration.py  taskbar identity, dark title bars, zettelapp:// protocol (dispatches to
+                     linuxintegration.py on Linux: user-local desktop entry, file manager reveal)
 tests/             pytest suite
 tools/             icon, screenshots, demo vault, website builder, translation tools
-packaging/         PyInstaller spec, version info, Inno Setup script, build script
+packaging/         PyInstaller specs, version info, Inno Setup script, Windows and Linux build scripts,
+                   .desktop entry, AppStream metainfo, Flatpak manifest, Snap recipe
 docs/              this documentation (also published on the website)
 website/           the GitHub Pages site
 ```

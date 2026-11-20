@@ -83,7 +83,11 @@ def registered_command() -> str | None:
     if not IS_LINUX:
         return None
     for directory in _applications_dirs():
-        for name in (f"{APP_NAME.lower()}.desktop", "com.dutrairs.ZettelApp.desktop"):
+        for name in (
+            f"{APP_NAME.lower()}.desktop",
+            "io.github.dutairs.zettelapp.desktop",
+            "com.dutrairs.ZettelApp.desktop",
+        ):
             entry = directory / name
             if not entry.is_file():
                 continue

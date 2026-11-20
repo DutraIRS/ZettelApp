@@ -154,7 +154,9 @@ class NoteRenderer:
             return href
         # markdown-it percent-encodes link destinations, so decode first: a literal
         # "%20" in a file name arrives as "%2520" and stays correct either way.
-        path = local_file_path(unquote(href)) or local_file_path(href)  # file:/// or C:\… or /home/…
+        path = local_file_path(unquote(href)) or local_file_path(
+            href
+        )  # file:/// or C:\… or /home/…
         return file_url(path) if path and self.allow_file_links else None
 
     def _render_link_open(self, renderer, tokens, idx, options, env):

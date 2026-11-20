@@ -1,7 +1,8 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; base-uri 'none'; form-action 'none'"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Development – ZettelApp documentation</title><meta name="description" content="ZettelApp is written in Python with Qt for Python ."><meta name="color-scheme" content="light dark"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="stylesheet" href="../style.css"><script src="../assets/lang.js" defer></script></head><body><div><a class="skip" href="#content">Skip to content</a><header class="site-header"><div class="wrap header-row"><a class="brand" href="../"><img src="../assets/favicon.png" alt="" width="28" height="28"> <span class="brand-name">ZettelApp</span></a><nav class="nav-wide" aria-label="Main"><ul class="nav"><li><a href="../#features">Features</a></li><li><a href="tutorial.html">Tutorial</a></li><li><a href="./">Docs</a></li><li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li><li><a class="nav-donate" href="https://ko-fi.com/dutrairs" rel="noopener"><span aria-hidden="true">♥</span> Donate</a></li><li><a class="nav-cta" href="../#download">Download</a></li></ul></nav><details class="lang-switch"><summary><svg class="globe" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.4 2.5 3.6 5.5 3.6 9s-1.2 6.5-3.6 9c-2.4-2.5-3.6-5.5-3.6-9s1.2-6.5 3.6-9z"/></svg><span class="sr-only">Languages</span></summary><ul class="lang-switch-panel" aria-label="Languages"><li><a href="development.html" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="../es/docs/" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/docs/" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/docs/" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/docs/" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/docs/" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/docs/" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/docs/" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/docs/" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/docs/" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/docs/" lang="ar" hreflang="ar">العربية</a></li></ul></details><div class="header-actions"><a class="hbtn donate" href="https://ko-fi.com/dutrairs" rel="noopener" aria-label="Donate"><span aria-hidden="true">♥</span><span class="hbtn-text" aria-hidden="true">Donate</span></a><a class="hbtn cta" href="../#download">Download</a><details class="menu"><summary><span class="menu-icon" aria-hidden="true"></span><span class="sr-only">Menu</span></summary><ul class="menu-panel"><li><a href="../#features">Features</a></li><li><a href="tutorial.html">Tutorial</a></li><li><a href="./">Docs</a></li><li><a href="https://github.com/DutraIRS/ZettelApp">GitHub</a></li></ul></details></div></div></header><div class="wrap docs-layout"><nav class="docs-nav" aria-label="Documentation"><details class="docs-menu"><summary><span class="docs-menu-text"><span class="docs-menu-label">Documentation</span><span class="docs-menu-current">Development</span></span></summary><ul><li><a href="index.html">Overview</a></li><li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li><li><a href="tutorial.html">Tutorial: first 30 minutes</a></li><li><a href="getting-started.html">Getting started</a></li><li><a href="notes-and-links.html">Notes and links</a></li><li><a href="link-suggestions.html">Link suggestions</a></li><li><a href="graph-and-insights.html">Graph and Insights</a></li><li><a href="review-and-anki.html">Review, quizzes and Anki</a></li><li><a href="zotero.html">Zotero</a></li><li><a href="ai-assistant.html">Ask your notes (AI)</a></li><li><a href="mcp-server.html">MCP server</a></li><li><a href="mcp-reference.html">MCP API reference</a></li><li><a href="export-import.html">Export and import</a></li><li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li><li><a href="privacy-and-security.html">Privacy and security</a></li><li><a href="development.html" aria-current="page">Development</a></li><li><a href="faq.html">FAQ</a></li></ul></details><div class="docs-list"><h2>Documentation</h2><ul><li><a href="index.html">Overview</a></li><li><a href="what-is-zettelkasten.html">What is a Zettelkasten?</a></li><li><a href="tutorial.html">Tutorial: first 30 minutes</a></li><li><a href="getting-started.html">Getting started</a></li><li><a href="notes-and-links.html">Notes and links</a></li><li><a href="link-suggestions.html">Link suggestions</a></li><li><a href="graph-and-insights.html">Graph and Insights</a></li><li><a href="review-and-anki.html">Review, quizzes and Anki</a></li><li><a href="zotero.html">Zotero</a></li><li><a href="ai-assistant.html">Ask your notes (AI)</a></li><li><a href="mcp-server.html">MCP server</a></li><li><a href="mcp-reference.html">MCP API reference</a></li><li><a href="export-import.html">Export and import</a></li><li><a href="keyboard-shortcuts.html">Keyboard shortcuts</a></li><li><a href="privacy-and-security.html">Privacy and security</a></li><li><a href="development.html" aria-current="page">Development</a></li><li><a href="faq.html">FAQ</a></li></ul></div></nav><main class="doc" id="content"><h1 id="development">Development</h1>
 <p>ZettelApp is written in Python with <a href="https://doc.qt.io/qtforpython-6/">Qt for Python (PySide6)</a>.</p>
 <h2 id="set-up">Set up</h2>
-<p>You need Python 3.12 or later on Windows, and Git.</p>
+<p>You need Python 3.12 or later on Windows or Linux, and Git.</p>
+<p>Windows:</p>
 <pre><code class="language-powershell">git clone https://github.com/DutraIRS/ZettelApp.git
 cd ZettelApp
 py -m venv .venv
@@ -9,8 +10,19 @@ py -m venv .venv
 pip install -r requirements-dev.txt
 python -m zettelapp
 </code></pre>
+<p>Linux:</p>
+<pre><code class="language-bash">git clone https://github.com/DutraIRS/ZettelApp.git
+cd ZettelApp
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -r requirements-dev.txt
+python -m zettelapp
+</code></pre>
 <h2 id="tests">Tests</h2>
-<pre><code class="language-powershell">pytest
+<pre><code class="language-powershell">pytest   # Windows
+</code></pre>
+<p>On Linux, run the suite with Qt's offscreen platform:</p>
+<pre><code class="language-bash">QT_QPA_PLATFORM=offscreen pytest
 </code></pre>
 <p>The tests cover:</p>
 <ul>
@@ -66,6 +78,26 @@ and <code>zettelapp://</code> link registration;</li>
 </ul>
 <p>The executables carry Windows version information and the app icon. One-folder builds start faster and
 trigger fewer antivirus false positives than single-file builds.</p>
+<h2 id="build-the-linux-app">Build the Linux app</h2>
+<pre><code class="language-bash">bash packaging/build-linux.sh
+</code></pre>
+<p>This produces:</p>
+<ul>
+<li><code>dist/ZettelApp/</code>: the app folder (PyInstaller, one-folder mode) with the desktop app <code>zettelapp</code> and
+the console MCP server <code>zettelapp-mcp</code>;</li>
+<li><code>dist/ZettelApp-&lt;version&gt;-linux-x86_64.tar.gz</code>: the same folder, portable archive;</li>
+<li><code>dist/zettelapp_&lt;version&gt;_amd64.deb</code>: the package for Debian-based distributions (needs <code>dpkg-deb</code>),
+which installs the folder under <code>/usr/lib/ZettelApp</code>, <code>zettelapp</code> and <code>zettelapp-mcp</code> on <code>PATH</code>, the
+application entry with the <code>zettelapp://</code> scheme handler, the AppStream metadata and the icon;</li>
+<li><code>dist/SHA256SUMS-linux.txt</code>.</li>
+</ul>
+<p>Both executables are self-tested offscreen as part of the build (the script fails otherwise). The
+metadata is validated in CI: <code>desktop-file-validate</code>, <code>appstreamcli validate</code> and a YAML/XML parse of
+the Flatpak manifest (<code>packaging/flatpak/</code>) and the Snap recipe (<code>packaging/snap/</code>). To build those:</p>
+<pre><code class="language-bash">flatpak-builder --force-clean --install-deps-from=flathub --install --user \
+    build/flatpak packaging/flatpak/io.github.DutraIRS.ZettelApp.yml
+snapcraft  # in packaging/snap/, or pass -d snapcraft.yaml; snap install --dangerous zettelapp_*.snap
+</code></pre>
 <h2 id="release">Release</h2>
 <ol>
 <li>Update <code>__version__</code> in <code>zettelapp/__init__.py</code> and <code>CHANGELOG.md</code>, run <code>python tools/build_site.py</code>
@@ -73,9 +105,11 @@ trigger fewer antivirus false positives than single-file builds.</p>
 learn about new versions) and commit the result.</li>
 <li>Commit, then tag and push: <code>git tag v1.0.1; git push origin v1.0.1</code>.</li>
 <li>GitHub Actions checks that the tag matches the app version, runs lint, formatting, the tests and the
-dependency audit, builds the app on Windows and publishes a GitHub release with
-<code>ZettelApp-Setup.exe</code>, <code>ZettelApp-Portable.zip</code> and <code>SHA256SUMS.txt</code>. The website's download buttons
-always point to the latest release.</li>
+dependency audit, builds the app on Windows and Linux and publishes a GitHub release with
+<code>ZettelApp-Setup.exe</code>, <code>ZettelApp-Portable.zip</code>, the Linux <code>.deb</code> and portable <code>.tar.gz</code>, and a
+combined <code>SHA256SUMS.txt</code>. The website's download buttons always point to the latest release. A
+final job builds the Snap from the tagged commit, attaches it to the release and — when the
+repository secret <code>SNAPCRAFT_STORE_CREDENTIALS</code> is set — publishes it to the Snap Store.</li>
 </ol>
 <p>A release needs a <strong>code-signing certificate</strong>, stored in the repository secrets
 <code>WINDOWS_SIGNING_CERT_BASE64</code> and <code>WINDOWS_SIGNING_CERT_PASSWORD</code>. Without it the release job stops,
@@ -107,7 +141,7 @@ and the tag ontology). Older vaults are upgraded automatically when opened.</p>
     quiz.py        SM-2 scheduling and quiz generation
     zotero.py      Zotero local API client
     llm.py         AI providers (registry + adapters) and retrieval
-    secrets.py     Windows Credential Manager
+    secrets.py     keyrings: Windows Credential Manager, the Linux Secret Service (libsecret)
     security.py    validation of URLs, file names, images, archives
   ui/              PySide6 widgets: main window, editor, graph views, pages, dialogs, theme
   resources/       icon, adventure illustrations, translation catalogues (locales/)
@@ -115,10 +149,12 @@ and the tag ontology). Older vaults are upgraded automatically when opened.</p>
   mcp_server.py    MCP server; mcp_main.py: its entry point (zettelapp-mcp.exe)
   app.py           startup, single instance, logging
   settings.py      preferences (QSettings)
-  winintegration.py  taskbar identity, dark title bars, zettelapp:// protocol
+  winintegration.py  taskbar identity, dark title bars, zettelapp:// protocol (dispatches to
+                     linuxintegration.py on Linux: user-local desktop entry, file manager reveal)
 tests/             pytest suite
 tools/             icon, screenshots, demo vault, website builder, translation tools
-packaging/         PyInstaller spec, version info, Inno Setup script, build script
+packaging/         PyInstaller specs, version info, Inno Setup script, Windows and Linux build scripts,
+                   .desktop entry, AppStream metainfo, Flatpak manifest, Snap recipe
 docs/              this documentation (also published on the website)
 website/           the GitHub Pages site
 </code></pre>

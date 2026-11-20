@@ -2,8 +2,10 @@
 
 ## Install
 
-ZettelApp runs on **Windows 10 (21H2 or later) and Windows 11, 64-bit**. Download it from the
-[latest release](https://github.com/DutraIRS/ZettelApp/releases/latest):
+ZettelApp runs on **Windows 10 (21H2 or later), Windows 11, and recent 64-bit Linux desktops**. Download
+it from the [latest release](https://github.com/DutraIRS/ZettelApp/releases/latest).
+
+### Windows
 
 | Download | Use it when |
 |---|---|
@@ -19,6 +21,27 @@ Each release lists SHA-256 checksums (`SHA256SUMS.txt`). To check a download in 
 Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 ```
 
+### Linux
+
+| Download | Use it when |
+|---|---|
+| `zettelapp_<version>_amd64.deb` | Debian, Ubuntu, Mint or another `.deb`-based distribution. Install it with `sudo apt install ./zettelapp_*.deb`, or open it in your software centre, which then offers updates. |
+| `ZettelApp-<version>-linux-x86_64.tar.gz` | Any other distribution, or no installation: unpack it anywhere and run `ZettelApp/zettelapp`. |
+
+Both bundle Python and Qt; they need a 64-bit desktop (X11 or Wayland — GNOME, KDE and others) with
+its standard graphics libraries. To check a download in a terminal:
+
+```bash
+sha256sum zettelapp_1.3.1_amd64.deb
+```
+
+The app and its documentation are translated into 11 languages; change the app's language in *Options*.
+
+API keys are stored in the Secret Service (GNOME Keyring or KWallet); without a keyring they are kept
+in memory only. `zettelapp://` links from Anki cards open notes out of the box with the `.deb`; other
+installs set the handler up from *Options ▸ Desktop integration*. A Flatpak manifest and a Snap recipe
+live in the repository (`packaging/`), with store listings planned.
+
 ### "Windows protected your PC"
 
 Builds are not code-signed yet, so Microsoft Defender SmartScreen may warn the first time you run the
@@ -28,7 +51,8 @@ installer. If you downloaded it from the official release page and the checksum 
 ## Your first vault
 
 A **vault** is a folder holding your notes: a database file (`zettel.db`) and an `assets` folder for images.
-On first start ZettelApp creates one in **Documents\ZettelApp** with eleven linked starter notes. The
+On first start ZettelApp creates one in **Documents\ZettelApp** (Windows) or **~/Documents/ZettelApp**
+(Linux) with eleven linked starter notes. The
 *Welcome to ZettelApp* note leads through links, tags, images, mind maps, flashcards and the rest of the app. An
 optional ten-minute adventure offers the same tour through real actions. New vaults created with
 *File ▸ New Vault…* or *File ▸ Open Vault…* receive the same starter material, so you can work elsewhere,
@@ -54,10 +78,10 @@ The **navigation rail** on the left switches between pages (Ctrl+1 to Ctrl+5):
 - **Ask**: ask questions about your notes using an AI provider of your choice (optional).
 
 **Options** (bottom of the rail, or *Tools ▸ Options…*, Ctrl+,) holds the preferences: theme, editor text
-size, link suggestions, link types, AI, MCP server, Anki, Zotero, Windows integration and backups.
+size, link suggestions, link types, AI, MCP server, Anki, Zotero, Desktop integration and backups.
 
-The app follows your Windows **light/dark** setting and **accent colour**. You can force a theme in
-*View ▸ Theme*.
+The app follows your system **light/dark** setting and **accent colour** (Windows, GNOME and KDE). You
+can force a theme in *View ▸ Theme*.
 
 ## Updates
 
