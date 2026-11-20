@@ -19,10 +19,13 @@ from collections.abc import Callable, Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from zettelapp import androidintegration
 from zettelapp.core.models import Flashcard, Note
 from zettelapp.core.render import NoteRenderer
 from zettelapp.core.security import app_url, is_valid_asset_name
 from zettelapp.i18n import _
+
+IS_ANDROID = androidintegration.IS_ANDROID
 
 BASIC_MODEL_ID = 1_733_870_101
 CLOZE_MODEL_ID = 1_733_870_102
