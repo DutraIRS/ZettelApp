@@ -347,7 +347,7 @@ class MainWindow(QMainWindow):
         theme_menu = v.addMenu(_("&Theme"))
         group = QActionGroup(self)
         for text, key in (
-            (N_("Use &Windows Setting"), "system"),
+            (N_("Use &System Setting"), "system"),
             (N_("&Light"), "light"),
             (N_("&Dark"), "dark"),
         ):

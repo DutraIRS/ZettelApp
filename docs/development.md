@@ -47,7 +47,7 @@ The tests cover:
 - the security checks;
 - a smoke test of the main window, run offscreen.
 
-They never touch your real preferences or Credential Manager entries beyond a throwaway test key.
+They never touch your real preferences or keyring entries beyond a throwaway test key.
 
 ## Useful tools
 

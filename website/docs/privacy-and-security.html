@@ -76,7 +76,7 @@ The MCP server makes no network requests at all.</p>
 </tr>
 <tr>
 <td>API keys</td>
-<td><strong>Windows Credential Manager</strong> (<code>ZettelApp/llm/…</code>), never in files or the registry.</td>
+<td>The system keyring — <strong>Windows Credential Manager</strong> (<code>ZettelApp/llm/…</code>) on Windows, the Secret Service (GNOME Keyring / KWallet) on Linux — never in files or the registry.</td>
 </tr>
 <tr>
 <td>Logs</td>
@@ -134,10 +134,10 @@ are written atomically.</li>
 query syntax.</li>
 <li><strong><code>zettelapp://</code> links</strong> (used by Anki cards) can only <em>open a note by its ID</em>. Any other request is
 ignored.</li>
-<li><strong>Single instance per user.</strong> A second launch hands its request to the running app through a Windows
-named pipe that only your user account can access.</li>
+<li><strong>Single instance per user.</strong> A second launch hands its request to the running app through a channel —
+a Windows named pipe, or a user-only local socket on Linux — that only your user account can access.</li>
 <li><strong>AI safety.</strong> The AI model gets no tools, so instructions hidden in a note can't make it act, and its
-answer is rendered with the same safe renderer. API keys stay in Credential Manager and are removed from
+answer is rendered with the same safe renderer. API keys stay in the system keyring and are removed from
 error messages.</li>
 <li><strong>MCP server and its switch.</strong> MCP clients can reach your notes only while ZettelApp is open <strong>and</strong> the
 MCP switch in its status bar is on. The switch is off every time ZettelApp starts and is never saved.
@@ -145,11 +145,12 @@ The server is read-only by default, runs only when your MCP client starts it, an
 input/output with no network port. See <a href="mcp-server.html">MCP server</a>.</li>
 </ul>
 <h2 id="uninstalling">Uninstalling</h2>
-<p>Uninstall from <em>Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall</em>. The uninstaller offers
+<p>On Windows, uninstall from <em>Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall</em>. The uninstaller offers
 an unticked option, <strong>Also delete my ZettelApp settings and data</strong>. If you tick it, it removes your
 settings, the API keys saved in Credential Manager, logs, the cache, automatic backups and the semantic
 search model and index (<code>%LOCALAPPDATA%\ZettelApp</code>) <strong>and all your notes</strong> (the database and attachments of your vaults). Unticked,
-your notes stay where they are.</p>
+your notes stay where they are. On Linux, remove the package (<code>sudo apt remove zettelapp</code>, or uninstall it in
+your software centre); your notes and your settings in <code>~/.config/ZettelApp</code> stay unless you delete them yourself.</p>
 <p>Found a security problem? Please report it privately; see
 <a href="https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md">SECURITY.md</a>.</p>
 <p class="doc-footer">Found a mistake? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/privacy-and-security.md">Edit this page on GitHub</a>.</p></main></div><footer class="site-footer"><div class="wrap footer-row"><p><img src="../assets/favicon.png" alt="" width="20" height="20"> <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p><ul class="nav"><li><a href="../">Home</a></li><li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li><li><a href="https://ko-fi.com/dutrairs" rel="noopener">Donate</a></li></ul></div><ul class="nav lang-row" aria-label="Languages"><li><a href="privacy-and-security.html" lang="en" hreflang="en" aria-current="true">English</a></li><li><a href="../es/docs/privacy-and-security.html" lang="es" hreflang="es">Español</a></li><li><a href="../pt-br/docs/privacy-and-security.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../fr/docs/privacy-and-security.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../de/docs/privacy-and-security.html" lang="de" hreflang="de">Deutsch</a></li><li><a href="../it/docs/privacy-and-security.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../ru/docs/privacy-and-security.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../zh-cn/docs/privacy-and-security.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../ja/docs/privacy-and-security.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../ko/docs/privacy-and-security.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../ar/docs/privacy-and-security.html" lang="ar" hreflang="ar">العربية</a></li></ul><p class="made-with">Proudly developed with <a href="https://github.com/DutraIRS/Rational-Web">RationalWeb</a></p></footer></div></body></html>

@@ -256,7 +256,7 @@ class OptionsDialog(QDialog):
         form = QFormLayout()
         self.theme = QComboBox()
         for text, key in (
-            (_("Use Windows setting"), "system"),
+            (_("Use system setting"), "system"),
             (_("Light"), "light"),
             (_("Dark"), "dark"),
         ):
@@ -264,7 +264,7 @@ class OptionsDialog(QDialog):
         self.theme.setCurrentIndex(max(0, self.theme.findData(settings.get(settings.THEME))))
         form.addRow(_("App theme"), self.theme)
         self.language = QComboBox()
-        self.language.addItem(_("Use Windows setting"), "system")
+        self.language.addItem(_("Use system setting"), "system")
         for code, name in i18n.LANGUAGES.items():
             self.language.addItem(name, code)
         stored = i18n.setting_code(settings.get(settings.UI_LANGUAGE))
@@ -801,7 +801,7 @@ class OptionsDialog(QDialog):
             label(
                 _(
                     "Connect an AI provider to ask questions about your notes (Ask page). Keys are stored "
-                    "in Windows Credential Manager, never in plain files. You can save several keys per provider and pick the one to use. Only your question and the "
+                    "in the system keyring, never in plain files. You can save several keys per provider and pick the one to use. Only your question and the "
                     "most relevant notes are sent."
                 ),
                 "caption",
@@ -880,7 +880,7 @@ class OptionsDialog(QDialog):
         self.key_remove.setEnabled(bool(keys))
         self.key_hint.setText(
             _(
-                "The selected key is the one used for questions. Keys are kept in Windows Credential Manager."
+                "The selected key is the one used for questions. Keys are kept in the system keyring."
             )
             if len(keys) > 1
             else ""

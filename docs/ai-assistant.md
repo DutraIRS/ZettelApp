@@ -33,8 +33,8 @@ costs more. The default is *medium*.
 ## Bring your own LLM
 
 Ask uses **your own account** with the provider you pick, so any usage is billed by that provider to you.
-ZettelApp has no AI service of its own. Your API key is saved in **Windows Credential Manager**, never in
-settings files.
+ZettelApp has no AI service of its own. Your API key is saved in the **system keyring** (Windows
+Credential Manager, or the Secret Service — GNOME Keyring or KWallet — on Linux), never in settings files.
 
 - **Providers**: Anthropic Claude, OpenAI and Z.ai (GLM), in *Tools ▸ Options ▸ AI assistant ▸ Provider*.
   Pick a **Model** from the list (*Refresh list* asks the provider which models your key can use) or type
@@ -74,7 +74,8 @@ links to its sources.
 
 - **Only what you ask is sent**: your question and the notes listed under *Sources sent*. A notice
   reminds you of this before you ask (tick *Don't show this again* to skip it).
-- **Your API key** is stored in **Windows Credential Manager** (as `ZettelApp/llm/<provider>`, or `ZettelApp/llm/<provider>/<key id>` for further keys), never in
+- **Your API key** is stored in the **system keyring** (Windows Credential Manager, or the Secret Service
+  on Linux; as `ZettelApp/llm/<provider>`, or `ZettelApp/llm/<provider>/<key id>` for further keys), never in
   settings files or logs, and it is removed from any error message shown to you. *Delete* removes it from this computer.
 - **The model has no tools.** It can't search the web, run code or change your notes, so instructions
   hidden in a note (or an imported file) can't make it do anything. The answer is shown through the same

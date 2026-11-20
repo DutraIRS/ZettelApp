@@ -39,6 +39,10 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Fixed
 
+- Wording no longer assumes Windows on Linux: the *App theme* and *Language* options and the
+  *View ▸ Theme* menu say "use system setting", privacy notes about API keys say "the system
+  keyring", and the About dialog says "for Windows and Linux". Translations updated in all
+  11 languages.
 - Links to local files whose names contain spaces or accented letters open again: the renderer now
   decodes the link destination before looking the file up (markdown-it writes destinations
   percent-encoded).
