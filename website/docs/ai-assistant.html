@@ -56,8 +56,8 @@ computer (<code>http://localhost:…</code>). Addresses must use <code>https://<
 costs more. The default is <em>medium</em>.</p>
 <h2 id="bring-your-own-llm">Bring your own LLM</h2>
 <p>Ask uses <strong>your own account</strong> with the provider you pick, so any usage is billed by that provider to you.
-ZettelApp has no AI service of its own. Your API key is saved in <strong>Windows Credential Manager</strong>, never in
-settings files.</p>
+ZettelApp has no AI service of its own. Your API key is saved in the <strong>system keyring</strong> (Windows
+Credential Manager, or the Secret Service — GNOME Keyring or KWallet — on Linux), never in settings files.</p>
 <ul>
 <li><strong>Providers</strong>: Anthropic Claude, OpenAI and Z.ai (GLM), in <em>Tools ▸ Options ▸ AI assistant ▸ Provider</em>.
 Pick a <strong>Model</strong> from the list (<em>Refresh list</em> asks the provider which models your key can use) or type
@@ -94,7 +94,8 @@ links to its sources.</p>
 <ul>
 <li><strong>Only what you ask is sent</strong>: your question and the notes listed under <em>Sources sent</em>. A notice
 reminds you of this before you ask (tick <em>Don't show this again</em> to skip it).</li>
-<li><strong>Your API key</strong> is stored in <strong>Windows Credential Manager</strong> (as <code>ZettelApp/llm/&lt;provider&gt;</code>, or <code>ZettelApp/llm/&lt;provider&gt;/&lt;key id&gt;</code> for further keys), never in
+<li><strong>Your API key</strong> is stored in the <strong>system keyring</strong> (Windows Credential Manager, or the Secret Service
+on Linux; as <code>ZettelApp/llm/&lt;provider&gt;</code>, or <code>ZettelApp/llm/&lt;provider&gt;/&lt;key id&gt;</code> for further keys), never in
 settings files or logs, and it is removed from any error message shown to you. <em>Delete</em> removes it from this computer.</li>
 <li><strong>The model has no tools.</strong> It can't search the web, run code or change your notes, so instructions
 hidden in a note (or an imported file) can't make it do anything. The answer is shown through the same

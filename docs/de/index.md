@@ -1,6 +1,6 @@
 # ZettelApp-Dokumentation
 
-ZettelApp ist ein Zettelkasten für Windows: ein Netzwerk aus kleinen Notizen, die jeweils eine Idee enthalten und durch Links verbunden sind, die erklären, *wie* die Ideen zusammenhängen. Beim Schreiben schlägt die App Links vor, stellt Ihr Wissen als 2D- oder 3D-Graph dar, macht aus Notizen Lernkarten und Quizfragen und funktioniert mit Anki, Zotero und KI-Assistenten.
+ZettelApp ist ein Zettelkasten für Windows und Linux: ein Netzwerk aus kleinen Notizen, die jeweils eine Idee enthalten und durch Links verbunden sind, die erklären, *wie* die Ideen zusammenhängen. Beim Schreiben schlägt die App Links vor, stellt Ihr Wissen als 2D- oder 3D-Graph dar, macht aus Notizen Lernkarten und Quizfragen und funktioniert mit Anki, Zotero und KI-Assistenten.
 
 Alles bleibt auf Ihrem Computer, außer wenn Sie etwas anfordern, das eine Netzwerkverbindung benötigt.
 

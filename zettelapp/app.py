@@ -228,7 +228,9 @@ def main(argv: list[str] | None = None) -> int:
     app.setApplicationName(APP_NAME)
     app.setOrganizationName(ORG_NAME)
     app.setApplicationVersion(__version__)
-    icon_file = resource_path("icon.ico")
+    icon_file = resource_path("icon-256.png")
+    if not icon_file.exists():  # the Windows build keeps the multi-resolution .ico
+        icon_file = resource_path("icon.ico")
     if icon_file.exists():
         app.setWindowIcon(QIcon(str(icon_file)))
 

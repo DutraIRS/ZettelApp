@@ -58,12 +58,14 @@
 
 ### 应用提供其他语言吗?
 
-是的。安装程序和应用已翻译成西班牙语、葡萄牙语(巴西)、法语、德语、意大利语、俄语、简体中文、日语、韩语和阿拉伯语。应用默认跟随你的 Windows 语言;可在*选项*中更改。缺失的文字会回退到英文。
+是的。安装程序和应用已翻译成西班牙语、葡萄牙语(巴西)、法语、德语、意大利语、俄语、简体中文、日语、韩语和阿拉伯语。应用默认跟随你的系统语言;可在*选项*中更改。缺失的文字会回退到英文。
 
 ### 如何卸载?我的数据会怎样?
 
-*设置 ▸ 应用 ▸ 已安装的应用 ▸ ZettelApp ▸ 卸载*。卸载程序提供一个未勾选的**同时删除我的 ZettelApp 设置和数据**选项,它会删除偏好设置、已保存的 API 密钥、日志、缓存和自动备份,**以及你的所有笔记**(库数据库和附件)。不勾选时,你的笔记会被保留。对于便携版,删除它的文件夹即可;它的偏好设置位于注册表中的 `HKEY_CURRENT_USER\Software\ZettelApp` 下,日志和备份位于 `%LOCALAPPDATA%\ZettelApp`。
+*设置 ▸ 应用 ▸ 已安装的应用 ▸ ZettelApp ▸ 卸载*。卸载程序提供一个未勾选的**同时删除我的 ZettelApp 设置和数据**选项,它会删除偏好设置、已保存的 API 密钥、日志、缓存和自动备份,**以及你的所有笔记**(库数据库和附件)。不勾选时,你的笔记会被保留。对于便携版,删除它的文件夹即可;它的偏好设置在 Windows 上位于注册表中的 `HKEY_CURRENT_USER\Software\ZettelApp` 下,在 Linux 上位于
+`~/.config/ZettelApp/ZettelApp.conf`;日志和备份在 Windows 上位于 `%LOCALAPPDATA%\ZettelApp`,在 Linux 上
+位于 `~/.local/share/ZettelApp`。
 
 ### 出了问题。日志在哪里?
 
-在 `%LOCALAPPDATA%\ZettelApp\Logs` 中。当你[报告问题](https://github.com/DutraIRS/ZettelApp/issues)时,请附上相关部分。请先检查其中不包含任何隐私内容。
+在 Windows 上是 `%LOCALAPPDATA%\ZettelApp\Logs`,在 Linux 上是 `~/.local/share/ZettelApp/Logs`。当你[报告问题](https://github.com/DutraIRS/ZettelApp/issues)时,请附上相关部分。请先检查其中不包含任何隐私内容。

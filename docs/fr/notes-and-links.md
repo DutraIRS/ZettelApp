@@ -12,7 +12,7 @@ côte à côte) et **Aperçu**.
 
 Par sécurité, le HTML brut d’une note est affiché comme texte et n’est jamais rendu. Dans l’aperçu, les liens
 ouvrent uniquement des pages Web (`http`, `https`), des e-mails (`mailto`), des notes, des éléments Zotero
-et des fichiers locaux (affichés dans l’Explorateur de fichiers ; consultez [Liens vers des fichiers locaux](#links-to-local-files)). Consultez [Confidentialité et sécurité](privacy-and-security.md).
+et des fichiers locaux (affichés dans votre gestionnaire de fichiers ; consultez [Liens vers des fichiers locaux](#links-to-local-files)). Consultez [Confidentialité et sécurité](privacy-and-security.md).
 
 ### Suivre des liens
 
@@ -29,10 +29,10 @@ un lien tel que `[report.pdf](file:///C:/Users/me/Documents/report.pdf)`. Vous p
 le texte de la note un fichier qui n’est pas une image. Le lien pointe vers l’emplacement d’origine ; rien n’est
 copié dans le coffre.
 
-Cliquer sur le lien dans l’aperçu ou faire Ctrl+clic dessus dans l’éditeur ouvre **l’Explorateur de fichiers avec
+Cliquer sur le lien dans l’aperçu ou faire Ctrl+clic dessus dans l’éditeur ouvre **votre gestionnaire de fichiers avec
 le fichier sélectionné**. Le fichier lui-même n’est jamais ouvert ni exécuté. Seuls les chemins sur un disque local
 sont autorisés : les chemins réseau (UNC) comme `\\server\share\file.pdf` sont refusés, car leur consultation
-pourrait transmettre vos identifiants Windows à ce serveur.
+pourrait transmettre vos identifiants réseau à ce serveur.
 
 Chaque note possède :
 

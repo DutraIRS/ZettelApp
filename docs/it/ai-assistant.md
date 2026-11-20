@@ -33,7 +33,7 @@ costa di più. Il valore predefinito è *medio*.
 ## Porta il tuo LLM
 
 Chiedi usa **il tuo account** presso il provider che scegli, quindi qualsiasi utilizzo viene fatturato a te da quel provider.
-ZettelApp non ha un servizio di IA proprio. La tua chiave API è salvata in **Gestione credenziali di Windows**, mai nei
+ZettelApp non ha un servizio di IA proprio. La tua chiave API è salvata nel **portachiavi di sistema** (Gestione credenziali di Windows su Windows, o Secret Service — GNOME Keyring o KWallet — su Linux), mai nei
 file di impostazioni.
 
 - **Provider**: Anthropic Claude, OpenAI e Z.ai (GLM), in *Strumenti ▸ Opzioni ▸ Assistente IA ▸ Provider*.
@@ -74,7 +74,7 @@ alle sue fonti.
 
 - **Viene inviato solo ciò che chiedi**: la tua domanda e le note elencate sotto *Fonti inviate*. Un avviso
   te lo ricorda prima di chiedere (seleziona *Non mostrare più* per saltarlo).
-- **La tua chiave API** è conservata in **Gestione credenziali di Windows** (come `ZettelApp/llm/<provider>`, o `ZettelApp/llm/<provider>/<id della chiave>` per le chiavi successive), mai nei
+- **La tua chiave API** è conservata nel **portachiavi di sistema** (Gestione credenziali di Windows su Windows, o Secret Service su Linux; come `ZettelApp/llm/<provider>`, o `ZettelApp/llm/<provider>/<id della chiave>` per le chiavi successive), mai nei
   file di impostazioni o nei log, ed è rimossa da qualsiasi messaggio di errore che ti viene mostrato. *Elimina* la cancella da questo computer.
 - **Il modello non ha strumenti.** Non può cercare sul web, eseguire codice o modificare le tue note, quindi le istruzioni
   nascoste in una nota (o in un file importato) non possono fargli fare nulla. La risposta viene mostrata con lo stesso

@@ -1,4 +1,4 @@
-"""ZettelApp: a Zettelkasten note-taking app for Windows."""
+"""ZettelApp: a Zettelkasten note-taking app."""
 
 __version__ = "1.3.1"
 

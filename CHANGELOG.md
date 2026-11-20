@@ -4,6 +4,49 @@ All notable changes to ZettelApp are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- **Linux support** (roadmap item 2): ZettelApp now runs on 64-bit Linux desktops, on X11 and Wayland.
+  - New install options: a `.deb` for Debian-based distributions and a portable `.tar.gz`, built by
+    `packaging/build-linux.sh`. A Flatpak manifest (`packaging/flatpak/`, freedesktop 24.08) and a Snap
+    recipe (`packaging/snap/`, core24 with the GNOME extension) live in the repository; store listings
+    are planned, and releases can already publish the Snap when store credentials are configured.
+  - API keys are stored in the Secret Service (GNOME Keyring / KWallet) instead of Windows Credential
+    Manager. Without a keyring they are kept in memory only, as before, and nothing changes on Windows.
+  - Notes default to `~/Documents/ZettelApp` (through `xdg-user-dir`), settings live in
+    `~/.config/ZettelApp`, caches and generated images in `~/.cache/ZettelApp`: the XDG base
+    directories, instead of `%LOCALAPPDATA%`.
+  - Every icon is painted with QPainter from a bundled shape library when the Windows icon fonts are
+    missing, so menus, toolbars and dialogs look right without any icon theme.
+  - The theme follows the desktop's light/dark preference and accent colour (GNOME via `gsettings`,
+    KDE via `kdeglobals`), and the font stacks follow the platform.
+  - `zettelapp://` links from Anki cards open the matching note: the `.deb` ships a desktop entry
+    advertising the scheme, and other installs register a user-local one from
+    *Options ▸ Desktop integration*.
+  - Revealing a file or folder in the file manager goes through `org.freedesktop.FileManager1`, with a
+    plain open as fallback.
+  - On Linux, links to local files in notes accept only absolute paths on the same machine: network
+    shares, `file://` URLs with a host and control characters are refused before any lookup.
+- CI now runs the tests on Ubuntu as well as Windows, builds and self-tests the Linux packages on every
+  pull request, and releases carry the `.deb` and `.tar.gz` alongside the Windows installer.
+
+### Changed
+
+- *Options*: the *Windows integration* page is now *Desktop integration*, and on Linux it configures a
+  `zettelapp` (not `zettelapp.exe`) MCP binary and a Claude Desktop config under `XDG_CONFIG_HOME`.
+
+### Fixed
+
+- Wording no longer assumes Windows on Linux: the *App theme* and *Language* options and the
+  *View ▸ Theme* menu say "use system setting", privacy notes about API keys say "the system
+  keyring", and the About dialog says "for Windows and Linux". Translations updated in all
+  11 languages.
+- Links to local files whose names contain spaces or accented letters open again: the renderer now
+  decodes the link destination before looking the file up (markdown-it writes destinations
+  percent-encoded).
+
 ## [1.3.1] - 2026-11-05
 
 ### Changed

@@ -93,7 +93,7 @@ Noch nicht. Linux-Pakete (.deb, AppImage) und macOS stehen auf der
 
 Ja. Das Installationsprogramm und die App sind auf Spanisch, brasilianischem Portugiesisch, Französisch,
 Deutsch, Italienisch, Russisch, vereinfachtem Chinesisch, Japanisch, Koreanisch und Arabisch verfügbar.
-Die App verwendet standardmäßig die Sprache von Windows; ändern Sie sie unter *Optionen*. Fehlende Texte
+Die App verwendet standardmäßig die Sprache des Systems; ändern Sie sie unter *Optionen*. Fehlende Texte
 werden auf Englisch angezeigt.
 
 ### Wie deinstalliere ich die App und was geschieht mit meinen Daten?
@@ -103,11 +103,12 @@ bietet die standardmäßig deaktivierte Option **Auch meine ZettelApp-Einstellun
 Wenn Sie sie aktivieren, werden Einstellungen, gespeicherte API-Schlüssel, Protokolle, Cache und
 automatische Sicherungen **sowie alle Ihre Notizen** (Datenbanken und Anhänge Ihrer Tresore) entfernt.
 Wenn Sie die Option nicht aktivieren, bleiben Ihre Notizen erhalten. Bei der portablen Version löschen Sie
-deren Ordner; ihre Einstellungen liegen in der Registrierung unter `HKEY_CURRENT_USER\Software\ZettelApp`,
-Protokolle und Sicherungen unter `%LOCALAPPDATA%\ZettelApp`.
+deren Ordner; ihre Einstellungen liegen in der Registrierung unter `HKEY_CURRENT_USER\Software\ZettelApp` (unter Windows)
+bzw. in `~/.config/ZettelApp/ZettelApp.conf` (unter Linux); Protokolle und Sicherungen liegen unter
+`%LOCALAPPDATA%\ZettelApp` (unter Windows) bzw. `~/.local/share/ZettelApp` (unter Linux).
 
 ### Es ist ein Fehler aufgetreten. Wo finde ich die Protokolle?
 
-Unter `%LOCALAPPDATA%\ZettelApp\Logs`. Fügen Sie dem
+Unter `%LOCALAPPDATA%\ZettelApp\Logs` unter Windows, bzw. `~/.local/share/ZettelApp/Logs` unter Linux. Fügen Sie dem
 [Fehlerbericht](https://github.com/DutraIRS/ZettelApp/issues) bitte den relevanten Abschnitt bei. Prüfen
 Sie vorher, dass er keine privaten Informationen enthält.

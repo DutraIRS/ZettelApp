@@ -451,7 +451,7 @@ class AboutDialog(QDialog):
         layout.addLayout(head)
         text = QLabel(
             _(
-                'A Zettelkasten for Windows: atomic notes, typed links, mind maps, flashcards and a knowledge graph, with link suggestions that learn from you.<br><br><a href="{HOMEPAGE_URL}">Website</a> · <a href="{DOCS_URL}">Documentation</a> · <a href="{REPO_URL}">Source code</a><br><br>ZettelApp is free. If it helps you, please consider a donation.<br><br>Released into the public domain (The Unlicense). Built with Qt for Python (LGPLv3), NumPy, RapidFuzz, genanki, markdown-it-py, PyYAML and the Anthropic SDK; see THIRD_PARTY_NOTICES.md for licences.<br><br><span>Python {python_version} · {system} {release}</span>'
+                'A Zettelkasten for Windows and Linux: atomic notes, typed links, mind maps, flashcards and a knowledge graph, with link suggestions that learn from you.<br><br><a href="{HOMEPAGE_URL}">Website</a> · <a href="{DOCS_URL}">Documentation</a> · <a href="{REPO_URL}">Source code</a><br><br>ZettelApp is free. If it helps you, please consider a donation.<br><br>Released into the public domain (The Unlicense). Built with Qt for Python (LGPLv3), NumPy, RapidFuzz, genanki, markdown-it-py, PyYAML and the Anthropic SDK; see THIRD_PARTY_NOTICES.md for licences.<br><br><span>Python {python_version} · {system} {release}</span>'
             ).format(
                 HOMEPAGE_URL=HOMEPAGE_URL,
                 DOCS_URL=DOCS_URL,

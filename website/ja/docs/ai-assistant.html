@@ -41,7 +41,7 @@
 <p>お使いのキーでアクセスできる任意のモデル ID を入力できます。<strong>エンドポイント (任意)</strong> はアドレスを上書きします。たとえば、Z.ai のコーディングプランのエンドポイント、OpenAI 互換のプロキシ、お使いのコンピューター上で動作するモデル (<code>http://localhost:…</code>) を使う場合です。アドレスは <code>https://</code> を使う必要があります。平文の <code>http://</code> は <code>localhost</code> のみ受け付けられます。</p>
 <p>Claude では<strong>エフォート</strong> (低から最大) も設定できます。エフォートが高いほど回答前により深く考え、コストも増えます。既定は<em>中</em>です。</p>
 <h2 id="自分の-llm-を使う">自分の LLM を使う</h2>
-<p>質問機能は、選んだプロバイダーの<strong>ご自身のアカウント</strong>を使うので、使用料はそのプロバイダーからあなたに請求されます。ZettelApp には独自の AI サービスはありません。API キーは <strong>Windows 資格情報マネージャー</strong>に保存され、設定ファイルには決して保存されません。</p>
+<p>質問機能は、選んだプロバイダーの<strong>ご自身のアカウント</strong>を使うので、使用料はそのプロバイダーからあなたに請求されます。ZettelApp には独自の AI サービスはありません。API キーは<strong>システムのキーリング</strong> (Windows では Windows 資格情報マネージャー、Linux では Secret Service — GNOME Keyring または KWallet) に保存され、設定ファイルには決して保存されません。</p>
 <ul>
 <li><strong>プロバイダー</strong>: Anthropic Claude、OpenAI、Z.ai (GLM)。<em>ツール ▸ オプション ▸ AI アシスタント ▸ プロバイダー</em>で選べます。<strong>モデル</strong>は一覧から選ぶか (<em>一覧を更新</em>で、お使いのキーで利用できるモデルをプロバイダーに問い合わせます)、お使いのキーでアクセスできる任意のモデル ID を入力します。</li>
 <li><strong>自分のサーバー</strong>: <strong>OpenAI スタイルの chat completions</strong> API を提供するサービスなら何でも使えます。<strong>OpenAI</strong> を選び、<strong>エンドポイント (任意)</strong> にそのベースアドレスを設定します。たとえば <code>https://my-proxy.example.com/v1</code>、<code>http://localhost:11434/v1</code> (Ollama)、<code>http://localhost:1234/v1</code> (LM Studio) です。平文の <code>http://</code> は <code>localhost</code>、<code>127.0.0.1</code>、<code>::1</code> のみ受け付けられ、それ以外はすべて <code>https://</code> を使う必要があります。これらのローカルアドレスでは、<strong>API キー</strong>は空のままでもかまいません。</li>
@@ -60,7 +60,7 @@
 <h2 id="フライハシーと安全性">プライバシーと安全性</h2>
 <ul>
 <li><strong>送信されるのは質問した内容だけ</strong>: 質問と、<em>送信された情報源</em>に表示されるノートです。質問する前に、お知らせでこのことが通知されます (<em>今後このメッセージを表示しない</em>にチェックを入れると、表示されなくなります)。</li>
-<li><strong>API キー</strong>は <strong>Windows 資格情報マネージャー</strong> (<code>ZettelApp/llm/&lt;provider&gt;</code>、追加のキーは <code>ZettelApp/llm/&lt;provider&gt;/&lt;キー ID&gt;</code> として) に保存され、設定ファイルやログには決して保存されず、表示されるエラーメッセージからも取り除かれます。<em>削除</em>でこのコンピューターから削除できます。</li>
+<li><strong>API キー</strong>は<strong>システムのキーリング</strong> (Windows では Windows 資格情報マネージャー、Linux では Secret Service。<code>ZettelApp/llm/&lt;provider&gt;</code>、追加のキーは <code>ZettelApp/llm/&lt;provider&gt;/&lt;キー ID&gt;</code> として) に保存され、設定ファイルやログには決して保存されず、表示されるエラーメッセージからも取り除かれます。<em>削除</em>でこのコンピューターから削除できます。</li>
 <li><strong>モデルはツールを持ちません。</strong> Web を検索したり、コードを実行したり、ノートを変更したりできないので、ノート (またはインポートしたファイル) に隠された指示で何かをさせることはできません。回答は、ノートと同じ安全なレンダラーで表示され、HTML やスクリプトは含まれません。</li>
 <li>Claude では、ZettelApp は Anthropic の公式 SDK を使い、<strong>サーバー側のリフューザル フォールバック</strong>を有効にします。リクエストが安全性分類器に拒否された場合、Anthropic は推奨のフォールバックモデルで再試行します。これは Claude Opus 5.5、Opus 5、Sonnet 5.5、Fable 5.1 に適用されます。</li>
 <li>送信した内容には、各プロバイダー自身の利用規約とデータポリシーが適用されます。</li>

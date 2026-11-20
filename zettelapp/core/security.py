@@ -8,7 +8,9 @@ handler. Everything here fails closed: unknown input is rejected.
 from __future__ import annotations
 
 import ntpath
+import posixpath
 import re
+import sys
 import unicodedata
 import zipfile
 from pathlib import Path, PurePosixPath
@@ -20,6 +22,7 @@ from zettelapp.i18n import _
 
 WEB_SCHEMES = frozenset({"http", "https", "mailto"})
 MAX_URL_LENGTH = 2048
+IS_POSIX = sys.platform != "win32"
 
 NOTE_ID_RE = re.compile(r"^\d{14}(?:-\d{1,4})?$")
 ASSET_NAME_RE = re.compile(r"^[0-9a-f]{20}\.(?:png|jpg|gif|webp|bmp)$")
@@ -87,12 +90,14 @@ _DRIVE_PATH_RE = re.compile(r"^[A-Za-z]:[\\/]")
 
 
 def local_file_path(target: object) -> str | None:
-    """The Windows path a file link points to (file:///C:/… or C:\\…), or None.
+    """The local path a file link points to (file:///C:/…, file:///home/…, or a
+    plain absolute path), or None.
 
-    Only absolute paths on a local drive letter are accepted. Network paths
-    (\\\\server\\share, file://server/…) and device paths (\\\\?\\…) are refused before
-    anything touches the disk: just looking up a network path makes Windows offer the
-    user's credentials to that server, so a crafted note could otherwise leak them.
+    Only absolute paths on a local disk are accepted. Network paths (UNC
+    \\\\server\\share and file://server/… on Windows, //server/share on POSIX) and
+    device paths (\\\\?\\…) are refused before anything touches the disk: just
+    looking up a network path can offer the user's credentials to that server,
+    so a crafted note could otherwise leak them.
     """
     if not isinstance(target, str) or len(target) > MAX_URL_LENGTH:
         return None
@@ -108,15 +113,24 @@ def local_file_path(target: object) -> str | None:
             if re.match(r"^/[A-Za-z]:", text):
                 text = text[1:]
         else:
+            return None  # file://server/share: never looked up
+    if not IS_POSIX:
+        if not _DRIVE_PATH_RE.match(text) or _CONTROL_CHARS.search(text):
             return None
-    if not _DRIVE_PATH_RE.match(text) or _CONTROL_CHARS.search(text):
+        path = ntpath.normpath(text)  # a string operation: nothing is looked up
+        return path if _DRIVE_PATH_RE.match(path) else None
+    if _CONTROL_CHARS.search(text) or not text.startswith("/"):
         return None
-    path = ntpath.normpath(text)  # a string operation: nothing is looked up
-    return path if _DRIVE_PATH_RE.match(path) else None
+    if text.startswith("//"):
+        return None  # POSIX network paths may reach out to a server when looked up
+    return posixpath.normpath(text)  # a string operation: nothing is looked up
 
 
 def file_url(path: str) -> str:
-    """The file:/// URL of a local Windows path, e.g. file:///C:/My%20Files/report.pdf."""
+    """The file:/// URL of a local path, e.g. file:///C:/My%20Files/report.pdf
+    or file:///home/me/My%20Files/report.pdf."""
+    if IS_POSIX:
+        return "file://" + quote(path, safe="/:")
     return "file:///" + quote(path.replace("\\", "/"), safe="/:")
 
 

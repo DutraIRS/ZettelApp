@@ -30,11 +30,15 @@ weggeleitet werden. Der MCP-Server stellt überhaupt keine Netzwerkanfragen.
 | Notizen, Links, Lernkarten, Wiederholungsverlauf | Ihr Tresorordner: `zettel.db` (SQLite). Standardmäßig **Documents\ZettelApp**. |
 | Bilder | Der Ordner `assets` im Tresor. |
 | Einstellungen | Die Registrierung unter `HKEY_CURRENT_USER\Software\ZettelApp\ZettelApp`. |
-| API-Schlüssel | **Windows-Anmeldeinformations-Manager** (`ZettelApp/llm/…`), nie in Dateien oder der Registrierung. |
+| API-Schlüssel | **Der Schlüsselbund des Systems** — der Windows-Anmeldeinformations-Manager unter Windows oder der Secret Service (GNOME Keyring oder KWallet) unter Linux (`ZettelApp/llm/…`) —, nie in Dateien oder der Registrierung. |
 | Protokolle | `%LOCALAPPDATA%\ZettelApp\Logs` (rotierte Protokolle, höchstens einige MB). Sie enthalten Fehler, aber keine Notizen und niemals API-Schlüssel. |
 | Automatische Sicherungen | `%LOCALAPPDATA%\ZettelApp\Backups` |
 | Kleiner UI-Cache | `%LOCALAPPDATA%\ZettelApp\Cache` |
 | Modell und Index der semantischen Suche, falls Sie sie einrichten | `%LOCALAPPDATA%\ZettelApp\Search`. Der Index wird aus Ihren Notizen abgeleitet und liegt nie im Tresor, wird also nicht mit ihm synchronisiert. *Modell und Index entfernen* unter *Extras ▸ Optionen ▸ Suche* löscht ihn. |
+
+Unter Linux liegen dieselben Elemente in den XDG-Ordnern: Notizen standardmäßig in **Documents/ZettelApp**,
+Einstellungen in `~/.config/ZettelApp/ZettelApp.conf`, Protokolle, Sicherungen und das Suchmodell unter
+`~/.local/share/ZettelApp`, der kleine UI-Cache in `~/.cache/ZettelApp`.
 
 Der Tresor ist ein gewöhnlicher Ordner: Sie können ihn kopieren, sichern oder in OneDrive aufbewahren.
 ZettelApp schreibt die Datenbank mit vollständiger Synchronisierung, einer Einstellung für synchronisierte
@@ -53,20 +57,22 @@ nicht vertrauenswürdig:
 
 - **Keine aktiven Inhalte.** Rohes HTML in Notizen wird als Text angezeigt und nie dargestellt; in einer Notiz können keine Skripte ausgeführt werden. Die Notizvorschau lädt Bilder **nur aus dem Ordner `assets` des Tresors**, niemals aus dem Web oder anderen Orten auf der Festplatte.
 - **Zulässige Links.** Beim Anklicken werden nur Webseiten (`http`/`https`), E-Mail (`mailto`), Notizen, Zotero-Links zum *Auswählen eines Eintrags* oder *Öffnen eines PDFs* sowie Links zu lokalen Dateien (siehe unten) geöffnet. `javascript:` und andere Schemas werden abgelehnt.
-- **Links zu lokalen Dateien zeigen die Datei nur an.** Ein Link `file:///` öffnet **den Datei-Explorer mit ausgewählter Datei**; die Datei selbst wird weder geöffnet noch ausgeführt. Erlaubt sind nur Pfade auf lokalen Laufwerken. Netzwerkpfade (UNC) wie `\\server\share` werden abgelehnt, weil eine Abfrage Ihre Windows-Anmeldedaten an den Server senden könnte.
+- **Links zu lokalen Dateien zeigen die Datei nur an.** Ein Link `file:///` öffnet **Ihren Dateimanager mit ausgewählter Datei**; die Datei selbst wird weder geöffnet noch ausgeführt. Erlaubt sind nur Pfade auf lokalen Laufwerken. Netzwerkpfade (UNC) wie `\\server\share` werden abgelehnt, weil eine Abfrage Ihre Netzwerk-Anmeldedaten an den Server senden könnte.
 - **Bilder werden anhand ihres Inhalts geprüft**, nicht anhand des Dateinamens. Erlaubt sind PNG, JPEG, GIF, WebP und BMP bis 25 MB; SVG wird abgelehnt, da es Skripte enthalten kann. Die Prüfung umfasst die Dateisignatur und komprimierte Größe; beim ersten Anzeigen werden außerdem die Pixelabmessungen überprüft.
 - **Sichere Importe.** Archive werden auf Pfadmanipulationen („Zip Slip“) und Dekompressionsbomben geprüft. Jedes Feld wird validiert und in der Größe begrenzt; Markdown-Importe können nicht aus dem Importordner herausgreifen. Bei einem fehlgeschlagenen Import bleibt der Tresor unverändert: Der Import läuft in einer einzelnen Datenbanktransaktion, die bei jedem Fehler zurückgerollt wird.
 - **Sichere Exporte.** Exportierte Websites enthalten keine Skripte und verwenden eine strikte Content-Security-Policy. Dateien werden atomar geschrieben.
 - **Sicherheit der Datenbank.** Alle Datenbankabfragen verwenden gebundene Parameter; Suchtext wird nie als Abfragesyntax interpretiert.
 - **`zettelapp://`-Links** (für Anki-Karten) können ausschließlich *eine Notiz anhand ihrer ID öffnen*. Alle anderen Anfragen werden ignoriert.
-- **Nur eine Instanz pro Benutzer.** Ein zweiter Start übergibt seine Anfrage über eine Windows-Named-Pipe an die bereits laufende App, auf die nur Ihr Benutzerkonto zugreifen kann.
+- **Nur eine Instanz pro Benutzer.** Ein zweiter Start übergibt seine Anfrage über eine Windows-Named-Pipe (unter Linux über einen lokalen Socket, auf den nur Ihr Benutzerkonto zugreift) an die bereits laufende App.
 - **KI-Sicherheit.** Das KI-Modell erhält keine Tools. Versteckte Anweisungen in einer Notiz können es daher nicht zu Aktionen veranlassen; seine Antwort wird mit demselben sicheren Renderer angezeigt. API-Schlüssel bleiben im Anmeldeinformations-Manager und werden aus Fehlermeldungen entfernt.
 - **MCP-Server und Schalter.** MCP-Clients können nur dann auf Ihre Notizen zugreifen, wenn ZettelApp geöffnet **und** der MCP-Schalter in der Statusleiste eingeschaltet ist. Bei jedem Start ist der Schalter aus und wird nie gespeichert. Standardmäßig ist der Server schreibgeschützt. Er läuft nur, wenn Ihr MCP-Client ihn startet, und verwendet Standardein- und -ausgabe ohne Netzwerkport. Siehe [MCP-Server](mcp-server.md).
 
 ## Deinstallieren
 
-Deinstallieren Sie ZettelApp unter *Windows-Einstellungen ▸ Apps ▸ Installierte Apps ▸ ZettelApp ▸
-Deinstallieren*. Das Deinstallationsprogramm bietet die standardmäßig deaktivierte Option **Auch meine
+Deinstallieren Sie ZettelApp unter Windows über *Windows-Einstellungen ▸ Apps ▸ Installierte Apps ▸
+ZettelApp ▸ Deinstallieren*. Unter Linux entfernen Sie das Paket (`sudo apt remove zettelapp`, oder
+deinstallieren es in Ihrem Software-Center); Ihre Notizen und Einstellungen in `~/.config/ZettelApp`
+bleiben erhalten, wenn Sie sie nicht selbst löschen. Das Deinstallationsprogramm bietet die standardmäßig deaktivierte Option **Auch meine
 ZettelApp-Einstellungen und -Daten löschen**. Wenn Sie sie aktivieren, werden Ihre Einstellungen, die im
 Anmeldeinformations-Manager gespeicherten API-Schlüssel, Protokolle, der Cache, automatische Sicherungen sowie Modell und Index der semantischen Suche
 (`%LOCALAPPDATA%\ZettelApp`) **sowie alle Ihre Notizen** (die Datenbank und Anhänge Ihrer Tresore) entfernt.

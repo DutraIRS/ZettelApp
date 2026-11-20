@@ -6,14 +6,14 @@ Ideas and planned work for ZettelApp. Suggestions are welcome in
 **Companies can sponsor a specific roadmap item** through [Ko-fi](https://ko-fi.com/dutrairs) or by getting in
 touch on [GitHub](https://github.com/DutraIRS/ZettelApp).
 
-Linux support was requested for 1.0, evaluated, and **deferred because it is not quick**: it needs
-careful work across the whole app rather than a small addition.
+Linux support was requested for 1.0, evaluated, and **deferred because it is not quick**: it needed
+careful work across the whole app rather than a small addition. It has since shipped — see item 2.
 
 ## 1. App localisation (many languages)
 
 **Status: done in 1.1.** The app, its documentation and the website are available in English, Spanish,
 Portuguese (Brazil), French, German, Italian, Russian, Simplified Chinese, Japanese, Korean and Arabic
-(right to left). The language follows Windows or the installer's choice, and can be changed in
+(right to left). The language follows your system or the installer's choice, and can be changed in
 *Tools ▸ Options ▸ General*.
 
 Still to do:
@@ -24,31 +24,30 @@ Still to do:
   `zettelapp/resources/locales/messages.json`, and `python tools/i18n.py check` reports what a catalogue is
   missing.
 
-## 2. Linux (.deb, AppImage, Flatpak)
+## 2. Linux (.deb, portable archive, Flatpak, Snap)
 
-**Status: planned.** *(Evaluated for 1.0 and deferred.)*
+**Status: done in 1.4** (from the original evaluation and checklist):
 
-What already works: the core is plain Python and Qt, which run on Linux. That covers storage, search, link
-suggestions, clustering, export and import, Anki, Zotero, the AI providers and the MCP server, and the
-whole test suite should pass there.
+- [x] **Icons**: every icon is painted with QPainter through a bundled shape library (`ui/iconshapes.py`),
+  so the app looks right without Windows' *Segoe Fluent Icons* font and without any icon theme.
+- [x] **Paths**: XDG locations — notes default to `~/Documents/ZettelApp` via `xdg-user-dir`, settings in
+  `~/.config/ZettelApp`, caches in `~/.cache/ZettelApp`.
+- [x] **API keys**: stored with the Secret Service through libsecret (GNOME Keyring / KWallet); the
+  Windows Credential Manager path is untouched and the memory-only fallback remains.
+- [x] **Links**: the `.deb` ships a `.desktop` file with `MimeType=x-scheme-handler/zettelapp;`; other
+  installs register a user-local desktop entry from *Options ▸ Desktop integration*.
+- [x] **Theme**: follows the desktop's light/dark preference and accent colour (GNOME via `gsettings`,
+  KDE via `kdeglobals`), with per-platform font stacks.
+- [x] **Packaging**: a PyInstaller build on Linux packed into a portable `.tar.gz` and a `.deb`
+  (`packaging/build-linux.sh`), a Flatpak manifest (`packaging/flatpak/`, freedesktop 24.08) and a Snap
+  recipe (`packaging/snap/`, core24 + GNOME). AppImage was dropped in favour of the portable archive:
+  it covers the same "run anywhere" need without bundling a runtime. Store listings (Flathub, Snap
+  Store) are planned — the release workflow can already publish the Snap when credentials exist.
+- [x] **CI**: Ubuntu jobs run the tests and build the packages on every pull request; releases carry
+  the `.deb` and `.tar.gz` alongside the Windows installer.
 
-Checklist:
-
-- [ ] **Icons**: the app draws icons from Windows' *Segoe Fluent Icons* font, which Linux doesn't have.
-  Add a fallback: an open icon set bundled as SVG, or freedesktop theme icons via `QIcon.fromTheme`.
-- [ ] **Paths**: XDG locations (`~/.local/share/ZettelApp`, `~/.cache/ZettelApp`, `~/Documents`
-  via `xdg-user-dir`) instead of `%LOCALAPPDATA%`.
-- [ ] **API keys**: store them with the Secret Service (libsecret / GNOME Keyring / KWallet) instead of
-  Windows Credential Manager. Today, Linux keeps them in memory only.
-- [ ] **Links**: a `.desktop` file with `MimeType=x-scheme-handler/zettelapp;`, so `zettelapp://` links
-  from Anki open notes.
-- [ ] **Theme**: follow the desktop's light/dark preference and accent colour where available.
-- [ ] **Packaging**: a PyInstaller build on Linux, packed into a `.deb` (`dpkg-deb` or fpm) and an
-  AppImage, then possibly a Flatpak on Flathub.
-- [ ] **CI**: an Ubuntu job that runs the tests and builds the packages on each release.
-
-Why deferred: each item is small, but together they need testing on real Linux desktops (GNOME, KDE)
-and a second release pipeline.
+Still open: reviews of the Linux builds on more real desktops (GNOME and KDE Wayland sessions in
+particular), and the Flathub submission.
 
 ## 3. Signed Windows builds
 

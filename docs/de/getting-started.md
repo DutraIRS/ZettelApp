@@ -2,7 +2,7 @@
 
 ## Installieren
 
-ZettelApp läuft unter **Windows 10 (21H2 oder höher) und Windows 11, 64-Bit**. Laden Sie die App von der
+ZettelApp läuft unter **Windows 10 (21H2 oder höher), Windows 11 und aktuellen 64-Bit-Linux-Desktops**. Laden Sie die App von der
 [neuesten Version](https://github.com/DutraIRS/ZettelApp/releases/latest) herunter:
 
 | Download | Verwenden Sie diese Version, wenn … |
@@ -19,6 +19,24 @@ Für jede Version sind SHA-256-Prüfsummen aufgeführt (`SHA256SUMS.txt`). So pr
 ```powershell
 Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 ```
+
+### Linux
+
+| Download | Wann Sie ihn verwenden |
+|---|---|
+| `zettelapp_<Version>_amd64.deb` | Debian, Ubuntu, Mint oder eine andere `.deb`-basierte Distribution. Installieren Sie ihn mit `sudo apt install ./zettelapp_*.deb`, oder öffnen Sie ihn in Ihrem Software-Center, das danach Updates anbietet. |
+| `ZettelApp-<Version>-linux-x86_64.tar.gz` | Jede andere Distribution oder ohne Installation: Entpacken Sie ihn an einem beliebigen Ort und führen Sie `ZettelApp/zettelapp` aus. |
+
+Beide bündeln Python und Qt; sie benötigen einen 64-Bit-Desktop (X11 oder Wayland — GNOME, KDE und
+andere) mit seinen Standard-Grafikbibliotheken. So prüfen Sie einen Download im Terminal:
+
+```bash
+sha256sum zettelapp_1.3.1_amd64.deb
+```
+
+API-Schlüssel werden im Secret Service (GNOME Keyring oder KWallet) gespeichert; ohne Schlüsselbund
+liegen sie nur im Speicher. `zettelapp://`-Links aus Anki-Karten öffnen Notizen mit dem `.deb` ohne
+weitere Einrichtung; andere Installationen richten den Handler unter *Optionen ▸ Desktop-Integration* ein.
 
 ### „Windows hat Ihren PC geschützt“
 
@@ -56,9 +74,9 @@ Mit der **Navigationsleiste** links wechseln Sie zwischen den Seiten (Ctrl+1 bis
 
 Unter **Optionen** (unten in der Navigationsleiste oder über *Werkzeuge ▸ Optionen…*, Ctrl+,) finden Sie
 Einstellungen für Design, Editor-Schriftgröße, Linkvorschläge, Linktypen, KI, MCP-Server, Anki, Zotero,
-Windows-Integration und Sicherungen.
+Desktop-Integration und Sicherungen.
 
-Die App übernimmt die **helle/dunkle** Darstellung und **Akzentfarbe** von Windows. Unter *Ansicht ▸ Design*
+Die App übernimmt die **helle/dunkle** Darstellung und **Akzentfarbe** des Systems. Unter *Ansicht ▸ Design*
 können Sie ein Design festlegen.
 
 ## Aktualisierungen
@@ -74,7 +92,10 @@ aktivieren. ZettelApp installiert niemals selbst etwas.
 
 ## Deinstallieren
 
-Verwenden Sie *Windows-Einstellungen ▸ Apps ▸ Installierte Apps ▸ ZettelApp ▸ Deinstallieren*. Nach Ihrer
+Deinstallieren Sie unter Windows über *Windows-Einstellungen ▸ Apps ▸ Installierte Apps ▸
+ZettelApp ▸ Deinstallieren*. Unter Linux entfernen Sie das Paket (`sudo apt remove zettelapp`, oder
+deinstallieren es in Ihrem Software-Center); Ihre Notizen und Einstellungen in `~/.config/ZettelApp`
+bleiben erhalten, wenn Sie sie nicht selbst löschen. Nach Ihrer
 Bestätigung bietet ein Dialog die nicht aktivierte Option **Auch meine ZettelApp-Einstellungen und -Daten
 löschen** an. Sie entfernt Ihre Einstellungen, gespeicherten API-Schlüssel, Protokolle, den Cache und
 automatische Sicherungen (`%LOCALAPPDATA%\ZettelApp`) **sowie alle Ihre Notizen** (die Datenbank und

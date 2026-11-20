@@ -63,7 +63,7 @@ die Schätzungen werden besser, wenn Sie Links annehmen und Vorschläge ablehnen
 <h3 id="ist-die-app-in-weiteren-sprachen-verfugbar">Ist die App in weiteren Sprachen verfügbar?</h3>
 <p>Ja. Das Installationsprogramm und die App sind auf Spanisch, brasilianischem Portugiesisch, Französisch,
 Deutsch, Italienisch, Russisch, vereinfachtem Chinesisch, Japanisch, Koreanisch und Arabisch verfügbar.
-Die App verwendet standardmäßig die Sprache von Windows; ändern Sie sie unter <em>Optionen</em>. Fehlende Texte
+Die App verwendet standardmäßig die Sprache des Systems; ändern Sie sie unter <em>Optionen</em>. Fehlende Texte
 werden auf Englisch angezeigt.</p>
 <h3 id="wie-deinstalliere-ich-die-app-und-was-geschieht-mit-meinen-daten">Wie deinstalliere ich die App und was geschieht mit meinen Daten?</h3>
 <p><em>Einstellungen ▸ Apps ▸ Installierte Apps ▸ ZettelApp ▸ Deinstallieren</em>. Das Deinstallationsprogramm
@@ -71,10 +71,11 @@ bietet die standardmäßig deaktivierte Option <strong>Auch meine ZettelApp-Eins
 Wenn Sie sie aktivieren, werden Einstellungen, gespeicherte API-Schlüssel, Protokolle, Cache und
 automatische Sicherungen <strong>sowie alle Ihre Notizen</strong> (Datenbanken und Anhänge Ihrer Tresore) entfernt.
 Wenn Sie die Option nicht aktivieren, bleiben Ihre Notizen erhalten. Bei der portablen Version löschen Sie
-deren Ordner; ihre Einstellungen liegen in der Registrierung unter <code>HKEY_CURRENT_USER\Software\ZettelApp</code>,
-Protokolle und Sicherungen unter <code>%LOCALAPPDATA%\ZettelApp</code>.</p>
+deren Ordner; ihre Einstellungen liegen in der Registrierung unter <code>HKEY_CURRENT_USER\Software\ZettelApp</code> (unter Windows)
+bzw. in <code>~/.config/ZettelApp/ZettelApp.conf</code> (unter Linux); Protokolle und Sicherungen liegen unter
+<code>%LOCALAPPDATA%\ZettelApp</code> (unter Windows) bzw. <code>~/.local/share/ZettelApp</code> (unter Linux).</p>
 <h3 id="es-ist-ein-fehler-aufgetreten-wo-finde-ich-die-protokolle">Es ist ein Fehler aufgetreten. Wo finde ich die Protokolle?</h3>
-<p>Unter <code>%LOCALAPPDATA%\ZettelApp\Logs</code>. Fügen Sie dem
+<p>Unter <code>%LOCALAPPDATA%\ZettelApp\Logs</code> unter Windows, bzw. <code>~/.local/share/ZettelApp/Logs</code> unter Linux. Fügen Sie dem
 <a href="https://github.com/DutraIRS/ZettelApp/issues">Fehlerbericht</a> bitte den relevanten Abschnitt bei. Prüfen
 Sie vorher, dass er keine privaten Informationen enthält.</p>
 <p class="doc-footer">Fehler gefunden? <a href="https://github.com/DutraIRS/ZettelApp/blob/main/docs/de/faq.md">Diese Seite auf GitHub bearbeiten</a>.</p></main></div><footer class="site-footer"><div class="wrap footer-row"><p><img src="../../assets/favicon.png" alt="" width="20" height="20"> <span>ZettelApp · public domain (<a href="https://github.com/DutraIRS/ZettelApp/blob/main/LICENSE">The Unlicense</a>)</span></p><ul class="nav"><li><a href="../">Start</a></li><li><a href="https://github.com/DutraIRS/ZettelApp/issues">Issues</a></li><li><a href="https://ko-fi.com/dutrairs" rel="noopener">Spenden</a></li></ul></div><ul class="nav lang-row" aria-label="Sprachen"><li><a href="../../docs/faq.html" lang="en" hreflang="en">English</a></li><li><a href="../../es/docs/faq.html" lang="es" hreflang="es">Español</a></li><li><a href="../../pt-br/docs/faq.html" lang="pt-BR" hreflang="pt-BR">Português (Brasil)</a></li><li><a href="../../fr/docs/faq.html" lang="fr" hreflang="fr">Français</a></li><li><a href="../../de/docs/faq.html" lang="de" hreflang="de" aria-current="true">Deutsch</a></li><li><a href="../../it/docs/faq.html" lang="it" hreflang="it">Italiano</a></li><li><a href="../../ru/docs/faq.html" lang="ru" hreflang="ru">Русский</a></li><li><a href="../../zh-cn/docs/faq.html" lang="zh-CN" hreflang="zh-CN">简体中文</a></li><li><a href="../../ja/docs/faq.html" lang="ja" hreflang="ja">日本語</a></li><li><a href="../../ko/docs/faq.html" lang="ko" hreflang="ko">한국어</a></li><li><a href="../../ar/docs/faq.html" lang="ar" hreflang="ar">العربية</a></li></ul><p class="made-with">Proudly developed with <a href="https://github.com/DutraIRS/Rational-Web">RationalWeb</a></p></footer></div></body></html>

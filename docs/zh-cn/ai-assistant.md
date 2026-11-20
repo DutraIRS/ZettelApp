@@ -24,7 +24,7 @@
 
 ## 使用你自己的 LLM
 
-“提问”使用的是你所选服务商处的**你自己的账户**,因此任何用量都由该服务商向你计费。ZettelApp 自己没有任何 AI 服务。你的 API 密钥保存在 **Windows 凭据管理器**中,绝不会保存在设置文件里。
+“提问”使用的是你所选服务商处的**你自己的账户**,因此任何用量都由该服务商向你计费。ZettelApp 自己没有任何 AI 服务。你的 API 密钥保存在**系统密钥环**中(Windows 上是 Windows 凭据管理器,Linux 上是 Secret Service — GNOME Keyring 或 KWallet),绝不会保存在设置文件里。
 
 - **服务商**:Anthropic Claude、OpenAI 和 Z.ai (GLM),位于*工具 ▸ 选项 ▸ AI 助手 ▸ 服务商*。从列表中选择一个**模型**(*刷新列表*会向服务商查询你的密钥可使用哪些模型),或输入你的密钥有权访问的任何模型 ID。
 - **你自己的服务器**:任何提供**OpenAI 风格聊天补全**API 的服务都可以使用。选择 **OpenAI**,并把**端点(可选)**设置为其基础地址,例如 `https://my-proxy.example.com/v1`、`http://localhost:11434/v1`(Ollama)或 `http://localhost:1234/v1`(LM Studio)。仅 `localhost`、`127.0.0.1` 和 `::1` 接受普通的 `http://`;其他地址都必须使用 `https://`。对于这些本地地址,**API 密钥**可以留空。
@@ -46,7 +46,7 @@
 ## 隐私与安全
 
 - **只发送你所问的内容**:你的问题和*已发送的来源*下列出的笔记。提问之前会有一条通知提醒你这一点(勾选*不再显示*可跳过)。
-- **你的 API 密钥**存储在 **Windows 凭据管理器**中(名为 `ZettelApp/llm/<provider>`,其他密钥为 `ZettelApp/llm/<provider>/<密钥 ID>`),绝不会存入设置文件或日志,并且会从向你显示的任何错误消息中移除。*删除*会将其从这台电脑上删除。
+- **你的 API 密钥**存储在**系统密钥环**中(Windows 上是 Windows 凭据管理器,Linux 上是 Secret Service;名为 `ZettelApp/llm/<provider>`,其他密钥为 `ZettelApp/llm/<provider>/<密钥 ID>`),绝不会存入设置文件或日志,并且会从向你显示的任何错误消息中移除。*删除*会将其从这台电脑上删除。
 - **模型没有任何工具。**它无法搜索网络、运行代码或更改你的笔记,因此隐藏在笔记(或导入文件)中的指令无法让它执行任何操作。答案通过与笔记相同的安全渲染器显示,不含 HTML 或脚本。
 - 使用 Claude 时,ZettelApp 采用 Anthropic 的官方 SDK,并选择启用**服务端拒绝回退**:如果某个请求被安全分类器拒绝,Anthropic 会在其推荐的回退模型上重试。这适用于 Claude Opus 5.5、Opus 5、Sonnet 5.5 和 Fable 5.1。
 - 每个服务商自己的条款和数据政策适用于你发送的内容。

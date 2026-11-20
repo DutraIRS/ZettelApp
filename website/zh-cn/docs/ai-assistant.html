@@ -47,7 +47,7 @@
 <p>你可以输入你的密钥有权访问的任何模型 ID。**端点(可选)**可覆盖默认地址,例如使用 Z.ai 的编程套餐端点、兼容 OpenAI 的代理,或运行在你自己电脑上的模型(<code>http://localhost:…</code>)。地址必须使用 <code>https://</code>;仅 <code>localhost</code> 接受普通的 <code>http://</code>。</p>
 <p>使用 Claude 时,你还可以设置<strong>思考强度</strong>(从低到最高):强度越高,回答前思考得越多,费用也越高。默认值为<em>中</em>。</p>
 <h2 id="使用你自己的-llm">使用你自己的 LLM</h2>
-<p>“提问”使用的是你所选服务商处的<strong>你自己的账户</strong>,因此任何用量都由该服务商向你计费。ZettelApp 自己没有任何 AI 服务。你的 API 密钥保存在 <strong>Windows 凭据管理器</strong>中,绝不会保存在设置文件里。</p>
+<p>“提问”使用的是你所选服务商处的<strong>你自己的账户</strong>,因此任何用量都由该服务商向你计费。ZettelApp 自己没有任何 AI 服务。你的 API 密钥保存在<strong>系统密钥环</strong>中(Windows 上是 Windows 凭据管理器,Linux 上是 Secret Service — GNOME Keyring 或 KWallet),绝不会保存在设置文件里。</p>
 <ul>
 <li><strong>服务商</strong>:Anthropic Claude、OpenAI 和 Z.ai (GLM),位于<em>工具 ▸ 选项 ▸ AI 助手 ▸ 服务商</em>。从列表中选择一个<strong>模型</strong>(<em>刷新列表</em>会向服务商查询你的密钥可使用哪些模型),或输入你的密钥有权访问的任何模型 ID。</li>
 <li><strong>你自己的服务器</strong>:任何提供<strong>OpenAI 风格聊天补全</strong>API 的服务都可以使用。选择 <strong>OpenAI</strong>,并把**端点(可选)**设置为其基础地址,例如 <code>https://my-proxy.example.com/v1</code>、<code>http://localhost:11434/v1</code>(Ollama)或 <code>http://localhost:1234/v1</code>(LM Studio)。仅 <code>localhost</code>、<code>127.0.0.1</code> 和 <code>::1</code> 接受普通的 <code>http://</code>;其他地址都必须使用 <code>https://</code>。对于这些本地地址,<strong>API 密钥</strong>可以留空。</li>
@@ -66,7 +66,7 @@
 <h2 id="隐私与安全">隐私与安全</h2>
 <ul>
 <li><strong>只发送你所问的内容</strong>:你的问题和<em>已发送的来源</em>下列出的笔记。提问之前会有一条通知提醒你这一点(勾选<em>不再显示</em>可跳过)。</li>
-<li><strong>你的 API 密钥</strong>存储在 <strong>Windows 凭据管理器</strong>中(名为 <code>ZettelApp/llm/&lt;provider&gt;</code>,其他密钥为 <code>ZettelApp/llm/&lt;provider&gt;/&lt;密钥 ID&gt;</code>),绝不会存入设置文件或日志,并且会从向你显示的任何错误消息中移除。<em>删除</em>会将其从这台电脑上删除。</li>
+<li><strong>你的 API 密钥</strong>存储在<strong>系统密钥环</strong>中(Windows 上是 Windows 凭据管理器,Linux 上是 Secret Service;名为 <code>ZettelApp/llm/&lt;provider&gt;</code>,其他密钥为 <code>ZettelApp/llm/&lt;provider&gt;/&lt;密钥 ID&gt;</code>),绝不会存入设置文件或日志,并且会从向你显示的任何错误消息中移除。<em>删除</em>会将其从这台电脑上删除。</li>
 <li>**模型没有任何工具。**它无法搜索网络、运行代码或更改你的笔记,因此隐藏在笔记(或导入文件)中的指令无法让它执行任何操作。答案通过与笔记相同的安全渲染器显示,不含 HTML 或脚本。</li>
 <li>使用 Claude 时,ZettelApp 采用 Anthropic 的官方 SDK,并选择启用<strong>服务端拒绝回退</strong>:如果某个请求被安全分类器拒绝,Anthropic 会在其推荐的回退模型上重试。这适用于 Claude Opus 5.5、Opus 5、Sonnet 5.5 和 Fable 5.1。</li>
 <li>每个服务商自己的条款和数据政策适用于你发送的内容。</li>

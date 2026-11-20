@@ -10,7 +10,7 @@ El editor tiene tres modos (Ctrl+E alterna entre ellos): **Editar**, **Dividir**
 al otro) y **Vista previa**.
 
 Por seguridad, el HTML sin procesar de una nota se muestra como texto y nunca se renderiza. Los enlaces de la vista previa solo abren páginas
-web (`http`, `https`), correo electrónico (`mailto`), notas, elementos de Zotero y archivos locales (se muestran en el Explorador de archivos,
+web (`http`, `https`), correo electrónico (`mailto`), notas, elementos de Zotero y archivos locales (se muestran en tu gestor de archivos,
 consulta [Enlaces a archivos locales](#links-to-local-files)). Consulta [Privacidad y seguridad](privacy-and-security.md).
 
 ### Seguir enlaces
@@ -27,9 +27,9 @@ consulta [Enlaces a archivos locales](#links-to-local-files)). Consulta [Privaci
 como `[informe.pdf](file:///C:/Users/me/Documents/report.pdf)`. Arrastrar al texto de la nota un archivo que no sea una imagen
 hace lo mismo. El archivo se enlaza donde está; no se copia nada a la bóveda.
 
-Al hacer clic en el enlace en la vista previa, o Ctrl+clic en el editor, se abre el **Explorador de archivos con el archivo
+Al hacer clic en el enlace en la vista previa, o Ctrl+clic en el editor, se abre **tu gestor de archivos con el archivo
 seleccionado**. El archivo en sí nunca se abre ni se ejecuta. Solo se permiten rutas de una unidad local: las rutas de red
-(UNC) como `\\servidor\recurso\archivo.pdf` se rechazan, porque consultarlas puede enviar tus credenciales de Windows
+(UNC) como `\\servidor\recurso\archivo.pdf` se rechazan, porque consultarlas puede enviar tus credenciales de red
 a ese servidor.
 
 Cada nota tiene:

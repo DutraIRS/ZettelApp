@@ -24,7 +24,7 @@ Avec Claude, vous pouvez également régler l’**effort** (de faible à maximal
 
 ## Utiliser votre propre LLM
 
-Ask utilise **votre propre compte** chez le fournisseur choisi ; celui-ci vous facture l’utilisation. ZettelApp n’a pas de service d’IA propre. Votre clé API est enregistrée dans le **Gestionnaire d’identifiants Windows**, jamais dans les fichiers de paramètres.
+Ask utilise **votre propre compte** chez le fournisseur choisi ; celui-ci vous facture l’utilisation. ZettelApp n’a pas de service d’IA propre. Votre clé API est enregistrée dans **le trousseau du système** (le Gestionnaire d’identifiants Windows sous Windows, ou le Service de secrets — GNOME Keyring ou KWallet — sur Linux), jamais dans les fichiers de paramètres.
 
 - **Fournisseurs** : Anthropic Claude, OpenAI et Z.ai (GLM), dans *Outils ▸ Options ▸ Assistant IA ▸ Fournisseur*. Choisissez un **Modèle** dans la liste (*Actualiser la liste* demande au fournisseur les modèles accessibles avec votre clé) ou saisissez un identifiant de modèle disponible.
 - **Votre propre serveur** : tout service proposant une API **complétion de conversation compatible avec OpenAI** est compatible. Choisissez **OpenAI** et indiquez son adresse de base dans **Point d'accès (facultatif)**, par exemple `https://my-proxy.example.com/v1`, `http://localhost:11434/v1` (Ollama) ou `http://localhost:1234/v1` (LM Studio). `http://` est accepté uniquement pour `localhost`, `127.0.0.1` et `::1` ; les autres adresses doivent utiliser `https://`. Pour ces adresses locales, la **clé API** peut rester vide.
@@ -46,7 +46,7 @@ Le modèle reçoit pour instruction de répondre uniquement à partir de vos not
 ## Confidentialité et sécurité
 
 - **Seules les données nécessaires à votre demande sont envoyées** : votre question et les notes figurant sous *Sources envoyées*. Un avis vous le rappelle avant la question (cochez *Ne plus afficher* pour ne plus l’afficher).
-- **Votre clé API** est stockée dans le **Gestionnaire d’identifiants Windows** (sous `ZettelApp/llm/<provider>`, ou `ZettelApp/llm/<provider>/<id de la clé>` pour les clés suivantes), jamais dans les fichiers de paramètres ou les journaux ; elle est supprimée des messages d’erreur affichés. *Supprimer* l’efface de cet ordinateur.
+- **Votre clé API** est stockée dans **le trousseau du système** (le Gestionnaire d’identifiants Windows sous Windows, ou le Service de secrets sur Linux ; sous `ZettelApp/llm/<provider>`, ou `ZettelApp/llm/<provider>/<id de la clé>` pour les clés suivantes), jamais dans les fichiers de paramètres ou les journaux ; elle est supprimée des messages d’erreur affichés. *Supprimer* l’efface de cet ordinateur.
 - **Le modèle ne dispose d’aucun outil.** Il ne peut ni chercher sur le Web, ni exécuter de code, ni modifier vos notes. Des instructions cachées dans une note (ou un fichier importé) ne peuvent donc pas lui faire effectuer d’action. La réponse utilise le même affichage sécurisé que les notes, sans HTML ni scripts.
 - Avec Claude, ZettelApp utilise le SDK officiel d’Anthropic et active le **repli de refus côté serveur** : si un classificateur de sécurité refuse une requête, Anthropic la réessaie avec son modèle de repli recommandé. Cela concerne Claude Opus 5.5, Opus 5, Sonnet 5.5 et Fable 5.1.
 - Les conditions et politiques de données de chaque fournisseur s’appliquent aux données que vous lui envoyez.

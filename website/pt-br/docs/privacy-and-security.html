@@ -76,7 +76,7 @@ O servidor MCP não faz nenhuma requisição de rede.</p>
 </tr>
 <tr>
 <td>Chaves de API</td>
-<td><strong>Gerenciador de Credenciais do Windows</strong> (<code>ZettelApp/llm/…</code>), nunca em arquivos nem no registro.</td>
+<td><strong>O chaveiro do sistema</strong> — o Gerenciador de Credenciais do Windows no Windows, ou o Serviço de Segredos (GNOME Keyring ou KWallet) no Linux (<code>ZettelApp/llm/…</code>) —, nunca em arquivos nem no registro.</td>
 </tr>
 <tr>
 <td>Logs</td>
@@ -96,6 +96,9 @@ O servidor MCP não faz nenhuma requisição de rede.</p>
 </tr>
 </tbody>
 </table></div>
+<p>No Linux, os mesmos itens vivem nas pastas XDG: as notas por padrão em <strong>Documents/ZettelApp</strong>, as
+preferências em <code>~/.config/ZettelApp/ZettelApp.conf</code>, e os logs, backups e o modelo de busca em
+<code>~/.local/share/ZettelApp</code>, com o pequeno cache da interface em <code>~/.cache/ZettelApp</code>.</p>
 <p>O cofre é uma pasta comum: você pode copiá-la, fazer backup dela ou mantê-la no OneDrive. O ZettelApp grava o
 banco de dados com sincronização total, uma configuração escolhida para se adequar a pastas sincronizadas. Evite abrir o mesmo cofre em dois
 computadores ao mesmo tempo.</p>
@@ -117,9 +120,9 @@ web nem de outro lugar do disco.</li>
 <li><strong>Lista de links permitidos.</strong> Clicar em um link abre apenas páginas web (<code>http</code>/<code>https</code>), e-mail (<code>mailto</code>), notas,
 links de <em>selecionar item</em> / <em>abrir PDF</em> do Zotero e links para arquivos locais (abaixo). <code>javascript:</code> e outros
 esquemas são recusados.</li>
-<li><strong>Links de arquivos locais apenas revelam o arquivo.</strong> Um link <code>file:///</code> abre o <strong>Explorador de Arquivos com o arquivo
+<li><strong>Links de arquivos locais apenas revelam o arquivo.</strong> Um link <code>file:///</code> abre <strong>o seu gerenciador de arquivos com o arquivo
 selecionado</strong>; o arquivo em si nunca é aberto nem executado. Somente caminhos em uma unidade local são permitidos. Caminhos de rede
-(UNC), como <code>\\server\share</code>, são recusados, porque consultar um deles pode enviar suas credenciais do Windows
+(UNC), como <code>\\server\share</code>, são recusados, porque consultar um deles pode enviar suas credenciais de rede
 a esse servidor.</li>
 <li><strong>As imagens são verificadas pelo conteúdo</strong>, não pelo nome do arquivo. Somente PNG, JPEG, GIF, WebP e BMP de até 25 MB são
 aceitos; o SVG é recusado porque pode conter scripts. A verificação cobre a assinatura do arquivo e o tamanho
@@ -134,7 +137,7 @@ são gravados de forma atômica.</li>
 sintaxe de consulta.</li>
 <li><strong>Os links <code>zettelapp://</code></strong> (usados pelos cartões do Anki) só podem <em>abrir uma nota pelo seu ID</em>. Qualquer outra requisição é
 ignorada.</li>
-<li><strong>Uma única instância por usuário.</strong> Uma segunda inicialização repassa sua requisição ao aplicativo em execução por um pipe nomeado do Windows
+<li><strong>Uma única instância por usuário.</strong> Uma segunda inicialização repassa sua requisição ao aplicativo em execução por um pipe nomeado do Windows (ou um soquete local exclusivo do seu usuário, no Linux)
 que somente a sua conta de usuário pode acessar.</li>
 <li><strong>Segurança da IA.</strong> O modelo de IA não recebe ferramentas, então instruções escondidas em uma nota não podem fazê-lo agir, e sua
 resposta é renderizada com o mesmo renderizador seguro. As chaves de API ficam no Gerenciador de Credenciais e são removidas das
@@ -145,7 +148,9 @@ O servidor é somente leitura por padrão, roda apenas quando seu cliente MCP o 
 padrão, sem porta de rede. Veja <a href="mcp-server.html">Servidor MCP</a>.</li>
 </ul>
 <h2 id="desinstalacao">Desinstalação</h2>
-<p>Desinstale em <em>Configurações do Windows ▸ Aplicativos ▸ Aplicativos instalados ▸ ZettelApp ▸ Desinstalar</em>. O desinstalador oferece
+<p>No Windows, desinstale em <em>Configurações do Windows ▸ Aplicativos ▸ Aplicativos instalados ▸ ZettelApp ▸ Desinstalar</em>.
+No Linux, remova o pacote (<code>sudo apt remove zettelapp</code>, ou desinstale pelo seu centro de aplicativos); suas notas e
+suas configurações em <code>~/.config/ZettelApp</code> permanecem, a menos que você as exclua. O desinstalador oferece
 uma opção desmarcada, <strong>Excluir também minhas configurações e dados do ZettelApp</strong>. Se você marcá-la, ela remove suas
 configurações, as chaves de API salvas no Gerenciador de Credenciais, os logs, o cache, os backups automáticos e o modelo e o índice da busca semântica
 (<code>%LOCALAPPDATA%\ZettelApp</code>) <strong>e todas as suas notas</strong> (o banco de dados e os anexos dos seus cofres). Desmarcada,

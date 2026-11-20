@@ -73,5 +73,5 @@ Karten.
 
 Die **Quelle** jeder Karte ist ein Link `zettelapp://note/<id>`. Klicken Sie in Anki darauf, um die Notiz
 in ZettelApp zu öffnen. Das Installationsprogramm richtet dies ein. Bei der portablen Version verwenden
-Sie *Optionen ▸ Windows-Integration ▸ Links registrieren*. Der Linkhandler akzeptiert nur Links zum
+Sie *Optionen ▸ Desktop-Integration ▸ Links registrieren*. Der Linkhandler akzeptiert nur Links zum
 *Öffnen einer Notiz*; siehe [Datenschutz und Sicherheit](privacy-and-security.md).

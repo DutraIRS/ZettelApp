@@ -55,4 +55,4 @@ ZettelApp 只会与本机上的 AnkiConnect 通信(`127.0.0.1`,默认端口 8765
 
 ### 从 Anki 回到你的笔记
 
-每张卡片的 **Source** 是一个 `zettelapp://note/<id>` 链接。在 Anki 中点击它,笔记就会在 ZettelApp 中打开。安装程序会完成这项设置。对于便携版,请使用*选项 ▸ Windows 集成 ▸ 注册链接*。链接处理程序只接受*打开笔记*链接;参见[隐私与安全](privacy-and-security.md)。
+每张卡片的 **Source** 是一个 `zettelapp://note/<id>` 链接。在 Anki 中点击它,笔记就会在 ZettelApp 中打开。安装程序会完成这项设置。对于便携版,请使用*选项 ▸ 桌面集成 ▸ 注册链接*。链接处理程序只接受*打开笔记*链接;参见[隐私与安全](privacy-and-security.md)。

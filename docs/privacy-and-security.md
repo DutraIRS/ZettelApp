@@ -29,11 +29,15 @@ The MCP server makes no network requests at all.
 | Notes, links, flashcards, review history | Your vault folder: `zettel.db` (SQLite). By default **Documents\ZettelApp**. |
 | Images | The vault's `assets` folder. |
 | Preferences | The registry, under `HKEY_CURRENT_USER\Software\ZettelApp\ZettelApp`. |
-| API keys | **Windows Credential Manager** (`ZettelApp/llm/…`), never in files or the registry. |
+| API keys | The system keyring — **Windows Credential Manager** (`ZettelApp/llm/…`) on Windows, the Secret Service (GNOME Keyring / KWallet) on Linux — never in files or the registry. |
 | Logs | `%LOCALAPPDATA%\ZettelApp\Logs` (rotated, at most a few MB). They record errors, not your notes, and never include API keys. |
 | Automatic backups | `%LOCALAPPDATA%\ZettelApp\Backups` |
 | Small UI cache | `%LOCALAPPDATA%\ZettelApp\Cache` |
 | Semantic search model and index, if you set it up | `%LOCALAPPDATA%\ZettelApp\Search`. The index is derived from your notes and is never in the vault, so it isn't synced with it. *Remove model and index* in *Tools ▸ Options ▸ Search* deletes it. |
+
+On Linux, the same items live in the XDG folders: notes default to **Documents/ZettelApp**, preferences in
+`~/.config/ZettelApp/ZettelApp.conf`, logs, backups and the search model under `~/.local/share/ZettelApp`, and the
+small UI cache in `~/.cache/ZettelApp`.
 
 The vault is an ordinary folder: you can copy it, back it up or keep it in OneDrive. ZettelApp writes the
 database with full synchronisation, a setting chosen to suit synced folders. Avoid opening the same vault on two
@@ -58,9 +62,9 @@ Notes can come from imports, the web or AI answers, so ZettelApp treats their co
 - **Link allowlist.** Clicking a link opens only web pages (`http`/`https`), e-mail (`mailto`), notes,
   Zotero *select item* / *open PDF* links, and links to local files (below). `javascript:` and other
   schemes are refused.
-- **Local file links only reveal the file.** A `file:///` link opens **File Explorer with the file
+- **Local file links only reveal the file.** A `file:///` link opens **your file manager with the file
   selected**; the file itself is never opened or run. Only paths on a local drive are allowed. Network
-  (UNC) paths such as `\\server\share` are refused, because looking one up can send your Windows
+  (UNC) paths such as `\\server\share` are refused, because looking one up can send your network
   credentials to that server.
 - **Images are verified by content**, not by file name. Only PNG, JPEG, GIF, WebP and BMP up to 25 MB are
   accepted; SVG is refused because it can carry scripts. Verification covers the file signature and
@@ -75,10 +79,10 @@ Notes can come from imports, the web or AI answers, so ZettelApp treats their co
   query syntax.
 - **`zettelapp://` links** (used by Anki cards) can only *open a note by its ID*. Any other request is
   ignored.
-- **Single instance per user.** A second launch hands its request to the running app through a Windows
-  named pipe that only your user account can access.
+- **Single instance per user.** A second launch hands its request to the running app through a channel —
+  a Windows named pipe, or a user-only local socket on Linux — that only your user account can access.
 - **AI safety.** The AI model gets no tools, so instructions hidden in a note can't make it act, and its
-  answer is rendered with the same safe renderer. API keys stay in Credential Manager and are removed from
+  answer is rendered with the same safe renderer. API keys stay in the system keyring and are removed from
   error messages.
 - **MCP server and its switch.** MCP clients can reach your notes only while ZettelApp is open **and** the
   MCP switch in its status bar is on. The switch is off every time ZettelApp starts and is never saved.
@@ -87,11 +91,12 @@ Notes can come from imports, the web or AI answers, so ZettelApp treats their co
 
 ## Uninstalling
 
-Uninstall from *Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall*. The uninstaller offers
+On Windows, uninstall from *Windows Settings ▸ Apps ▸ Installed apps ▸ ZettelApp ▸ Uninstall*. The uninstaller offers
 an unticked option, **Also delete my ZettelApp settings and data**. If you tick it, it removes your
 settings, the API keys saved in Credential Manager, logs, the cache, automatic backups and the semantic
 search model and index (`%LOCALAPPDATA%\ZettelApp`) **and all your notes** (the database and attachments of your vaults). Unticked,
-your notes stay where they are.
+your notes stay where they are. On Linux, remove the package (`sudo apt remove zettelapp`, or uninstall it in
+your software centre); your notes and your settings in `~/.config/ZettelApp` stay unless you delete them yourself.
 
 Found a security problem? Please report it privately; see
 [SECURITY.md](https://github.com/DutraIRS/ZettelApp/blob/main/SECURITY.md).

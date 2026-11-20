@@ -143,7 +143,7 @@ class AskPage(QWidget):
         )
         self.privacy.setText(
             _(
-                "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes. Your API key is kept in Windows Credential Manager."
+                "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes. Your API key is kept in the system keyring."
             ).format(label=info.label)
         )
         if self.window.vault:

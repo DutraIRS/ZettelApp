@@ -2,7 +2,7 @@
 
 ## 설치
 
-ZettelApp은 **Windows 10(21H2 이상)과 Windows 11, 64비트**에서 실행돼요.
+ZettelApp은 **Windows 10(21H2 이상), Windows 11, 그리고 최근 64비트 Linux 데스크톱**에서 실행돼요.
 [최신 릴리스](https://github.com/DutraIRS/ZettelApp/releases/latest)에서 내려받으세요.
 
 | 다운로드 | 이럴 때 사용하세요 |
@@ -18,6 +18,21 @@ ZettelApp은 **Windows 10(21H2 이상)과 Windows 11, 64비트**에서 실행돼
 ```powershell
 Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 ```
+
+### Linux
+
+| 다운로드 | 이럴 때 사용 |
+|---|---|
+| `zettelapp_<버전>_amd64.deb` | Debian, Ubuntu, Mint 등 `.deb` 기반 배포판. `sudo apt install ./zettelapp_*.deb`로 설치하거나 소프트웨어 센터에서 열면 이후 업데이트도 제공돼요. |
+| `ZettelApp-<버전>-linux-x86_64.tar.gz` | 다른 배포판, 또는 설치 없이 사용: 원하는 곳에 압축을 풀고 `ZettelApp/zettelapp`을 실행하세요. |
+
+두 패키지 모두 Python과 Qt를 포함해요. 64비트 데스크톱(X11 또는 Wayland — GNOME, KDE 등)과 표준 그래픽 라이브러리가 필요해요. 터미널에서 다운로드를 확인하려면:
+
+```bash
+sha256sum zettelapp_1.3.1_amd64.deb
+```
+
+API 키는 Secret Service(GNOME Keyring 또는 KWallet)에 저장되고, 키링이 없으면 메모리에만 보관돼요. Anki 카드의 `zettelapp://` 링크는 `.deb`에서는 바로 노트를 열어요. 다른 설치 방식에서는 *옵션 ▸ 데스크톱 통합*에서 핸들러를 설정하세요.
 
 ### "Windows에서 PC를 보호했습니다"
 
@@ -53,9 +68,9 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 - **질문**: 원하는 AI 공급자로 노트에 대해 질문해요(선택 사항).
 
 **옵션**(레일 맨 아래 또는 *도구 ▸ 옵션…*, Ctrl+,)에는 테마, 편집기 글자 크기, 링크 제안, 링크 유형, AI, MCP 서버,
-Anki, Zotero, Windows 통합, 백업 설정이 있어요.
+Anki, Zotero, 데스크톱 통합, 백업 설정이 있어요.
 
-앱은 Windows의 **밝게/어둡게** 설정과 **강조 색상**을 따라요. *보기 ▸ 테마*에서 테마를 고정할 수 있어요.
+앱은 시스템의 **밝게/어둡게** 설정과 **강조 색상**을 따라요. *보기 ▸ 테마*에서 테마를 고정할 수 있어요.
 
 ## 업데이트
 
@@ -68,7 +83,7 @@ HTTPS 요청을 한 번 보내요. 그 밖에는 아무것도 보내지 않으�
 
 ## 제거
 
-*Windows 설정 ▸ 앱 ▸ 설치된 앱 ▸ ZettelApp ▸ 제거*를 사용하세요. 확인하면 선택되지 않은
+Windows에서는 *Windows 설정 ▸ 앱 ▸ 설치된 앱 ▸ ZettelApp ▸ 제거*를 사용하세요. Linux에서는 패키지를 제거하거나(`sudo apt remove zettelapp`) 소프트웨어 센터에서 삭제하세요. 노트와 `~/.config/ZettelApp`의 설정은 직접 삭제하지 않는 한 남아 있어요. 확인하면 선택되지 않은
 **내 ZettelApp 설정과 데이터도 삭제** 옵션이 있는 대화 상자가 나와요. 이 옵션은 설정, 저장된 API 키, 로그, 캐시,
 자동 백업(`%LOCALAPPDATA%\ZettelApp`)과 **모든 노트**(볼트의 데이터베이스와 첨부 파일)를 삭제해요.
 노트를 유지하려면 선택하지 마세요. 포터블 버전은 폴더를 삭제하세요.

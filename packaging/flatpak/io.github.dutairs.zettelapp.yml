@@ -1,0 +1,39 @@
+app-id: io.github.dutairs.zettelapp
+runtime: org.freedesktop.Platform
+runtime-version: "24.08"
+sdk: org.freedesktop.Sdk
+command: zettelapp
+# Home: vaults live wherever the user keeps them. Network: the update check, AI providers,
+# Zotero and Anki. Secrets: the API keys go through org.freedesktop.secrets. FileManager1:
+# "reveal in file manager". DRI: the 3D graph renders on the GPU.
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --device=dri
+  - --share=network
+  - --filesystem=home
+  - --talk-name=org.freedesktop.secrets
+  - --talk-name=org.freedesktop.Notifications
+  - --talk-name=org.freedesktop.FileManager1
+  - --talk-name=org.freedesktop.portal.Desktop
+# Validate and build locally with:
+#   flatpak-builder --force-clean --install-deps-from=flathub --install --user build/flatpak packaging/flatpak/io.github.dutairs.zettelapp.yml
+# When submitting to Flathub, pin this source to the release tag instead of a moving branch.
+modules:
+  - name: zettelapp
+    buildsystem: simple
+    build-commands:
+      # The freedesktop 24.08 runtime ships Python 3.12; PySide6 and the other wheels are abi3 or
+      # have CPython 3.12 builds. The app and the zettelapp-mcp entry point land in /app/bin.
+      - pip3 install --verbose --root=/ --prefix=/app .
+      - install -Dm644 packaging/io.github.dutairs.zettelapp.desktop
+        /app/share/applications/io.github.dutairs.zettelapp.desktop
+      - install -Dm644 packaging/io.github.dutairs.zettelapp.metainfo.xml
+        /app/share/metainfo/io.github.dutairs.zettelapp.metainfo.xml
+      - install -Dm644 zettelapp/resources/icon-256.png
+        /app/share/icons/hicolor/256x256/apps/io.github.dutairs.zettelapp.png
+    sources:
+      - type: git
+        url: https://github.com/DutraIRS/ZettelApp.git
+        branch: main

@@ -2,7 +2,7 @@
 
 ## Installation
 
-ZettelApp fonctionne sous **Windows 10 (21H2 ou version ultérieure) et Windows 11, en 64 bits**. Téléchargez l’application depuis la [dernière version](https://github.com/DutraIRS/ZettelApp/releases/latest) :
+ZettelApp fonctionne sous **Windows 10 (21H2 ou version ultérieure), Windows 11 et les bureaux Linux 64 bits récents**. Téléchargez l’application depuis la [dernière version](https://github.com/DutraIRS/ZettelApp/releases/latest) :
 
 | Téléchargement | À utiliser si… |
 |---|---|
@@ -16,6 +16,24 @@ Chaque version indique les sommes de contrôle SHA-256 (`SHA256SUMS.txt`). Pour 
 ```powershell
 Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 ```
+
+### Linux
+
+| Téléchargement | Quand l’utiliser |
+|---|---|
+| `zettelapp_<version>_amd64.deb` | Debian, Ubuntu, Mint ou une autre distribution basée sur `.deb`. Installez-le avec `sudo apt install ./zettelapp_*.deb`, ou ouvrez-le dans votre logithèque, qui proposera ensuite les mises à jour. |
+| `ZettelApp-<version>-linux-x86_64.tar.gz` | Toute autre distribution, ou sans installation : décompressez-le où vous voulez et lancez `ZettelApp/zettelapp`. |
+
+Les deux embarquent Python et Qt ; ils nécessitent un bureau 64 bits (X11 ou Wayland — GNOME, KDE et
+autres) avec ses bibliothèques graphiques standard. Pour vérifier un téléchargement dans un terminal :
+
+```bash
+sha256sum zettelapp_1.3.1_amd64.deb
+```
+
+Les clés API sont stockées dans le Service de secrets (GNOME Keyring ou KWallet) ; sans trousseau,
+elles ne restent qu’en mémoire. Les liens `zettelapp://` des cartes Anki ouvrent les notes sans
+configuration avec le `.deb` ; les autres installations configurent le gestionnaire dans *Options ▸ Intégration au bureau*.
 
 ### « Windows a protégé votre ordinateur »
 
@@ -42,9 +60,9 @@ La **barre de navigation** à gauche permet de passer d’une page à l’autre 
 - **Révision** : révisions espacées, quiz et Anki.
 - **Ask** : posez des questions sur vos notes avec le fournisseur d’IA de votre choix (facultatif).
 
-**Options** (en bas de la barre ou dans *Outils ▸ Options…*, Ctrl+,) regroupe les préférences : thème, taille du texte de l’éditeur, suggestions de liens, types de liens, IA, serveur MCP, Anki, Zotero, intégration Windows et sauvegardes.
+**Options** (en bas de la barre ou dans *Outils ▸ Options…*, Ctrl+,) regroupe les préférences : thème, taille du texte de l’éditeur, suggestions de liens, types de liens, IA, serveur MCP, Anki, Zotero, intégration au bureau et sauvegardes.
 
-L’application suit le réglage **clair/sombre** et la **couleur d’accentuation** de Windows. Vous pouvez imposer un thème dans *Affichage ▸ Thème*.
+L’application suit le réglage **clair/sombre** et la **couleur d’accentuation** du système. Vous pouvez imposer un thème dans *Affichage ▸ Thème*.
 
 ## Mises à jour
 
@@ -52,7 +70,9 @@ Environ quatre secondes après le démarrage, ZettelApp envoie une requête HTTP
 
 ## Désinstallation
 
-Utilisez *Paramètres Windows ▸ Applications ▸ Applications installées ▸ ZettelApp ▸ Désinstaller*. Après confirmation, une boîte de dialogue propose l’option **Supprimer aussi mes paramètres et données ZettelApp**, décochée par défaut. Elle supprime vos paramètres, clés API enregistrées, journaux, cache et sauvegardes automatiques (`%LOCALAPPDATA%\ZettelApp`), **ainsi que toutes vos notes** (base de données et pièces jointes de vos coffres). Laissez-la décochée pour conserver vos notes. Pour la version portable, supprimez son dossier.
+Sous Windows, utilisez *Paramètres Windows ▸ Applications ▸ Applications installées ▸ ZettelApp ▸ Désinstaller*.
+Sous Linux, supprimez le paquet (`sudo apt remove zettelapp`, ou désinstallez-le depuis votre logithèque) ; vos notes
+et vos paramètres dans `~/.config/ZettelApp` restent en place tant que vous ne les supprimez pas vous-même. Après confirmation, une boîte de dialogue propose l’option **Supprimer aussi mes paramètres et données ZettelApp**, décochée par défaut. Elle supprime vos paramètres, clés API enregistrées, journaux, cache et sauvegardes automatiques (`%LOCALAPPDATA%\ZettelApp`), **ainsi que toutes vos notes** (base de données et pièces jointes de vos coffres). Laissez-la décochée pour conserver vos notes. Pour la version portable, supprimez son dossier.
 
 ## Étapes suivantes
 

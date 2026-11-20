@@ -2,7 +2,7 @@
 
 ## 安装
 
-ZettelApp 可在 **Windows 10(21H2 或更高版本)和 Windows 11(64 位)**上运行。请从[最新版本](https://github.com/DutraIRS/ZettelApp/releases/latest)下载:
+ZettelApp 可在 **Windows 10(21H2 或更高版本)、Windows 11(64 位)以及较新的 64 位 Linux 桌面**上运行。请从[最新版本](https://github.com/DutraIRS/ZettelApp/releases/latest)下载:
 
 | 下载 | 适用情况 |
 |---|---|
@@ -16,6 +16,21 @@ ZettelApp 可在 **Windows 10(21H2 或更高版本)和 Windows 11(64 位)**上�
 ```powershell
 Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 ```
+
+### Linux
+
+| 下载 | 适用场景 |
+|---|---|
+| `zettelapp_<版本>_amd64.deb` | Debian、Ubuntu、Mint 或其他基于 `.deb` 的发行版。使用 `sudo apt install ./zettelapp_*.deb` 安装,或在软件中心中打开,之后它会提供更新。 |
+| `ZettelApp-<版本>-linux-x86_64.tar.gz` | 其他发行版,或无需安装:解压到任意位置并运行 `ZettelApp/zettelapp`。 |
+
+两者都内置 Python 和 Qt;需要 64 位桌面环境(X11 或 Wayland — GNOME、KDE 等)及其标准图形库。要在终端中校验下载:
+
+```bash
+sha256sum zettelapp_1.3.1_amd64.deb
+```
+
+API 密钥存储在 Secret Service(GNOME Keyring 或 KWallet)中;没有密钥环时仅保存在内存中。Anki 卡片中的 `zettelapp://` 链接在使用 `.deb` 时开箱即可打开笔记;其他安装方式请在*选项 ▸ 桌面集成*中设置处理程序。
 
 ### “Windows 已保护你的电脑”
 
@@ -42,9 +57,9 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 - **复习**:间隔重复复习、测验和 Anki。
 - **提问**:使用你选择的 AI 服务商询问关于你笔记的问题(可选)。
 
-**选项**(导航栏底部,或*工具 ▸ 选项…*,Ctrl+,)包含各项偏好设置:主题、编辑器文字大小、链接建议、链接类型、AI、MCP 服务器、Anki、Zotero、Windows 集成和备份。
+**选项**(导航栏底部,或*工具 ▸ 选项…*,Ctrl+,)包含各项偏好设置:主题、编辑器文字大小、链接建议、链接类型、AI、MCP 服务器、Anki、Zotero、桌面集成和备份。
 
-应用会跟随你的 Windows **浅色/深色**设置和**强调色**。你可以在*视图 ▸ 主题*中强制指定主题。
+应用会跟随系统的**浅色/深色**设置和**强调色**。你可以在*视图 ▸ 主题*中强制指定主题。
 
 ## 更新
 
@@ -52,7 +67,7 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 
 ## 卸载
 
-使用 *Windows 设置 ▸ 应用 ▸ 已安装的应用 ▸ ZettelApp ▸ 卸载*。确认后,会出现一个对话框,其中有一个未勾选的**同时删除我的 ZettelApp 设置和数据**选项。它会删除你的设置、已保存的 API 密钥、日志、缓存和自动备份(`%LOCALAPPDATA%\ZettelApp`),**以及你的所有笔记**(你各个库的数据库和附件)。保持未勾选即可保留你的笔记。对于便携版,删除它的文件夹即可。
+在 Windows 上,使用 *Windows 设置 ▸ 应用 ▸ 已安装的应用 ▸ ZettelApp ▸ 卸载*。在 Linux 上,使用 `sudo apt remove zettelapp` 移除软件包,或在软件中心中卸载;除非你自行删除,否则你的笔记和 `~/.config/ZettelApp` 中的设置会保留。确认后,会出现一个对话框,其中有一个未勾选的**同时删除我的 ZettelApp 设置和数据**选项。它会删除你的设置、已保存的 API 密钥、日志、缓存和自动备份(`%LOCALAPPDATA%\ZettelApp`),**以及你的所有笔记**(你各个库的数据库和附件)。保持未勾选即可保留你的笔记。对于便携版,删除它的文件夹即可。
 
 ## 下一步
 

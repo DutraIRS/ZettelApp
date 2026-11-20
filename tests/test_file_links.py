@@ -1,6 +1,7 @@
-"""Links to local files: shown in File Explorer, never opened, never on a network path."""
+"""Links to local files: shown in the file manager, never opened, never on a network path."""
 
 import os
+import sys
 
 import pytest
 
@@ -9,7 +10,11 @@ from zettelapp.core.security import file_url, local_file_path
 
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
 
+_windows = pytest.mark.skipif(sys.platform != "win32", reason="Windows drive letters")
+_posix = pytest.mark.skipif(sys.platform == "win32", reason="POSIX absolute paths")
 
+
+@_windows
 @pytest.mark.parametrize(
     ("target", "expected"),
     [
@@ -21,6 +26,20 @@ os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
     ],
 )
 def test_local_drive_paths_are_accepted(target, expected):
+    assert local_file_path(target) == expected
+
+
+@_posix
+@pytest.mark.parametrize(
+    ("target", "expected"),
+    [
+        ("file:///home/me/My%20Files/report.pdf", "/home/me/My Files/report.pdf"),
+        ("file://localhost/data/a.txt", "/data/a.txt"),
+        ("/data/../docs/b.docx", "/docs/b.docx"),
+        ("/data/c.csv", "/data/c.csv"),
+    ],
+)
+def test_local_absolute_paths_are_accepted(target, expected):
     assert local_file_path(target) == expected
 
 
@@ -44,6 +63,7 @@ def test_network_device_and_other_paths_are_refused(target):
     assert local_file_path(target) is None
 
 
+@_windows
 def test_file_url_round_trips():
     path = r"C:\Users\me\My Files\notes #1.txt"
     url = file_url(path)
@@ -51,6 +71,15 @@ def test_file_url_round_trips():
     assert local_file_path(url) == path
 
 
+@_posix
+def test_file_url_round_trips_on_posix():
+    path = "/home/me/My Files/notes #1.txt"
+    url = file_url(path)
+    assert url == "file:///home/me/My%20Files/notes%20%231.txt"
+    assert local_file_path(url) == path
+
+
+@_windows
 def test_file_links_are_clickable_only_in_the_app():
     text = (
         "[report](file:///C:/Docs/report.pdf), [spaced](<C:\\My Docs\\plan.txt>) "
@@ -59,6 +88,20 @@ def test_file_links_are_clickable_only_in_the_app():
     app = NoteRenderer(lambda t: None, allow_file_links=True).render(text)
     assert 'href="file:///C:/Docs/report.pdf" class="file"' in app
     assert 'href="file:///C:/My%20Docs/plan.txt" class="file"' in app
+    assert app.count('class="broken"') == 1 and "file://server" not in app  # the network path
+    exported = NoteRenderer(lambda t: None).render(text)  # websites, Anki cards
+    assert "file:" not in exported and exported.count('class="broken"') == 3
+
+
+@_posix
+def test_file_links_are_clickable_only_in_the_app_on_posix():
+    text = (
+        "[report](file:///home/me/Docs/report.pdf), [spaced](</home/me/My Docs/plan.txt>) "
+        "and [share](file://server/share/x.txt)"
+    )
+    app = NoteRenderer(lambda t: None, allow_file_links=True).render(text)
+    assert 'href="file:///home/me/Docs/report.pdf" class="file"' in app
+    assert 'href="file:///home/me/My%20Docs/plan.txt" class="file"' in app
     assert app.count('class="broken"') == 1 and "file://server" not in app  # the network path
     exported = NoteRenderer(lambda t: None).render(text)  # websites, Anki cards
     assert "file:" not in exported and exported.count('class="broken"') == 3

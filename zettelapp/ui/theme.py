@@ -1,15 +1,17 @@
 """Light/dark themes in the spirit of Windows 11 (Fluent) design.
 
-The accent colour follows the Windows personalisation setting. Chart and
-graph colours come from a categorical palette validated for colour-vision
-deficiencies in both modes (fixed order; never cycled - extra groups fold
-into a neutral "other" colour).
+The accent colour follows the desktop's personalisation setting (Windows or
+GNOME/KDE on Linux). Chart and graph colours come from a categorical palette
+validated for colour-vision deficiencies in both modes (fixed order; never
+cycled - extra groups fold into a neutral "other" colour).
 """
 
 from __future__ import annotations
 
 import sys
 from dataclasses import dataclass, field
+from functools import cache
+from pathlib import Path
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QFont, QGuiApplication, QPalette
@@ -37,10 +39,18 @@ CATEGORICAL_DARK = [
 ]
 _DARK_STEP = {light.lower(): dark for light, dark in zip(CATEGORICAL_LIGHT, CATEGORICAL_DARK)}
 
-UI_FONTS = ["Segoe UI Variable Text", "Segoe UI", "Arial"]
+UI_FONTS = {
+    "win32": ["Segoe UI Variable Text", "Segoe UI", "Arial"],
+    "linux": ["Cantarell", "Ubuntu", "Noto Sans", "DejaVu Sans", "Inter", "Arial", "Sans Serif"],
+    "darwin": ["SF Pro Text", "Helvetica Neue", "Arial"],
+}.get(sys.platform, ["Segoe UI", "Arial"])
 # Segoe UI Variable has no italic faces, and Qt draws its bold italic as a regular-weight
 # slant, so **bold** inside *italics* would look plain. Segoe UI has real italic faces.
-ITALIC_FONTS = ["Segoe UI", "Arial"]
+ITALIC_FONTS = {
+    "win32": ["Segoe UI", "Arial"],
+    "linux": UI_FONTS,
+    "darwin": UI_FONTS,
+}.get(sys.platform, ["Segoe UI", "Arial"])
 
 
 @dataclass(frozen=True)
@@ -101,6 +111,60 @@ def _windows_accent(dark: bool) -> str | None:
         return None
 
 
+_GNOME_ACCENTS = {
+    # libadwaita's named accent colours (GNOME 47+), light-mode backgrounds.
+    "default": "#3584e4",
+    "blue": "#3584e4",
+    "teal": "#2190a4",
+    "green": "#3a944a",
+    "yellow": "#c88800",
+    "orange": "#ed5b00",
+    "red": "#e62d42",
+    "pink": "#d0619a",
+    "purple": "#813d9c",
+    "slate": "#6f8396",
+}
+
+
+@cache
+def _linux_accent() -> str | None:
+    """The desktop's accent colour: GNOME (gsettings) or KDE (kdeglobals)."""
+    if sys.platform != "linux":
+        return None
+    import subprocess
+
+    try:
+        result = subprocess.run(  # noqa: S603 - fixed argument list
+            ["gsettings", "get", "org.gnome.desktop.interface", "accent-color"],  # noqa: S607
+            capture_output=True,
+            text=True,
+            timeout=2,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        result = None
+    if result is not None and result.returncode == 0:
+        value = result.stdout.strip().strip("'\"")
+        return _GNOME_ACCENTS.get(value.lower())
+    settings_file = Path.home() / ".config" / "kdeglobals"
+    if settings_file.exists():
+        from PySide6.QtCore import QSettings
+
+        kde = QSettings(str(settings_file), QSettings.Format.IniFormat)
+        kde.beginGroup("KDE")
+        value = kde.value("AccentColor")
+        kde.endGroup()
+        if isinstance(value, str) and QColor(value).isValid():
+            return value
+    return None
+
+
+def _desktop_accent(dark: bool) -> str | None:
+    if sys.platform == "win32":
+        return _windows_accent(dark)
+    return _linux_accent()
+
+
 def system_prefers_dark() -> bool:
     hints = QGuiApplication.styleHints()
     try:
@@ -111,7 +175,7 @@ def system_prefers_dark() -> bool:
 
 def build_theme(mode: str = "system") -> Theme:
     dark = system_prefers_dark() if mode == "system" else mode == "dark"
-    accent = _windows_accent(dark) or ("#60cdff" if dark else "#005fb8")
+    accent = _desktop_accent(dark) or ("#60cdff" if dark else "#005fb8")
     a = QColor(accent)
     if dark:
         return Theme(
@@ -209,13 +273,9 @@ def _draw_indicator(name: str, color: str, path) -> None:
 
 def _indicator_images(t: Theme) -> str:
     """Draw check mark and chevrons to PNGs that QSS can reference."""
-    from zettelapp.paths import local_data_dir
+    from zettelapp.paths import cache_dir
 
-    folder = (
-        local_data_dir()
-        / "Cache"
-        / f"theme2-{'dark' if t.dark else 'light'}-{t.accent.lstrip('#')}"
-    )
+    folder = cache_dir() / f"theme2-{'dark' if t.dark else 'light'}-{t.accent.lstrip('#')}"
     folder.mkdir(parents=True, exist_ok=True)
     for name, color in (
         ("check", t.on_accent),

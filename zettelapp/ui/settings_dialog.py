@@ -90,7 +90,7 @@ PAGES = [
     N_("MCP server"),
     N_("Anki"),
     N_("Zotero"),
-    N_("Windows integration"),
+    N_("Desktop integration"),
     N_("Backups"),
 ]
 PAGE_ICONS = {
@@ -102,7 +102,7 @@ PAGE_ICONS = {
     "MCP server": "server",
     "Anki": "cards",
     "Zotero": "library",
-    "Windows integration": "link",
+    "Desktop integration": "link",
     "Backups": "history",
 }
 NAV_ROW_HEIGHT = 34
@@ -114,17 +114,18 @@ def mcp_command(vault: Path | None, allow_writes: bool) -> tuple[str, list[str],
     if allow_writes:
         args.append("--allow-writes")
     if getattr(sys, "frozen", False):
-        return str(Path(sys.executable).with_name("zettelapp-mcp.exe")), args, {}
+        suffix = ".exe" if sys.platform == "win32" else ""
+        return str(Path(sys.executable).with_name(f"zettelapp-mcp{suffix}")), args, {}
     root = str(Path(__file__).resolve().parents[2])
     return sys.executable, ["-m", "zettelapp.mcp_main", *args], {"PYTHONPATH": root}
 
 
 def claude_desktop_config_path() -> Path:
-    return (
-        Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming"))
-        / "Claude"
-        / "claude_desktop_config.json"
-    )
+    if sys.platform == "win32":
+        base = Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming"))
+    else:
+        base = Path(os.environ.get("XDG_CONFIG_HOME") or (Path.home() / ".config"))
+    return base / "Claude" / "claude_desktop_config.json"
 
 
 class _LinkSample(QWidget):
@@ -255,7 +256,7 @@ class OptionsDialog(QDialog):
         form = QFormLayout()
         self.theme = QComboBox()
         for text, key in (
-            (_("Use Windows setting"), "system"),
+            (_("Use system setting"), "system"),
             (_("Light"), "light"),
             (_("Dark"), "dark"),
         ):
@@ -263,7 +264,7 @@ class OptionsDialog(QDialog):
         self.theme.setCurrentIndex(max(0, self.theme.findData(settings.get(settings.THEME))))
         form.addRow(_("App theme"), self.theme)
         self.language = QComboBox()
-        self.language.addItem(_("Use Windows setting"), "system")
+        self.language.addItem(_("Use system setting"), "system")
         for code, name in i18n.LANGUAGES.items():
             self.language.addItem(name, code)
         stored = i18n.setting_code(settings.get(settings.UI_LANGUAGE))
@@ -800,7 +801,7 @@ class OptionsDialog(QDialog):
             label(
                 _(
                     "Connect an AI provider to ask questions about your notes (Ask page). Keys are stored "
-                    "in Windows Credential Manager, never in plain files. You can save several keys per provider and pick the one to use. Only your question and the "
+                    "in the system keyring, never in plain files. You can save several keys per provider and pick the one to use. Only your question and the "
                     "most relevant notes are sent."
                 ),
                 "caption",
@@ -879,7 +880,7 @@ class OptionsDialog(QDialog):
         self.key_remove.setEnabled(bool(keys))
         self.key_hint.setText(
             _(
-                "The selected key is the one used for questions. Keys are kept in Windows Credential Manager."
+                "The selected key is the one used for questions. Keys are kept in the system keyring."
             )
             if len(keys) > 1
             else ""
@@ -1167,8 +1168,8 @@ class OptionsDialog(QDialog):
             label(
                 _(
                     "Register zettelapp:// links so that links on Anki cards (and elsewhere) open the "
-                    "matching note. The installer does this for you; use this for the portable version. "
-                    "Only “open note” links are accepted."
+                    "matching note. Your installer or package does this for you; use this for the "
+                    "portable version or when running from source. Only “open note” links are accepted."
                 ),
                 "caption",
                 wrap=True,

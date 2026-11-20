@@ -73,6 +73,6 @@ stabili, quindi importare un'esportazione più recente **aggiorna** le schede im
 ### Da Anki alle tue note
 
 La **Source** di ogni scheda è un collegamento `zettelapp://note/<id>`. Cliccalo in Anki e la nota si apre in
-ZettelApp. Il programma di installazione lo configura. Con la versione portatile, usa *Opzioni ▸ Integrazione con Windows ▸
+ZettelApp. Il programma di installazione lo configura. Con la versione portatile, usa *Opzioni ▸ Integrazione con il desktop ▸
 Registra collegamenti*. Il gestore dei collegamenti accetta solo collegamenti *apri nota*; vedi
 [Privacy e sicurezza](privacy-and-security.md).

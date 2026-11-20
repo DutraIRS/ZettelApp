@@ -73,6 +73,6 @@ estáveis, então importar uma exportação mais recente **atualiza** os cartõe
 ### Do Anki de volta às suas notas
 
 A **Source** de cada cartão é um link `zettelapp://note/<id>`. Clique nele no Anki e a nota abre no
-ZettelApp. O instalador configura isso. Na versão portátil, use *Opções ▸ Integração com o Windows ▸
+ZettelApp. O instalador configura isso. Na versão portátil, use *Opções ▸ Integração com a área de trabalho ▸
 Registrar links*. O manipulador de links só aceita links de *abrir nota*; veja
 [Privacidade e segurança](privacy-and-security.md).

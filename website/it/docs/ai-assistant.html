@@ -56,7 +56,7 @@ computer (<code>http://localhost:…</code>). Gli indirizzi devono usare <code>h
 costa di più. Il valore predefinito è <em>medio</em>.</p>
 <h2 id="porta-il-tuo-llm">Porta il tuo LLM</h2>
 <p>Chiedi usa <strong>il tuo account</strong> presso il provider che scegli, quindi qualsiasi utilizzo viene fatturato a te da quel provider.
-ZettelApp non ha un servizio di IA proprio. La tua chiave API è salvata in <strong>Gestione credenziali di Windows</strong>, mai nei
+ZettelApp non ha un servizio di IA proprio. La tua chiave API è salvata nel <strong>portachiavi di sistema</strong> (Gestione credenziali di Windows su Windows, o Secret Service — GNOME Keyring o KWallet — su Linux), mai nei
 file di impostazioni.</p>
 <ul>
 <li><strong>Provider</strong>: Anthropic Claude, OpenAI e Z.ai (GLM), in <em>Strumenti ▸ Opzioni ▸ Assistente IA ▸ Provider</em>.
@@ -94,7 +94,7 @@ alle sue fonti.</p>
 <ul>
 <li><strong>Viene inviato solo ciò che chiedi</strong>: la tua domanda e le note elencate sotto <em>Fonti inviate</em>. Un avviso
 te lo ricorda prima di chiedere (seleziona <em>Non mostrare più</em> per saltarlo).</li>
-<li><strong>La tua chiave API</strong> è conservata in <strong>Gestione credenziali di Windows</strong> (come <code>ZettelApp/llm/&lt;provider&gt;</code>, o <code>ZettelApp/llm/&lt;provider&gt;/&lt;id della chiave&gt;</code> per le chiavi successive), mai nei
+<li><strong>La tua chiave API</strong> è conservata nel <strong>portachiavi di sistema</strong> (Gestione credenziali di Windows su Windows, o Secret Service su Linux; come <code>ZettelApp/llm/&lt;provider&gt;</code>, o <code>ZettelApp/llm/&lt;provider&gt;/&lt;id della chiave&gt;</code> per le chiavi successive), mai nei
 file di impostazioni o nei log, ed è rimossa da qualsiasi messaggio di errore che ti viene mostrato. <em>Elimina</em> la cancella da questo computer.</li>
 <li><strong>Il modello non ha strumenti.</strong> Non può cercare sul web, eseguire codice o modificare le tue note, quindi le istruzioni
 nascoste in una nota (o in un file importato) non possono fargli fare nulla. La risposta viene mostrata con lo stesso

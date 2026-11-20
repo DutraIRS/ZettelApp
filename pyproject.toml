@@ -4,17 +4,19 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zettelapp"
-description = "A Zettelkasten note-taking app for Windows with typed links, a knowledge graph, link suggestions, mind maps, quizzes, Anki and Zotero integration."
+description = "A Zettelkasten note-taking app for Windows and Linux with typed links, a knowledge graph, link suggestions, mind maps, quizzes, Anki and Zotero integration."
 readme = "README.md"
 license = "Unlicense"
 requires-python = ">=3.12"
 dynamic = ["version"]
 authors = [{ name = "ZettelApp contributors" }]
 classifiers = [
+    "Environment :: X11 Applications :: Qt",
     "Environment :: Win32 (MS Windows)",
     "Intended Audience :: Education",
     "Intended Audience :: Science/Research",
     "Operating System :: Microsoft :: Windows",
+    "Operating System :: POSIX :: Linux",
     "Programming Language :: Python :: 3",
     "Topic :: Office/Business",
 ]

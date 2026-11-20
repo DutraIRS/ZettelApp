@@ -55,4 +55,4 @@ ZettelApp communique uniquement avec AnkiConnect sur cet ordinateur (`127.0.0.1`
 
 ### D’Anki vers vos notes
 
-Le champ **Source** de chaque carte contient un lien `zettelapp://note/<id>`. Cliquez dessus dans Anki pour ouvrir la note dans ZettelApp. L’installateur configure cette association. Avec la version portable, utilisez *Options ▸ Intégration Windows ▸ Enregistrer les liens*. Le gestionnaire de liens n’accepte que les liens d’ouverture de note ; consultez [Confidentialité et sécurité](privacy-and-security.md).
+Le champ **Source** de chaque carte contient un lien `zettelapp://note/<id>`. Cliquez dessus dans Anki pour ouvrir la note dans ZettelApp. L’installateur configure cette association. Avec la version portable, utilisez *Options ▸ Intégration au bureau ▸ Enregistrer les liens*. Le gestionnaire de liens n’accepte que les liens d’ouverture de note ; consultez [Confidentialité et sécurité](privacy-and-security.md).

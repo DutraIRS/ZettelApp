@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- AppStream metadata for software centres (GNOME Software, KDE Discover, Flathub).
+     Released versions mirror CHANGELOG.md; add a new <release> entry with every release.
+     Validate with: appstreamcli validate packaging/io.github.dutairs.zettelapp.metainfo.xml -->
+<component type="desktop-application">
+  <id>io.github.dutairs.zettelapp</id>
+  <name>ZettelApp</name>
+  <summary>A Zettelkasten that helps you connect ideas</summary>
+  <developer id="io.github.dutairs">
+    <name>ZettelApp contributors</name>
+  </developer>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>Unlicense</project_license>
+  <description>
+    <p>
+      ZettelApp is a Zettelkasten note-taking app: atomic notes in Markdown, typed and optionally
+      directed links, mind maps, flashcards and quizzes, and a 2D/3D knowledge graph.
+    </p>
+    <ul>
+      <li>Typo-tolerant and optional semantic search, a tag ontology, and link suggestions that learn
+        from what you accept;</li>
+      <li>Flashcards from your text with SM-2 spaced repetition, and Anki sync;</li>
+      <li>Zotero citations and literature notes;</li>
+      <li>"Ask your notes" with Anthropic Claude, OpenAI or Z.ai using your own API key;</li>
+      <li>an MCP server that lets Claude Desktop and other clients search your vault while the app is
+        open;</li>
+      <li>export to Markdown, a static website, Anki decks, GraphML, Graphviz and more, and imports for
+        Markdown folders, Obsidian vaults and Evernote.</li>
+    </ul>
+    <p>
+      Everything stays on your computer. Notes can't run scripts, imports are sandboxed, and API keys
+      are kept in the system keyring.
+    </p>
+  </description>
+  <launchable type="desktop-id">io.github.dutairs.zettelapp.desktop</launchable>
+  <icon type="remote" width="512" height="512">https://dutrairs.github.io/ZettelApp/assets/icon-512.png</icon>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://dutrairs.github.io/ZettelApp/assets/screenshots/notes-light.png</image>
+      <caption>The Notes page: the note list, a note with Markdown text and preview, and suggested links</caption>
+    </screenshot>
+    <screenshot>
+      <image>https://dutrairs.github.io/ZettelApp/assets/screenshots/graph-3d-dark.png</image>
+      <caption>The 3D knowledge graph, coloured by topic cluster</caption>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">https://dutrairs.github.io/ZettelApp/</url>
+  <url type="bugtracker">https://github.com/DutraIRS/ZettelApp/issues</url>
+  <url type="help">https://dutrairs.github.io/ZettelApp/docs/</url>
+  <url type="donation">https://ko-fi.com/dutrairs</url>
+  <provides>
+    <binary>zettelapp</binary>
+    <binary>zettelapp-mcp</binary>
+  </provides>
+  <content_rating type="oars-1.1"/>
+  <categories>
+    <category>Office</category>
+    <category>ProjectManagement</category>
+  </categories>
+  <keywords>
+    <keyword>notes</keyword>
+    <keyword>zettelkasten</keyword>
+    <keyword>knowledge</keyword>
+    <keyword>markdown</keyword>
+  </keywords>
+  <releases>
+    <release version="1.3.1" date="2026-11-05">
+      <description>
+        <p>Word-processor style bold and italic, smarter [[ autocomplete, and a tidier note list menu.</p>
+      </description>
+    </release>
+    <release version="1.3.0" date="2026-11-03">
+      <description>
+        <p>Evernote import, Markdown import improvements for Notion and Obsidian vaults, and a graph tab for the tag ontology.</p>
+      </description>
+    </release>
+    <release version="1.2.1" date="2026-11-03">
+      <description>
+        <p>Fixed a crash when opening a note whose stored time has no time zone.</p>
+      </description>
+    </release>
+    <release version="1.2.0" date="2026-11-02">
+      <description>
+        <p>Tag ontology, hybrid search, optional semantic search by a local language model, and adaptive result ranking.</p>
+      </description>
+    </release>
+    <release version="1.1.1" date="2026-10-29">
+      <description>
+        <p>Multi-select for notes, note duplication, and draggable groups in the 2D graph.</p>
+      </description>
+    </release>
+    <release version="1.1.0" date="2026-10-28">
+      <description>
+        <p>Interface, documentation and website translations (11 languages), a first-run adventure, checklists, alarm notes, LaTeX formulas and title images.</p>
+      </description>
+    </release>
+    <release version="1.0.0" date="2026-10-28">
+      <description>
+        <p>First release.</p>
+      </description>
+    </release>
+  </releases>
+</component>

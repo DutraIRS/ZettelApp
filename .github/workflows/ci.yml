@@ -38,11 +38,18 @@ jobs:
           }
 
   test:
-    runs-on: windows-latest
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.12", "3.14"]
+        include:
+          - os: windows-latest
+            python-version: "3.12"
+          - os: windows-latest
+            python-version: "3.14"
+          # The Linux build and release use 3.13: the pinned wheels are verified there.
+          - os: ubuntu-latest
+            python-version: "3.13"
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -76,4 +83,47 @@ jobs:
         with:
           name: ZettelApp-Portable
           path: dist/ZettelApp-Portable.zip
+          retention-days: 7
+
+  build-linux:
+    needs: [quality, test]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: requirements-dev.txt
+      - name: Install dependencies
+        run: python -m pip install -r requirements-dev.txt
+      - name: Validate the Linux packaging metadata
+        run: |
+          bash -n packaging/build-linux.sh
+          desktop-file-validate packaging/io.github.dutairs.zettelapp.desktop
+          appstreamcli validate --pedantic packaging/io.github.dutairs.zettelapp.metainfo.xml
+          python - <<'PY'
+          import xml.etree.ElementTree as ET
+
+          import yaml
+
+          for path in (
+              "packaging/flatpak/io.github.dutairs.zettelapp.yml",
+              "packaging/snap/snapcraft.yaml",
+          ):
+              yaml.safe_load(open(path, encoding="utf-8"))
+          ET.parse("packaging/io.github.dutairs.zettelapp.metainfo.xml")
+          print("packaging metadata OK")
+          PY
+      - name: Build and self-test the packaged app
+        run: bash packaging/build-linux.sh
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ZettelApp-Portable-Linux
+          path: dist/ZettelApp-*-linux-x86_64.tar.gz
+          retention-days: 7
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ZettelApp-deb
+          path: dist/zettelapp_*_amd64.deb
           retention-days: 7
