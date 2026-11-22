@@ -8,6 +8,7 @@ from datetime import UTC, datetime
 from PySide6.QtCore import QLocale, QSize, Qt, QTimer, QUrl, Signal
 from PySide6.QtGui import QDesktopServices, QGuiApplication, QPixmap, QTextCursor
 from PySide6.QtWidgets import (
+    QApplication,
     QButtonGroup,
     QFileDialog,
     QHBoxLayout,
@@ -38,6 +39,7 @@ from zettelapp.core.textutil import extract_hashtags, find_tasks, strip_markdown
 from zettelapp.i18n import _, n_
 from zettelapp.ui import icons, theme
 from zettelapp.ui.dialogs import AlarmDialog, CardDialog, FormulaDialog, TextPromptDialog
+from zettelapp.ui.findbar import FindBar
 from zettelapp.ui.markdown_editor import MarkdownEditor, referenced_assets
 from zettelapp.ui.mindmap import MindMapView
 from zettelapp.ui.preview import NotePreview
@@ -257,8 +259,16 @@ class NoteEditor(QWidget):
         self.preview.taskToggled.connect(self._toggle_task)
         self.preview.image_actions = self._image_actions
         self.body.image_actions = self._image_actions
+        # The note text with its find bar (Ctrl+F / Ctrl+H) above it.
+        self.text_pane = text_pane = QWidget()
+        text_layout = QVBoxLayout(text_pane)
+        text_layout.setContentsMargins(0, 0, 0, 0)
+        text_layout.setSpacing(0)
+        self.find_bar = FindBar(self.body)
+        text_layout.addWidget(self.find_bar)
+        text_layout.addWidget(self.body, 1)
         self.split = QSplitter(Qt.Orientation.Horizontal)
-        self.split.addWidget(self.body)
+        self.split.addWidget(text_pane)
         self.split.addWidget(self.preview)
         self.split.setChildrenCollapsible(False)
         self.tabs.addTab(self.split, icons.icon("notes"), _("Note"))
@@ -393,6 +403,18 @@ class NoteEditor(QWidget):
             self._refresh_picture()
         return self.note
 
+    def show_find(self, replace: bool = False) -> None:
+        """Find (and replace) in the note text, which is shown if only the preview was."""
+        self.tabs.setCurrentIndex(0)
+        if self.mode_group.checkedId() == 2:  # only the preview: show the text beside it
+            self.set_view_mode(1)
+        self.find_bar.open(replace)
+
+    def finding(self) -> bool:
+        """Whether the keyboard is in the note text or its find bar."""
+        focus = QApplication.focusWidget()
+        return focus is not None and (focus is self.body or self.find_bar.isAncestorOf(focus))
+
     def flush(self) -> None:
         self.autosave.stop()
         if not self._dirty or self.note is None or self.window.vault is None:
@@ -472,7 +494,7 @@ class NoteEditor(QWidget):
 
     def set_view_mode(self, mode: int) -> None:
         self.mode_group.button(mode).setChecked(True)
-        self.body.setVisible(mode in (0, 1))
+        self.text_pane.setVisible(mode in (0, 1))
         self.preview.setVisible(mode in (1, 2))
         for b in self.fmt_buttons:
             b.setEnabled(mode != 2)

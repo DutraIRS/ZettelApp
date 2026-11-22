@@ -21,11 +21,12 @@ from PySide6.QtGui import (
     QCursor,
     QFont,
     QKeySequence,
+    QPainter,
     QSyntaxHighlighter,
     QTextCharFormat,
     QTextCursor,
 )
-from PySide6.QtWidgets import QCompleter, QPlainTextEdit, QToolTip
+from PySide6.QtWidgets import QCompleter, QPlainTextEdit, QTextEdit, QToolTip
 
 from zettelapp.core.security import file_url, local_file_path
 from zettelapp.core.textutil import (
@@ -232,6 +233,9 @@ class MarkdownEditor(QPlainTextEdit):
         # Given an asset name, the (text, callback) actions to offer when right-clicking an image.
         self.image_actions: Callable[[str], list[tuple[str, Callable[[], None]]]] | None = None
         self._pressed_link: tuple[str, str] | None = None
+        # Alt+click adds a caret: typing, deleting and moving then happen at every one.
+        self.extra_cursors: list[QTextCursor] = []
+        self._layers: dict[str, list] = {}  # highlights by owner (find, extra carets)
         self.viewport().setMouseTracking(True)
         self.setAccessibleName(_("Note text"))
         self.setPlaceholderText(
@@ -314,7 +318,116 @@ class MarkdownEditor(QPlainTextEdit):
         cursor.insertText(title + "]]")
         self.setTextCursor(cursor)
 
+    # --- highlights and several carets -----------------------------------------------
+
+    def set_selection_layer(self, name: str, selections: list) -> None:
+        """Show *selections* (extra selections) alongside those of other owners."""
+        self._layers[name] = selections
+        self.setExtraSelections([s for layer in self._layers.values() for s in layer])
+
+    def add_cursor_at(self, pos: QPoint) -> None:
+        """Alt+click: keep the current caret and add one at *pos* (or take that one away)."""
+        clicked = self.cursorForPosition(pos)
+        where = clicked.position()
+        kept = [c for c in self.extra_cursors if c.position() != where]
+        if len(kept) != len(self.extra_cursors):  # Alt+click on a caret removes it
+            self.extra_cursors = kept
+        elif where != self.textCursor().position():
+            self.extra_cursors.append(QTextCursor(self.textCursor()))
+            self.setTextCursor(clicked)
+        self._show_extra_cursors()
+
+    def clear_extra_cursors(self) -> None:
+        if self.extra_cursors:
+            self.extra_cursors = []
+            self._show_extra_cursors()
+
+    def _show_extra_cursors(self) -> None:
+        colour = QColor(theme.current().accent)
+        colour.setAlphaF(0.3)
+        selections = []
+        for cursor in self.extra_cursors:
+            if cursor.hasSelection():
+                selection = QTextEdit.ExtraSelection()
+                selection.cursor = cursor
+                selection.format.setBackground(colour)
+                selections.append(selection)
+        self.set_selection_layer("carets", selections)
+        self.viewport().update()
+
+    _MOVES = {
+        Qt.Key.Key_Left: QTextCursor.MoveOperation.Left,
+        Qt.Key.Key_Right: QTextCursor.MoveOperation.Right,
+        Qt.Key.Key_Up: QTextCursor.MoveOperation.Up,
+        Qt.Key.Key_Down: QTextCursor.MoveOperation.Down,
+        Qt.Key.Key_Home: QTextCursor.MoveOperation.StartOfLine,
+        Qt.Key.Key_End: QTextCursor.MoveOperation.EndOfLine,
+    }
+
+    def _multi_key(self, event) -> bool:
+        """Apply a key press at every caret; False lets the editor handle it as usual."""
+        key, mods = event.key(), event.modifiers()
+        if key == Qt.Key.Key_Escape:
+            self.clear_extra_cursors()
+            return True
+        if mods & (Qt.KeyboardModifier.ControlModifier | Qt.KeyboardModifier.AltModifier):
+            if key not in (Qt.Key.Key_Control, Qt.Key.Key_Alt, Qt.Key.Key_Shift):
+                self.clear_extra_cursors()  # shortcuts act on the main caret only
+            return False
+        text = event.text()
+        typing = bool(text) and (text.isprintable() or text == "\t") and key not in self._MOVES
+        if not (
+            typing
+            or key in self._MOVES
+            or key in (Qt.Key.Key_Backspace, Qt.Key.Key_Delete, Qt.Key.Key_Return, Qt.Key.Key_Enter)
+        ):
+            return False
+        main = QTextCursor(self.textCursor())
+        cursors = [main, *self.extra_cursors]
+        keep = (
+            QTextCursor.MoveMode.KeepAnchor
+            if mods & Qt.KeyboardModifier.ShiftModifier
+            else QTextCursor.MoveMode.MoveAnchor
+        )
+        main.beginEditBlock()  # one undo for the edit at every caret
+        for cursor in cursors:
+            if key in self._MOVES:
+                cursor.movePosition(self._MOVES[key], keep)
+            elif key == Qt.Key.Key_Backspace:
+                cursor.deletePreviousChar()
+            elif key == Qt.Key.Key_Delete:
+                cursor.deleteChar()
+            elif key in (Qt.Key.Key_Return, Qt.Key.Key_Enter):
+                cursor.insertText("\n")
+            else:
+                cursor.insertText(text)
+        main.endEditBlock()
+        self.setTextCursor(main)
+        seen = {main.position()}
+        self.extra_cursors = []
+        for cursor in cursors[1:]:  # carets that ran into each other become one
+            if cursor.position() not in seen:
+                seen.add(cursor.position())
+                self.extra_cursors.append(cursor)
+        self._show_extra_cursors()
+        self.ensureCursorVisible()
+        return True
+
+    def paintEvent(self, event) -> None:  # noqa: N802
+        super().paintEvent(event)
+        if not self.extra_cursors:
+            return
+        painter = QPainter(self.viewport())
+        colour = self.palette().text().color()
+        for cursor in self.extra_cursors:
+            rect = self.cursorRect(cursor)
+            painter.fillRect(rect.left(), rect.top(), 2, rect.height(), colour)
+        painter.end()
+
     def keyPressEvent(self, event) -> None:  # noqa: N802
+        if self.extra_cursors and not self.completer.popup().isVisible():
+            if self._multi_key(event):
+                return
         if self.completer.popup().isVisible() and event.key() in (
             Qt.Key.Key_Enter,
             Qt.Key.Key_Return,
@@ -398,10 +511,19 @@ class MarkdownEditor(QPlainTextEdit):
         )
 
     def mousePressEvent(self, event) -> None:  # noqa: N802
+        left = event.button() == Qt.MouseButton.LeftButton
+        mods = event.modifiers()
         if (
-            event.button() == Qt.MouseButton.LeftButton
-            and event.modifiers() & Qt.KeyboardModifier.ControlModifier
+            left
+            and mods & Qt.KeyboardModifier.AltModifier
+            and not mods & Qt.KeyboardModifier.ControlModifier
         ):
+            self.add_cursor_at(event.position().toPoint())
+            event.accept()
+            return
+        if left:
+            self.clear_extra_cursors()  # a plain click goes back to one caret
+        if left and mods & Qt.KeyboardModifier.ControlModifier:
             self._pressed_link = self.link_at(event.position().toPoint())
             if self._pressed_link is not None:
                 event.accept()

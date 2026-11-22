@@ -284,3 +284,65 @@ def test_italics_inside_italics_come_off_instead_of_nesting(editor):
     _select(editor, "_homo nov*os*_", "os")
     editor.toggle_emphasis("*")
     assert editor.toPlainText() == "_homo novos_"
+
+
+def test_alt_click_adds_carets_that_type_delete_and_move_together(editor):
+    from PySide6.QtCore import Qt
+    from PySide6.QtGui import QTextCursor
+    from PySide6.QtTest import QTest
+
+    editor.setPlainText("cat\ncat\ncat")
+    editor.setFocus()
+
+    def click(line, alt=True):
+        block = editor.document().findBlockByNumber(line)
+        cursor = QTextCursor(block)
+        cursor.movePosition(QTextCursor.MoveOperation.EndOfBlock)
+        point = editor.cursorRect(cursor).center()
+        modifier = Qt.KeyboardModifier.AltModifier if alt else Qt.KeyboardModifier.NoModifier
+        QTest.mouseClick(editor.viewport(), Qt.MouseButton.LeftButton, modifier, point)
+
+    click(0, alt=False)
+    click(1)
+    click(2)
+    assert len(editor.extra_cursors) == 2
+    QTest.keyClicks(editor, "s!")
+    assert editor.toPlainText() == "cats!\ncats!\ncats!"
+    QTest.keyClick(editor, Qt.Key.Key_Backspace)
+    QTest.keyClick(editor, Qt.Key.Key_Home)
+    QTest.keyClicks(editor, "a ")
+    assert editor.toPlainText() == "a cats\na cats\na cats"
+    editor.undo()  # one undo per keystroke, at every caret
+    assert editor.toPlainText() == "a cats\na cats\na cats".replace("a ", "a", 3)
+    QTest.keyClick(editor, Qt.Key.Key_Escape)
+    assert editor.extra_cursors == []
+    QTest.keyClicks(editor, "x")
+    assert editor.toPlainText().count("x") == 1
+
+
+def test_find_bar_counts_steps_and_replaces(editor):
+    from PySide6.QtWidgets import QApplication
+
+    from zettelapp.ui.findbar import FindBar
+
+    editor.setPlainText("Rosa rosa ROSA\nrosae")
+    bar = FindBar(editor)
+    bar.show()
+    bar.find.setText("rosa")
+    QApplication.processEvents()
+    assert len(bar.matches()) == 4  # case doesn't matter, and part of a word counts
+    assert bar.count.text() == "1 of 4"
+    bar.next()
+    assert bar.count.text() == "2 of 4"
+    bar.previous()
+    bar.previous()  # wraps around
+    assert bar.count.text() == "4 of 4"
+    bar.case.setChecked(True)
+    assert len(bar.matches()) == 2
+    bar.replacement.setText("lupa")
+    assert bar.replace_all() == 2
+    assert editor.toPlainText() == "Rosa lupa ROSA\nlupae"
+    editor.undo()  # one undo takes back every replacement
+    assert editor.toPlainText() == "Rosa rosa ROSA\nrosae"
+    bar.close_bar()
+    assert bar.isHidden()

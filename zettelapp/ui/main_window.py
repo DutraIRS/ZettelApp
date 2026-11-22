@@ -328,6 +328,13 @@ class MainWindow(QMainWindow):
             )  # let editors handle the keys
         e.addSeparator()
         self._action(e, "&Find Notes", self._focus_search, QKeySequence.StandardKey.Find, "search")
+        self._action(
+            e,
+            "Find and &Replace in Note",
+            lambda: self.editor.show_find(replace=True) if self.current_note_id() else None,
+            "Ctrl+H",
+            "sync",
+        )
         e.addSeparator()
         self._action(e, "&Duplicate Note", self.duplicate_current, "Ctrl+D", "copy")
         self._action(e, "Move Note to &Trash", self.trash_current, "Ctrl+Delete", "delete")
@@ -439,6 +446,10 @@ class MainWindow(QMainWindow):
             getattr(widget, method)()
 
     def _focus_search(self) -> None:
+        # In the note text, Ctrl+F finds in the note; again (from the find bar), in all notes.
+        if self.editor.finding() and not self.editor.find_bar.find.hasFocus():
+            self.editor.show_find()
+            return
         self.show_page(0)
         self.list.search.setFocus()
         self.list.search.selectAll()
