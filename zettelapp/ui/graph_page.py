@@ -36,7 +36,7 @@ from zettelapp.ui.graph2d import Graph2DView
 from zettelapp.ui.graph3d import Graph3DView
 from zettelapp.ui.graph_common import MAX_GROUP_COLORS, GraphData
 from zettelapp.ui.link_style import LIST_ICON, type_icon
-from zettelapp.ui.widgets import FlowLayout, SearchBox, label, tool_button
+from zettelapp.ui.widgets import FlowLayout, SearchBox, label, link_button, tool_button
 from zettelapp.ui.workers import run_task
 
 # Layouts and clusterings kept for switching views quickly. Editing a note changes their keys
@@ -127,7 +127,14 @@ class GraphPage(QWidget):
         for i, (text, tip) in enumerate(
             (
                 (_("All notes"), _("Show the whole collection")),
-                (_("Local"), _("Show the open note and its neighbourhood")),
+                (
+                    _("Local"),
+                    _(
+                        "Show the note open in the editor and the notes a few links away. "
+                        "To centre on another note, right-click it and choose "
+                        "Show local graph."
+                    ),
+                ),
             )
         ):
             b = QToolButton()
@@ -141,7 +148,10 @@ class GraphPage(QWidget):
         self.depth_spin.setValue(2)
         self.depth_spin.setPrefix(_("Depth "))
         self.depth_spin.setToolTip(_("Links away from the open note"))
-        group(*self.scope_group.buttons(), self.depth_spin)
+        # Says which note the local graph is about; a click finds it in the graph.
+        self.center_button = link_button("", self._find_center)
+        self.center_button.setVisible(False)
+        group(*self.scope_group.buttons(), self.depth_spin, self.center_button)
         self.dim_group = QButtonGroup(self)
         for i, (text, tip) in enumerate((("2D", _("2D view")), ("3D", _("3D view")))):
             b = QToolButton()
@@ -299,6 +309,25 @@ class GraphPage(QWidget):
     def set_focus_note(self, note_id: str | None) -> None:
         self.focus_id = note_id
 
+    def _find_center(self) -> None:
+        if self.focus_id:
+            self._view().focus_node(self.focus_id)
+
+    def _show_center(self, local: bool, title: str) -> None:
+        if self.scope_group.checkedId() != 1:
+            self.center_button.setVisible(False)
+            return
+        if local:
+            short = title if len(title) <= 40 else title[:39] + "…"
+            self.center_button.setText(_("Around “{title}”").format(title=short))
+            self.center_button.setToolTip(
+                _("The local graph is centred on the note open in the editor")
+            )
+        else:
+            self.center_button.setText(_("No note open: showing all notes"))
+            self.center_button.setToolTip(_("Open a note to see its local graph"))
+        self.center_button.setVisible(True)
+
     def relayout(self) -> None:
         self._layouts.clear()
         self._clusters.clear()
@@ -392,6 +421,7 @@ class GraphPage(QWidget):
             {lt.id for lt in types if not lt.directed},
         )
         local = self.scope_group.checkedId() == 1 and self.focus_id in notes
+        self._show_center(local, notes[self.focus_id].display_title if local else "")
         ids = (
             sorted(subgraph([self.focus_id], links, self.depth_spin.value()))
             if local
