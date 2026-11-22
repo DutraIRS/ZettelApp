@@ -26,6 +26,7 @@ from zettelapp.core.models import (
     LEGACY_LINE_STYLES,
     LINE_STYLES,
     TAG_RELATION_TYPES,
+    TEXT_ORIGINS,
     Flashcard,
     Link,
     LinkType,
@@ -33,6 +34,7 @@ from zettelapp.core.models import (
     ReviewState,
     TagGraph,
     TagRelationship,
+    link_type_tokens,
     sanitize_mindmap,
     utc_now,
 )
@@ -635,7 +637,7 @@ class Vault:
             copy.image, copy.mindmap = original.image, original.mindmap
             self.save_note(copy, manual_tags=self.manual_tags(note_id), touch=False)
             for link in self.links_from(note_id):
-                if link.origin != "inline":
+                if not link.from_text:
                     self.add_link(copy.id, link.dst, link.type, link.origin)
             for card in self.cards_for(note_id):
                 if card.source == "manual":
@@ -978,7 +980,7 @@ class Vault:
                 "SELECT origin FROM links WHERE src = ? AND dst = ? AND type = ?",
                 (src, dst, link_type),
             ).fetchone()
-            if row is None or row["origin"] == "inline":
+            if row is None or row["origin"] in TEXT_ORIGINS:
                 return  # links written in the text are reversed by editing the text
             self.conn.execute(
                 "DELETE FROM links WHERE src = ? AND dst = ? AND type = ?", (src, dst, link_type)
@@ -1011,43 +1013,84 @@ class Vault:
     def neighbors(self, note_id: str) -> set[str]:
         return {l.dst for l in self.links_from(note_id)} | {l.src for l in self.links_to(note_id)}
 
-    def _sync_inline_links(self, note: Note) -> None:
-        desired: set[tuple[str, str]] = set()
+    def _text_links(self, note: Note) -> tuple[set[tuple[str, str]], set[tuple[str, str]]]:
+        """The links *note*'s text declares: ({(target, type)}, {(source, type)}), the
+        second for reverse names (discussed_by::[[A]] declares A -> this note)."""
+        outgoing: set[tuple[str, str]] = set()
+        incoming: set[tuple[str, str]] = set()
         wikilinks = find_wikilinks(note.body)
-        if wikilinks:
-            by_title: dict[str, str] = {}
-            for r in self.conn.execute(
-                "SELECT id, title FROM notes WHERE deleted = 0 ORDER BY id DESC"
-            ):
-                by_title[fold(r["title"].strip())] = r["id"]
-            types = {r["id"] for r in self.conn.execute("SELECT id FROM link_types")}
-            for wl in wikilinks:
-                dst = (
-                    wl.target
-                    if is_valid_note_id(wl.target) and self.note_exists(wl.target, True)
-                    else by_title.get(fold(wl.target))
-                )
-                if dst and dst != note.id:
-                    desired.add(
-                        (dst, wl.link_type if wl.link_type and wl.link_type in types else "related")
-                    )
-        existing = {
+        if not wikilinks:
+            return outgoing, incoming
+        by_title: dict[str, str] = {}
+        for r in self.conn.execute(
+            "SELECT id, title FROM notes WHERE deleted = 0 ORDER BY id DESC"
+        ):
+            by_title[fold(r["title"].strip())] = r["id"]
+        tokens = link_type_tokens(self.link_types())
+        for wl in wikilinks:
+            other = (
+                wl.target
+                if is_valid_note_id(wl.target) and self.note_exists(wl.target, True)
+                else by_title.get(fold(wl.target))
+            )
+            if not other or other == note.id:
+                continue
+            type_id, reverse = tokens.get(wl.link_type or "", ("related", False))
+            (incoming if reverse else outgoing).add((other, type_id))
+        return outgoing, incoming
+
+    def _sync_inline_links(self, note: Note, follow: bool = True) -> None:
+        """Make the links written in *note*'s text match the text."""
+        want_out, want_in = self._text_links(note)
+        have_out = {
             (r["dst"], r["type"])
             for r in self.conn.execute(
                 "SELECT dst, type FROM links WHERE src = ? AND origin = 'inline'", (note.id,)
             )
         }
-        for dst, link_type in existing - desired:
+        have_in = {
+            (r["src"], r["type"])
+            for r in self.conn.execute(
+                "SELECT src, type FROM links WHERE dst = ? AND origin = 'inline-reverse'",
+                (note.id,),
+            )
+        }
+        dropped: set[str] = set()
+        for dst, link_type in have_out - want_out:
             self.conn.execute(
                 "DELETE FROM links WHERE src = ? AND dst = ? AND type = ? AND origin = 'inline'",
                 (note.id, dst, link_type),
             )
+            dropped.add(dst)
+        for src, link_type in have_in - want_in:
+            self.conn.execute(
+                "DELETE FROM links WHERE src = ? AND dst = ? AND type = ? "
+                "AND origin = 'inline-reverse'",
+                (src, note.id, link_type),
+            )
+            dropped.add(src)
         now = utc_now()
-        for dst, link_type in desired - existing:
+        for dst, link_type in want_out - have_out:
             self.conn.execute(
                 "INSERT OR IGNORE INTO links (src, dst, type, origin, created) VALUES (?, ?, ?, 'inline', ?)",
                 (note.id, dst, link_type, now),
             )
+        for src, link_type in want_in - have_in:
+            self.conn.execute(
+                "INSERT OR IGNORE INTO links (src, dst, type, origin, created) "
+                "VALUES (?, ?, ?, 'inline-reverse', ?)",
+                (src, note.id, link_type, now),
+            )
+        # Both notes may write the same link (A: discusses::[[B]], B: discussed_by::[[A]]),
+        # which is stored once, under whichever text came first. When one text drops it, the
+        # other note's text may still declare it: let that note put it back.
+        if follow:
+            for other in dropped:
+                row = self.conn.execute(
+                    "SELECT body FROM notes WHERE id = ? AND deleted = 0", (other,)
+                ).fetchone()
+                if row is not None:
+                    self._sync_inline_links(Note(id=other, body=row["body"]), follow=False)
 
     # --- assets -----------------------------------------------------------
 

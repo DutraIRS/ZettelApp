@@ -221,7 +221,7 @@ class SidePanel(QWidget):
                 item.setData(Qt.ItemDataRole.UserRole, (link, other))
                 item.setToolTip(
                     f"{verb} “{title}”"
-                    + ("  " + _("(from a [[link]] in the text)") if link.origin == "inline" else "")
+                    + ("  " + _("(from a [[link]] in the text)") if link.from_text else "")
                 )
                 widget.addItem(item)
             if not rows:
@@ -253,13 +253,13 @@ class SidePanel(QWidget):
             )
             change.addAction(action)
         lt = next((t for t in self.link_types if t.id == link.type), None)
-        if lt is not None and lt.directed and link.origin != "inline":
+        if lt is not None and lt.directed and not link.from_text:
             menu.addAction(
                 icons.icon("sync"),
                 _("Reverse direction"),
                 lambda: self.reverseLink.emit(link.src, link.dst, link.type),
             )
-        if link.origin == "inline":
+        if link.from_text:
             menu.addAction(_("Remove (edit the [[link]] in the text)")).setEnabled(False)
         else:
             menu.addAction(

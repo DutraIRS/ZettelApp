@@ -17,7 +17,7 @@ from xml.etree import ElementTree as ET
 
 from markdown_it import MarkdownIt
 
-from zettelapp.core.models import LinkType, mindmap_nodes
+from zettelapp.core.models import LinkType, link_type_tokens, mindmap_nodes
 from zettelapp.core.security import (
     file_url,
     is_safe_web_url,
@@ -26,7 +26,7 @@ from zettelapp.core.security import (
     is_zotero_url,
     local_file_path,
 )
-from zettelapp.core.textutil import CLOZE_RE, MATH_RE, WIKILINK_RE, find_tasks
+from zettelapp.core.textutil import CLOZE_RE, MATH_RE, WIKILINK_RE, find_tasks, slugify_type
 
 NOTE_SCHEME = "zettel:"
 NEW_NOTE_SCHEME = "zettel-new:"
@@ -78,6 +78,7 @@ class NoteRenderer:
         self.note_href = note_href
         self.asset_href = asset_href
         self.link_types = link_types or {}
+        self._tokens = link_type_tokens(self.link_types.values())
         self.allow_new_note_links = allow_new_note_links
         self.allow_file_links = allow_file_links
         self.task_links = task_links
@@ -104,8 +105,10 @@ class NoteRenderer:
         text = m.group("alias") or (self.title_of(note_id) if note_id else target) or target
         prefix = ""
         if m.group("type"):
-            lt = self.link_types.get(m.group("type").lower().replace("-", "_"))
-            prefix = f"*{_escape_md(lt.label if lt else m.group('type'))}:* "
+            type_id, reverse = self._tokens.get(slugify_type(m.group("type")), ("", False))
+            lt = self.link_types.get(type_id)
+            name = (lt.inverse_label if reverse else lt.label) if lt else m.group("type")
+            prefix = f"*{_escape_md(name)}:* "
         if note_id:
             return f"{prefix}[{_escape_md(text)}]({NOTE_SCHEME}{note_id})"
         if self.allow_new_note_links:

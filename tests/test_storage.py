@@ -68,6 +68,64 @@ def test_manual_link_survives_inline_removal(vault):
     assert [(l.dst, l.origin) for l in vault.links_from(a.id)] == [(b.id, "manual")]
 
 
+def test_a_reverse_name_in_the_text_links_the_other_way(vault):
+    from zettelapp.core.models import LinkType
+
+    vault.save_link_type(LinkType("discusses", "Discusses", "Discussed by", "#800080"))
+    paper = vault.create_note("Paper")
+    essay = vault.create_note("Essay", "discussed_by::[[Paper]] and supported_by::[[Paper]]")
+    links = {(l.src, l.dst, l.type, l.origin) for l in vault.links_to(essay.id)}
+    assert links == {
+        (paper.id, essay.id, "discusses", "inline-reverse"),
+        (paper.id, essay.id, "supports", "inline-reverse"),
+    }
+    assert all(l.from_text for l in vault.links_from(paper.id))
+    # The source note's own text keeps its links: they aren't its to remove.
+    paper.body = "Nothing here"
+    vault.save_note(paper)
+    assert len(vault.links_to(essay.id)) == 2
+    essay.body = ""
+    vault.save_note(essay)
+    assert vault.links_to(essay.id) == []
+
+
+def test_a_link_both_texts_write_survives_either_text_dropping_it(vault):
+    from zettelapp.core.models import LinkType
+
+    vault.save_link_type(LinkType("discusses", "Discusses", "Discussed by", "#800080"))
+    a = vault.create_note("A")
+    b = vault.create_note("B", "discussed_by::[[A]]")
+    a.body = "discusses::[[B]]"
+    vault.save_note(a)
+    assert [(l.dst, l.type) for l in vault.links_from(a.id)] == [(b.id, "discusses")]
+    b.body = ""  # A still says it
+    vault.save_note(b)
+    assert [(l.dst, l.type) for l in vault.links_from(a.id)] == [(b.id, "discusses")]
+    b.body = "discussed_by::[[A]]"
+    vault.save_note(b)
+    a.body = ""  # B still says it
+    vault.save_note(a)
+    assert [(l.dst, l.type, l.origin) for l in vault.links_from(a.id)] == [
+        (b.id, "discusses", "inline-reverse")
+    ]
+
+
+def test_link_type_names_in_the_text(vault):
+    from dataclasses import replace
+
+    from zettelapp.core.models import link_type_tokens, reverse_token
+
+    types = vault.link_types()
+    supports = replace(next(t for t in types if t.id == "supports"), label="Apoia")
+    supports.inverse_label = "Apoiada por"
+    types = [supports if t.id == "supports" else t for t in types]
+    tokens = link_type_tokens(types)
+    assert tokens["apoia"] == tokens["supports"] == ("supports", False)
+    assert tokens["apoiada_por"] == tokens["supported_by"] == ("supports", True)
+    assert reverse_token(supports, types) == "apoiada_por"
+    assert reverse_token(next(t for t in types if t.id == "related"), types) == "related"
+
+
 def test_search_with_fts_and_tags(sample, vault):
     assert sample["b"].id in vault.search("forget")
     assert vault.search("tag:cooking") == [sample["d"].id]

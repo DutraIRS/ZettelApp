@@ -341,7 +341,7 @@ def _markdown_for(
     front = "\n".join(f"{k}: {json.dumps(v, ensure_ascii=False)}" for k, v in meta.items())
     parts = [f"---\n{front}\n---\n", body.rstrip() + "\n"]
 
-    manual = [l for l in outgoing if l.origin != "inline"]
+    manual = [l for l in outgoing if not l.from_text]
     if manual:
         lines = [f"- {l.type}:: [[{stems[l.dst]}]]" for l in manual]
         parts.append("\n## Links\n\n" + "\n".join(lines) + "\n")

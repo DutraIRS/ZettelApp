@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
+from zettelapp.core.textutil import slugify_type
 from zettelapp.i18n import N_, _
 
 
@@ -35,12 +36,23 @@ class Note:
         return self.title.strip() or "Untitled"
 
 
+# Links written as [[links]] in a note's text. "inline" is written in the text of its
+# source note; "inline-reverse" in the text of its target, with the type's reverse name
+# (discussed_by::[[A]] in B is the link A -> B of type "discusses").
+TEXT_ORIGINS = ("inline", "inline-reverse")
+
+
 @dataclass(frozen=True)
 class Link:
     src: str
     dst: str
     type: str = "related"
-    origin: str = "manual"  # manual | inline | suggestion
+    origin: str = "manual"  # manual | inline | inline-reverse | suggestion
+
+    @property
+    def from_text(self) -> bool:
+        """Written in a note's text: it changes by editing the text, not by hand."""
+        return self.origin in TEXT_ORIGINS
 
 
 TAG_RELATION_TYPES = ("parent", "related", "synonym")
@@ -195,6 +207,47 @@ DEFAULT_LINK_TYPES = [
     ),
     LinkType("cites", N_("Cites"), N_("Cited by"), "#1BAF7A", builtin=True, arrow="open"),
 ]
+
+
+def link_type_tokens(types: Iterable[LinkType]) -> dict[str, tuple[str, bool]]:
+    """What may stand before :: in a [[link]] -> (type id, reversed).
+
+    A type is written by its id or its name ("supports::", "apoia::"); a directed type
+    also by its reverse name ("supported_by::"), which makes the link point the other
+    way. Built-in types also answer to their English names, whatever language the vault
+    was created in. A name never shadows another type's own name or id.
+    """
+    english = {lt.id: lt for lt in DEFAULT_LINK_TYPES}
+    forward: dict[str, tuple[str, bool]] = {}
+    reverse: dict[str, tuple[str, bool]] = {}
+    types = list(types)
+    for lt in types:
+        forward.setdefault(lt.id, (lt.id, False))
+    for lt in types:
+        default = english.get(lt.id) if lt.builtin else None
+        labels = [lt.label] + ([default.label] if default else [])
+        inverses = [lt.inverse_label] + ([default.inverse_label] if default else [])
+        for name in labels:
+            forward.setdefault(slugify_type(name), (lt.id, False))
+        if lt.directed:
+            for name in inverses:
+                reverse.setdefault(slugify_type(name), (lt.id, True))
+    tokens = {**reverse, **forward}  # a forward name wins over a reverse one
+    tokens.pop("", None)
+    return tokens
+
+
+def reverse_token(lt: LinkType, types: Iterable[LinkType]) -> str | None:
+    """How a note writes *lt* seen from the other end: the reverse name of a directed
+    type (None if that name doesn't unambiguously mean it), the id of an undirected one."""
+    if not lt.directed:
+        return lt.id
+    tokens = link_type_tokens(types)
+    for name in (lt.inverse_label, *(t.inverse_label for t in DEFAULT_LINK_TYPES if t.id == lt.id)):
+        token = slugify_type(name)
+        if token and tokens.get(token) == (lt.id, True):
+            return token
+    return None
 
 
 @dataclass

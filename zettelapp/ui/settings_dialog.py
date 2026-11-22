@@ -50,7 +50,7 @@ from zettelapp.core.llm import (
     list_models,
     test_connection,
 )
-from zettelapp.core.models import LinkType, least_used_line_style
+from zettelapp.core.models import LinkType, least_used_line_style, reverse_token
 from zettelapp.core.suggest import FEATURES
 from zettelapp.core.textutil import slugify_type
 from zettelapp.i18n import N_, _, n_
@@ -731,11 +731,15 @@ class OptionsDialog(QDialog):
             self.type_arrow.setItemIcon(i, sample_icon(color, "solid", self.type_arrow.itemData(i)))
         self.type_sample.set_type(lt)
         type_id = lt.id or slugify_type(lt.label)
-        hint = (
-            _("In a note, write {example}.").format(example=f"{type_id}::[[…]]")
-            if type_id
-            else _("Give the link type a name.")
-        )
+        reverse = reverse_token(lt, self._types) if type_id and lt.directed else None
+        if not type_id:
+            hint = _("Give the link type a name.")
+        elif reverse:
+            hint = _("In a note, write {example}, or {reverse} for the other direction.").format(
+                example=f"{type_id}::[[…]]", reverse=f"{reverse}::[[…]]"
+            )
+        else:
+            hint = _("In a note, write {example}.").format(example=f"{type_id}::[[…]]")
         if lt.builtin:
             hint += " " + _("Built-in link types can be renamed and restyled but not removed.")
         self.type_hint.setText(hint)

@@ -24,6 +24,7 @@ from zettelapp.core.enex import enml_to_markdown, read_enex
 from zettelapp.core.models import (
     ARROW_TIPS,
     LINE_STYLES,
+    TEXT_ORIGINS,
     Flashcard,
     LinkType,
     Note,
@@ -298,7 +299,7 @@ def _import_data(
         result.notes += 1
 
     for raw in data.get("links") or []:
-        if not isinstance(raw, dict) or raw.get("origin") == "inline":
+        if not isinstance(raw, dict) or raw.get("origin") in TEXT_ORIGINS:
             continue  # inline links are re-created from the note text
         raw_src, raw_dst = raw.get("src"), raw.get("dst")
         src = id_map.get(raw_src) if isinstance(raw_src, str) else None
