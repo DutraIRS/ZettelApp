@@ -2,6 +2,7 @@
 
 import io
 import json
+import sys
 import urllib.error
 
 import pytest
@@ -75,6 +76,7 @@ def test_only_a_newer_version_is_an_update(monkeypatch):
     assert updates.available_update() is None
 
 
+@pytest.mark.skipif(sys.platform.startswith("linux"), reason="Linux offers its own packages")
 def test_the_notice_offers_the_installer_only_to_installed_copies(tmp_path, monkeypatch):
     from zettelapp import DOWNLOAD_URL, RELEASES_URL
     from zettelapp.ui import update_notice
@@ -83,3 +85,27 @@ def test_the_notice_offers_the_installer_only_to_installed_copies(tmp_path, monk
     assert update_notice.download_url() == RELEASES_URL
     (tmp_path / "unins000.exe").touch()
     assert update_notice.download_url() == DOWNLOAD_URL
+
+
+@pytest.mark.skipif(not sys.platform.startswith("linux"), reason="Linux packages")
+def test_the_notice_offers_the_linux_package_in_use(tmp_path, monkeypatch):
+    from zettelapp import RELEASES_URL
+    from zettelapp.ui import update_notice
+
+    release = "https://github.com/DutraIRS/ZettelApp/releases/download/v1.4.0/"
+    monkeypatch.delenv("FLATPAK_ID", raising=False)
+    monkeypatch.delenv("SNAP", raising=False)
+    assert update_notice.download_url("1.4.0") == RELEASES_URL  # run from source
+    monkeypatch.setattr(update_notice.sys, "frozen", True, raising=False)
+    monkeypatch.setattr(update_notice, "DEB_INSTALL_DIR", tmp_path / "usr" / "lib" / "ZettelApp")
+    monkeypatch.setattr(
+        update_notice.sys, "executable", str(tmp_path / "usr" / "lib" / "ZettelApp" / "zettelapp")
+    )
+    assert update_notice.download_url("1.4.0") == release + "zettelapp_1.4.0_amd64.deb"
+    assert update_notice.download_url("1.4.0-rc1").endswith(
+        "/v1.4.0-rc1/zettelapp_1.4.0~rc1_amd64.deb"
+    )
+    monkeypatch.setattr(update_notice.sys, "executable", str(tmp_path / "My apps" / "zettelapp"))
+    assert update_notice.download_url("1.4.0") == release + "ZettelApp-1.4.0-linux-x86_64.tar.gz"
+    monkeypatch.setenv("FLATPAK_ID", "io.github.dutairs.zettelapp")  # the store updates it
+    assert update_notice.download_url("1.4.0") == "appstream://io.github.dutairs.zettelapp"

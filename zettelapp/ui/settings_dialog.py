@@ -36,7 +36,7 @@ from PySide6.QtWidgets import (
 )
 
 from zettelapp import i18n, settings, winintegration
-from zettelapp.core import apikeys
+from zettelapp.core import apikeys, secrets
 from zettelapp.core.embeddings import (
     MODEL_BYTES,
     model_installed,
@@ -106,6 +106,11 @@ PAGE_ICONS = {
     "Backups": "history",
 }
 NAV_ROW_HEIGHT = 34
+
+
+def _memory_only_keys() -> str:
+    """Where keys would be saved, when Linux has no Secret Service to keep them."""
+    return _("No system keyring was found, so keys are kept only until ZettelApp closes.")
 
 
 def mcp_command(vault: Path | None, allow_writes: bool) -> tuple[str, list[str], dict]:
@@ -878,13 +883,15 @@ class OptionsDialog(QDialog):
         self.key_choice.setEnabled(bool(keys))
         self.key_rename.setEnabled(bool(keys))
         self.key_remove.setEnabled(bool(keys))
-        self.key_hint.setText(
-            _(
+        if not secrets.secrets_available():  # Linux without a Secret Service
+            hint = _memory_only_keys()
+        elif len(keys) > 1:
+            hint = _(
                 "The selected key is the one used for questions. Keys are kept in the system keyring."
             )
-            if len(keys) > 1
-            else ""
-        )
+        else:
+            hint = ""
+        self.key_hint.setText(hint)
 
     def _provider_changed(self, *_args, initial: bool = False) -> None:
         info = PROVIDERS[self.provider.currentData()]
@@ -942,7 +949,11 @@ class OptionsDialog(QDialog):
             QMessageBox.warning(self, _("API key"), str(exc))
             return
         self._fill_keys(profile.id)
-        self.ai_status.setText(_("Key “{name}” saved on this computer.").format(name=profile.label))
+        self.ai_status.setText(
+            _("Key “{name}” saved on this computer.").format(name=profile.label)
+            if secrets.secrets_available()
+            else _memory_only_keys()
+        )
 
     def _rename_key(self) -> None:
         provider, key_id = self.provider.currentData(), self.key_choice.currentData()

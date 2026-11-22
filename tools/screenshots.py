@@ -1,8 +1,10 @@
 """Render screenshots of the real app (offscreen) for the website and docs.
 
-Run with:  python tools/screenshots.py [output-folder]
+Run with:  python tools/screenshots.py [output-folder] [--icon-theme NAME]
 Settings and local data (backups, caches) go to a temporary folder, so your own
-preferences and data are untouched.
+preferences and data are untouched. On Linux, --icon-theme picks the icon theme whose
+symbolic icons replace the bundled Fluent ones (e.g. Adwaita); QT_SCALE_FACTOR renders
+at another scaling.
 """
 
 from __future__ import annotations
@@ -16,9 +18,14 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 TMP = Path(tempfile.mkdtemp(prefix="zettelapp-shots-"))
 os.environ.setdefault("QT_QPA_PLATFORM", "offscreen")
-os.environ.setdefault("QT_QPA_FONTDIR", str(Path(os.environ.get("WINDIR", "C:/Windows")) / "Fonts"))
+if sys.platform == "win32":  # the offscreen platform finds no system fonts by itself there
+    os.environ.setdefault(
+        "QT_QPA_FONTDIR", str(Path(os.environ.get("WINDIR", "C:/Windows")) / "Fonts")
+    )
 os.environ["ZETTELAPP_SETTINGS_FILE"] = str(TMP / "settings.ini")
 os.environ["LOCALAPPDATA"] = str(TMP / "local")
+os.environ["XDG_DATA_HOME"] = str(TMP / "local")  # Linux: backups and indexes,
+os.environ["XDG_CACHE_HOME"] = str(TMP / "cache")  # generated images
 
 from PySide6.QtCore import QEventLoop, QLocale, QThreadPool, QTimer  # noqa: E402
 from PySide6.QtWidgets import QApplication  # noqa: E402
@@ -40,11 +47,32 @@ def settle(app: QApplication, ms: int = 400, window=None) -> None:
         app.processEvents()
 
 
+DEFAULT_ACCENT = {"light": "#005fb8", "dark": "#60cdff"}  # Windows' default blue
+
+
+def use_default_accent() -> None:
+    """Screenshots show the default Windows blue, whatever this desktop's accent colour: every
+    accent reader in theme (Windows registry, GNOME, KDE, the XDG portal...) answers "none"."""
+    for name in dir(theme):
+        if name.endswith("_accent") and callable(getattr(theme, name)):
+            setattr(theme, name, lambda *args, **kwargs: None)
+
+
 def main() -> None:
-    theme._windows_accent = lambda dark: None  # screenshots use the default Windows blue accent
-    out = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "website" / "assets" / "screenshots"
+    use_default_accent()
+    args = sys.argv[1:]
+    icon_theme = None
+    if "--icon-theme" in args:
+        at = args.index("--icon-theme")
+        icon_theme = args[at + 1]
+        del args[at : at + 2]
+    out = Path(args[0]) if args else ROOT / "website" / "assets" / "screenshots"
     out.mkdir(parents=True, exist_ok=True)
-    app = QApplication(sys.argv)
+    app = QApplication([sys.argv[0], *args])
+    if icon_theme is not None:
+        from PySide6.QtGui import QIcon
+
+        QIcon.setThemeName(icon_theme)
     # Dates as an English reader sees them, whatever this computer's own language.
     QLocale.setDefault(QLocale(QLocale.Language.English, QLocale.Country.UnitedStates))
     vault_dir = TMP / "Demo vault"
@@ -57,13 +85,17 @@ def main() -> None:
     for mode in ("light", "dark"):
         settings.put(settings.THEME, mode)
         theme.apply_theme(app, mode)
+        if theme.current().accent != DEFAULT_ACCENT[mode]:
+            raise SystemExit(f"The desktop's accent colour reached the {mode} screenshots.")
         window = MainWindow()
         window.resize(1440, 900)
         window.show()
         window.open_vault(vault_dir)
-        window.status_vault.setText(
+        window.status_vault.setText(  # never publish a real local path
             r"C:\Users\you\Documents\ZettelApp"
-        )  # never publish a real local path
+            if sys.platform == "win32"
+            else "/home/you/Documents/ZettelApp"
+        )
         window.open_note(ids["Spaced repetition"])
         window.editor.set_view_mode(1)
         settle(app, 900, window)

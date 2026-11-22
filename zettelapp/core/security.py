@@ -102,6 +102,8 @@ def local_file_path(target: object) -> str | None:
     if not isinstance(target, str) or len(target) > MAX_URL_LENGTH:
         return None
     text = target.strip()
+    if _CONTROL_CHARS.search(text):
+        return None  # before urlsplit, which silently drops tabs and line breaks
     if text[:5].lower() == "file:":
         parts = urlsplit(text)
         if parts.query or parts.fragment:

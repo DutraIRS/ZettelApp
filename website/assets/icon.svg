@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+<title>ZettelApp</title>
+<defs>
+<linearGradient id="tile" gradientUnits="userSpaceOnUse" x1="20.48" y1="20.48" x2="491.52" y2="491.52"><stop offset="0" stop-color="#3987e5"/><stop offset="1" stop-color="#5a3fd0"/></linearGradient>
+<linearGradient id="shine" gradientUnits="userSpaceOnUse" x1="20.48" y1="20.48" x2="20.48" y2="256"><stop offset="0" stop-color="#ffffff" stop-opacity="0.180392"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+</defs>
+<rect x="20.48" y="20.48" width="471.04" height="471.04" rx="112.64" ry="112.64" fill="url(#tile)"/>
+<rect x="20.48" y="20.48" width="471.04" height="471.04" rx="112.64" ry="112.64" fill="url(#shine)"/>
+<g stroke="#ffffff" stroke-width="25.6" stroke-linecap="round">
+<line x1="161.792" y1="190.0544" x2="350.208" y2="161.792"/>
+<line x1="350.208" y1="161.792" x2="321.9456" y2="354.9184"/>
+<line x1="321.9456" y1="354.9184" x2="161.792" y2="340.7872"/>
+<line x1="161.792" y1="340.7872" x2="161.792" y2="190.0544"/>
+<line x1="161.792" y1="190.0544" x2="321.9456" y2="354.9184"/>
+</g>
+<circle cx="161.792" cy="190.0544" r="43.52" fill="#ffffff"/>
+<circle cx="350.208" cy="161.792" r="53.76" fill="#ffd166"/>
+<circle cx="321.9456" cy="354.9184" r="43.52" fill="#ffffff"/>
+<circle cx="161.792" cy="340.7872" r="43.52" fill="#ffffff"/>
+</svg>

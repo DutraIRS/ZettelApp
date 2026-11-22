@@ -185,7 +185,7 @@ def _bodies(link: dict[str, str]) -> dict[str, str]:
                     + _(
                         "**Files:** click **Link to a file** (the folder button on the "
                         "toolbar). The file stays where it is; Ctrl+click the link to show it "
-                        "in File Explorer."
+                        "in your file manager."
                     ),
                     "- "
                     + _(

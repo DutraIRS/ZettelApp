@@ -350,7 +350,7 @@ class MarkdownEditor(QPlainTextEdit):
             return _("Ctrl+click to list the notes tagged #{tag}").format(tag=target)
         path = local_file_path(target)
         if path:
-            return _("Ctrl+click to show {name} in File Explorer").format(
+            return _("Ctrl+click to show {name} in your file manager").format(
                 name=ntpath.basename(path) or path
             )
         return _("Ctrl+click to open {link}").format(link=target)

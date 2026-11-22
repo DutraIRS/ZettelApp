@@ -93,6 +93,7 @@ elif IS_LINUX:
 
     if _lib is not None:
         _SECRET_SCHEMA_ATTRIBUTE_STRING = 0
+        _SECRET_SERVICE_OPEN_SESSION = 1 << 1
         _SECRET_SEARCH_ALL = 1 << 0
         _SECRET_SEARCH_UNLOCK = 1 << 1
         _SECRET_SEARCH_LOAD_SECRETS = 1 << 2
@@ -117,6 +118,8 @@ elif IS_LINUX:
         _lib.g_object_unref.restype = None
         _lib.g_free.argtypes = [ctypes.c_void_p]
         _lib.g_free.restype = None
+        _lib.g_error_free.argtypes = [ctypes.POINTER(_GError)]
+        _lib.g_error_free.restype = None
         _lib.g_list_free.argtypes = [ctypes.c_void_p]
         _lib.g_list_free.restype = None
         _lib.g_hash_table_lookup.argtypes = [ctypes.c_void_p, ctypes.c_char_p]
@@ -158,6 +161,19 @@ elif IS_LINUX:
             ctypes.c_void_p,
             ctypes.POINTER(ctypes.POINTER(_GError)),
         ]  # then attribute pairs, NULL-terminated (variadic)
+        # Every function used needs its argtypes: without them ctypes passes the schema
+        # pointer as a 32-bit int, which cuts off pointers above 4 GB (memory allocated by
+        # another thread, or the heap of a PIE Python such as most distributions' builds).
+        _lib.secret_password_clear_sync.restype = ctypes.c_int
+        _lib.secret_password_clear_sync.argtypes = [
+            ctypes.c_void_p,
+            ctypes.c_void_p,
+            ctypes.POINTER(ctypes.POINTER(_GError)),
+        ]  # then attribute pairs, NULL-terminated (variadic)
+        _lib.secret_password_free.restype = None
+        _lib.secret_password_free.argtypes = [ctypes.c_void_p]  # wipes, then frees
+        _lib.g_hash_table_unref.restype = None
+        _lib.g_hash_table_unref.argtypes = [ctypes.c_void_p]
 
         _lib.secret_password_search_sync.restype = ctypes.POINTER(_GList)
         _lib.secret_password_search_sync.argtypes = [
@@ -192,10 +208,14 @@ elif IS_LINUX:
             raise OSError(_("Could not talk to the system keyring."))
         return schema
 
-    def _raise_gerror(error: _GError | None, fallback: str) -> None:
-        if error is not None and error.message:
-            raise OSError(error.code, error.message.decode("utf-8", errors="replace"))
-        raise OSError(fallback)
+    def _raise_gerror(error, fallback: str) -> None:
+        """Raise OSError for the GError libsecret set in *error* (a GError**), freeing it."""
+        detail = ""
+        if error:  # not NULL
+            message = error.contents.message
+            detail = message.decode("utf-8", errors="replace") if message else ""
+            _lib.g_error_free(error)
+        raise OSError(f"{fallback} ({detail})" if detail else fallback)
 
 
 def secrets_available() -> bool:
@@ -207,11 +227,17 @@ def secrets_available() -> bool:
         return False
     if _SERVICE_OK is None:
         error = ctypes.POINTER(_GError)()
-        service = _lib.secret_service_get_sync(0, None, ctypes.byref(error))
+        # OPEN_SESSION talks to the service (starting it if D-Bus can): a bus without any
+        # Secret Service then means memory-only keys, not an error on every save.
+        service = _lib.secret_service_get_sync(
+            _SECRET_SERVICE_OPEN_SESSION, None, ctypes.byref(error)
+        )
         if service:
             _lib.g_object_unref(service)
             _SERVICE_OK = True
         else:
+            if error:
+                _lib.g_error_free(error)
             _SERVICE_OK = False
     return _SERVICE_OK
 
@@ -318,7 +344,7 @@ def get_secret(name: str) -> str | None:
     try:
         return ctypes.string_at(pointer).decode("utf-8")
     finally:
-        _lib.g_free(pointer)
+        _lib.secret_password_free(pointer)
 
 
 def delete_secret(name: str) -> None:
@@ -400,12 +426,16 @@ def delete_all() -> int:
         if item:
             attributes = _lib.secret_item_get_attributes(ctypes.c_void_p(item))
             name_bytes = _lib.g_hash_table_lookup(attributes, b"name") if attributes else None
+            if attributes:
+                _lib.g_hash_table_unref(attributes)  # name_bytes is a copy (c_char_p)
             if name_bytes and bytes(name_bytes).startswith(prefix):
                 item_error = ctypes.POINTER(_GError)()
                 if _lib.secret_item_delete_sync(
                     ctypes.c_void_p(item), None, ctypes.byref(item_error)
                 ):
                     count += 1
+                elif item_error:
+                    _lib.g_error_free(item_error)
             _lib.g_object_unref(ctypes.c_void_p(item))
         node = node.contents.next
     _lib.g_list_free(items)

@@ -11,7 +11,7 @@
 from __future__ import annotations
 
 import os
-import shlex
+import re
 import subprocess
 import sys
 from pathlib import Path
@@ -47,12 +47,19 @@ def desktop_file_path() -> Path:
     return _applications_dirs()[0] / f"{APP_NAME.lower()}.desktop"
 
 
+def _exec_argument(arg: str) -> str:
+    """*arg* quoted for a desktop entry's Exec key: double quotes with \\ " ` $ escaped, %
+    doubled, then backslashes doubled again because the key is itself an escaped string."""
+    quoted = '"' + re.sub(r'([\\"`$])', r"\\\1", arg).replace("%", "%%") + '"'
+    return quoted.replace("\\", "\\\\")
+
+
 def launch_command() -> str:
     """Command a desktop entry should run for zettelapp:// links."""
-    executable = shlex.quote(str(Path(sys.executable)))
+    executable = _exec_argument(str(Path(sys.executable)))
     if getattr(sys, "frozen", False):
-        return f'"{executable}"'
-    return f'"{executable}" -m {APP_NAME.lower()}'
+        return executable
+    return f"{executable} -m {APP_NAME.lower()}"
 
 
 def register_url_protocol() -> None:
@@ -101,7 +108,8 @@ def registered_command() -> str | None:
 
 
 def reveal_in_file_manager(path: str | Path) -> None:
-    """Show *path* in the file manager, selected (or open the folder)."""
+    """Show *path* in the file manager: a file selected in its folder, a folder opened (as
+    Explorer does on Windows)."""
     path = Path(path)
     if not IS_LINUX:  # pragma: no cover - Windows has its own implementation
         from PySide6.QtCore import QUrl
@@ -109,34 +117,50 @@ def reveal_in_file_manager(path: str | Path) -> None:
 
         QDesktopServices.openUrl(QUrl.fromLocalFile(str(path)))
         return
-    shown = str(path if path.is_dir() else path.parent)
-    if _file_manager_show_items(path if path.exists() else shown):
+    if not path.is_dir() and path.exists() and _file_manager_show_items(path):
         return
     from PySide6.QtCore import QUrl
     from PySide6.QtGui import QDesktopServices
 
-    QDesktopServices.openUrl(QUrl.fromLocalFile(shown))
+    QDesktopServices.openUrl(QUrl.fromLocalFile(str(path if path.is_dir() else path.parent)))
 
 
 def _file_manager_show_items(target: str | Path) -> bool:
-    """org.freedesktop.FileManager1, the standard "show and select" service."""
+    """Select *target* through org.freedesktop.FileManager1, the standard "show and select"
+    service, when a file manager provides it: already running, or started on demand by D-Bus,
+    which is how Thunar, Nautilus, Dolphin and Nemo install it."""
     try:
         from PySide6.QtCore import QUrl
-        from PySide6.QtDBus import QDBusCall, QDBusConnection, QDBusMessage
+        from PySide6.QtDBus import QDBus, QDBusConnection, QDBusMessage
     except ImportError:  # pragma: no cover - QtDBus ships with PySide6-Essentials
         return False
 
     connection = QDBusConnection.sessionBus()
+    if not connection.isConnected():
+        return False
     service = "org.freedesktop.FileManager1"
-    if not connection.interface().isServiceRegistered(service):
+
+    def ask_bus(method: str, *args):
+        message = QDBusMessage.createMethodCall(
+            "org.freedesktop.DBus", "/org/freedesktop/DBus", "org.freedesktop.DBus", method
+        )
+        message.setArguments(list(args))
+        reply = connection.call(message, QDBus.CallMode.Block, 2000)
+        if reply.type() != QDBusMessage.MessageType.ReplyMessage or not reply.arguments():
+            return None
+        return reply.arguments()[0]
+
+    if ask_bus("NameHasOwner", service) is not True and service not in (
+        ask_bus("ListActivatableNames") or []
+    ):
         return False
     message = QDBusMessage.createMethodCall(
         service, "/org/freedesktop/FileManager1", "org.freedesktop.FileManager1", "ShowItems"
     )
-    uri = QUrl.fromLocalFile(str(Path(target).absolute())).toString()
+    uri = bytes(QUrl.fromLocalFile(str(Path(target).absolute())).toEncoded()).decode("ascii")
     message.setArguments([[uri], ""])
-    call = connection.asyncCall(message)  # fire and forget: a file manager is opening
-    return not (isinstance(call, QDBusCall) and call.isError())
+    connection.asyncCall(message)  # fire and forget: a file manager is opening
+    return True
 
 
 def _set_mime_handler(entry_name: str) -> None:

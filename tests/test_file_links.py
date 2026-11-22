@@ -63,6 +63,17 @@ def test_network_device_and_other_paths_are_refused(target):
     assert local_file_path(target) is None
 
 
+@pytest.mark.parametrize("char", ["\t", "\n", "\r"])
+def test_control_characters_are_refused_not_dropped(char):
+    # urlsplit() silently removes tabs and line breaks, which turned a link to "a<LF>b.pdf"
+    # into a link to "ab.pdf", another file.
+    drive = "/C:" if sys.platform == "win32" else ""
+    assert local_file_path(f"file://{drive}/tmp/a{char}b.pdf") is None
+    encoded = f"[x](file://{drive}/tmp/a%{ord(char):02X}b.pdf)"
+    html = NoteRenderer(lambda t: None, allow_file_links=True).render(encoded)
+    assert 'class="broken"' in html and "ab.pdf" not in html
+
+
 @_windows
 def test_file_url_round_trips():
     path = r"C:\Users\me\My Files\notes #1.txt"
@@ -145,7 +156,7 @@ def test_clicking_a_file_link_shows_it_in_explorer(tmp_path, monkeypatch):
         cursor = QTextCursor(body.document())
         cursor.setPosition(body.toPlainText().index("report") + 2)
         point = body.cursorRect(cursor).center()
-        assert "File Explorer" in body._link_tip(*body.link_at(point))
+        assert "file manager" in body._link_tip(*body.link_at(point))
         QTest.mouseClick(
             body.viewport(), Qt.MouseButton.LeftButton, Qt.KeyboardModifier.ControlModifier, point
         )

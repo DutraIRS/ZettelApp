@@ -1,7 +1,7 @@
 """Light/dark themes in the spirit of Windows 11 (Fluent) design.
 
-The accent colour follows the desktop's personalisation setting (Windows or
-GNOME/KDE on Linux). Chart and graph colours come from a categorical palette
+The accent colour follows the desktop's personalisation setting (Windows, or
+GNOME, KDE or the settings portal on Linux). Chart and graph colours come from a categorical palette
 validated for colour-vision deficiencies in both modes (fixed order; never
 cycled - extra groups fold into a neutral "other" colour).
 """
@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import sys
 from dataclasses import dataclass, field
-from functools import cache
 from pathlib import Path
 
 from PySide6.QtCore import Qt
@@ -41,7 +40,19 @@ _DARK_STEP = {light.lower(): dark for light, dark in zip(CATEGORICAL_LIGHT, CATE
 
 UI_FONTS = {
     "win32": ["Segoe UI Variable Text", "Segoe UI", "Arial"],
-    "linux": ["Cantarell", "Ubuntu", "Noto Sans", "DejaVu Sans", "Inter", "Arial", "Sans Serif"],
+    # Linux keeps the desktop's own UI font, put first by adopt_desktop_fonts(); these are the
+    # fallbacks, and the whole list where no desktop reports a font (offscreen).
+    "linux": [
+        "Adwaita Sans",
+        "Cantarell",
+        "Ubuntu",
+        "Noto Sans",
+        "DejaVu Sans",
+        "Inter",
+        "Liberation Sans",
+        "Arial",
+        "Sans Serif",
+    ],
     "darwin": ["SF Pro Text", "Helvetica Neue", "Arial"],
 }.get(sys.platform, ["Segoe UI", "Arial"])
 # Segoe UI Variable has no italic faces, and Qt draws its bold italic as a regular-weight
@@ -51,6 +62,48 @@ ITALIC_FONTS = {
     "linux": UI_FONTS,
     "darwin": UI_FONTS,
 }.get(sys.platform, ["Segoe UI", "Arial"])
+# Code in the preview and \texttt in formulas. On Linux the desktop's monospace font goes first.
+CODE_FONTS = {
+    "win32": ["Cascadia Code", "Consolas"],
+    "linux": ["DejaVu Sans Mono", "Liberation Mono", "Noto Sans Mono", "Ubuntu Mono"],
+}.get(sys.platform, ["Menlo", "Courier New"])
+_FALLBACK_FONTS = (tuple(UI_FONTS), tuple(CODE_FONTS))
+_NO_DESKTOP = {"offscreen", "minimal", "minimalegl"}  # Qt platforms without a desktop theme
+
+
+def desktop_font_lists(
+    platform: str, ui_family: str, code_family: str
+) -> tuple[list[str], list[str]]:
+    """The UI and code font lists for a desktop whose fonts Qt reports as *ui_family* and
+    *code_family* on Qt platform *platform*: the desktop's choice first, then the fallbacks."""
+
+    def lead(family: str, fallbacks: tuple[str, ...]) -> list[str]:
+        if platform in _NO_DESKTOP or not family:
+            return list(fallbacks)
+        return [family] + [f for f in fallbacks if f.casefold() != family.casefold()]
+
+    return lead(ui_family, _FALLBACK_FONTS[0]), lead(code_family, _FALLBACK_FONTS[1])
+
+
+def adopt_desktop_fonts() -> None:
+    """On Linux, use the desktop's own fonts: the families its settings (GNOME, KDE, Xfce…)
+    give through Qt's platform theme, which the app's own setFont() leaves untouched. Sizes stay
+    the app's, so layouts match Windows. Elsewhere the lists above stay as they are."""
+    if sys.platform != "linux":
+        return
+    from PySide6.QtGui import QFontDatabase, QFontInfo
+
+    general = QFontDatabase.systemFont(QFontDatabase.SystemFont.GeneralFont)
+    # The monospace setting is often an alias ("Monospace"), which Qt only resolves when it is
+    # the first family of a list: name the real family.
+    fixed = QFontInfo(QFontDatabase.systemFont(QFontDatabase.SystemFont.FixedFont)).family()
+    ui, code = desktop_font_lists(QGuiApplication.platformName(), general.family(), fixed)
+    UI_FONTS[:] = ui  # in place: ITALIC_FONTS is the same list on Linux
+    CODE_FONTS[:] = code
+    # Qt resolves no generic CSS family when it isn't the first, so the "monospace" ending the
+    # code font stacks in rich text would fall back to the proportional UI font.
+    QFont.removeSubstitutions("monospace")
+    QFont.insertSubstitutions("monospace", CODE_FONTS)
 
 
 @dataclass(frozen=True)
@@ -112,7 +165,7 @@ def _windows_accent(dark: bool) -> str | None:
 
 
 _GNOME_ACCENTS = {
-    # libadwaita's named accent colours (GNOME 47+), light-mode backgrounds.
+    # libadwaita's named accent colours (GNOME 47+), as libadwaita itself defines them.
     "default": "#3584e4",
     "blue": "#3584e4",
     "teal": "#2190a4",
@@ -120,52 +173,160 @@ _GNOME_ACCENTS = {
     "yellow": "#c88800",
     "orange": "#ed5b00",
     "red": "#e62d42",
-    "pink": "#d0619a",
-    "purple": "#813d9c",
+    "pink": "#d56199",
+    "purple": "#9141ac",
     "slate": "#6f8396",
 }
+# OKLab lightness of the Windows default accents (#005fb8 on light, #60cdff on dark): a desktop
+# accent is darkened to at most the first on light backgrounds and lightened to at least the
+# second on dark ones, as Windows picks a darker or lighter shade of its accent for each mode.
+_ACCENT_LIGHTNESS = (0.49, 0.80)
 
 
-@cache
-def _linux_accent() -> str | None:
-    """The desktop's accent colour: GNOME (gsettings) or KDE (kdeglobals)."""
-    if sys.platform != "linux":
-        return None
+def _run_quietly(argv: list[str]) -> str | None:
+    """Output of a small desktop tool (gsettings, gdbus), or None if it is missing or fails."""
     import subprocess
 
     try:
-        result = subprocess.run(  # noqa: S603 - fixed argument list
-            ["gsettings", "get", "org.gnome.desktop.interface", "accent-color"],  # noqa: S607
-            capture_output=True,
-            text=True,
-            timeout=2,
-            check=False,
+        result = subprocess.run(  # noqa: S603 - fixed argument lists
+            argv, capture_output=True, text=True, timeout=2, check=False
         )
     except (OSError, subprocess.TimeoutExpired):
-        result = None
-    if result is not None and result.returncode == 0:
-        value = result.stdout.strip().strip("'\"")
-        return _GNOME_ACCENTS.get(value.lower())
-    settings_file = Path.home() / ".config" / "kdeglobals"
-    if settings_file.exists():
-        from PySide6.QtCore import QSettings
+        return None
+    return result.stdout if result.returncode == 0 else None
 
-        kde = QSettings(str(settings_file), QSettings.Format.IniFormat)
-        kde.beginGroup("KDE")
-        value = kde.value("AccentColor")
-        kde.endGroup()
-        if isinstance(value, str) and QColor(value).isValid():
-            return value
+
+def _portal_accent() -> str | None:
+    """org.freedesktop.appearance accent-color from the XDG settings portal, which desktops
+    with an accent setting provide (GNOME 47+, KDE Plasma 6…); also inside Flatpak and Snap."""
+    import re
+
+    out = _run_quietly(
+        [
+            "gdbus",
+            "call",
+            "--session",
+            "--timeout=1",
+            "--dest=org.freedesktop.portal.Desktop",
+            "--object-path=/org/freedesktop/portal/desktop",
+            "--method=org.freedesktop.portal.Settings.ReadOne",
+            "org.freedesktop.appearance",
+            "accent-color",
+        ]
+    )
+    number = r"\s*(-?[\d.]+(?:[eE][-+]?\d+)?)\s*"
+    match = re.search(rf"\({number},{number},{number}\)", out or "")
+    if not match:
+        return None
+    rgb = [float(v) for v in match.groups()]
+    if not all(0.0 <= v <= 1.0 for v in rgb):  # out of range means "no accent colour set"
+        return None
+    return QColor.fromRgbF(*rgb).name()
+
+
+def _gnome_accent() -> str | None:
+    """GNOME's accent-color setting (GNOME 47+), by name."""
+    out = _run_quietly(["gsettings", "get", "org.gnome.desktop.interface", "accent-color"])
+    return _GNOME_ACCENTS.get((out or "").strip().strip("'\"").lower())
+
+
+def _kde_accent() -> str | None:
+    """KDE Plasma's accent colour: the chosen one, else its colour scheme's selection colour."""
+    import configparser
+    import os
+
+    config = os.environ.get("XDG_CONFIG_HOME") or str(Path.home() / ".config")
+    kde = configparser.ConfigParser(interpolation=None, strict=False)
+    try:
+        kde.read(Path(config) / "kdeglobals", encoding="utf-8")
+    except configparser.Error:
+        pass  # a line configparser can't read; the rest has been read
+    except (OSError, UnicodeDecodeError):
+        return None
+    for section, key in (("General", "AccentColor"), ("Colors:Selection", "BackgroundNormal")):
+        value = kde.get(section, key, fallback="").strip()
+        parts = value.split(",")
+        if len(parts) in (3, 4) and all(p.strip().isdigit() for p in parts):
+            r, g, b = (min(int(p), 255) for p in parts[:3])  # "61,174,233"
+            return QColor(r, g, b).name()
+        if value.startswith("#") and QColor(value).isValid():
+            return QColor(value).name()
     return None
+
+
+def _accent_shade(color: str, dark: bool) -> str:
+    """*color* with its OKLab lightness limited for the light or dark theme; hue and chroma kept
+    (chroma reduced only as far as needed to stay displayable)."""
+
+    def linear(c: float) -> float:
+        return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+    def encoded(c: float) -> float:
+        c = min(max(c, 0.0), 1.0)
+        return c * 12.92 if c <= 0.0031308 else 1.055 * c ** (1 / 2.4) - 0.055
+
+    def to_rgb(lightness: float, a: float, b: float) -> tuple[float, float, float]:
+        l = (lightness + 0.3963377774 * a + 0.2158037573 * b) ** 3
+        m = (lightness - 0.1055613458 * a - 0.0638541728 * b) ** 3
+        s = (lightness - 0.0894841775 * a - 1.2914855480 * b) ** 3
+        return (
+            4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+            -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+            -0.0041960863 * l - 0.7034186147 * m + 1.7076147010 * s,
+        )
+
+    q = QColor(color)
+    red, green, blue = (linear(c) for c in (q.redF(), q.greenF(), q.blueF()))
+    l = (0.4122214708 * red + 0.5363325363 * green + 0.0514459929 * blue) ** (1 / 3)
+    m = (0.2119034982 * red + 0.6806995451 * green + 0.1073969566 * blue) ** (1 / 3)
+    s = (0.0883024619 * red + 0.2817188376 * green + 0.6299787005 * blue) ** (1 / 3)
+    lightness = 0.2104542553 * l + 0.7936177850 * m - 0.0040720468 * s
+    a = 1.9779984951 * l - 2.4285922050 * m + 0.4505937099 * s
+    b = 0.0259040371 * l + 0.7827717662 * m - 0.8086757660 * s
+    if dark:
+        lightness = max(lightness, _ACCENT_LIGHTNESS[1])
+    else:
+        lightness = min(lightness, _ACCENT_LIGHTNESS[0])
+    low, high = 0.0, 1.0  # the largest share of the chroma that stays inside sRGB
+    for _step in range(20):
+        mid = (low + high) / 2
+        if all(-1e-4 <= c <= 1 + 1e-4 for c in to_rgb(lightness, a * mid, b * mid)):
+            low = mid
+        else:
+            high = mid
+    return QColor.fromRgbF(*(encoded(c) for c in to_rgb(lightness, a * low, b * low))).name()
+
+
+def _linux_accent(dark: bool) -> str | None:
+    """The desktop's accent colour, shaded for the light or dark theme: GNOME's only on GNOME,
+    KDE's only on KDE, the settings portal's where it provides one. None elsewhere (Xfce has
+    no accent setting) and without a desktop, so the Windows default accent applies."""
+    if sys.platform != "linux" or QGuiApplication.instance() is None:
+        return None
+    if QGuiApplication.platformName() in _NO_DESKTOP:
+        return None
+    import os
+
+    desktops = {d.strip().casefold() for d in os.environ.get("XDG_CURRENT_DESKTOP", "").split(":")}
+    if "gnome" in desktops:
+        color = _portal_accent() or _gnome_accent()
+    elif "kde" in desktops:
+        color = _kde_accent() or _portal_accent()
+    else:
+        color = _portal_accent()
+    return _accent_shade(color, dark) if color else None
 
 
 def _desktop_accent(dark: bool) -> str | None:
     if sys.platform == "win32":
         return _windows_accent(dark)
-    return _linux_accent()
+    return _linux_accent(dark)
 
 
 def system_prefers_dark() -> bool:
+    """The desktop's light/dark setting as Qt's platform theme reports it, and nothing else:
+    on Xfce that is the GTK theme (what other apps show), on GNOME and KDE their own setting.
+    GNOME's color-scheme key, which the settings portal also answers on Xfce, isn't consulted."""
     hints = QGuiApplication.styleHints()
     try:
         return hints.colorScheme() == Qt.ColorScheme.Dark
@@ -470,6 +631,7 @@ def apply_theme(app: QApplication, mode: str = "system", font_size: float = 10.0
     if hasattr(QPalette.ColorRole, "Accent"):
         pal.setColor(QPalette.ColorRole.Accent, QColor(t.accent))
     app.setPalette(pal)
+    adopt_desktop_fonts()
     app.setFont(ui_font(font_size))
     app.setStyleSheet(stylesheet(t))
     from zettelapp.ui import icons

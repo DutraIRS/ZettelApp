@@ -27,6 +27,7 @@ apps:
       - home
       - network
       - removable-media
+      - password-manager-service # API keys in the Secret Service
   zettelapp-mcp:
     command: bin/zettelapp-mcp
     plugs:
@@ -46,6 +47,8 @@ parts:
         "$CRAFT_PART_INSTALL/usr/share/applications/io.github.dutairs.zettelapp.desktop"
       install -Dm644 packaging/io.github.dutairs.zettelapp.metainfo.xml \
         "$CRAFT_PART_INSTALL/usr/share/metainfo/io.github.dutairs.zettelapp.metainfo.xml"
-      install -m644 zettelapp/resources/icon-256.png \
+      install -Dm644 zettelapp/resources/icon-256.png \
         "$CRAFT_PART_INSTALL/usr/share/icons/hicolor/256x256/apps/io.github.dutairs.zettelapp.png"
+      install -Dm644 zettelapp/resources/icon.svg \
+        "$CRAFT_PART_INSTALL/usr/share/icons/hicolor/scalable/apps/io.github.dutairs.zettelapp.svg"
     parse-info: [usr/share/metainfo/io.github.dutairs.zettelapp.metainfo.xml]

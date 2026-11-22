@@ -717,7 +717,7 @@ def test_mcp_switch_starts_off_and_closing_the_app_turns_it_off(window, monkeypa
     from zettelapp import mcp_switch
 
     monkeypatch.setattr(mcp_switch, "EVENT_NAME", rf"Local\ZettelApp.UiTest.{os.getpid()}")
-    monkeypatch.setattr(mcp_switch, "_pid_file", lambda: tmp_path / "mcp-switch-on.pid")
+    monkeypatch.setattr(mcp_switch, "_lock_file", lambda: tmp_path / "mcp-switch.lock")
     assert not window.mcp_toggle.isChecked() and not mcp_switch.mcp_switched_on()
     assert window.mcp_label.text() == "MCP off"
     window.mcp_toggle.click()

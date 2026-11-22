@@ -20,10 +20,10 @@ from PySide6.QtGui import QIcon
 from PySide6.QtNetwork import QLocalServer, QLocalSocket
 from PySide6.QtWidgets import QApplication, QMessageBox
 
-from zettelapp import APP_NAME, ORG_NAME, __version__, i18n, settings, winintegration
+from zettelapp import APP_NAME, DESKTOP_ID, ORG_NAME, __version__, i18n, settings, winintegration
 from zettelapp.core.security import parse_app_url
 from zettelapp.i18n import _
-from zettelapp.paths import ensure_dir, logs_dir, resource_path
+from zettelapp.paths import ensure_dir, logs_dir, resource_path, runtime_dir
 from zettelapp.ui import theme
 
 log = logging.getLogger("zettelapp")
@@ -48,8 +48,19 @@ def configure_logging() -> None:
 
 
 def _server_name() -> str:
-    """Per-user pipe name, so two Windows accounts never talk to each other."""
-    return f"{APP_NAME}-{hashlib.sha256(getpass.getuser().encode('utf-8')).hexdigest()[:16]}"
+    """Per-user pipe name, so two Windows accounts never talk to each other. On Linux the
+    socket goes in the user's private runtime folder rather than the shared /tmp, where another
+    account could take the name first."""
+    name = f"{APP_NAME}-{hashlib.sha256(getpass.getuser().encode('utf-8')).hexdigest()[:16]}"
+    runtime = os.environ.get("XDG_RUNTIME_DIR")
+    if sys.platform.startswith("linux") and runtime and os.path.isdir(runtime):
+        folder = runtime_dir()
+        try:
+            folder.mkdir(mode=0o700, parents=True, exist_ok=True)
+            return str(folder / name)
+        except OSError:
+            pass
+    return name
 
 
 def _message_from_args(args: list[str]) -> dict:
@@ -228,6 +239,10 @@ def main(argv: list[str] | None = None) -> int:
     app.setApplicationName(APP_NAME)
     app.setOrganizationName(ORG_NAME)
     app.setApplicationVersion(__version__)
+    if sys.platform.startswith("linux"):
+        # The Wayland app id and X11's _GTK_APPLICATION_ID: desktops find the window's desktop
+        # entry (name, icon, taskbar grouping) by it. WM_CLASS stays "ZettelApp".
+        app.setDesktopFileName(DESKTOP_ID)
     icon_file = resource_path("icon-256.png")
     if not icon_file.exists():  # the Windows build keeps the multi-resolution .ico
         icon_file = resource_path("icon.ico")

@@ -14,19 +14,38 @@ All notable changes to ZettelApp are documented here. The format follows
     recipe (`packaging/snap/`, core24 with the GNOME extension) live in the repository; store listings
     are planned, and releases can already publish the Snap when store credentials are configured.
   - API keys are stored in the Secret Service (GNOME Keyring / KWallet) instead of Windows Credential
-    Manager. Without a keyring they are kept in memory only, as before, and nothing changes on Windows.
-  - Notes default to `~/Documents/ZettelApp` (through `xdg-user-dir`), settings live in
+    Manager. Without a keyring they are kept in memory only, as before, and *Options ▸ AI* says so;
+    a keyring that refuses (a dismissed prompt, a locked collection) gets an error message. Nothing
+    changes on Windows.
+  - Notes default to `~/Documents/ZettelApp` (the desktop's own Documents folder, through
+    `xdg-user-dir DOCUMENTS`, so `~/Documentos` on a Portuguese desktop), settings live in
     `~/.config/ZettelApp`, caches and generated images in `~/.cache/ZettelApp`: the XDG base
     directories, instead of `%LOCALAPPDATA%`.
-  - Every icon is painted with QPainter from a bundled shape library when the Windows icon fonts are
-    missing, so menus, toolbars and dialogs look right without any icon theme.
-  - The theme follows the desktop's light/dark preference and accent colour (GNOME via `gsettings`,
-    KDE via `kdeglobals`), and the font stacks follow the platform.
+  - Where the Windows icon fonts are missing, icons come from the desktop's icon theme when it has a
+    monochrome symbolic icon of the same meaning (Adwaita, for instance), and otherwise from the
+    Fluent UI System Icons, the open-source set the Windows glyphs belong to (MIT licence, a small
+    subset bundled by `tools/fetch_icons.py`): the same pictures as on Windows, including the Graph,
+    Insights, Review and Mind map icons and the language-specific Bold and Italic letters, drawn
+    sharp at any scaling and in the theme's colour. Mind map nodes linked to a note show their link
+    icon again.
+  - The theme follows the desktop's light/dark setting as Qt's platform theme reports it (on Xfce,
+    the GTK theme) and switches when it changes. The accent colour is GNOME's on GNOME, KDE's on
+    KDE and the settings portal's where it offers one, in a lighter or darker shade per theme as
+    Windows does; desktops without an accent setting, such as Xfce, keep the Windows blue.
+  - Text uses the desktop's own font (whatever GNOME, KDE, Xfce… are set to) at the app's usual
+    sizes, so layouts match Windows; code in the preview uses the desktop's monospace font, and
+    formulas use the serif and maths fonts Linux distributions ship. Graphviz exports made on Linux
+    name `sans-serif` after Segoe UI, so diagrams drawn from them don't fall back to a serif font.
   - `zettelapp://` links from Anki cards open the matching note: the `.deb` ships a desktop entry
     advertising the scheme, and other installs register a user-local one from
-    *Options ▸ Desktop integration*.
-  - Revealing a file or folder in the file manager goes through `org.freedesktop.FileManager1`, with a
-    plain open as fallback.
+    *Options ▸ Desktop integration* (also from a folder whose name has spaces).
+  - Revealing a file in the file manager selects it through `org.freedesktop.FileManager1`, also when
+    the file manager isn't running yet (Thunar, Nautilus, Dolphin and Nemo start on demand); a folder
+    opens as on Windows, and without that service the file's folder opens.
+  - The MCP switch holds a lock that the system releases when ZettelApp exits in any way, so MCP
+    clients are refused as soon as ZettelApp closes, even after a crash.
+  - The update notice's *Download* button offers the `.deb` to the `.deb` install, the `.tar.gz` to
+    the portable folder and the software centre to Flatpak and Snap.
   - On Linux, links to local files in notes accept only absolute paths on the same machine: network
     shares, `file://` URLs with a host and control characters are refused before any lookup.
 - CI now runs the tests on Ubuntu as well as Windows, builds and self-tests the Linux packages on every
@@ -41,8 +60,11 @@ All notable changes to ZettelApp are documented here. The format follows
 
 - Wording no longer assumes Windows on Linux: the *App theme* and *Language* options and the
   *View ▸ Theme* menu say "use system setting", privacy notes about API keys say "the system
-  keyring", and the About dialog says "for Windows and Linux". Translations updated in all
-  11 languages.
+  keyring", the About dialog says "for Windows and Linux", and *File ▸ Show Vault in File Manager*,
+  the hints on file links and the welcome notes say "file manager" instead of "File Explorer".
+  Translations updated in all 11 languages.
+- A link to a local file whose address contains a tab or a line break is refused, instead of
+  silently pointing at the file named without those characters.
 - Links to local files whose names contain spaces or accented letters open again: the renderer now
   decodes the link destination before looking the file up (markdown-it writes destinations
   percent-encoded).

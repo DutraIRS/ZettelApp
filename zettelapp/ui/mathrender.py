@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import base64
 import re
+import sys
 from dataclasses import dataclass, replace
 
 from PySide6.QtCore import QPointF, Qt
@@ -26,7 +27,23 @@ from PySide6.QtGui import (
 MAX_LATEX = 2000
 MAX_DEPTH = 24
 SCALE = 2  # drawn at twice the size so it stays sharp on high-DPI screens
-FAMILIES = ["Cambria Math", "STIX Two Math", "Times New Roman", "Segoe UI Symbol", "Segoe UI"]
+FAMILIES = {
+    "win32": ["Cambria Math", "STIX Two Math", "Times New Roman", "Segoe UI Symbol", "Segoe UI"],
+}.get(
+    sys.platform,
+    # A serif with real italics for letters and digits, close to Cambria; then a maths font
+    # (fonts-stix, fonts-lmodern or fonts-noto-core) for all the symbols the serif lacks.
+    [
+        "Noto Serif",
+        "STIX Two Math",
+        "Latin Modern Math",
+        "Noto Sans Math",
+        "DejaVu Serif",
+        "Liberation Serif",
+        "DejaVu Sans",
+        "Symbola",
+    ],
+)
 AXIS = 0.25  # height of the fraction bar and minus sign above the baseline, in em
 
 GREEK = {
@@ -101,6 +118,14 @@ def decode(text: str) -> str | None:
         return None
 
 
+def _code_families() -> list[str]:
+    if sys.platform == "win32":
+        return ["Consolas"]
+    from zettelapp.ui import theme
+
+    return theme.CODE_FONTS
+
+
 @dataclass(frozen=True)
 class Style:
     size: float  # pixels
@@ -114,7 +139,7 @@ class Style:
     def font(self, kind: str | None = None, scale: float = 1.0) -> QFont:
         kind = kind or self.kind
         font = QFont()
-        font.setFamilies(["Consolas"] + FAMILIES if kind == "tt" else FAMILIES)
+        font.setFamilies(_code_families() + FAMILIES if kind == "tt" else FAMILIES)
         font.setPixelSize(max(1, round(self.size * scale)))
         font.setItalic(kind in ("it", "cal"))
         font.setBold(kind == "bf")

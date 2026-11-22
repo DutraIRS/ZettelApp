@@ -1,6 +1,7 @@
-"""Entry point of the ZettelApp MCP server (zettelapp-mcp.exe).
+"""Entry point of the ZettelApp MCP server (zettelapp-mcp.exe on Windows, zettelapp-mcp on Linux).
 
     zettelapp-mcp --vault "C:\\Users\\me\\Documents\\ZettelApp" [--allow-writes]
+    zettelapp-mcp --vault ~/Documents/ZettelApp [--allow-writes]
 
 Without --vault, the vault last opened in ZettelApp is served.
 
