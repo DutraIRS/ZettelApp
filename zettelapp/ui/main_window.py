@@ -330,7 +330,7 @@ class MainWindow(QMainWindow):
         self._action(e, "&Find Notes", self._focus_search, QKeySequence.StandardKey.Find, "search")
         self._action(
             e,
-            "Find and &Replace in Note",
+            "Find and R&eplace in Note",
             lambda: self.editor.show_find(replace=True) if self.current_note_id() else None,
             "Ctrl+H",
             "sync",

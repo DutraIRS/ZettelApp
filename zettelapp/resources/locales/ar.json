@@ -1201,5 +1201,18 @@
  "Write it at the end of the linked note": "اكتبه في نهاية الملاحظة المرتبطة",
  "Write it at the start of the linked note": "اكتبه في بداية الملاحظة المرتبطة",
  "Write links in both notes": "اكتب الروابط في الملاحظتين",
- "Reverse {name}": "{name} (عكسي)"
+ "Reverse {name}": "{name} (عكسي)",
+ "Close (Esc)": "إغلاق (Esc)",
+ "Find in note": "البحث في الملاحظة",
+ "Match case": "مطابقة حالة الأحرف",
+ "Next match (Enter)": "التطابق التالي (Enter)",
+ "No results": "لا نتائج",
+ "Previous match (Shift+Enter)": "التطابق السابق (Shift+Enter)",
+ "Replace": "استبدال",
+ "Replace (Ctrl+H)": "استبدال (Ctrl+H)",
+ "Replace all": "استبدال الكل",
+ "Replace with": "الاستبدال بـ",
+ "{i} of {n}": "{i} من {n}",
+ "{n} replaced": "تم استبدال {n}",
+ "Find and R&eplace in Note": "بحث واست&بدال في الملاحظة"
 }

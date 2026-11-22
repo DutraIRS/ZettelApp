@@ -1077,5 +1077,18 @@
  "Write it at the end of the linked note": "Escrevê-lo no fim da nota ligada",
  "Write it at the start of the linked note": "Escrevê-lo no começo da nota ligada",
  "Write links in both notes": "Escrever links nas duas notas",
- "Reverse {name}": "{name} (inverso)"
+ "Reverse {name}": "{name} (inverso)",
+ "Close (Esc)": "Fechar (Esc)",
+ "Find in note": "Localizar na nota",
+ "Match case": "Diferenciar maiúsculas",
+ "Next match (Enter)": "Próxima ocorrência (Enter)",
+ "No results": "Nenhum resultado",
+ "Previous match (Shift+Enter)": "Ocorrência anterior (Shift+Enter)",
+ "Replace": "Substituir",
+ "Replace (Ctrl+H)": "Substituir (Ctrl+H)",
+ "Replace all": "Substituir tudo",
+ "Replace with": "Substituir por",
+ "{i} of {n}": "{i} de {n}",
+ "{n} replaced": "{n} substituídas",
+ "Find and R&eplace in Note": "Localizar e &substituir na nota"
 }

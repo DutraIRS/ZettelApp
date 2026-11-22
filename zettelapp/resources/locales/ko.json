@@ -1046,5 +1046,18 @@
  "Write it at the end of the linked note": "링크된 노트의 끝에 쓰기",
  "Write it at the start of the linked note": "링크된 노트의 시작에 쓰기",
  "Write links in both notes": "두 노트 모두에 링크 쓰기",
- "Reverse {name}": "{name} (역방향)"
+ "Reverse {name}": "{name} (역방향)",
+ "Close (Esc)": "닫기 (Esc)",
+ "Find in note": "노트에서 찾기",
+ "Match case": "대소문자 구분",
+ "Next match (Enter)": "다음 일치 (Enter)",
+ "No results": "결과 없음",
+ "Previous match (Shift+Enter)": "이전 일치 (Shift+Enter)",
+ "Replace": "바꾸기",
+ "Replace (Ctrl+H)": "바꾸기 (Ctrl+H)",
+ "Replace all": "모두 바꾸기",
+ "Replace with": "바꿀 내용",
+ "{i} of {n}": "{i} / {n}",
+ "{n} replaced": "{n}개 바꿈",
+ "Find and R&eplace in Note": "노트에서 찾아 바꾸기(&R)"
 }

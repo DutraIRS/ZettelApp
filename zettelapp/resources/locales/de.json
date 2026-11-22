@@ -1077,5 +1077,18 @@
  "Write it at the end of the linked note": "Am Ende der verknüpften Notiz schreiben",
  "Write it at the start of the linked note": "Am Anfang der verknüpften Notiz schreiben",
  "Write links in both notes": "Links in beide Notizen schreiben",
- "Reverse {name}": "{name} (umgekehrt)"
+ "Reverse {name}": "{name} (umgekehrt)",
+ "Close (Esc)": "Schließen (Esc)",
+ "Find in note": "In Notiz suchen",
+ "Match case": "Groß-/Kleinschreibung beachten",
+ "Next match (Enter)": "Nächster Treffer (Eingabe)",
+ "No results": "Keine Treffer",
+ "Previous match (Shift+Enter)": "Vorheriger Treffer (Umschalt+Eingabe)",
+ "Replace": "Ersetzen",
+ "Replace (Ctrl+H)": "Ersetzen (Strg+H)",
+ "Replace all": "Alle ersetzen",
+ "Replace with": "Ersetzen durch",
+ "{i} of {n}": "{i} von {n}",
+ "{n} replaced": "{n} ersetzt",
+ "Find and R&eplace in Note": "In Notiz suchen und &ersetzen"
 }

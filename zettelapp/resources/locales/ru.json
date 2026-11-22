@@ -1108,5 +1108,18 @@
  "Write it at the end of the linked note": "Дописать в конец связанной заметки",
  "Write it at the start of the linked note": "Дописать в начало связанной заметки",
  "Write links in both notes": "Записывать связи в обе заметки",
- "Reverse {name}": "{name} (обратная)"
+ "Reverse {name}": "{name} (обратная)",
+ "Close (Esc)": "Закрыть (Esc)",
+ "Find in note": "Найти в заметке",
+ "Match case": "Учитывать регистр",
+ "Next match (Enter)": "Следующее совпадение (Enter)",
+ "No results": "Ничего не найдено",
+ "Previous match (Shift+Enter)": "Предыдущее совпадение (Shift+Enter)",
+ "Replace": "Заменить",
+ "Replace (Ctrl+H)": "Заменить (Ctrl+H)",
+ "Replace all": "Заменить все",
+ "Replace with": "Заменить на",
+ "{i} of {n}": "{i} из {n}",
+ "{n} replaced": "Заменено: {n}",
+ "Find and R&eplace in Note": "Найти и &заменить в заметке"
 }

@@ -1046,5 +1046,18 @@
  "Write it at the end of the linked note": "写在被链接笔记的末尾",
  "Write it at the start of the linked note": "写在被链接笔记的开头",
  "Write links in both notes": "在两篇笔记中都写入链接",
- "Reverse {name}": "{name}（反向）"
+ "Reverse {name}": "{name}（反向）",
+ "Close (Esc)": "关闭 (Esc)",
+ "Find in note": "在笔记中查找",
+ "Match case": "区分大小写",
+ "Next match (Enter)": "下一个匹配 (Enter)",
+ "No results": "无结果",
+ "Previous match (Shift+Enter)": "上一个匹配 (Shift+Enter)",
+ "Replace": "替换",
+ "Replace (Ctrl+H)": "替换 (Ctrl+H)",
+ "Replace all": "全部替换",
+ "Replace with": "替换为",
+ "{i} of {n}": "第 {i} 个，共 {n} 个",
+ "{n} replaced": "已替换 {n} 处",
+ "Find and R&eplace in Note": "在笔记中查找和替换(&R)"
 }
