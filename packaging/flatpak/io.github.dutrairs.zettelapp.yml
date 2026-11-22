@@ -1,4 +1,4 @@
-app-id: io.github.dutairs.zettelapp
+app-id: io.github.dutrairs.zettelapp
 runtime: org.freedesktop.Platform
 runtime-version: "24.08"
 sdk: org.freedesktop.Sdk
@@ -18,7 +18,7 @@ finish-args:
   - --talk-name=org.freedesktop.FileManager1
   - --talk-name=org.freedesktop.portal.Desktop
 # Validate and build locally with:
-#   flatpak-builder --force-clean --install-deps-from=flathub --install --user build/flatpak packaging/flatpak/io.github.dutairs.zettelapp.yml
+#   flatpak-builder --force-clean --install-deps-from=flathub --install --user build/flatpak packaging/flatpak/io.github.dutrairs.zettelapp.yml
 # When submitting to Flathub, pin this source to the release tag instead of a moving branch.
 modules:
   - name: zettelapp
@@ -27,12 +27,12 @@ modules:
       # The freedesktop 24.08 runtime ships Python 3.12; PySide6 and the other wheels are abi3 or
       # have CPython 3.12 builds. The app and the zettelapp-mcp entry point land in /app/bin.
       - pip3 install --verbose --root=/ --prefix=/app .
-      - install -Dm644 packaging/io.github.dutairs.zettelapp.desktop
-        /app/share/applications/io.github.dutairs.zettelapp.desktop
-      - install -Dm644 packaging/io.github.dutairs.zettelapp.metainfo.xml
-        /app/share/metainfo/io.github.dutairs.zettelapp.metainfo.xml
+      - install -Dm644 packaging/io.github.dutrairs.zettelapp.desktop
+        /app/share/applications/io.github.dutrairs.zettelapp.desktop
+      - install -Dm644 packaging/io.github.dutrairs.zettelapp.metainfo.xml
+        /app/share/metainfo/io.github.dutrairs.zettelapp.metainfo.xml
       - install -Dm644 zettelapp/resources/icon-256.png
-        /app/share/icons/hicolor/256x256/apps/io.github.dutairs.zettelapp.png
+        /app/share/icons/hicolor/256x256/apps/io.github.dutrairs.zettelapp.png
     sources:
       - type: git
         url: https://github.com/DutraIRS/ZettelApp.git

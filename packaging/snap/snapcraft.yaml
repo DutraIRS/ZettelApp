@@ -42,10 +42,10 @@ parts:
     # the file manager service talk to it); PySide6's wheels bundle their own Qt.
     override-build: |
       craftctl default
-      install -Dm644 packaging/io.github.dutairs.zettelapp.desktop \
-        "$CRAFT_PART_INSTALL/usr/share/applications/io.github.dutairs.zettelapp.desktop"
-      install -Dm644 packaging/io.github.dutairs.zettelapp.metainfo.xml \
-        "$CRAFT_PART_INSTALL/usr/share/metainfo/io.github.dutairs.zettelapp.metainfo.xml"
+      install -Dm644 packaging/io.github.dutrairs.zettelapp.desktop \
+        "$CRAFT_PART_INSTALL/usr/share/applications/io.github.dutrairs.zettelapp.desktop"
+      install -Dm644 packaging/io.github.dutrairs.zettelapp.metainfo.xml \
+        "$CRAFT_PART_INSTALL/usr/share/metainfo/io.github.dutrairs.zettelapp.metainfo.xml"
       install -m644 zettelapp/resources/icon-256.png \
-        "$CRAFT_PART_INSTALL/usr/share/icons/hicolor/256x256/apps/io.github.dutairs.zettelapp.png"
-    parse-info: [usr/share/metainfo/io.github.dutairs.zettelapp.metainfo.xml]
+        "$CRAFT_PART_INSTALL/usr/share/icons/hicolor/256x256/apps/io.github.dutrairs.zettelapp.png"
+    parse-info: [usr/share/metainfo/io.github.dutrairs.zettelapp.metainfo.xml]
