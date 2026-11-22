@@ -289,6 +289,15 @@ def test_renderer_blocks_unsafe_content(vault, sample):
     assert 'href="https://example.com"' in out
 
 
+def test_a_line_of_dashes_is_always_a_rule():
+    r = NoteRenderer(lambda _t: None)
+    # Under a line of text, --- would be a setext heading; the editor shows it as a rule.
+    out = r.render("---\nSee also\n---\n\n    indented, not code")
+    assert out.count("<hr />") == 2
+    assert "<h2>" not in out and "<pre>" not in out
+    assert "<p>indented, not code</p>" in out
+
+
 def test_malicious_archives_are_rejected(vault, tmp_path):
     evil = tmp_path / "evil.zip"
     with zipfile.ZipFile(evil, "w") as zf:

@@ -84,6 +84,10 @@ class NoteRenderer:
         self.math_href = math_href
         self.md = MarkdownIt("commonmark", {"html": False, "breaks": True, "typographer": False})
         self.md.enable(["table", "strikethrough"])
+        # Read the text the way the editor shows it: a line of --- is always a rule (not an
+        # underline turning the line above into a heading), and indented lines are ordinary
+        # text (code is fenced with ```). Otherwise the same --- did different things.
+        self.md.disable(["lheading", "code"])
         # markdown-it drops file: links outright; let them through to _target_href,
         # which decides what every link may point to.
         validate = self.md.validateLink
