@@ -70,6 +70,9 @@ class Question:
     card_id: int | None = None
     choices: list[str] = field(default_factory=list)
     correct: int = -1
+    # A cloze answer is the prompt with the blank filled in, so it replaces the prompt
+    # rather than repeating the whole text below it.
+    in_place: bool = False
 
 
 def grade_typed(given: str, expected: str) -> tuple[float, str]:
@@ -95,7 +98,13 @@ def _card_items(card: Flashcard) -> list[tuple[str, str, str]]:
                 m.group(2) for m in CLOZE_RE.finditer(card.front) if int(m.group(1)) == number
             ]
             short = ", ".join(answers)
-            items.append((cloze_front(card.front, number), cloze_back(card.front), short))
+            items.append(
+                (
+                    cloze_front(card.front, number, emphasize=True),
+                    cloze_back(card.front, number),
+                    short,
+                )
+            )
         return items
     return [(card.front, card.back, card.back)]
 
@@ -159,7 +168,15 @@ def build_quiz(
             questions.append(Question("typed", prompt, short, note.id, note.display_title, card.id))
         else:
             questions.append(
-                Question("flashcard", prompt, answer, note.id, note.display_title, card.id)
+                Question(
+                    "flashcard",
+                    prompt,
+                    answer,
+                    note.id,
+                    note.display_title,
+                    card.id,
+                    in_place=card.kind == "cloze",
+                )
             )
     return questions
 

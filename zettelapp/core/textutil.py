@@ -332,19 +332,29 @@ def extract_inline_cards(body: str) -> list[InlineCard]:
     return cards
 
 
-def cloze_front(text: str, number: int | None = None) -> str:
-    """Hide cloze deletions ("[...]" or the hint) for quizzing."""
+def cloze_front(text: str, number: int | None = None, emphasize: bool = False) -> str:
+    """Hide cloze deletions ("[...]" or the hint) for quizzing; *emphasize* makes the
+    blanks bold so they stand out in a long text or a table."""
 
     def repl(m: re.Match) -> str:
         if number is not None and int(m.group(1)) != number:
             return m.group(2)
-        return f"[{m.group(3)}]" if m.group(3) else "[…]"
+        blank = f"[{m.group(3)}]" if m.group(3) else "[…]"
+        return f"**{blank}**" if emphasize else blank
 
     return CLOZE_RE.sub(repl, text)
 
 
-def cloze_back(text: str) -> str:
-    return CLOZE_RE.sub(lambda m: m.group(2), text)
+def cloze_back(text: str, number: int | None = None) -> str:
+    """The text with every deletion filled in; with *number*, that deletion's answers are
+    bold, so the answer shows where the blank was."""
+
+    def repl(m: re.Match) -> str:
+        if number is not None and int(m.group(1)) == number:
+            return f"**{m.group(2)}**"
+        return m.group(2)
+
+    return CLOZE_RE.sub(repl, text)
 
 
 def cloze_numbers(text: str) -> list[int]:

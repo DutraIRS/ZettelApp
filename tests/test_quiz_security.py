@@ -2,7 +2,7 @@ from datetime import date
 
 import pytest
 
-from zettelapp.core.models import ReviewState, sanitize_mindmap
+from zettelapp.core.models import Flashcard, Note, ReviewState, sanitize_mindmap
 from zettelapp.core.quiz import build_quiz, grade_typed, schedule
 from zettelapp.core.security import (
     UnsafeInputError,
@@ -34,6 +34,19 @@ def test_typed_grading():
     assert grade_typed("hermann ebinghaus", "Hermann Ebbinghaus")[1] == "correct"
     assert grade_typed("Ebbing", "Hermann Ebbinghaus")[1] == "wrong"
     assert grade_typed("", "x")[1] == "wrong"
+
+
+def test_cloze_cards_mark_the_blank_and_fill_it_in_place():
+
+    note = Note(id="20260101000000", title="Declension", body="")
+    table = "Case | Sg\n--- | ---\nNom. | ros-{{c1::a}}\nGen. | ros-{{c2::ae}}"
+    card = Flashcard(7, note.id, table, "", "cloze")
+    questions = build_quiz("flashcards", {note.id: note}, [card], seed=1)
+    by_answer = {q.answer: q for q in questions}
+    first = next(q for q in questions if "**[…]**" in q.prompt and "ros-ae" in q.prompt)
+    assert first.in_place
+    assert "ros-**a**" in first.answer and "ros-ae" in first.answer
+    assert len(by_answer) == 2
 
 
 def test_quiz_modes(vault, sample):

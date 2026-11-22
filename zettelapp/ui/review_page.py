@@ -162,15 +162,15 @@ class ReviewPage(QWidget):
         card = Card(margins=28)
         self.prompt = NotePreview(self._asset_path)
         self.prompt.document().setDefaultFont(theme.ui_font(15))
+        # The prompt and answer share the card's height: a capped prompt hid the blank of a
+        # cloze in a table below its fold.
         self.prompt.setMinimumHeight(110)
-        self.prompt.setMaximumHeight(280)
         self.prompt.noteRequested.connect(self.openNote)
-        card.body.addWidget(self.prompt)
+        card.body.addWidget(self.prompt, 3)
         self.answer = NotePreview(self._asset_path)
         self.answer.document().setDefaultFont(theme.ui_font(12))
-        self.answer.setMaximumHeight(260)
         self.answer.noteRequested.connect(self.openNote)
-        card.body.addWidget(self.answer)
+        card.body.addWidget(self.answer, 2)
         self.source = link_button("")
         self.source.clicked.connect(
             lambda: self.openNote.emit(self.questions[self.position].note_id)
@@ -184,7 +184,6 @@ class ReviewPage(QWidget):
         card.body.addWidget(self.typed)
         self.choices_row = QVBoxLayout()
         card.body.addLayout(self.choices_row)
-        card.body.addStretch(1)
         layout.addWidget(card, 1)
         buttons = QHBoxLayout()
         buttons.addStretch(1)
@@ -299,6 +298,8 @@ class ReviewPage(QWidget):
         q = self.questions[self.position]
         self.progress.setText(f"{self.position + 1} / {len(self.questions)}")
         self.prompt.show_markdown(q.prompt)
+        self.prompt.verticalScrollBar().setValue(0)
+        self._scroll_to_blank()
         self.answer.setVisible(False)
         self.feedback.setText("")
         self.source.setText(_("From: {note_title}").format(note_title=q.note_title))
@@ -324,10 +325,27 @@ class ReviewPage(QWidget):
             b.setVisible(False)
         self.next_button.setVisible(False)
 
+    def _scroll_to_blank(self) -> None:
+        """Bring a cloze's blank into view when the text is longer than the card."""
+        if not self.questions[self.position].in_place:
+            return
+        doc = self.prompt.document()
+        found = doc.find("[")
+        while not found.isNull() and not found.charFormat().font().bold():
+            found = doc.find("[", found)
+        if not found.isNull():
+            self.prompt.setTextCursor(found)
+            self.prompt.ensureCursorVisible()
+            found.clearSelection()
+            self.prompt.setTextCursor(found)
+
     def _reveal(self) -> None:
         q = self.questions[self.position]
-        self.answer.show_markdown(q.answer)
-        self.answer.setVisible(True)
+        if q.in_place:  # a cloze: fill in the blank where it is, keeping the scroll
+            self.prompt.show_markdown(q.answer)
+        else:
+            self.answer.show_markdown(q.answer)
+            self.answer.setVisible(True)
         self.source.setVisible(True)
         self.show_button.setVisible(False)
         if q.kind == "flashcard":
