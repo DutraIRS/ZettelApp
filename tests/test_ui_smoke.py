@@ -478,7 +478,7 @@ def test_options_page_edits_link_types_and_their_styles(window, monkeypatch):
     dialog.type_name.setText("Inspired by")
     dialog.type_name.textEdited.emit("Inspired by")
     dialog.type_directed.setChecked(False)
-    assert not dialog.type_arrow.isEnabled() and not dialog.type_reverse.isEnabled()
+    assert dialog.type_arrow.isHidden() and dialog.type_reverse.isHidden()
     dialog.type_line.setCurrentIndex(dialog.type_line.findData("dotted"))
     assert dialog.apply()
 
@@ -932,3 +932,21 @@ def test_ctrl_f_finds_in_the_note_from_its_text_and_in_all_notes_otherwise(windo
     assert window.list.search.hasFocus()
     window.editor.show_find(replace=True)  # Ctrl+H
     assert bar.replace_row.isVisible()
+
+
+def test_an_undirected_link_type_has_no_reverse_name(window):
+    from zettelapp.core.models import LinkType
+    from zettelapp.ui.settings_dialog import OptionsDialog
+
+    options = OptionsDialog(window, "Link types")
+    options.show()
+    options._add_type()
+    options.type_directed.setChecked(False)
+    assert not options.type_reverse.isVisible()
+    options.type_directed.setChecked(True)
+    assert options.type_reverse.isVisible()
+    options.reject()
+    saved = window.vault.save_link_type(
+        LinkType("", "Linkoso", "Linkoso (reverse)", "#123456", False)
+    )
+    assert saved.inverse_label == "Linkoso"

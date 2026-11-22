@@ -941,9 +941,10 @@ class Vault:
         if lt.arrow not in ARROW_TIPS:
             lt.arrow = "triangle"
         lt.label = lt.label.strip()[:60] or lt.id
-        lt.inverse_label = lt.inverse_label.strip()[:60] or (
-            default_reverse_name(lt.label)[:60] if lt.directed else lt.label
-        )
+        if lt.directed:
+            lt.inverse_label = lt.inverse_label.strip()[:60] or default_reverse_name(lt.label)[:60]
+        else:
+            lt.inverse_label = lt.label  # an undirected type reads the same from both notes
         existing = self.conn.execute(
             "SELECT builtin, position FROM link_types WHERE id = ?", (lt.id,)
         ).fetchone()
