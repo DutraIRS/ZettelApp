@@ -40,7 +40,8 @@ All notable changes to ZettelApp are documented here. The format follows
   pull request, and releases carry the `.deb` and `.tar.gz` alongside the Windows installer.
 - **Reverse names in the text**: with a directed type such as *Discusses* / *Discussed by*, a note can
   write `discussed_by::[[A]]` for the link A → this note. Types are also written by their name
-  (`apoia::`), and built-in types answer to their English names in any language.
+  (`apoia::`), and built-in types answer to their English names in any language. A directed type
+  whose reverse isn't named yet reads "Reverse Nameon", and `reverse_nameon::` always works.
 - **Write links in both notes** (*Options ▸ Link types*, off by default): a `[[link]]` added in a
   note's text is also written in the linked note's text as seen from its side (`discussed_by::[[A]]`
   for `discusses::[[B]]`), at its end or start, and taken out again when the link is deleted.

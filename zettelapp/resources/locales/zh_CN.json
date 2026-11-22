@@ -521,7 +521,6 @@
  "New flashcard": "新建闪卡",
  "New idea": "新想法",
  "New link type": "新链接类型",
- "New link type (reverse)": "新链接类型(反向)",
  "New literature note": "新建文献笔记",
  "New note": "新笔记",
  "New note (Ctrl+N)": "新建笔记 (Ctrl+N)",
@@ -1046,5 +1045,6 @@
  "When a note links another in its text:": "当笔记在正文中链接另一篇笔记时：",
  "Write it at the end of the linked note": "写在被链接笔记的末尾",
  "Write it at the start of the linked note": "写在被链接笔记的开头",
- "Write links in both notes": "在两篇笔记中都写入链接"
+ "Write links in both notes": "在两篇笔记中都写入链接",
+ "Reverse {name}": "{name}（反向）"
 }

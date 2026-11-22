@@ -526,7 +526,6 @@
  "New flashcard": "Nueva tarjeta",
  "New idea": "Nueva idea",
  "New link type": "Nuevo tipo de enlace",
- "New link type (reverse)": "Nuevo tipo de enlace (inverso)",
  "New literature note": "Nueva nota bibliográfica",
  "New note": "Nueva nota",
  "New note (Ctrl+N)": "Nueva nota (Ctrl+N)",
@@ -1077,5 +1076,6 @@
  "When a note links another in its text:": "Cuando una nota enlaza otra en su texto:",
  "Write it at the end of the linked note": "Escribirlo al final de la nota enlazada",
  "Write it at the start of the linked note": "Escribirlo al principio de la nota enlazada",
- "Write links in both notes": "Escribir los enlaces en ambas notas"
+ "Write links in both notes": "Escribir los enlaces en ambas notas",
+ "Reverse {name}": "{name} (inverso)"
 }

@@ -521,7 +521,6 @@
  "New flashcard": "新しいフラッシュカード",
  "New idea": "新しいアイデア",
  "New link type": "新しいリンクの種類",
- "New link type (reverse)": "新しいリンクの種類 (逆方向)",
  "New literature note": "新しい文献ノート",
  "New note": "新規ノート",
  "New note (Ctrl+N)": "新規ノート (Ctrl+N)",
@@ -1046,5 +1045,6 @@
  "When a note links another in its text:": "ノートが本文で別のノートにリンクしたとき：",
  "Write it at the end of the linked note": "リンク先のノートの末尾に書き込む",
  "Write it at the start of the linked note": "リンク先のノートの先頭に書き込む",
- "Write links in both notes": "両方のノートにリンクを書き込む"
+ "Write links in both notes": "両方のノートにリンクを書き込む",
+ "Reverse {name}": "{name}（逆）"
 }

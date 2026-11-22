@@ -209,6 +209,17 @@ DEFAULT_LINK_TYPES = [
 ]
 
 
+def default_reverse_name(name: str) -> str:
+    """The reverse name a directed type gets until it is given one: "Reverse Nameon"."""
+    return _("Reverse {name}").format(name=name)
+
+
+def reverse_unnamed(lt: LinkType) -> bool:
+    """Whether *lt*'s reverse name was never chosen: empty, the name itself, or the default."""
+    reverse = lt.inverse_label.strip()
+    return reverse in ("", lt.label.strip(), default_reverse_name(lt.label.strip()))
+
+
 def link_type_tokens(types: Iterable[LinkType]) -> dict[str, tuple[str, bool]]:
     """What may stand before :: in a [[link]] -> (type id, reversed).
 
@@ -232,6 +243,8 @@ def link_type_tokens(types: Iterable[LinkType]) -> dict[str, tuple[str, bool]]:
         if lt.directed:
             for name in inverses:
                 reverse.setdefault(slugify_type(name), (lt.id, True))
+            # Always works, in any language and before the reverse is named: reverse_nameon.
+            reverse.setdefault(f"reverse_{lt.id}", (lt.id, True))
     tokens = {**reverse, **forward}  # a forward name wins over a reverse one
     tokens.pop("", None)
     return tokens
@@ -242,9 +255,12 @@ def reverse_token(lt: LinkType, types: Iterable[LinkType]) -> str | None:
     type (None if that name doesn't unambiguously mean it), the id of an undirected one."""
     if not lt.directed:
         return lt.id
+    if not lt.id:
+        return None
     tokens = link_type_tokens(types)
-    for name in (lt.inverse_label, *(t.inverse_label for t in DEFAULT_LINK_TYPES if t.id == lt.id)):
-        token = slugify_type(name)
+    names = [] if reverse_unnamed(lt) else [lt.inverse_label]
+    names += [t.inverse_label for t in DEFAULT_LINK_TYPES if t.id == lt.id]
+    for token in [slugify_type(name) for name in names] + [f"reverse_{lt.id}"]:
         if token and tokens.get(token) == (lt.id, True):
             return token
     return None

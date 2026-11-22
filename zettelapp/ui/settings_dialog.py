@@ -50,7 +50,13 @@ from zettelapp.core.llm import (
     list_models,
     test_connection,
 )
-from zettelapp.core.models import LinkType, least_used_line_style, reverse_token
+from zettelapp.core.models import (
+    LinkType,
+    default_reverse_name,
+    least_used_line_style,
+    reverse_token,
+    reverse_unnamed,
+)
 from zettelapp.core.suggest import FEATURES
 from zettelapp.core.textutil import slugify_type
 from zettelapp.i18n import N_, _, n_
@@ -720,9 +726,14 @@ class OptionsDialog(QDialog):
         lt = self._current_type()
         if lt is None or self._loading_type:
             return
+        # Until the reverse is named, it follows the name: "Nameon" reads "Reverse Nameon".
+        follows = self.sender() is not self.type_reverse and reverse_unnamed(lt)
         lt.label = self.type_name.text()
         lt.inverse_label = self.type_reverse.text()
         lt.directed = self.type_directed.isChecked()
+        if follows and lt.directed:
+            lt.inverse_label = default_reverse_name(lt.label.strip())
+            self.type_reverse.setText(lt.inverse_label)
         lt.line_style = self.type_line.currentData()
         lt.arrow = self.type_arrow.currentData()
         self._refresh_type()
@@ -756,7 +767,10 @@ class OptionsDialog(QDialog):
             self.type_arrow.setItemIcon(i, sample_icon(color, "solid", self.type_arrow.itemData(i)))
         self.type_sample.set_type(lt)
         type_id = lt.id or slugify_type(lt.label)
-        reverse = reverse_token(lt, self._types) if type_id and lt.directed else None
+        reverse = None
+        if type_id and lt.directed:
+            named = replace(lt, id=type_id)  # a new type gets its id when saved
+            reverse = reverse_token(named, [named if t is lt else t for t in self._types])
         if not type_id:
             hint = _("Give the link type a name.")
         elif reverse:
@@ -783,7 +797,7 @@ class OptionsDialog(QDialog):
         lt = LinkType(
             "",
             _("New link type"),
-            _("New link type (reverse)"),
+            default_reverse_name(_("New link type")),
             min(theme.CATEGORICAL_LIGHT, key=used.count),
             line_style=least_used_line_style(self._types),
         )

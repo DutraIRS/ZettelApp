@@ -163,6 +163,24 @@ def test_mirroring_at_the_top_and_only_when_asked(vault):
     assert vault.get_note(b.id).body == "supported_by::[[A]]\n\nSome text."
 
 
+def test_an_unnamed_reverse_is_reverse_name_and_reads_as_reverse_slug(vault):
+    from zettelapp.core.models import LinkType, link_type_tokens, reverse_token
+
+    lt = vault.save_link_type(LinkType("", "Nameon", "", "#123456"))
+    assert (lt.id, lt.inverse_label) == ("nameon", "Reverse Nameon")
+    types = vault.link_types()
+    assert reverse_token(lt, types) == "reverse_nameon"
+    assert link_type_tokens(types)["reverse_nameon"] == ("nameon", True)
+    a = vault.create_note("A")
+    b = vault.create_note("B", "reverse_nameon::[[A]]")
+    assert [(l.src, l.type) for l in vault.links_to(b.id)] == [(a.id, "nameon")]
+    # A reverse name you choose is used instead, and reverse_nameon keeps working.
+    lt.inverse_label = "Named by"
+    vault.save_link_type(lt)
+    assert reverse_token(lt, vault.link_types()) == "named_by"
+    assert link_type_tokens(vault.link_types())["reverse_nameon"] == ("nameon", True)
+
+
 def test_search_with_fts_and_tags(sample, vault):
     assert sample["b"].id in vault.search("forget")
     assert vault.search("tag:cooking") == [sample["d"].id]

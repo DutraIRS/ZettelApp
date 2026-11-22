@@ -546,7 +546,6 @@
  "New flashcard": "بطاقة تعليمية جديدة",
  "New idea": "فكرة جديدة",
  "New link type": "نوع رابط جديد",
- "New link type (reverse)": "نوع رابط جديد (عكسي)",
  "New literature note": "ملاحظة مرجعية جديدة",
  "New note": "ملاحظة جديدة",
  "New note (Ctrl+N)": "ملاحظة جديدة (Ctrl+N)",
@@ -1201,5 +1200,6 @@
  "When a note links another in its text:": "عندما تربط ملاحظةٌ ملاحظةً أخرى في نصها:",
  "Write it at the end of the linked note": "اكتبه في نهاية الملاحظة المرتبطة",
  "Write it at the start of the linked note": "اكتبه في بداية الملاحظة المرتبطة",
- "Write links in both notes": "اكتب الروابط في الملاحظتين"
+ "Write links in both notes": "اكتب الروابط في الملاحظتين",
+ "Reverse {name}": "{name} (عكسي)"
 }

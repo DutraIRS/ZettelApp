@@ -889,3 +889,22 @@ def test_note_list_orders_by_closeness_to_the_open_note(window):
     titles = [vault.get_note(i).title for i in order]
     assert titles[:2] == ["Market", "Linked"]
     assert settings.get(settings.NOTES_SORT) == "distance"
+
+
+def test_a_new_link_types_reverse_follows_its_name_until_named(window):
+    from PySide6.QtTest import QTest
+
+    from zettelapp.ui.settings_dialog import OptionsDialog
+
+    options = OptionsDialog(window, "Link types")
+    options._add_type()
+    options.type_directed.setChecked(True)
+    options.type_name.selectAll()
+    QTest.keyClicks(options.type_name, "Nameon")
+    assert options.type_reverse.text() == "Reverse Nameon"
+    assert "reverse_nameon::[[…]]" in options.type_hint.text()
+    options.type_reverse.selectAll()
+    QTest.keyClicks(options.type_reverse, "Named by")
+    QTest.keyClicks(options.type_name, "s")
+    assert options.type_reverse.text() == "Named by"  # named: no longer follows
+    options.reject()

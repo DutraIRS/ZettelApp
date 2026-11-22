@@ -34,6 +34,7 @@ from zettelapp.core.models import (
     ReviewState,
     TagGraph,
     TagRelationship,
+    default_reverse_name,
     link_type_tokens,
     reverse_token,
     sanitize_mindmap,
@@ -940,7 +941,9 @@ class Vault:
         if lt.arrow not in ARROW_TIPS:
             lt.arrow = "triangle"
         lt.label = lt.label.strip()[:60] or lt.id
-        lt.inverse_label = lt.inverse_label.strip()[:60] or lt.label
+        lt.inverse_label = lt.inverse_label.strip()[:60] or (
+            default_reverse_name(lt.label)[:60] if lt.directed else lt.label
+        )
         existing = self.conn.execute(
             "SELECT builtin, position FROM link_types WHERE id = ?", (lt.id,)
         ).fetchone()
