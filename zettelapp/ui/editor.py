@@ -25,7 +25,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
-from zettelapp import i18n
+from zettelapp import i18n, settings
 from zettelapp.core.models import Flashcard, Note, new_mindmap_node
 from zettelapp.core.security import (
     UnsafeInputError,
@@ -398,7 +398,9 @@ class NoteEditor(QWidget):
         if not self._dirty or self.note is None or self.window.vault is None:
             return
         note = self.collect()
-        self.window.vault.save_note(note, manual_tags=self.tags.tags())
+        self.window.vault.save_note(
+            note, manual_tags=self.tags.tags(), mirror=settings.get(settings.LINK_MIRROR)
+        )
         self._dirty = False
         self._refresh_meta()
         self._refresh_cards()

@@ -35,6 +35,7 @@ from zettelapp.core.models import (
     TagGraph,
     TagRelationship,
     link_type_tokens,
+    reverse_token,
     sanitize_mindmap,
     utc_now,
 )
@@ -47,6 +48,7 @@ from zettelapp.core.security import (
     sniff_image_type,
 )
 from zettelapp.core.textutil import (
+    WIKILINK_RE,
     extract_hashtags,
     extract_inline_cards,
     find_wikilinks,
@@ -185,6 +187,36 @@ def _clean_alarm(value: str | None) -> str:
 
 def _pair(a: str, b: str) -> tuple[str, str]:
     return (a, b) if a <= b else (b, a)
+
+
+def _links_only(line: str) -> bool:
+    """A line holding nothing but [[links]] (a "see also" line)."""
+    rest = WIKILINK_RE.sub("", line).strip(" \t,;·")
+    return bool(line.strip()) and not rest
+
+
+def _add_line(body: str, line: str, where: str) -> str:
+    """*body* with *line* on its own line at its top or bottom; a blank line separates it
+    from ordinary text, so it never joins the paragraph next to it."""
+    body = body or ""
+    if not body.strip():
+        return line
+    if where == "top":
+        lines = body.lstrip("\n").split("\n")
+        joint = "\n" if _links_only(lines[0]) else "\n\n"
+        return line + joint + body.lstrip("\n")
+    lines = body.rstrip().split("\n")
+    joint = "\n" if _links_only(lines[-1]) else "\n\n"
+    return body.rstrip() + joint + line
+
+
+def _remove_line(body: str, line: str) -> str:
+    """*body* without the lines that are exactly *line*, and without the blank lines that
+    leaves at either end."""
+    kept = [l for l in (body or "").split("\n") if l.strip() != line]
+    if len(kept) == len((body or "").split("\n")):
+        return body
+    return "\n".join(kept).strip("\n")
 
 
 class Vault:
@@ -432,17 +464,30 @@ class Vault:
         return note
 
     def save_note(
-        self, note: Note, touch: bool = True, manual_tags: Iterable[str] | None = None
+        self,
+        note: Note,
+        touch: bool = True,
+        manual_tags: Iterable[str] | None = None,
+        mirror: str = "",
     ) -> Note:
         """Save *note*. #tags in its text become tags; *manual_tags*, when given, are the
-        tags added by hand (the editor knows them), otherwise they are inferred."""
+        tags added by hand (the editor knows them), otherwise they are inferred.
+
+        *mirror* ("top" or "bottom") also writes each [[link]] added to the text into the
+        linked note's text, at that end, as that note would write it (B gets
+        discussed_by::[[A]] when A writes discusses::[[B]]), and takes it out again when
+        the link leaves the text. Only edits made by hand ask for this."""
         with self.transaction():
-            self._write_note(note, touch, manual_tags)
+            self._write_note(note, touch, manual_tags, mirror)
         self._changed("notes")
         return note
 
     def _write_note(
-        self, note: Note, touch: bool, manual_tags: Iterable[str] | None = None
+        self,
+        note: Note,
+        touch: bool,
+        manual_tags: Iterable[str] | None = None,
+        mirror: str = "",
     ) -> None:
         note.title = (note.title or "")[:MAX_TITLE]
         note.body = (note.body or "")[:MAX_BODY]
@@ -502,7 +547,7 @@ class Vault:
                 "INSERT INTO notes_fts (note_id, title, body, tags) VALUES (?, ?, ?, ?)",
                 (note.id, note.title, note.body, " ".join(note.tags)),
             )
-        self._sync_inline_links(note)
+        self._sync_inline_links(note, mirror=mirror)
         self._sync_inline_cards(note)
         if fold(old_title.strip()) != fold(note.title.strip()):
             self._resync_references({old_title.strip(), note.title.strip()} - {""}, note.id)
@@ -1039,8 +1084,9 @@ class Vault:
             (incoming if reverse else outgoing).add((other, type_id))
         return outgoing, incoming
 
-    def _sync_inline_links(self, note: Note, follow: bool = True) -> None:
-        """Make the links written in *note*'s text match the text."""
+    def _sync_inline_links(self, note: Note, follow: bool = True, mirror: str = "") -> None:
+        """Make the links written in *note*'s text match the text (see save_note for
+        *mirror*)."""
         want_out, want_in = self._text_links(note)
         have_out = {
             (r["dst"], r["type"])
@@ -1081,6 +1127,15 @@ class Vault:
                 "VALUES (?, ?, ?, 'inline-reverse', ?)",
                 (src, note.id, link_type, now),
             )
+        if mirror in ("top", "bottom"):
+            self._mirror_links(
+                note,
+                added=[(o, t, False) for o, t in want_out - have_out]
+                + [(o, t, True) for o, t in want_in - have_in],
+                removed=[(o, t, False) for o, t in have_out - want_out]
+                + [(o, t, True) for o, t in have_in - want_in],
+                where=mirror,
+            )
         # Both notes may write the same link (A: discusses::[[B]], B: discussed_by::[[A]]),
         # which is stored once, under whichever text came first. When one text drops it, the
         # other note's text may still declare it: let that note put it back.
@@ -1091,6 +1146,64 @@ class Vault:
                 ).fetchone()
                 if row is not None:
                     self._sync_inline_links(Note(id=other, body=row["body"]), follow=False)
+
+    def _mirror_line(self, note: Note, other: str, type_id: str, reverse: bool) -> str | None:
+        """The line *other* would write for the link *note* writes to it (reverse: written
+        with the type's reverse name), or None if it can't be written unambiguously."""
+        types = self.link_types()
+        lt = next((t for t in types if t.id == type_id), None)
+        if lt is None:
+            return None
+        # Seen from the other end, a forward link reads backwards and a reverse one forwards.
+        token = lt.id if reverse else reverse_token(lt, types)
+        if token is None:
+            return None
+        title = (note.title or "").strip()
+        same = self.conn.execute(
+            "SELECT COUNT(*) FROM notes WHERE deleted = 0 AND title = ? COLLATE NOCASE", (title,)
+        ).fetchone()[0]
+        plain = title and same == 1 and not re.search(r"[\[\]|#\n]", title)
+        return f"{token}::[[{title if plain else note.id}]]"
+
+    def _mirror_links(
+        self,
+        note: Note,
+        added: list[tuple[str, str, bool]],
+        removed: list[tuple[str, str, bool]],
+        where: str,
+    ) -> None:
+        """Write links added to *note*'s text into the linked notes' texts, and take out
+        the lines written that way for links that left it."""
+        undirected = {t.id for t in self.link_types() if not t.directed}
+        changed: dict[str, Note] = {}
+        for other, type_id, reverse, adding in [(*a, True) for a in added] + [
+            (*r, False) for r in removed
+        ]:
+            target = changed.get(other) or self.get_note(other)
+            if target is None or target.deleted:
+                continue
+            line = self._mirror_line(note, other, type_id, reverse)
+            if line is None:
+                continue
+            if adding:
+                # Already said there, in either direction for an undirected type?
+                out, inc = self._text_links(target)
+                said = inc if not reverse else out
+                if (note.id, type_id) in said or (
+                    type_id in undirected and (note.id, type_id) in out | inc
+                ):
+                    continue
+                target.body = _add_line(target.body, line, where)
+            else:
+                body = _remove_line(target.body, line)
+                if body == target.body:
+                    continue
+                target.body = body
+            changed[other] = target
+        for target in changed.values():
+            self._write_note(target, touch=True)
+        if changed:
+            self._changed("notes")
 
     # --- assets -----------------------------------------------------------
 

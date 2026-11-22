@@ -652,6 +652,31 @@ class OptionsDialog(QDialog):
         editor_lay.addStretch(1)
         body.addWidget(editor, 1)
         lay.addLayout(body, 1)
+        mirror_row = QHBoxLayout()
+        self.link_mirror = QComboBox()
+        self.link_mirror.setAccessibleName(_("Write links in both notes"))
+        for text, value in (
+            (_("Don't change the linked note"), ""),
+            (_("Write it at the end of the linked note"), "bottom"),
+            (_("Write it at the start of the linked note"), "top"),
+        ):
+            self.link_mirror.addItem(text, value)
+        self.link_mirror.setCurrentIndex(
+            max(0, self.link_mirror.findData(settings.get(settings.LINK_MIRROR)))
+        )
+        mirror_row.addWidget(label(_("When a note links another in its text:")))
+        mirror_row.addWidget(self.link_mirror, 1)
+        lay.addLayout(mirror_row)
+        lay.addWidget(
+            label(
+                _(
+                    "The linked note gets the same link seen from its side (discussed_by::[[A]] "
+                    "for discusses::[[B]]), and loses it again when you delete the link."
+                ),
+                "caption",
+                wrap=True,
+            )
+        )
 
         self._removed_types: list[str] = []
         self._types = [
@@ -1257,6 +1282,7 @@ class OptionsDialog(QDialog):
         settings.put(settings.EDITOR_FONT_SIZE, self.font_size.value())
         settings.put(settings.AUTOSAVE_MS, self.autosave.value())
         settings.put(settings.UPDATE_CHECK, self.update_check.isChecked())
+        settings.put(settings.LINK_MIRROR, self.link_mirror.currentData())
         settings.put(settings.SUGGEST_ENABLED, self.suggest_on.isChecked())
         settings.put(
             settings.SUGGEST_FEATURES, [k for k, b in self.feature_boxes.items() if b.isChecked()]

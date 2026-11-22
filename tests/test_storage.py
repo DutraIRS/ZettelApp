@@ -126,6 +126,43 @@ def test_link_type_names_in_the_text(vault):
     assert reverse_token(next(t for t in types if t.id == "related"), types) == "related"
 
 
+def test_mirroring_writes_the_link_in_the_other_note_and_takes_it_out(vault):
+    from zettelapp.core.models import LinkType
+
+    vault.save_link_type(LinkType("discusses", "Discusses", "Discussed by", "#800080"))
+    a = vault.create_note("Gramsci", "Organic intellectuals.")
+    b = vault.create_note("Paper", "An essay.\n\n[[Gramsci]]")
+    c = vault.create_note("Bourdieu", "")
+    a.body = "Organic intellectuals. discusses::[[Paper]] [[Bourdieu]]"
+    vault.save_note(a, mirror="bottom")
+    paper, bourdieu = vault.get_note(b.id), vault.get_note(c.id)
+    # A see-also line of links gets the new link right under it; plain text gets a gap.
+    assert paper.body == "An essay.\n\n[[Gramsci]]\ndiscussed_by::[[Gramsci]]"
+    assert bourdieu.body == "related::[[Gramsci]]"  # the other end of an undirected link
+    assert [(l.src, l.type) for l in vault.links_to(b.id)] == [(a.id, "discusses")]
+
+    vault.save_note(vault.get_note(a.id), mirror="bottom")  # nothing new: nothing written
+    assert vault.get_note(b.id).body == paper.body
+
+    a.body = "Organic intellectuals."
+    vault.save_note(a, mirror="bottom")
+    assert vault.get_note(b.id).body == "An essay.\n\n[[Gramsci]]"
+    assert vault.get_note(c.id).body == ""
+
+
+def test_mirroring_at_the_top_and_only_when_asked(vault):
+    a = vault.create_note("A")
+    b = vault.create_note("B", "Some text.")
+    a.body = "supports::[[B]]"
+    vault.save_note(a)  # imports, the MCP server and the like don't mirror
+    assert vault.get_note(b.id).body == "Some text."
+    a.body = ""
+    vault.save_note(a)
+    a.body = "supports::[[B]]"
+    vault.save_note(a, mirror="top")
+    assert vault.get_note(b.id).body == "supported_by::[[A]]\n\nSome text."
+
+
 def test_search_with_fts_and_tags(sample, vault):
     assert sample["b"].id in vault.search("forget")
     assert vault.search("tag:cooking") == [sample["d"].id]

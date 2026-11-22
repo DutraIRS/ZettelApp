@@ -43,6 +43,7 @@ UPDATE_NOTIFIED = "updates/notifiedVersion"  # the newest version already announ
 QUEST_STATE = "quest/state"  # "" (never offered) | declined | active | paused | finished
 QUEST_CHAPTER = "quest/chapter"  # key of the adventure's current chapter
 QUEST_CLUES = "quest/clues"  # chapters solved by doing them (not skipped)
+LINK_MIRROR = "links/mirror"  # "" | top | bottom: also write a new [[link]] in the other note
 GRAPH_HIDDEN_TYPES = "graph/hiddenTypes"  # link types left out of the graph
 GRAPH_HIDDEN_TAGS = "graph/hiddenTags"  # notes with these tags are left out of the graph
 GRAPH_UNGROUPED_TAGS = "graph/ungroupedTags"  # tags that don't form groups or clusters
@@ -84,6 +85,7 @@ DEFAULTS: dict[str, Any] = {
     UPDATE_NOTIFIED: "",
     QUEST_STATE: "",
     QUEST_CHAPTER: "",
+    LINK_MIRROR: "",
     SEARCH_FUZZY_WEIGHT: 0.25,
     SEARCH_LEXICAL_WEIGHT: 0.45,
     SEARCH_SEMANTIC_WEIGHT: 0.20,
