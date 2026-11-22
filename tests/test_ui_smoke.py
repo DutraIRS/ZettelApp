@@ -861,3 +861,31 @@ def test_graph_filters_hide_link_types_and_tags_and_ungroup_tags(window):
     graph.refresh()
     pump(400)
     assert set(graph.view2d.data.ids) == {a.id, b.id}
+
+
+def test_note_list_orders_by_closeness_to_the_open_note(window):
+    from zettelapp import settings
+
+    vault = window.vault
+    cats = vault.create_note(
+        "Cats", "Cats purr, chase mice and sleep in the sun. Cats and kittens."
+    )
+    vault.create_note("Stocks", "Bonds, stocks and dividends in a market portfolio.")
+    kittens = vault.create_note("Kittens", "Kittens are young cats that purr and chase mice.")
+    bourse = vault.create_note("Market", "A market portfolio of stocks, bonds and dividends.")
+    vault.create_note("Linked", f"See [[{bourse.id}]].")
+    assert settings.get(settings.NOTES_SORT) == "meaning"  # the default order
+    window.list.refresh()
+    window.open_note(cats.id)
+    pump(500)  # the meaning index is built in the background
+    order = [row["id"] for row in window.list.model.rows]
+    assert order[:2] == [cats.id, kittens.id]
+
+    distance = next(a for a in window.list.sort_button.menu().actions() if a.data() == "distance")
+    distance.trigger()
+    window.open_note(bourse.id)
+    pump(400)
+    order = [row["id"] for row in window.list.model.rows]
+    titles = [vault.get_note(i).title for i in order]
+    assert titles[:2] == ["Market", "Linked"]
+    assert settings.get(settings.NOTES_SORT) == "distance"

@@ -40,6 +40,7 @@ from PySide6.QtWidgets import (
 from zettelapp import settings
 from zettelapp.core.adaptive import FeedbackModel
 from zettelapp.core.models import Note
+from zettelapp.core.proximity import MeaningIndex, link_closeness
 from zettelapp.core.search import hybrid_search
 from zettelapp.core.storage import Vault, split_query
 from zettelapp.core.textutil import fold, snippet_around
@@ -52,6 +53,7 @@ from zettelapp.ui.widgets import (
     label,
     tool_button,
 )
+from zettelapp.ui.workers import run_task
 
 ROW_HEIGHT = 78
 
@@ -288,6 +290,14 @@ class NoteListPanel(QWidget):
         # The order is a menu behind an icon, like the tag options: as a list of words it
         # left no room for "All tags" in most languages.
         self.sort_key = "modified"
+        # Closeness to the open note: who it is (the anchor), the LSA index of the vault
+        # (rebuilt in the background after edits) and the scores for the anchor.
+        self.anchor: str | None = None
+        self._meaning = None
+        self._meaning_generation = -1
+        self._meaning_busy = False
+        self._closeness: dict[str, float] = {}
+        self._anchor_timer = QTimer(self, singleShot=True, interval=300, timeout=self._anchor_moved)
         self.sort_button = tool_button("sort", "")
         self.sort_button.setAccessibleName(_("Sort notes"))
         self.sort_button.setProperty("noindicator", True)
@@ -299,14 +309,21 @@ class NoteListPanel(QWidget):
             (_("Created"), "created"),
             (_("Title"), "title"),
             (_("Most linked"), "links"),
+            (_("Closest in meaning to the open note"), "meaning"),
+            (_("Fewest links from the open note"), "distance"),
         ):
+            if key == "meaning":
+                sort_menu.addSeparator()
             action = sort_menu.addAction(text)
             action.setData(key)
             action.setCheckable(True)
             orders.addAction(action)
         orders.triggered.connect(self._sort_chosen)
         self.sort_button.setMenu(sort_menu)
-        self._show_sort(sort_menu.actions()[0])
+        chosen = settings.get(settings.NOTES_SORT)
+        self._show_sort(
+            next((a for a in orders.actions() if a.data() == chosen), orders.actions()[0])
+        )
         filters.addWidget(self.tag_filter, 1)
         filters.addWidget(self.tag_options)
         filters.addWidget(self.sort_button)
@@ -347,6 +364,7 @@ class NoteListPanel(QWidget):
 
     def set_vault(self, vault: Vault | None) -> None:
         self.vault = vault
+        self.anchor, self._meaning, self._meaning_generation = None, None, -1
         self.forget_semantic_scores()
         self.refresh_tags()
         self.refresh()
@@ -374,7 +392,54 @@ class NoteListPanel(QWidget):
 
     def _sort_chosen(self, action: QAction) -> None:
         self._show_sort(action)
+        settings.put(settings.NOTES_SORT, action.data())
         self.refresh()
+
+    # --- closeness to the open note -----------------------------------------------
+
+    def set_anchor(self, note_id: str | None) -> None:
+        """The note the list is ordered around when sorting by closeness."""
+        if note_id == self.anchor:
+            return
+        self.anchor = note_id
+        if self.sort_key in ("meaning", "distance"):
+            # A moment later, so stepping through notes with the arrow keys doesn't reorder
+            # on every step, and Shift/Ctrl+click has extended the selection first.
+            self._anchor_timer.start()
+
+    def _anchor_moved(self) -> None:
+        # Not while several notes are picked: reordering would lose the selection.
+        if len(self.view.selectionModel().selectedIndexes()) <= 1:
+            self.refresh()
+
+    def _closeness_for(self, notes: dict[str, Note]) -> dict[str, float]:
+        """Scores for the anchor, by the current order; stale meanings until the index
+        catches up with the latest edits, so editing doesn't make the list jump around."""
+        if self.anchor is None or self.vault is None:
+            return {}
+        if self.sort_key == "distance":
+            return link_closeness(self.anchor, self.vault.all_links())
+        if self._meaning_generation != self.vault.generation and not self._meaning_busy:
+            self._rebuild_meaning(list(notes.values()))
+        return self._meaning.closeness(self.anchor) if self._meaning is not None else {}
+
+    def _rebuild_meaning(self, notes: list[Note]) -> None:
+        self._meaning_busy = True
+        vault, generation = self.vault, self.vault.generation
+
+        def done(index) -> None:
+            self._meaning_busy = False
+            if vault is not self.vault:
+                return
+            self._meaning, self._meaning_generation = index, generation
+            if self.sort_key == "meaning":
+                self.refresh()
+
+        def failed(_message) -> None:
+            self._meaning_busy = False
+            self._meaning_generation = generation  # don't retry until the next edit
+
+        run_task(MeaningIndex, notes, on_done=done, on_error=failed)
 
     def toggle_trash(self) -> None:
         self.trash_mode = self.trash_button.isChecked()
@@ -419,14 +484,24 @@ class NoteListPanel(QWidget):
             degree[l.dst] = degree.get(l.dst, 0) + 1
         cards = self.vault.card_counts()
         key = self.sort_key
-        if not query.strip() or key != "modified":
-            sorters = {
-                "modified": lambda i: notes[i].modified,
-                "created": lambda i: notes[i].created,
-                "title": lambda i: fold(notes[i].display_title),
-                "links": lambda i: degree.get(i, 0),
-            }
-            ids.sort(key=sorters[key], reverse=key in ("modified", "created", "links"))
+        near = key in ("meaning", "distance")
+        closeness = self._closeness_for(notes) if near and not self.trash_mode else {}
+        if near and not closeness:
+            key = "modified"  # no open note (or not indexed yet): newest first
+        # A search keeps its own ranking unless an order was chosen on purpose.
+        if not query.strip() or key not in ("modified", "meaning", "distance"):
+            if near and closeness:
+                # The open note first, then the closest; the rest by last edit.
+                ids.sort(key=lambda i: notes[i].modified, reverse=True)
+                ids.sort(key=lambda i: (i != self.anchor, -closeness.get(i, -2.0)))
+            else:
+                sorters = {
+                    "modified": lambda i: notes[i].modified,
+                    "created": lambda i: notes[i].created,
+                    "title": lambda i: fold(notes[i].display_title),
+                    "links": lambda i: degree.get(i, 0),
+                }
+                ids.sort(key=sorters[key], reverse=key in ("modified", "created", "links"))
         rows = [
             {
                 "id": i,

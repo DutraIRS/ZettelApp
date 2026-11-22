@@ -740,6 +740,7 @@ class MainWindow(QMainWindow):
             self.list.trash_button.setChecked(True)
             self.list.toggle_trash()
         self.editor.load(note)
+        self.list.set_anchor(note_id)  # the list may be ordered by closeness to it
         self.list.select(note_id, emit=False)
         self.graph.set_focus_note(note_id)
         self._refresh_side()
