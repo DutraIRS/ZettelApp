@@ -185,6 +185,7 @@ class Graph2DView(QGraphicsView):
         self.selected: str | None = None
         self.selected_group: object = None  # a group picked by clicking its area
         self._group_drag: tuple[object, QPointF] | None = None  # group, last scene point
+        self._void_press: QPointF | None = None  # a press on empty space, to tell a click
         self.hover_set: set[str] | None = None
         self.show_groups = True
         self.show_labels = True
@@ -383,12 +384,18 @@ class Graph2DView(QGraphicsView):
             else None
         )
         if group is None:
-            if event.button() == Qt.MouseButton.LeftButton and self.selected_group is not None:
+            left = event.button() == Qt.MouseButton.LeftButton
+            if left and self.selected_group is not None:
                 self.selected_group = None
                 self.schedule_edges()
+            on_node = any(isinstance(i, NodeItem) for i in self.items(event.position().toPoint()))
+            self._void_press = event.position() if left and not on_node else None
             super().mousePressEvent(event)
             return
         self.selected_group = group
+        if self.selected is not None:  # picking an area is clicking off the note
+            self.hover_set = None
+            self.select(None)
         self._group_drag = (group, self.mapToScene(event.position().toPoint()))
         self.setCursor(Qt.CursorShape.ClosedHandCursor)
         self.schedule_edges()
@@ -410,7 +417,12 @@ class Graph2DView(QGraphicsView):
 
     def mouseReleaseEvent(self, event) -> None:  # noqa: N802
         if self._group_drag is None:
+            press, self._void_press = self._void_press, None
             super().mouseReleaseEvent(event)
+            # A click on empty space (not a drag to pan) clears the selection.
+            if press is not None and (event.position() - press).manhattanLength() < 5:
+                self.hover_set = None
+                self.select(None)
             return
         self._group_drag = None
         self.unsetCursor()

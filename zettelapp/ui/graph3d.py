@@ -398,6 +398,9 @@ class Graph3DView(QWidget):
 
     def mouseReleaseEvent(self, event) -> None:  # noqa: N802
         if self._group_drag is not None or self._node_drag is not None:
+            if self._group_drag is not None and not self._dragged:
+                self.selected = None  # a click on a group's area is a click off the note
+                self.update()
             self._group_drag = self._node_drag = None
             self._drag_from = None
             self.unsetCursor()

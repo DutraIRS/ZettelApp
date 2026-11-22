@@ -271,3 +271,32 @@ def test_ctrl_dragging_a_3d_note_moves_only_that_note_and_plain_dragging_orbits(
     QTest.mouseMove(view, start + QPoint(60, 0))
     QTest.mouseRelease(view, Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier, start)
     assert view.yaw != yaw  # a plain drag still orbits, even from a note
+
+
+def test_a_click_on_empty_space_clears_the_selection_but_a_pan_does_not():
+    from PySide6.QtCore import QPoint, Qt
+    from PySide6.QtTest import QTest
+    from PySide6.QtWidgets import QApplication
+
+    from zettelapp.ui.graph2d import Graph2DView
+
+    QApplication.instance() or QApplication(["test"])
+    data = _styled_graph()
+    positions = {i: (300.0 * k, 0.0) for k, i in enumerate(data.ids)}
+    view = Graph2DView()
+    view.resize(800, 600)
+    view.show()
+    view.set_graph(data, positions, show_groups=False, show_labels=False)
+    view.resetTransform()
+    view.centerOn(0, 0)
+    QApplication.processEvents()
+    empty = view.mapFromScene(150, 250)
+
+    view.select(data.ids[0])
+    QTest.mousePress(view.viewport(), Qt.MouseButton.LeftButton, pos=empty)
+    QTest.mouseMove(view.viewport(), empty + QPoint(60, 40))
+    QTest.mouseRelease(view.viewport(), Qt.MouseButton.LeftButton, pos=empty + QPoint(60, 40))
+    assert view.selected == data.ids[0]  # dragging pans and keeps the selection
+
+    QTest.mouseClick(view.viewport(), Qt.MouseButton.LeftButton, pos=empty)
+    assert view.selected is None
