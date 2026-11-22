@@ -18,6 +18,7 @@ def private_dirs(monkeypatch: pytest.MonkeyPatch, tmp_path: Path):
     monkeypatch.setattr(paths, "_ANDROID_CACHE", cache)
     monkeypatch.setattr(mobile, "documents_dir", lambda: base / "Documents")
     monkeypatch.setattr(mobile, "local_data_dir", lambda: base)
+    monkeypatch.setattr(mobile, "_seed_new_vault", lambda vault: None)  # an empty vault
     yield base, cache
     mobile.close_vault()
 
@@ -80,3 +81,29 @@ def test_list_notes_orders_by_recency(private_dirs) -> None:
     mobile.save_note(first["id"], "First", "touched last")
     titles = [n["title"] for n in mobile.list_notes()]
     assert titles == ["First", "Second"]
+
+
+def test_a_new_vault_gets_the_starter_notes_once(private_dirs, monkeypatch) -> None:
+    from zettelapp.core.starter import create_starter_notes
+
+    monkeypatch.setattr(mobile, "_seed_new_vault", create_starter_notes)
+    notes = mobile.list_notes()
+    assert len(notes) > 5
+    for note in notes:
+        mobile.trash_note(note["id"])
+    mobile.empty_trash()
+    mobile.close_vault()
+    assert mobile.list_notes() == []  # an emptied vault stays empty on the next start
+
+
+def test_graph_and_details_show_a_mutual_link_once_and_clozes_have_blanks(private_dirs) -> None:
+    a = mobile.create_note("A", "[[B]]")
+    b = mobile.create_note("B", "related::[[A]]\n\n{{c1::Paris}} is the capital of France.")
+    mobile.save_note(a["id"], "A", "[[B]]")  # resolve the link now that B exists
+    graph = mobile.get_graph()
+    assert len(graph["edges"]) == 1
+    details = mobile.note_details(a["id"])
+    assert [l["id"] for l in details["links"]] == [b["id"]] and details["backlinks"] == []
+    card = mobile.review_deck()["cards"][0]
+    assert card["front"] == "[…] is the capital of France."
+    assert card["back"] == "Paris is the capital of France."

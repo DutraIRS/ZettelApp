@@ -59,12 +59,6 @@ def _android_base() -> Path:
     return Path.home()
 
 
-def _android_documents() -> Path | None:
-    """The shared Documents folder, when its view is mounted on the device."""
-    shared = Path("/storage/emulated/0/Documents")
-    return shared if shared.is_dir() else None
-
-
 def _known_folder_documents() -> Path | None:
     if sys.platform != "win32":
         return None
@@ -103,7 +97,11 @@ def _known_folder_documents() -> Path | None:
 
 def documents_dir() -> Path:
     if IS_ANDROID:
-        return _android_documents() or _android_base() / "Documents"
+        # App-private storage, always: scoped storage mounts the shared Documents
+        # folder but denies SQLite the locking it needs, and a ZettelApp folder left
+        # there by an older install (different UID) is permanently inaccessible.
+        # Shared access can return via the Storage Access Framework if ever needed.
+        return _android_base() / "Documents"
     if IS_WINDOWS:
         return _known_folder_documents() or Path.home() / "Documents"
     return _xdg_documents() or Path.home() / "Documents"
