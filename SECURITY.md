@@ -1,5 +1,8 @@
 # Security policy
 
+What ZettelApp sends over the network (only a version check, unless you use the AI assistant or
+download the search model) is described in [PRIVACY.md](PRIVACY.md).
+
 ## Reporting a vulnerability
 
 Please **do not open a public issue** for security problems. Instead, report them privately with

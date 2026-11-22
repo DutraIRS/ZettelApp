@@ -145,5 +145,5 @@ Sponsors are thanked in the release notes. Thank you! ❤️
 
 ZettelApp is free and unencumbered software released into the public domain. See [LICENSE](LICENSE)
 (The Unlicense). It builds on open-source components listed in
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Security reports: [SECURITY.md](SECURITY.md).
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Privacy: [PRIVACY.md](PRIVACY.md) (one update check, nothing else unless you ask). Security reports: [SECURITY.md](SECURITY.md).
 Contributions: [CONTRIBUTING.md](CONTRIBUTING.md).
