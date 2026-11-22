@@ -141,3 +141,54 @@ def test_every_landing_page_has_the_csp_both_language_widgets_and_no_rational_ex
         assert "Proudly developed with" in text
         # Static and self-styled: no theme stylesheet, inline style, runtime or 404 page.
         assert "_rational" not in text and "<style" not in text and "data-rw" not in text
+
+
+def _downloads_shown(user_agent: str, platform: str = "") -> list[str]:
+    """Which download buttons download.js leaves visible, in order (run with Node.js)."""
+    script = (build_site.ROOT / "website" / "assets" / "download.js").read_text(encoding="utf-8")
+    harness = (
+        "function el(name, attrs) { return { name: name, hidden: !!attrs.hidden,"
+        " className: attrs.cls || '', pkg: attrs.pkg, children: attrs.children || [],"
+        ' querySelector(s) { var p = s.match(/data-pkg="([a-z]+)"/)[1];'
+        " return this.children.find(function (c) { return c.pkg === p; }); },"
+        " insertBefore(a, b) { this.children.splice(this.children.indexOf(a), 1);"
+        " this.children.splice(this.children.indexOf(b), 0, a); } }; }\n"
+        "var win = el('windows', { children: [el('setup', {cls: 'button primary'})] });\n"
+        "var lin = el('linux', { hidden: true, children: [el('deb', {cls: 'button primary', pkg: 'deb'}),"
+        " el('tar', {cls: 'button secondary', pkg: 'tar'}), el('exe', {cls: 'button secondary'})] });\n"
+        "Object.defineProperty(globalThis, 'navigator', { configurable: true, value:"
+        f" {{ userAgent: {json.dumps(user_agent)}, platform: {json.dumps(platform)} }} }});\n"
+        "globalThis.document = { querySelectorAll(s) { return s.indexOf('windows') >= 0 ? [win] : [lin]; } };\n"
+        + script
+        + "\nvar out = [win, lin].filter(function (b) { return !b.hidden; })[0];\n"
+        "console.log(JSON.stringify(out.children.map(function (c) {"
+        " return c.name + (c.className.indexOf('primary') >= 0 ? '*' : ''); })));\n"
+    )
+    done = subprocess.run(
+        ["node", "-"], input=harness, capture_output=True, text=True, timeout=30, check=True
+    )
+    return json.loads(done.stdout)
+
+
+@pytest.mark.skipif(shutil.which("node") is None, reason="needs Node.js to run the script")
+def test_download_buttons_follow_the_visitors_system():
+    windows = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Firefox/140.0"
+    ubuntu = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0"
+    fedora = "Mozilla/5.0 (X11; Fedora; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0"
+    android = "Mozilla/5.0 (Linux; Android 15; Pixel 9) Chrome/140.0 Mobile Safari/537.36"
+    arm = "Mozilla/5.0 (X11; Linux aarch64; rv:140.0) Gecko/20100101 Firefox/140.0"
+    assert _downloads_shown(windows, "Win32") == ["setup*"]
+    assert _downloads_shown(ubuntu, "Linux x86_64") == ["deb*", "tar", "exe"]
+    assert _downloads_shown(fedora, "Linux x86_64") == ["tar*", "deb", "exe"]
+    assert _downloads_shown(android, "Linux armv8l") == ["setup*"]  # no phone build here
+    assert _downloads_shown(arm, "Linux aarch64") == ["setup*"]  # no ARM build: all releases
+
+
+def test_landing_pages_link_the_linux_packages_by_their_fixed_names():
+    for folder in ["", *website.LANGS]:
+        page = build_site.ROOT / "website" / folder / "index.html"
+        text = page.read_text(encoding="utf-8")
+        assert text.count('data-os="linux" hidden') == 2, page
+        assert "releases/latest/download/ZettelApp-Linux-amd64.deb" in text
+        assert "releases/latest/download/ZettelApp-Linux-x86_64.tar.gz" in text
+        assert "assets/download.js" in text

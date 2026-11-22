@@ -4,10 +4,15 @@
       <h1>连接你的想法。</h1>
       <p class="lead">ZettelApp 是一款适用于 Windows 和 Linux 的 Zettelkasten。写下小笔记,用有意义的方式把它们链接起来,
         并让它为你建议那些你遗漏的联系。以 2D 或 3D 图谱探索你的知识,并把它变成闪卡。</p>
-      <div class="actions">
+      <div class="actions" data-os="windows">
         <a class="button primary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe">下载 Windows 版</a>
         <a class="button secondary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Portable.zip">便携版 .zip</a>
         <a class="button secondary" href="https://github.com/DutraIRS/ZettelApp/releases/latest">Linux（.deb · .tar.gz）</a>
+      </div>
+      <div class="actions" data-os="linux" hidden>
+        <a class="button primary" data-pkg="deb" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Linux-amd64.deb">下载 Linux (.deb) 版</a>
+        <a class="button secondary" data-pkg="tar" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Linux-x86_64.tar.gz">便携版 .tar.gz</a>
+        <a class="button secondary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe">Windows 安装程序</a>
       </div>
       <p class="fine">免费开源 · Windows 10 &amp; 11 和 Linux,64 位 ·
         <a href="https://github.com/DutraIRS/ZettelApp/releases/latest">所有版本与校验和</a></p>
@@ -271,10 +276,15 @@
       <div>
         <h2>下载 ZettelApp</h2>
         <p>免费开源,释放到公有领域。</p>
-        <div class="actions">
+        <div class="actions" data-os="windows">
           <a class="button primary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe">下载安装程序</a>
           <a class="button secondary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Portable.zip">便携版 .zip</a>
           <a class="button secondary" href="https://github.com/DutraIRS/ZettelApp/releases/latest">Linux（.deb · .tar.gz）</a>
+        </div>
+        <div class="actions" data-os="linux" hidden>
+          <a class="button primary" data-pkg="deb" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Linux-amd64.deb">下载 Linux (.deb) 版</a>
+          <a class="button secondary" data-pkg="tar" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Linux-x86_64.tar.gz">便携版 .tar.gz</a>
+          <a class="button secondary" href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe">Windows 安装程序</a>
         </div>
         <p class="fine"><a href="https://github.com/DutraIRS/ZettelApp/releases/latest">所有版本、发布说明和
           SHA-256 校验和</a></p>

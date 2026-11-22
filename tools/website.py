@@ -293,6 +293,7 @@ def head_end(up: str, landing: bool) -> str:
         f'<link rel="icon" type="image/png" href="{up}assets/favicon.png">'
         f'<link rel="stylesheet" href="{up}style.css">'
         f'<script src="{up}assets/lang.js" defer></script>'
+        f'<script src="{up}assets/download.js" defer></script>'
     )
 
 
