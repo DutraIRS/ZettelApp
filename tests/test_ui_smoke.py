@@ -815,3 +815,49 @@ def test_the_installer_option_downloads_the_model_then_turns_semantic_search_on(
     window._semantic_downloaded("")
     assert settings.get(settings.SEARCH_SEMANTIC_ENABLED)
     assert not settings.get(settings.SEARCH_SEMANTIC_SET_UP)
+
+
+def test_graph_filters_hide_link_types_and_tags_and_ungroup_tags(window):
+    from PySide6.QtCore import Qt
+
+    from zettelapp import settings
+
+    vault = window.vault
+    a = vault.create_note("Alpha", "About alpha. supports::[[Beta]]", ["topic", "todo"])
+    b = vault.create_note("Beta", "About beta.", ["topic"])
+    c = vault.create_note("Gamma", "About gamma. [[Alpha]]", ["other"])
+    vault.save_note(a, touch=False)
+    window.show_page(1)
+    pump(400)
+    graph = window.graph
+    assert set(graph.view2d.data.ids) == {a.id, b.id, c.id}
+
+    graph._fill_types()
+    item = next(
+        graph.types_list.item(i)
+        for i in range(graph.types_list.count())
+        if graph.types_list.item(i).data(Qt.ItemDataRole.UserRole) == "supports"
+    )
+    item.setCheckState(Qt.CheckState.Unchecked)
+    graph.refresh()
+    pump(400)
+    assert {l.type for l in graph.view2d.data.links} == {"related"}
+    assert settings.get_list(settings.GRAPH_HIDDEN_TYPES) == ["supports"]
+
+    graph._fill_tags()
+    rows = {
+        graph.tags_tree.topLevelItem(i).data(
+            0, Qt.ItemDataRole.UserRole
+        ): graph.tags_tree.topLevelItem(i)
+        for i in range(graph.tags_tree.topLevelItemCount())
+    }
+    rows["todo"].setCheckState(2, Qt.CheckState.Unchecked)  # #todo forms no group
+    graph.refresh()
+    pump(400)
+    names = graph.view2d.data.group_names
+    assert "#todo" not in names and "#topic" in names
+
+    rows["other"].setCheckState(1, Qt.CheckState.Unchecked)  # hide notes tagged #other
+    graph.refresh()
+    pump(400)
+    assert set(graph.view2d.data.ids) == {a.id, b.id}

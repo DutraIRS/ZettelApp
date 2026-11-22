@@ -303,10 +303,13 @@ def stylesheet(t: Theme) -> str:
         }
     )
     return f"""
-QCheckBox::indicator, QGroupBox::indicator, QTableWidget::indicator {{ width: 16px; height: 16px;
+QCheckBox::indicator, QGroupBox::indicator, QTableWidget::indicator, QListWidget::indicator,
+QTreeWidget::indicator {{ width: 16px; height: 16px;
     border: 1px solid {t.border_strong}; border-radius: 4px; background: {t.surface}; }}
-QCheckBox::indicator:hover, QTableWidget::indicator:hover {{ border-color: {t.text_secondary}; }}
-QCheckBox::indicator:checked, QGroupBox::indicator:checked, QTableWidget::indicator:checked {{
+QCheckBox::indicator:hover, QTableWidget::indicator:hover, QListWidget::indicator:hover,
+QTreeWidget::indicator:hover {{ border-color: {t.text_secondary}; }}
+QCheckBox::indicator:checked, QGroupBox::indicator:checked, QTableWidget::indicator:checked,
+QListWidget::indicator:checked, QTreeWidget::indicator:checked {{
     background: {t.accent}; border-color: {t.accent}; image: url({images}/check.png); }}
 QRadioButton::indicator {{ width: 16px; height: 16px; border: 1px solid {t.border_strong}; border-radius: 9px;
     background: {t.surface}; }}

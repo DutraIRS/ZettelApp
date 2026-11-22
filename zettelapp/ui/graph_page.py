@@ -4,24 +4,30 @@ from __future__ import annotations
 
 from collections import Counter
 
-from PySide6.QtCore import QSize, Qt, Signal
-from PySide6.QtGui import QAction, QColor, QIcon, QPainter, QPixmap
+from PySide6.QtCore import QSize, Qt, QTimer, Signal
+from PySide6.QtGui import QColor, QIcon, QPainter, QPixmap
 from PySide6.QtWidgets import (
+    QAbstractItemView,
     QButtonGroup,
     QCheckBox,
     QComboBox,
     QFileDialog,
     QHBoxLayout,
+    QHeaderView,
     QListWidget,
     QListWidgetItem,
     QMenu,
     QSpinBox,
     QStackedWidget,
     QToolButton,
+    QTreeWidget,
+    QTreeWidgetItem,
     QVBoxLayout,
     QWidget,
+    QWidgetAction,
 )
 
+from zettelapp import settings
 from zettelapp.core.cluster import cluster_notes
 from zettelapp.core.graph import force_layout, merge_reciprocal, subgraph
 from zettelapp.i18n import _, n_
@@ -29,7 +35,7 @@ from zettelapp.ui import icons, theme
 from zettelapp.ui.graph2d import Graph2DView
 from zettelapp.ui.graph3d import Graph3DView
 from zettelapp.ui.graph_common import MAX_GROUP_COLORS, GraphData
-from zettelapp.ui.link_style import LIST_ICON, MENU_ICON, type_icon
+from zettelapp.ui.link_style import LIST_ICON, type_icon
 from zettelapp.ui.widgets import FlowLayout, SearchBox, label, tool_button
 from zettelapp.ui.workers import run_task
 
@@ -42,6 +48,27 @@ def _remember(cache: dict, key: tuple, value) -> None:
     cache[key] = value
     while len(cache) > CACHE_SIZE:
         del cache[next(iter(cache))]  # the oldest
+
+
+def _checked(on: bool) -> Qt.CheckState:
+    return Qt.CheckState.Checked if on else Qt.CheckState.Unchecked
+
+
+def _popup_button(text: str, icon: str, widget: QWidget, fill) -> QToolButton:
+    """A toolbar button opening *widget* (a list of checkboxes); unlike a menu of checkable
+    actions it stays open while you tick several boxes. *fill* refreshes it on opening."""
+    button = QToolButton()
+    button.setIcon(icons.icon(icon))
+    button.setText(text)
+    button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+    button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+    menu = QMenu(button)
+    action = QWidgetAction(menu)
+    action.setDefaultWidget(widget)
+    menu.addAction(action)
+    menu.aboutToShow.connect(fill)
+    button.setMenu(menu)
+    return button
 
 
 def _dot(color: QColor) -> QIcon:
@@ -72,7 +99,12 @@ class GraphPage(QWidget):
         self._clusters: dict[tuple, object] = {}
         self._request = 0
         self._computing = False
-        self.hidden_types: set[str] = set()
+        # What the graph leaves out, kept between sessions.
+        self.hidden_types = set(settings.get_list(settings.GRAPH_HIDDEN_TYPES))
+        self.hidden_tags = set(settings.get_list(settings.GRAPH_HIDDEN_TAGS))
+        self.ungrouped_tags = set(settings.get_list(settings.GRAPH_UNGROUPED_TAGS))
+        # Ticking several boxes in a row redraws once.
+        self._filter_timer = QTimer(self, singleShot=True, interval=250, timeout=self.refresh)
         layout = QVBoxLayout(self)
         layout.setContentsMargins(16, 12, 16, 12)
         layout.setSpacing(10)
@@ -138,14 +170,35 @@ class GraphPage(QWidget):
         )
         self.labels_box = QCheckBox(_("Labels"))
         self.labels_box.setChecked(True)
-        self.types_button = QToolButton()
-        self.types_button.setIcon(icons.icon("filter"))
-        self.types_button.setText(_("Link types"))
-        self.types_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
-        self.types_button.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
-        self.types_menu = QMenu(self.types_button)
-        self.types_button.setMenu(self.types_menu)
-        group(self.group_box, self.labels_box, self.types_button)
+        self.types_list = QListWidget()
+        self.types_list.setAccessibleName(_("Link types shown in the graph"))
+        self.types_list.setIconSize(LIST_ICON)
+        self.types_list.ensurePolished()
+        self.types_list.itemChanged.connect(self._type_ticked)
+        self.types_button = _popup_button(
+            _("Link types"), "filter", self.types_list, self._fill_types
+        )
+        self.types_button.setToolTip(_("Choose which link types the graph shows"))
+        self.tags_tree = QTreeWidget()
+        self.tags_tree.setAccessibleName(_("Tags in the graph"))
+        self.tags_tree.setRootIsDecorated(False)
+        self.tags_tree.setSelectionMode(QAbstractItemView.SelectionMode.NoSelection)
+        self.tags_tree.setHeaderLabels([_("Tag"), _("Show"), _("Group")])
+        head = self.tags_tree.headerItem()
+        head.setToolTip(1, _("Show the notes with this tag"))
+        head.setToolTip(2, _("Let this tag form a group and count for clusters"))
+        header = self.tags_tree.header()
+        header.setStretchLastSection(False)
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Stretch)
+        for column in (1, 2):
+            header.setSectionResizeMode(column, QHeaderView.ResizeMode.ResizeToContents)
+        self.tags_tree.ensurePolished()
+        self.tags_tree.itemChanged.connect(self._tag_ticked)
+        self.tags_button = _popup_button(_("Tags"), "tag", self.tags_tree, self._fill_tags)
+        self.tags_button.setToolTip(
+            _("Choose which tags the graph shows and which ones form groups")
+        )
+        group(self.group_box, self.labels_box, self.types_button, self.tags_button)
         self.search = SearchBox(_("Find in graph"))
         self.search.setFixedWidth(200)
         self.search.returnPressed.connect(self._find)
@@ -261,28 +314,79 @@ class GraphPage(QWidget):
 
     # --- data --------------------------------------------------------------
 
-    def _rebuild_types_menu(self, types) -> None:
-        self.types_menu.clear()
-        for lt in types:
-            action = QAction(type_icon(lt, MENU_ICON), lt.label, self.types_menu)
-            action.setCheckable(True)
-            action.setChecked(lt.id not in self.hidden_types)
-            action.toggled.connect(lambda on, t=lt.id: self._toggle_type(t, on))
-            self.types_menu.addAction(action)
+    @staticmethod
+    def _fit_popup(view, rows: int, width: int) -> None:
+        row = view.sizeHintForRow(0) if rows else 24
+        header = view.header().sizeHint().height() if isinstance(view, QTreeWidget) else 0
+        view.setFixedSize(width, min(420, header + max(rows, 1) * row + 8))
 
-    def _toggle_type(self, type_id: str, on: bool) -> None:
-        (self.hidden_types.discard if on else self.hidden_types.add)(type_id)
-        self.invalidate()
-        self.refresh()
+    def _fill_types(self) -> None:
+        vault = self.window.vault
+        types = vault.link_types() if vault else []
+        used = Counter(l.type for l in vault.all_links()) if vault else Counter()
+        self.types_list.blockSignals(True)
+        self.types_list.clear()
+        for lt in types:
+            item = QListWidgetItem(type_icon(lt), f"{lt.label}  ({used.get(lt.id, 0)})")
+            item.setData(Qt.ItemDataRole.UserRole, lt.id)
+            item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
+            item.setCheckState(_checked(lt.id not in self.hidden_types))
+            self.types_list.addItem(item)
+        self.types_list.blockSignals(False)
+        self._fit_popup(self.types_list, len(types), 260)
+
+    def _type_ticked(self, item: QListWidgetItem) -> None:
+        type_id = item.data(Qt.ItemDataRole.UserRole)
+        shown = item.checkState() == Qt.CheckState.Checked
+        (self.hidden_types.discard if shown else self.hidden_types.add)(type_id)
+        settings.put(settings.GRAPH_HIDDEN_TYPES, sorted(self.hidden_types))
+        self._filter_timer.start()
+
+    def _fill_tags(self) -> None:
+        vault = self.window.vault
+        tags = vault.all_tags() if vault else []
+        self.tags_tree.blockSignals(True)
+        self.tags_tree.clear()
+        for tag, count in tags:
+            item = QTreeWidgetItem([f"#{tag}  ({count})", "", ""])
+            item.setData(0, Qt.ItemDataRole.UserRole, tag)
+            item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
+            item.setCheckState(1, _checked(tag not in self.hidden_tags))
+            item.setCheckState(2, _checked(tag not in self.ungrouped_tags))
+            self.tags_tree.addTopLevelItem(item)
+        if not tags:
+            empty = QTreeWidgetItem([_("No tags yet"), "", ""])
+            empty.setFlags(Qt.ItemFlag.NoItemFlags)
+            self.tags_tree.addTopLevelItem(empty)
+        self.tags_tree.blockSignals(False)
+        self._fit_popup(self.tags_tree, len(tags), 320)
+
+    def _tag_ticked(self, item: QTreeWidgetItem, column: int) -> None:
+        tag = item.data(0, Qt.ItemDataRole.UserRole)
+        if not tag or column not in (1, 2):
+            return
+        on = item.checkState(column) == Qt.CheckState.Checked
+        chosen, key = (
+            (self.hidden_tags, settings.GRAPH_HIDDEN_TAGS)
+            if column == 1
+            else (self.ungrouped_tags, settings.GRAPH_UNGROUPED_TAGS)
+        )
+        (chosen.discard if on else chosen.add)(tag)
+        settings.put(key, sorted(chosen))
+        self._filter_timer.start()
 
     def refresh(self) -> None:
         vault = self.window.vault
         if vault is None or not self.isVisible():
             return
         types = vault.link_types()
-        self._rebuild_types_menu(types)
         type_map = {lt.id: lt for lt in types}
-        notes = {n.id: n for n in vault.all_notes()}
+        # Notes with a hidden tag are left out, except the one a local graph is about.
+        notes = {
+            n.id: n
+            for n in vault.all_notes()
+            if n.id == self.focus_id or not self.hidden_tags.intersection(n.tags)
+        }
         links = merge_reciprocal(
             (l for l in vault.all_links() if l.type not in self.hidden_types),
             {lt.id for lt in types if not lt.directed},
@@ -324,9 +428,10 @@ class GraphPage(QWidget):
         self.info.setText(_("Computing layout…"))
         self.status.emit(_("Computing graph layout…"))
 
-        tag_counts = Counter(t for i in ids for t in notes[i].tags)
+        ungrouped = frozenset(self.ungrouped_tags)
+        tag_counts = Counter(t for i in ids for t in notes[i].tags if t not in ungrouped)
         note_payload = [notes[i] for i in ids]
-        cluster_key = (mode, self.k.value(), tuple(ids), vault.generation)
+        cluster_key = (mode, self.k.value(), tuple(ids), vault.generation, ungrouped)
         layout_key = (
             dims,
             grouping,
@@ -334,6 +439,7 @@ class GraphPage(QWidget):
             self.k.value(),
             tuple(ids),
             tuple(sorted(self.hidden_types)),
+            tuple(sorted(ungrouped)),
             vault.generation,
             tuple((link.src, link.dst, link.type) for link in links),
         )
@@ -349,13 +455,12 @@ class GraphPage(QWidget):
                 top = [t for t, _unused in tag_counts.most_common()]
                 rank = {t: r for r, t in enumerate(top)}
                 for i in ids:
-                    tags = notes[i].tags
-                    group_of[i] = min((rank[t] for t in tags), default=None) if tags else None
+                    group_of[i] = min((rank[t] for t in notes[i].tags if t in rank), default=None)
                 names = [f"#{t}" for t in top]
                 quality = _("Each note takes the colour of its most common tag.")
             elif mode in ("kmeans", "hierarchical"):
                 cluster_result = cached_clusters or cluster_notes(
-                    note_payload, mode, self.k.value() or None
+                    note_payload, mode, self.k.value() or None, ignore_tags=ungrouped
                 )
                 if cluster_result is not None:
                     label_of = cluster_result.label_of()

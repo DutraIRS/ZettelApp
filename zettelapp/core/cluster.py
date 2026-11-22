@@ -8,7 +8,7 @@ is named by the terms that distinguish it from the rest of the vault.
 from __future__ import annotations
 
 import math
-from collections.abc import Sequence
+from collections.abc import Collection, Sequence
 from dataclasses import dataclass
 
 import numpy as np
@@ -33,9 +33,17 @@ class Clustering:
         return {note_id: int(c) for note_id, c in zip(self.ids, self.labels)}
 
 
-def embed_notes(notes: Sequence[Note], dims: int = 48) -> tuple[SemanticIndex, np.ndarray]:
+def embed_notes(
+    notes: Sequence[Note], dims: int = 48, ignore_tags: Collection[str] = ()
+) -> tuple[SemanticIndex, np.ndarray]:
+    """LSA embeddings of the notes' titles, text and tags (less *ignore_tags*)."""
     index = SemanticIndex(
-        {n.id: tokenize(n.title) * 2 + tokenize(n.body) + list(n.tags) for n in notes},
+        {
+            n.id: tokenize(n.title) * 2
+            + tokenize(n.body)
+            + [t for t in n.tags if t not in ignore_tags]
+            for n in notes
+        },
         lsa_dims=dims,
     )
     if index.embeddings is not None:
@@ -193,12 +201,17 @@ def _keywords(index: SemanticIndex, labels: np.ndarray, top: int = 4) -> dict[in
 
 
 def cluster_notes(
-    notes: Sequence[Note], method: str = "kmeans", k: int | None = None, seed: int = 0
+    notes: Sequence[Note],
+    method: str = "kmeans",
+    k: int | None = None,
+    seed: int = 0,
+    ignore_tags: Collection[str] = (),
 ) -> Clustering | None:
-    """Cluster notes; *k* None picks the k with the best silhouette score."""
+    """Cluster notes; *k* None picks the k with the best silhouette score. Tags in
+    *ignore_tags* don't count (a #todo says nothing about what a note is about)."""
     if len(notes) < 3:
         return None
-    index, x = embed_notes(notes)
+    index, x = embed_notes(notes, ignore_tags=ignore_tags)
     if method == "hierarchical" and len(notes) > MAX_HIERARCHICAL:
         method = "kmeans"
 
