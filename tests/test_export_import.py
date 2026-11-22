@@ -570,3 +570,35 @@ def test_markdown_links_note_embeds_aliases_and_notion_names_become_note_links(v
     assert "[x](Nowhere.md)" in body  # a link to nothing that was imported stays as it was
     linked = {vault.get_note(l.dst).title for l in vault.links_from(titles["Source"].id)}
     assert linked == {"Reading list", "Target"}
+
+
+def test_markdown_from_windows_editors_keeps_its_front_matter(vault, tmp_path):
+    # Notepad and other Windows editors start UTF-8 files with a byte-order mark and end
+    # lines with CRLF; the front matter must still be read.
+    folder = tmp_path / "md"
+    folder.mkdir()
+    (folder / "a.md").write_bytes(
+        "﻿---\r\ntitle: Café\r\ntags: [win]\r\n---\r\nBody #crlf\r\n".encode()
+    )
+    (folder / "b.json").write_bytes(b"")  # not imported, just present
+    import_path(vault, folder)
+    (note,) = vault.all_notes()
+    assert note.title == "Café"
+    assert set(note.tags) == {"win", "crlf"}
+    assert "﻿" not in note.body and "---" not in note.body
+
+
+@pytest.mark.skipif(not hasattr(os, "symlink") or os.name == "nt", reason="POSIX symlinks")
+def test_markdown_folder_import_does_not_follow_links_out_of_the_folder(vault, tmp_path):
+    secret = tmp_path / "secret.md"
+    secret.write_text("private text", encoding="utf-8")
+    outside_image = tmp_path / "outside.png"
+    outside_image.write_bytes(tiny_png())
+    folder = tmp_path / "md"
+    folder.mkdir()
+    (folder / "note.md").write_text("See ![[outside.png]]", encoding="utf-8")
+    (folder / "linked.md").symlink_to(secret)
+    (folder / "outside.png").symlink_to(outside_image)
+    result = import_path(vault, folder)
+    assert [n.title for n in vault.all_notes()] == ["note"]
+    assert result.images == 0

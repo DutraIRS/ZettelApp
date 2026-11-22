@@ -85,7 +85,7 @@ def import_path(vault: Vault, path: str | Path) -> ImportResult:
     if suffix == ".json":
         if path.stat().st_size > MAX_JSON_BYTES:
             raise UnsafeInputError(_("The file is too large to import."))
-        return import_data(vault, json.loads(path.read_text(encoding="utf-8")))
+        return import_data(vault, json.loads(path.read_text(encoding="utf-8-sig")))
     if suffix == ".enex":
         return import_enex(vault, path)
     if suffix == ".md":
@@ -354,12 +354,23 @@ def import_markdown_folder(vault: Vault, folder: Path) -> ImportResult:
     for path in sorted(folder.rglob("*.md")):
         if any(part.startswith(".") for part in path.relative_to(folder).parts):
             continue  # skip .obsidian, .trash and other hidden folders
+        if not _inside(folder, path):
+            continue  # a symbolic link to a file elsewhere on disk
         files.append(path)
         if len(files) > MAX_MARKDOWN_FILES:
             raise UnsafeInputError(_("The folder contains too many Markdown files."))
     with vault.transaction():
         _import_markdown_files(vault, folder, files, result)
     return result
+
+
+def _inside(root: Path, path: Path) -> bool:
+    """True when *path*, symbolic links followed, is within *root* (already resolved)."""
+    try:
+        resolved = path.resolve()
+    except OSError:
+        return False
+    return resolved == root or root in resolved.parents
 
 
 def _parse_front_matter(text: str) -> tuple[dict, str]:
@@ -378,7 +389,11 @@ def _import_markdown_files(
 ) -> None:
     images_by_name: dict[str, Path] = {}
     for p in root.rglob("*"):
-        if p.suffix.lower() in (".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp") and p.is_file():
+        if (
+            p.suffix.lower() in (".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp")
+            and p.is_file()
+            and _inside(root, p)
+        ):
             images_by_name.setdefault(p.name.lower(), p)
 
     parsed = []
@@ -386,7 +401,7 @@ def _import_markdown_files(
         if path.stat().st_size > MAX_MARKDOWN_BYTES:
             result.warn(_("Skipped {name}: file too large").format(name=path.name))
             continue
-        text = path.read_text(encoding="utf-8", errors="replace")
+        text = path.read_text(encoding="utf-8-sig", errors="replace")  # BOMs from Windows editors
         meta, body = _parse_front_matter(text)
         title = meta.get("title") if isinstance(meta.get("title"), str) else None
         if not title:

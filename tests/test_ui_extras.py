@@ -3,6 +3,7 @@
 # ruff: noqa: F811  (the `window` fixture is imported, then used as a test argument)
 
 import os
+import sys
 from datetime import UTC, datetime, timedelta
 
 import pytest
@@ -275,3 +276,25 @@ def test_a_note_time_without_a_zone_does_not_crash_the_editor():
     QApplication.instance() or QApplication(["test"])
     assert "2024" in friendly_time("2024-01-01T12:00:00")
     assert "2024" in friendly_time("2024-01-01T12:00:00+00:00")
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="Windows reopens the last folder itself")
+def test_file_dialogs_reopen_the_last_folder_used(window, monkeypatch, tmp_path):
+    from PySide6.QtWidgets import QFileDialog
+
+    from zettelapp.paths import documents_dir
+
+    picture = tmp_path / "pics" / "a.png"
+    picture.parent.mkdir()
+    picture.write_bytes(tiny_png())
+    _new_note(window)
+    asked = []
+
+    def fake_open(parent, caption, folder="", *_args):
+        asked.append(folder)
+        return str(picture), ""
+
+    monkeypatch.setattr(QFileDialog, "getOpenFileName", fake_open)
+    window.editor.insert_image()  # first time: Documents, not the working folder
+    window.editor.insert_file_link()  # then the folder of the last file chosen
+    assert asked == [str(documents_dir()), str(picture.parent)]

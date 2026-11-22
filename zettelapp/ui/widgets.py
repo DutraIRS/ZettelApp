@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import sys
 from collections.abc import Callable
+from pathlib import Path
 
 from PySide6.QtCore import QPoint, QPointF, QRect, QRectF, QSize, Qt, QTimer, Signal
 from PySide6.QtGui import QAction, QFontMetrics, QPainter, QPalette, QPen
@@ -64,6 +66,34 @@ class ToggleSwitch(QAbstractButton):
         painter.setPen(Qt.PenStyle.NoPen)
         painter.setBrush(t.q("on_accent") if on else t.q("text_secondary"))
         painter.drawEllipse(QPointF(x, track.center().y()), radius, radius)
+
+
+_LAST_FOLDER_KEY = "dialogs/lastFolder"
+
+
+def dialog_start(name: str = "") -> str:
+    """Where a file dialog without a folder of its own opens, with *name* proposed.
+
+    Windows reopens the folder last used in the app by itself. Elsewhere such a dialog
+    would open the process's working folder (often the home folder, sometimes "/"), so
+    it opens the folder last used here instead, or Documents the first time."""
+    if sys.platform == "win32":
+        return name
+    from zettelapp import settings
+    from zettelapp.paths import documents_dir
+
+    folder = settings.store().value(_LAST_FOLDER_KEY, "")
+    if not isinstance(folder, str) or not folder or not Path(folder).is_dir():
+        folder = str(documents_dir())
+    return str(Path(folder) / name) if name else folder
+
+
+def remember_folder(path: str) -> None:
+    """Note the folder of a file chosen in a dialog that used dialog_start()."""
+    if path and sys.platform != "win32":
+        from zettelapp import settings
+
+        settings.store().setValue(_LAST_FOLDER_KEY, str(Path(path).parent))
 
 
 def run_dialog(dialog: QDialog) -> int:

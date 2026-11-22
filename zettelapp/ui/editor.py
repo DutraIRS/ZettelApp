@@ -45,7 +45,9 @@ from zettelapp.ui.widgets import (
     FlowLayout,
     TagEditor,
     accent_button,
+    dialog_start,
     label,
+    remember_folder,
     run_dialog,
     tool_button,
 )
@@ -498,10 +500,14 @@ class NoteEditor(QWidget):
         if self.note is None:
             return
         path, _unused = QFileDialog.getOpenFileName(
-            self, _("Insert image"), "", _("Images (*.png *.jpg *.jpeg *.gif *.webp *.bmp)")
+            self,
+            _("Insert image"),
+            dialog_start(),
+            _("Images (*.png *.jpg *.jpeg *.gif *.webp *.bmp)"),
         )
         if not path:
             return
+        remember_folder(path)
         try:
             asset = self.window.vault.add_image_file(path)
         except (UnsafeInputError, OSError) as exc:
@@ -568,8 +574,9 @@ class NoteEditor(QWidget):
         """Link a file where it is (nothing is copied); clicking shows it in the file manager."""
         if self.note is None:
             return
-        path, _unused = QFileDialog.getOpenFileName(self, _("Link to a file"))
+        path, _unused = QFileDialog.getOpenFileName(self, _("Link to a file"), dialog_start())
         if path:
+            remember_folder(path)
             self.body.insert_file_link(path)
 
     def insert_web_link(self) -> None:
@@ -682,9 +689,12 @@ class NoteEditor(QWidget):
             "mm": _("FreeMind mind map (*.mm)"),
         }
         name = safe_filename(self.title.text() or _("Mind map")) + "." + kind
-        path, _unused = QFileDialog.getSaveFileName(self, _("Export mind map"), name, filters[kind])
+        path, _unused = QFileDialog.getSaveFileName(
+            self, _("Export mind map"), dialog_start(name), filters[kind]
+        )
         if not path:
             return
+        remember_folder(path)
         if kind == "png":
             self.mindmap.render_image().save(path, "PNG")
         elif kind == "svg":

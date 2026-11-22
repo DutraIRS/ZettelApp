@@ -23,7 +23,7 @@ from PySide6.QtWidgets import QApplication, QMessageBox
 from zettelapp import APP_NAME, DESKTOP_ID, ORG_NAME, __version__, i18n, settings, winintegration
 from zettelapp.core.security import parse_app_url
 from zettelapp.i18n import _
-from zettelapp.paths import ensure_dir, logs_dir, resource_path, runtime_dir
+from zettelapp.paths import ensure_dir, logs_dir, make_private_dirs, resource_path, runtime_dir
 from zettelapp.ui import theme
 
 log = logging.getLogger("zettelapp")
@@ -32,13 +32,14 @@ UPDATE_CHECK_DELAY_MS = 4000
 
 
 def configure_logging() -> None:
+    make_private_dirs()
     try:
-        handler = RotatingFileHandler(
-            ensure_dir(logs_dir()) / "zettelapp.log",
-            maxBytes=1_000_000,
-            backupCount=3,
-            encoding="utf-8",
-        )
+        log_file = ensure_dir(logs_dir()) / "zettelapp.log"
+        if os.name == "posix":  # created for this user only, rotated copies included
+            log_file.touch(mode=0o600, exist_ok=True)
+            for old in (log_file, *log_file.parent.glob("zettelapp.log.*")):
+                old.chmod(0o600)
+        handler = RotatingFileHandler(log_file, maxBytes=1_000_000, backupCount=3, encoding="utf-8")
     except OSError:
         handler = logging.StreamHandler()
     handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s: %(message)s"))

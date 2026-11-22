@@ -23,9 +23,12 @@ All notable changes to ZettelApp are documented here. The format follows
     recipe (`packaging/snap/`, core24 with the GNOME extension) live in the repository; store listings
     are planned, and releases can already publish the Snap when store credentials are configured.
   - API keys are stored in the Secret Service (GNOME Keyring / KWallet) instead of Windows Credential
-    Manager. Without a keyring they are kept in memory only, as before, and *Options ▸ AI* says so;
-    a keyring that refuses (a dismissed prompt, a locked collection) gets an error message. Nothing
-    changes on Windows.
+    Manager. Without a keyring they are kept in memory only, as before, and *Options ▸ AI* and the
+    *Ask* page say so; a keyring that refuses (a dismissed prompt, a locked collection) gets an error
+    message. Nothing changes on Windows.
+  - Alarms show a desktop notification through the desktop's notification service, also on desktops
+    without a tray such as GNOME; clicking it (*Open note*) opens the note, as the toast does on
+    Windows.
   - Notes default to `~/Documents/ZettelApp` (the desktop's own Documents folder, through
     `xdg-user-dir DOCUMENTS`, so `~/Documentos` on a Portuguese desktop), settings live in
     `~/.config/ZettelApp`, caches and generated images in `~/.cache/ZettelApp`: the XDG base
@@ -80,6 +83,16 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Fixed
 
+- On Linux, *Insert ▸ Image…*, *Link to a File…*, the mind map export and *Save graph as image*
+  open the folder used last (Documents the first time), as on Windows, instead of the folder
+  ZettelApp was started from.
+- Markdown files saved with a byte-order mark (as Notepad and other Windows editors do) keep their
+  front matter (title, tags, aliases) when imported; JSON exports with one import too.
+- Importing a Markdown folder no longer follows symbolic links to notes or images outside that
+  folder.
+- On Linux, the settings, data (logs, backups, search index) and cache folders are made readable by
+  your account only (0700), and so is the log file (0600), whatever the umask; folders made by an
+  earlier version are tightened at the next start.
 - `---` under a line of text drew a heading in the preview (a Markdown "setext" heading) while the same
   `---` elsewhere drew a rule, and the editor showed neither as a heading. It is now always a rule, and
   indented lines are no longer code blocks (fence code with ```), so the preview reads like the editor.

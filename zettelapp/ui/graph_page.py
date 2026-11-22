@@ -36,7 +36,15 @@ from zettelapp.ui.graph2d import Graph2DView
 from zettelapp.ui.graph3d import Graph3DView
 from zettelapp.ui.graph_common import MAX_GROUP_COLORS, GraphData
 from zettelapp.ui.link_style import LIST_ICON, type_icon
-from zettelapp.ui.widgets import FlowLayout, SearchBox, label, link_button, tool_button
+from zettelapp.ui.widgets import (
+    FlowLayout,
+    SearchBox,
+    dialog_start,
+    label,
+    link_button,
+    remember_folder,
+    tool_button,
+)
 from zettelapp.ui.workers import run_task
 
 # Layouts and clusterings kept for switching views quickly. Editing a note changes their keys
@@ -619,9 +627,10 @@ class GraphPage(QWidget):
 
     def save_image(self) -> None:
         path, _unused = QFileDialog.getSaveFileName(
-            self, _("Save graph as image"), "Graph.png", _("PNG image (*.png)")
+            self, _("Save graph as image"), dialog_start("Graph.png"), _("PNG image (*.png)")
         )
         if path:
+            remember_folder(path)
             self._view().render_image().save(path, "PNG")
             self.window.notify_file(path, _("Graph image saved"))
 

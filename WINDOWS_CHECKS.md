@@ -46,6 +46,14 @@ it's done and write the result under it (a screenshot path, a log excerpt, or "s
 - [ ] **Options ▸ AI wording:** the key hint and "Key … saved on this computer." read as before
   (the new "No system keyring was found…" text is for Linux without a Secret Service only).
 
+- [ ] **Which folder file dialogs open in.** *Insert ▸ Image…*, *Insert ▸ Link to a File…*, the mind
+  map export and *Save graph as image* pass no folder. Confirm that Windows reopens the folder used
+  last (also after a restart), and that the save dialogs propose that folder, not ZettelApp's
+  install folder. Linux now does the same itself (it opened the working folder before).
+- [ ] **Alarm toast click.** Confirm that clicking the alarm toast opens the alarmed note and
+  whether it also un-maximises a maximised window (`showNormal()` in `_open_alarm_note`); Linux now
+  sends the same alarm to the desktop's notification service and opens the note on *Open note*.
+
 ## Data only Windows can provide
 
 - [ ] **A vault made on Windows,** zipped as it is on disk (`zettel.db` plus its assets folder),

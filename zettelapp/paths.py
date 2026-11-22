@@ -178,9 +178,31 @@ def backups_dir() -> Path:
     return local_data_dir() / "Backups"
 
 
+def config_dir() -> Path | None:
+    """Where QSettings keeps ZettelApp.conf on Linux; None where preferences live elsewhere."""
+    if IS_WINDOWS or IS_ANDROID:
+        return None
+    base = os.environ.get("XDG_CONFIG_HOME") or str(Path.home() / ".config")
+    return Path(base) / APP_NAME
+
+
 def ensure_dir(path: Path) -> Path:
     path.mkdir(parents=True, exist_ok=True)
     return path
+
+
+def make_private_dirs() -> None:
+    """Linux: settings, logs, backups, the search index and the cache are readable by this
+    user only (0700 folders), whatever the umask; Windows gives %LOCALAPPDATA% the same
+    protection. Notes stay in the Documents folder with the user's own permissions."""
+    if IS_WINDOWS or IS_ANDROID:
+        return
+    for folder in (config_dir(), local_data_dir(), cache_dir()):
+        try:
+            folder.mkdir(mode=0o700, parents=True, exist_ok=True)
+            folder.chmod(0o700)  # also folders an earlier version created with the umask
+        except OSError:
+            pass  # a read-only or foreign location: the app still runs
 
 
 def resource_path(*parts: str) -> Path:

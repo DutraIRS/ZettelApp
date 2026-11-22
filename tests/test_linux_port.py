@@ -474,3 +474,30 @@ def test_text_glyphs_stay_empty_where_the_icon_font_is_missing():
     if icons._icon_family() is not None:
         pytest.skip("a Windows icon font is installed")
     assert icons.glyph("bold") == ""
+
+
+@_linux
+def test_settings_logs_backups_and_cache_are_private(tmp_path, monkeypatch):
+    import logging
+    import stat
+
+    from zettelapp import app, paths
+
+    for name in ("XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME"):
+        monkeypatch.setenv(name, str(tmp_path / name))
+    old_folder = tmp_path / "XDG_CACHE_HOME" / "ZettelApp"
+    old_folder.mkdir(parents=True, mode=0o775)  # left by an earlier version
+    old_umask = os.umask(0o002)
+    root = logging.getLogger()
+    handlers = list(root.handlers)
+    try:
+        app.configure_logging()
+    finally:
+        os.umask(old_umask)
+        for handler in root.handlers[len(handlers) :]:
+            handler.close()
+            root.removeHandler(handler)
+    for folder in (paths.config_dir(), paths.local_data_dir(), paths.cache_dir()):
+        assert stat.S_IMODE(folder.stat().st_mode) == 0o700, folder
+    log_file = paths.logs_dir() / "zettelapp.log"
+    assert stat.S_IMODE(log_file.stat().st_mode) == 0o600
