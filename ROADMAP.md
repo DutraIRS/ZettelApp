@@ -105,3 +105,24 @@ is open on two machines.
 - **Mind map ↔ notes**: turn a mind map's ideas into linked notes in one step.
 - **Accessibility audit** with Windows Narrator, and a high-contrast theme.
 - **Bulk editing**: tag, retype links or export a hand-picked selection of notes.
+
+## 8. Graph, links and the note list (requested November 2026)
+
+**Status: done, unreleased.**
+
+- [x] **Graph filters**: tick link types and tags to show or hide them in the graph, and choose which tags
+  form groups and count for clusters.
+- [x] **Local graph**: says which note it is centred on (the open note), or that it shows all notes when
+  none is open.
+- [x] **Link types list** in *Options*: rows no longer overlap until clicked.
+- [x] **Reverse names in notes**: with a directed type such as *discusses* / *discussed by*, write
+  `discussed_by:: [[...]]` from the other end; an unnamed reverse is called "Reverse <name>".
+- [x] **Mirror new links**: an option in *Options* writes a new `link_type:: [[A]]` into the linked note
+  too, at its top or bottom (off by default).
+- [x] **Note list ordered by closeness** to the open note, by meaning (LSA, the new default) or by fewest
+  links; it follows the open note as you move between notes.
+- [x] **`---` is always a horizontal rule** in the preview, like in the editor (no setext headings or
+  indented code blocks that the editor doesn't show).
+- [x] **Cloze cards**: the blank is shown and scrolled into view, and revealing fills it in place.
+- [x] **Undirected links written in both notes** show once.
+- [x] **Graph selection**: a click on empty space clears the selected note.
