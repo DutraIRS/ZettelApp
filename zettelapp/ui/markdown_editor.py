@@ -78,6 +78,37 @@ def _emphasis_around(text: str, a: int, b: int, size: int) -> tuple[int, int] | 
     return None
 
 
+def _enclosing_emphasis(text: str, a: int, b: int, size: int) -> tuple[int, int] | None:
+    """The bold (*size* 2) or italic (1) span whose markers enclose text[a:b] with other text
+    between them and the selection, as (start, end) of the whole span; None if there is none."""
+    best = None
+    for s, e, bold in emphasis_spans(text):
+        if bold != (size == 2):
+            continue
+        if s + size <= a and b <= e - size and (s + size < a or b < e - size):
+            if best is None or e - s < best[1] - best[0]:
+                best = (s, e)  # the innermost one
+    return best
+
+
+def _split_emphasis(text: str, s: int, e: int, a: int, b: int, size: int) -> tuple[str, int, int]:
+    """Take bold or italics off text[a:b] inside the span text[s:e]: the parts before and after
+    keep it. Returns the new text of the span and where the selection sits in it. The markers
+    become * (or **), since _ can't open or close in the middle of a word, and spaces at a cut
+    stay outside the markers, or Markdown wouldn't read them as emphasis."""
+    marker = "*" * size
+    left, right = text[s + size : a], text[b : e - size]
+    left_text, right_text = left.rstrip(), right.lstrip()
+    out = f"{marker}{left_text}{marker}" if left_text else ""
+    out += left[len(left_text) :]
+    start = len(out)
+    out += text[a:b]
+    end = len(out)
+    out += right[: len(right) - len(right_text)]
+    out += f"{marker}{right_text}{marker}" if right_text else ""
+    return out, start, end
+
+
 _MD_LINK_RE = re.compile(r"(?<!!)\[[^\]\n]*\]\((?:<([^>\n]+)>|([^)\s]+))(?:\s+\"[^\"\n]*\")?\)")
 _URL_RE = re.compile(r"\b(?:https?://|mailto:|file:///)[^\s<>()\[\]]*[^\s<>()\[\].,;:!?'\"]")
 _PATH_RE = re.compile(r"(?<![\w/\\])[A-Za-z]:\\[^\s<>\"|?*]*[^\s<>\"|?*.,;:!']")  # C:\no\spaces
@@ -476,16 +507,27 @@ class MarkdownEditor(QPlainTextEdit):
             while b > a and text[b - 1].isspace():
                 b -= 1
             if a < b:
-                parts.append((block, a, b, _emphasis_around(text, a, b, size)))
+                found = _emphasis_around(text, a, b, size)
+                # Part of a longer bold or italic stretch: pressing the button takes it off
+                # that part, like a word processor (instead of nesting a second one).
+                inside = None if found else _enclosing_emphasis(text, a, b, size)
+                parts.append((block, a, b, found, inside))
             block = block.next()
         if not parts:
             return
-        remove = all(found is not None for *_unused, found in parts)
+        remove = all(found is not None or inside for *_unused, found, inside in parts)
         selected = []
         cursor.beginEditBlock()
-        for block, a, b, found in reversed(parts):  # later lines first: positions stay valid
+        for block, a, b, found, inside in reversed(parts):  # later lines first
             at = block.position()
-            if remove:
+            if remove and found is None:
+                s, e = inside
+                new, sel_start, sel_end = _split_emphasis(block.text(), s, e, a, b, size)
+                cursor.setPosition(at + s)
+                cursor.setPosition(at + e, QTextCursor.MoveMode.KeepAnchor)
+                cursor.insertText(new)
+                selected.append((block, s + sel_start, s + sel_end))
+            elif remove:
                 text_start, text_end = found
                 for pos in (text_end, text_start - size):  # the markers nearest the text
                     cursor.setPosition(at + pos)

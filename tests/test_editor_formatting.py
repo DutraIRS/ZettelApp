@@ -255,3 +255,32 @@ def test_bold_and_italic_buttons_use_the_letters_windows_uses_in_each_language()
 
 
 from tests.test_ui_smoke import window  # noqa: E402, F401
+
+
+@pytest.mark.parametrize(
+    ("line", "part", "marker", "result"),
+    [
+        # The ending of an italic word, taken out of the italics (_ can't close mid-word).
+        ("(ex.: _homo novos_ / x)", "os", "*", "(ex.: *homo nov*os / x)"),
+        ("_homo novos_", "homo", "*", "homo *novos*"),
+        ("*a b c*", "b", "*", "*a* b *c*"),
+        ("**bold words here**", "words", "**", "**bold** words **here**"),
+    ],
+)
+def test_the_button_takes_emphasis_off_part_of_a_longer_stretch(editor, line, part, marker, result):
+    from zettelapp.core.render import NoteRenderer
+
+    _select(editor, line, part)
+    editor.toggle_emphasis(marker)
+    assert editor.toPlainText() == result
+    assert _selected(editor) == part
+    html = NoteRenderer(lambda _t: None).render(result)
+    assert f"<em>{part}" not in html and f"<strong>{part}" not in html
+    editor.toggle_emphasis(marker)  # and back on, around that part
+    assert part in editor.toPlainText()
+
+
+def test_italics_inside_italics_come_off_instead_of_nesting(editor):
+    _select(editor, "_homo nov*os*_", "os")
+    editor.toggle_emphasis("*")
+    assert editor.toPlainText() == "_homo novos_"
