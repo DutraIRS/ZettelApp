@@ -884,10 +884,15 @@ def test_note_list_orders_by_closeness_to_the_open_note(window):
     distance = next(a for a in window.list.sort_button.menu().actions() if a.data() == "distance")
     distance.trigger()
     window.open_note(bourse.id)
-    pump(400)
-    order = [row["id"] for row in window.list.model.rows]
-    titles = [vault.get_note(i).title for i in order]
-    assert titles[:2] == ["Market", "Linked"]
+
+    def titles():
+        return [vault.get_note(row["id"]).title for row in window.list.model.rows]
+
+    for _attempt in range(30):  # the reorder follows the open note a moment later
+        pump(100)
+        if titles()[:2] == ["Market", "Linked"]:
+            break
+    assert titles()[:2] == ["Market", "Linked"]
     assert settings.get(settings.NOTES_SORT) == "distance"
 
 
