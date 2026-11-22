@@ -23,7 +23,7 @@ from PySide6.QtWidgets import (
 )
 
 from zettelapp.core.cluster import cluster_notes
-from zettelapp.core.graph import force_layout, subgraph
+from zettelapp.core.graph import force_layout, merge_reciprocal, subgraph
 from zettelapp.i18n import _, n_
 from zettelapp.ui import icons, theme
 from zettelapp.ui.graph2d import Graph2DView
@@ -283,7 +283,10 @@ class GraphPage(QWidget):
         self._rebuild_types_menu(types)
         type_map = {lt.id: lt for lt in types}
         notes = {n.id: n for n in vault.all_notes()}
-        links = [l for l in vault.all_links() if l.type not in self.hidden_types]
+        links = merge_reciprocal(
+            (l for l in vault.all_links() if l.type not in self.hidden_types),
+            {lt.id for lt in types if not lt.directed},
+        )
         local = self.scope_group.checkedId() == 1 and self.focus_id in notes
         ids = (
             sorted(subgraph([self.focus_id], links, self.depth_spin.value()))

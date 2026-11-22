@@ -300,3 +300,16 @@ def test_a_click_on_empty_space_clears_the_selection_but_a_pan_does_not():
 
     QTest.mouseClick(view.viewport(), Qt.MouseButton.LeftButton, pos=empty)
     assert view.selected is None
+
+
+def test_an_undirected_link_both_notes_write_is_drawn_once():
+    from zettelapp.core.graph import merge_reciprocal
+
+    links = [
+        Link("a", "b", "related"),
+        Link("b", "a", "related"),
+        Link("a", "b", "supports"),
+        Link("b", "a", "supports"),  # directed: two different relations
+    ]
+    kept = merge_reciprocal(links, {"related"})
+    assert kept == [links[0], links[2], links[3]]

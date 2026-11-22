@@ -196,6 +196,14 @@ class SidePanel(QWidget):
         self, note_id: str, outgoing: list[tuple[Link, str]], incoming: list[tuple[Link, str]]
     ) -> None:
         types = {lt.id: (i, lt) for i, lt in enumerate(self.link_types)}
+        # Both notes naming each other with an undirected type is one relation: list it
+        # once, under Links.
+        mutual = {
+            (link.dst, link.type)
+            for link, _title in outgoing
+            if link.type in types and not types[link.type][1].directed
+        }
+        incoming = [(l, t) for l, t in incoming if (l.src, l.type) not in mutual]
         for widget, rows, out in (
             (self.outgoing, outgoing, True),
             (self.incoming, incoming, False),

@@ -19,6 +19,21 @@ def adjacency(links: Iterable[Link], types: set[str] | None = None) -> dict[str,
     return adj
 
 
+def merge_reciprocal(links: Iterable[Link], undirected: set[str]) -> list[Link]:
+    """*links* with each undirected link kept once: A→B and B→A of an undirected type
+    (both notes naming each other) are the same relation."""
+    seen: set[tuple[str, frozenset[str]]] = set()
+    out = []
+    for link in links:
+        if link.type in undirected:
+            key = (link.type, frozenset((link.src, link.dst)))
+            if key in seen:
+                continue
+            seen.add(key)
+        out.append(link)
+    return out
+
+
 def subgraph(
     seeds: Iterable[str], links: Iterable[Link], depth: int, types: set[str] | None = None
 ) -> set[str]:
