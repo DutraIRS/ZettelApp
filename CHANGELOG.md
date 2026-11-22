@@ -10,8 +10,10 @@ All notable changes to ZettelApp are documented here. The format follows
 
 - **Android (alpha)** (roadmap item 5): a native Kotlin/Compose app in `android/` runs the Qt-free
   Python core on device through Chaquopy, with a notes list, title search, editing and creating
-  notes, and `zettelapp://note/<id>` deep links. The vault lives in the app's private storage
-  (shared `Documents/ZettelApp` when it is visible), API keys stay in memory for the session, and
+  notes, a tag filter, links and backlinks, a graph, Insights, flashcard review, the trash and
+  `zettelapp://note/<id>` deep links. A new vault starts with the starter notes. The vault lives in
+  the app's private storage (scoped storage denies SQLite the shared `Documents` folder), API keys
+  stay in memory for the session, and
   AnkiDroid detection plus `zotero://` links go through Android intents. The desktop apps are
   unchanged; `paths` and `core.secrets` gained explicit Android branches so the platform dispatch
   stays correct (`sys.platform` is `linux` on Android).

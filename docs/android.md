@@ -10,11 +10,16 @@ the phone gets its own screen that talks to the core through the small, Qt-free
 
 What works:
 
-- **Notes list** with search over titles, **editing** and **creating** notes, saved the same way
-  the desktop app saves them (atomic writes, link resync, `#tags` in the text).
+- **Notes list** with search over titles and a tag filter, **editing** and **creating** notes
+  (title, text, tags), saved the same way the desktop app saves them (atomic writes, link resync,
+  `#tags` and typed `[[links]]` in the text), a simple preview, and moving notes to the trash.
+- Under each note, its **links, backlinks and flashcards**.
+- **Graph** (a ring layout grouped by tag, links in their type colours), **Insights** (counts, notes
+  per month, top tags, links by type) and **Review** of due flashcards, cloze cards included.
+- A new vault starts with the same **starter notes** as on the desktop.
 - **Deep links**: `zettelapp://note/<id>` opens the matching note, so links on Anki cards work.
-- **Storage**: the vault lives in the app's private storage; the shared
-  `Documents/ZettelApp` folder is used when its view is mounted on the device. Logs, backups and
+- **Storage**: the vault lives in the app's private storage. (Scoped storage mounts the shared
+  `Documents` folder but won't let SQLite lock a database there, so it isn't used.) Logs, backups and
   the app's settings follow the same layout the desktop uses, under the app's private directories.
 - **Secrets**: API keys are kept in memory for the current session — Android has no shared secret
   store the app could use today.
@@ -22,7 +27,9 @@ What works:
   intents (`zettelapp/androidintegration.py`).
 
 Not yet on Android: semantic search and *Ask your notes* (their wheels have no Android builds
-yet), on-device flashcard export to AnkiDroid, sync, and signed store releases.
+yet), a force-directed graph and the clustering (numpy), the Markdown renderer in the preview,
+translations of the phone screens, on-device flashcard export to AnkiDroid, sync, and signed store
+releases.
 
 ## Building
 

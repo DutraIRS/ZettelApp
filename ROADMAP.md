@@ -70,9 +70,10 @@ Gradle project).
 
 What works:
 
-- Notes list, search over titles, editing and creating notes. The vault lives
-  in the app's private storage, with shared `Documents/ZettelApp` used when
-  that view is mounted on the device.
+- Notes list with search and a tag filter, editing and creating notes, links,
+  backlinks and flashcards under each note, a graph, Insights and flashcard
+  review. The vault lives in the app's private storage (scoped storage won't
+  let SQLite open a database in the shared `Documents` folder).
 - `zettelapp://note/<id>` deep links open the matching note.
 - API keys stay in memory for the session (Android has no shared secret store
   the app could use yet).
@@ -83,6 +84,9 @@ Still to do:
 - Semantic search and *Ask your notes* on device (needs onnxruntime/tokenizers
   Android wheels), on-device flashcard export to AnkiDroid, a release pipeline
   with signing, and store listings.
+- The Markdown renderer in the preview, a force-directed graph, translated
+  phone screens, and opening a vault in shared storage through the Storage
+  Access Framework.
 
 ## 6. Sync between devices
 
