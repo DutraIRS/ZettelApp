@@ -7,13 +7,15 @@ Windows follows its own conventions:
 - preferences are stored by QSettings in the registry (HKCU\\Software).
 
 Linux follows the XDG base directories:
-- notes live in ~/Documents (or xdg-user-dir DOCUMENT, which follows the
+- notes live in ~/Documents (or xdg-user-dir DOCUMENTS, which follows the
   desktop's localisation and redirections);
 - logs, backups and the semantic search model live under
   $XDG_DATA_HOME/ZettelApp (default ~/.local/share/ZettelApp);
 - the small UI cache lives under $XDG_CACHE_HOME/ZettelApp (default
   ~/.cache/ZettelApp);
-- preferences are stored by QSettings as ~/.config/ZettelApp/ZettelApp.conf.
+- preferences are stored by QSettings as ~/.config/ZettelApp/ZettelApp.conf;
+- the single-instance socket and the MCP switch's lock live in the private
+  $XDG_RUNTIME_DIR/ZettelApp, which ends with the user's session.
 
 Android keeps everything app-private (scoped storage):
 - notes default to Documents/ZettelApp on shared storage when it is visible,
@@ -111,7 +113,7 @@ def _xdg_documents() -> Path | None:
     """The desktop's Documents folder (localised or redirected), via xdg-user-dir."""
     try:
         result = subprocess.run(  # noqa: S603 - fixed argument list
-            ["xdg-user-dir", "DOCUMENT"],  # noqa: S607 - always on PATH on Linux desktops
+            ["xdg-user-dir", "DOCUMENTS"],  # noqa: S607 - always on PATH on Linux desktops
             capture_output=True,
             text=True,
             timeout=2,
@@ -120,9 +122,9 @@ def _xdg_documents() -> Path | None:
     except (OSError, subprocess.TimeoutExpired):
         return None
     path = result.stdout.strip()
-    # xdg-user-dir answers the fallback ~ itself when unset; treat that as "no answer"
-    # so a redirected folder is preferred but the default is built by the caller.
-    if not path or path == str(Path.home() / "Documents"):
+    # Unset (or misspelt), xdg-user-dir answers the home folder itself: treat that, and the
+    # default ~/Documents, as "no answer", so the caller builds the default.
+    if not path or path in (str(Path.home()), str(Path.home() / "Documents")):
         return None
     return Path(path)
 
@@ -149,6 +151,19 @@ def cache_dir() -> Path:
         return local_data_dir() / "Cache"
     base = os.environ.get("XDG_CACHE_HOME") or str(Path.home() / ".cache")
     return Path(base) / APP_NAME
+
+
+def runtime_dir() -> Path:
+    """Linux: the private per-user folder for sockets and locks, $XDG_RUNTIME_DIR/ZettelApp
+    (the kernel empties it when the user's last session on this machine ends). Flatpak shares
+    only $XDG_RUNTIME_DIR/app/<app id> between the app's instances, so that part is used there.
+    Without a runtime folder (rare), local_data_dir()."""
+    base = os.environ.get("XDG_RUNTIME_DIR")
+    if IS_WINDOWS or not base or not os.path.isdir(base):
+        return local_data_dir()
+    flatpak_id = os.environ.get("FLATPAK_ID")
+    root = Path(base) / "app" / flatpak_id if flatpak_id else Path(base)
+    return root / APP_NAME
 
 
 def default_vault_dir() -> Path:

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import sys
 from datetime import date
 from pathlib import Path
 
@@ -51,7 +52,13 @@ from zettelapp.core.textutil import strip_markdown
 from zettelapp.core.updates import available_update
 from zettelapp.i18n import N_, _, n_
 from zettelapp.mcp_switch import McpSwitch
-from zettelapp.paths import backups_dir, default_vault_dir, documents_dir, local_data_dir
+from zettelapp.paths import (
+    backups_dir,
+    default_vault_dir,
+    documents_dir,
+    local_data_dir,
+    resource_path,
+)
 from zettelapp.ui import icons, theme
 from zettelapp.ui.ask_page import AskPage
 from zettelapp.ui.dialogs import (
@@ -199,6 +206,7 @@ class MainWindow(QMainWindow):
         self.alarm_timer.start()
         self._tray = None
         self._tray_note: str | None = None
+        self._notifier = None
         self._wire()
         self.quest = Quest(self)
         self._build_menus()
@@ -301,7 +309,7 @@ class MainWindow(QMainWindow):
         self._action(f, "&Back Up Vault Now", self.backup_now, None, "save")
         self._action(
             f,
-            "Show Vault in &File Explorer",
+            "Show Vault in File &Manager",
             lambda: self.vault and winintegration.reveal_in_explorer(self.vault.folder),
         )
         f.addSeparator()
@@ -493,26 +501,41 @@ class MainWindow(QMainWindow):
     def _notify_alarm(self, note) -> None:
         title = note.title or _("Untitled")
         self.info.show_message(_("Alarm: {title}").format(title=title))
+        body = strip_markdown(note.body)[:140] or _("Time for this note.")
+        # Linux desktops may have no tray (GNOME), but all have a notification service.
+        if sys.platform.startswith("linux") and self._desktop_notifier().notify(
+            title, body, note.id, _("Open note"), lambda: self._tray_message(note.id, title, body)
+        ):
+            return
+        self._tray_message(note.id, title, body)
+
+    def _tray_message(self, note_id: str, title: str, body: str) -> None:
         if not QSystemTrayIcon.isSystemTrayAvailable():
             return
         if self._tray is None:
             self._tray = QSystemTrayIcon(self.windowIcon(), self)
             self._tray.messageClicked.connect(self._open_alarm_note)
             self._tray.show()
-        self._tray_note = note.id
-        self._tray.showMessage(
-            title,
-            strip_markdown(note.body)[:140] or _("Time for this note."),
-            QSystemTrayIcon.MessageIcon.Information,
-            15000,
-        )
+        self._tray_note = note_id
+        self._tray.showMessage(title, body, QSystemTrayIcon.MessageIcon.Information, 15000)
 
-    def _open_alarm_note(self) -> None:
-        if self._tray_note and self.vault is not None:
+    def _desktop_notifier(self):
+        if self._notifier is None:
+            from zettelapp.ui.notifications import DesktopNotifier
+
+            icon = resource_path("icon-256.png")
+            self._notifier = DesktopNotifier(
+                self._open_alarm_note, str(icon) if icon.exists() else "", self
+            )
+        return self._notifier
+
+    def _open_alarm_note(self, note_id: str | None = None) -> None:
+        note_id = note_id or self._tray_note
+        if note_id and self.vault is not None:
             self.showNormal()
             self.raise_()
             self.activateWindow()
-            self.open_note(self._tray_note)
+            self.open_note(note_id)
 
     # --- vault lifecycle ---------------------------------------------------
 
@@ -695,7 +718,7 @@ class MainWindow(QMainWindow):
         )
 
     def reveal_file(self, path: str) -> None:
-        """Show a linked file in File Explorer, selected. The file is never opened or run."""
+        """Show a linked file in the file manager, selected. The file is never opened or run."""
         local = local_file_path(path)  # network paths are refused before any disk access
         if local is None:
             return

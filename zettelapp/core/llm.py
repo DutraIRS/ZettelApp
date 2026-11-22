@@ -69,7 +69,7 @@ class ProviderInfo:
 
     @property
     def secret_name(self) -> str:
-        """Name of the API key in Windows Credential Manager (zettelapp.core.secrets)."""
+        """Name of the API key in the system keyring (zettelapp.core.secrets)."""
         return f"llm/{self.id}"
 
 

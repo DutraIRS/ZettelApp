@@ -1,8 +1,9 @@
 """Several saved API keys per AI provider (say a work key and a personal one).
 
-The secret values live in Windows Credential Manager (see ``secrets``); only the key
-names and which one is in use are kept in the settings, as JSON. A key saved before
-profiles existed is the "default" profile and keeps its original secret name.
+The secret values live in the system keyring (Windows Credential Manager or the Secret
+Service, see ``secrets``); only the key names and which one is in use are kept in the
+settings, as JSON. A key saved before profiles existed is the "default" profile and keeps
+its original secret name.
 """
 
 from __future__ import annotations

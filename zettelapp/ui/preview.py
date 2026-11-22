@@ -61,7 +61,7 @@ td, th {{ padding: 3px 8px; border: 1px solid {t.border}; }}
 class NotePreview(QTextBrowser):
     noteRequested = Signal(str)
     newNoteRequested = Signal(str)
-    fileRequested = Signal(str)  # a local path to show in File Explorer
+    fileRequested = Signal(str)  # a local path to show in the file manager
     taskToggled = Signal(int)  # the position of a checklist box among all boxes in the note
     hovered = Signal(str)
 
@@ -139,7 +139,7 @@ class NotePreview(QTextBrowser):
         if href.startswith(TASK_SCHEME):
             return
         path = local_file_path(href)
-        self.hovered.emit(_("Show in File Explorer: {path}").format(path=path) if path else href)
+        self.hovered.emit(_("Show in file manager: {path}").format(path=path) if path else href)
 
     def _on_anchor(self, url: QUrl) -> None:
         href = url.toString()
@@ -148,7 +148,7 @@ class NotePreview(QTextBrowser):
             index = href[len(TASK_SCHEME) :]
             if index.isdigit():
                 self.taskToggled.emit(int(index))
-        elif path:  # shown in File Explorer, never opened or run
+        elif path:  # shown in the file manager, never opened or run
             self.fileRequested.emit(path)
         elif href.startswith(NOTE_SCHEME) and is_valid_note_id(href[len(NOTE_SCHEME) :]):
             self.noteRequested.emit(href[len(NOTE_SCHEME) :])

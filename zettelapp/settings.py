@@ -1,8 +1,10 @@
-"""User preferences, stored by QSettings in HKCU\\Software\\ZettelApp\\ZettelApp.
+"""User preferences, stored by QSettings: in HKCU\\Software\\ZettelApp\\ZettelApp on
+Windows, in ~/.config/ZettelApp/ZettelApp.conf ($XDG_CONFIG_HOME) on Linux.
 
 Only QtCore is used here, so the MCP server (which has no GUI) can read the
 same preferences as the desktop app. Secrets such as API keys never go here:
-they live in Windows Credential Manager (see zettelapp.core.secrets).
+they live in Windows Credential Manager or the Secret Service (see
+zettelapp.core.secrets).
 """
 
 from __future__ import annotations
@@ -111,7 +113,7 @@ def store() -> QSettings:
 def get(key: str, default: Any = None) -> Any:
     fallback = DEFAULTS.get(key) if default is None else default
     value = store().value(key, fallback)
-    # The registry returns strings for some types; coerce to the default's type.
+    # The registry and INI files return strings for some types; coerce to the default's type.
     if isinstance(fallback, bool):
         return value in (True, "true", "True", "1", 1)
     if isinstance(fallback, int) and not isinstance(fallback, bool):

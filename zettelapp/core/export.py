@@ -13,6 +13,7 @@ import json
 import math
 import os
 import re
+import sys
 import zipfile
 from collections import defaultdict
 from collections.abc import Iterable, Iterator
@@ -738,13 +739,19 @@ _DOT_ARROWS = {
 }
 
 
+# Graphviz looks the font up where the diagram is drawn, and SVG viewers show a font they lack
+# in their default serif: without Segoe UI (Linux), fall back to the system's sans-serif.
+_DOT_FONT = "Segoe UI" if sys.platform == "win32" else "Segoe UI,sans-serif"
+
+
 def _dot(bundle: Bundle, title: str) -> str:
     types = {t.id: t for t in bundle.link_types}
     lines = [
         f"digraph {_dot_str(title)} {{",
-        '  graph [overlap=false, splines=true, fontname="Segoe UI"];',
-        '  node [shape=box, style="rounded,filled", fillcolor="#eef3fb", color="#0f6cbd", fontname="Segoe UI"];',
-        '  edge [fontname="Segoe UI", fontsize=9];',
+        f'  graph [overlap=false, splines=true, fontname="{_DOT_FONT}"];',
+        '  node [shape=box, style="rounded,filled", fillcolor="#eef3fb", color="#0f6cbd", '
+        f'fontname="{_DOT_FONT}"];',
+        f'  edge [fontname="{_DOT_FONT}", fontsize=9];',
     ]
     for n in bundle.notes:
         lines.append(f"  {_dot_str(n.id)} [label={_dot_str(n.display_title)}];")

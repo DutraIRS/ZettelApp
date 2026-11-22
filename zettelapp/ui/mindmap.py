@@ -83,13 +83,13 @@ class _NodeItem(QGraphicsItem):
         text_rect = self.rect.adjusted(PAD_X, 0, -PAD_X, 0)
         if self.node.get("note"):
             text_rect.setRight(text_rect.right() - 18)
-            painter.setFont(icons.glyph_font(12))
-            painter.drawText(
+            icons.paint(
+                painter,
+                "link",
                 QRectF(text_rect.right() + 4, self.rect.top(), 16, self.rect.height()),
-                Qt.AlignmentFlag.AlignCenter,
-                icons.glyph("link"),
+                text_color,
+                12,
             )
-            painter.setFont(font)
         painter.drawText(
             text_rect,
             Qt.AlignmentFlag.AlignVCenter | Qt.AlignmentFlag.AlignLeft,

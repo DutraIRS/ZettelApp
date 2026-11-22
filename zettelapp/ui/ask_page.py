@@ -18,7 +18,7 @@ from PySide6.QtWidgets import (
 )
 
 from zettelapp import settings
-from zettelapp.core import apikeys
+from zettelapp.core import apikeys, secrets
 from zettelapp.core.llm import LLMSettings, retrieve_context, stream_answer
 from zettelapp.core.render import NoteRenderer
 from zettelapp.i18n import _
@@ -141,11 +141,19 @@ class AskPage(QWidget):
         self.provider_label.setText(
             f"{info.label} · {model}" + ("" if has_key else " · " + _("no API key"))
         )
-        self.privacy.setText(
-            _(
+        if secrets.secrets_available():
+            privacy = _(
                 "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes. Your API key is kept in the system keyring."
-            ).format(label=info.label)
-        )
+            )
+        else:  # Linux without a Secret Service: keys live in memory only
+            privacy = (
+                _(
+                    "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes."
+                )
+                + " "
+                + _("No system keyring was found, so keys are kept only until ZettelApp closes.")
+            )
+        self.privacy.setText(privacy.format(label=info.label))
         if self.window.vault:
             self.scope.set_tags(self.window.vault.all_tags())
 

@@ -62,7 +62,12 @@ version = { attr = "zettelapp.__version__" }
 include = ["zettelapp*"]
 
 [tool.setuptools.package-data]
-zettelapp = ["resources/*", "resources/locales/*.json", "resources/quest/*.png"]
+zettelapp = [
+    "resources/*",
+    "resources/locales/*.json",
+    "resources/quest/*.png",
+    "resources/icons/fluent/*",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

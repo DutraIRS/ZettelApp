@@ -23,6 +23,11 @@ finish-args:
 modules:
   - name: zettelapp
     buildsystem: simple
+    # pip downloads the wheels, so the build needs the network (Flathub wants the wheels
+    # listed as sources instead, e.g. with flatpak-pip-generator).
+    build-options:
+      build-args:
+        - --share=network
     build-commands:
       # The freedesktop 24.08 runtime ships Python 3.12; PySide6 and the other wheels are abi3 or
       # have CPython 3.12 builds. The app and the zettelapp-mcp entry point land in /app/bin.
@@ -33,6 +38,8 @@ modules:
         /app/share/metainfo/io.github.dutairs.zettelapp.metainfo.xml
       - install -Dm644 zettelapp/resources/icon-256.png
         /app/share/icons/hicolor/256x256/apps/io.github.dutairs.zettelapp.png
+      - install -Dm644 zettelapp/resources/icon.svg
+        /app/share/icons/hicolor/scalable/apps/io.github.dutairs.zettelapp.svg
     sources:
       - type: git
         url: https://github.com/DutraIRS/ZettelApp.git

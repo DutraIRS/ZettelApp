@@ -459,7 +459,7 @@ class NoteEditor(QWidget):
                 self.newNoteRequested.emit(target)
         elif kind == "tag":
             self.window.show_tag(target)
-        elif local_file_path(target):  # shown in File Explorer, never opened or run
+        elif local_file_path(target):  # shown in the file manager, never opened or run
             self.window.reveal_file(target)
         elif is_openable_url(target):  # web pages, e-mail and Zotero items only
             QDesktopServices.openUrl(QUrl(target))
@@ -565,7 +565,7 @@ class NoteEditor(QWidget):
             self._edited()
 
     def insert_file_link(self) -> None:
-        """Link a file where it is (nothing is copied); clicking shows it in File Explorer."""
+        """Link a file where it is (nothing is copied); clicking shows it in the file manager."""
         if self.note is None:
             return
         path, _unused = QFileDialog.getOpenFileName(self, _("Link to a file"))

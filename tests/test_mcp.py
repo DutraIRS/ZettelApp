@@ -316,34 +316,103 @@ def test_server_process_ends_once_switched_off(monkeypatch, switched_on):
 def private_switch(monkeypatch, tmp_path):
     """A switch nobody else uses, so a ZettelApp running on this machine can't interfere."""
     monkeypatch.setattr(mcp_switch, "EVENT_NAME", rf"Local\ZettelApp.Test.{os.getpid()}")
-    monkeypatch.setattr(mcp_switch, "_pid_file", lambda: tmp_path / "mcp-switch-on.pid")
+    monkeypatch.setattr(mcp_switch, "_lock_file", lambda: tmp_path / "run" / "mcp-switch.lock")
     return mcp_switch
+
+
+SWITCH_SCRIPT = (
+    "import pathlib, sys, time; from zettelapp import mcp_switch as s; "
+    "s.EVENT_NAME = sys.argv[1]; s._lock_file = lambda: pathlib.Path(sys.argv[2]); "
+)
+
+
+def _seen_elsewhere(private_switch) -> bool:
+    """What a separate process (the MCP server) sees."""
+    out = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            SWITCH_SCRIPT + "print(s.mcp_switched_on())",
+            private_switch.EVENT_NAME,
+            str(private_switch._lock_file()),
+        ],
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+    return out.stdout.strip() == "True"
 
 
 def test_the_switch_is_seen_by_other_processes_only_while_on(private_switch):
     switch = private_switch.McpSwitch()
-    probe = (
-        "import sys; from zettelapp import mcp_switch as s; s.EVENT_NAME = sys.argv[1]; "
-        "print(s.mcp_switched_on())"
-    )
-
-    def seen_elsewhere() -> bool:
-        out = subprocess.run(
-            [sys.executable, "-c", probe, private_switch.EVENT_NAME],
-            capture_output=True,
-            text=True,
-            check=True,
-        )
-        return out.stdout.strip() == "True"
-
-    assert not private_switch.mcp_switched_on()
+    assert not private_switch.mcp_switched_on() and not _seen_elsewhere(private_switch)
     switch.on()
     try:
         assert switch.is_on and private_switch.mcp_switched_on()
-        if sys.platform == "win32":
-            assert seen_elsewhere()  # the MCP server is a separate process
+        assert _seen_elsewhere(private_switch)  # the MCP server is a separate process
+        switch.on()  # switching on twice changes nothing
+        assert private_switch.mcp_switched_on()
     finally:
         switch.off()
     assert not switch.is_on and not private_switch.mcp_switched_on()
-    if sys.platform == "win32":
-        assert not seen_elsewhere()
+    assert not _seen_elsewhere(private_switch)
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="Windows destroys the named event itself")
+def test_a_killed_app_leaves_the_switch_off(private_switch):
+    """The kernel drops the lock with the process, even after kill -9: never a stale "on"."""
+    import signal
+
+    app = subprocess.Popen(
+        [
+            sys.executable,
+            "-c",
+            SWITCH_SCRIPT + "s.McpSwitch().on(); print('on', flush=True); time.sleep(60)",
+            private_switch.EVENT_NAME,
+            str(private_switch._lock_file()),
+        ],
+        stdout=subprocess.PIPE,
+        text=True,
+    )
+    try:
+        assert app.stdout.readline().strip() == "on"
+        assert private_switch.mcp_switched_on()
+        app.send_signal(signal.SIGKILL)
+        app.wait(10)
+    finally:
+        app.kill()
+        app.stdout.close()
+    assert private_switch._lock_file().exists()  # left behind, but nobody holds it
+    assert not private_switch.mcp_switched_on()
+    switch = private_switch.McpSwitch()
+    switch.on()  # and the next start can switch on again
+    assert private_switch.mcp_switched_on()
+    switch.off()
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="the Linux lock file")
+def test_the_switch_lock_is_private_and_not_inherited(private_switch):
+    switch = private_switch.McpSwitch()
+    old_umask = os.umask(0)  # whatever the umask, the lock is the user's alone
+    try:
+        switch.on()
+    finally:
+        os.umask(old_umask)
+    try:
+        lock = private_switch._lock_file()
+        assert lock.stat().st_mode & 0o777 == 0o600
+        assert lock.parent.stat().st_mode & 0o777 == 0o700
+        # Programs ZettelApp starts (a browser, a file manager) must not keep it switched on.
+        assert not os.get_inheritable(switch._lock_fd)
+    finally:
+        switch.off()
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="the Linux lock file")
+def test_the_switch_fails_closed(private_switch):
+    lock = private_switch._lock_file()
+    assert not private_switch.mcp_switched_on()  # no lock file yet
+    lock.mkdir(parents=True)  # something that can't be locked
+    assert not private_switch.mcp_switched_on()
+    with pytest.raises(OSError):
+        private_switch.McpSwitch().on()
