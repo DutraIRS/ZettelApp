@@ -262,6 +262,7 @@ class LinkPickerDialog(QDialog):
         self.search = SearchBox(_("Search notes by title or text"))
         layout.addWidget(self.search)
         self.list = QListWidget()
+        self.list.ensurePolished()  # or rows filled before showing overlap
         self.list.setAccessibleName(_("Notes"))
         layout.addWidget(self.list, 1)
         self.type_combo = QComboBox()

@@ -44,6 +44,7 @@ class ZoteroDialog(QDialog):
         layout.addWidget(self.state)
         split = QSplitter(Qt.Orientation.Horizontal)
         self.results = QListWidget()
+        self.results.ensurePolished()  # or rows filled before showing overlap
         self.results.setAccessibleName(_("Zotero items"))
         self.results.setWordWrap(True)
         self.details = QTextBrowser()

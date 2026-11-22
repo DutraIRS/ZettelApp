@@ -588,6 +588,9 @@ class OptionsDialog(QDialog):
         self.types_list.setAccessibleName(_("Link types"))
         self.types_list.setIconSize(LIST_ICON)
         self.types_list.setFixedWidth(220)
+        # Rows laid out before the stylesheet applies come out too short and overlap
+        # until something lays them out again; polishing first gives them their padding.
+        self.types_list.ensurePolished()
         self.types_list.currentRowChanged.connect(self._show_type)
         left.addWidget(self.types_list, 1)
         buttons = QHBoxLayout()
