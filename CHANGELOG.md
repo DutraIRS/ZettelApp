@@ -38,6 +38,18 @@ All notable changes to ZettelApp are documented here. The format follows
     shares, `file://` URLs with a host and control characters are refused before any lookup.
 - CI now runs the tests on Ubuntu as well as Windows, builds and self-tests the Linux packages on every
   pull request, and releases carry the `.deb` and `.tar.gz` alongside the Windows installer.
+- **Reverse names in the text**: with a directed type such as *Discusses* / *Discussed by*, a note can
+  write `discussed_by::[[A]]` for the link A → this note. Types are also written by their name
+  (`apoia::`), and built-in types answer to their English names in any language.
+- **Write links in both notes** (*Options ▸ Link types*, off by default): a `[[link]]` added in a
+  note's text is also written in the linked note's text as seen from its side (`discussed_by::[[A]]`
+  for `discusses::[[B]]`), at its end or start, and taken out again when the link is deleted.
+- **Note list ordered by closeness to the open note**, by meaning (LSA, the new default) or by the
+  fewest links away. The open note comes first and the order follows it as you move between notes.
+- **Graph filters with checkboxes**: *Link types* is now a list of checkboxes that stays open, and a new
+  *Tags* list has *Show* (hide the notes with a tag) and *Group* (a tag that forms no group and doesn't
+  count for clusters, for tags like `#todo`) for each tag. The choices are kept between sessions.
+- The local graph says which note it is centred on (*Around "…"*), or that no note is open.
 
 ### Changed
 
@@ -46,6 +58,16 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Fixed
 
+- `---` under a line of text drew a heading in the preview (a Markdown "setext" heading) while the same
+  `---` elsewhere drew a rule, and the editor showed neither as a heading. It is now always a rule, and
+  indented lines are no longer code blocks (fence code with ```), so the preview reads like the editor.
+- Cloze cards in a table: the prompt was capped in height, so the blank could sit out of sight and the
+  card looked like the whole table with nothing hidden; revealing printed the table again. The prompt
+  now fills the card, the blank is bold and scrolled into view, and the answer fills it in place.
+- An undirected link written in both notes is drawn once in the graph and listed once in the side panel.
+- A click on empty space in the graph unselects the note.
+- The link types list in *Options* (and the note picker and Zotero results) no longer starts with
+  overlapping rows.
 - Wording no longer assumes Windows on Linux: the *App theme* and *Language* options and the
   *View ▸ Theme* menu say "use system setting", privacy notes about API keys say "the system
   keyring", and the About dialog says "for Windows and Linux". Translations updated in all

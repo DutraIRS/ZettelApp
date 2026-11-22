@@ -79,13 +79,24 @@ The built-in link types are:
 These are the looks of a new vault; you can change them (see below). A vault made with an earlier version
 keeps the lines it had.
 
-A plain `[[link]]` is *Related to*.
+A plain `[[link]]` is *Related to*. Instead of the id you can write the type's name, in any language
+the vault uses (`apoia::` as well as `supports::`).
+
+A directed type can also be written from the other end with its **reverse name**: in note B,
+`supported_by:: [[A]]` is the same link as `supports:: [[B]]` written in A. So with a type
+*Discusses* / *Discussed by*, a note can say `discussed_by:: [[Gramsci]]`.
 
 ### Directed and undirected links
 
 A **directed** type reads differently from each side. If note A *supports* note B, then B's backlinks
 show A as *Supported by*. Directed links get arrow tips in the graph and stay directed in exports.
-**Undirected** types such as *Related to* and *Contradicts* read the same both ways.
+**Undirected** types such as *Related to* and *Contradicts* read the same both ways; when both notes
+write an undirected link to each other, it is shown once.
+
+To keep both notes' text in step, set *Tools ▸ Options ▸ Link types ▸ When a note links another in its
+text* to write the link at the end or the start of the linked note: writing `discusses:: [[B]]` in A then
+adds `discussed_by:: [[A]]` to B (and `related:: [[A]]` for a plain link), and deleting the link from
+A's text takes that line out of B again. It is off by default.
 
 To flip a directed link created the wrong way round, right-click it in the side panel and choose
 **Reverse direction**. Links written in the text are reversed by editing the text.
@@ -229,7 +240,8 @@ A: Hermann Ebbinghaus
 ```
 
 A question can span several lines until the `A:` line. Any paragraph with `{{c1::…}}` becomes a
-**cloze** card, which hides each deletion in turn. `{{c1::text::hint}}` shows a hint instead of `[…]`.
+**cloze** card, which hides each deletion in turn. `{{c1::text::hint}}` shows a hint instead of `[…]`. In review, the blank is bold
+and revealing fills it in where it is, which also works for clozes inside a table.
 
 **In the Flashcards tab.** Use *Insert ▸ Flashcard…* (Ctrl+Shift+F) for cards that shouldn't appear in
 the note. Cards from the text are marked *from note text* and are edited in the text.
@@ -239,8 +251,10 @@ the note. Cards from the text are marked *from note text* and are edited in the 
 The search box (Ctrl+F) looks through titles, text and tags, ignores accents, and matches word prefixes,
 so `forget` finds *forgetting*. Add `tag:name` to keep only the notes with a tag, for example
 `memory tag:psychology`. The best matches come first and each one shows the part of the note around your
-word; without a query, notes follow the order picked with the sort button next to the tag filter (*Last edited*, *Created*, *Title* or *Most
-linked*).
+word; without a query, notes follow the order picked with the sort button next to the tag filter (*Last edited*, *Created*, *Title*, *Most
+linked*, *Closest in meaning to the open note* or *Fewest links from the open note*). The last two put
+the open note first and follow it as you move between notes; *Closest in meaning*, the default, compares
+the notes' words (LSA) and catches up a moment after you edit.
 
 Several kinds of match work together, and *Tools ▸ Options ▸ Search* sets how much each one counts:
 

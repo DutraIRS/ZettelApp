@@ -11,19 +11,20 @@ it has, and each line is a link.
 
 | Control | What it does |
 |---|---|
-| **All notes / Local** | Show the whole collection, or only the open note and the notes within **Depth** links of it (following links in both directions). *Show in graph* in a note's ⋯ menu opens the local graph. |
+| **All notes / Local** | Show the whole collection, or only the note open in the editor and the notes within **Depth** links of it (following links in both directions). Beside the depth, *Around "…"* names that note (click it to find it in the graph). To centre on another note, right-click it and choose *Show local graph*, or use *Show in graph* in a note's ⋯ menu. |
 | **2D / 3D** | Switch between a flat, draggable layout and a 3D view you can orbit. |
 | **Colour by** | Tags, *Clusters: k-means*, *Clusters: hierarchical*, or nothing. |
 | **k** | Number of clusters. *Auto k* picks it for you (see below). |
 | **Group** | Pull notes of the same group together and shade each group's area. In 2D, click an area to select it and drag it to move all its notes. |
 | **Labels** | Show note titles. In large graphs, only the best-connected notes are labelled until you hover. |
-| **Link types** | Hide or show individual link types. |
+| **Link types** | Tick the link types to show. |
+| **Tags** | Two boxes per tag. **Show**: untick it to hide the notes with that tag. **Group**: untick it so the tag forms no group when colouring by tag and doesn't count for clusters (useful for tags like `#todo`). |
 | **Find in graph** | Type part of a title and press Enter to jump to the note. |
 
 At the bottom right are zoom, fit, **recompute layout**, **save as image** (PNG) and **export these
 notes** (opens the [export](export-import.md) dialog with the notes on screen).
 
-**In 2D**, drag a note to move it, drag the background to pan, and use the mouse wheel to zoom. Double-click
+**In 2D**, drag a note to move it, drag the background to pan, click it to unselect the note, and use the mouse wheel to zoom. Double-click
 a note to open it; right-click it for more (open, local graph, quiz on this neighbourhood, export with
 linked notes). A note's title image is shown inside its circle.
 
