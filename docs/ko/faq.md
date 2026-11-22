@@ -71,7 +71,8 @@ ID로 한 링크는 절대 깨지지 않아요. ID를 볼 일은 거의 없어�
 
 ### macOS나 Linux에서도 동작하나요?
 
-아직은 아니에요. Linux 패키지(.deb, AppImage)와 macOS는
+Linux는 돼요. 64비트 데스크톱(X11 또는 Wayland)용으로 Debian·Ubuntu·Mint를 위한 `.deb`와 다른 배포판을 위한
+포터블 `.tar.gz`가 있어요. [시작하기](getting-started.md)를 보세요. macOS는 아직 지원하지 않으며
 [로드맵](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md)에 있어요.
 
 ### 앱을 다른 언어로 쓸 수 있나요?

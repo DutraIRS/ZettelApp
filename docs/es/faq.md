@@ -80,8 +80,9 @@ es lo que más importa, y las estimaciones mejoran a medida que enlazas y descar
 
 ### ¿Funciona en macOS o Linux?
 
-Todavía no. Los paquetes para Linux (.deb, AppImage) y macOS están en la
-[hoja de ruta](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
+Linux, sí: los escritorios de 64 bits (X11 o Wayland) tienen un `.deb` para Debian, Ubuntu y Mint y un
+`.tar.gz` portátil para cualquier otra distribución; consulta [Primeros pasos](getting-started.md). macOS
+aún no es compatible; está en la [hoja de ruta](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
 
 ### ¿Está disponible la aplicación en otros idiomas?
 

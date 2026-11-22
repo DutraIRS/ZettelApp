@@ -80,8 +80,9 @@
 
 ### هل يعمل على macOS أو Linux؟
 
-ليس بعد. حزم Linux (.deb وAppImage)
-ودعم macOS مدرجان في [خارطة الطريق](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
+Linux نعم: لأسطح المكتب 64 بت (X11 أو Wayland) حزمة `.deb` لـ Debian وUbuntu وMint وأرشيف `.tar.gz`
+محمول لأي توزيعة أخرى؛ راجع [البدء](getting-started.md). لا يُدعم macOS بعد، وهو مدرج في
+[خارطة الطريق](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
 
 ### هل التطبيق متاح بلغات أخرى؟
 

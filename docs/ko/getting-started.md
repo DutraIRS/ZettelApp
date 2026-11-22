@@ -23,13 +23,13 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 
 | 다운로드 | 이럴 때 사용 |
 |---|---|
-| `zettelapp_<버전>_amd64.deb` | Debian, Ubuntu, Mint 등 `.deb` 기반 배포판. `sudo apt install ./zettelapp_*.deb`로 설치하거나 소프트웨어 센터에서 열면 이후 업데이트도 제공돼요. |
-| `ZettelApp-<버전>-linux-x86_64.tar.gz` | 다른 배포판, 또는 설치 없이 사용: 원하는 곳에 압축을 풀고 `ZettelApp/zettelapp`을 실행하세요. |
+| `ZettelApp-Linux-amd64.deb` | Debian, Ubuntu, Mint 등 `.deb` 기반 배포판. `sudo apt install ./ZettelApp-Linux-amd64.deb`로 설치하거나 소프트웨어 센터에서 열면 이후 업데이트도 제공돼요. |
+| `ZettelApp-Linux-x86_64.tar.gz` | 다른 배포판, 또는 설치 없이 사용: 원하는 곳에 압축을 풀고 `ZettelApp/zettelapp`을 실행하세요. |
 
 두 패키지 모두 Python과 Qt를 포함해요. 64비트 데스크톱(X11 또는 Wayland — GNOME, KDE 등)과 표준 그래픽 라이브러리가 필요해요. 터미널에서 다운로드를 확인하려면:
 
 ```bash
-sha256sum zettelapp_1.3.1_amd64.deb
+sha256sum ZettelApp-Linux-amd64.deb
 ```
 
 API 키는 Secret Service(GNOME Keyring 또는 KWallet)에 저장되고, 키링이 없으면 메모리에만 보관돼요. Anki 카드의 `zettelapp://` 링크는 `.deb`에서는 바로 노트를 열어요. 다른 설치 방식에서는 *옵션 ▸ 데스크톱 통합*에서 핸들러를 설정하세요.

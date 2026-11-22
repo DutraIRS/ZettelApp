@@ -80,8 +80,9 @@
 
 ### Работает ли она на macOS или Linux?
 
-Пока нет. Пакеты для Linux (.deb, AppImage) и macOS есть в
-[дорожной карте](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
+Linux — да: для 64-битных рабочих столов (X11 или Wayland) есть `.deb` для Debian, Ubuntu и Mint и
+переносной `.tar.gz` для любого другого дистрибутива; см. [Начало работы](getting-started.md). macOS пока
+не поддерживается; она есть в [дорожной карте](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
 
 ### Доступно ли приложение на других языках?
 

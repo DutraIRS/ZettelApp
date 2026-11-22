@@ -38,8 +38,8 @@ jobs:
         with:
           name: linux-packages
           path: |
-            dist/ZettelApp-*.tar.gz
-            dist/zettelapp_*.deb
+            dist/ZettelApp-Linux-x86_64.tar.gz
+            dist/ZettelApp-Linux-amd64.deb
             dist/SHA256SUMS-linux.txt
           retention-days: 7
 
@@ -115,8 +115,8 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          $files = @("dist/ZettelApp-Setup.exe", "dist/ZettelApp-Portable.zip", "dist/SHA256SUMS.txt") +
-            @(Get-Item dist/ZettelApp-*.tar.gz) + @(Get-Item dist/zettelapp_*.deb)
+          $files = @("dist/ZettelApp-Setup.exe", "dist/ZettelApp-Portable.zip", "dist/SHA256SUMS.txt",
+            "dist/ZettelApp-Linux-amd64.deb", "dist/ZettelApp-Linux-x86_64.tar.gz")
           gh release create "${{ github.ref_name }}" $files `
             --title "ZettelApp ${{ github.ref_name }}" --generate-notes
 

@@ -86,8 +86,9 @@ die Schätzungen werden besser, wenn Sie Links annehmen und Vorschläge ablehnen
 
 ### Funktioniert die App unter macOS oder Linux?
 
-Noch nicht. Linux-Pakete (.deb, AppImage) und macOS stehen auf der
-[Roadmap](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
+Linux ja: 64-Bit-Desktops (X11 oder Wayland) erhalten ein `.deb` für Debian, Ubuntu und Mint und ein
+portables `.tar.gz` für jede andere Distribution; siehe [Erste Schritte](getting-started.md). macOS wird
+noch nicht unterstützt; es steht auf der [Roadmap](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
 
 ### Ist die App in weiteren Sprachen verfügbar?
 

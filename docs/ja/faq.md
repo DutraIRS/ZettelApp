@@ -54,7 +54,7 @@ Claude Desktop や Claude Code などの AI アシスタントが、[MCP](mcp-se
 
 ### macOS や Linux で動きますか?
 
-まだです。Linux パッケージ (.deb、AppImage) と macOS は[ロードマップ](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md)に入っています。
+Linux は使えます。64 ビットのデスクトップ (X11 または Wayland) 向けに、Debian・Ubuntu・Mint 用の `.deb` と、ほかのディストリビューション用のポータブルな `.tar.gz` があります。[はじめに](getting-started.md)をご覧ください。macOS はまだ対応しておらず、[ロードマップ](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md)に入っています。
 
 ### アプリは他の言語でも使えますか?
 

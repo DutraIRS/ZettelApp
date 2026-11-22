@@ -54,7 +54,7 @@
 
 ### 它能在 macOS 或 Linux 上使用吗?
 
-暂时不能。Linux 软件包(.deb、AppImage)和 macOS 已列入[路线图](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md)。
+Linux 可以：64 位桌面（X11 或 Wayland）有适用于 Debian、Ubuntu 和 Mint 的 `.deb`，以及适用于其他发行版的便携 `.tar.gz`；请参阅[入门](getting-started.md)。macOS 暂不支持，已列入[路线图](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md)。
 
 ### 应用提供其他语言吗?
 

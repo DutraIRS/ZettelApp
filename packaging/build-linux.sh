@@ -2,15 +2,18 @@
 # Builds ZettelApp for Linux.
 #
 # Produces, in dist/:
-#   ZettelApp/                              the app folder (zettelapp + zettelapp-mcp)
-#   ZettelApp-<version>-linux-x86_64.tar.gz the same folder, portable archive
-#   zettelapp_<version>_amd64.deb           the .deb package (needs dpkg-deb; skipped otherwise)
-#   SHA256SUMS-linux.txt                    checksums for the downloads
+#   ZettelApp/                     the app folder (zettelapp + zettelapp-mcp)
+#   ZettelApp-Linux-x86_64.tar.gz  the same folder, portable archive
+#   ZettelApp-Linux-amd64.deb      the .deb package (needs dpkg-deb; skipped otherwise)
+#   SHA256SUMS-linux.txt           checksums for the downloads
+#
+# The names carry no version, like the Windows downloads, so the website can link to
+# /releases/latest/download/<name>; the version is inside the package.
 #
 # Needs Python 3.12+ with requirements-dev.txt installed. The PyInstaller binaries bundle
 # Python, Qt and the wheels; the .deb additionally Depends on the system libraries Qt talks
 # to (X11/Wayland/GL) and on libsecret for the keyring. Validate afterwards with:
-#   dpkg-deb -I dist/zettelapp_*.deb
+#   dpkg-deb -I dist/ZettelApp-Linux-amd64.deb
 set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -31,7 +34,7 @@ mcp_version="$(dist/ZettelApp/zettelapp-mcp --version)"
 echo "Self-tests passed ($mcp_version)"
 
 # Portable archive: unpack anywhere and run ZettelApp/zettelapp.
-tar -C dist -czf "dist/ZettelApp-${version}-linux-x86_64.tar.gz" ZettelApp
+tar -C dist -czf "dist/ZettelApp-Linux-x86_64.tar.gz" ZettelApp
 
 # .deb package. A version such as 1.4.0-rc1 becomes 1.4.0~rc1 (Debian's pre-release order).
 deb_version="${version%%-*}"
@@ -92,11 +95,11 @@ exit 0
 POSTINST
 chmod 755 "$staging/DEBIAN/postinst"
 
-dpkg-deb --build --root-owner-group "$staging" "dist/zettelapp_${deb_version}_amd64.deb"
+dpkg-deb --build --root-owner-group "$staging" "dist/ZettelApp-Linux-amd64.deb"
 
 # Checksums for the release page (the Windows workflow merges these into SHA256SUMS.txt).
 {
-    sha256sum "dist/ZettelApp-${version}-linux-x86_64.tar.gz" "dist/zettelapp_${deb_version}_amd64.deb"
+    sha256sum "dist/ZettelApp-Linux-x86_64.tar.gz" "dist/ZettelApp-Linux-amd64.deb"
 } | sed "s#  dist/#  #" > dist/SHA256SUMS-linux.txt
 
 echo "Done: $(pwd)/dist"

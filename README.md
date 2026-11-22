@@ -68,8 +68,8 @@ From the [latest release](https://github.com/DutraIRS/ZettelApp/releases/latest)
 
 | Download | Use it when |
 |---|---|
-| `zettelapp_<version>_amd64.deb` | You use Debian, Ubuntu, Mint or another `.deb`-based distribution: install it with `sudo apt install ./zettelapp_*.deb` (or open it in your software centre, which then offers updates). |
-| `ZettelApp-<version>-linux-x86_64.tar.gz` | You want a portable build, or use another distribution: unpack it anywhere and run `ZettelApp/zettelapp`. |
+| `ZettelApp-Linux-amd64.deb` | You use Debian, Ubuntu, Mint or another `.deb`-based distribution: install it with `sudo apt install ./ZettelApp-Linux-amd64.deb` (or open it in your software centre, which then offers updates). |
+| `ZettelApp-Linux-x86_64.tar.gz` | You want a portable build, or use another distribution: unpack it anywhere and run `ZettelApp/zettelapp`. |
 
 Both bundle Python and Qt; they need a 64-bit desktop (X11 or Wayland, GNOME, KDE and others) with the
 standard graphics libraries, listed in the `.deb`'s dependencies. API keys are stored in the Secret

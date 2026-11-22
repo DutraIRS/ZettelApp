@@ -21,13 +21,13 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 
 | 下载 | 适用场景 |
 |---|---|
-| `zettelapp_<版本>_amd64.deb` | Debian、Ubuntu、Mint 或其他基于 `.deb` 的发行版。使用 `sudo apt install ./zettelapp_*.deb` 安装,或在软件中心中打开,之后它会提供更新。 |
-| `ZettelApp-<版本>-linux-x86_64.tar.gz` | 其他发行版,或无需安装:解压到任意位置并运行 `ZettelApp/zettelapp`。 |
+| `ZettelApp-Linux-amd64.deb` | Debian、Ubuntu、Mint 或其他基于 `.deb` 的发行版。使用 `sudo apt install ./ZettelApp-Linux-amd64.deb` 安装,或在软件中心中打开,之后它会提供更新。 |
+| `ZettelApp-Linux-x86_64.tar.gz` | 其他发行版,或无需安装:解压到任意位置并运行 `ZettelApp/zettelapp`。 |
 
 两者都内置 Python 和 Qt;需要 64 位桌面环境(X11 或 Wayland — GNOME、KDE 等)及其标准图形库。要在终端中校验下载:
 
 ```bash
-sha256sum zettelapp_1.3.1_amd64.deb
+sha256sum ZettelApp-Linux-amd64.deb
 ```
 
 API 密钥存储在 Secret Service(GNOME Keyring 或 KWallet)中;没有密钥环时仅保存在内存中。Anki 卡片中的 `zettelapp://` 链接在使用 `.deb` 时开箱即可打开笔记;其他安装方式请在*选项 ▸ 桌面集成*中设置处理程序。

@@ -54,7 +54,7 @@ Il s’agit de l’estimation honnête du modèle concernant la probabilité que
 
 ### L’application fonctionne-t-elle sur macOS ou Linux ?
 
-Pas encore. Les paquets Linux (.deb, AppImage) et macOS figurent dans la [feuille de route](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
+Linux, oui : les bureaux 64 bits (X11 ou Wayland) disposent d’un `.deb` pour Debian, Ubuntu et Mint et d’un `.tar.gz` portable pour toute autre distribution ; voir [Prise en main](getting-started.md). macOS n’est pas encore pris en charge ; il figure dans la [feuille de route](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
 
 ### L’application est-elle disponible dans d’autres langues ?
 

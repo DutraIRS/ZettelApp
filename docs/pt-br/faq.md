@@ -80,8 +80,9 @@ a maioria dos pares de notas não tem relação, então até boas sugestões com
 
 ### Funciona no macOS ou no Linux?
 
-Ainda não. Pacotes para Linux (.deb, AppImage) e o macOS estão no
-[roadmap](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
+Linux, sim: desktops de 64 bits (X11 ou Wayland) têm um `.deb` para Debian, Ubuntu e Mint e um `.tar.gz`
+portátil para qualquer outra distribuição; veja [Primeiros passos](getting-started.md). O macOS ainda não é
+suportado; está no [roadmap](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
 
 ### O aplicativo está disponível em outros idiomas?
 

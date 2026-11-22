@@ -80,8 +80,9 @@ conta di più e le stime migliorano man mano che colleghi e scarti. Vedi
 
 ### Funziona su macOS o Linux?
 
-Non ancora. I pacchetti Linux (.deb, AppImage) e macOS sono nella
-[roadmap](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
+Linux sì: i desktop a 64 bit (X11 o Wayland) hanno un `.deb` per Debian, Ubuntu e Mint e un `.tar.gz`
+portatile per qualsiasi altra distribuzione; vedi [Per iniziare](getting-started.md). macOS non è ancora
+supportato; è nella [roadmap](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
 
 ### L'app è disponibile in altre lingue?
 

@@ -23,14 +23,14 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 
 | Download | Use quando |
 |---|---|
-| `zettelapp_<versão>_amd64.deb` | Debian, Ubuntu, Mint ou outra distribuição baseada em `.deb`. Instale com `sudo apt install ./zettelapp_*.deb`, ou abra no seu centro de aplicativos, que depois oferecerá atualizações. |
-| `ZettelApp-<versão>-linux-x86_64.tar.gz` | Qualquer outra distribuição, ou sem instalação: descompacte em qualquer lugar e execute `ZettelApp/zettelapp`. |
+| `ZettelApp-Linux-amd64.deb` | Debian, Ubuntu, Mint ou outra distribuição baseada em `.deb`. Instale com `sudo apt install ./ZettelApp-Linux-amd64.deb`, ou abra no seu centro de aplicativos, que depois oferecerá atualizações. |
+| `ZettelApp-Linux-x86_64.tar.gz` | Qualquer outra distribuição, ou sem instalação: descompacte em qualquer lugar e execute `ZettelApp/zettelapp`. |
 
 Ambos incluem Python e Qt; eles precisam de um desktop de 64 bits (X11 ou Wayland — GNOME, KDE e
 outros) com suas bibliotecas gráficas padrão. Para verificar um download em um terminal:
 
 ```bash
-sha256sum zettelapp_1.3.1_amd64.deb
+sha256sum ZettelApp-Linux-amd64.deb
 ```
 
 As chaves de API são armazenadas no Serviço de Segredos (GNOME Keyring ou KWallet); sem um chaveiro,

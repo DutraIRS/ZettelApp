@@ -88,8 +88,8 @@ This produces:
 
 - `dist/ZettelApp/`: the app folder (PyInstaller, one-folder mode) with the desktop app `zettelapp` and
   the console MCP server `zettelapp-mcp`;
-- `dist/ZettelApp-<version>-linux-x86_64.tar.gz`: the same folder, portable archive;
-- `dist/zettelapp_<version>_amd64.deb`: the package for Debian-based distributions (needs `dpkg-deb`),
+- `dist/ZettelApp-Linux-x86_64.tar.gz`: the same folder, portable archive;
+- `dist/ZettelApp-Linux-amd64.deb`: the package for Debian-based distributions (needs `dpkg-deb`),
   which installs the folder under `/usr/lib/ZettelApp`, `zettelapp` and `zettelapp-mcp` on `PATH`, the
   application entry with the `zettelapp://` scheme handler, the AppStream metadata and the icon;
 - `dist/SHA256SUMS-linux.txt`.

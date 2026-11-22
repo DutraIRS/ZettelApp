@@ -80,8 +80,9 @@ matters most, and the estimates improve as you link and dismiss. See
 
 ### Does it work on macOS or Linux?
 
-Not yet. Linux packages (.deb, AppImage) and macOS are on the
-[roadmap](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
+Linux, yes: 64-bit desktops (X11 or Wayland) get a `.deb` for Debian, Ubuntu and Mint and a portable
+`.tar.gz` for any other distribution; see [Getting started](getting-started.md). macOS isn't supported
+yet; it is on the [roadmap](https://github.com/DutraIRS/ZettelApp/blob/main/ROADMAP.md).
 
 ### Is the app available in other languages?
 

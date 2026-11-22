@@ -21,13 +21,13 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 
 | ダウンロード | 次の場合に使う |
 |---|---|
-| `zettelapp_<バージョン>_amd64.deb` | Debian、Ubuntu、Mint など `.deb` 系のディストリビューション。`sudo apt install ./zettelapp_*.deb` でインストールするか、ソフトウェアセンターで開くと、その後の更新も提案されます。 |
-| `ZettelApp-<バージョン>-linux-x86_64.tar.gz` | その他のディストリビューション、またはインストールしない場合: 任意の場所に展開し、`ZettelApp/zettelapp` を実行します。 |
+| `ZettelApp-Linux-amd64.deb` | Debian、Ubuntu、Mint など `.deb` 系のディストリビューション。`sudo apt install ./ZettelApp-Linux-amd64.deb` でインストールするか、ソフトウェアセンターで開くと、その後の更新も提案されます。 |
+| `ZettelApp-Linux-x86_64.tar.gz` | その他のディストリビューション、またはインストールしない場合: 任意の場所に展開し、`ZettelApp/zettelapp` を実行します。 |
 
 どちらも Python と Qt を同梱しています。64 ビットのデスクトップ (X11 または Wayland — GNOME、KDE など) と、その標準的なグラフィックライブラリが必要です。ターミナルでダウンロードを確認するには:
 
 ```bash
-sha256sum zettelapp_1.3.1_amd64.deb
+sha256sum ZettelApp-Linux-amd64.deb
 ```
 
 API キーは Secret Service (GNOME Keyring または KWallet) に保存され、キーリングがなければメモリ上にだけ置かれます。Anki カードの `zettelapp://` リンクは、`.deb` なら追加設定なしでノートを開きます。それ以外のインストールでは、*オプション ▸ デスクトップ統合*からハンドラーを設定します。

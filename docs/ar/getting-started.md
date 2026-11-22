@@ -23,13 +23,13 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 
 | التحميل | متى تستخدمه |
 |---|---|
-| `zettelapp_<الإصدار>_amd64.deb` | ديبيان أو أوبونتو أو منت أو توزيعة أخرى قائمة على `.deb`. ثبّته بـ `sudo apt install ./zettelapp_*.deb`، أو افتحه في مركز البرامج لديك، الذي سيعرض التحديثات لاحقًا. |
-| `ZettelApp-<الإصدار>-linux-x86_64.tar.gz` | أي توزيعة أخرى أو دون تثبيت: فك ضغطه في أي مكان وشغّل `ZettelApp/zettelapp`. |
+| `ZettelApp-Linux-amd64.deb` | ديبيان أو أوبونتو أو منت أو توزيعة أخرى قائمة على `.deb`. ثبّته بـ `sudo apt install ./ZettelApp-Linux-amd64.deb`، أو افتحه في مركز البرامج لديك، الذي سيعرض التحديثات لاحقًا. |
+| `ZettelApp-Linux-x86_64.tar.gz` | أي توزيعة أخرى أو دون تثبيت: فك ضغطه في أي مكان وشغّل `ZettelApp/zettelapp`. |
 
 كلاهما يضم Python وQt؛ ويتطلبان سطح مكتب بنظام 64-bit (‏X11 أو Wayland — ‏GNOME وKDE وغيرهما) مع مكتباته الرسومية القياسية. للتحقق من تحميل في الطرفية:
 
 ```bash
-sha256sum zettelapp_1.3.1_amd64.deb
+sha256sum ZettelApp-Linux-amd64.deb
 ```
 
 تُحفظ مفاتيح API في Secret Service (‏GNOME Keyring أو KWallet)؛ وبدون حلقة مفاتيح تبقى في الذاكرة فقط. روابط `zettelapp://` من بطاقات Anki تفتح الملاحظات فورًا مع حزمة `.deb`؛ وتركيبات أخرى تضبط المعالج من *الخيارات ▸ تكامل سطح المكتب*.

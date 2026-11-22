@@ -143,10 +143,10 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: ZettelApp-Portable-Linux
-          path: dist/ZettelApp-*-linux-x86_64.tar.gz
+          path: dist/ZettelApp-Linux-x86_64.tar.gz
           retention-days: 7
       - uses: actions/upload-artifact@v7
         with:
           name: ZettelApp-deb
-          path: dist/zettelapp_*_amd64.deb
+          path: dist/ZettelApp-Linux-amd64.deb
           retention-days: 7
