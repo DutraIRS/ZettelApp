@@ -1048,5 +1048,18 @@
  "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes.": "질문과 위에 나열된 노트만 {label}에 전송돼요. 모델은 도구를 받지 않으며 노트를 변경할 수 없어요.",
  "Show in file manager: {path}": "파일 관리자에서 표시: {path}",
  "Show Vault in File &Manager": "볼트를 파일 관리자에서 표시(&M)",
- "No system keyring was found, so keys are kept only until ZettelApp closes.": "시스템 키링을 찾지 못해 키는 ZettelApp을 닫을 때까지만 보관돼요."
+ "No system keyring was found, so keys are kept only until ZettelApp closes.": "시스템 키링을 찾지 못해 키는 ZettelApp을 닫을 때까지만 보관돼요.",
+ "Close (Esc)": "닫기 (Esc)",
+ "Find in note": "노트에서 찾기",
+ "Match case": "대소문자 구분",
+ "Next match (Enter)": "다음 일치 (Enter)",
+ "No results": "결과 없음",
+ "Previous match (Shift+Enter)": "이전 일치 (Shift+Enter)",
+ "Replace": "바꾸기",
+ "Replace (Ctrl+H)": "바꾸기 (Ctrl+H)",
+ "Replace all": "모두 바꾸기",
+ "Replace with": "바꿀 내용",
+ "{i} of {n}": "{i} / {n}",
+ "{n} replaced": "{n}개 바꿈",
+ "Find and R&eplace in Note": "노트에서 찾아 바꾸기(&R)"
 }

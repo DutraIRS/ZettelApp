@@ -8,7 +8,7 @@ ORG_NAME = "ZettelApp"
 APP_USER_MODEL_ID = "ZettelApp.Desktop"
 URL_SCHEME = "zettelapp"
 # Linux: the desktop entry's name (and AppStream id), so desktops match windows to it.
-DESKTOP_ID = "io.github.dutairs.zettelapp"
+DESKTOP_ID = "io.github.dutrairs.zettelapp"
 
 REPO_URL = "https://github.com/DutraIRS/ZettelApp"
 HOMEPAGE_URL = "https://dutrairs.github.io/ZettelApp/"

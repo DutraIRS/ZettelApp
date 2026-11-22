@@ -92,7 +92,7 @@ def registered_command() -> str | None:
     for directory in _applications_dirs():
         for name in (
             f"{APP_NAME.lower()}.desktop",
-            "io.github.dutairs.zettelapp.desktop",
+            "io.github.dutrairs.zettelapp.desktop",
             "com.dutrairs.ZettelApp.desktop",
         ):
             entry = directory / name

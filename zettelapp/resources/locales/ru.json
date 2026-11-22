@@ -1110,5 +1110,18 @@
  "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes.": "{label} получает только ваш вопрос и заметки, перечисленные выше. У модели нет инструментов, и она не может менять ваши заметки.",
  "Show in file manager: {path}": "Показать в файловом менеджере: {path}",
  "Show Vault in File &Manager": "Показать хранилище в &файловом менеджере",
- "No system keyring was found, so keys are kept only until ZettelApp closes.": "Системное хранилище ключей не найдено, поэтому ключи хранятся только до закрытия ZettelApp."
+ "No system keyring was found, so keys are kept only until ZettelApp closes.": "Системное хранилище ключей не найдено, поэтому ключи хранятся только до закрытия ZettelApp.",
+ "Close (Esc)": "Закрыть (Esc)",
+ "Find in note": "Найти в заметке",
+ "Match case": "Учитывать регистр",
+ "Next match (Enter)": "Следующее совпадение (Enter)",
+ "No results": "Ничего не найдено",
+ "Previous match (Shift+Enter)": "Предыдущее совпадение (Shift+Enter)",
+ "Replace": "Заменить",
+ "Replace (Ctrl+H)": "Заменить (Ctrl+H)",
+ "Replace all": "Заменить все",
+ "Replace with": "Заменить на",
+ "{i} of {n}": "{i} из {n}",
+ "{n} replaced": "Заменено: {n}",
+ "Find and R&eplace in Note": "Найти и &заменить в заметке"
 }

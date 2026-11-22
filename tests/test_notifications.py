@@ -35,7 +35,7 @@ def test_notifier_sends_a_typed_gdbus_call(monkeypatch):
         '"Say \\"hi\\""',
         '"line\\nbreak"',
         '["default", "Open note"]',
-        '{"desktop-entry": <"io.github.dutairs.zettelapp">}',
+        '{"desktop-entry": <"io.github.dutrairs.zettelapp">}',
         "15000",
     ]
 

@@ -1203,5 +1203,18 @@
  "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes.": "لا يُرسل إلى {label} سوى سؤالك والملاحظات المدرجة أعلاه. لا يحصل النموذج على أي أدوات ولا يستطيع تغيير ملاحظاتك.",
  "Show in file manager: {path}": "إظهار في مدير الملفات: {path}",
  "Show Vault in File &Manager": "إظهار المستودع في &مدير الملفات (&M)",
- "No system keyring was found, so keys are kept only until ZettelApp closes.": "لم يُعثر على حلقة مفاتيح النظام، لذا تُحفظ المفاتيح فقط حتى إغلاق ZettelApp."
+ "No system keyring was found, so keys are kept only until ZettelApp closes.": "لم يُعثر على حلقة مفاتيح النظام، لذا تُحفظ المفاتيح فقط حتى إغلاق ZettelApp.",
+ "Close (Esc)": "إغلاق (Esc)",
+ "Find in note": "البحث في الملاحظة",
+ "Match case": "مطابقة حالة الأحرف",
+ "Next match (Enter)": "التطابق التالي (Enter)",
+ "No results": "لا نتائج",
+ "Previous match (Shift+Enter)": "التطابق السابق (Shift+Enter)",
+ "Replace": "استبدال",
+ "Replace (Ctrl+H)": "استبدال (Ctrl+H)",
+ "Replace all": "استبدال الكل",
+ "Replace with": "الاستبدال بـ",
+ "{i} of {n}": "{i} من {n}",
+ "{n} replaced": "تم استبدال {n}",
+ "Find and R&eplace in Note": "بحث واست&بدال في الملاحظة"
 }

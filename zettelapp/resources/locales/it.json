@@ -1079,5 +1079,18 @@
  "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes.": "Solo la tua domanda e le note elencate sopra vengono inviate a {label}. Il modello non ha strumenti e non può modificare le tue note.",
  "Show in file manager: {path}": "Mostra nel gestore file: {path}",
  "Show Vault in File &Manager": "Mostra vault nel &gestore file",
- "No system keyring was found, so keys are kept only until ZettelApp closes.": "Non è stato trovato nessun portachiavi di sistema, quindi le chiavi vengono conservate solo fino alla chiusura di ZettelApp."
+ "No system keyring was found, so keys are kept only until ZettelApp closes.": "Non è stato trovato nessun portachiavi di sistema, quindi le chiavi vengono conservate solo fino alla chiusura di ZettelApp.",
+ "Close (Esc)": "Chiudi (Esc)",
+ "Find in note": "Trova nella nota",
+ "Match case": "Maiuscole/minuscole",
+ "Next match (Enter)": "Occorrenza successiva (Invio)",
+ "No results": "Nessun risultato",
+ "Previous match (Shift+Enter)": "Occorrenza precedente (Maiusc+Invio)",
+ "Replace": "Sostituisci",
+ "Replace (Ctrl+H)": "Sostituisci (Ctrl+H)",
+ "Replace all": "Sostituisci tutto",
+ "Replace with": "Sostituisci con",
+ "{i} of {n}": "{i} di {n}",
+ "{n} replaced": "{n} sostituite",
+ "Find and R&eplace in Note": "Trova e &sostituisci nella nota"
 }

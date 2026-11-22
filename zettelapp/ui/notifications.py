@@ -19,9 +19,11 @@ from collections.abc import Callable
 
 from PySide6.QtCore import SLOT, QObject, QProcess, QTimer, Slot
 
+from zettelapp import DESKTOP_ID
+
 SERVICE = "org.freedesktop.Notifications"
 PATH = "/org/freedesktop/Notifications"
-DESKTOP_ENTRY = "io.github.dutairs.zettelapp"
+DESKTOP_ENTRY = DESKTOP_ID  # lets the desktop show our icon and name
 TIMEOUT_MS = 15000
 
 

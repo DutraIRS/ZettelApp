@@ -8,6 +8,7 @@ from functools import lru_cache
 from PySide6.QtCore import (
     QAbstractListModel,
     QEvent,
+    QItemSelectionModel,
     QModelIndex,
     QRectF,
     QSize,
@@ -605,7 +606,11 @@ class NoteListPanel(QWidget):
             if data["id"] == note_id:
                 index = self.model.index(row)
                 self.view.selectionModel().blockSignals(not emit)
-                self.view.setCurrentIndex(index)
+                # Just this note: view.setCurrentIndex would extend the selection while Shift or
+                # Ctrl happens to be held, and opening a note isn't picking several.
+                self.view.selectionModel().setCurrentIndex(
+                    index, QItemSelectionModel.SelectionFlag.ClearAndSelect
+                )
                 self.view.selectionModel().blockSignals(False)
                 self.view.scrollTo(index)
                 self.view.viewport().update()

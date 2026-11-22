@@ -1048,5 +1048,18 @@
  "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes.": "質問と上に表示されたノートだけが {label} に送信されます。モデルはツールを使えず、ノートを変更することもできません。",
  "Show in file manager: {path}": "ファイルマネージャーで表示: {path}",
  "Show Vault in File &Manager": "保管庫をファイルマネージャーで表示(&M)",
- "No system keyring was found, so keys are kept only until ZettelApp closes.": "システムのキーリングが見つからないため、キーは ZettelApp を閉じるまでしか保持されません。"
+ "No system keyring was found, so keys are kept only until ZettelApp closes.": "システムのキーリングが見つからないため、キーは ZettelApp を閉じるまでしか保持されません。",
+ "Close (Esc)": "閉じる (Esc)",
+ "Find in note": "ノート内を検索",
+ "Match case": "大文字と小文字を区別",
+ "Next match (Enter)": "次の一致 (Enter)",
+ "No results": "見つかりません",
+ "Previous match (Shift+Enter)": "前の一致 (Shift+Enter)",
+ "Replace": "置換",
+ "Replace (Ctrl+H)": "置換 (Ctrl+H)",
+ "Replace all": "すべて置換",
+ "Replace with": "置換後の文字列",
+ "{i} of {n}": "{i} / {n}",
+ "{n} replaced": "{n} 件を置換",
+ "Find and R&eplace in Note": "ノート内で検索と置換(&R)"
 }

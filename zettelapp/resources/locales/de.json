@@ -1079,5 +1079,18 @@
  "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes.": "Nur Ihre Frage und die oben aufgeführten Notizen werden an {label} gesendet. Das Modell erhält keine Werkzeuge und kann Ihre Notizen nicht ändern.",
  "Show in file manager: {path}": "Im Dateimanager anzeigen: {path}",
  "Show Vault in File &Manager": "Tresor im Datei&manager anzeigen",
- "No system keyring was found, so keys are kept only until ZettelApp closes.": "Es wurde kein Systemschlüsselbund gefunden, daher werden Schlüssel nur bis zum Schließen von ZettelApp aufbewahrt."
+ "No system keyring was found, so keys are kept only until ZettelApp closes.": "Es wurde kein Systemschlüsselbund gefunden, daher werden Schlüssel nur bis zum Schließen von ZettelApp aufbewahrt.",
+ "Close (Esc)": "Schließen (Esc)",
+ "Find in note": "In Notiz suchen",
+ "Match case": "Groß-/Kleinschreibung beachten",
+ "Next match (Enter)": "Nächster Treffer (Eingabe)",
+ "No results": "Keine Treffer",
+ "Previous match (Shift+Enter)": "Vorheriger Treffer (Umschalt+Eingabe)",
+ "Replace": "Ersetzen",
+ "Replace (Ctrl+H)": "Ersetzen (Strg+H)",
+ "Replace all": "Alle ersetzen",
+ "Replace with": "Ersetzen durch",
+ "{i} of {n}": "{i} von {n}",
+ "{n} replaced": "{n} ersetzt",
+ "Find and R&eplace in Note": "In Notiz suchen und &ersetzen"
 }

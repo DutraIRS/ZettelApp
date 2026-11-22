@@ -48,8 +48,8 @@ def test_sockets_and_locks_live_in_the_private_runtime_folder(tmp_path, monkeypa
     monkeypatch.delenv("FLATPAK_ID", raising=False)
     assert paths.runtime_dir() == tmp_path / "ZettelApp"
     # Flatpak shares only the app's own part of the runtime folder between its instances.
-    monkeypatch.setenv("FLATPAK_ID", "io.github.dutairs.zettelapp")
-    assert paths.runtime_dir() == tmp_path / "app" / "io.github.dutairs.zettelapp" / "ZettelApp"
+    monkeypatch.setenv("FLATPAK_ID", "io.github.dutrairs.zettelapp")
+    assert paths.runtime_dir() == tmp_path / "app" / "io.github.dutrairs.zettelapp" / "ZettelApp"
     monkeypatch.setenv("XDG_RUNTIME_DIR", str(tmp_path / "missing"))
     assert paths.runtime_dir() == paths.local_data_dir()
 

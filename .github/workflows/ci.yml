@@ -141,19 +141,19 @@ jobs:
       - name: Validate the Linux packaging metadata
         run: |
           bash -n packaging/build-linux.sh
-          desktop-file-validate packaging/io.github.dutairs.zettelapp.desktop
-          appstreamcli validate --pedantic packaging/io.github.dutairs.zettelapp.metainfo.xml
+          desktop-file-validate packaging/io.github.dutrairs.zettelapp.desktop
+          appstreamcli validate --pedantic packaging/io.github.dutrairs.zettelapp.metainfo.xml
           python - <<'PY'
           import xml.etree.ElementTree as ET
 
           import yaml
 
           for path in (
-              "packaging/flatpak/io.github.dutairs.zettelapp.yml",
+              "packaging/flatpak/io.github.dutrairs.zettelapp.yml",
               "packaging/snap/snapcraft.yaml",
           ):
               yaml.safe_load(open(path, encoding="utf-8"))
-          ET.parse("packaging/io.github.dutairs.zettelapp.metainfo.xml")
+          ET.parse("packaging/io.github.dutrairs.zettelapp.metainfo.xml")
           print("packaging metadata OK")
           PY
       - name: Build and self-test the packaged app

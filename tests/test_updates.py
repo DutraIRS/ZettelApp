@@ -105,5 +105,5 @@ def test_the_notice_offers_the_linux_package_in_use(tmp_path, monkeypatch):
     assert update_notice.download_url("1.4.0-rc1").endswith("/v1.4.0-rc1/ZettelApp-Linux-amd64.deb")
     monkeypatch.setattr(update_notice.sys, "executable", str(tmp_path / "My apps" / "zettelapp"))
     assert update_notice.download_url("1.4.0") == release + "ZettelApp-Linux-x86_64.tar.gz"
-    monkeypatch.setenv("FLATPAK_ID", "io.github.dutairs.zettelapp")  # the store updates it
-    assert update_notice.download_url("1.4.0") == "appstream://io.github.dutairs.zettelapp"
+    monkeypatch.setenv("FLATPAK_ID", "io.github.dutrairs.zettelapp")  # the store updates it
+    assert update_notice.download_url("1.4.0") == "appstream://io.github.dutrairs.zettelapp"

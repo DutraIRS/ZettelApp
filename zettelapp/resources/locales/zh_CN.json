@@ -1048,5 +1048,18 @@
  "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes.": "只有你的问题和上面列出的笔记会发送给 {label}。模型没有任何工具,无法更改你的笔记。",
  "Show in file manager: {path}": "在文件管理器中显示:{path}",
  "Show Vault in File &Manager": "在文件管理器中显示库(&M)",
- "No system keyring was found, so keys are kept only until ZettelApp closes.": "未找到系统密钥环，因此密钥只会保留到 ZettelApp 关闭为止。"
+ "No system keyring was found, so keys are kept only until ZettelApp closes.": "未找到系统密钥环，因此密钥只会保留到 ZettelApp 关闭为止。",
+ "Close (Esc)": "关闭 (Esc)",
+ "Find in note": "在笔记中查找",
+ "Match case": "区分大小写",
+ "Next match (Enter)": "下一个匹配 (Enter)",
+ "No results": "无结果",
+ "Previous match (Shift+Enter)": "上一个匹配 (Shift+Enter)",
+ "Replace": "替换",
+ "Replace (Ctrl+H)": "替换 (Ctrl+H)",
+ "Replace all": "全部替换",
+ "Replace with": "替换为",
+ "{i} of {n}": "第 {i} 个，共 {n} 个",
+ "{n} replaced": "已替换 {n} 处",
+ "Find and R&eplace in Note": "在笔记中查找和替换(&R)"
 }

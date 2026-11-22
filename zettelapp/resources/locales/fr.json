@@ -1079,5 +1079,18 @@
  "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes.": "Seuls votre question et les notes listées ci-dessus sont envoyées à {label}. Le modèle n'a aucun outil et ne peut pas modifier vos notes.",
  "Show in file manager: {path}": "Afficher dans le gestionnaire de fichiers : {path}",
  "Show Vault in File &Manager": "Afficher le coffre dans le &gestionnaire de fichiers",
- "No system keyring was found, so keys are kept only until ZettelApp closes.": "Aucun trousseau du système n’a été trouvé : les clés ne sont conservées que jusqu’à la fermeture de ZettelApp."
+ "No system keyring was found, so keys are kept only until ZettelApp closes.": "Aucun trousseau du système n’a été trouvé : les clés ne sont conservées que jusqu’à la fermeture de ZettelApp.",
+ "Close (Esc)": "Fermer (Échap)",
+ "Find in note": "Rechercher dans la note",
+ "Match case": "Respecter la casse",
+ "Next match (Enter)": "Occurrence suivante (Entrée)",
+ "No results": "Aucun résultat",
+ "Previous match (Shift+Enter)": "Occurrence précédente (Maj+Entrée)",
+ "Replace": "Remplacer",
+ "Replace (Ctrl+H)": "Remplacer (Ctrl+H)",
+ "Replace all": "Tout remplacer",
+ "Replace with": "Remplacer par",
+ "{i} of {n}": "{i} sur {n}",
+ "{n} replaced": "{n} remplacées",
+ "Find and R&eplace in Note": "Rechercher et &remplacer dans la note"
 }

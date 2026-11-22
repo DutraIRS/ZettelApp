@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- AppStream metadata for software centres (GNOME Software, KDE Discover, Flathub).
      Released versions mirror CHANGELOG.md; add a new <release> entry with every release.
-     Validate with: appstreamcli validate packaging/io.github.dutairs.zettelapp.metainfo.xml -->
+     Validate with: appstreamcli validate packaging/io.github.dutrairs.zettelapp.metainfo.xml -->
 <component type="desktop-application">
-  <id>io.github.dutairs.zettelapp</id>
+  <id>io.github.dutrairs.zettelapp</id>
   <name>ZettelApp</name>
   <summary>A Zettelkasten that helps you connect ideas</summary>
-  <developer id="io.github.dutairs">
+  <developer id="io.github.dutrairs">
     <name>ZettelApp contributors</name>
   </developer>
   <metadata_license>CC0-1.0</metadata_license>
@@ -32,7 +32,7 @@
       are kept in the system keyring.
     </p>
   </description>
-  <launchable type="desktop-id">io.github.dutairs.zettelapp.desktop</launchable>
+  <launchable type="desktop-id">io.github.dutrairs.zettelapp.desktop</launchable>
   <icon type="remote" width="512" height="512">https://dutrairs.github.io/ZettelApp/assets/icon-512.png</icon>
   <screenshots>
     <screenshot type="default">

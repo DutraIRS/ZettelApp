@@ -55,14 +55,14 @@ WRAPPER
     chmod 755 "$staging/usr/bin/$tool"
 done
 
-install -m 644 packaging/io.github.dutairs.zettelapp.desktop "$staging/usr/share/applications/"
-install -m 644 packaging/io.github.dutairs.zettelapp.metainfo.xml "$staging/usr/share/metainfo/"
+install -m 644 packaging/io.github.dutrairs.zettelapp.desktop "$staging/usr/share/applications/"
+install -m 644 packaging/io.github.dutrairs.zettelapp.metainfo.xml "$staging/usr/share/metainfo/"
 install -m 644 zettelapp/resources/icon-256.png \
-    "$staging/usr/share/icons/hicolor/256x256/apps/io.github.dutairs.zettelapp.png"
+    "$staging/usr/share/icons/hicolor/256x256/apps/io.github.dutrairs.zettelapp.png"
 install -m 644 website/assets/icon-512.png \
-    "$staging/usr/share/icons/hicolor/512x512/apps/io.github.dutairs.zettelapp.png"
+    "$staging/usr/share/icons/hicolor/512x512/apps/io.github.dutrairs.zettelapp.png"
 install -m 644 zettelapp/resources/icon.svg \
-    "$staging/usr/share/icons/hicolor/scalable/apps/io.github.dutairs.zettelapp.svg"
+    "$staging/usr/share/icons/hicolor/scalable/apps/io.github.dutrairs.zettelapp.svg"
 install -m 644 packaging/debian-copyright "$staging/usr/share/doc/zettelapp/copyright"
 gzip -9n < CHANGELOG.md > "$staging/usr/share/doc/zettelapp/changelog.gz"
 chmod 644 "$staging/usr/share/doc/zettelapp/changelog.gz"

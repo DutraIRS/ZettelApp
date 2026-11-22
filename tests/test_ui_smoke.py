@@ -913,3 +913,22 @@ def test_a_new_link_types_reverse_follows_its_name_until_named(window):
     QTest.keyClicks(options.type_name, "s")
     assert options.type_reverse.text() == "Named by"  # named: no longer follows
     options.reject()
+
+
+def test_ctrl_f_finds_in_the_note_from_its_text_and_in_all_notes_otherwise(window):
+    from PySide6.QtWidgets import QApplication
+
+    note = window.vault.create_note("Rosa", "rosa rosae rosam")
+    window.list.refresh()
+    window.open_note(note.id)
+    window.editor.body.setFocus()
+    QApplication.processEvents()
+    window._focus_search()
+    bar = window.editor.find_bar
+    assert bar.isVisible() and bar.find.hasFocus()
+    bar.find.setText("rosa")
+    assert len(bar.matches()) == 3
+    window._focus_search()  # Ctrl+F again, from the find bar: search every note
+    assert window.list.search.hasFocus()
+    window.editor.show_find(replace=True)  # Ctrl+H
+    assert bar.replace_row.isVisible()

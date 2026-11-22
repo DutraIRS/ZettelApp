@@ -74,6 +74,10 @@ All notable changes to ZettelApp are documented here. The format follows
 - **Graph filters with checkboxes**: *Link types* is now a list of checkboxes that stays open, and a new
   *Tags* list has *Show* (hide the notes with a tag) and *Group* (a tag that forms no group and doesn't
   count for clusters, for tags like `#todo`) for each tag. The choices are kept between sessions.
+- **Find and replace in a note**: Ctrl+F in the note text (Ctrl+F again searches all notes), Ctrl+H to
+  replace one or all matches.
+- **Several carets**: Alt+click adds a caret; typing, deleting and moving happen at every one.
+- `PRIVACY.md`: the one automatic network request (the update check) and what else is sent, and when.
 - The local graph says which note it is centred on (*Around "…"*), or that no note is open.
 
 ### Changed
@@ -99,6 +103,9 @@ All notable changes to ZettelApp are documented here. The format follows
 - Cloze cards in a table: the prompt was capped in height, so the blank could sit out of sight and the
   card looked like the whole table with nothing hidden; revealing printed the table again. The prompt
   now fills the card, the blank is bold and scrolled into view, and the answer fills it in place.
+- Bold or Italic on part of a bold or italic stretch nested a second one (no visible change); it now
+  takes the formatting off that part (`*homo nov*os`).
+- The Linux app ID is `io.github.dutrairs.zettelapp` (it was missing an r).
 - An undirected link written in both notes is drawn once in the graph and listed once in the side panel.
 - A click on empty space in the graph unselects the note.
 - The link types list in *Options* (and the note picker and Zotero results) no longer starts with

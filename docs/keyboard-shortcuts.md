@@ -8,7 +8,9 @@ then the underlined letter.
 | Action | Shortcut |
 |---|---|
 | New note | Ctrl+N |
-| Find notes | Ctrl+F |
+| Find notes | Ctrl+F (in the note text: find in the note; Ctrl+F again: all notes) |
+| Find in the note: next / previous match | Enter / Shift+Enter (Esc closes) |
+| Find and replace in the note | Ctrl+H |
 | Link to note | Ctrl+K |
 | Insert image | Ctrl+Shift+I |
 | Add flashcard | Ctrl+Shift+F |
@@ -17,7 +19,8 @@ then the underlined letter.
 | Move note to Trash | Ctrl+Delete |
 | Move selected notes to Trash (in the note list) | Del |
 | Select several notes | Ctrl+click, Shift+click, Shift+arrows |
-| Bold / italic | Ctrl+B / Ctrl+I |
+| Bold / italic | Ctrl+B / Ctrl+I (on part of a bold or italic stretch: takes it off that part) |
+| Type in several places at once | Alt+click to add a caret (again to remove it), Esc for one caret |
 | Undo / redo | Ctrl+Z / Ctrl+Y |
 | Complete a `[[link]]` | Type `[[`, then pick a title and press Enter |
 | Follow a link or `#tag` in the editor | Ctrl+click (in the preview, a plain click) |
