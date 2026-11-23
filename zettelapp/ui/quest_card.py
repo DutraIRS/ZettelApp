@@ -44,6 +44,7 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from zettelapp import i18n
 from zettelapp.paths import resource_path
 from zettelapp.ui import icons, theme
 from zettelapp.ui.widgets import accent_button, label, link_button, tool_button
@@ -184,13 +185,17 @@ class ProgressDots(QWidget):
 
 
 PARAGRAPH_GAP = 8  # px between the story's paragraphs
+# Qt justifies by widening spaces only: Chinese and Japanese, written without them, would have
+# the gaps around a Latin word stretched wide, so their story keeps to the start of the line.
+UNJUSTIFIED_LANGUAGES = ("ja", "zh_CN")
 
 
 def story_html(text: str) -> str:
     """The story as justified paragraphs, one per line of `text`, with a gap between them."""
     paragraphs = [html.escape(line) for line in text.split("\n") if line.strip()]
+    align = "left" if i18n.language() in UNJUSTIFIED_LANGUAGES else "justify"
     return "".join(
-        f'<p align="justify" style="margin-top:0; margin-bottom:'
+        f'<p align="{align}" style="margin-top:0; margin-bottom:'
         f'{PARAGRAPH_GAP if i < len(paragraphs) - 1 else 0}px">{line}</p>'
         for i, line in enumerate(paragraphs)
     )

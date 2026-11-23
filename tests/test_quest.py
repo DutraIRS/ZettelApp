@@ -283,3 +283,13 @@ def test_the_story_reads_as_justified_escaped_paragraphs():
     assert "&lt;b&gt;" in html  # the story is text, never markup
     assert f"margin-bottom:{PARAGRAPH_GAP}px" in html
     assert html.endswith('margin-bottom:0px">Second line.</p>')  # no gap after the last one
+
+
+def test_chinese_and_japanese_stories_are_not_justified(monkeypatch):
+    """Qt justifies at spaces only: in Chinese or Japanese the gaps around a Latin word stretched."""
+    from zettelapp import i18n
+    from zettelapp.ui.quest_card import story_html
+
+    for code, align in (("zh_CN", "left"), ("ja", "left"), ("ar", "justify"), ("en", "justify")):
+        monkeypatch.setattr(i18n, "_language", code)
+        assert f'align="{align}"' in story_html("用 AI 回答。")

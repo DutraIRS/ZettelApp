@@ -22,7 +22,8 @@ All notable changes to ZettelApp are documented here. The format follows
   and brings it back, like the side panels' tabs and in line with them. The mode chosen is kept
   for the next start; a new note still opens with its text, and the next note opens in Reading
   view again.
-- **The adventure card's story** is set in justified paragraphs with space between them.
+- **The adventure card's story** is set in justified paragraphs with space between them (aligned
+  to the start in Chinese and Japanese, where justifying stretched the gaps around Latin words).
 - **Android (alpha)** (roadmap item 5): a native Kotlin/Compose app in `android/` runs the Qt-free
   Python core on device through Chaquopy, with a notes list, title search, editing and creating
   notes, a tag filter, links and backlinks, a graph, Insights, flashcard review, the trash and
