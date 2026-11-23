@@ -426,3 +426,22 @@ def test_the_store_package_uses_its_mcp_alias_and_skips_the_update_check(window,
     settings.put(settings.UPDATE_CHECK, True)
     window.check_for_updates()
     assert asked == []  # the Store updates it
+
+
+def test_the_editor_text_size_applies_from_the_start(tmp_path, monkeypatch):
+    """Options ▸ Editor text size reached the text and the preview only once Options was saved."""
+    monkeypatch.setenv("ZETTELAPP_SETTINGS_FILE", str(tmp_path / "settings.ini"))
+    from PySide6.QtWidgets import QApplication
+
+    from zettelapp import settings
+    from zettelapp.ui.main_window import MainWindow
+
+    QApplication.instance() or QApplication(["test"])
+    settings.put(settings.EDITOR_FONT_SIZE, 16)
+    w = MainWindow()
+    try:
+        assert w.editor.body.font().pointSizeF() == 16
+        assert w.editor.preview.font().pointSizeF() == 16
+    finally:
+        w.close()
+        w.deleteLater()

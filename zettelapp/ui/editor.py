@@ -263,6 +263,9 @@ class NoteEditor(QWidget):
         self.preview.hovered.connect(self.statusMessage)
         self.preview.taskToggled.connect(self._toggle_task)
         self.preview.image_actions = self._image_actions
+        size = settings.get(settings.EDITOR_FONT_SIZE)  # Options ▸ General ▸ Editor text size
+        self.body.set_font_size(size)
+        self.preview.set_font_size(size)
         self.body.image_actions = self._image_actions
         # The note text with its find bar (Ctrl+F / Ctrl+H) above it.
         self.text_pane = text_pane = QWidget()

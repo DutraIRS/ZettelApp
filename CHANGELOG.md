@@ -106,6 +106,8 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Fixed
 
+- *Options ▸ General ▸ Editor text size* now applies from the start: the note text was always
+  11 pt and the preview the interface's size until Options was saved again.
 - The preview spaced paragraphs, headings and lists unevenly and used a smaller text than the
   editor. Every block now leaves the same space below it, a heading more above it, and the
   preview follows the editor's text size (also in Review and Ask).
