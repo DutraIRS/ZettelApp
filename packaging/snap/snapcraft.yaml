@@ -5,6 +5,7 @@ title: ZettelApp
 grade: stable
 confinement: strict
 website: https://dutrairs.github.io/ZettelApp/
+source-code: https://github.com/DutraIRS/ZettelApp
 contact: https://github.com/DutraIRS/ZettelApp/issues
 issues: https://github.com/DutraIRS/ZettelApp/issues
 summary: A Zettelkasten that helps you connect ideas
