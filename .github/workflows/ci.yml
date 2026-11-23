@@ -66,7 +66,7 @@ jobs:
         run: python -m pytest -q --cov --cov-report=term-missing
       - name: Install the keyring for the Secret Service tests
         if: runner.os == 'Linux'
-        run: sudo apt-get update && sudo apt-get install -y gnome-keyring libsecret-1-0 dbus xdg-user-dirs
+        run: sudo apt-get update && sudo apt-get install -y gnome-keyring libsecret-1-0 dbus xdg-user-dirs libegl1 libgl1 libxkbcommon0 libfontconfig1 libdbus-1-3
       # A private D-Bus session with a throwaway, unlocked keyring, so the Secret Service tests
       # run instead of skipping (they never touch a real keyring: see tests/test_linux_port.py).
       - name: Run tests (with a private keyring)
@@ -137,7 +137,7 @@ jobs:
       - name: Install dependencies
         run: python -m pip install -r requirements-dev.txt
       - name: Install the packaging tools
-        run: sudo apt-get update && sudo apt-get install -y desktop-file-utils appstream
+        run: sudo apt-get update && sudo apt-get install -y desktop-file-utils appstream libegl1 libgl1 libxkbcommon0 libfontconfig1 libdbus-1-3
       - name: Validate the Linux packaging metadata
         run: |
           bash -n packaging/build-linux.sh
