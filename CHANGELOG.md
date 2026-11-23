@@ -108,6 +108,13 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Fixed
 
+- **Clicking an alarm notification on Windows 11 showed the desktop** instead of the note:
+  Windows never passed the click on Qt's tray balloon to the app. Alarms are now a Windows
+  reminder toast with the app's icon, the note's title and text, and **Open note** and
+  **Dismiss** buttons; it stays until you choose, and opening it brings the window back as it
+  was (maximised stays maximised). It opens the note through its `zettelapp://` link, so the
+  installed app and the Store app use it; a portable copy does once links are registered in
+  *Options ▸ Desktop integration*, and shows the old balloon otherwise.
 - *Options ▸ General ▸ Editor text size* now applies from the start: the note text was always
   11 pt and the preview the interface's size until Options was saved again.
 - Closing a vault (or switching to another) while the note list was being reordered by closeness

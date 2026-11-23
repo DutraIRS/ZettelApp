@@ -13,6 +13,7 @@ from __future__ import annotations
 import os
 import subprocess
 import sys
+from dataclasses import dataclass
 from pathlib import Path
 
 from zettelapp import APP_NAME, APP_USER_MODEL_ID, URL_SCHEME, linuxintegration
@@ -20,6 +21,8 @@ from zettelapp import APP_NAME, APP_USER_MODEL_ID, URL_SCHEME, linuxintegration
 IS_WINDOWS = sys.platform == "win32"
 IS_LINUX = linuxintegration.IS_LINUX
 _PROTOCOL_KEY = rf"Software\Classes\{URL_SCHEME}"
+# Lets Windows show toasts for an app without a Start menu shortcut (the portable copy).
+_APP_ID_KEY = rf"Software\Classes\AppUserModelId\{APP_USER_MODEL_ID}"
 
 
 def set_app_user_model_id() -> None:
@@ -48,6 +51,147 @@ def is_packaged() -> bool:
     except (AttributeError, OSError):
         return False
     return result == 122
+
+
+def _package_family_name() -> str | None:
+    import ctypes
+    from ctypes import wintypes
+
+    length = wintypes.UINT(256)
+    buffer = ctypes.create_unicode_buffer(length.value)
+    try:
+        result = ctypes.windll.kernel32.GetCurrentPackageFamilyName(ctypes.byref(length), buffer)
+    except (AttributeError, OSError):
+        return None
+    return buffer.value if result == 0 else None
+
+
+def _toast_app_id() -> str | None:
+    """The AppUserModelID Windows shows a toast under, or None when there is none to use.
+
+    The package has its own; the installed app's comes from its Start menu shortcut (an
+    unpackaged app needs one, or Windows drops its toasts); the portable copy registers it with
+    the zettelapp:// links (register_url_protocol)."""
+    if is_packaged():
+        family = _package_family_name()
+        return f"{family}!{APP_NAME}" if family else None
+    for base in (os.environ.get("APPDATA"), os.environ.get("PROGRAMDATA")):
+        if (
+            base
+            and (Path(base) / "Microsoft/Windows/Start Menu/Programs" / f"{APP_NAME}.lnk").exists()
+        ):
+            return APP_USER_MODEL_ID
+    import winreg
+
+    try:
+        with winreg.OpenKey(winreg.HKEY_CURRENT_USER, _APP_ID_KEY):
+            return APP_USER_MODEL_ID
+    except OSError:
+        return None
+
+
+def _links_open_the_app() -> bool:
+    """Whether zettelapp:// links are handled, by the package or a registration."""
+    if is_packaged():
+        return True
+    import winreg
+
+    try:
+        with winreg.OpenKey(winreg.HKEY_CLASSES_ROOT, rf"{URL_SCHEME}\shell\open\command"):
+            return True
+    except OSError:
+        return False
+
+
+@dataclass(frozen=True)
+class ToastText:
+    """The words on an alarm toast, in the interface language."""
+
+    open: str  # the button that opens the note
+    dismiss: str  # the button that closes the toast
+    caption: str  # the small line under the text, e.g. "ZettelApp · Alarm"
+
+
+def toast_xml(title: str, body: str, url: str, text: ToastText, icon: Path | None = None) -> str:
+    """A reminder toast like Windows' own: the app's icon, the note's title and text, a caption,
+    and side-by-side Open note / Dismiss buttons. A click on the toast or on Open note opens
+    *url* (a zettelapp://note/<id> link); it stays on screen until one or the other."""
+    from xml.sax.saxutils import escape, quoteattr
+
+    logo = (
+        f'<image placement="appLogoOverride" hint-crop="none" src={quoteattr(icon.as_uri())}/>'
+        if icon is not None
+        else ""
+    )
+    return (
+        f'<toast activationType="protocol" scenario="reminder" launch={quoteattr(url)}>'
+        '<visual><binding template="ToastGeneric">'
+        f"<text>{escape(title)}</text><text>{escape(body)}</text>"
+        f'<text placement="attribution">{escape(text.caption)}</text>{logo}'
+        "</binding></visual>"
+        "<actions>"
+        f'<action content={quoteattr(text.open)} activationType="protocol" arguments={quoteattr(url)}/>'
+        f'<action content={quoteattr(text.dismiss)} activationType="system" arguments="dismiss"/>'
+        "</actions>"
+        '<audio src="ms-winsoundevent:Notification.Reminder"/>'
+        "</toast>"
+    )
+
+
+def show_toast(
+    title: str, body: str, note_id: str, text: ToastText, icon: Path | None = None
+) -> bool:
+    """Show a Windows toast for an alarm; clicking it opens the note through its zettelapp://
+    link, which brings the running window forward (see MainWindow.handle_message).
+
+    Qt's tray balloon isn't used where this works: Windows 11 shows it as a toast too, but a
+    click on it never reaches the app (it shows the desktop instead). False when a toast can't
+    be shown or clicked through (no app id, links not registered), so the caller falls back
+    to the balloon. The toast goes through Windows' own notification API, from PowerShell."""
+    if not IS_WINDOWS:
+        return False
+    app_id = _toast_app_id()
+    if app_id is None or not _links_open_the_app():
+        return False
+    import base64
+
+    xml = toast_xml(title, body, f"{URL_SCHEME}://note/{note_id}", text, icon)
+
+    def quoted(text: str) -> str:  # a PowerShell single-quoted string
+        return "'" + text.replace("'", "''") + "'"
+
+    script = (
+        "$ErrorActionPreference = 'Stop';"
+        "[void][Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications,"
+        " ContentType = WindowsRuntime];"
+        "[void][Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom, ContentType = WindowsRuntime];"
+        "$xml = New-Object Windows.Data.Xml.Dom.XmlDocument;"
+        f"$xml.LoadXml({quoted(xml)});"
+        "$toast = [Windows.UI.Notifications.ToastNotification]::new($xml);"
+        f"[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier({quoted(app_id)})"
+        ".Show($toast)"
+    )
+    root = os.environ.get("SystemRoot", r"C:\Windows")
+    powershell = Path(root) / "System32" / "WindowsPowerShell" / "v1.0" / "powershell.exe"
+    try:
+        subprocess.Popen(
+            [
+                str(powershell),
+                "-NoProfile",
+                "-NonInteractive",
+                "-WindowStyle",
+                "Hidden",
+                "-EncodedCommand",
+                base64.b64encode(script.encode("utf-16-le")).decode("ascii"),
+            ],
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            creationflags=getattr(subprocess, "CREATE_NO_WINDOW", 0),
+        )
+    except OSError:
+        return False
+    return True
 
 
 def mcp_alias() -> Path:
@@ -113,6 +257,14 @@ def register_url_protocol() -> None:
             winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + r"\shell\open\command"
         ) as key:
             winreg.SetValueEx(key, "", 0, winreg.REG_SZ, command)
+        # The app's name and icon for its alarm toasts, which open notes through these links.
+        from zettelapp.paths import resource_path
+
+        with winreg.CreateKey(winreg.HKEY_CURRENT_USER, _APP_ID_KEY) as key:
+            winreg.SetValueEx(key, "DisplayName", 0, winreg.REG_SZ, APP_NAME)
+            icon = resource_path("icon-256.png")
+            if icon.exists():
+                winreg.SetValueEx(key, "IconUri", 0, winreg.REG_SZ, str(icon))
     else:
         linuxintegration.register_url_protocol()
 
@@ -126,6 +278,10 @@ def unregister_url_protocol() -> None:
                 winreg.DeleteKey(winreg.HKEY_CURRENT_USER, _PROTOCOL_KEY + sub)
             except OSError:
                 pass
+        try:
+            winreg.DeleteKey(winreg.HKEY_CURRENT_USER, _APP_ID_KEY)
+        except OSError:
+            pass
     else:
         linuxintegration.unregister_url_protocol()
 

@@ -152,7 +152,7 @@ before switching). The earlier Windows pass never switched Windows itself.
   14 skipped; Windows skips the Linux-only ones), `ruff check .`, `ruff format --check .`,
   `python tools/i18n.py check` (1027/1027 in every language). *Windows: 490 passed, 70 skipped;
   ruff clean; 1027/1027 in all ten languages.*
-- [x] **Microsoft Store package** (`dist/ZettelApp.msix`, built with `-SignMsixForTesting` to
+- [x] **Microsoft Store package** (`dist/ZettelApp.msix`, built with a test signature (since removed) to
   install it locally): installs and starts from the Start menu with its logo; *Options ▸ Desktop
   integration* offers no link registration (the manifest registers `zettelapp://`), and a
   `zettelapp://note/<id>` link opens the note; no update notice at start; *Options ▸ MCP* points
@@ -171,7 +171,11 @@ before switching). The earlier Windows pass never switched Windows itself.
   shows the desktop (every window minimised) instead of the note; seen by the user and twice in
   the scripted run. The toast itself appears ("ZettelApp", title, note text). To investigate
   before 1.4.0: the app shows the alarm through `QSystemTrayIcon.showMessage` (a legacy balloon
-  Windows turns into a toast).
+  Windows turns into a toast). **Fixed**: Windows never handed that click to the app. Alarms
+  are now a Windows reminder toast (icon, title, text, "ZettelApp · Alarm", Open note and
+  Dismiss) that opens the note's `zettelapp://` link. Checked from source: a click on the toast
+  with the window maximised and behind another window, and Open note with it minimised, both
+  opened the note with the window maximised and in front.
 - [x] **Options ▸ AI assistant** wording, by eye: save a key, read the hint ("Key … saved on this
   computer."), delete it. *Windows: "Key “Platform check” saved on this computer.", read back
   from Credential Manager, then "… deleted from this computer." and gone from `cmdkey /list`.*

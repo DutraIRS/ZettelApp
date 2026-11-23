@@ -8,8 +8,8 @@
       ZettelApp-Portable.zip   the same folder, zipped
       ZettelApp-Setup.exe      the installer (needs Inno Setup 6; skipped otherwise)
       ZettelApp.msix           the Microsoft Store package (needs the Windows SDK; skipped
-                               otherwise; -SkipMsix to leave it out, -SignMsixForTesting to also
-                               write a test-signed ZettelApp-test.msix to install locally)
+                               otherwise; -SkipMsix to leave it out). Unsigned: the Store
+                               signs it on upload
       SHA256SUMS.txt           checksums for the downloads
 
     Code signing is optional: set ZETTELAPP_SIGN_PFX (path to a .pfx certificate) and
@@ -18,7 +18,7 @@
 .EXAMPLE
     pwsh packaging/build.ps1
 #>
-param([switch]$SkipInstaller, [switch]$SkipMsix, [switch]$SignMsixForTesting)
+param([switch]$SkipInstaller, [switch]$SkipMsix)
 
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
@@ -73,7 +73,7 @@ if ($SkipInstaller) {
 
 # The Microsoft Store package (see build-msix.ps1); skipped without the Windows SDK.
 if (-not $SkipMsix) {
-    & (Join-Path $PSScriptRoot "build-msix.ps1") -SignForTesting:$SignMsixForTesting
+    & (Join-Path $PSScriptRoot "build-msix.ps1")
 }
 
 Get-ChildItem dist -File | Where-Object { $_.Extension -in ".zip", ".exe" } | ForEach-Object {

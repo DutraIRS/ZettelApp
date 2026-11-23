@@ -90,15 +90,8 @@ Inside the package, the app detects it (`winintegration.is_packaged()`): it does
 the Claude Desktop setup points at the `zettelapp-mcp.exe` alias, since files inside `WindowsApps`
 can't be started by their path.
 
-To try a package on your own computer:
-
-```powershell
-pwsh packaging/build.ps1 -SignMsixForTesting   # also writes dist/ZettelApp-test.msix and .cer
-certutil -addstore TrustedPeople dist\ZettelApp-test.cer   # once, as administrator
-Add-AppxPackage dist\ZettelApp-test.msix
-```
-
-Remove it with `Get-AppxPackage DutraIRS.ZettelApp | Remove-AppxPackage`.
+Windows installs only signed packages, so the unsigned `.msix` can't be installed locally; the
+Store's signed build is the one to install.
 
 The executables carry Windows version information and the app icon. One-folder builds start faster and
 trigger fewer antivirus false positives than single-file builds.

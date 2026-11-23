@@ -3,27 +3,23 @@
     Packs the built app (dist\ZettelApp\) as an MSIX package for the Microsoft Store.
 
 .DESCRIPTION
-    Run after packaging/build.ps1 (which calls this at its end). Produces, in dist\:
-      ZettelApp.msix        unsigned, for uploading to Partner Center (the Store signs it)
-      ZettelApp-test.msix   with -SignForTesting: signed with a local test certificate, to
-                            install and try on this computer
+    Run after packaging/build.ps1 (which calls this at its end). Produces dist\ZettelApp.msix,
+    unsigned, for uploading to Partner Center: the Store signs it.
 
     The package identity must match the one Partner Center reserves for the app (Product
     management > Product identity): pass -IdentityName and -Publisher with those values for a
     Store upload. The defaults are for local testing only.
 
-    Needs the Windows SDK (makeappx.exe, makepri.exe, signtool.exe); skipped with a warning
+    Needs the Windows SDK (makeappx.exe, makepri.exe); skipped with a warning
     when it is missing.
 
 .EXAMPLE
-    pwsh packaging/build-msix.ps1 -SignForTesting
     pwsh packaging/build-msix.ps1 -IdentityName 12345DutraIRS.ZettelApp -Publisher "CN=ABCD-1234"
 #>
 param(
     [string]$IdentityName = "DutraIRS.ZettelApp",
-    [string]$Publisher = "CN=ZettelApp Test",
-    [string]$PublisherDisplayName = "DutraIRS",
-    [switch]$SignForTesting
+    [string]$Publisher = "CN=DutraIRS",
+    [string]$PublisherDisplayName = "DutraIRS"
 )
 
 $ErrorActionPreference = "Stop"
@@ -122,22 +118,3 @@ New-Item -ItemType Directory -Force dist | Out-Null
 if ($LASTEXITCODE -ne 0) { throw "makeappx failed." }
 Write-Host "Wrote dist\ZettelApp.msix (unsigned, for Partner Center)"
 
-if ($SignForTesting) {
-    # A self-signed certificate whose subject is the package's Publisher, kept in the user's own
-    # store. Windows installs the package once the certificate is trusted on this computer.
-    $cert = Get-ChildItem Cert:\CurrentUser\My | Where-Object { $_.Subject -eq $Publisher } |
-        Select-Object -First 1
-    if (-not $cert) {
-        $cert = New-SelfSignedCertificate -Type Custom -Subject $Publisher -KeyUsage DigitalSignature `
-            -FriendlyName "ZettelApp MSIX test signing" -CertStoreLocation Cert:\CurrentUser\My `
-            -TextExtension @("2.5.29.37={text}1.3.6.1.5.5.7.3.3", "2.5.29.19={text}")
-    }
-    Export-Certificate -Cert $cert -FilePath "dist\ZettelApp-test.cer" | Out-Null
-    Copy-Item "dist\ZettelApp.msix" "dist\ZettelApp-test.msix" -Force
-    & "$tools\signtool.exe" sign /fd SHA256 /sha1 $cert.Thumbprint /s My "dist\ZettelApp-test.msix" | Out-Null
-    if ($LASTEXITCODE -ne 0) { throw "Signing the test package failed." }
-    Write-Host "Wrote dist\ZettelApp-test.msix, signed with the test certificate dist\ZettelApp-test.cer"
-    Write-Host "To install it: trust the certificate once (as administrator):"
-    Write-Host "  certutil -addstore TrustedPeople dist\ZettelApp-test.cer"
-    Write-Host "then: Add-AppxPackage dist\ZettelApp-test.msix"
-}

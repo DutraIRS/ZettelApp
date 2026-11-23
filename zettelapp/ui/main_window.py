@@ -627,6 +627,12 @@ class MainWindow(QMainWindow):
         self._tray_message(note.id, title, body)
 
     def _tray_message(self, note_id: str, title: str, body: str) -> None:
+        text = winintegration.ToastText(
+            open=_("Open note"), dismiss=_("Dismiss"), caption=f"{APP_NAME} · {_('Alarm')}"
+        )
+        icon = resource_path("icon-256.png")
+        if winintegration.show_toast(title, body, note_id, text, icon if icon.exists() else None):
+            return
         if not QSystemTrayIcon.isSystemTrayAvailable():
             return
         if self._tray is None:
