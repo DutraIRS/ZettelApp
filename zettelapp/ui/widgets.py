@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import sys
 from collections.abc import Callable
 from pathlib import Path
 
@@ -74,11 +73,9 @@ _LAST_FOLDER_KEY = "dialogs/lastFolder"
 def dialog_start(name: str = "") -> str:
     """Where a file dialog without a folder of its own opens, with *name* proposed.
 
-    Windows reopens the folder last used in the app by itself. Elsewhere such a dialog
-    would open the process's working folder (often the home folder, sometimes "/"), so
-    it opens the folder last used here instead, or Documents the first time."""
-    if sys.platform == "win32":
-        return name
+    Left to itself, such a dialog opens the process's working folder: the install folder
+    when ZettelApp starts from its Windows shortcut, the home folder or "/" on Linux. So it
+    opens the folder last used here instead, or Documents the first time."""
     from zettelapp import settings
     from zettelapp.paths import documents_dir
 
@@ -90,7 +87,7 @@ def dialog_start(name: str = "") -> str:
 
 def remember_folder(path: str) -> None:
     """Note the folder of a file chosen in a dialog that used dialog_start()."""
-    if path and sys.platform != "win32":
+    if path:
         from zettelapp import settings
 
         settings.store().setValue(_LAST_FOLDER_KEY, str(Path(path).parent))

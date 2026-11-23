@@ -385,3 +385,19 @@ def test_tab_goes_from_the_search_straight_to_the_replacement(editor):
     bar.open(replace=True)
     QApplication.processEvents()
     assert bar.find.nextInFocusChain() is bar.replacement
+
+
+def test_alt_click_on_the_caret_just_added_takes_it_away(editor):
+    from PySide6.QtCore import Qt
+    from PySide6.QtGui import QTextCursor
+    from PySide6.QtTest import QTest
+
+    editor.setPlainText("one\ntwo")
+    editor.setFocus()
+    cursor = QTextCursor(editor.document().findBlockByNumber(1))
+    point = editor.cursorRect(cursor).center()
+    alt = Qt.KeyboardModifier.AltModifier | Qt.KeyboardModifier.ShiftModifier
+    QTest.mouseClick(editor.viewport(), Qt.MouseButton.LeftButton, alt, point)
+    assert len(editor.extra_cursors) == 1
+    QTest.mouseClick(editor.viewport(), Qt.MouseButton.LeftButton, alt, point)
+    assert editor.extra_cursors == [] and editor.textCursor().position() == 0
