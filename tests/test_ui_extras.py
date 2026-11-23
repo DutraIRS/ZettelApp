@@ -29,7 +29,7 @@ def test_reading_view_is_read_only_and_remembered(window):
     from zettelapp import settings
     from zettelapp.ui.editor import READING, SPLIT
 
-    _new_note(window, "Some text.")
+    note = _new_note(window, "Some text.")
     editor = window.editor
     editor.set_view_mode(READING)
     assert editor.text_pane.isHidden() and not editor.preview.isHidden()
@@ -41,6 +41,16 @@ def test_reading_view_is_read_only_and_remembered(window):
     window.open_note(blank.id)  # a new note opens for writing, without forgetting the choice
     assert editor.mode_group.checkedId() == SPLIT and not editor.title.isReadOnly()
     assert settings.get(settings.EDITOR_VIEW_MODE) == READING
+    blank.title = "Named now"
+    window.vault.save_note(blank)
+    window.open_note(blank.id)  # the same note again, now titled: still being written
+    assert editor.mode_group.checkedId() == SPLIT
+    window.open_note(note.id)  # another note: back to reading
+    assert editor.mode_group.checkedId() == READING
+    window.open_note(blank.id)
+    editor.set_view_mode(SPLIT)  # chosen by hand: kept
+    window.open_note(note.id)
+    assert editor.mode_group.checkedId() == SPLIT
 
 
 def test_the_text_folds_away_with_its_tab(window):

@@ -364,6 +364,9 @@ class NoteListPanel(QWidget):
         self.related_tags.toggled.connect(lambda _unused: self._related_toggled())
 
     def set_vault(self, vault: Vault | None) -> None:
+        """Show *vault*'s notes, or none: a closing vault is let go first, so neither a pending
+        reorder nor a similarity index still being built reads it once it is closed."""
+        self._anchor_timer.stop()
         self.vault = vault
         self.anchor, self._meaning, self._meaning_generation = None, None, -1
         self.forget_semantic_scores()
@@ -407,10 +410,6 @@ class NoteListPanel(QWidget):
             # A moment later, so stepping through notes with the arrow keys doesn't reorder
             # on every step, and Shift/Ctrl+click has extended the selection first.
             self._anchor_timer.start()
-
-    def stop_reordering(self) -> None:
-        """Drop a pending reorder: the vault is closing and it would read a closed database."""
-        self._anchor_timer.stop()
 
     def _anchor_moved(self) -> None:
         # Not while several notes are picked: reordering would lose the selection.

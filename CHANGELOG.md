@@ -20,7 +20,8 @@ All notable changes to ZettelApp are documented here. The format follows
   column of comfortable width at the editor's text size, with the title and source link locked
   (an empty source link is left out). A tab between the text and the preview folds the text away
   and brings it back, like the side panels' tabs and in line with them. The mode chosen is kept
-  for the next start; a new note still opens with its text.
+  for the next start; a new note still opens with its text, and the next note opens in Reading
+  view again.
 - **The adventure card's story** is set in justified paragraphs with space between them.
 - **Android (alpha)** (roadmap item 5): a native Kotlin/Compose app in `android/` runs the Qt-free
   Python core on device through Chaquopy, with a notes list, title search, editing and creating
@@ -108,8 +109,8 @@ All notable changes to ZettelApp are documented here. The format follows
 
 - *Options ▸ General ▸ Editor text size* now applies from the start: the note text was always
   11 pt and the preview the interface's size until Options was saved again.
-- Closing a vault (or switching to another) just after opening a note, with the list ordered by
-  closeness, raised an error in the background.
+- Closing a vault (or switching to another) while the note list was being reordered by closeness
+  raised an error in the background.
 - The preview spaced paragraphs, headings and lists unevenly and used a smaller text than the
   editor. Every block now leaves the same space below it, a heading more above it, and the
   preview follows the editor's text size (also in Review and Ask).

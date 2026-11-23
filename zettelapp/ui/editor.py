@@ -360,6 +360,7 @@ class NoteEditor(QWidget):
         self.tabs.addTab(cards, icons.icon("cards"), _("Flashcards"))
         layout.addWidget(self.tabs, 1)
 
+        self._split_to_write = ""  # the new note Split view was chosen for, to write it
         self._build_text_fold()
         self._build_more_menu()
         self.set_view_mode(settings.get(settings.EDITOR_VIEW_MODE), remember=False)
@@ -391,7 +392,12 @@ class NoteEditor(QWidget):
         if not note.title:
             if self.mode_group.checkedId() == READING:  # a new note is for writing
                 self.set_view_mode(SPLIT, remember=False)
+                self._split_to_write = note.id
+            elif self._split_to_write:  # from one new note to another
+                self._split_to_write = note.id
             self.title.setFocus()
+        elif self._split_to_write not in ("", note.id) and self.mode_group.checkedId() == SPLIT:
+            self.set_view_mode(READING, remember=False)  # back to reading the other notes
 
     def _edited(self, *_args) -> None:
         if self._loading or self.note is None:
@@ -532,6 +538,7 @@ class NoteEditor(QWidget):
         such as SPLIT for a new note, is not.
         """
         mode = mode if mode in (EDIT, SPLIT, READING) else SPLIT
+        self._split_to_write = ""  # set again by load() when it opens a new note to write
         self.mode_group.button(mode).setChecked(True)
         self.text_pane.setVisible(mode in (EDIT, SPLIT))
         self.preview.setVisible(mode in (SPLIT, READING))
