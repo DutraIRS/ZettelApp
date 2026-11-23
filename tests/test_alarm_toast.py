@@ -45,7 +45,13 @@ def test_the_toast_is_sent_by_windows_powershell(monkeypatch):
     monkeypatch.setattr(winintegration.subprocess, "Popen", lambda args, **k: started.append(args))
     assert winintegration.show_toast("It's time", "Body", "20260101000000", TEXT)
     (args,) = started
-    assert args[0].lower().endswith(r"system32\windowspowershell\v1.0\powershell.exe")
+    # Path joins with "/" off Windows (this test also runs on Linux): ignore the separator style
+    assert (
+        args[0]
+        .lower()
+        .replace("/", "\\")
+        .endswith(r"system32\windowspowershell\v1.0\powershell.exe")
+    )
     script = base64.b64decode(args[-1]).decode("utf-16-le")
     assert "CreateToastNotifier('ZettelApp.Desktop')" in script
     assert "It''s time" in script  # quoted for PowerShell
