@@ -218,7 +218,8 @@ NATIVE = {
     "trash": ("user-trash-symbolic",),
     "save": ("document-save-symbolic",),
     "edit": ("document-edit-symbolic",),
-    "link": ("link-symbolic", "insert-link-symbolic"),
+    # No "link": Adwaita's insert-link-symbolic is a bar and an arrow, not a chain, so the
+    # suggestion buttons and mind-map markers keep the Fluent chain on every desktop.
     "image": ("image-x-generic-symbolic",),
     "help": ("help-contents-symbolic",),
     "folder": ("folder-symbolic",),

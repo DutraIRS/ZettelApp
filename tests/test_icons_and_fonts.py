@@ -428,3 +428,11 @@ def QFontDatabase_families():  # noqa: N802 - reads like the Qt call it wraps
     from PySide6.QtGui import QFontDatabase
 
     return QFontDatabase.families()
+
+
+def test_link_is_always_the_bundled_chain():
+    """GNOME's insert-link-symbolic is not a chain; the link icon never comes from the theme."""
+    from zettelapp.ui import icons
+
+    assert "link" not in icons.NATIVE
+    assert icons.FLUENT["link"] == "link_20_regular"
