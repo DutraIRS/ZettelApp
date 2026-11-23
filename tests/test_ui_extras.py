@@ -409,3 +409,20 @@ def test_the_main_window_passes_theme_changes_on(window):
     window.desktopThemeChanged.connect(lambda: calls.append(1))
     QApplication.sendEvent(window, QEvent(QEvent.Type.ThemeChange))
     assert calls == [1]
+
+
+def test_the_store_package_uses_its_mcp_alias_and_skips_the_update_check(window, monkeypatch):
+    from zettelapp import settings, winintegration
+    from zettelapp.ui import main_window, settings_dialog
+
+    assert winintegration.is_packaged() is False  # tests never run from a package
+    monkeypatch.setattr(winintegration, "is_packaged", lambda: True)
+    command, args, env = settings_dialog.mcp_command(None, False)
+    assert command.endswith(r"WindowsApps\zettelapp-mcp.exe") or command.endswith(
+        "WindowsApps/zettelapp-mcp.exe"
+    )
+    asked = []
+    monkeypatch.setattr(main_window, "run_task", lambda *a, **k: asked.append(a))
+    settings.put(settings.UPDATE_CHECK, True)
+    window.check_for_updates()
+    assert asked == []  # the Store updates it

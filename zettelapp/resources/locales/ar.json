@@ -1241,5 +1241,6 @@
  "The image on the clipboard could not be read. Copy it again, then paste.": "تعذّرت قراءة الصورة الموجودة في الحافظة. انسخها مرة أخرى ثم الصقها.",
  "Reading view": "عرض القراءة",
  "Hide the text and read the note, or drag to resize it": "إخفاء النص وقراءة الملاحظة، أو اسحب لتغيير حجمه",
- "Show the text beside the preview to edit the note": "إظهار النص بجانب المعاينة لتحرير الملاحظة"
+ "Show the text beside the preview to edit the note": "إظهار النص بجانب المعاينة لتحرير الملاحظة",
+ "Registered by the ZettelApp package.": "مسجّلة بواسطة حزمة ZettelApp."
 }

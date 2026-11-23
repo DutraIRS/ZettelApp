@@ -1117,5 +1117,6 @@
  "The image on the clipboard could not be read. Copy it again, then paste.": "Impossibile leggere l’immagine negli appunti. Copiala di nuovo, poi incollala.",
  "Reading view": "Vista lettura",
  "Hide the text and read the note, or drag to resize it": "Nascondi il testo e leggi la nota, o trascina per ridimensionarlo",
- "Show the text beside the preview to edit the note": "Mostra il testo accanto all'anteprima per modificare la nota"
+ "Show the text beside the preview to edit the note": "Mostra il testo accanto all'anteprima per modificare la nota",
+ "Registered by the ZettelApp package.": "Registrato dal pacchetto di ZettelApp."
 }

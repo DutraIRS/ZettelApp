@@ -32,6 +32,31 @@ def set_app_user_model_id() -> None:
             pass
 
 
+def is_packaged() -> bool:
+    """True when running from an MSIX package (the Microsoft Store build): Windows then
+    registers zettelapp:// links from the package's manifest, and the Store updates the app."""
+    if not IS_WINDOWS:
+        return False
+    import ctypes
+    from ctypes import wintypes
+
+    length = wintypes.UINT(0)
+    try:
+        # ERROR_INSUFFICIENT_BUFFER (122) means there is a package name to fetch;
+        # APPMODEL_ERROR_NO_PACKAGE (15700) means an ordinary process.
+        result = ctypes.windll.kernel32.GetCurrentPackageFullName(ctypes.byref(length), None)
+    except (AttributeError, OSError):
+        return False
+    return result == 122
+
+
+def mcp_alias() -> Path:
+    """Where the packaged app's execution alias for the MCP server lives: files inside
+    WindowsApps can't be started by their path, the alias can."""
+    base = Path(os.environ.get("LOCALAPPDATA", Path.home() / "AppData" / "Local"))
+    return base / "Microsoft" / "WindowsApps" / "zettelapp-mcp.exe"
+
+
 def set_window_frame_dark(win_id: int, dark: bool) -> None:
     """Ask DWM to draw the title bar in dark or light mode (Windows 10 2004+)."""
     if not IS_WINDOWS:

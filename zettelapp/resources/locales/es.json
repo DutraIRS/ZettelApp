@@ -1117,5 +1117,6 @@
  "The image on the clipboard could not be read. Copy it again, then paste.": "No se pudo leer la imagen del portapapeles. Cópiala de nuevo y luego pégala.",
  "Reading view": "Vista de lectura",
  "Hide the text and read the note, or drag to resize it": "Ocultar el texto y leer la nota, o arrastra para cambiar su tamaño",
- "Show the text beside the preview to edit the note": "Mostrar el texto junto a la vista previa para editar la nota"
+ "Show the text beside the preview to edit the note": "Mostrar el texto junto a la vista previa para editar la nota",
+ "Registered by the ZettelApp package.": "Registrado por el paquete de ZettelApp."
 }

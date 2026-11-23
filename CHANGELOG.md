@@ -88,6 +88,9 @@ All notable changes to ZettelApp are documented here. The format follows
 - **Graph filters with checkboxes**: *Link types* is now a list of checkboxes that stays open, and a new
   *Tags* list has *Show* (hide the notes with a tag) and *Group* (a tag that forms no group and doesn't
   count for clusters, for tags like `#todo`) for each tag. The choices are kept between sessions.
+- **Microsoft Store package**: `packaging/build.ps1` also builds `dist/ZettelApp.msix` (with the
+  Windows SDK). In the package the app leaves updates to the Store, links come from its manifest, and
+  the MCP server is reached through a `zettelapp-mcp.exe` alias.
 - **Find and replace in a note**: Ctrl+F in the note text (Ctrl+F again searches all notes), Ctrl+H to
   replace one or all matches.
 - **Several carets**: Alt+Shift+click (or Alt+click) adds a caret; typing, deleting and moving happen

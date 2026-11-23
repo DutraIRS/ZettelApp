@@ -136,13 +136,16 @@ before switching). The earlier Windows pass never switched Windows itself.
 
 - [ ] **Tests and lint**: `.venv\Scripts\python -m pytest` all passing (Linux: 545 passed,
   14 skipped; Windows skips the Linux-only ones), `ruff check .`, `ruff format --check .`,
-  `python tools/i18n.py check` (1026/1026 in every language).
-- [ ] **A `zettelapp://` link clicked in Anki** brings the running window to the front, on the
-  linked note, maximised if it was (needs a person: the test launcher could not pass the
-  foreground on).
-- [ ] **An alarm toast**: set an alarm a minute ahead, minimise ZettelApp. What it looks and
-  sounds like (Focus Assist and notification settings decide); clicking it opens the note and
-  brings the window back as it was (maximised stays maximised).
+  `python tools/i18n.py check` (1027/1027 in every language).
+- [ ] **Microsoft Store package** (`dist/ZettelApp.msix`, built with `-SignMsixForTesting` to
+  install it locally): installs and starts from the Start menu with its logo; *Options ▸ Desktop
+  integration* offers no link registration (the manifest registers `zettelapp://`), and a
+  `zettelapp://note/<id>` link opens the note; no update notice at start; *Options ▸ MCP* points
+  Claude Desktop at the `zettelapp-mcp.exe` alias and a client can call tools with the switch on;
+  this round's items in section 1 also work in the package. Uninstall leaves the vault.
+- [ ] **Alarm toast click** with the window maximised and then minimised: the note opens and
+  the window comes back maximised (the toast's look was confirmed; the click after the fix was
+  not watched).
 - [ ] **Options ▸ AI assistant** wording, by eye: save a key, read the hint ("Key … saved on this
   computer."), delete it.
 - [ ] **Show in folder** (*Export* result, a `file:///` link in a note): Explorer opens with the
@@ -209,7 +212,9 @@ and the Snap:
 Windows (23 November 2026): the OLED theme, own colours, folding side panels, icons on theme
 switch, find bar order, extra carets, access keys, icons and fonts as in 1.3.1, the Windows accent
 at start, mind map and graph exports, Credential Manager, MCP switch, update link, single instance,
-file dialogs' folder, snippets, checklists, packaging, start-up times, a Windows vault (opens on
+file dialogs' folder, snippets, checklists, packaging, start-up times, `zettelapp://` links
+clicked in Anki, the alarm toast's look ("ZettelApp", the title, "Time for this note."), a
+Windows vault (opens on
 Linux: pictures, typed links, flashcards; the `C:\` links show greyed out as unavailable).
 GNOME and KDE (23 November 2026): native Wayland, app id and icon, dark at start, Show in folder
 (Nautilus; Dolphin when it owns the name), drag and drop and screenshot paste on GNOME, menus and
