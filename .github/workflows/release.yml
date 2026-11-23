@@ -85,7 +85,10 @@ jobs:
       - name: Run tests
         env:
           QT_QPA_PLATFORM: offscreen
-        run: python -m pytest -q --cov --cov-report=term-missing
+        run: |
+          python -X faulthandler -m pytest -q --cov --cov-report=term-missing
+          Write-Host "pytest exit code: $LASTEXITCODE"
+          exit $LASTEXITCODE
       - name: Audit installed dependencies
         run: python -m pip_audit --progress-spinner off
       - name: Require signing or explicit unsigned approval
