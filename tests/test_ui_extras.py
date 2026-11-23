@@ -356,3 +356,12 @@ def test_a_message_on_screen_follows_a_theme_switch(window):
     window._set_theme("dark")
     assert theme.current().surface in window.info.styleSheet()
     assert light not in window.info.styleSheet()
+
+
+def test_an_alarm_or_a_link_brings_a_maximised_window_back_maximised(window):
+    from PySide6.QtCore import Qt
+
+    window.setWindowState(Qt.WindowState.WindowMaximized | Qt.WindowState.WindowMinimized)
+    window.bring_forward()
+    assert window.windowState() & Qt.WindowState.WindowMaximized
+    assert not window.windowState() & Qt.WindowState.WindowMinimized

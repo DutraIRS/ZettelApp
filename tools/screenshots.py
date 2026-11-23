@@ -54,7 +54,8 @@ def use_default_accent() -> None:
     """Screenshots show the default Windows blue, whatever this desktop's accent colour: every
     accent reader in theme (Windows registry, GNOME, KDE, the XDG portal...) answers "none"."""
     for name in dir(theme):
-        if name.endswith("_accent") and callable(getattr(theme, name)):
+        # Readers of the desktop's colour only: _with_accent builds a theme from a colour.
+        if name.endswith("_accent") and name != "_with_accent" and callable(getattr(theme, name)):
             setattr(theme, name, lambda *args, **kwargs: None)
 
 

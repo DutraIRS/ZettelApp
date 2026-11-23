@@ -647,9 +647,7 @@ class MainWindow(QMainWindow):
     def _open_alarm_note(self, note_id: str | None = None) -> None:
         note_id = note_id or self._tray_note
         if note_id and self.vault is not None:
-            self.showNormal()
-            self.raise_()
-            self.activateWindow()
+            self.bring_forward()
             self.open_note(note_id)
 
     # --- vault lifecycle ---------------------------------------------------
@@ -1462,10 +1460,17 @@ class MainWindow(QMainWindow):
 
     # --- single instance / protocol handler ------------------------------------
 
-    def handle_message(self, message: dict) -> None:
-        self.showNormal() if self.isMinimized() else None
+    def bring_forward(self) -> None:
+        """Out of the taskbar and in front, as it was: maximised stays maximised."""
+        if self.isMinimized():
+            state = self.windowState() & ~Qt.WindowState.WindowMinimized
+            self.setWindowState(state | Qt.WindowState.WindowActive)
+        self.show()
         self.raise_()
         self.activateWindow()
+
+    def handle_message(self, message: dict) -> None:
+        self.bring_forward()
         note_id = message.get("open")
         if isinstance(note_id, str) and is_valid_note_id(note_id):
             self.open_note(note_id)
