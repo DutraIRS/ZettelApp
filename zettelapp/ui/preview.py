@@ -55,10 +55,10 @@ h1 {{ font-size: {round(px * 1.6)}px; font-weight: 600; margin: {step * 2}px 0 {
 h2 {{ font-size: {round(px * 1.3)}px; font-weight: 600; margin: {step * 2}px 0 {step // 2}px 0; }}
 h3, h4, h5, h6 {{ font-size: {round(px * 1.1)}px; font-weight: 600;
     margin: {round(step * 1.5)}px 0 {step // 2}px 0; }}
-p {{ {block} line-height: 150%; }}
+p {{ {block} line-height: 125%; }}
 p.picture {{ line-height: 100%; }}
 ul, ol {{ {block} }}
-li {{ margin: 0 0 {step // 3}px 0; line-height: 150%; }}
+li {{ margin: 0 0 {step // 3}px 0; line-height: 125%; }}
 em, i {{ font-family: {italic}; }}
 a {{ color: {t.link}; text-decoration: none; }}
 a.new-note {{ color: {t.text_muted}; text-decoration: underline; }}
