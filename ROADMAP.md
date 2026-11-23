@@ -151,3 +151,31 @@ is open on two machines.
 - [ ] **Reading as Android's default**: the Android app opens notes in a reading view first.
 - [✓] **Preview spacing**: paragraphs, headings and lists in the preview are still spaced unevenly.
   *Done 2026-11-23:* one spacing step for every block, the editor's text size.
+
+## 10. One top row on Windows, as GitHub Desktop's (requested 23 November 2026)
+
+Windows draws its own title bar (in the user's accent colour, when they chose that) above the menu
+bar. Instead, the app's icon, the menus, the note's name (muted, centred) and the minimise, maximise
+and close buttons should share **one row**, in the theme's colours. Euterpes did it the same day
+(`euterpes/ui/title_bar.py`, its roadmap item G23); the same approach fits here.
+
+- [ ] **The look**: paint the row in the **sidebar's colour**, not the window's, so with the rail at the
+  left it forms one L around the page and the page starts inside it with one straight edge. Close turns
+  red (`#c42b1c`) on hover, as Windows does; the buttons are 46 × 32 px with Segoe Fluent Icons glyphs
+  (E921, E922/E923, E8BB), plain characters where the font is missing.
+- [ ] **The behaviour stays native**: set `Qt.FramelessWindowHint` before the first show, then on the
+  first `showEvent` put back `WS_THICKFRAME | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX |
+  WS_MAXIMIZEBOX` and extend the DWM frame by one pixel, so the window still snaps, animates, keeps its
+  shadow and rounded corners. In `nativeEvent`, answer `WM_NCCALCSIZE` with 0 (all client area; inset a
+  maximised window by its frame so nothing hangs off the screen) and `WM_NCHITTEST` with the edges
+  (resize), `HTCAPTION` over the empty row (drag, double-click to maximise) and `HTCLIENT` over menus
+  and buttons.
+- [ ] **Pitfalls to avoid**: calling `winId()` while answering `WM_NCCALCSIZE` recurses while the native
+  window is being made: use the message's own `hWnd`, and answer nothing until restyled. Once the row
+  holds the menus, never call `QMainWindow.menuBar()`: Qt silently replaces the row with a new, empty
+  menu bar. ZettelApp calls it in `main_window.py` and `quest_card.py`; use `menuWidget()`.
+- [ ] **Windows only** (`platformName() == "windows"`): Linux keeps the desktop's title bar, and tests
+  (offscreen) keep Qt's menu bar.
+- *Done when* the row shows in every theme, the window drags, snaps, resizes from every edge and
+  maximises to the screen's free area (checked with Windows' own `WM_NCHITTEST` answers), and a test
+  covers the hit rules. It needs a check on a Windows machine, as the Linux VM can't show it.
