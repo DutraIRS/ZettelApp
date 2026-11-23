@@ -6,6 +6,8 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-23
+
 ### Added
 
 - **Black (OLED) theme** (*View ▸ Theme*, or Options): the dark theme on true black.

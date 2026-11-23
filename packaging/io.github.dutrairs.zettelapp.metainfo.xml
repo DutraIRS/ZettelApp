@@ -64,6 +64,14 @@
     <keyword>markdown</keyword>
   </keywords>
   <releases>
+    <release version="1.4.0" date="2026-11-23">
+      <description>
+        <p>ZettelApp on Linux (.deb, portable archive, Snap and Flatpak) and in the Microsoft Store.
+          A Reading view, folding side panels, a Black (OLED) theme and your own colours, find and
+          replace, several carets, a note list ordered by closeness, graph filters, alarms you can
+          click through to the note, and many fixes.</p>
+      </description>
+    </release>
     <release version="1.3.1" date="2026-11-05">
       <description>
         <p>Word-processor style bold and italic, smarter [[ autocomplete, and a tidier note list menu.</p>

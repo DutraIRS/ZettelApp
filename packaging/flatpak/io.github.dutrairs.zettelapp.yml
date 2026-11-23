@@ -17,9 +17,10 @@ finish-args:
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.freedesktop.FileManager1
   - --talk-name=org.freedesktop.portal.Desktop
-# Validate and build locally with:
+# The release workflow builds a bundle from it (job `flatpak`). Build locally, from a clean
+# checkout (the whole folder is copied in), with:
 #   flatpak-builder --force-clean --install-deps-from=flathub --install --user build/flatpak packaging/flatpak/io.github.dutrairs.zettelapp.yml
-# When submitting to Flathub, pin this source to the release tag instead of a moving branch.
+# For Flathub, the source becomes the release tag and the wheels become listed sources.
 modules:
   - name: zettelapp
     buildsystem: simple
@@ -41,6 +42,5 @@ modules:
       - install -Dm644 zettelapp/resources/icon.svg
         /app/share/icons/hicolor/scalable/apps/io.github.dutrairs.zettelapp.svg
     sources:
-      - type: git
-        url: https://github.com/DutraIRS/ZettelApp.git
-        branch: main
+      - type: dir
+        path: ../..

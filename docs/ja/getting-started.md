@@ -25,6 +25,8 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 |---|---|
 | `ZettelApp-Linux-amd64.deb` | Debian、Ubuntu、Mint など `.deb` 系のディストリビューション。`sudo apt install ./ZettelApp-Linux-amd64.deb` でインストールするか、ソフトウェアセンターで開きます。 |
 | `ZettelApp-Linux-x86_64.tar.gz` | その他のディストリビューション、またはインストールしない場合: 任意の場所に展開し、`ZettelApp/zettelapp` を実行します。 |
+| `ZettelApp-Linux-x86_64.flatpak` | Flatpak を使う場合: `flatpak install --user ./ZettelApp-Linux-x86_64.flatpak` (ランタイムは Flathub から取得されます)。 |
+| `zettelapp` (Snap) | Snap Store から: `sudo snap install zettelapp`。 |
 
 どちらも Python と Qt を同梱しています。64 ビットのデスクトップ (X11 または Wayland — GNOME、KDE など) と、その標準的なグラフィックライブラリが必要です。ターミナルでダウンロードを確認するには:
 

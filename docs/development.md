@@ -82,8 +82,10 @@ This produces:
 `packaging/build-msix.ps1` packs `dist/ZettelApp/` with MakeAppx: a full-trust desktop app with the
 `zettelapp://` protocol and a `zettelapp-mcp.exe` execution alias in its manifest, logos drawn by
 `packaging/make_msix_assets.py` and indexed by MakePri. The `.msix` is unsigned: Partner Center signs
-it on upload. Pass the identity Partner Center reserved for the app (*Product management ▸ Product
-identity*): `-IdentityName <Package/Identity/Name> -Publisher "<Package/Identity/Publisher>"`.
+it on upload. Its identity is the one Partner Center reserved for the app (*Product management ▸
+Product identity*): `DutraIRS.ZettelApp`, publisher `CN=53099347-7B2E-461F-AD4A-B9F301A1269D`, the
+script's defaults (Store ID 9PB0HCDXF63D). The release workflow keeps each version's `.msix` as a
+workflow artifact (`microsoft-store-package`) to upload to Partner Center.
 
 Inside the package, the app detects it (`winintegration.is_packaged()`): it doesn't check for updates
 (the Store updates it), Options doesn't offer to register `zettelapp://` links (the manifest does), and

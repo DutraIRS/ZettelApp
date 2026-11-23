@@ -7,18 +7,18 @@
     unsigned, for uploading to Partner Center: the Store signs it.
 
     The package identity must match the one Partner Center reserves for the app (Product
-    management > Product identity): pass -IdentityName and -Publisher with those values for a
-    Store upload. The defaults are for local testing only.
+    management > Product identity). The defaults are ZettelApp's reserved identity, so the
+    package is ready to upload as it is.
 
     Needs the Windows SDK (makeappx.exe, makepri.exe); skipped with a warning
     when it is missing.
 
 .EXAMPLE
-    pwsh packaging/build-msix.ps1 -IdentityName 12345DutraIRS.ZettelApp -Publisher "CN=ABCD-1234"
+    pwsh packaging/build-msix.ps1
 #>
 param(
     [string]$IdentityName = "DutraIRS.ZettelApp",
-    [string]$Publisher = "CN=DutraIRS",
+    [string]$Publisher = "CN=53099347-7B2E-461F-AD4A-B9F301A1269D",
     [string]$PublisherDisplayName = "DutraIRS"
 )
 

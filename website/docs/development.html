@@ -82,18 +82,16 @@ and <code>zettelapp://</code> link registration;</li>
 <p><code>packaging/build-msix.ps1</code> packs <code>dist/ZettelApp/</code> with MakeAppx: a full-trust desktop app with the
 <code>zettelapp://</code> protocol and a <code>zettelapp-mcp.exe</code> execution alias in its manifest, logos drawn by
 <code>packaging/make_msix_assets.py</code> and indexed by MakePri. The <code>.msix</code> is unsigned: Partner Center signs
-it on upload. Pass the identity Partner Center reserved for the app (<em>Product management ▸ Product
-identity</em>): <code>-IdentityName &lt;Package/Identity/Name&gt; -Publisher &quot;&lt;Package/Identity/Publisher&gt;&quot;</code>.</p>
+it on upload. Its identity is the one Partner Center reserved for the app (<em>Product management ▸
+Product identity</em>): <code>DutraIRS.ZettelApp</code>, publisher <code>CN=53099347-7B2E-461F-AD4A-B9F301A1269D</code>, the
+script's defaults (Store ID 9PB0HCDXF63D). The release workflow keeps each version's <code>.msix</code> as a
+workflow artifact (<code>microsoft-store-package</code>) to upload to Partner Center.</p>
 <p>Inside the package, the app detects it (<code>winintegration.is_packaged()</code>): it doesn't check for updates
 (the Store updates it), Options doesn't offer to register <code>zettelapp://</code> links (the manifest does), and
 the Claude Desktop setup points at the <code>zettelapp-mcp.exe</code> alias, since files inside <code>WindowsApps</code>
 can't be started by their path.</p>
-<p>To try a package on your own computer:</p>
-<pre><code class="language-powershell">pwsh packaging/build.ps1 -SignMsixForTesting   # also writes dist/ZettelApp-test.msix and .cer
-certutil -addstore TrustedPeople dist\ZettelApp-test.cer   # once, as administrator
-Add-AppxPackage dist\ZettelApp-test.msix
-</code></pre>
-<p>Remove it with <code>Get-AppxPackage DutraIRS.ZettelApp | Remove-AppxPackage</code>.</p>
+<p>Windows installs only signed packages, so the unsigned <code>.msix</code> can't be installed locally; the
+Store's signed build is the one to install.</p>
 <p>The executables carry Windows version information and the app icon. One-folder builds start faster and
 trigger fewer antivirus false positives than single-file builds.</p>
 <h2 id="build-the-linux-app">Build the Linux app</h2>
