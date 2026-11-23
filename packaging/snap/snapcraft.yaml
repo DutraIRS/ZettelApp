@@ -40,6 +40,8 @@ parts:
     plugin: python
     source: .
     python-requirements: [requirements.txt]
+    # Qt's X11 plugin needs libxcb-cursor, which the gnome runtime does not ship.
+    stage-packages: [libxcb-cursor0]
     # The gnome extension puts the SDK's Python packages on PYTHONPATH while building, and its
     # older pip then shadows the virtualenv's ("cannot import name 'cli'"). Build without it.
     build-environment:
