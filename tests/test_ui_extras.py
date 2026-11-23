@@ -329,3 +329,19 @@ def test_file_dialogs_open_the_last_folder_or_documents_never_the_working_folder
     widgets.remember_folder(str(chosen / "Graph.png"))
     assert Path(widgets.dialog_start("Map.svg")) == chosen / "Map.svg"
     assert Path(widgets.dialog_start()) == chosen
+
+
+def test_every_menu_item_has_its_own_access_key(window):
+    from PySide6.QtGui import QAction
+
+    from zettelapp.ui.main_window import _access_key, unique_access_keys
+
+    actions = [QAction(t) for t in ("&Save", "&Search", "Cu&t", "&Trash", "Save &&&Quit")]
+    unique_access_keys(actions)
+    assert [a.text() for a in actions] == ["&Save", "S&earch", "Cu&t", "T&rash", "Save &&&Quit"]
+
+    menus = [a.menu() for a in window.menuBar().actions() if a.menu() is not None]
+    for menu in menus:
+        keys = [_access_key(a.text()) for a in menu.actions() if a.text()]
+        letters = [k[1] for k in keys if k is not None]
+        assert len(letters) == len(set(letters)), menu.title()

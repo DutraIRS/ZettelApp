@@ -137,6 +137,48 @@ class NavRail(QWidget):
         self.buttons[index].setChecked(True)
 
 
+def _access_key(text: str) -> tuple[int, str] | None:
+    """Where the access key (the letter after the first single &) is in *text*, and it."""
+    i = 0
+    while i < len(text) - 1:
+        if text[i] == "&":
+            if text[i + 1] == "&":
+                i += 2
+                continue
+            return i, text[i + 1].lower()
+        i += 1
+    return None
+
+
+def unique_access_keys(actions) -> None:
+    """Give each item of a menu its own access key: a letter used twice (in a translation, or
+    in a name put together in code) only cycles between the items on Windows, so the later
+    item takes the first letter of its text that no other item uses."""
+    used: set[str] = set()
+    for action in actions:
+        text = action.text()
+        found = _access_key(text)
+        if found is None:
+            continue
+        at, key = found
+        if key not in used:
+            used.add(key)
+            continue
+        plain = text[:at] + text[at + 1 :]
+        spot = next(
+            (
+                i
+                for i, ch in enumerate(plain)
+                if ch.isalnum() and ch.lower() not in used and plain[i - 1 : i] != "&"
+            ),
+            None,
+        )
+        if spot is None:
+            continue  # every letter is taken: leave it (pressing it cycles)
+        action.setText(plain[:spot] + "&" + plain[spot:])
+        used.add(plain[spot].lower())
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -350,7 +392,7 @@ class MainWindow(QMainWindow):
         )
         e.addSeparator()
         self._action(e, "&Duplicate Note", self.duplicate_current, "Ctrl+D", "copy")
-        self._action(e, "Move Note to &Trash", self.trash_current, "Ctrl+Delete", "delete")
+        self._action(e, "&Move Note to Trash", self.trash_current, "Ctrl+Delete", "delete")
 
         v = bar.addMenu(_("&View"))
         for i, (glyph, text) in enumerate(NAV):
@@ -392,7 +434,7 @@ class MainWindow(QMainWindow):
         i = bar.addMenu(_("&Insert"))
         self._action(i, "&Link to Note…", self.link_note_inline, "Ctrl+K", "relationship")
         self._action(i, "&Web Link…", self.editor.insert_web_link, None, "globe")
-        self._action(i, "Link to a &File…", self.editor.insert_file_link, None, "folder")
+        self._action(i, "Link to a Fil&e…", self.editor.insert_file_link, None, "folder")
         self._action(i, "&Image…", self.editor.insert_image, "Ctrl+Shift+I", "image")
         self._action(i, "&Zotero Reference…", self.zotero_reference, None, "library")
         self._action(i, "&Mind Map", self.editor.show_mindmap, None, "mindmap")
@@ -461,6 +503,12 @@ class MainWindow(QMainWindow):
             None,
             "info",
         )
+        menus = [a.menu() for a in bar.actions() if a.menu() is not None]
+        unique_access_keys(bar.actions())
+        while menus:
+            menu = menus.pop()
+            unique_access_keys(menu.actions())
+            menus += [a.menu() for a in menu.actions() if a.menu() is not None]
 
     def donate(self) -> None:
         QDesktopServices.openUrl(QUrl(SPONSOR_URL))
