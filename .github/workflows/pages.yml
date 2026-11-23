@@ -33,7 +33,7 @@ jobs:
       - name: Build documentation pages and version.json
         run: |
           python -m pip install --upgrade pip
-          python -m pip install "markdown-it-py==4.2.0" "rational==0.3.0a1"
+          python -m pip install "markdown-it-py==4.3.0" "rational==0.4.0a2"
           python tools/build_site.py
       - uses: actions/configure-pages@v6
       - uses: actions/upload-pages-artifact@v5
