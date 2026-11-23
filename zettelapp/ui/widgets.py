@@ -383,6 +383,7 @@ class InfoBar(QFrame):
         row.addWidget(self.close_button)
         self._timer = QTimer(self, singleShot=True, timeout=self.hide)
         self._callback: Callable | None = None
+        self._kind = "info"
         self.action.clicked.connect(self._run)
 
     def show_message(
@@ -393,14 +394,8 @@ class InfoBar(QFrame):
         callback: Callable | None = None,
         timeout_ms: int = 8000,
     ) -> None:
-        t = theme.current()
-        color = {"info": t.accent, "success": t.success, "error": t.danger}.get(kind, t.accent)
-        self.setStyleSheet(
-            f"InfoBar {{ background: {t.surface}; border: 1px solid {t.border};"
-            f" border-left: 4px solid {color}; border-radius: 6px; }}"
-        )
-        glyph = {"info": "info", "success": "check", "error": "info"}[kind]
-        self.icon.setPixmap(icons.icon(glyph, color).pixmap(18, 18))
+        self._kind = kind
+        self.refresh_style()
         self.text.setText(text)
         self.action.setVisible(bool(action))
         self.action.setText(action or "")
@@ -409,6 +404,18 @@ class InfoBar(QFrame):
         self._timer.stop()
         if timeout_ms:
             self._timer.start(timeout_ms)
+
+    def refresh_style(self) -> None:
+        """Colour the strip from the current theme (again after a theme switch)."""
+        t = theme.current()
+        kind = self._kind
+        color = {"info": t.accent, "success": t.success, "error": t.danger}.get(kind, t.accent)
+        self.setStyleSheet(
+            f"InfoBar {{ background: {t.surface}; border: 1px solid {t.border};"
+            f" border-left: 4px solid {color}; border-radius: 6px; }}"
+        )
+        glyph = {"info": "info", "success": "check", "error": "info"}.get(kind, "info")
+        self.icon.setPixmap(icons.icon(glyph, color).pixmap(18, 18))
 
     def _run(self) -> None:
         if self._callback:

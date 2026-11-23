@@ -1443,6 +1443,7 @@ class MainWindow(QMainWindow):
             QApplication.instance(), settings.get(settings.THEME), colours=settings.theme_colours()
         )
         winintegration.set_window_frame_dark(int(self.winId()), theme.current().dark)
+        self.info.refresh_style()  # a message on screen keeps the old theme's colours otherwise
         self.editor.body.set_font_size(settings.get(settings.EDITOR_FONT_SIZE))
         self.editor.refresh_style()
         self._configure_suggestions()

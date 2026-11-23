@@ -345,3 +345,14 @@ def test_every_menu_item_has_its_own_access_key(window):
         keys = [_access_key(a.text()) for a in menu.actions() if a.text()]
         letters = [k[1] for k in keys if k is not None]
         assert len(letters) == len(set(letters)), menu.title()
+
+
+def test_a_message_on_screen_follows_a_theme_switch(window):
+    from zettelapp.ui import theme
+
+    window._set_theme("light")
+    window.info.show_message("Saved", "success")
+    light = theme.current().surface
+    window._set_theme("dark")
+    assert theme.current().surface in window.info.styleSheet()
+    assert light not in window.info.styleSheet()
