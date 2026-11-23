@@ -71,6 +71,10 @@ From the [latest release](https://github.com/DutraIRS/ZettelApp/releases/latest)
 | `ZettelApp-Linux-amd64.deb` | You use Debian, Ubuntu, Mint or another `.deb`-based distribution: install it with `sudo apt install ./ZettelApp-Linux-amd64.deb` (or open it in your software centre, which then offers updates). |
 | `ZettelApp-Linux-x86_64.tar.gz` | You want a portable build, or use another distribution: unpack it anywhere and run `ZettelApp/zettelapp`. |
 
+Officially supported: **Debian 13 and Ubuntu 24.04 LTS or newer** (and distributions built on them,
+such as Linux Mint 22). The portable archive also runs on other 64-bit distributions with glibc 2.39 or
+newer (Fedora 40+, Arch, openSUSE Tumbleweed…), without official testing.
+
 Both bundle Python and Qt; they need a 64-bit desktop (X11 or Wayland, GNOME, KDE and others) with the
 standard graphics libraries, listed in the `.deb`'s dependencies. API keys are stored in the Secret
 Service (GNOME Keyring or KWallet); without a keyring ZettelApp keeps them in memory only. A Flatpak

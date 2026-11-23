@@ -1,6 +1,6 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: ZettelApp
-Upstream-Contact: ZettelApp contributors <https://github.com/DutraIRS/ZettelApp>
+Upstream-Contact: Iago Riveiro Santos Dutra <iagorivsd@gmail.com>
 Source: https://github.com/DutraIRS/ZettelApp
 
 Files: *

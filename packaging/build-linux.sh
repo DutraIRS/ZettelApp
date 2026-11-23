@@ -83,7 +83,7 @@ cat > "$staging/DEBIAN/control" <<CONTROL
 Package: zettelapp
 Version: $deb_version
 Architecture: amd64
-Maintainer: ZettelApp contributors <https://github.com/DutraIRS/ZettelApp>
+Maintainer: Iago Riveiro Santos Dutra <iagorivsd@gmail.com>
 Installed-Size: $(du -sk --exclude=DEBIAN "$staging/usr" | cut -f1)
 Depends: libc6 (>= ${glibc:-2.31}), libdbus-1-3, libegl1, libfontconfig1, libgl1, libsecret-1-0, libwayland-client0, libx11-6, libxkbcommon0, libxkbcommon-x11-0, libxcb-cursor0, libxcb-icccm4, libxcb-keysyms1, libxcb-shape0, libxcb-xinerama0, libxcb-xkb1, desktop-file-utils, xdg-utils
 Recommends: gnome-keyring | kwalletd6 | kwalletd5, libglib2.0-bin, fonts-noto-cjk
