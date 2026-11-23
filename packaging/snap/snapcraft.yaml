@@ -39,6 +39,10 @@ parts:
     plugin: python
     source: .
     python-requirements: [requirements.txt]
+    # The gnome extension puts the SDK's Python packages on PYTHONPATH while building, and its
+    # older pip then shadows the virtualenv's ("cannot import name 'cli'"). Build without it.
+    build-environment:
+      - PYTHONPATH: ""
     # The gnome extension provides the desktop interfaces and the session bus (the keyring and
     # the file manager service talk to it); PySide6's wheels bundle their own Qt.
     override-build: |
