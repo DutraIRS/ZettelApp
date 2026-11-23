@@ -152,7 +152,7 @@ before switching). The earlier Windows pass never switched Windows itself.
   14 skipped; Windows skips the Linux-only ones), `ruff check .`, `ruff format --check .`,
   `python tools/i18n.py check` (1027/1027 in every language). *Windows: 490 passed, 70 skipped;
   ruff clean; 1027/1027 in all ten languages.*
-- [ ] **Microsoft Store package** (`dist/ZettelApp.msix`, built with `-SignMsixForTesting` to
+- [x] **Microsoft Store package** (`dist/ZettelApp.msix`, built with `-SignMsixForTesting` to
   install it locally): installs and starts from the Start menu with its logo; *Options ▸ Desktop
   integration* offers no link registration (the manifest registers `zettelapp://`), and a
   `zettelapp://note/<id>` link opens the note; no update notice at start; *Options ▸ MCP* points
