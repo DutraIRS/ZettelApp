@@ -116,7 +116,7 @@ Add, rename, restyle or remove link types in *Tools ▸ Options ▸ Link types*.
 change it beside the list:
 
 - **Name** and **Reverse name**: how the link reads from its source and from its target. The reverse
-  name is used only by directed types; until you give one, it follows the name ("Nameon" reads
+  name (and the arrow tip) appear only for directed types; until you give one, it follows the name ("Nameon" reads
   "Reverse Nameon"). In text, `reverse_nameon::` always works for the reverse direction, whatever the
   reverse name.
 - **Directed**: whether the type reads differently from each side and gets an arrow tip.

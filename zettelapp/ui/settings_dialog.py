@@ -627,10 +627,13 @@ class OptionsDialog(QDialog):
         self.type_reverse.setMaxLength(60)
         self.type_reverse.setToolTip(_("How the link reads from the note it points to"))
         self.type_reverse.textEdited.connect(self._type_edited)
-        form.addRow(_("Reverse name"), self.type_reverse)
+        # Directed comes first: ticking it shows the reverse name below, which an undirected
+        # type doesn't have (it reads the same from both notes).
         self.type_directed = QCheckBox(_("Directed: reads differently from each side"))
         self.type_directed.toggled.connect(self._type_edited)
         form.addRow("", self.type_directed)
+        form.addRow(_("Reverse name"), self.type_reverse)
+        self._type_form = form
         self.type_colour = QPushButton()
         self.type_colour.setAccessibleName(_("Colour"))
         self.type_colour.setToolTip(_("Choose a colour"))
@@ -752,9 +755,8 @@ class OptionsDialog(QDialog):
         item = self.types_list.currentItem()
         item.setText(lt.label.strip() or _("Untitled"))
         item.setIcon(type_icon(lt))
-        self.type_reverse.setEnabled(lt.directed)
-        self.type_arrow.setEnabled(lt.directed)
-        self.type_reverse.setPlaceholderText("" if lt.directed else _("Same as the name"))
+        self._type_form.setRowVisible(self.type_reverse, lt.directed)
+        self._type_form.setRowVisible(self.type_arrow, lt.directed)  # no arrow without a direction
         swatch = QPixmap(32, 32)
         swatch.setDevicePixelRatio(2)
         swatch.fill(Qt.GlobalColor.transparent)
