@@ -1414,6 +1414,9 @@ class MainWindow(QMainWindow):
     # --- single instance / protocol handler ------------------------------------
 
     def handle_message(self, message: dict) -> None:
+        from zettelapp.ui.notifications import use_activation_token
+
+        use_activation_token(message.get("activation_token"))
         self.showNormal() if self.isMinimized() else None
         self.raise_()
         self.activateWindow()

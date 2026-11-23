@@ -1455,7 +1455,7 @@
  "Could not switch MCP on.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1501"
+   "zettelapp/ui/main_window.py:1504"
   ]
  },
  "Could not talk to the system keyring.": {
@@ -1509,25 +1509,25 @@
  "Ctrl+click to list the notes tagged #{tag}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:496"
+   "zettelapp/ui/markdown_editor.py:497"
   ]
  },
  "Ctrl+click to open {link}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:502"
+   "zettelapp/ui/markdown_editor.py:503"
   ]
  },
  "Ctrl+click to open “{title}”": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:494"
+   "zettelapp/ui/markdown_editor.py:495"
   ]
  },
  "Ctrl+click to show {name} in your file manager": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:499"
+   "zettelapp/ui/markdown_editor.py:500"
   ]
  },
  "Ctrl+click, Shift+click, Shift+arrows": {
@@ -1693,7 +1693,7 @@
  "Details were written to the log in {folder}.": {
   "plural": null,
   "where": [
-   "zettelapp/app.py:131"
+   "zettelapp/app.py:138"
   ]
  },
  "Diamond": {
@@ -2753,7 +2753,7 @@
  "Let AI agents use ZettelApp through MCP": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1471"
+   "zettelapp/ui/main_window.py:1474"
   ]
  },
  "Let the title state the idea, like the title of this note. When a note grows a second idea, split it: press **Ctrl+N** for a new note, move the text there and link the two.": {
@@ -3055,38 +3055,38 @@
  "MCP is off: AI agents can no longer reach your notes.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1519"
+   "zettelapp/ui/main_window.py:1522"
   ]
  },
  "MCP is on: AI agents connected to ZettelApp can read and add to your notes until you switch it off or close ZettelApp.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1506"
+   "zettelapp/ui/main_window.py:1509"
   ]
  },
  "MCP is on: AI agents connected to ZettelApp can read your notes until you switch it off or close ZettelApp.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1511"
+   "zettelapp/ui/main_window.py:1514"
   ]
  },
  "MCP lets AI agents such as Claude Desktop or Claude Code search and read your notes.\nIt works only while ZettelApp is open and this switch is on. The switch is off\nwhenever ZettelApp starts, and the agent's connection stops when you switch it\noff or close ZettelApp. Set it up in Tools ▸ Options ▸ MCP server.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1481"
+   "zettelapp/ui/main_window.py:1484"
   ]
  },
  "MCP off": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1473",
-   "zettelapp/ui/main_window.py:1503"
+   "zettelapp/ui/main_window.py:1476",
+   "zettelapp/ui/main_window.py:1506"
   ]
  },
  "MCP on": {
   "plural": null,
   "where": [
-   "zettelapp/ui/main_window.py:1503"
+   "zettelapp/ui/main_window.py:1506"
   ]
  },
  "MCP server": {
@@ -3384,7 +3384,7 @@
  "No note called “{title}” yet. Ctrl+click to create it.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:491"
+   "zettelapp/ui/markdown_editor.py:492"
   ]
  },
  "No note in the graph matches that title.": {
@@ -3548,7 +3548,7 @@
  "Note text": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:241"
+   "zettelapp/ui/markdown_editor.py:242"
   ]
  },
  "Note: {model} is not in the provider's model list.": {
@@ -3671,7 +3671,7 @@
  "Only files on this computer's drives can be linked.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:745"
+   "zettelapp/ui/markdown_editor.py:757"
   ]
  },
  "Only http(s) and mailto links are allowed.": {
@@ -4662,7 +4662,7 @@
  "Something went wrong. Your notes are saved automatically, so nothing should be lost.": {
   "plural": null,
   "where": [
-   "zettelapp/app.py:124"
+   "zettelapp/app.py:131"
   ]
  },
  "Sort notes": {
@@ -4746,7 +4746,7 @@
  "Start writing… Use [[ to link a note, #tags, Q:/A: or {{c1::cloze}} for flashcards.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/markdown_editor.py:243"
+   "zettelapp/ui/markdown_editor.py:244"
   ]
  },
  "Stop": {
@@ -5131,6 +5131,12 @@
   "plural": null,
   "where": [
    "zettelapp/core/starter.py:35"
+  ]
+ },
+ "The image on the clipboard could not be read. Copy it again, then paste.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/markdown_editor.py:736"
   ]
  },
  "The language model is installed. With the index it takes {size} MB.": {

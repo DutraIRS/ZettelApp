@@ -13,8 +13,10 @@ back as the service's ActionInvoked signal, received through QtDBus.
 from __future__ import annotations
 
 import json
+import os
 import re
 import shutil
+import sys
 from collections.abc import Callable
 
 from PySide6.QtCore import SLOT, QObject, QProcess, QTimer, Slot
@@ -25,6 +27,21 @@ SERVICE = "org.freedesktop.Notifications"
 PATH = "/org/freedesktop/Notifications"
 DESKTOP_ENTRY = DESKTOP_ID  # lets the desktop show our icon and name
 TIMEOUT_MS = 15000
+
+
+def use_activation_token(token: object) -> bool:
+    """Hand a Wayland activation token to Qt, which uses it once on the next activateWindow():
+    GNOME and KWin only bring a window forward that presents one. It comes from the launch
+    that asked for the window, or from the notification that was clicked."""
+    if not (
+        sys.platform.startswith("linux")
+        and isinstance(token, str)
+        and 0 < len(token) <= 512
+        and token.isprintable()
+    ):
+        return False
+    os.environ["XDG_ACTIVATION_TOKEN"] = token
+    return True
 
 
 def _text(value: str) -> str:
@@ -41,6 +58,7 @@ class DesktopNotifier(QObject):
         self.icon = icon
         self.gdbus = shutil.which("gdbus")
         self._keys: dict[int, str] = {}  # notification id -> key
+        self._tokens: dict[int, str] = {}  # notification id -> activation token of its click
         self._listening = False
 
     def available(self) -> bool:
@@ -106,16 +124,27 @@ class DesktopNotifier(QObject):
         from PySide6.QtDBus import QDBusConnection
 
         bus = QDBusConnection.sessionBus()
+        # The desktop sends the click's activation token just before ActionInvoked (GNOME,
+        # Plasma); without it the window can't come to the front.
+        bus.connect(SERVICE, PATH, SERVICE, "ActivationToken", self, SLOT("_token(uint,QString)"))
         bus.connect(SERVICE, PATH, SERVICE, "ActionInvoked", self, SLOT("_invoked(uint,QString)"))
         bus.connect(SERVICE, PATH, SERVICE, "NotificationClosed", self, SLOT("_closed(uint,uint)"))
         self._listening = True
 
     @Slot("uint", "QString")
+    def _token(self, notification_id: int, token: str) -> None:
+        if notification_id in self._keys:
+            self._tokens[notification_id] = token
+
+    @Slot("uint", "QString")
     def _invoked(self, notification_id: int, action: str) -> None:
         key = self._keys.pop(notification_id, None)
+        token = self._tokens.pop(notification_id, None)
         if key is not None and action == "default":
+            use_activation_token(token)
             self.on_click(key)
 
     @Slot("uint", "uint")
     def _closed(self, notification_id: int, _reason: int) -> None:
         self._keys.pop(notification_id, None)
+        self._tokens.pop(notification_id, None)

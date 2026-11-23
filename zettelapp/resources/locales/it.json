@@ -1113,5 +1113,6 @@
  "Selected text and find matches": "Testo selezionato e risultati della ricerca",
  "The text of the whole program": "Il testo di tutto il programma",
  "Theme": "Tema",
- "Use the theme's colour": "Usa il colore del tema"
+ "Use the theme's colour": "Usa il colore del tema",
+ "The image on the clipboard could not be read. Copy it again, then paste.": "Impossibile leggere l’immagine negli appunti. Copiala di nuovo, poi incollala."
 }

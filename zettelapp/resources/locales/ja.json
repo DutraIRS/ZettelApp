@@ -1082,5 +1082,6 @@
  "Selected text and find matches": "選択したテキストと検索結果",
  "The text of the whole program": "プログラム全体の文字",
  "Theme": "テーマ",
- "Use the theme's colour": "テーマの色を使う"
+ "Use the theme's colour": "テーマの色を使う",
+ "The image on the clipboard could not be read. Copy it again, then paste.": "クリップボードの画像を読み取れませんでした。もう一度コピーしてから貼り付けてください。"
 }

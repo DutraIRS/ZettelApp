@@ -353,6 +353,43 @@ def test_dark_mode_follows_qt_not_gnomes_color_scheme(desktop, monkeypatch):
     monkeypatch.setenv("XDG_CURRENT_DESKTOP", "XFCE")
     desktop.answers["gsettings"] = "'prefer-dark'\n"
     assert theme.build_theme("system").dark is theme.system_prefers_dark()
+    assert "gsettings" not in desktop.asked
+
+
+@_linux
+@pytest.mark.parametrize(
+    ("portal", "gsettings", "dark"),
+    [
+        ("(<uint32 1>,)\n", "'default'\n", True),  # the portal wins
+        ("(<uint32 2>,)\n", "'prefer-dark'\n", False),
+        (None, "'prefer-dark'\n", True),  # no portal: gsettings
+        (None, "'prefer-light'\n", False),
+    ],
+)
+def test_gnome_dark_style_decides_at_start(desktop, monkeypatch, portal, gsettings, dark):
+    """GNOME's Qt theme reports Light at start with the Adwaita GTK theme even when the dark
+    style is on (seen on Debian 13 GNOME 48), so GNOME's own setting is read."""
+    from zettelapp.ui import theme
+
+    monkeypatch.setenv("XDG_CURRENT_DESKTOP", "ubuntu:GNOME")
+    if portal is not None:
+        desktop.answers["gdbus"] = portal
+    desktop.answers["gsettings"] = gsettings
+    assert theme.system_prefers_dark() is dark
+    assert theme.build_theme("system").dark is dark
+
+
+@_linux
+def test_gnome_default_style_is_light(desktop, monkeypatch):
+    """GNOME offers "default" (light) and "dark"; the portal answers 0 for "default"."""
+    from zettelapp.ui import theme
+
+    monkeypatch.setenv("XDG_CURRENT_DESKTOP", "GNOME")
+    desktop.answers["gdbus"] = "(<uint32 0>,)\n"
+    assert theme.system_prefers_dark() is False
+    desktop.answers.pop("gdbus")
+    desktop.answers["gsettings"] = "'default'\n"
+    assert theme.system_prefers_dark() is False
 
 
 # --- the zettelapp:// handler ---------------------------------------------------------------
@@ -501,3 +538,51 @@ def test_settings_logs_backups_and_cache_are_private(tmp_path, monkeypatch):
         assert stat.S_IMODE(folder.stat().st_mode) == 0o700, folder
     log_file = paths.logs_dir() / "zettelapp.log"
     assert stat.S_IMODE(log_file.stat().st_mode) == 0o600
+
+
+@_linux
+def test_gnome_dark_style_watch_reacts_only_to_the_color_scheme(desktop, monkeypatch):
+    """Qt misses GNOME's switch to light when it guessed light at start, so the portal's
+    SettingChanged is followed directly; other settings are ignored."""
+    from PySide6.QtCore import QObject
+    from PySide6.QtDBus import QDBusMessage
+
+    from zettelapp.ui import theme
+
+    calls = []
+    watch = theme._GnomeStyleWatch(lambda: calls.append(1), QObject())
+    for namespace, key in [
+        ("org.freedesktop.appearance", "color-scheme"),
+        ("org.gnome.desktop.interface", "color-scheme"),
+        ("org.freedesktop.appearance", "accent-color"),
+    ]:
+        message = QDBusMessage.createSignal(
+            "/p", "org.freedesktop.portal.Settings", "SettingChanged"
+        )
+        message.setArguments([namespace, key, 1])
+        watch.changed(message)
+    assert calls == [1]
+    monkeypatch.setenv("XDG_CURRENT_DESKTOP", "XFCE")
+    assert theme.watch_gnome_dark_style(lambda: None, QObject()) is False
+
+
+@pytest.mark.parametrize(
+    ("desktop", "chosen", "during"),
+    [
+        ("KDE", None, "xdgdesktopportal"),  # KDE's file dialogs through the portal
+        ("GNOME", None, None),  # Qt's GTK theme already gives GTK's dialogs
+        ("XFCE", None, None),
+        ("KDE", "kde", "kde"),  # the user's choice wins
+    ],
+)
+def test_kde_gets_its_file_dialogs_through_the_portal(monkeypatch, desktop, chosen, during):
+    from zettelapp.ui import theme
+
+    monkeypatch.setattr(theme.sys, "platform", "linux")
+    environ = {"XDG_CURRENT_DESKTOP": desktop}
+    if chosen:
+        environ["QT_QPA_PLATFORMTHEME"] = chosen
+    with theme.kde_file_dialogs(environ):
+        assert environ.get("QT_QPA_PLATFORMTHEME") == during
+    # Removed once Qt has read it: programs the app starts keep their own theme.
+    assert environ.get("QT_QPA_PLATFORMTHEME") == chosen

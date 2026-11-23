@@ -448,3 +448,25 @@ def test_link_is_always_the_bundled_chain():
 
     assert "link" not in icons.NATIVE
     assert icons.FLUENT["link"] == "link_20_regular"
+
+
+def test_following_the_system_leaves_qt_tracking_the_desktop(app, monkeypatch):
+    """Pinning Qt's scheme, even to the one the system has, stops Qt from announcing the
+    desktop's next switch (dark to light went unnoticed on KDE and Windows). Only a theme the
+    user picked is pinned."""
+    pinned = []
+    hints = type("Hints", (), {"setColorScheme": lambda _self, scheme: pinned.append(scheme)})()
+    monkeypatch.setattr(theme.QGuiApplication, "styleHints", staticmethod(lambda: hints))
+    monkeypatch.setattr(theme, "system_prefers_dark", lambda: True)
+    try:
+        for mode in ("system", "dark", "black", "light"):
+            theme.apply_theme(app, mode)
+        assert pinned == [
+            Qt.ColorScheme.Unknown,
+            Qt.ColorScheme.Dark,
+            Qt.ColorScheme.Dark,
+            Qt.ColorScheme.Light,
+        ]
+    finally:
+        monkeypatch.undo()
+        theme.apply_theme(app, "light")

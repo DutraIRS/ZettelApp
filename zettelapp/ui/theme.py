@@ -8,12 +8,15 @@ cycled - extra groups fold into a neutral "other" colour).
 
 from __future__ import annotations
 
+import os
 import sys
-from collections.abc import Mapping
+from collections.abc import Callable, Iterator, Mapping, MutableMapping
+from contextlib import contextmanager
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import SLOT, QObject, Qt, Slot
+from PySide6.QtDBus import QDBusMessage
 from PySide6.QtGui import QColor, QFont, QGuiApplication, QPalette
 from PySide6.QtWidgets import QApplication
 
@@ -329,10 +332,106 @@ def _desktop_accent(dark: bool) -> str | None:
     return _linux_accent(dark)
 
 
+def _gnome_color_scheme() -> bool | None:
+    """GNOME's dark style setting: True dark, False light ("default" is GNOME's light style),
+    None when neither the settings portal nor gsettings answers. Asked only on GNOME, whose Qt
+    platform theme guesses from the GTK theme at start (light for Adwaita, whatever the style)
+    and catches up only when the setting changes."""
+    import re
+
+    out = _run_quietly(
+        [
+            "gdbus",
+            "call",
+            "--session",
+            "--timeout=1",
+            "--dest=org.freedesktop.portal.Desktop",
+            "--object-path=/org/freedesktop/portal/desktop",
+            "--method=org.freedesktop.portal.Settings.ReadOne",
+            "org.freedesktop.appearance",
+            "color-scheme",
+        ]
+    )
+    match = re.search(r"uint32 (\d+)", out or "")
+    if match:
+        return int(match.group(1)) == 1  # GNOME's "default" (0) is its light style
+    out = _run_quietly(["gsettings", "get", "org.gnome.desktop.interface", "color-scheme"])
+    value = (out or "").strip().strip("'\"")
+    return value == "prefer-dark" if value else None
+
+
+def _on_gnome() -> bool:
+    import os
+
+    if sys.platform != "linux" or QGuiApplication.instance() is None:
+        return False
+    if QGuiApplication.platformName() in _NO_DESKTOP:
+        return False
+    desktops = {d.strip().casefold() for d in os.environ.get("XDG_CURRENT_DESKTOP", "").split(":")}
+    return "gnome" in desktops
+
+
+class _GnomeStyleWatch(QObject):
+    """Calls back when GNOME's dark style changes, as the settings portal announces it."""
+
+    def __init__(self, callback: Callable[[], None], parent: QObject | None = None):
+        super().__init__(parent)
+        self.callback = callback
+
+    @Slot(QDBusMessage)
+    def changed(self, message: QDBusMessage) -> None:
+        args = message.arguments()
+        if args[:2] == ["org.freedesktop.appearance", "color-scheme"]:
+            self.callback()
+
+
+def watch_gnome_dark_style(callback: Callable[[], None], parent: QObject) -> bool:
+    """On GNOME, call *callback* whenever the dark style is switched. Qt's own
+    colorSchemeChanged misses the switch to light when it started out guessing light (see
+    _gnome_color_scheme), so the portal is listened to directly. False elsewhere."""
+    if not _on_gnome():
+        return False
+    from PySide6.QtDBus import QDBusConnection
+
+    watch = _GnomeStyleWatch(callback, parent)
+    return QDBusConnection.sessionBus().connect(
+        "org.freedesktop.portal.Desktop",
+        "/org/freedesktop/portal/desktop",
+        "org.freedesktop.portal.Settings",
+        "SettingChanged",
+        watch,
+        SLOT("changed(QDBusMessage)"),
+    )
+
+
+@contextmanager
+def kde_file_dialogs(environ: MutableMapping[str, str] | None = None) -> Iterator[None]:
+    """Create the QApplication inside this on KDE Plasma to get KDE's file dialogs: Qt's KDE
+    platform theme isn't part of PySide6, and without it Qt shows its own dialog. Qt's portal
+    theme asks xdg-desktop-portal-kde instead, and keeps the colour scheme, fonts and icons
+    Qt reads from KDE. A platform theme the user chose wins. The variable is removed again
+    once Qt has read it, so programs the app starts keep their own platform theme."""
+    environ = os.environ if environ is None else environ
+    desktops = {d.strip().casefold() for d in environ.get("XDG_CURRENT_DESKTOP", "").split(":")}
+    chosen = sys.platform == "linux" and "kde" in desktops and "QT_QPA_PLATFORMTHEME" not in environ
+    if chosen:
+        environ["QT_QPA_PLATFORMTHEME"] = "xdgdesktopportal"
+    try:
+        yield
+    finally:
+        if chosen:
+            environ.pop("QT_QPA_PLATFORMTHEME", None)
+
+
 def system_prefers_dark() -> bool:
-    """The desktop's light/dark setting as Qt's platform theme reports it, and nothing else:
-    on Xfce that is the GTK theme (what other apps show), on GNOME and KDE their own setting.
-    GNOME's color-scheme key, which the settings portal also answers on Xfce, isn't consulted."""
+    """The desktop's light/dark setting. On GNOME its dark style setting (see
+    _gnome_color_scheme); elsewhere what Qt's platform theme reports: on Xfce that is the GTK
+    theme (what other apps show), on KDE its colour scheme. GNOME's color-scheme key, which the
+    settings portal also answers on Xfce, isn't consulted there."""
+    if _on_gnome():
+        dark = _gnome_color_scheme()
+        if dark is not None:
+            return dark
     hints = QGuiApplication.styleHints()
     try:
         return hints.colorScheme() == Qt.ColorScheme.Dark
@@ -698,13 +797,16 @@ def apply_theme(
     global _current
     t = build_theme(mode, colours)
     _current = t
+    # Following the system leaves Qt's scheme unset: pinned (even to the scheme the system has),
+    # Qt stops tracking the desktop and never announces the next switch (dark to light on KDE
+    # and Windows). Only a theme the user picked is pinned, for native dialogs and title bars.
     try:
         QGuiApplication.styleHints().setColorScheme(
-            Qt.ColorScheme.Dark
+            Qt.ColorScheme.Unknown
+            if mode == "system"
+            else Qt.ColorScheme.Dark
             if t.dark
             else Qt.ColorScheme.Light
-            if mode != "system"
-            else Qt.ColorScheme.Unknown
         )
     except AttributeError:  # pragma: no cover - Qt < 6.8
         pass

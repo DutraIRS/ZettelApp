@@ -65,11 +65,18 @@ def _server_name() -> str:
 
 
 def _message_from_args(args: list[str]) -> dict:
+    message: dict = {"activate": True}
     for arg in args[1:]:
         note_id = parse_app_url(arg)
         if note_id:
-            return {"open": note_id}
-    return {"activate": True}
+            message = {"open": note_id}
+            break
+    # Wayland: only the launcher's token lets the running window come to the front (GNOME
+    # otherwise leaves it behind), so it travels with the message.
+    token = os.environ.get("XDG_ACTIVATION_TOKEN", "")
+    if token and len(token) <= 512 and token.isprintable():
+        message["activation_token"] = token
+    return message
 
 
 def _send_to_running_instance(message: dict) -> bool:
@@ -236,7 +243,8 @@ def main(argv: list[str] | None = None) -> int:
     QApplication.setHighDpiScaleFactorRoundingPolicy(
         Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
     )
-    app = QApplication(argv)
+    with theme.kde_file_dialogs():
+        app = QApplication(argv)
     app.setApplicationName(APP_NAME)
     app.setOrganizationName(ORG_NAME)
     app.setApplicationVersion(__version__)
@@ -273,14 +281,18 @@ def main(argv: list[str] | None = None) -> int:
     QTimer.singleShot(UPDATE_CHECK_DELAY_MS, window.check_for_updates)
     QTimer.singleShot(UPDATE_CHECK_DELAY_MS, window.set_up_semantic_search)
 
-    def follow_system_theme(*_args) -> None:
+    def follow_system_theme() -> None:
         if settings.get(settings.THEME) == "system":
             window.settings_changed()
 
+    # Qt and (on GNOME) the settings portal both announce a switch, the portal twice: one
+    # re-theme for them all.
+    theme_switch = QTimer(window, singleShot=True, interval=150, timeout=follow_system_theme)
     try:
-        app.styleHints().colorSchemeChanged.connect(follow_system_theme)
+        app.styleHints().colorSchemeChanged.connect(lambda *_args: theme_switch.start())
     except AttributeError:  # pragma: no cover - Qt < 6.5
         pass
+    theme.watch_gnome_dark_style(theme_switch.start, window)
     log.info("%s %s started", APP_NAME, __version__)
     code = app.exec()
     server.close()

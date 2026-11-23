@@ -64,6 +64,29 @@ def test_clicking_a_notification_calls_back_once():
     assert clicked == ["20260101120000"]
 
 
+def test_the_click_passes_its_activation_token_on(monkeypatch):
+    """GNOME and KWin bring a window forward only with the click's activation token, which
+    the desktop sends just before ActionInvoked."""
+    from zettelapp.ui import notifications
+    from zettelapp.ui.notifications import DesktopNotifier
+
+    monkeypatch.setattr(notifications.sys, "platform", "linux")
+    monkeypatch.delenv("XDG_ACTIVATION_TOKEN", raising=False)
+    seen = []
+    notifier = DesktopNotifier(lambda key: seen.append(os.environ.get("XDG_ACTIVATION_TOKEN")))
+    notifier._keys[5] = "20260101120000"
+    notifier._token(9, "not-ours")  # another app's notification
+    notifier._token(5, "kwin-token-1")
+    notifier._invoked(5, "default")
+    assert seen == ["kwin-token-1"]
+    assert notifier._tokens == {}
+    notifier._keys[6] = "x"
+    notifier._token(6, "bad\ntoken")  # not printable: not handed to Qt
+    monkeypatch.delenv("XDG_ACTIVATION_TOKEN")
+    notifier._invoked(6, "default")
+    assert seen == ["kwin-token-1", None]
+
+
 def test_alarm_uses_the_notification_service_on_linux(window, monkeypatch):
     monkeypatch.setattr(sys, "platform", "linux")
     note = window.vault.create_note("Call Ana", "about the **project**")

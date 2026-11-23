@@ -46,8 +46,20 @@ Still to do:
 - [x] **CI**: Ubuntu jobs run the tests and build the packages on every pull request; releases carry
   the `.deb` and `.tar.gz` alongside the Windows installer.
 
-Still open: reviews of the Linux builds on more real desktops (GNOME and KDE Wayland sessions in
-particular), and the Flathub submission.
+Checked on real GNOME 48 and Plasma 6.3 Wayland sessions on 23 November 2026 (dark style at start and
+live, file dialogs, Show in folder, window identity, notifications, second launch). Still open:
+
+- [ ] **Flathub and the Snap Store**: rework the Flatpak manifest for offline builds (the PySide6 base
+  app and pinned, checksummed Python sources), build and test both, then submit.
+- [ ] **Alarm click and second launch, on screen**: clicking an alarm notification, and a second launch
+  from the GNOME overview or KRunner, bring the window forward (activation tokens are passed on and
+  unit-tested; the on-screen click was never done).
+- [ ] **KDE**: KWallet as the Secret Service (the test machine ran GNOME Keyring under Plasma); *Show in
+  folder* preferring Dolphin when it is the default file manager but another one owns the D-Bus name;
+  pasting images on real Plasma hardware (Klipper served them empty in the VM).
+- [ ] **A live accent colour change** is followed only after a restart (light and dark are followed
+  live), on Linux as on Windows.
+- [ ] **Fractional scaling (125-200 %), keyboard layouts and input methods (IBus, Fcitx), and Orca.**
 
 ## 3. Signed Windows builds
 
@@ -126,3 +138,11 @@ is open on two machines.
 - [x] **Cloze cards**: the blank is shown and scrolled into view, and revealing fills it in place.
 - [x] **Undirected links written in both notes** show once.
 - [x] **Graph selection**: a click on empty space clears the selected note.
+
+## 9. Reading and editing (requested 23 November 2026)
+
+- [ ] **The adventure card's text**: justified, with space between paragraphs (Euterpes' tutorial card
+  too).
+- [ ] **A view-only mode**: fold the Markdown editor away, like the side panels, and read the note in the
+  preview alone. On Android this should be the default.
+- [ ] **Preview spacing**: paragraphs, headings and lists in the preview are still spaced unevenly.

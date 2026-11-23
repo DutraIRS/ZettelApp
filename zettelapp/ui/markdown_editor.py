@@ -20,6 +20,7 @@ from PySide6.QtGui import (
     QColor,
     QCursor,
     QFont,
+    QImage,
     QKeySequence,
     QPainter,
     QSyntaxHighlighter,
@@ -724,6 +725,17 @@ class MarkdownEditor(QPlainTextEdit):
             return
         if source.hasImage():
             image = source.imageData()
+            if isinstance(image, QByteArray):  # some sources hand over the encoded bytes
+                image = QImage.fromData(image)
+            elif hasattr(image, "toImage"):  # a QPixmap
+                image = image.toImage()
+            if not isinstance(image, QImage) or image.isNull():
+                # Offered but empty: the program that copied it has quit and nothing kept the
+                # picture (Spectacle's background copy on Plasma). Say so, not "unsupported".
+                self.imageError.emit(
+                    _("The image on the clipboard could not be read. Copy it again, then paste.")
+                )
+                return
             data = QByteArray()
             buffer = QBuffer(data)
             buffer.open(QIODevice.OpenModeFlag.WriteOnly)

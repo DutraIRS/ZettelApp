@@ -176,3 +176,45 @@ def test_clicking_a_file_link_shows_it_in_explorer(tmp_path, monkeypatch):
         assert f"[data.csv]({file_url(str(other))})" in body.toPlainText()
     finally:
         window.close()
+
+
+def test_an_empty_clipboard_image_is_reported_as_unreadable():
+    """Spectacle's background copy on Plasma offers image/png with no data once it has quit.
+    That is an unreadable clipboard, not an unsupported format, and nothing is stored."""
+    from PySide6.QtCore import QMimeData
+    from PySide6.QtWidgets import QApplication
+
+    from zettelapp.ui.markdown_editor import MarkdownEditor
+
+    QApplication.instance() or QApplication([])
+    stored, errors = [], []
+    editor = MarkdownEditor(lambda data, name: stored.append(data) or "x.png")
+    editor.imageError.connect(errors.append)
+    offered = QMimeData()
+    offered.setData("application/x-qt-image", b"")
+    offered.setData("image/png", b"")
+    assert offered.hasImage()
+    editor.insertFromMimeData(offered)
+    assert stored == []
+    assert errors == ["The image on the clipboard could not be read. Copy it again, then paste."]
+
+
+def test_a_clipboard_image_in_any_form_is_stored_as_png():
+    from PySide6.QtCore import QByteArray, QMimeData
+    from PySide6.QtGui import QColor, QImage, QPixmap
+    from PySide6.QtWidgets import QApplication
+
+    from tests.conftest import tiny_png
+    from zettelapp.ui.markdown_editor import MarkdownEditor
+
+    QApplication.instance() or QApplication([])
+    stored = []
+    editor = MarkdownEditor(lambda data, name: stored.append(data) or "x.png")
+    pixmap = QPixmap(4, 4)
+    pixmap.fill(QColor("orange"))
+    for image in (QImage.fromData(tiny_png()), QByteArray(tiny_png()), pixmap):
+        offered = QMimeData()
+        offered.setImageData(image)
+        editor.insertFromMimeData(offered)
+    assert len(stored) == 3
+    assert all(data.startswith(b"\x89PNG") for data in stored)

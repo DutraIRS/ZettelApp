@@ -1144,5 +1144,6 @@
  "Selected text and find matches": "Выделенный текст и найденные совпадения",
  "The text of the whole program": "Текст во всей программе",
  "Theme": "Тема",
- "Use the theme's colour": "Цвет темы"
+ "Use the theme's colour": "Цвет темы",
+ "The image on the clipboard could not be read. Copy it again, then paste.": "Не удалось прочитать изображение из буфера обмена. Скопируйте его ещё раз, затем вставьте."
 }
