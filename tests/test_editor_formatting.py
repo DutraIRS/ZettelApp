@@ -320,6 +320,34 @@ def test_alt_click_adds_carets_that_type_delete_and_move_together(editor):
     assert editor.toPlainText().count("x") == 1
 
 
+def test_alt_shift_click_adds_and_removes_carets(editor):
+    # Many Linux window managers (Xfce, KDE before Plasma 6) take Alt+click to move windows,
+    # so Alt+Shift+click (the JetBrains convention) does the same everywhere.
+    from PySide6.QtCore import Qt
+    from PySide6.QtGui import QTextCursor
+    from PySide6.QtTest import QTest
+
+    editor.setPlainText("one\ntwo")
+    editor.setFocus()
+    alt_shift = Qt.KeyboardModifier.AltModifier | Qt.KeyboardModifier.ShiftModifier
+
+    def point(line):
+        cursor = QTextCursor(editor.document().findBlockByNumber(line))
+        cursor.movePosition(QTextCursor.MoveOperation.EndOfBlock)
+        return editor.cursorRect(cursor).center()
+
+    QTest.mouseClick(
+        editor.viewport(), Qt.MouseButton.LeftButton, Qt.KeyboardModifier.NoModifier, point(0)
+    )
+    QTest.mouseClick(editor.viewport(), Qt.MouseButton.LeftButton, alt_shift, point(1))
+    assert len(editor.extra_cursors) == 1
+    assert not editor.textCursor().hasSelection()  # not a Shift+click selection
+    QTest.keyClicks(editor, "!")
+    assert editor.toPlainText() == "one!\ntwo!"
+    QTest.mouseClick(editor.viewport(), Qt.MouseButton.LeftButton, alt_shift, point(0))
+    assert editor.extra_cursors == []  # again on the other caret takes it away
+
+
 def test_find_bar_counts_steps_and_replaces(editor):
     from PySide6.QtWidgets import QApplication
 
@@ -346,3 +374,14 @@ def test_find_bar_counts_steps_and_replaces(editor):
     assert editor.toPlainText() == "Rosa rosa ROSA\nrosae"
     bar.close_bar()
     assert bar.isHidden()
+
+
+def test_tab_goes_from_the_search_straight_to_the_replacement(editor):
+    from PySide6.QtWidgets import QApplication
+
+    from zettelapp.ui.findbar import FindBar
+
+    bar = FindBar(editor)
+    bar.open(replace=True)
+    QApplication.processEvents()
+    assert bar.find.nextInFocusChain() is bar.replacement

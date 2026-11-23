@@ -19,7 +19,9 @@ from zettelapp import APP_NAME, ORG_NAME
 # Keys -----------------------------------------------------------------------
 LAST_VAULT = "vault/last"
 RECENT_VAULTS = "vault/recent"
-THEME = "ui/theme"  # system | light | dark
+THEME = "ui/theme"  # system | light | dark | black
+THEME_COLOUR = "ui/colour/"  # + a name from THEME_COLOURS: "#rrggbb", or "" for the theme's
+THEME_COLOURS = ("primary", "secondary", "highlight", "text")
 UI_LANGUAGE = "ui/language"  # system, a code from i18n.LANGUAGES, or the installer's choice
 EDITOR_FONT_SIZE = "editor/fontSize"
 AUTOSAVE_MS = "editor/autosaveMs"
@@ -50,6 +52,8 @@ LINK_MIRROR = "links/mirror"  # "" | top | bottom: also write a new [[link]] in 
 GRAPH_HIDDEN_TYPES = "graph/hiddenTypes"  # link types left out of the graph
 GRAPH_HIDDEN_TAGS = "graph/hiddenTags"  # notes with these tags are left out of the graph
 GRAPH_UNGROUPED_TAGS = "graph/ungroupedTags"  # tags that don't form groups or clusters
+NOTE_LIST_HIDDEN = "layout/noteListHidden"  # the note list is folded away
+LINKS_PANEL_HIDDEN = "layout/linksPanelHidden"  # the links and suggestions panel is folded away
 
 # Search ---------------------------------------------------------------------
 SEARCH_FUZZY_WEIGHT = "search/fuzzyWeight"
@@ -66,6 +70,8 @@ SEARCH_ADAPTIVE_ENABLED = "search/adaptiveEnabled"
 SEARCH_ADAPTIVE_STATE = "search/adaptiveState"
 
 DEFAULTS: dict[str, Any] = {
+    NOTE_LIST_HIDDEN: False,
+    LINKS_PANEL_HIDDEN: False,
     THEME: "system",
     UI_LANGUAGE: "system",
     EDITOR_FONT_SIZE: 11,
@@ -133,6 +139,12 @@ def put(key: str, value: Any) -> None:
     s = store()
     s.setValue(key, value)
     s.sync()
+
+
+def theme_colours() -> dict[str, str]:
+    """The colours the user chose over the theme, by name (THEME_COLOURS); unset ones left out."""
+    chosen = {name: str(get(THEME_COLOUR + name, "") or "") for name in THEME_COLOURS}
+    return {name: value for name, value in chosen.items() if value}
 
 
 def search_weights() -> dict[str, float]:

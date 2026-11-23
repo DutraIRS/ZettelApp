@@ -26,7 +26,7 @@
 
 ### 我的笔记在哪里?
 
-在你的库文件夹中,默认位于 **Documents\ZettelApp**:一个 `zettel.db` 数据库和一个 `assets` 文件夹。*文件 ▸ 在文件资源管理器中显示库*会打开它。
+在你的库文件夹中,默认位于 **Documents\ZettelApp**:一个 `zettel.db` 数据库和一个 `assets` 文件夹。*文件 ▸ 在文件管理器中显示库*会打开它。
 
 ### 我可以配合 OneDrive、Dropbox 或 Google Drive 使用吗?
 

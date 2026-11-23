@@ -62,7 +62,9 @@ _MD_NOISE = [
     (re.compile(r"\{\{c\d+::(.*?)(?:::[^}]*)?\}\}"), r"\1"),
     (re.compile(r"^(\s{0,3}(?:[-*+]|\d+[.)])\s+)\[[ xX]\]\s*", re.M), r"\1"),
     (re.compile(r"^\s{0,3}(?:#{1,6}|>|[-*+]|\d+[.)])\s+", re.M), ""),
-    (re.compile(r"[*_`~]+"), ""),
+    (re.compile(r"[*`~]+"), ""),
+    # _ marks emphasis only at a word's edge; inside a word (supported_by::, snake_case) it stays.
+    (re.compile(r"(?<!\w)_+|_+(?!\w)"), ""),
 ]
 
 
@@ -116,13 +118,23 @@ def find_tasks(text: str) -> list[tuple[int, int, bool]]:
     return found
 
 
-def toggle_task(text: str, index: int) -> str:
-    """*text* with the checklist item number *index* (see find_tasks) ticked or unticked."""
+def task_edit(text: str, index: int) -> tuple[int, int, str] | None:
+    """The edit that ticks or unticks checklist item *index* (see find_tasks): the span of its
+    box in *text* and the box to put there; None when there is no such item."""
     tasks = find_tasks(text)
     if not 0 <= index < len(tasks):
-        return text
+        return None
     start, end, checked = tasks[index]
-    return text[:start] + ("[ ]" if checked else "[x]") + text[end:]
+    return start, end, "[ ]" if checked else "[x]"
+
+
+def toggle_task(text: str, index: int) -> str:
+    """*text* with the checklist item number *index* (see find_tasks) ticked or unticked."""
+    edit = task_edit(text, index)
+    if edit is None:
+        return text
+    start, end, box = edit
+    return text[:start] + box + text[end:]
 
 
 # --- LaTeX ------------------------------------------------------------------

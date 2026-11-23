@@ -45,7 +45,7 @@ Ihren lokalen Server an, zum Beispiel `http://localhost:11434/v1` (Ollama) oder
 ### Wo sind meine Notizen gespeichert?
 
 Im Tresorordner, standardmäßig **Documents\ZettelApp**: in einer Datenbank `zettel.db` und einem Ordner
-`assets`. Mit *Datei ▸ Tresor im Datei-Explorer anzeigen* öffnen Sie den Ordner.
+`assets`. Mit *Datei ▸ Tresor im Dateimanager anzeigen* öffnen Sie den Ordner.
 
 ### Kann ich ZettelApp mit OneDrive, Dropbox oder Google Drive verwenden?
 

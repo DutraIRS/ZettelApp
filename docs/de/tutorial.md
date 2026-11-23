@@ -166,7 +166,7 @@ Siehe [Export und Import](export-import.md) und [Anki](review-and-anki.md#anki).
 
 ## 15. Wissen, wo Ihre Daten liegen
 
-- Ihre Notizen liegen im Tresorordner (*Datei ▸ Tresor im Datei-Explorer anzeigen*): `zettel.db` und `assets`.
+- Ihre Notizen liegen im Tresorordner (*Datei ▸ Tresor im Dateimanager anzeigen*): `zettel.db` und `assets`.
 - Einmal täglich wird automatisch eine Sicherung erstellt. Mit *Datei ▸ Tresor jetzt sichern* können Sie jederzeit eine erstellen.
 - Gelöschte Notizen landen im **Papierkorb** unter der Notizliste und können dort wiederhergestellt werden.
 

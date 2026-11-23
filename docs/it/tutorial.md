@@ -169,7 +169,7 @@ Vedi [Esportazione e importazione](export-import.md) e [Anki](review-and-anki.md
 
 ## 15. Sai dove risiedono i tuoi dati
 
-- Le tue note risiedono nella cartella del vault (*File ▸ Mostra vault in Esplora file*): `zettel.db` più `assets`.
+- Le tue note risiedono nella cartella del vault (*File ▸ Mostra vault nel gestore file*): `zettel.db` più `assets`.
 - Un backup viene creato automaticamente una volta al giorno e *File ▸ Esegui backup del vault ora* ne crea uno in qualsiasi momento.
 - Le note eliminate vanno nel **Cestino** sotto l'elenco delle note, dove puoi ripristinarle.
 

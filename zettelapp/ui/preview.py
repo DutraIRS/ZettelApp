@@ -44,10 +44,10 @@ h2 {{ font-size: 15pt; font-weight: 600; margin: 14px 0 6px 0; }}
 h3, h4, h5, h6 {{ font-size: 12pt; font-weight: 600; margin: 12px 0 4px 0; }}
 p {{ margin: 0 0 9px 0; line-height: 150%; }}
 em, i {{ font-family: {italic}; }}
-a {{ color: {t.accent}; text-decoration: none; }}
+a {{ color: {t.link}; text-decoration: none; }}
 a.new-note {{ color: {t.text_muted}; text-decoration: underline; }}
-a.file {{ color: {t.accent}; text-decoration: underline; }}
-a.task {{ color: {t.accent}; text-decoration: none; font-size: 13pt; }}
+a.file {{ color: {t.link}; text-decoration: underline; }}
+a.task {{ color: {t.link}; text-decoration: none; font-size: 13pt; }}
 a.broken {{ color: {t.text_muted}; }}
 code {{ font-family: 'Cascadia Code', Consolas, monospace; background-color: {t.window}; }}
 pre {{ font-family: 'Cascadia Code', Consolas, monospace; background-color: {t.window}; padding: 8px; }}

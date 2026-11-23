@@ -170,7 +170,7 @@ See [Export and import](export-import.md) and [Anki](review-and-anki.md#anki).
 
 ## 15. Know where your data lives
 
-- Your notes live in the vault folder (*File ▸ Show Vault in File Explorer*): `zettel.db` plus `assets`.
+- Your notes live in the vault folder (*File ▸ Show Vault in File Manager*): `zettel.db` plus `assets`.
 - A backup is made automatically once a day, and *File ▸ Back Up Vault Now* makes one any time.
 - Deleted notes go to the **Trash** under the note list, where you can restore them.
 

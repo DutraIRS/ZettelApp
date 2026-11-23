@@ -11,7 +11,7 @@
 | Vous testez la connexion à l’IA ou actualisez la liste des modèles | Le même fournisseur | Votre clé API, pour l’authentification |
 | Vous cliquez sur **Télécharger le modèle** dans *Outils ▸ Options ▸ Recherche* et confirmez (ou avez coché *Configurer la recherche sémantique* dans le programme d’installation : alors au premier démarrage) | `huggingface.co`, qui peut rediriger vers ses serveurs de téléchargement | Une requête HTTPS par fichier du modèle de recherche sémantique, avec l’en-tête `User-Agent: ZettelApp/<version>`. Rien sur vos notes. Chaque fichier est vérifié par rapport à un SHA-256 fixe avant d’être utilisé. Voir [Notes et liens](notes-and-links.md#recherche-semantique). |
 | Vous cliquez sur **Synchroniser avec Anki** | AnkiConnect sur **cet ordinateur** (`127.0.0.1`) | Les cartes mémoire du périmètre choisi |
-| Vous utilisez *Insertion ▸ Zotero Reference* ou *Tester la connexion* dans les options Zotero | Zotero sur **cet ordinateur** (`127.0.0.1`) | Les termes recherchés (lecture seule) |
+| Vous utilisez *Insertion ▸ Référence Zotero* ou *Tester la connexion* dans les options Zotero | Zotero sur **cet ordinateur** (`127.0.0.1`) | Les termes recherchés (lecture seule) |
 | Vous cliquez sur un lien Web, utilisez *Aide ▸ Website / Documentation / Rechercher des mises à jour* ou cliquez sur **Télécharger** dans la notification | Votre navigateur ouvre la page | Aucune donnée provenant de ZettelApp |
 
 Pour arrêter la vérification des mises à jour, décochez *Outils ▸ Options ▸ Général ▸ Vérifier les mises à jour au démarrage de ZettelApp*. ZettelApp n’enverra alors aucune requête, sauf lorsque vous posez une question ou utilisez l’une des autres fonctions ci-dessus.
@@ -37,7 +37,7 @@ Le coffre est un dossier ordinaire : vous pouvez le copier, le sauvegarder ou le
 
 ## Sauvegardes et annulation
 
-- **Sauvegardes quotidiennes :** la première ouverture d’un coffre chaque jour en enregistre une copie cohérente de la base de données. Les 10 plus récentes sont conservées (*Options ▸ Backups*). *Fichier ▸ Sauvegarder le coffre maintenant* en crée une à tout moment. Les images sont stockées par contenu et ne sont jamais supprimées automatiquement.
+- **Sauvegardes quotidiennes :** la première ouverture d’un coffre chaque jour en enregistre une copie cohérente de la base de données. Les 10 plus récentes sont conservées (*Options ▸ Sauvegardes*). *Fichier ▸ Sauvegarder le coffre maintenant* en crée une à tout moment. Les images sont stockées par contenu et ne sont jamais supprimées automatiquement.
 - **Corbeille :** les notes supprimées y sont d’abord déplacées et peuvent être restaurées tant que la Corbeille n’est pas vidée.
 - **Enregistrement automatique :** les notes sont enregistrées pendant la saisie. Une boîte de dialogue signale les erreurs inattendues et en consigne les détails dans le journal.
 

@@ -187,6 +187,7 @@ class SidePanel(QWidget):
         while self.suggestions.count():
             w = self.suggestions.takeAt(0).widget()
             if w:
+                w.hide()  # deleted later, maybe only after a dialog closes: not drawn meanwhile
                 w.deleteLater()
         for s in items:
             self.suggestions.addWidget(_SuggestionRow(s, self))

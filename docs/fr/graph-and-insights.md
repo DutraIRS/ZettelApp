@@ -12,11 +12,12 @@ La page **Graphe** (Ctrl+2) représente vos notes en réseau : chaque cercle cor
 |---|---|
 | **Toutes les notes / Local** | Afficher toute la collection ou uniquement la note ouverte et les notes situées à **Profondeur** liens ou moins (en suivant les liens dans les deux sens). *Afficher dans le graphe* dans le menu ⋯ d’une note ouvre le graphe local. |
 | **2D / 3D** | Passer d’une disposition plane déplaçable à une vue 3D pivotante. |
-| **Couleur by** | Colorer par tag, par *Clusters: k-means*, par *Clusters: hierarchical* ou sans coloration. |
+| **Couleur by** | Colorer par tag, par *Groupes : k-moyennes*, par *Groupes : hiérarchique* ou sans coloration. |
 | **k** | Nombre de clusters. *Auto k* le choisit automatiquement (voir ci-dessous). |
 | **Groupe** | Rapprocher les notes d’un même groupe et ombrer la zone de chaque groupe. En 2D, cliquez sur une zone pour la sélectionner et faites-la glisser pour déplacer toutes ses notes. |
 | **Libellés** | Afficher les titres des notes. Dans les grands graphes, seuls les titres des notes les plus connectées apparaissent jusqu’au survol. |
 | **Types de lien** | Masquer ou afficher certains types de liens. |
+| **Tags** | Deux cases par tag. **Afficher** : décochez-la pour masquer les notes portant ce tag. **Regrouper** : décochez-la pour que le tag ne forme pas de groupe quand on colore par tag et ne compte pas pour les clusters (utile pour des tags comme `#todo`). |
 | **Rechercher dans le graphe** | Saisir une partie d’un titre et appuyer sur Entrée pour accéder à la note. |
 
 En bas à droite se trouvent les commandes de zoom et d’ajustement, **recalculer la disposition**, **enregistrer comme image** (PNG) et **exporter ces notes** (ouvre la boîte de dialogue d’[exportation](export-import.md) avec les notes affichées).

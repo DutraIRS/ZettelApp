@@ -114,9 +114,9 @@ Le calendrier SM-2 détermine quand chaque carte revient. Essayez aussi **Quiz d
 Ouvrez **Graphe** (**Ctrl+2**).
 
 1. Déplacez les notes par glisser-déposer, utilisez la molette pour zoomer et survolez une note pour mettre ses voisines en évidence.
-2. Sélectionnez une note sur la page Notes, revenez au graphe et cliquez sur **Local**, puis réglez **Depth** sur 1, 2 ou 3.
-3. Réglez **Couleur by** sur **Clusters: k-means**. Les notes sont regroupées par sens, et la légende nomme chaque cluster à partir de ses mots-clés.
-4. Activez **Group** pour rapprocher les éléments de chaque groupe sur un fond ombré.
+2. Sélectionnez une note sur la page Notes, revenez au graphe et cliquez sur **Local**, puis réglez **Profondeur** sur 1, 2 ou 3.
+3. Réglez **Couleur by** sur **Groupes : k-moyennes**. Les notes sont regroupées par sens, et la légende nomme chaque cluster à partir de ses mots-clés.
+4. Activez **Regrouper** pour rapprocher les éléments de chaque groupe sur un fond ombré.
 5. Cliquez sur **3D**, faites glisser pour pivoter et essayez **Rotate automatically**.
 
 ![Le graphe, coloré par tag et regroupé](../website/assets/screenshots/graph-light.png)
@@ -159,7 +159,7 @@ Consultez [Exporter et importer](export-import.md) et [Anki](review-and-anki.md#
 
 ## 15. Savoir où se trouvent vos données
 
-- Vos notes sont dans le dossier du coffre (*Fichier ▸ Show Vault in File Explorer*) : `zettel.db` et `assets`.
+- Vos notes sont dans le dossier du coffre (*Fichier ▸ Afficher le coffre dans le gestionnaire de fichiers*) : `zettel.db` et `assets`.
 - Une sauvegarde est créée automatiquement chaque jour ; *Fichier ▸ Sauvegarder le coffre maintenant* en crée une à tout moment.
 - Les notes supprimées vont dans la **Corbeille**, sous la liste des notes, où vous pouvez les restaurer.
 

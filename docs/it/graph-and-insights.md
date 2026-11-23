@@ -18,6 +18,7 @@ ha, e ogni linea è un collegamento.
 | **Raggruppa** | Avvicina le note dello stesso gruppo e ombreggia l'area di ciascun gruppo. In 2D, fai clic su un'area per selezionarla e trascinala per spostare tutte le sue note. |
 | **Etichette** | Mostra i titoli delle note. Nei grafi grandi, solo le note meglio collegate sono etichettate finché non ci passi sopra con il mouse. |
 | **Tipi di collegamento** | Nascondi o mostra i singoli tipi di collegamento. |
+| **Tag** | Due caselle per tag. **Mostra**: deselezionala per nascondere le note con quel tag. **Raggruppa**: deselezionala perché il tag non formi un gruppo quando si colora per tag e non conti per i cluster (utile per tag come `#todo`). |
 | **Trova nel grafo** | Scrivi parte di un titolo e premi Enter per saltare alla nota. |
 
 In basso a destra ci sono zoom, adatta, **ricalcola disposizione**, **salva come immagine** (PNG) ed **esporta queste

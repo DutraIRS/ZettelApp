@@ -18,6 +18,7 @@ Größe hängt von der Anzahl ihrer Links ab, und jede Linie ist ein Link.
 | **Gruppieren** | Zieht Notizen derselben Gruppe zusammen und schattiert den Bereich der jeweiligen Gruppe. In 2D klicken Sie auf einen Bereich, um ihn auszuwählen, und ziehen ihn, um alle seine Notizen zu verschieben. |
 | **Beschriftungen** | Zeigt Notiztitel. In großen Graphen werden zunächst nur die am stärksten verknüpften Notizen beschriftet; weitere Beschriftungen erscheinen beim Darüberfahren. |
 | **Linktypen** | Blendet einzelne Linktypen ein oder aus. |
+| **Tags** | Zwei Kästchen pro Tag. **Zeigen**: abwählen, um die Notizen mit diesem Tag auszublenden. **Gruppieren**: abwählen, damit der Tag beim Färben nach Tags keine Gruppe bildet und nicht für Cluster zählt (nützlich für Tags wie `#todo`). |
 | **Im Graph suchen** | Geben Sie einen Teil eines Titels ein und drücken Sie Enter, um zur Notiz zu springen. |
 
 Unten rechts finden Sie Zoom, Einpassen, **Layout neu berechnen**, **Als Bild speichern** (PNG) und **Diese

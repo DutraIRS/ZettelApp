@@ -42,7 +42,7 @@ needed for `localhost`. See [Bring your own LLM](ai-assistant.md#bring-your-own-
 ### Where are my notes?
 
 In your vault folder, by default **Documents\ZettelApp**: a `zettel.db` database and an `assets` folder.
-*File ▸ Show Vault in File Explorer* opens it.
+*File ▸ Show Vault in File Manager* opens it.
 
 ### Can I use it with OneDrive, Dropbox or Google Drive?
 

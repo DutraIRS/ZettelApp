@@ -298,3 +298,15 @@ def test_file_dialogs_reopen_the_last_folder_used(window, monkeypatch, tmp_path)
     window.editor.insert_image()  # first time: Documents, not the working folder
     window.editor.insert_file_link()  # then the folder of the last file chosen
     assert asked == [str(documents_dir()), str(picture.parent)]
+
+
+def test_replaced_suggestion_rows_are_hidden_at_once(window):
+    # Rows are deleted later; while a modal dialog runs that can be long after they were
+    # replaced, and visible ones were drawn under the new rows.
+    from zettelapp.core.suggest import Suggestion
+
+    side = window.side
+    side.set_suggestions([Suggestion(window.vault.create_note("A").id, "A", 0.9)])
+    old = [side.suggestions.itemAt(i).widget() for i in range(side.suggestions.count())]
+    side.set_suggestions([Suggestion(window.vault.create_note("B").id, "B", 0.8)])
+    assert old and all(w.isHidden() for w in old)

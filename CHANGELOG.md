@@ -8,6 +8,14 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Added
 
+- **Black (OLED) theme** (*View ▸ Theme*, or Options): the dark theme on true black.
+- **Your own colours** in *Options ▸ General*: a primary colour (buttons and other accents), a
+  secondary colour (links), a highlight colour (selected text and find matches) and a text colour,
+  over any theme; each can go back to the theme's own.
+- **Folding side panels**: the note list and the links panel each have a small tab near the bottom
+  of their edge that folds them away to give the note more room, and brings them back; dragging the edge resizes them
+  and a double-click on it folds them too. *View ▸ Note List* (Ctrl+Shift+L) and *View ▸ Links
+  Panel* (Ctrl+Shift+K) do the same, and ZettelApp remembers each panel's state.
 - **Android (alpha)** (roadmap item 5): a native Kotlin/Compose app in `android/` runs the Qt-free
   Python core on device through Chaquopy, with a notes list, title search, editing and creating
   notes, a tag filter, links and backlinks, a graph, Insights, flashcard review, the trash and
@@ -76,7 +84,9 @@ All notable changes to ZettelApp are documented here. The format follows
   count for clusters, for tags like `#todo`) for each tag. The choices are kept between sessions.
 - **Find and replace in a note**: Ctrl+F in the note text (Ctrl+F again searches all notes), Ctrl+H to
   replace one or all matches.
-- **Several carets**: Alt+click adds a caret; typing, deleting and moving happen at every one.
+- **Several carets**: Alt+Shift+click (or Alt+click) adds a caret; typing, deleting and moving happen
+  at every one. Alt+Shift+click works on Linux desktops that keep Alt+click for moving windows (Xfce,
+  KDE before Plasma 6).
 - `PRIVACY.md`: the one automatic network request (the update check) and what else is sent, and when.
 - The local graph says which note it is centred on (*Around "…"*), or that no note is open.
 
@@ -87,6 +97,17 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Fixed
 
+- Icons follow a theme switch made while ZettelApp runs (*View ▸ Theme*, or the system turning dark);
+  they kept the old theme's colour, nearly invisible on dark.
+- In the find bar, Tab goes from the search straight to *Replace with*.
+- A system keyring that answers with an error (locked, refused or timed out) no longer crashes the
+  *Ask* page: it shows no key, and *Ask* reports the keyring's error.
+- Replaced link suggestions no longer stay drawn under the new ones while a dialog is open.
+- Note list snippets keep underscores inside words, so `supported_by:: [[…]]` no longer shows as
+  `supportedby:: …`.
+- *Help ▸ Donate* has its own access key (Alt+H, O in English) instead of sharing D with
+  *Documentation*; the same clash is fixed in Arabic, Chinese, French, Japanese, Korean, Portuguese
+  and Spanish.
 - On Linux, *Insert ▸ Image…*, *Link to a File…*, the mind map export and *Save graph as image*
   open the folder used last (Documents the first time), as on Windows, instead of the folder
   ZettelApp was started from.

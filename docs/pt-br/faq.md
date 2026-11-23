@@ -42,7 +42,7 @@ necessária para `localhost`. Veja [Traga seu próprio LLM](ai-assistant.md#brin
 ### Onde estão minhas notas?
 
 Na pasta do seu cofre, por padrão **Documentos\ZettelApp**: um banco de dados `zettel.db` e uma pasta `assets`.
-*Arquivo ▸ Mostrar cofre no Explorador de Arquivos* a abre.
+*Arquivo ▸ Mostrar cofre no gerenciador de arquivos* a abre.
 
 ### Posso usar com OneDrive, Dropbox ou Google Drive?
 

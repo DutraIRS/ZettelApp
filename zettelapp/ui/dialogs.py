@@ -493,6 +493,7 @@ SHORTCUTS = [
             (N_("Move selected notes to Trash (in the note list)"), N_("Del")),
             (N_("Select several notes"), N_("Ctrl+click, Shift+click, Shift+arrows")),
             (N_("Bold / italic"), "Ctrl+B / Ctrl+I"),
+            (N_("Type in several places at once"), "Alt+Shift+click"),
         ],
     ),
     (
@@ -504,6 +505,8 @@ SHORTCUTS = [
             (N_("Review"), "Ctrl+4"),
             (N_("Ask your notes"), "Ctrl+5"),
             (N_("Full screen"), "F11"),
+            (N_("Hide or show the note list"), "Ctrl+Shift+L"),
+            (N_("Hide or show the links panel"), "Ctrl+Shift+K"),
         ],
     ),
     (

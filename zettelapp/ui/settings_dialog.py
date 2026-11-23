@@ -206,6 +206,51 @@ class _LinkSample(QWidget):
         p.end()
 
 
+COLOUR_CHOICES = (
+    ("primary", N_("Primary colour"), N_("Buttons, check boxes, tabs and the other accents")),
+    ("secondary", N_("Secondary colour"), N_("Links, in notes and in the program")),
+    ("highlight", N_("Highlight colour"), N_("Selected text and find matches")),
+    ("text", N_("Text colour"), N_("The text of the whole program")),
+)
+"""The colours a user may choose over the theme: setting name, label, what it colours."""
+
+
+class ColourChoice(QWidget):
+    """A colour swatch that opens a colour picker, and a link back to the theme's own colour."""
+
+    def __init__(self, name: str, title: str, value: str):
+        super().__init__()
+        self.name, self.title, self.value = name, title, value
+        row = QHBoxLayout(self)
+        row.setContentsMargins(0, 0, 0, 0)
+        self.swatch = QPushButton()
+        self.swatch.setAccessibleName(title)
+        self.swatch.clicked.connect(self._pick)
+        self.reset = link_button(_("Use the theme's colour"), lambda: self._set(""))
+        row.addWidget(self.swatch)
+        row.addWidget(self.reset)
+        row.addStretch(1)
+        self._set(value)
+
+    def _shown(self) -> str:
+        theme_colour = {"primary": "accent", "secondary": "link"}.get(self.name, self.name)
+        return self.value or getattr(theme.current(), theme_colour)
+
+    def _set(self, value: str) -> None:
+        self.value = value
+        swatch = QPixmap(28, 16)
+        swatch.fill(QColor(self._shown()))
+        self.swatch.setIcon(QIcon(swatch))
+        self.swatch.setIconSize(QSize(28, 16))
+        self.swatch.setText(value.upper() if value else _("Theme"))
+        self.reset.setVisible(bool(value))
+
+    def _pick(self) -> None:
+        colour = QColorDialog.getColor(QColor(self._shown()), self, self.title)
+        if colour.isValid():
+            self._set(colour.name())
+
+
 class OptionsDialog(QDialog):
     def __init__(self, window, page: str = "General"):
         super().__init__(window)
@@ -270,10 +315,18 @@ class OptionsDialog(QDialog):
             (_("Use system setting"), "system"),
             (_("Light"), "light"),
             (_("Dark"), "dark"),
+            (_("Black (OLED)"), "black"),
         ):
             self.theme.addItem(text, key)
         self.theme.setCurrentIndex(max(0, self.theme.findData(settings.get(settings.THEME))))
         form.addRow(_("App theme"), self.theme)
+        chosen = settings.theme_colours()
+        self.colours = []
+        for name, title, tip in COLOUR_CHOICES:
+            choice = ColourChoice(name, _(title), chosen.get(name, ""))
+            choice.setToolTip(_(tip))
+            self.colours.append(choice)
+            form.addRow(_(title), choice)
         self.language = QComboBox()
         self.language.addItem(_("Use system setting"), "system")
         for code, name in i18n.LANGUAGES.items():
@@ -1290,6 +1343,8 @@ class OptionsDialog(QDialog):
 
     def apply(self) -> bool:
         settings.put(settings.THEME, self.theme.currentData())
+        for choice in self.colours:
+            settings.put(settings.THEME_COLOUR + choice.name, choice.value)
         settings.put(settings.SEARCH_FUZZY_WEIGHT, self.w_fuzzy.value())
         settings.put(settings.SEARCH_LEXICAL_WEIGHT, self.w_lexical.value())
         settings.put(settings.SEARCH_SEMANTIC_WEIGHT, self.w_semantic.value())

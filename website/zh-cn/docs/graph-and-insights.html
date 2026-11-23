@@ -12,35 +12,39 @@
 </thead>
 <tbody>
 <tr>
-<td><strong>All notes / Local</strong></td>
-<td>显示整个集合,或仅显示当前笔记以及与其相距在 <strong>Depth</strong> 个链接以内的笔记(沿两个方向跟随链接)。笔记 ⋯ 菜单中的<em>在图谱中显示</em>会打开局部图谱。</td>
+<td><strong>所有笔记 / 局部</strong></td>
+<td>显示整个集合,或仅显示当前笔记以及与其相距在 <strong>深度</strong> 个链接以内的笔记(沿两个方向跟随链接)。笔记 ⋯ 菜单中的<em>在图谱中显示</em>会打开局部图谱。</td>
 </tr>
 <tr>
 <td><strong>2D / 3D</strong></td>
 <td>在平面、可拖动的布局和可环绕查看的 3D 视图之间切换。</td>
 </tr>
 <tr>
-<td><strong>Colour by</strong></td>
-<td>标签、<em>Clusters: k-means</em>、<em>Clusters: hierarchical</em>,或不着色。</td>
+<td><strong>着色依据</strong></td>
+<td>标签、<em>聚类：k 均值</em>、<em>聚类：层次</em>,或不着色。</td>
 </tr>
 <tr>
 <td><strong>k</strong></td>
-<td>聚类的数量。<em>Auto k</em> 会为你选择(见下文)。</td>
+<td>聚类的数量。<em>自动 k</em> 会为你选择(见下文)。</td>
 </tr>
 <tr>
-<td><strong>Group</strong></td>
+<td><strong>分组</strong></td>
 <td>把同一组的笔记拉到一起,并为每组的区域添加阴影。在 2D 中,点击区域可选中它,拖动它可移动其中所有笔记。</td>
 </tr>
 <tr>
-<td><strong>Labels</strong></td>
+<td><strong>标签文字</strong></td>
 <td>显示笔记标题。在大型图谱中,在你悬停之前只会标注连接最多的笔记。</td>
 </tr>
 <tr>
-<td><strong>Link types</strong></td>
+<td><strong>链接类型</strong></td>
 <td>隐藏或显示单个链接类型。</td>
 </tr>
 <tr>
-<td><strong>Find in graph</strong></td>
+<td><strong>标签</strong></td>
+<td>每个标签有两个复选框。<strong>显示</strong>:取消勾选可隐藏带有该标签的笔记。<strong>分组</strong>:取消勾选后,按标签着色时该标签不形成分组,也不计入聚类(适用于 <code>#todo</code> 这类标签)。</td>
+</tr>
+<tr>
+<td><strong>在图谱中查找</strong></td>
 <td>输入标题的一部分并按 Enter,即可跳转到该笔记。</td>
 </tr>
 </tbody>
@@ -58,9 +62,9 @@
 <li><strong>k-means</strong>:使用 k-means++ 初始化的 Lloyd 算法,取多次运行中的最优结果。它速度快,产生圆形、大小均匀的分组。</li>
 <li><strong>层次聚类</strong>:基于余弦距离、采用平均连接的凝聚聚类,使用最近邻链算法计算(O(n²))。它更适合不均匀、嵌套的主题。超过 4,000 条笔记的库会回退到 k-means。</li>
 </ul>
-<p>启用 <strong>Auto k</strong> 时,ZettelApp 会尝试从 2 到约 √(n/2) + 2(最多 12)的 k 值,并保留<strong>轮廓系数</strong>最佳的 k。图例下方显示的该得分衡量各聚类的分离程度:1 为完美,约 0 表示分组重叠。每个聚类以其最具辨识度的词命名,即在聚类内部比在库的其余部分更频繁出现的词语。</p>
+<p>启用 <strong>自动 k</strong> 时,ZettelApp 会尝试从 2 到约 √(n/2) + 2(最多 12)的 k 值,并保留<strong>轮廓系数</strong>最佳的 k。图例下方显示的该得分衡量各聚类的分离程度:1 为完美,约 0 表示分组重叠。每个聚类以其最具辨识度的词命名,即在聚类内部比在库的其余部分更频繁出现的词语。</p>
 <h3 id="分组与颜色">分组与颜色</h3>
-<p>开启 <strong>Group</strong> 后,同一标签或同一聚类的笔记会相互靠拢,每个分组都会得到一块带有其名称的浅色阴影区域。图例列出各分组及其大小。点击其中一个可高亮其笔记。</p>
+<p>开启 <strong>分组</strong> 后,同一标签或同一聚类的笔记会相互靠拢,每个分组都会得到一块带有其名称的浅色阴影区域。图例列出各分组及其大小。点击其中一个可高亮其笔记。</p>
 <p>分组和图表的颜色来自一个在浅色和深色模式下都经过<strong>色觉缺陷验证</strong>的调色板。颜色按固定顺序分配且从不重复使用:第八个之后的分组共用一种中性灰色的“其他”颜色。<strong>链接类型</strong>在颜色之外使用第二种提示:每种类型都有自己的线条(实线、虚线、点线等),有向类型还会绘制三角形或菱形之类的箭头。可在<em>工具 ▸ 选项 ▸ 链接类型</em>中选择它们(参见<a href="notes-and-links.html#your-own-link-types">你自己的链接类型</a>)。图例始终会标明所有内容,因此没有任何信息只依赖颜色。</p>
 <h2 id="insights">Insights</h2>
 <p><strong>Insights</strong> 页面(Ctrl+3)概括了你的库:</p>

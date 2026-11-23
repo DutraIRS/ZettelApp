@@ -5,6 +5,8 @@
 ZettelApp funziona su **Windows 10 (21H2 o successivo), Windows 11 e desktop Linux a 64 bit recenti**. Scaricalo dall'
 [ultima versione](https://github.com/DutraIRS/ZettelApp/releases/latest):
 
+### Windows
+
 | Download | Usalo quando |
 |---|---|
 | `ZettelApp-Setup.exe` | Vuoi una normale installazione con una voce nel menu Start, un programma di disinstallazione in *Impostazioni ▸ App* e collegamenti `zettelapp://` che aprono le note da Anki. Non servono privilegi di amministratore: viene installato solo per il tuo account. |
@@ -61,7 +63,7 @@ Le note si salvano automaticamente mentre scrivi. Non c'è nessun pulsante Salva
 
 La **barra di navigazione** a sinistra passa da una pagina all'altra (Ctrl+1 – Ctrl+5):
 
-- **Note**: l'elenco delle note, l'editor e un pannello laterale.
+- **Nota**: l'elenco delle note, l'editor e un pannello laterale.
   - L'*elenco* ha la ricerca (funzionano anche i filtri `tag:nome`), un filtro per tag, l'ordinamento e il Cestino.
   - L'*editor* ha il titolo, i tag, un collegamento alla fonte facoltativo e le schede per la **Nota** (Markdown, con le
     modalità Modifica, Divisa e Anteprima), la sua **Mappa mentale** e le sue **Flashcard**.
@@ -76,6 +78,11 @@ del testo dell'editor, suggerimenti di collegamento, tipi di collegamento, IA, s
 
 L'app segue l'impostazione **chiaro/scuro** e il **colore di accento** di sistema. Puoi forzare un tema in
 *Visualizza ▸ Tema*.
+
+*Nero (OLED)* è il tema scuro su nero puro, per gli schermi OLED. In *Opzioni ▸ Generale* puoi scegliere il
+tuo **colore principale** (pulsanti e altri accenti), **colore secondario** (collegamenti), **colore di
+evidenziazione** (testo selezionato e risultati della ricerca) e **colore del testo**; *Usa il colore del tema*
+ripristina quello originale.
 
 ## Aggiornamenti
 

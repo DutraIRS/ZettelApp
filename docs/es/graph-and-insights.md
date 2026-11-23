@@ -18,6 +18,7 @@ tiene, y cada línea es un enlace.
 | **Agrupar** | Junta las notas del mismo grupo y sombrea el área de cada grupo. En 2D, haz clic en un área para seleccionarla y arrástrala para mover todas sus notas. |
 | **Etiquetas** | Muestra los títulos de las notas. En grafos grandes, solo se rotulan las notas mejor conectadas hasta que pasas el cursor. |
 | **Tipos de enlace** | Oculta o muestra tipos de enlace individuales. |
+| **Etiquetas** | Dos casillas por etiqueta. **Mostrar**: desmárcala para ocultar las notas con esa etiqueta. **Agrupar**: desmárcala para que la etiqueta no forme grupo al colorear por etiquetas ni cuente para los clústeres (útil para etiquetas como `#todo`). |
 | **Buscar en el grafo** | Escribe parte de un título y pulsa Enter para saltar a la nota. |
 
 En la parte inferior derecha están el zoom, ajustar, **recalcular disposición**, **guardar como imagen** (PNG) y **exportar estas

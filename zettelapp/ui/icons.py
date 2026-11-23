@@ -22,7 +22,16 @@ from functools import cache, lru_cache
 from pathlib import Path
 
 from PySide6.QtCore import QByteArray, QRect, QRectF, QSize, Qt
-from PySide6.QtGui import QColor, QFont, QFontDatabase, QIcon, QImage, QPainter, QPixmap
+from PySide6.QtGui import (
+    QColor,
+    QFont,
+    QFontDatabase,
+    QIcon,
+    QIconEngine,
+    QImage,
+    QPainter,
+    QPixmap,
+)
 from PySide6.QtSvg import QSvgRenderer
 
 from zettelapp.paths import resource_path
@@ -506,7 +515,53 @@ def _pixmap(name: str, color: str, size: int, ratio: float, theme_name: str = ""
         painter.end()
 
 
+def _mode_color(mode: QIcon.Mode) -> str:
+    t = theme.current()
+    if mode == QIcon.Mode.Disabled:
+        return t.text_muted
+    return t.accent if mode == QIcon.Mode.Selected else t.text
+
+
+class _ThemedIcon(QIconEngine):
+    """An icon in the theme's colours, read each time it is drawn: a theme switch recolours it."""
+
+    def __init__(self, name: str) -> None:
+        super().__init__()
+        self.name = name
+
+    def clone(self) -> QIconEngine:
+        return _ThemedIcon(self.name)
+
+    def scaledPixmap(
+        self, size: QSize, mode: QIcon.Mode, state: QIcon.State, scale: float
+    ) -> QPixmap:  # noqa: N802
+        logical = max(1, round(min(size.width(), size.height()) / scale))
+        theme_name = "" if _icon_family() else QIcon.themeName()
+        return _pixmap(self.name, _mode_color(mode), logical, scale, theme_name)
+
+    def pixmap(self, size: QSize, mode: QIcon.Mode, state: QIcon.State) -> QPixmap:
+        return self.scaledPixmap(size, mode, state, 1.0)
+
+    def paint(self, painter: QPainter, rect: QRect, mode: QIcon.Mode, state: QIcon.State) -> None:
+        ratio = painter.device().devicePixelRatioF() if painter.device() else 1.0
+        side = min(rect.width(), rect.height())
+        picture = self.scaledPixmap(QSize(side, side) * ratio, mode, state, ratio)
+        painter.drawPixmap(
+            rect.x() + (rect.width() - side) // 2, rect.y() + (rect.height() - side) // 2, picture
+        )
+
+    def availableSizes(self, mode: QIcon.Mode, state: QIcon.State) -> list[QSize]:  # noqa: N802
+        return [QSize(16, 16), QSize(20, 20)]  # drawn at any size; these are its designs
+
+    def actualSize(self, size: QSize, mode: QIcon.Mode, state: QIcon.State) -> QSize:  # noqa: N802
+        side = min(size.width(), size.height())
+        return QSize(side, side)
+
+
 def icon(name: str, color: str | None = None, size: int = 20) -> QIcon:
+    """An icon by name. Without a colour it follows the theme, even after the theme changes."""
+    if color is None:
+        return QIcon(_ThemedIcon(name))
     t = theme.current()
     result = QIcon()
     sizes = [size]
@@ -519,13 +574,8 @@ def icon(name: str, color: str | None = None, size: int = 20) -> QIcon:
             sizes.append(16)
     for s in sizes:
         for ratio in (1.0, 1.25, 1.5, 2.0):
-            result.addPixmap(
-                _pixmap(name, color or t.text, s, ratio, theme_name), QIcon.Mode.Normal
-            )
+            result.addPixmap(_pixmap(name, color, s, ratio, theme_name), QIcon.Mode.Normal)
             result.addPixmap(_pixmap(name, t.text_muted, s, ratio, theme_name), QIcon.Mode.Disabled)
-            if color is None:
-                result.addPixmap(_pixmap(name, t.text, s, ratio, theme_name), QIcon.Mode.Active)
-                result.addPixmap(_pixmap(name, t.accent, s, ratio, theme_name), QIcon.Mode.Selected)
     return result
 
 

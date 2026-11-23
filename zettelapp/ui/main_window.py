@@ -186,8 +186,13 @@ class MainWindow(QMainWindow):
         self.insights = InsightsPage(self)
         self.review = ReviewPage(self)
         self.ask = AskPage(self)
-        for page in (self.splitter, self.graph, self.insights, self.review, self.ask):
+        notes_page = QWidget()
+        notes_layout = QVBoxLayout(notes_page)
+        notes_layout.setContentsMargins(0, 0, 0, 0)
+        notes_layout.addWidget(self.splitter)
+        for page in (notes_page, self.graph, self.insights, self.review, self.ask):
             self.pages.addWidget(page)
+        self._build_folds(notes_page)
 
         self.suggest_timer = QTimer(
             self, singleShot=True, interval=900, timeout=self.request_suggestions
@@ -359,12 +364,24 @@ class MainWindow(QMainWindow):
         v.addSeparator()
         self._action(v, "Toggle &Preview", self.editor.cycle_view_mode, "Ctrl+E", "view")
         self._action(v, "&Full Screen", self._toggle_full_screen, "F11", "fit")
+        self.fold_actions = {}
+        for key, text, shortcut in (
+            ("list", N_("Note &List"), "Ctrl+Shift+L"),
+            ("links", N_("Lin&ks Panel"), "Ctrl+Shift+K"),
+        ):
+            action = self._action(
+                v, text, lambda checked, k=key: self.toggle_panel(k, checked), shortcut
+            )
+            action.setCheckable(True)
+            action.setChecked(self.folds[key][0].shown())
+            self.fold_actions[key] = action
         theme_menu = v.addMenu(_("&Theme"))
         group = QActionGroup(self)
         for text, key in (
             (N_("Use &System Setting"), "system"),
             (N_("&Light"), "light"),
             (N_("&Dark"), "dark"),
+            (N_("&Black (OLED)"), "black"),
         ):
             action = QAction(_(text), self, checkable=True)
             action.setChecked(settings.get(settings.THEME) == key)
@@ -430,7 +447,7 @@ class MainWindow(QMainWindow):
         )
         self._action(
             h,
-            "&Donate (Ko-fi)…",
+            "D&onate (Ko-fi)…",
             self.donate,
             None,
             "heart",
@@ -459,8 +476,47 @@ class MainWindow(QMainWindow):
             self.editor.show_find()
             return
         self.show_page(0)
+        self.toggle_panel("list", True)  # the search box is on the note list
         self.list.search.setFocus()
         self.list.search.selectAll()
+
+    # --- folding the note list and the links panel ---------------------------
+
+    def _build_folds(self, page: QWidget) -> None:
+        """A sash and a tab on the editor's edges fold the note list and the links panel away."""
+        from zettelapp.ui.panel_sash import CollapseButton, PanelFold, PanelSash
+
+        self.folds: dict[str, tuple[PanelFold, PanelSash, CollapseButton]] = {}
+        tips = {
+            "list": (
+                _("Hide the note list (Ctrl+Shift+L), or drag to resize it"),
+                _("Show the note list (Ctrl+Shift+L)"),
+            ),
+            "links": (
+                _("Hide the links panel (Ctrl+Shift+K), or drag to resize it"),
+                _("Show the links panel (Ctrl+Shift+K)"),
+            ),
+        }
+        for key, panel in (("list", self.list), ("links", self.side)):
+            fold = PanelFold(self.splitter, panel, self.editor)
+            sash = PanelSash(fold, lambda k=key: self.toggle_panel(k), page)
+            tab = CollapseButton(fold, sash, tips[key], page)
+            tab.clicked.connect(lambda _checked=False, k=key: self.toggle_panel(k))
+            self.folds[key] = (fold, sash, tab)
+
+    _FOLD_SETTINGS = {"list": settings.NOTE_LIST_HIDDEN, "links": settings.LINKS_PANEL_HIDDEN}
+
+    def toggle_panel(self, key: str, shown: bool | None = None) -> None:
+        """Fold the note list ("list") or the links panel ("links") away, or bring it back."""
+        fold, sash, tab = self.folds[key]
+        shown = not fold.shown() if shown is None else shown
+        fold.panel.setVisible(shown)
+        settings.put(self._FOLD_SETTINGS[key], not shown)
+        action = self.fold_actions.get(key) if hasattr(self, "fold_actions") else None
+        if action is not None and action.isChecked() != shown:
+            action.setChecked(shown)
+        sash.place()
+        tab.refresh()
 
     def _toggle_full_screen(self) -> None:
         self.showNormal() if self.isFullScreen() else self.showFullScreen()
@@ -728,6 +784,22 @@ class MainWindow(QMainWindow):
             math_href=math_href,
         )
 
+    def reading_renderer(self):
+        """A renderer for notes shown outside the editor (answers, review cards): links to notes
+        that don't exist stay plain text, since nothing there can create them."""
+        from zettelapp.core.render import NoteRenderer
+        from zettelapp.ui.preview import math_href
+
+        vault = self.vault
+        titles = vault.titles()
+        return NoteRenderer(
+            vault.resolve_title,
+            lambda i: titles.get(i) or _("Untitled"),
+            link_types=vault.link_type_map(),
+            allow_new_note_links=False,
+            math_href=math_href,
+        )
+
     def reveal_file(self, path: str) -> None:
         """Show a linked file in the file manager, selected. The file is never opened or run."""
         local = local_file_path(path)  # network paths are refused before any disk access
@@ -792,6 +864,7 @@ class MainWindow(QMainWindow):
             self.statusBar().showMessage(_("No notes are tagged #{tag} yet.").format(tag=tag), 5000)
             return
         self.show_page(0)
+        self.toggle_panel("list", True)
         self.list.tag_filter.setCurrentIndex(index)
 
     def open_tag_ontology(self) -> None:
@@ -1318,7 +1391,9 @@ class MainWindow(QMainWindow):
         self.settings_changed()
 
     def settings_changed(self) -> None:
-        theme.apply_theme(QApplication.instance(), settings.get(settings.THEME))
+        theme.apply_theme(
+            QApplication.instance(), settings.get(settings.THEME), colours=settings.theme_colours()
+        )
         winintegration.set_window_frame_dark(int(self.winId()), theme.current().dark)
         self.editor.body.set_font_size(settings.get(settings.EDITOR_FONT_SIZE))
         self.editor.refresh_style()
@@ -1358,6 +1433,8 @@ class MainWindow(QMainWindow):
         split = store.value("window/splitter")
         if isinstance(split, QByteArray):
             self.splitter.restoreState(split)
+        for key, name in self._FOLD_SETTINGS.items():
+            self.toggle_panel(key, not settings.get(name))
 
     def showEvent(self, event) -> None:  # noqa: N802
         super().showEvent(event)

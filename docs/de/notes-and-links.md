@@ -87,7 +87,9 @@ Ein einfacher `[[Link]]` bedeutet *Steht in Beziehung zu*.
 Ein **gerichteter** Linktyp wird von jeder Seite anders gelesen. Wenn Notiz A Notiz B *unterstützt*, zeigen
 B's Backlinks A als *Wird unterstützt von* an. Gerichtete Links erhalten Pfeilspitzen im Graph und bleiben
 beim Export gerichtet. **Ungerichtete** Typen wie *Steht in Beziehung zu* und *Widerspricht* lesen sich in
-beide Richtungen gleich.
+beide Richtungen gleich. Schreiben beide Notizen einen ungerichteten Link aufeinander, wird er nur einmal angezeigt.
+
+Damit der Text beider Notizen übereinstimmt, stellen Sie *Extras ▸ Optionen ▸ Linktypen ▸ Wenn eine Notiz im Text auf eine andere verlinkt* so ein, dass der Link am Ende oder am Anfang der verlinkten Notiz geschrieben wird: Wenn Sie in A `discusses:: [[B]]` schreiben, erhält B dann `discussed_by:: [[A]]` (und `related:: [[A]]` bei einem einfachen Link), und wenn Sie den Link aus dem Text von A löschen, verschwindet diese Zeile wieder aus B. Standardmäßig ist das ausgeschaltet.
 
 Um die Richtung eines falsch herum angelegten gerichteten Links umzukehren, klicken Sie in der Seitenleiste
 mit der rechten Maustaste darauf und wählen **Richtung umkehren**. Links im Text kehren Sie um, indem Sie

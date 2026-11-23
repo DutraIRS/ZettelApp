@@ -35,7 +35,7 @@ from zettelapp.core.security import (
     normalize_source_url,
     normalize_web_url,
 )
-from zettelapp.core.textutil import extract_hashtags, find_tasks, strip_markdown
+from zettelapp.core.textutil import extract_hashtags, strip_markdown, task_edit
 from zettelapp.i18n import _, n_
 from zettelapp.ui import icons, theme
 from zettelapp.ui.dialogs import AlarmDialog, CardDialog, FormulaDialog, TextPromptDialog
@@ -545,15 +545,15 @@ class NoteEditor(QWidget):
 
     def _toggle_task(self, index: int) -> None:
         text = self.body.toPlainText()
-        tasks = find_tasks(text)
-        if not 0 <= index < len(tasks):
+        edit = task_edit(text, index)
+        if edit is None:
             return
-        start, end, checked = tasks[index]
+        start, end, box = edit
         utf16 = lambda s: len(s.encode("utf-16-le")) // 2  # noqa: E731 - Qt positions
-        cursor = QTextCursor(self.body.document())
+        cursor = QTextCursor(self.body.document())  # an edit, not a new text: it can be undone
         cursor.setPosition(utf16(text[:start]))
         cursor.setPosition(utf16(text[:end]), QTextCursor.MoveMode.KeepAnchor)
-        cursor.insertText("[ ]" if checked else "[x]")
+        cursor.insertText(box)
 
     def insert_formula(self) -> None:
         if self.note is None:

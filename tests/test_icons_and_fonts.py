@@ -127,6 +127,18 @@ def test_icons_keep_their_modes_and_add_a_sharp_16_px_size():
 
 
 @pytest.mark.usefixtures("no_icon_font")
+def test_an_icon_made_before_a_theme_switch_takes_the_new_colours(app):
+    made = icons.icon("add")
+    theme.apply_theme(app, "dark")
+    try:
+        assert _drawn_in(made.pixmap(QSize(20, 20), 1.0).toImage(), theme.current().text)
+        theme.apply_theme(app, "light")
+        assert _drawn_in(made.pixmap(QSize(20, 20), 1.0).toImage(), theme.current().text)
+    finally:
+        theme.apply_theme(app, "light")
+
+
+@pytest.mark.usefixtures("no_icon_font")
 def test_fluent_icons_fill_the_box_like_the_windows_glyphs():
     """The font draws glyphs at 0.8 x the icon size: a 20 px icon keeps a 2 px margin."""
     for size, design in ((20, "add_20_regular"), (16, "add_16_regular")):

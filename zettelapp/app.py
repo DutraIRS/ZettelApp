@@ -256,7 +256,7 @@ def main(argv: list[str] | None = None) -> int:
 
     _install_excepthook()
     i18n.install(app, settings.get(settings.UI_LANGUAGE))
-    theme.apply_theme(app, settings.get(settings.THEME))
+    theme.apply_theme(app, settings.get(settings.THEME), colours=settings.theme_colours())
 
     from zettelapp.ui.main_window import MainWindow
 

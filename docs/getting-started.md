@@ -83,6 +83,11 @@ size, link suggestions, link types, AI, MCP server, Anki, Zotero, Desktop integr
 The app follows your system **light/dark** setting and **accent colour** (Windows, GNOME and KDE). You
 can force a theme in *View ▸ Theme*.
 
+*Black (OLED)* is the dark theme on true black, for OLED screens. In *Options ▸ General* you can
+choose your own **primary colour** (buttons and other accents), **secondary colour** (links),
+**highlight colour** (selected text and find matches) and **text colour**; *Use the theme's colour* puts
+one back.
+
 ## Updates
 
 About four seconds after it starts, ZettelApp makes one HTTPS request to

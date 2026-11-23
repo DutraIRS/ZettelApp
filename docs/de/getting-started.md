@@ -5,6 +5,8 @@
 ZettelApp läuft unter **Windows 10 (21H2 oder höher), Windows 11 und aktuellen 64-Bit-Linux-Desktops**. Laden Sie die App von der
 [neuesten Version](https://github.com/DutraIRS/ZettelApp/releases/latest) herunter:
 
+### Windows
+
 | Download | Verwenden Sie diese Version, wenn … |
 |---|---|
 | `ZettelApp-Setup.exe` | Sie eine normale Installation mit Eintrag im Startmenü, Deinstallationsprogramm unter *Einstellungen ▸ Apps* und `zettelapp://`-Links wünschen, die Notizen aus Anki öffnen. Administratorrechte sind nicht erforderlich: Die Installation gilt nur für Ihr Konto. |
@@ -49,7 +51,7 @@ Die Codesignierung steht auf der [Roadmap](https://github.com/DutraIRS/ZettelApp
 
 Ein **Tresor** ist ein Ordner mit Ihren Notizen: einer Datenbankdatei (`zettel.db`) und einem Ordner
 `assets` für Bilder. Beim ersten Start erstellt ZettelApp einen Tresor in **Documents\ZettelApp** mit elf
-verknüpften Startnotizen. Die Notiz *Welcome to ZettelApp* führt Sie durch Links, Tags, Bilder, Mindmaps,
+verknüpften Startnotizen. Die Notiz *Willkommen bei ZettelApp* führt Sie durch Links, Tags, Bilder, Mindmaps,
 Lernkarten und die übrigen Funktionen der App. Optional bietet ein zehnminütiges Abenteuer dieselbe
 Einführung anhand echter Aktionen. Neue Tresore, die Sie über *Datei ▸ Neuen Tresor…* oder *Datei ▸ Tresor
 öffnen…* erstellen, erhalten dieselben Startinhalte. So können Sie an einem anderen Ort arbeiten, zum
@@ -78,6 +80,11 @@ Desktop-Integration und Sicherungen.
 
 Die App übernimmt die **helle/dunkle** Darstellung und **Akzentfarbe** des Systems. Unter *Ansicht ▸ Design*
 können Sie ein Design festlegen.
+
+*Schwarz (OLED)* ist das dunkle Design auf echtem Schwarz, für OLED-Bildschirme. Unter *Optionen ▸ Allgemein*
+können Sie eigene Farben wählen: **Primärfarbe** (Schaltflächen und andere Akzente), **Sekundärfarbe** (Links),
+**Hervorhebungsfarbe** (markierter Text und Suchtreffer) und **Textfarbe**; *Farbe des Designs verwenden*
+stellt eine Farbe zurück.
 
 ## Aktualisierungen
 

@@ -8,7 +8,9 @@ depois a letra sublinhada.
 | Ação | Atalho |
 |---|---|
 | Nova nota | Ctrl+N |
-| Buscar notas | Ctrl+F |
+| Buscar notas | Ctrl+F (no texto da nota: localizar na nota; Ctrl+F de novo: todas as notas) |
+| Localizar na nota: ocorrência seguinte / anterior | Enter / Shift+Enter (Esc fecha) |
+| Localizar e substituir na nota | Ctrl+H |
 | Link para nota | Ctrl+K |
 | Inserir imagem | Ctrl+Shift+I |
 | Adicionar flashcard | Ctrl+Shift+F |
@@ -17,7 +19,8 @@ depois a letra sublinhada.
 | Mover nota para a lixeira | Ctrl+Delete |
 | Mover as notas selecionadas para a lixeira (na lista de notas) | Del |
 | Selecionar várias notas | Ctrl+clique, Shift+clique, Shift+setas |
-| Negrito / itálico | Ctrl+B / Ctrl+I |
+| Negrito / itálico | Ctrl+B / Ctrl+I (em parte de um trecho em negrito ou itálico: remove só dessa parte) |
+| Digitar em vários lugares ao mesmo tempo | Alt+Shift+clique (ou Alt+clique) adiciona um cursor (de novo: remove), Esc volta a um só. No Linux, use Alt+Shift+clique: muitos ambientes reservam Alt+clique para mover janelas |
 | Desfazer / refazer | Ctrl+Z / Ctrl+Y |
 | Completar um `[[link]]` | Digite `[[`, depois escolha um título e pressione Enter |
 | Seguir um link ou `#tag` no editor | Ctrl+clique (na pré-visualização, um clique simples) |
@@ -34,6 +37,8 @@ depois a letra sublinhada.
 | Revisão | Ctrl+4 |
 | Pergunte às suas notas | Ctrl+5 |
 | Tela cheia | F11 |
+| Ocultar ou mostrar a lista de notas | Ctrl+Shift+L, ou clique na aba da borda (arraste a borda para redimensionar) |
+| Ocultar ou mostrar o painel de links | Ctrl+Shift+K, ou clique na aba da borda |
 
 ## Arquivos e aplicativo
 

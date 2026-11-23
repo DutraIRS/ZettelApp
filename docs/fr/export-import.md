@@ -7,7 +7,7 @@
 | Périmètre | Contenu exporté |
 |---|---|
 | **Collection entière** | Toutes les notes (sauf celles de la Corbeille). |
-| **Note actuelle et notes liées** | La note ouverte et les notes situées à **Depth** liens ou moins, en suivant les liens dans les deux sens : un *sous-graphe*. |
+| **Note actuelle et notes liées** | La note ouverte et les notes situées à **Profondeur** liens ou moins, en suivant les liens dans les deux sens : un *sous-graphe*. |
 | **Notes avec un tag** | Les notes portant le tag, y compris les tags imbriqués (`math` inclut `math/algebra`). |
 
 La boîte de dialogue indique le nombre de notes, de liens et de cartes mémoire dans le périmètre. Vous pouvez aussi exporter depuis la liste des notes (clic droit ▸ *Exporter with linked notes…*), le menu ⋯ d’une note, le graphe (le bouton d’exportation inclut les notes affichées) ou le menu d’un nœud du graphe.
@@ -24,7 +24,7 @@ La boîte de dialogue indique le nombre de notes, de liens et de cartes mémoire
 | **Graphviz DOT** | `.dot` | Le graphe sous forme de diagramme Graphviz, avec des types de liens colorés, nommés et stylisés : lignes pleines, tiretées ou pointillées (Graphviz représente les lignes tiret-point et tirets longs par des tirets), ainsi que la pointe de flèche de chaque type ; les types non orientés n’ont pas de flèche. |
 | **Paquet Anki** | `.apkg` | Les cartes mémoire des notes exportées. Consultez [Anki](review-and-anki.md#anki). |
 
-Les exportations sont écrites dans un fichier temporaire, puis déplacées à leur emplacement définitif uniquement une fois terminées : une interruption ne laisse donc jamais de fichier incomplet. Elles s’exécutent en arrière-plan ; **Show in folder** ouvre le résultat dans l’Explorateur de fichiers.
+Les exportations sont écrites dans un fichier temporaire, puis déplacées à leur emplacement définitif uniquement une fois terminées : une interruption ne laisse donc jamais de fichier incomplet. Elles s’exécutent en arrière-plan ; **Afficher dans le dossier** ouvre le résultat dans votre gestionnaire de fichiers.
 
 Les cartes mentales disposent également de leur propre exportation (PNG, SVG ou FreeMind `.mm`) dans l’onglet **Carte mentale**. Le graphe peut être enregistré en image PNG.
 

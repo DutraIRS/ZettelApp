@@ -29,7 +29,7 @@ eines Graphknotens.
 
 Exporte werden in eine temporäre Datei geschrieben und erst nach vollständiger Erstellung an den
 Zielspeicherort verschoben. Ein abgebrochener Export hinterlässt daher nie eine unvollständige Datei. Der
-Export läuft im Hintergrund; **Im Ordner anzeigen** öffnet das Ergebnis im Datei-Explorer.
+Export läuft im Hintergrund; **Im Ordner anzeigen** öffnet das Ergebnis im Dateimanager.
 
 Mindmaps können außerdem in der Registerkarte **Mindmap** als PNG, SVG oder FreeMind-Datei (`.mm`)
 exportiert werden. Der Graph lässt sich als PNG-Bild speichern.

@@ -23,6 +23,7 @@ from zettelapp.core.models import (
 )
 from zettelapp.i18n import _
 from zettelapp.ui import icons, theme
+from zettelapp.ui.graph_common import render_scene
 
 H_GAP = 56
 V_GAP = 12
@@ -408,18 +409,7 @@ class MindMapView(QGraphicsView):
     # --- export -------------------------------------------------------------
 
     def render_image(self, scale: float = 2.0) -> QImage:
-        rect = self.scene().itemsBoundingRect().adjusted(-24, -24, 24, 24)
-        image = QImage(
-            int(rect.width() * scale), int(rect.height() * scale), QImage.Format.Format_ARGB32
-        )
-        image.fill(theme.current().q("surface"))
-        painter = QPainter(image)
-        painter.setRenderHints(
-            QPainter.RenderHint.Antialiasing | QPainter.RenderHint.TextAntialiasing
-        )
-        self.scene().render(painter, QRectF(image.rect()), rect)
-        painter.end()
-        return image
+        return render_scene(self.scene(), 24, scale)
 
     def render_svg(self, path: str) -> None:
         from PySide6.QtSvg import QSvgGenerator

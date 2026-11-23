@@ -89,10 +89,12 @@ Un simple `[[lien]]` signifie *Lié à*.
 Un type **orienté** se lit différemment selon le côté. Si la note A *étaye* la note B, les rétroliens de B
 présentent A comme *Soutenu par*. Les liens orientés ont des pointes de flèche dans le graphe et restent orientés
 lors des exportations. Les types **non orientés**, comme *Lié à* et *Contredit*, se lisent de la même façon
-dans les deux sens.
+dans les deux sens. Quand les deux notes s’écrivent mutuellement un lien non orienté, il n’est affiché qu’une fois.
+
+Pour garder le texte des deux notes en accord, réglez *Outils ▸ Options ▸ Types de lien ▸ Quand une note en lie une autre dans son texte* pour écrire le lien à la fin ou au début de la note liée : écrire `discusses:: [[B]]` dans A ajoute alors `discussed_by:: [[A]]` à B (et `related:: [[A]]` pour un lien simple), et supprimer le lien du texte de A retire cette ligne de B. C’est désactivé par défaut.
 
 Pour inverser un lien orienté dans le mauvais sens, faites un clic droit dessus dans le panneau latéral et choisissez
-**Reverse direction**. Pour inverser un lien écrit dans le texte, modifiez le texte.
+**Inverser le sens**. Pour inverser un lien écrit dans le texte, modifiez le texte.
 
 ### Liens dans le panneau latéral
 

@@ -26,7 +26,7 @@ Oui. Dans *Outils ▸ Options ▸ Assistant IA*, choisissez **OpenAI** et défin
 
 ### Où sont mes notes ?
 
-Dans votre dossier de coffre, par défaut **Documents\ZettelApp** : une base de données `zettel.db` et un dossier `assets`. *Fichier ▸ Show Vault in File Explorer* l’ouvre.
+Dans votre dossier de coffre, par défaut **Documents\ZettelApp** : une base de données `zettel.db` et un dossier `assets`. *Fichier ▸ Afficher le coffre dans le gestionnaire de fichiers* l’ouvre.
 
 ### Puis-je utiliser OneDrive, Dropbox ou Google Drive ?
 
@@ -46,7 +46,7 @@ Chaque note reçoit un identifiant permanent correspondant à son heure de créa
 
 ### Quelle différence entre un lien dans le texte et un lien dans le panneau latéral ?
 
-Les deux sont de vrais liens. Les `[[liens]]` du texte font partie de votre rédaction et sont supprimés si vous les effacez du texte. Les liens ajoutés avec **Add link…** ou en acceptant une suggestion ne figurent pas dans le texte. Vous pouvez modifier leur type, inverser leur direction ou les supprimer dans le panneau latéral.
+Les deux sont de vrais liens. Les `[[liens]]` du texte font partie de votre rédaction et sont supprimés si vous les effacez du texte. Les liens ajoutés avec **Ajouter un lien…** ou en acceptant une suggestion ne figurent pas dans le texte. Vous pouvez modifier leur type, inverser leur direction ou les supprimer dans le panneau latéral.
 
 ### Pourquoi une suggestion indique-t-elle seulement « 18 % · possible » ?
 

@@ -23,7 +23,7 @@ from zettelapp.core.llm import LLMSettings, retrieve_context, stream_answer
 from zettelapp.core.render import NoteRenderer
 from zettelapp.i18n import _
 from zettelapp.ui import icons
-from zettelapp.ui.preview import NotePreview, math_href
+from zettelapp.ui.preview import NotePreview
 from zettelapp.ui.widgets import Card, ScopePicker, accent_button, label, link_button
 from zettelapp.ui.workers import StreamThread
 
@@ -136,7 +136,10 @@ class AskPage(QWidget):
     def refresh(self) -> None:
         cfg = current_llm_settings()
         info = cfg.info
-        has_key = not info.requires_key or apikeys.has_key(info.id)
+        try:
+            has_key = not info.requires_key or apikeys.has_key(info.id)
+        except OSError:  # a keyring that fails (locked, timed out): shown as no key, never a crash
+            has_key = False
         model = cfg.effective_model()
         self.provider_label.setText(
             f"{info.label} · {model}" + ("" if has_key else " · " + _("no API key"))
@@ -167,15 +170,7 @@ class AskPage(QWidget):
         self.question.setReadOnly(not idle)
 
     def _renderer(self) -> NoteRenderer:
-        vault = self.window.vault
-        titles = vault.titles()
-        return NoteRenderer(
-            vault.resolve_title,
-            lambda i: titles.get(i) or "Untitled",
-            link_types=vault.link_type_map(),
-            allow_new_note_links=False,
-            math_href=math_href,
-        )
+        return self.window.reading_renderer()
 
     def ask(self) -> None:
         vault = self.window.vault
@@ -184,7 +179,11 @@ class AskPage(QWidget):
             return
         cfg = current_llm_settings()
         info = cfg.info
-        key = apikeys.active_secret(info.id)
+        try:
+            key = apikeys.active_secret(info.id)
+        except OSError as exc:  # the keyring answered with an error (locked, refused, timed out)
+            QMessageBox.warning(self, _("Connect an AI provider"), str(exc))
+            return
         if info.requires_key and not key:
             if (
                 QMessageBox.question(

@@ -9,12 +9,15 @@ cycled - extra groups fold into a neutral "other" colour).
 from __future__ import annotations
 
 import sys
-from dataclasses import dataclass, field
+from collections.abc import Mapping
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 
 from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor, QFont, QGuiApplication, QPalette
 from PySide6.QtWidgets import QApplication
+
+from zettelapp.settings import THEME_COLOURS
 
 CATEGORICAL_LIGHT = [
     "#2a78d6",
@@ -128,6 +131,9 @@ class Theme:
     axis: str
     danger: str
     success: str
+    link: str = ""  # links in notes and labels; the accent unless chosen
+    highlight: str = ""  # selected text and find matches; the accent unless chosen
+    on_highlight: str = ""
     categorical: list[str] = field(default_factory=list)
 
     def q(self, name: str) -> QColor:
@@ -334,12 +340,96 @@ def system_prefers_dark() -> bool:
         return False
 
 
-def build_theme(mode: str = "system") -> Theme:
-    dark = system_prefers_dark() if mode == "system" else mode == "dark"
-    accent = _desktop_accent(dark) or ("#60cdff" if dark else "#005fb8")
+MODES = ("system", "light", "dark", "black")
+"""The app themes: follow the system, light, dark, or black for OLED screens."""
+
+CUSTOM_COLOURS = THEME_COLOURS
+"""The colours a user may choose over any theme: primary (the accent), secondary (links),
+highlight (selected text and find matches) and text."""
+
+
+def _readable_on(color: str) -> str:
+    """Black or white, whichever reads better on *color*."""
+    c = QColor(color)
+    luminance = 0.2126 * c.redF() + 0.7152 * c.greenF() + 0.0722 * c.blueF()
+    return "#000000" if luminance > 0.5 else "#ffffff"
+
+
+def _mix(color: str, background: str, share: float) -> str:
+    """*color* at *share* over *background*, as one opaque colour."""
+    a, b = QColor(color), QColor(background)
+    return QColor(
+        round(a.red() * share + b.red() * (1 - share)),
+        round(a.green() * share + b.green() * (1 - share)),
+        round(a.blue() * share + b.blue() * (1 - share)),
+    ).name()
+
+
+def _with_accent(t: Theme, accent: str) -> Theme:
     a = QColor(accent)
-    if dark:
-        return Theme(
+    return replace(
+        t,
+        accent=accent,
+        accent_hover=a.lighter(112 if t.dark else 115).name(),
+        on_accent=_readable_on(accent),
+        accent_subtle=f"#{0x33 if t.dark else 0x24:02x}{a.red():02x}{a.green():02x}{a.blue():02x}",
+    )
+
+
+def customised(t: Theme, colours: Mapping[str, str]) -> Theme:
+    """The theme with the user's chosen colours over its own; invalid or empty ones are ignored."""
+    chosen = {
+        k: v for k, v in colours.items() if k in CUSTOM_COLOURS and QColor.isValidColorName(v)
+    }
+    if "primary" in chosen:
+        t = _with_accent(t, chosen["primary"])
+    if "text" in chosen:
+        text = chosen["text"]
+        t = replace(
+            t,
+            text=text,
+            text_secondary=_mix(text, t.window, 0.75),
+            text_muted=_mix(text, t.window, 0.55),
+        )
+    highlight = chosen.get("highlight", t.accent)
+    return replace(
+        t,
+        link=chosen.get("secondary", t.accent),
+        highlight=highlight,
+        on_highlight=_readable_on(highlight),
+    )
+
+
+def _black(t: Theme) -> Theme:
+    """The dark theme on true black, for OLED screens: black pixels are switched off."""
+    return replace(
+        t,
+        window="#000000",
+        surface="#000000",
+        surface_alt="#0a0a0a",
+        sidebar="#000000",
+        hover="#1affffff",
+        pressed="#12ffffff",
+        border="#262626",
+        border_strong="#3d3d3d",
+        grid="#1f1f1f",
+        axis="#333333",
+    )
+
+
+def build_theme(mode: str = "system", colours: Mapping[str, str] | None = None) -> Theme:
+    """The theme for *mode* (one of MODES), with the user's chosen colours over it."""
+    dark = system_prefers_dark() if mode == "system" else mode in ("dark", "black")
+    base = _dark_theme() if dark else _light_theme()
+    if mode == "black":
+        base = _black(base)
+    return customised(base, colours or {})
+
+
+def _dark_theme() -> Theme:
+    accent = _desktop_accent(True) or "#60cdff"
+    return _with_accent(
+        Theme(
             dark=True,
             window="#202020",
             surface="#2b2b2b",
@@ -353,37 +443,46 @@ def build_theme(mode: str = "system") -> Theme:
             text_secondary="#c5c5c5",
             text_muted="#9a9a9a",
             accent=accent,
-            accent_hover=a.lighter(112).name(),
+            accent_hover="",
             on_accent="#000000",
-            accent_subtle=f"#{0x33:02x}{a.red():02x}{a.green():02x}{a.blue():02x}",
+            accent_subtle="",
             grid="#383835",
             axis="#4a4a47",
             danger="#ff99a4",
             success="#6ccb5f",
             categorical=CATEGORICAL_DARK,
-        )
-    return Theme(
-        dark=False,
-        window="#f3f3f3",
-        surface="#ffffff",
-        surface_alt="#fafafa",
-        sidebar="#ebebeb",
-        hover="#0a000000",
-        pressed="#06000000",
-        border="#e5e5e5",
-        border_strong="#cfcfcf",
-        text="#1b1b1b",
-        text_secondary="#5d5d5d",
-        text_muted="#8a8a8a",
-        accent=accent,
-        accent_hover=a.lighter(115).name(),
-        on_accent="#ffffff",
-        accent_subtle=f"#{0x24:02x}{a.red():02x}{a.green():02x}{a.blue():02x}",
-        grid="#e1e0d9",
-        axis="#c3c2b7",
-        danger="#c42b1c",
-        success="#0f7b0f",
-        categorical=CATEGORICAL_LIGHT,
+        ),
+        accent,
+    )
+
+
+def _light_theme() -> Theme:
+    accent = _desktop_accent(False) or "#005fb8"
+    return _with_accent(
+        Theme(
+            dark=False,
+            window="#f3f3f3",
+            surface="#ffffff",
+            surface_alt="#fafafa",
+            sidebar="#ebebeb",
+            hover="#0a000000",
+            pressed="#06000000",
+            border="#e5e5e5",
+            border_strong="#cfcfcf",
+            text="#1b1b1b",
+            text_secondary="#5d5d5d",
+            text_muted="#8a8a8a",
+            accent=accent,
+            accent_hover="",
+            on_accent="#ffffff",
+            accent_subtle="",
+            grid="#e1e0d9",
+            axis="#c3c2b7",
+            danger="#c42b1c",
+            success="#0f7b0f",
+            categorical=CATEGORICAL_LIGHT,
+        ),
+        accent,
     )
 
 
@@ -505,10 +604,10 @@ QLabel[role="secondary"] {{ color: {t.text_secondary}; }}
 QLabel[role="caption"] {{ color: {t.text_muted}; font-size: 8.5pt; }}
 QLabel[role="hero"] {{ font-size: 24pt; font-weight: 600; }}
 QLabel[role="danger"] {{ color: {t.danger}; }}
-QLabel a {{ color: {t.accent}; }}
+QLabel a {{ color: {t.link}; }}
 QLineEdit, QPlainTextEdit, QTextEdit, QSpinBox, QDoubleSpinBox, QComboBox {{
     background: {t.surface}; border: 1px solid {t.border}; border-bottom-color: {t.border_strong};
-    border-radius: 4px; padding: 5px 8px; selection-background-color: {t.accent}; selection-color: {t.on_accent};
+    border-radius: 4px; padding: 5px 8px; selection-background-color: {t.highlight}; selection-color: {t.on_highlight};
 }}
 QLineEdit:hover, QComboBox:hover, QSpinBox:hover {{ background: {t.surface_alt}; }}
 QLineEdit:focus, QPlainTextEdit:focus, QTextEdit:focus, QSpinBox:focus, QComboBox:focus {{
@@ -529,7 +628,7 @@ QPushButton:disabled {{ color: {t.text_muted}; }}
 QPushButton[accent="true"] {{ background: {t.accent}; color: {t.on_accent}; border: 1px solid {t.accent}; font-weight: 600; }}
 QPushButton[accent="true"]:hover {{ background: {t.accent_hover}; border-color: {t.accent_hover}; }}
 QPushButton[accent="true"]:disabled {{ background: {t.border}; border-color: {t.border}; color: {t.text_muted}; }}
-QPushButton[flat="true"] {{ background: transparent; border: none; color: {t.accent}; padding: 4px 6px; }}
+QPushButton[flat="true"] {{ background: transparent; border: none; color: {t.link}; padding: 4px 6px; }}
 QPushButton[flat="true"]:hover {{ background: {t.hover}; }}
 QPushButton[flat="true"]:disabled {{ color: {t.text_muted}; background: transparent; }}
 QToolButton {{ background: transparent; border: none; border-radius: 4px; padding: 5px; }}
@@ -590,9 +689,14 @@ QGraphicsView {{ border: none; background: {t.surface}; }}
 """
 
 
-def apply_theme(app: QApplication, mode: str = "system", font_size: float = 10.0) -> Theme:
+def apply_theme(
+    app: QApplication,
+    mode: str = "system",
+    font_size: float = 10.0,
+    colours: Mapping[str, str] | None = None,
+) -> Theme:
     global _current
-    t = build_theme(mode)
+    t = build_theme(mode, colours)
     _current = t
     try:
         QGuiApplication.styleHints().setColorScheme(
@@ -614,8 +718,8 @@ def apply_theme(app: QApplication, mode: str = "system", font_size: float = 10.0
         QPalette.ColorRole.Text: t.text,
         QPalette.ColorRole.Button: t.surface,
         QPalette.ColorRole.ButtonText: t.text,
-        QPalette.ColorRole.Highlight: t.accent,
-        QPalette.ColorRole.HighlightedText: t.on_accent,
+        QPalette.ColorRole.Highlight: t.highlight,
+        QPalette.ColorRole.HighlightedText: t.on_highlight,
         QPalette.ColorRole.ToolTipBase: t.surface,
         QPalette.ColorRole.ToolTipText: t.text,
         QPalette.ColorRole.PlaceholderText: t.text_muted,

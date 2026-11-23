@@ -13,11 +13,12 @@ que ela tem, e cada linha é um link.
 |---|---|
 | **Todas as notas / Local** | Mostra a coleção inteira, ou somente a nota aberta e as notas a até **Profundidade** links de distância dela (seguindo links nos dois sentidos). *Mostrar no grafo*, no menu ⋯ de uma nota, abre o grafo local. |
 | **2D / 3D** | Alterna entre um layout plano e arrastável e uma visão 3D que você pode orbitar. |
-| **Cor por** | Tags, *Clusters: k-means*, *Clusters: hierárquico* ou nada. |
+| **Cor por** | Tags, *Grupos: k-means*, *Clusters: hierárquico* ou nada. |
 | **k** | Número de clusters. *k automático* escolhe por você (veja abaixo). |
 | **Grupo** | Junta notas do mesmo grupo e sombreia a área de cada grupo. Em 2D, clique em uma área para selecioná-la e arraste-a para mover todas as suas notas. |
 | **Rótulos** | Mostra os títulos das notas. Em grafos grandes, somente as notas mais conectadas recebem rótulo até você passar o mouse. |
 | **Tipos de link** | Oculta ou mostra tipos de link individuais. |
+| **Tags** | Duas caixas por tag. **Mostrar**: desmarque para ocultar as notas com essa tag. **Agrupar**: desmarque para que a tag não forme grupo ao colorir por tag nem conte para os clusters (útil para tags como `#todo`). |
 | **Buscar no grafo** | Digite parte de um título e pressione Enter para ir até a nota. |
 
 No canto inferior direito estão zoom, ajustar, **recalcular layout**, **salvar como imagem** (PNG) e **exportar estas

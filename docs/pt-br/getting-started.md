@@ -5,6 +5,8 @@
 O ZettelApp roda no **Windows 10 (21H2 ou posterior), no Windows 11 e em desktops Linux de 64 bits recentes**. Baixe-o da
 [versão mais recente](https://github.com/DutraIRS/ZettelApp/releases/latest):
 
+### Windows
+
 | Download | Use quando |
 |---|---|
 | `ZettelApp-Setup.exe` | Você quer uma instalação normal, com entrada no menu Iniciar, um desinstalador em *Configurações ▸ Aplicativos* e links `zettelapp://` que abrem notas a partir do Anki. Não são necessários direitos de administrador: ele instala somente para a sua conta. |
@@ -76,6 +78,10 @@ do editor, sugestões de links, tipos de link, IA, servidor MCP, Anki, Zotero, i
 
 O aplicativo segue a configuração **claro/escuro** e a **cor de destaque** do sistema. Você pode forçar um tema em
 *Exibir ▸ Tema*.
+
+*Preto (OLED)* é o tema escuro sobre preto puro, para telas OLED. Em *Opções ▸ Geral* você pode escolher
+sua **cor principal** (botões e outros destaques), **cor secundária** (links), **cor de destaque** (texto
+selecionado e resultados da busca) e **cor do texto**; *Usar a cor do tema* volta à original.
 
 ## Atualizações
 

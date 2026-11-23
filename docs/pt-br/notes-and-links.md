@@ -85,7 +85,9 @@ Um `[[link]]` simples é *Relacionada a*.
 
 Um tipo **direcionado** se lê de forma diferente de cada lado. Se a nota A *apoia* a nota B, os backlinks de B
 mostram A como *Apoiada por*. Os links direcionados ganham pontas de seta no grafo e continuam direcionados nas exportações.
-Os tipos **não direcionados**, como *Relacionada a* e *Contradiz*, se leem igual nos dois sentidos.
+Os tipos **não direcionados**, como *Relacionada a* e *Contradiz*, se leem igual nos dois sentidos. Quando as duas notas escrevem um link não direcionado uma para a outra, ele aparece uma só vez.
+
+Para manter o texto das duas notas em sintonia, ajuste *Ferramentas ▸ Opções ▸ Tipos de link ▸ Quando uma nota liga outra no texto* para escrever o link no fim ou no início da nota ligada: escrever `discusses:: [[B]]` em A então acrescenta `discussed_by:: [[A]]` a B (e `related:: [[A]]` para um link simples), e apagar o link do texto de A tira essa linha de B de novo. Vem desligado.
 
 Para inverter um link direcionado criado ao contrário, clique com o botão direito nele no painel lateral e escolha
 **Inverter direção**. Os links escritos no texto são invertidos editando-se o texto.

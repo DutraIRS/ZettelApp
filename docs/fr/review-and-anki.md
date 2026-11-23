@@ -43,7 +43,7 @@ Les tags de vos notes deviennent des tags Anki (les tags imbriqués deviennent `
 ### Synchroniser avec AnkiConnect
 
 1. Dans Anki, installez l’extension **AnkiConnect** (*Outils ▸ Add-ons ▸ Get Add-ons…*, code **2055492159**), puis redémarrez Anki.
-2. Avec Anki ouvert, accédez à **Révision** dans ZettelApp, choisissez le nom du paquet (**Default deck** dans *Options ▸ Anki*, `ZettelApp` au départ) et le périmètre, puis cliquez sur **Synchroniser avec Anki** (ou *Outils ▸ Synchroniser avec Anki*). *Tester la connexion* vérifie la connexion.
+2. Avec Anki ouvert, accédez à **Révision** dans ZettelApp, choisissez le nom du paquet (**Paquet par défaut** dans *Options ▸ Anki*, `ZettelApp` au départ) et le périmètre, puis cliquez sur **Synchroniser avec Anki** (ou *Outils ▸ Synchroniser avec Anki*). *Tester la connexion* vérifie la connexion.
 
 ZettelApp mémorise la note Anki associée à chaque carte. Une nouvelle synchronisation **met à jour** les cartes au lieu d’en créer des doublons ; une carte peut être retrouvée grâce à son *CardKey* même si cette association a été perdue. Les cartes supprimées dans ZettelApp ne sont pas supprimées d’Anki.
 

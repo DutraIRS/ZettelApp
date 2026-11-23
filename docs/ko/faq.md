@@ -37,7 +37,7 @@ Claude Desktop이나 Claude Code 같은 AI 어시스턴트가 [MCP](mcp-server.m
 ### 내 노트는 어디에 있나요?
 
 볼트 폴더에 있어요. 기본값은 **Documents\ZettelApp**이며 `zettel.db` 데이터베이스와 `assets` 폴더가 들어 있어요.
-*파일 ▸ 볼트를 파일 탐색기에서 표시*로 열 수 있어요.
+*파일 ▸ 볼트를 파일 관리자에서 표시*로 열 수 있어요.
 
 ### OneDrive, Dropbox, Google Drive와 함께 쓸 수 있나요?
 

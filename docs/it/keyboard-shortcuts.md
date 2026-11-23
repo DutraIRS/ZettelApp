@@ -8,7 +8,9 @@ poi la lettera sottolineata.
 | Azione | Scorciatoia |
 |---|---|
 | Nuova nota | Ctrl+N |
-| Trova note | Ctrl+F |
+| Trova note | Ctrl+F (nel testo della nota: trova nella nota; di nuovo Ctrl+F: tutte le note) |
+| Trova nella nota: risultato successivo / precedente | Enter / Shift+Enter (Esc chiude) |
+| Trova e sostituisci nella nota | Ctrl+H |
 | Collega a nota | Ctrl+K |
 | Inserisci immagine | Ctrl+Shift+I |
 | Aggiungi flashcard | Ctrl+Shift+F |
@@ -17,7 +19,8 @@ poi la lettera sottolineata.
 | Sposta nota nel cestino | Ctrl+Delete |
 | Sposta le note selezionate nel cestino (nell'elenco delle note) | Del |
 | Seleziona più note | Ctrl+clic, Shift+clic, Shift+frecce |
-| Grassetto / corsivo | Ctrl+B / Ctrl+I |
+| Grassetto / corsivo | Ctrl+B / Ctrl+I (su parte di un tratto in grassetto o corsivo: lo toglie da quella parte) |
+| Scrivere in più punti insieme | Alt+Shift+clic (o Alt+clic) aggiunge un cursore (di nuovo: lo toglie), Esc ne lascia uno solo. Su Linux usa Alt+Shift+clic: molti desktop riservano Alt+clic allo spostamento delle finestre |
 | Annulla / ripeti | Ctrl+Z / Ctrl+Y |
 | Completa un `[[collegamento]]` | Scrivi `[[`, poi scegli un titolo e premi Enter |
 | Segui un collegamento o un `#tag` nell'editor | Ctrl+clic (nell'anteprima, un semplice clic) |
@@ -34,6 +37,8 @@ poi la lettera sottolineata.
 | Ripasso | Ctrl+4 |
 | Chiedi alle tue note | Ctrl+5 |
 | Schermo intero | F11 |
+| Nascondere o mostrare l'elenco delle note | Ctrl+Shift+L, o clic sulla linguetta sul bordo (trascina il bordo per ridimensionare) |
+| Nascondere o mostrare il pannello dei collegamenti | Ctrl+Shift+K, o clic sulla linguetta sul bordo |
 
 ## File e app
 

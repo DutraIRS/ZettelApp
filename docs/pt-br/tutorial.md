@@ -123,7 +123,7 @@ Abra o **Grafo** (**Ctrl+2**).
 
 1. Arraste as notas, use a roda para dar zoom e passe o mouse sobre uma nota para destacar suas vizinhas.
 2. Selecione uma nota na página Notas, volte e clique em **Local**, depois mude a **Profundidade** para 1, 2 ou 3.
-3. Defina **Cor por** como **Clusters: k-means**. As notas são agrupadas por significado, e a legenda nomeia cada
+3. Defina **Cor por** como **Grupos: k-means**. As notas são agrupadas por significado, e a legenda nomeia cada
    cluster por suas palavras-chave.
 4. Ative **Grupo** para juntar cada grupo sobre um fundo sombreado.
 5. Clique em **3D**, arraste para orbitar e experimente **Girar automaticamente**.
@@ -169,7 +169,7 @@ Veja [Exportar e importar](export-import.md) e [Anki](review-and-anki.md#anki).
 
 ## 15. Saiba onde ficam seus dados
 
-- Suas notas ficam na pasta do cofre (*Arquivo ▸ Mostrar cofre no Explorador de Arquivos*): `zettel.db` mais `assets`.
+- Suas notas ficam na pasta do cofre (*Arquivo ▸ Mostrar cofre no gerenciador de arquivos*): `zettel.db` mais `assets`.
 - Um backup é feito automaticamente uma vez por dia, e *Arquivo ▸ Fazer backup do cofre agora* faz um a qualquer momento.
 - As notas excluídas vão para a **Lixeira**, abaixo da lista de notas, onde você pode restaurá-las.
 

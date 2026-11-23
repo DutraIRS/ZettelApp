@@ -94,3 +94,9 @@ def test_an_alarm_edited_into_the_database_by_hand_never_breaks_the_check(vault)
             ((datetime.now() - timedelta(minutes=5)).isoformat(), local.id),  # naive, local
         )
     assert [n.id for n in vault.due_alarms()] == [local.id]
+
+
+def test_plain_text_keeps_underscores_inside_words():
+    # Snippets in the note list showed "supported_by:: [[A]]" as "supportedby:: A".
+    assert strip_markdown("supported_by:: [[A]]") == "supported_by:: A"
+    assert strip_markdown("_italic_ and __bold__ in snake_case") == "italic and bold in snake_case"

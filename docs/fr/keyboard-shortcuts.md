@@ -7,7 +7,9 @@
 | Action | Raccourci |
 |---|---|
 | Nouvelle note | Ctrl+N |
-| Rechercher des notes | Ctrl+F |
+| Rechercher des notes | Ctrl+F (dans le texte de la note : rechercher dans la note ; Ctrl+F de nouveau : toutes les notes) |
+| Rechercher dans la note : résultat suivant / précédent | Enter / Shift+Enter (Échap ferme) |
+| Rechercher et remplacer dans la note | Ctrl+H |
 | Créer un lien vers une note | Ctrl+K |
 | Insérer une image | Ctrl+Shift+I |
 | Ajouter une carte mémoire | Ctrl+Shift+F |
@@ -16,7 +18,8 @@
 | Déplacer la note dans la Corbeille | Ctrl+Delete |
 | Mettre les notes sélectionnées à la Corbeille (dans la liste des notes) | Del |
 | Sélectionner plusieurs notes | Ctrl+clic, Shift+clic, Shift+flèches |
-| Gras / italique | Ctrl+B / Ctrl+I |
+| Gras / italique | Ctrl+B / Ctrl+I (sur une partie d’un passage en gras ou en italique : l’enlève de cette partie) |
+| Écrire à plusieurs endroits à la fois | Alt+Shift+clic (ou Alt+clic) ajoute un curseur (encore une fois : le retire), Échap n'en garde qu'un. Sous Linux, utilisez Alt+Shift+clic : beaucoup de bureaux réservent Alt+clic au déplacement des fenêtres |
 | Annuler / rétablir | Ctrl+Z / Ctrl+Y |
 | Compléter un `[[lien]]` | Saisissez `[[`, choisissez un titre, puis appuyez sur Entrée |
 | Suivre un lien ou un `#tag` dans l’éditeur | Ctrl+clic (dans l’aperçu, un clic suffit) |
@@ -33,6 +36,8 @@
 | Révision | Ctrl+4 |
 | Interroger vos notes | Ctrl+5 |
 | Plein écran | F11 |
+| Masquer ou afficher la liste des notes | Ctrl+Shift+L, ou cliquer sur l'onglet de son bord (faire glisser le bord pour redimensionner) |
+| Masquer ou afficher le panneau des liens | Ctrl+Shift+K, ou cliquer sur l'onglet de son bord |
 
 ## Fichiers et application
 

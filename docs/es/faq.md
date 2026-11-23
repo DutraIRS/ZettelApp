@@ -42,7 +42,7 @@ para `localhost`. Consulta [Trae tu propio LLM](ai-assistant.md#bring-your-own-l
 ### ¿Dónde están mis notas?
 
 En la carpeta de tu bóveda, por defecto **Documentos\ZettelApp**: una base de datos `zettel.db` y una carpeta `assets`.
-*Archivo ▸ Mostrar bóveda en el Explorador de archivos* la abre.
+*Archivo ▸ Mostrar bóveda en el administrador de archivos* la abre.
 
 ### ¿Puedo usarlo con OneDrive, Dropbox o Google Drive?
 

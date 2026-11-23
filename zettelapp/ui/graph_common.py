@@ -11,6 +11,7 @@ from PySide6.QtGui import (
     QColor,
     QFont,
     QFontMetricsF,
+    QImage,
     QPainter,
     QPainterPath,
     QPainterPathStroker,
@@ -237,3 +238,17 @@ def padded_hull(points: list[tuple[float, float]], pad: float) -> QPainterPath:
     stroker.setJoinStyle(Qt.PenJoinStyle.RoundJoin)
     stroker.setCapStyle(Qt.PenCapStyle.RoundCap)
     return stroker.createStroke(path).united(path).simplified()
+
+
+def render_scene(scene, margin: float, scale: float = 2.0) -> QImage:
+    """Everything in *scene*, with *margin* around it, as a picture on the theme's surface."""
+    rect = scene.itemsBoundingRect().adjusted(-margin, -margin, margin, margin)
+    image = QImage(
+        int(rect.width() * scale), int(rect.height() * scale), QImage.Format.Format_ARGB32
+    )
+    image.fill(theme.current().q("surface"))
+    painter = QPainter(image)
+    painter.setRenderHints(QPainter.RenderHint.Antialiasing | QPainter.RenderHint.TextAntialiasing)
+    scene.render(painter, QRectF(image.rect()), rect)
+    painter.end()
+    return image

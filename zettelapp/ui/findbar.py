@@ -52,13 +52,16 @@ class FindBar(QWidget):
         self.case.setAccessibleName(_("Match case"))
         self.case.toggled.connect(lambda _on: self._query_changed())
         row.addWidget(self.case)
-        row.addWidget(tool_button("chevron_up", _("Previous match (Shift+Enter)"), self.previous))
-        row.addWidget(tool_button("chevron_down", _("Next match (Enter)"), self.next))
+        previous = tool_button("chevron_up", _("Previous match (Shift+Enter)"), self.previous)
+        row.addWidget(previous)
+        following = tool_button("chevron_down", _("Next match (Enter)"), self.next)
+        row.addWidget(following)
         self.replace_toggle = tool_button(
             "sync", _("Replace (Ctrl+H)"), lambda: self._show_replace(not self._replacing), True
         )
         row.addWidget(self.replace_toggle)
-        row.addWidget(tool_button("cancel", _("Close (Esc)"), self.close_bar))
+        close = tool_button("cancel", _("Close (Esc)"), self.close_bar)
+        row.addWidget(close)
         outer.addLayout(row)
 
         self.replace_row = QWidget()
@@ -78,6 +81,20 @@ class FindBar(QWidget):
         self.replace_all_button.clicked.connect(self.replace_all)
         replace.addWidget(self.replace_all_button)
         outer.addWidget(self.replace_row)
+        # Tab goes from the search straight to its replacement, as in other editors.
+        chain = (
+            self.find,
+            self.replacement,
+            self.replace_button,
+            self.replace_all_button,
+            self.case,
+            previous,
+            following,
+            self.replace_toggle,
+            close,
+        )
+        for first, second in zip(chain, chain[1:], strict=False):
+            QWidget.setTabOrder(first, second)
 
         for widget in (self.find, self.replacement):
             QShortcut(
@@ -240,7 +257,7 @@ class FindBar(QWidget):
         self._highlight(found[:MAX_HIGHLIGHTS])
 
     def _highlight(self, found: list[QTextCursor]) -> None:
-        colour = QColor(theme.current().accent)
+        colour = QColor(theme.current().highlight)
         colour.setAlphaF(0.28)
         selections = []
         for cursor in found:

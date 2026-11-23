@@ -48,7 +48,8 @@ Atomic notes, typed links, mind maps, flashcards, a 2D/3D knowledge graph, and l
 - **Export the whole collection or any subgraph**: ZettelApp archive, Markdown (Obsidian), static website,
   JSON, GraphML, Graphviz and Anki. Imports Markdown folders and Obsidian vaults.
 - **At home on your desktop**: follows your light/dark theme and accent colour (Windows, GNOME and
-  KDE), with standard menus and shortcuts, per-user installers and daily backups.
+  KDE), or a black theme for OLED screens and colours of your own, with standard menus and shortcuts,
+  per-user installers and daily backups.
 - **Private and safe by design**: works offline; nothing leaves your computer unless you ask for it, apart
   from one small, optional update check at start-up. Notes can't run scripts, imports are sandboxed, and
   API keys never touch disk in plain text.

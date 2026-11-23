@@ -42,7 +42,7 @@ alcuna chiave API. Vedi [Porta il tuo LLM](ai-assistant.md#bring-your-own-llm).
 ### Dove sono le mie note?
 
 Nella cartella del tuo vault, per impostazione predefinita **Documenti\ZettelApp**: un database `zettel.db` e una cartella `assets`.
-*File ▸ Mostra vault in Esplora file* la apre.
+*File ▸ Mostra vault nel gestore file* la apre.
 
 ### Posso usarlo con OneDrive, Dropbox o Google Drive?
 

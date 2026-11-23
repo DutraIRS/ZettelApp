@@ -85,7 +85,9 @@ Un semplice `[[collegamento]]` è *Correlata a*.
 
 Un tipo **orientato** si legge in modo diverso da ciascun lato. Se la nota A *supporta* la nota B, allora i collegamenti entranti
 di B mostrano A come *Supportata da*. I collegamenti orientati hanno punte di freccia nel grafo e restano orientati nelle esportazioni.
-I tipi **non orientati** come *Correlata a* e *Contraddice* si leggono allo stesso modo in entrambe le direzioni.
+I tipi **non orientati** come *Correlata a* e *Contraddice* si leggono allo stesso modo in entrambe le direzioni. Quando entrambe le note si scrivono a vicenda un collegamento non orientato, viene mostrato una sola volta.
+
+Per tenere allineato il testo delle due note, imposta *Strumenti ▸ Opzioni ▸ Tipi di collegamento ▸ Quando una nota ne collega un’altra nel testo* in modo da scrivere il collegamento alla fine o all’inizio della nota collegata: scrivere `discusses:: [[B]]` in A aggiunge allora `discussed_by:: [[A]]` a B (e `related:: [[A]]` per un collegamento semplice), e cancellare il collegamento dal testo di A toglie di nuovo quella riga da B. È disattivato per impostazione predefinita.
 
 Per invertire un collegamento orientato creato nel verso sbagliato, fai clic destro su di esso nel pannello laterale e scegli
 **Inverti direzione**. I collegamenti scritti nel testo si invertono modificando il testo.

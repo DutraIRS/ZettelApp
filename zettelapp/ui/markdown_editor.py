@@ -156,10 +156,10 @@ class MarkdownHighlighter(QSyntaxHighlighter):
             (MATH_RE, _fmt("accent")),
             (re.compile(r"^>.*$"), _fmt("text_secondary", italic=True)),
             (re.compile(r"`[^`\n]+`"), _fmt("text_secondary", background="hover")),
-            (re.compile(r"!?\[[^\]\n]*\]\([^)\n]*\)"), _fmt("accent")),
+            (re.compile(r"!?\[[^\]\n]*\]\([^)\n]*\)"), _fmt("link")),
             (
                 re.compile(r"(?:[A-Za-z][\w-]{0,30}::[ \t]*)?\[\[[^\]\n]+\]\]"),
-                _fmt("accent", underline=True),
+                _fmt("link", underline=True),
             ),
             (re.compile(r"\{\{c\d+::.*?\}\}"), _fmt(bold=True, background="accent_subtle")),
             (re.compile(r"^\s*(?:Q|A|Question|Answer)\s*:", re.I), _fmt("accent", bold=True)),
@@ -233,7 +233,8 @@ class MarkdownEditor(QPlainTextEdit):
         # Given an asset name, the (text, callback) actions to offer when right-clicking an image.
         self.image_actions: Callable[[str], list[tuple[str, Callable[[], None]]]] | None = None
         self._pressed_link: tuple[str, str] | None = None
-        # Alt+click adds a caret: typing, deleting and moving then happen at every one.
+        # Alt+Shift+click (or Alt+click, which many Linux window managers keep for moving
+        # windows) adds a caret: typing, deleting and moving then happen at every one.
         self.extra_cursors: list[QTextCursor] = []
         self._layers: dict[str, list] = {}  # highlights by owner (find, extra carets)
         self.viewport().setMouseTracking(True)
@@ -326,7 +327,8 @@ class MarkdownEditor(QPlainTextEdit):
         self.setExtraSelections([s for layer in self._layers.values() for s in layer])
 
     def add_cursor_at(self, pos: QPoint) -> None:
-        """Alt+click: keep the current caret and add one at *pos* (or take that one away)."""
+        """Alt+Shift+click or Alt+click: keep the current caret and add one at *pos* (or take that
+        one away)."""
         clicked = self.cursorForPosition(pos)
         where = clicked.position()
         kept = [c for c in self.extra_cursors if c.position() != where]
@@ -343,7 +345,7 @@ class MarkdownEditor(QPlainTextEdit):
             self._show_extra_cursors()
 
     def _show_extra_cursors(self) -> None:
-        colour = QColor(theme.current().accent)
+        colour = QColor(theme.current().highlight)
         colour.setAlphaF(0.3)
         selections = []
         for cursor in self.extra_cursors:

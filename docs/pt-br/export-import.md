@@ -28,7 +28,7 @@ exporta as notas na tela) e pelo menu de um nó do grafo.
 
 As exportações são gravadas em um arquivo temporário e movidas para o lugar somente quando completas, então uma
 exportação interrompida nunca deixa um arquivo pela metade. Elas rodam em segundo plano, e **Mostrar na pasta** revela o
-resultado no Explorador de Arquivos.
+resultado no gerenciador de arquivos.
 
 Os mapas mentais também têm sua própria exportação (PNG, SVG ou FreeMind `.mm`) na aba **Mapa mental**, e o grafo
 pode ser salvo como uma imagem PNG.

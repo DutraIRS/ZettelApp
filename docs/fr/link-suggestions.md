@@ -102,5 +102,5 @@ suggestion à 15–30 % peut donc être bonne. Le classement est l’élément l
 
 - **Modèle details…** indique le nombre de paires liées et non liées utilisées pour l’entraînement ainsi que la capacité informative de
 chaque caractéristique (divergence symétrique de Kullback–Leibler entre ses distributions pour les paires liées et non liées).
-- **Forget dismissed suggestions** efface vos rejets : ces paires pourront être proposées à nouveau et ne compteront plus comme
+- **Oublier les suggestions ignorées** efface vos rejets : ces paires pourront être proposées à nouveau et ne compteront plus comme
 exemples négatifs.

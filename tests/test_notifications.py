@@ -90,8 +90,9 @@ def test_alarm_falls_back_to_the_tray_without_gdbus(window, monkeypatch):
 
 
 def test_ask_page_says_when_keys_are_memory_only(window, monkeypatch):
-    from zettelapp.core import secrets
+    from zettelapp.core import apikeys, secrets
 
+    monkeypatch.setattr(apikeys, "has_key", lambda _provider: False)  # no keyring lookups
     monkeypatch.setattr(secrets, "secrets_available", lambda: False)
     window.ask.refresh()
     assert "No system keyring" in window.ask.privacy.text()
@@ -99,3 +100,22 @@ def test_ask_page_says_when_keys_are_memory_only(window, monkeypatch):
     monkeypatch.setattr(secrets, "secrets_available", lambda: True)
     window.ask.refresh()
     assert "kept in the system keyring" in window.ask.privacy.text()
+
+
+def test_ask_page_survives_a_failing_keyring(window, monkeypatch):
+    from PySide6.QtWidgets import QMessageBox
+
+    from zettelapp.core import apikeys
+
+    def fail(*_args):
+        raise OSError("Could not read from the system keyring. (Timeout was reached)")
+
+    monkeypatch.setattr(apikeys, "has_key", fail)
+    monkeypatch.setattr(apikeys, "active_secret", fail)
+    shown = []
+    monkeypatch.setattr(QMessageBox, "warning", lambda *args: shown.append(args[2]))
+    window.ask.refresh()
+    assert "no API key" in window.ask.provider_label.text()
+    window.ask.question.setPlainText("Why?")
+    window.ask.ask()
+    assert shown and "Timeout" in shown[0]

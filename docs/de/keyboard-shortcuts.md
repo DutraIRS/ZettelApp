@@ -8,7 +8,9 @@ Tastenzugriffstasten: Drücken Sie **Alt** und danach den unterstrichenen Buchst
 | Aktion | Tastenkombination |
 |---|---|
 | Neue Notiz | Ctrl+N |
-| Notizen suchen | Ctrl+F |
+| Notizen suchen | Ctrl+F (im Notiztext: in der Notiz suchen; erneut Ctrl+F: alle Notizen) |
+| In der Notiz suchen: nächster / vorheriger Treffer | Enter / Shift+Enter (Esc schließt) |
+| In der Notiz suchen und ersetzen | Ctrl+H |
 | Link zu Notiz | Ctrl+K |
 | Bild einfügen | Ctrl+Shift+I |
 | Lernkarte hinzufügen | Ctrl+Shift+F |
@@ -17,7 +19,8 @@ Tastenzugriffstasten: Drücken Sie **Alt** und danach den unterstrichenen Buchst
 | Notiz in den Papierkorb verschieben | Ctrl+Delete |
 | Ausgewählte Notizen in den Papierkorb verschieben (in der Notizliste) | Del |
 | Mehrere Notizen auswählen | Ctrl+Klick, Shift+Klick, Shift+Pfeiltasten |
-| Fett / kursiv | Ctrl+B / Ctrl+I |
+| Fett / kursiv | Ctrl+B / Ctrl+I (auf einem Teil eines fetten oder kursiven Abschnitts: entfernt es dort) |
+| An mehreren Stellen zugleich tippen | Alt+Shift+Klick (oder Alt+Klick) setzt eine weitere Schreibmarke (noch einmal: entfernt sie), Esc lässt nur eine. Unter Linux Alt+Shift+Klick verwenden: viele Desktops verschieben mit Alt+Klick Fenster |
 | Rückgängig / Wiederholen | Ctrl+Z / Ctrl+Y |
 | Einen `[[Link]]` vervollständigen | `[[` eingeben, einen Titel auswählen und Enter drücken |
 | Einem Link oder `#tag` im Editor folgen | Ctrl+Klick (in der Vorschau normal klicken) |
@@ -34,6 +37,8 @@ Tastenzugriffstasten: Drücken Sie **Alt** und danach den unterstrichenen Buchst
 | Wiederholen | Ctrl+4 |
 | Ihre Notizen befragen | Ctrl+5 |
 | Vollbild | F11 |
+| Notizliste aus- oder einblenden | Ctrl+Shift+L oder die Lasche am Rand anklicken (den Rand ziehen ändert die Größe) |
+| Link-Leiste aus- oder einblenden | Ctrl+Shift+K oder die Lasche am Rand anklicken |
 
 ## Dateien und App
 

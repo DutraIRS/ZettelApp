@@ -43,7 +43,7 @@ ZettelApp 通过两种方式与 [Anki](https://apps.ankiweb.net/) 配合使用�
 ### 通过 AnkiConnect 同步
 
 1. 在 Anki 中,安装 **AnkiConnect** 插件(*Tools ▸ Add-ons ▸ Get Add-ons…*,代码 **2055492159**)并重启 Anki。
-2. 在 Anki 运行的情况下,在 ZettelApp 中打开**复习**,选择牌组名称(*选项 ▸ Anki* 中的 **Default deck**,起初为 `ZettelApp`)和范围,然后按**同步到 Anki**(或*工具 ▸ 与 Anki 同步*)。*检查连接*可测试该连接。
+2. 在 Anki 运行的情况下,在 ZettelApp 中打开**复习**,选择牌组名称(*选项 ▸ Anki* 中的 **默认牌组**,起初为 `ZettelApp`)和范围,然后按**同步到 Anki**(或*工具 ▸ 与 Anki 同步*)。*检查连接*可测试该连接。
 
 ZettelApp 会记住每张卡片对应哪条 Anki 笔记。再次同步会**更新**卡片而不是添加重复项,即使这份记忆丢失了,也可以通过 *CardKey* 重新找到卡片。你在 ZettelApp 中删除的卡片不会从 Anki 中删除。
 

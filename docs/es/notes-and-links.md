@@ -85,7 +85,9 @@ Un `[[enlace]]` simple es *Relacionada con*.
 
 Un tipo **dirigido** se lee distinto desde cada lado. Si la nota A *apoya a* la nota B, los retroenlaces de B
 muestran A como *Apoyada por*. Los enlaces dirigidos tienen puntas de flecha en el grafo y siguen siendo dirigidos en las exportaciones.
-Los tipos **no dirigidos**, como *Relacionada con* y *Contradice a*, se leen igual en ambos sentidos.
+Los tipos **no dirigidos**, como *Relacionada con* y *Contradice a*, se leen igual en ambos sentidos. Cuando ambas notas se escriben un enlace no dirigido entre sí, se muestra una sola vez.
+
+Para que el texto de ambas notas vaya a la par, ajusta *Herramientas ▸ Opciones ▸ Tipos de enlace ▸ Cuando una nota enlaza otra en su texto* para escribir el enlace al final o al principio de la nota enlazada: al escribir `discusses:: [[B]]` en A se añade `discussed_by:: [[A]]` a B (y `related:: [[A]]` para un enlace simple), y al borrar el enlace del texto de A esa línea desaparece de B. Viene desactivado.
 
 Para invertir un enlace dirigido creado al revés, haz clic derecho en él en el panel lateral y elige
 **Invertir dirección**. Los enlaces escritos en el texto se invierten editando el texto.

@@ -169,7 +169,7 @@ Consulta [Exportar e importar](export-import.md) y [Anki](review-and-anki.md#ank
 
 ## 15. Sabe dónde viven tus datos
 
-- Tus notas viven en la carpeta de la bóveda (*Archivo ▸ Mostrar bóveda en el Explorador de archivos*): `zettel.db` más `assets`.
+- Tus notas viven en la carpeta de la bóveda (*Archivo ▸ Mostrar bóveda en el administrador de archivos*): `zettel.db` más `assets`.
 - Se hace una copia de seguridad automáticamente una vez al día, y *Archivo ▸ Hacer copia de seguridad ahora* hace una en cualquier momento.
 - Las notas eliminadas van a la **papelera**, bajo la lista de notas, donde puedes restaurarlas.
 

@@ -26,7 +26,7 @@ Claude Desktop や Claude Code などの AI アシスタントが、[MCP](mcp-se
 
 ### ノートはどこにありますか?
 
-保管庫フォルダー (既定では **Documents\ZettelApp**) にあります。`zettel.db` データベースと `assets` フォルダーです。*ファイル ▸ 保管庫をエクスプローラーで表示*で開けます。
+保管庫フォルダー (既定では **Documents\ZettelApp**) にあります。`zettel.db` データベースと `assets` フォルダーです。*ファイル ▸ 保管庫をファイルマネージャーで表示*で開けます。
 
 ### OneDrive、Dropbox、Google Drive で使えますか?
 

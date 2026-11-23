@@ -28,7 +28,7 @@ button exports the notes on screen) and from a graph node's menu.
 
 Exports are written to a temporary file and moved into place only when complete, so an interrupted
 export never leaves a half-written file. They run in the background, and **Show in folder** reveals the
-result in File Explorer.
+result in your file manager.
 
 Mind maps also have their own export (PNG, SVG or FreeMind `.mm`) in the **Mind map** tab, and the graph
 can be saved as a PNG image.

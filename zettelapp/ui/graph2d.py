@@ -5,7 +5,16 @@ from __future__ import annotations
 import math
 
 from PySide6.QtCore import QPointF, QRectF, Qt, QTimer, Signal
-from PySide6.QtGui import QBrush, QColor, QFontMetricsF, QPainter, QPainterPath, QPen, QPixmap
+from PySide6.QtGui import (
+    QBrush,
+    QColor,
+    QFontMetricsF,
+    QImage,
+    QPainter,
+    QPainterPath,
+    QPen,
+    QPixmap,
+)
 from PySide6.QtWidgets import (
     QGraphicsItem,
     QGraphicsObject,
@@ -25,6 +34,7 @@ from zettelapp.ui.graph_common import (
     label_point,
     padded_hull,
     parallel_lanes,
+    render_scene,
 )
 from zettelapp.ui.link_style import link_pen, tip_pen
 
@@ -457,21 +467,8 @@ class Graph2DView(QGraphicsView):
     def wheelEvent(self, event) -> None:  # noqa: N802
         self.zoom(1.15 if event.angleDelta().y() > 0 else 1 / 1.15)
 
-    def render_image(self, scale: float = 2.0):
-        from PySide6.QtGui import QImage
-
-        rect = self.scene().itemsBoundingRect().adjusted(-30, -30, 30, 30)
-        image = QImage(
-            int(rect.width() * scale), int(rect.height() * scale), QImage.Format.Format_ARGB32
-        )
-        image.fill(theme.current().q("surface"))
-        painter = QPainter(image)
-        painter.setRenderHints(
-            QPainter.RenderHint.Antialiasing | QPainter.RenderHint.TextAntialiasing
-        )
-        self.scene().render(painter, QRectF(image.rect()), rect)
-        painter.end()
-        return image
+    def render_image(self, scale: float = 2.0) -> QImage:
+        return render_scene(self.scene(), 30, scale)
 
 
 __all__ = ["Graph2DView", "MAX_GROUP_COLORS", "node_radius"]

@@ -20,7 +20,7 @@ then the underlined letter.
 | Move selected notes to Trash (in the note list) | Del |
 | Select several notes | Ctrl+click, Shift+click, Shift+arrows |
 | Bold / italic | Ctrl+B / Ctrl+I (on part of a bold or italic stretch: takes it off that part) |
-| Type in several places at once | Alt+click to add a caret (again to remove it), Esc for one caret |
+| Type in several places at once | Alt+Shift+click (or Alt+click) to add a caret (again to remove it), Esc for one caret. On Linux, use Alt+Shift+click: many desktops keep Alt+click for moving windows |
 | Undo / redo | Ctrl+Z / Ctrl+Y |
 | Complete a `[[link]]` | Type `[[`, then pick a title and press Enter |
 | Follow a link or `#tag` in the editor | Ctrl+click (in the preview, a plain click) |
@@ -37,6 +37,8 @@ then the underlined letter.
 | Review | Ctrl+4 |
 | Ask your notes | Ctrl+5 |
 | Full screen | F11 |
+| Hide or show the note list | Ctrl+Shift+L, or click the tab on its edge (drag the edge to resize) |
+| Hide or show the links panel | Ctrl+Shift+K, or click the tab on its edge |
 
 ## Files and app
 
