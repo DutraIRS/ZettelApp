@@ -1083,5 +1083,6 @@
  "The text of the whole program": "整个程序的文字",
  "Theme": "主题",
  "Use the theme's colour": "使用主题颜色",
- "The image on the clipboard could not be read. Copy it again, then paste.": "无法读取剪贴板中的图片。请重新复制，然后粘贴。"
+ "The image on the clipboard could not be read. Copy it again, then paste.": "无法读取剪贴板中的图片。请重新复制，然后粘贴。",
+ "Registered by the ZettelApp package.": "已由 ZettelApp 软件包注册。"
 }

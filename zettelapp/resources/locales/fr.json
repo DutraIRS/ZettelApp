@@ -1114,5 +1114,6 @@
  "The text of the whole program": "Le texte de tout le programme",
  "Theme": "Thème",
  "Use the theme's colour": "Utiliser la couleur du thème",
- "The image on the clipboard could not be read. Copy it again, then paste.": "Impossible de lire l’image du presse-papiers. Copiez-la de nouveau, puis collez-la."
+ "The image on the clipboard could not be read. Copy it again, then paste.": "Impossible de lire l’image du presse-papiers. Copiez-la de nouveau, puis collez-la.",
+ "Registered by the ZettelApp package.": "Enregistré par le paquet ZettelApp."
 }

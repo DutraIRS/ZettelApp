@@ -1238,5 +1238,6 @@
  "The text of the whole program": "نص البرنامج كله",
  "Theme": "السمة",
  "Use the theme's colour": "استخدام لون السمة",
- "The image on the clipboard could not be read. Copy it again, then paste.": "تعذّرت قراءة الصورة الموجودة في الحافظة. انسخها مرة أخرى ثم الصقها."
+ "The image on the clipboard could not be read. Copy it again, then paste.": "تعذّرت قراءة الصورة الموجودة في الحافظة. انسخها مرة أخرى ثم الصقها.",
+ "Registered by the ZettelApp package.": "مسجّلة بواسطة حزمة ZettelApp."
 }

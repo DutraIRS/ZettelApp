@@ -1083,5 +1083,6 @@
  "The text of the whole program": "프로그램 전체의 글자",
  "Theme": "테마",
  "Use the theme's colour": "테마 색상 사용",
- "The image on the clipboard could not be read. Copy it again, then paste.": "클립보드의 이미지를 읽을 수 없습니다. 다시 복사한 다음 붙여 넣으세요."
+ "The image on the clipboard could not be read. Copy it again, then paste.": "클립보드의 이미지를 읽을 수 없습니다. 다시 복사한 다음 붙여 넣으세요.",
+ "Registered by the ZettelApp package.": "ZettelApp 패키지가 등록했어요."
 }

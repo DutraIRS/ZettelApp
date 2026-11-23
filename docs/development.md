@@ -73,7 +73,32 @@ This produces:
 - `dist/ZettelApp-Setup.exe`, when [Inno Setup 6](https://jrsoftware.org/isinfo.php) is installed: a
   per-user installer (no administrator rights) with a language picker, Start menu shortcut, uninstaller
   and `zettelapp://` link registration;
+- `dist/ZettelApp.msix`, when the Windows SDK is installed: the Microsoft Store package
+  (`packaging/build-msix.ps1`; `-SkipMsix` leaves it out);
 - `dist/SHA256SUMS.txt`.
+
+### The Microsoft Store package (MSIX)
+
+`packaging/build-msix.ps1` packs `dist/ZettelApp/` with MakeAppx: a full-trust desktop app with the
+`zettelapp://` protocol and a `zettelapp-mcp.exe` execution alias in its manifest, logos drawn by
+`packaging/make_msix_assets.py` and indexed by MakePri. The `.msix` is unsigned: Partner Center signs
+it on upload. Pass the identity Partner Center reserved for the app (*Product management ▸ Product
+identity*): `-IdentityName <Package/Identity/Name> -Publisher "<Package/Identity/Publisher>"`.
+
+Inside the package, the app detects it (`winintegration.is_packaged()`): it doesn't check for updates
+(the Store updates it), Options doesn't offer to register `zettelapp://` links (the manifest does), and
+the Claude Desktop setup points at the `zettelapp-mcp.exe` alias, since files inside `WindowsApps`
+can't be started by their path.
+
+To try a package on your own computer:
+
+```powershell
+pwsh packaging/build.ps1 -SignMsixForTesting   # also writes dist/ZettelApp-test.msix and .cer
+certutil -addstore TrustedPeople dist\ZettelApp-test.cer   # once, as administrator
+Add-AppxPackage dist\ZettelApp-test.msix
+```
+
+Remove it with `Get-AppxPackage DutraIRS.ZettelApp | Remove-AppxPackage`.
 
 The executables carry Windows version information and the app icon. One-folder builds start faster and
 trigger fewer antivirus false positives than single-file builds.

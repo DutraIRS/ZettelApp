@@ -74,8 +74,26 @@ MCP server <code>zettelapp-mcp.exe</code>;</li>
 <li><code>dist/ZettelApp-Setup.exe</code>, when <a href="https://jrsoftware.org/isinfo.php">Inno Setup 6</a> is installed: a
 per-user installer (no administrator rights) with a language picker, Start menu shortcut, uninstaller
 and <code>zettelapp://</code> link registration;</li>
+<li><code>dist/ZettelApp.msix</code>, when the Windows SDK is installed: the Microsoft Store package
+(<code>packaging/build-msix.ps1</code>; <code>-SkipMsix</code> leaves it out);</li>
 <li><code>dist/SHA256SUMS.txt</code>.</li>
 </ul>
+<h3 id="the-microsoft-store-package-msix">The Microsoft Store package (MSIX)</h3>
+<p><code>packaging/build-msix.ps1</code> packs <code>dist/ZettelApp/</code> with MakeAppx: a full-trust desktop app with the
+<code>zettelapp://</code> protocol and a <code>zettelapp-mcp.exe</code> execution alias in its manifest, logos drawn by
+<code>packaging/make_msix_assets.py</code> and indexed by MakePri. The <code>.msix</code> is unsigned: Partner Center signs
+it on upload. Pass the identity Partner Center reserved for the app (<em>Product management ▸ Product
+identity</em>): <code>-IdentityName &lt;Package/Identity/Name&gt; -Publisher &quot;&lt;Package/Identity/Publisher&gt;&quot;</code>.</p>
+<p>Inside the package, the app detects it (<code>winintegration.is_packaged()</code>): it doesn't check for updates
+(the Store updates it), Options doesn't offer to register <code>zettelapp://</code> links (the manifest does), and
+the Claude Desktop setup points at the <code>zettelapp-mcp.exe</code> alias, since files inside <code>WindowsApps</code>
+can't be started by their path.</p>
+<p>To try a package on your own computer:</p>
+<pre><code class="language-powershell">pwsh packaging/build.ps1 -SignMsixForTesting   # also writes dist/ZettelApp-test.msix and .cer
+certutil -addstore TrustedPeople dist\ZettelApp-test.cer   # once, as administrator
+Add-AppxPackage dist\ZettelApp-test.msix
+</code></pre>
+<p>Remove it with <code>Get-AppxPackage DutraIRS.ZettelApp | Remove-AppxPackage</code>.</p>
 <p>The executables carry Windows version information and the app icon. One-folder builds start faster and
 trigger fewer antivirus false positives than single-file builds.</p>
 <h2 id="build-the-linux-app">Build the Linux app</h2>

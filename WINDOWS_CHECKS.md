@@ -8,7 +8,8 @@ temporary: it is deleted in the release commit.
 "show accent colour on title bars" on, Portuguese (Brazil) UI and keyboard plus en-US). Results
 are under each item. Five bugs were found and fixed on Windows (commits on `android-port`, each
 with a test and a CHANGELOG line); nothing else differs from 1.3.1 except what is listed as
-intended. Two items need a person at the machine (marked **needs a person**).
+intended. The two items that needed a person at the machine (alarm toast, Anki link) were
+confirmed by the user.
 
 ## Setup and how to report
 
@@ -143,7 +144,8 @@ title bar mode, the keyboard layout and the native file dialog's folder.
     the first window comes back from minimised. From source it also came to the front; installed,
     Windows kept it behind because the test launcher was itself in the background (Windows only
     lets a foreground app pass the foreground on; Anki is in the foreground when you click a
-    link). **Needs a person:** click a `zettelapp://` link in Anki once.
+    link). **Confirmed by a person:** a test deck's `zettelapp://` links (the card's Source link
+    and a `[[link]]` in its text), clicked in Anki, opened the notes in ZettelApp.
   - **Bug found and fixed:** a maximised window came back un-maximised (the restore used
     `showNormal()`); it now keeps its state, for links and for alarms. (`78025ba`)
 - [x] **File dialogs reopen the last folder:** *Insert ▸ Image…*, *Insert ▸ Link to a File…*, the
@@ -160,8 +162,8 @@ title bar mode, the keyboard layout and the native file dialog's folder.
   - With the window minimised, the alarm fires through `QSystemTrayIcon.showMessage` (tray
     available) and the in-app strip shows "Alarm: …". What a click does (`_open_alarm_note`):
     opens the note and brings the window back — **un-maximised before the fix above, maximised
-    now**. **Needs a person:** what the toast looks and sounds like (Focus Assist and notification
-    settings decide); the screen grab missed it.
+    now**. **Confirmed by a person:** the Windows notification shows "ZettelApp", the note's title
+    and "Time for this note." (in the UI language), as in 1.3.0.
 - [x] **Note list snippets** keep underscores inside words: a note starting with
   `supported_by:: [[X]]` shows that, not `supportedby::`.
   - Shows `supported_by:: X …`.

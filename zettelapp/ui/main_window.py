@@ -1500,8 +1500,9 @@ class MainWindow(QMainWindow):
     # --- updates --------------------------------------------------------------
 
     def check_for_updates(self) -> None:
-        """Quietly ask the website for the latest version; failures never show anything."""
-        if settings.get(settings.UPDATE_CHECK):
+        """Quietly ask the website for the latest version; failures never show anything.
+        The Microsoft Store build doesn't ask: the Store updates it."""
+        if settings.get(settings.UPDATE_CHECK) and not winintegration.is_packaged():
             run_task(
                 available_update, on_done=self._show_update_notice, on_error=lambda *_unused: None
             )

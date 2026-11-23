@@ -124,6 +124,8 @@ def mcp_command(vault: Path | None, allow_writes: bool) -> tuple[str, list[str],
     args = ["--vault", str(vault)] if vault else []
     if allow_writes:
         args.append("--allow-writes")
+    if winintegration.is_packaged():  # Microsoft Store build
+        return str(winintegration.mcp_alias()), args, {}
     if getattr(sys, "frozen", False):
         suffix = ".exe" if sys.platform == "win32" else ""
         return str(Path(sys.executable).with_name(f"zettelapp-mcp{suffix}")), args, {}
@@ -1302,9 +1304,15 @@ class OptionsDialog(QDialog):
         row.addWidget(unregister)
         row.addStretch(1)
         lay.addLayout(row)
+        if winintegration.is_packaged():  # the package's manifest registers them
+            register.setEnabled(False)
+            unregister.setEnabled(False)
         self._update_protocol()
 
     def _update_protocol(self) -> None:
+        if winintegration.is_packaged():
+            self.protocol_status.setText(_("Registered by the ZettelApp package."))
+            return
         command = winintegration.registered_command()
         self.protocol_status.setText(
             _("Registered: {command}").format(command=command) if command else _("Not registered.")
