@@ -1,4 +1,5 @@
 import struct
+import sys
 import zlib
 
 import pytest
@@ -15,6 +16,27 @@ def _own_local_data(tmp_path_factory, monkeypatch):
     monkeypatch.setenv("LOCALAPPDATA", str(tmp_path_factory.mktemp("local")))
     monkeypatch.setenv("XDG_DATA_HOME", str(tmp_path_factory.mktemp("data")))
     monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path_factory.mktemp("cache")))
+
+
+@pytest.fixture(autouse=True, scope="session")
+def _tidy_qt_at_exit():
+    """Let go of every widget and queued event before Python shuts down, so Qt does not crash
+    while the interpreter exits after a long run (it did on Windows, with all tests green)."""
+    yield
+    qtwidgets = sys.modules.get("PySide6.QtWidgets")
+    if qtwidgets is None:
+        return
+    import gc
+
+    app = qtwidgets.QApplication.instance()
+    if app is not None:
+        for widget in app.topLevelWidgets():
+            widget.close()
+            widget.deleteLater()
+        for _ in range(3):
+            app.processEvents()
+            app.sendPostedEvents(None, 0)  # 0 = QEvent.DeferredDelete
+    gc.collect()
 
 
 @pytest.fixture
