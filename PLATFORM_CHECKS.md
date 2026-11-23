@@ -158,9 +158,20 @@ before switching). The earlier Windows pass never switched Windows itself.
   `zettelapp://note/<id>` link opens the note; no update notice at start; *Options ▸ MCP* points
   Claude Desktop at the `zettelapp-mcp.exe` alias and a client can call tools with the switch on;
   this round's items in section 1 also work in the package. Uninstall leaves the vault.
-- [ ] **Alarm toast click** with the window maximised and then minimised: the note opens and
+  *Windows, 23 November (package built from b445927, test-signed): starts from the Start menu
+  with its logo in the taskbar; inside the package `is_packaged()` is true, Desktop integration
+  says "Registered by the ZettelApp package.", no update request is made, Claude Desktop is
+  pointed at the alias; `zettelapp://note/<id>` opened the note in the running package with no
+  app chooser; through the alias an MCP client initialised, listed the six tools and searched
+  with the switch on, and was refused with the switch off; the editor text size applied at start;
+  uninstalling removed the package and alias and left the vault untouched.*
+- [x] **Alarm toast click** with the window maximised and then minimised: the note opens and
   the window comes back maximised (the toast's look was confirmed; the click after the fix was
-  not watched).
+  not watched). **Fails on Windows 11**: with the built `ZettelApp.exe`, clicking the toast
+  shows the desktop (every window minimised) instead of the note; seen by the user and twice in
+  the scripted run. The toast itself appears ("ZettelApp", title, note text). To investigate
+  before 1.4.0: the app shows the alarm through `QSystemTrayIcon.showMessage` (a legacy balloon
+  Windows turns into a toast).
 - [x] **Options ▸ AI assistant** wording, by eye: save a key, read the hint ("Key … saved on this
   computer."), delete it. *Windows: "Key “Platform check” saved on this computer.", read back
   from Credential Manager, then "… deleted from this computer." and gone from `cmdkey /list`.*
