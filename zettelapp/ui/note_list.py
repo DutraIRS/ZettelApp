@@ -408,6 +408,10 @@ class NoteListPanel(QWidget):
             # on every step, and Shift/Ctrl+click has extended the selection first.
             self._anchor_timer.start()
 
+    def stop_reordering(self) -> None:
+        """Drop a pending reorder: the vault is closing and it would read a closed database."""
+        self._anchor_timer.stop()
+
     def _anchor_moved(self) -> None:
         # Not while several notes are picked: reordering would lose the selection.
         if len(self.view.selectionModel().selectedIndexes()) <= 1:

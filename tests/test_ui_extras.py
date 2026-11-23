@@ -445,3 +445,20 @@ def test_the_editor_text_size_applies_from_the_start(tmp_path, monkeypatch):
     finally:
         w.close()
         w.deleteLater()
+
+
+def test_closing_the_vault_drops_a_pending_reorder(window, monkeypatch):
+    """Ordered by closeness, opening a note reorders the list a moment later; closing the vault
+    in that moment let the reorder read the closed database."""
+    import sys
+
+    errors = []
+    monkeypatch.setattr(sys, "excepthook", lambda *exc: errors.append(exc))
+    window.list.sort_key = "meaning"
+    first = _new_note(window, "One idea.")
+    other = window.vault.create_note("Other", "Another idea.")
+    window.open_note(other.id)
+    assert first.id != other.id
+    window.close_vault()
+    pump(500)
+    assert errors == []

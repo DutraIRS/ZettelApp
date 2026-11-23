@@ -700,6 +700,7 @@ class MainWindow(QMainWindow):
         self.editor.load(None)
         self.semantic_timer.stop()
         self.semantic.cancel_sync()
+        self.list.stop_reordering()
         self.vault.close()
         self.vault = None
 
