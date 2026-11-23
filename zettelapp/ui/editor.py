@@ -74,6 +74,9 @@ def friendly_time(iso: str) -> str:
     return QLocale().toString(when.astimezone().date(), "d MMM yyyy")
 
 
+EDIT, SPLIT, READING = range(3)  # the editor's view modes
+
+
 class NoteEditor(QWidget):
     saved = Signal(str)
     contentChanged = Signal()
@@ -179,7 +182,7 @@ class NoteEditor(QWidget):
         top = Qt.AlignmentFlag.AlignTop
         self.mode_group = QButtonGroup(self)
         for i, (name, tip) in enumerate(
-            (("edit", _("Edit")), ("view", _("Split view")), ("document", _("Preview")))
+            (("edit", _("Edit")), ("view", _("Split view")), ("document", _("Reading view")))
         ):
             b = tool_button(name, _("{tip} (Ctrl+E cycles)").format(tip=tip), checkable=True)
             self.mode_group.addButton(b, i)
@@ -354,8 +357,9 @@ class NoteEditor(QWidget):
         self.tabs.addTab(cards, icons.icon("cards"), _("Flashcards"))
         layout.addWidget(self.tabs, 1)
 
+        self._build_text_fold()
         self._build_more_menu()
-        self.set_view_mode(1)
+        self.set_view_mode(settings.get(settings.EDITOR_VIEW_MODE), remember=False)
 
     # --- loading and saving -------------------------------------------------
 
@@ -370,6 +374,7 @@ class NoteEditor(QWidget):
         self.title.setText(note.title)
         self.body.setPlainText(note.body)
         self.url.setText(note.url)
+        self._refresh_source_row()
         self.tags.set_tags(self.window.vault.manual_tags(note.id), extract_hashtags(note.body))
         self.tags.set_known_tags([t for t, _unused in self.window.vault.all_tags()])
         self.mindmap.set_mindmap(note.mindmap)
@@ -381,6 +386,8 @@ class NoteEditor(QWidget):
         self._refresh_preview()
         self.body.document().clearUndoRedoStacks()
         if not note.title:
+            if self.mode_group.checkedId() == READING:  # a new note is for writing
+                self.set_view_mode(SPLIT, remember=False)
             self.title.setFocus()
 
     def _edited(self, *_args) -> None:
@@ -408,8 +415,8 @@ class NoteEditor(QWidget):
     def show_find(self, replace: bool = False) -> None:
         """Find (and replace) in the note text, which is shown if only the preview was."""
         self.tabs.setCurrentIndex(0)
-        if self.mode_group.checkedId() == 2:  # only the preview: show the text beside it
-            self.set_view_mode(1)
+        if self.mode_group.checkedId() == READING:  # show the text beside the preview
+            self.set_view_mode(SPLIT)
         self.find_bar.open(replace)
 
     def finding(self) -> bool:
@@ -494,16 +501,58 @@ class NoteEditor(QWidget):
 
     # --- view modes -----------------------------------------------------
 
-    def set_view_mode(self, mode: int) -> None:
+    def _build_text_fold(self) -> None:
+        """A sash and a tab on the preview's edge fold the Markdown text away, to read.
+
+        They stand on the editor itself, so the tab lines up with the note list's and the
+        links panel's tabs, which stand on the editor's sides.
+        """
+        from zettelapp.ui.panel_sash import CollapseButton, PanelFold, PanelSash
+
+        fold = PanelFold(self.split, self.text_pane, self.preview)
+        self.text_sash = PanelSash(fold, self.toggle_text, self)
+        tips = (
+            _("Hide the text and read the note, or drag to resize it"),
+            _("Show the text beside the preview to edit the note"),
+        )
+        self.text_tab = CollapseButton(fold, self.text_sash, tips, self, floor=self)
+        self.text_tab.clicked.connect(lambda _checked=False: self.toggle_text())
+
+    def toggle_text(self) -> None:
+        """Fold the Markdown text away to read the note, or bring it back beside the preview."""
+        self.set_view_mode(SPLIT if self.text_pane.isHidden() else READING)
+
+    def set_view_mode(self, mode: int, remember: bool = True) -> None:
+        """Show the text (EDIT), text and preview (SPLIT) or only the preview, read-only (READING).
+
+        A mode the reader chooses is remembered for the next start; one the app switches to,
+        such as SPLIT for a new note, is not.
+        """
+        mode = mode if mode in (EDIT, SPLIT, READING) else SPLIT
         self.mode_group.button(mode).setChecked(True)
-        self.text_pane.setVisible(mode in (0, 1))
-        self.preview.setVisible(mode in (1, 2))
+        self.text_pane.setVisible(mode in (EDIT, SPLIT))
+        self.preview.setVisible(mode in (SPLIT, READING))
+        reading = mode == READING
         for b in self.fmt_buttons:
-            b.setEnabled(mode != 2)
-        if mode == 1:
+            b.setEnabled(not reading)
+        self.title.setReadOnly(reading)
+        self.url.setReadOnly(reading)
+        self.preview.set_reading(reading)
+        self._refresh_source_row()
+        if mode == SPLIT:
             self.split.setSizes([1, 1])
+        if remember:
+            settings.put(settings.EDITOR_VIEW_MODE, mode)
         self._refresh_preview()
         self.tabs.setCurrentIndex(0)
+        self.text_sash.place()
+        self.text_tab.refresh()
+
+    def _refresh_source_row(self) -> None:
+        """Reading leaves out an empty source link: there is nothing to read or open."""
+        shown = self.mode_group.checkedId() != READING or bool(self.url.text())
+        self.url.setVisible(shown)
+        self.open_url.setVisible(shown)
 
     def cycle_view_mode(self) -> None:
         self.set_view_mode((self.mode_group.checkedId() + 1) % 3)

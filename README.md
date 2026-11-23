@@ -69,7 +69,7 @@ From the [latest release](https://github.com/DutraIRS/ZettelApp/releases/latest)
 
 | Download | Use it when |
 |---|---|
-| `ZettelApp-Linux-amd64.deb` | You use Debian, Ubuntu, Mint or another `.deb`-based distribution: install it with `sudo apt install ./ZettelApp-Linux-amd64.deb` (or open it in your software centre, which then offers updates). |
+| `ZettelApp-Linux-amd64.deb` | You use Debian, Ubuntu, Mint or another `.deb`-based distribution: install it with `sudo apt install ./ZettelApp-Linux-amd64.deb` (or open it in your software centre). |
 | `ZettelApp-Linux-x86_64.tar.gz` | You want a portable build, or use another distribution: unpack it anywhere and run `ZettelApp/zettelapp`. |
 
 Officially supported: **Debian 13 and Ubuntu 24.04 LTS or newer** (and distributions built on them,

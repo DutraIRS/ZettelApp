@@ -401,3 +401,16 @@ def test_alt_click_on_the_caret_just_added_takes_it_away(editor):
     assert len(editor.extra_cursors) == 1
     QTest.mouseClick(editor.viewport(), Qt.MouseButton.LeftButton, alt, point)
     assert editor.extra_cursors == [] and editor.textCursor().position() == 0
+
+
+def test_a_picture_alone_is_not_spaced_like_a_line_of_text():
+    """A paragraph's 150 % line height would leave a gap under a picture the size of half of it."""
+    from zettelapp.core.render import NoteRenderer
+    from zettelapp.ui.preview import preview_css
+
+    html = NoteRenderer(lambda _t: None).render(
+        "Before.\n\n![A picture](asset:a9d143c2676f2fa2eefd.png)"
+    )
+    assert '<p class="picture"><img ' in html
+    assert "<p>Before.</p>" in html  # text paragraphs keep their line height
+    assert "p.picture" in preview_css()

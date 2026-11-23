@@ -25,6 +25,40 @@ def test_split_view_is_the_default(window):
     assert window.editor.mode_group.checkedId() == 1
 
 
+def test_reading_view_is_read_only_and_remembered(window):
+    from zettelapp import settings
+    from zettelapp.ui.editor import READING, SPLIT
+
+    _new_note(window, "Some text.")
+    editor = window.editor
+    editor.set_view_mode(READING)
+    assert editor.text_pane.isHidden() and not editor.preview.isHidden()
+    assert editor.title.isReadOnly() and editor.url.isReadOnly()
+    assert not any(b.isEnabled() for b in editor.fmt_buttons)
+    assert editor.url.isHidden()  # an empty source link is left out
+    assert settings.get(settings.EDITOR_VIEW_MODE) == READING
+    blank = window.vault.create_note("", "")
+    window.open_note(blank.id)  # a new note opens for writing, without forgetting the choice
+    assert editor.mode_group.checkedId() == SPLIT and not editor.title.isReadOnly()
+    assert settings.get(settings.EDITOR_VIEW_MODE) == READING
+
+
+def test_the_text_folds_away_with_its_tab(window):
+    from zettelapp.ui.editor import EDIT, READING, SPLIT
+
+    _new_note(window, "Some text.")
+    pump(50)
+    editor = window.editor
+    assert editor.text_tab.isVisible()
+    editor.text_tab.click()
+    assert editor.mode_group.checkedId() == READING
+    assert editor.text_tab.toolTip().startswith("Show the text")
+    editor.text_tab.click()
+    assert editor.mode_group.checkedId() == SPLIT
+    editor.set_view_mode(EDIT)  # no preview to fold the text against
+    assert not editor.text_sash.isVisible() and not editor.text_tab.isVisible()
+
+
 def test_trash_button_sits_before_bold_and_not_in_the_more_menu(window):
     from PySide6.QtWidgets import QToolButton
 
@@ -365,3 +399,13 @@ def test_an_alarm_or_a_link_brings_a_maximised_window_back_maximised(window):
     window.bring_forward()
     assert window.windowState() & Qt.WindowState.WindowMaximized
     assert not window.windowState() & Qt.WindowState.WindowMinimized
+
+
+def test_the_main_window_passes_theme_changes_on(window):
+    from PySide6.QtCore import QEvent
+    from PySide6.QtWidgets import QApplication
+
+    calls = []
+    window.desktopThemeChanged.connect(lambda: calls.append(1))
+    QApplication.sendEvent(window, QEvent(QEvent.Type.ThemeChange))
+    assert calls == [1]

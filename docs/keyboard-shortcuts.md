@@ -14,7 +14,7 @@ then the underlined letter.
 | Link to note | Ctrl+K |
 | Insert image | Ctrl+Shift+I |
 | Add flashcard | Ctrl+Shift+F |
-| Toggle edit / split / preview | Ctrl+E |
+| Toggle edit / split / reading | Ctrl+E |
 | Duplicate note | Ctrl+D |
 | Move note to Trash | Ctrl+Delete |
 | Move selected notes to Trash (in the note list) | Del |
@@ -39,6 +39,7 @@ then the underlined letter.
 | Full screen | F11 |
 | Hide or show the note list | Ctrl+Shift+L, or click the tab on its edge (drag the edge to resize) |
 | Hide or show the links panel | Ctrl+Shift+K, or click the tab on its edge |
+| Fold the note text away to read, or bring it back | click the tab between the text and the preview |
 
 ## Files and app
 

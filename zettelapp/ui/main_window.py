@@ -7,7 +7,7 @@ import sys
 from datetime import date
 from pathlib import Path
 
-from PySide6.QtCore import QByteArray, QSize, Qt, QTimer, QUrl
+from PySide6.QtCore import QByteArray, QEvent, QSize, Qt, QTimer, QUrl, Signal
 from PySide6.QtGui import QAction, QActionGroup, QDesktopServices, QKeySequence
 from PySide6.QtWidgets import (
     QApplication,
@@ -180,6 +180,8 @@ def unique_access_keys(actions) -> None:
 
 
 class MainWindow(QMainWindow):
+    desktopThemeChanged = Signal()  # the system's theme changed, its accent colour perhaps
+
     def __init__(self):
         super().__init__()
         self.vault: Vault | None = None
@@ -1436,6 +1438,11 @@ class MainWindow(QMainWindow):
         settings.put(settings.THEME, mode)
         self.settings_changed()
 
+    def changeEvent(self, event) -> None:  # noqa: N802 - Qt API
+        super().changeEvent(event)
+        if event.type() == QEvent.Type.ThemeChange:
+            self.desktopThemeChanged.emit()
+
     def settings_changed(self) -> None:
         theme.apply_theme(
             QApplication.instance(), settings.get(settings.THEME), colours=settings.theme_colours()
@@ -1443,6 +1450,7 @@ class MainWindow(QMainWindow):
         winintegration.set_window_frame_dark(int(self.winId()), theme.current().dark)
         self.info.refresh_style()  # a message on screen keeps the old theme's colours otherwise
         self.editor.body.set_font_size(settings.get(settings.EDITOR_FONT_SIZE))
+        self.editor.preview.set_font_size(settings.get(settings.EDITOR_FONT_SIZE))
         self.editor.refresh_style()
         self._configure_suggestions()
         self._configure_semantic()

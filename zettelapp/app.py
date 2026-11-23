@@ -293,6 +293,14 @@ def main(argv: list[str] | None = None) -> int:
     except AttributeError:  # pragma: no cover - Qt < 6.5
         pass
     theme.watch_gnome_dark_style(theme_switch.start, window)
+
+    def follow_desktop_accent() -> None:
+        if theme.desktop_accent_changed():  # never for the app's own re-theme
+            window.settings_changed()
+
+    accent_switch = QTimer(window, singleShot=True, interval=150, timeout=follow_desktop_accent)
+    theme.watch_desktop_accent(accent_switch.start, window)
+    window.desktopThemeChanged.connect(accent_switch.start)
     log.info("%s %s started", APP_NAME, __version__)
     code = app.exec()
     server.close()

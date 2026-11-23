@@ -25,7 +25,7 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 
 | Descarga | Úsala cuando |
 |---|---|
-| `ZettelApp-Linux-amd64.deb` | Debian, Ubuntu, Mint u otra distribución basada en `.deb`. Instálala con `sudo apt install ./ZettelApp-Linux-amd64.deb`, o ábrela en tu centro de software, que después ofrecerá actualizaciones. |
+| `ZettelApp-Linux-amd64.deb` | Debian, Ubuntu, Mint u otra distribución basada en `.deb`. Instálala con `sudo apt install ./ZettelApp-Linux-amd64.deb`, o ábrela en tu centro de software. |
 | `ZettelApp-Linux-x86_64.tar.gz` | Cualquier otra distribución, o sin instalación: descomprímela donde quieras y ejecuta `ZettelApp/zettelapp`. |
 
 Ambas incluyen Python y Qt; necesitan un escritorio de 64 bits (X11 o Wayland — GNOME, KDE y otros)
@@ -78,6 +78,8 @@ sugerencias de enlaces, tipos de enlace, IA, servidor MCP, Anki, Zotero, integra
 
 La aplicación sigue tu configuración **claro/oscuro** y el **color de énfasis** del sistema. Puedes forzar un tema en
 *Ver ▸ Tema*.
+
+Si cambias el color de acento con la app abierta, lo sigue al instante.
 
 *Negro (OLED)* es el tema oscuro sobre negro puro, para pantallas OLED. En *Opciones ▸ General* puedes
 elegir tu propio **color principal** (botones y demás acentos), **color secundario** (enlaces), **color de

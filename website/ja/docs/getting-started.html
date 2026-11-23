@@ -35,7 +35,7 @@
 <tbody>
 <tr>
 <td><code>ZettelApp-Linux-amd64.deb</code></td>
-<td>Debian、Ubuntu、Mint など <code>.deb</code> 系のディストリビューション。<code>sudo apt install ./ZettelApp-Linux-amd64.deb</code> でインストールするか、ソフトウェアセンターで開くと、その後の更新も提案されます。</td>
+<td>Debian、Ubuntu、Mint など <code>.deb</code> 系のディストリビューション。<code>sudo apt install ./ZettelApp-Linux-amd64.deb</code> でインストールするか、ソフトウェアセンターで開きます。</td>
 </tr>
 <tr>
 <td><code>ZettelApp-Linux-x86_64.tar.gz</code></td>
@@ -70,6 +70,7 @@
 </ul>
 <p><strong>オプション</strong> (レールの下部、または<em>ツール ▸ オプション…</em>、Ctrl+,) には、テーマ、エディターの文字サイズ、リンク候補、リンクの種類、AI、MCP サーバー、Anki、Zotero、デスクトップ統合、バックアップなどの設定があります。</p>
 <p>アプリはシステムの<strong>ライト / ダーク</strong>設定と<strong>アクセントカラー</strong>に従います。<em>表示 ▸ テーマ</em>でテーマを固定することもできます。</p>
+<p>アプリを開いたままアクセントカラーを変えても、すぐに反映されます。</p>
 <p><em>ブラック (OLED)</em> は、OLED 画面向けに真っ黒を背景にしたダークテーマです。<em>オプション ▸ 全般</em>では、<strong>メインの色</strong>(ボタンなどのアクセント)、<strong>サブの色</strong>(リンク)、<strong>強調表示の色</strong>(選択したテキストと検索結果)、<strong>文字の色</strong>を自分で選べます。<em>テーマの色を使う</em>で元に戻せます。</p>
 <h2 id="更新">更新</h2>
 <p>起動の約 4 秒後に、ZettelApp は最新バージョンを知るために <code>https://dutrairs.github.io/ZettelApp/version.json</code> へ HTTPS リクエストを 1 回送ります。それ以外は何も送信しません (<code>ZettelApp/&lt;version&gt;</code> のユーザーエージェントのみ)。リクエストが失敗しても何も表示されません。新しいバージョンがあると、右下に小さな通知が表示されます (1 バージョンにつき 1 回まで)。フォーカスを奪うことはありません。<strong>ダウンロード</strong>でブラウザーにリリースページが開き、<strong>✕</strong> で通知が閉じ、<strong>更新を確認しない</strong>で確認がオフになります。再びオンにするには、<em>ツール ▸ オプション ▸ 一般 ▸ ZettelApp の起動時に更新を確認する</em>を使います。ZettelApp が自動で何かをインストールすることはありません。</p>

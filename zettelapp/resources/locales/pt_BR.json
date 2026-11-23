@@ -1114,5 +1114,8 @@
  "The text of the whole program": "O texto de todo o programa",
  "Theme": "Tema",
  "Use the theme's colour": "Usar a cor do tema",
- "The image on the clipboard could not be read. Copy it again, then paste.": "Não foi possível ler a imagem da área de transferência. Copie-a de novo e depois cole."
+ "The image on the clipboard could not be read. Copy it again, then paste.": "Não foi possível ler a imagem da área de transferência. Copie-a de novo e depois cole.",
+ "Reading view": "Modo leitura",
+ "Hide the text and read the note, or drag to resize it": "Ocultar o texto e ler a nota, ou arraste para redimensioná-lo",
+ "Show the text beside the preview to edit the note": "Mostrar o texto ao lado da pré-visualização para editar a nota"
 }

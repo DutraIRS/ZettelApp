@@ -6,8 +6,11 @@ Las notas se escriben en **Markdown**: `**negrita**`, `*cursiva*`, `# encabezado
 `` `código` ``, bloques de código delimitados, tablas y `~~tachado~~`. La barra de herramientas sobre el editor inserta los
 más comunes, y Ctrl+B / Ctrl+I funcionan como siempre. Las listas continúan al pulsar Enter.
 
-El editor tiene tres modos (Ctrl+E alterna entre ellos): **Editar**, **Dividir** (texto y vista previa uno junto
-al otro) y **Vista previa**.
+El editor tiene tres modos (Ctrl+E alterna entre ellos): **Editar**, **Dividir** (texto y vista previa uno
+junto al otro) y **Vista de lectura**: solo la vista previa, en una columna de ancho cómodo, con el título y
+el enlace de origen bloqueados para que nada cambie por accidente. La pestaña entre el texto y la vista
+previa oculta el texto para leer y lo vuelve a mostrar (arrástrala para cambiar el tamaño). El modo que
+elijas se recuerda en el próximo inicio; una nota nueva siempre se abre con su texto, lista para escribir.
 
 Por seguridad, el HTML sin procesar de una nota se muestra como texto y nunca se renderiza. Los enlaces de la vista previa solo abren páginas
 web (`http`, `https`), correo electrónico (`mailto`), notas, elementos de Zotero y archivos locales (se muestran en tu gestor de archivos,
@@ -31,6 +34,9 @@ Al hacer clic en el enlace en la vista previa, o Ctrl+clic en el editor, se abre
 seleccionado**. El archivo en sí nunca se abre ni se ejecuta. Solo se permiten rutas de una unidad local: las rutas de red
 (UNC) como `\\servidor\recurso\archivo.pdf` se rechazan, porque consultarlas puede enviar tus credenciales de red
 a ese servidor.
+
+En KDE Plasma, cuando Dolphin es tu gestor de archivos predeterminado, Dolphin muestra el archivo aunque
+haya otro gestor instalado.
 
 Cada nota tiene:
 

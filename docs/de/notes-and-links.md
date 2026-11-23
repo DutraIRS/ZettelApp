@@ -7,7 +7,10 @@ Notizen werden in **Markdown** geschrieben: `**fett**`, `*kursiv*`, `# Überschr
 verwendete Elemente ein; Ctrl+B und Ctrl+I funktionieren wie gewohnt. Listen werden bei Enter fortgesetzt.
 
 Der Editor hat drei Modi (Ctrl+E wechselt zwischen ihnen): **Bearbeiten**, **Geteilte Ansicht** (Text und
-Vorschau nebeneinander) und **Vorschau**.
+Vorschau nebeneinander) und **Leseansicht**: nur die Vorschau, als Spalte in angenehmer Breite, Titel und
+Quelllink gesperrt, damit sich nichts versehentlich ändert. Die Lasche zwischen Text und Vorschau blendet
+den Text zum Lesen aus und wieder ein (ziehen ändert die Größe). Der gewählte Modus bleibt beim nächsten
+Start erhalten; eine neue Notiz öffnet sich immer mit ihrem Text, bereit zum Schreiben.
 
 Aus Sicherheitsgründen wird rohes HTML in einer Notiz als Text angezeigt und nie dargestellt. Links in der
 Vorschau öffnen nur Webseiten (`http`, `https`), E-Mail-Adressen (`mailto`), Notizen, Zotero-Einträge und
@@ -30,6 +33,9 @@ Wenn Sie in der Vorschau auf den Link oder im Editor bei gedrückter Ctrl-Taste 
 Ihr Dateimanager mit ausgewählter Datei geöffnet**. Die Datei selbst wird weder geöffnet noch ausgeführt.
 Erlaubt sind nur Pfade auf einem lokalen Laufwerk: Netzwerkpfade (UNC) wie `\\server\share\file.pdf` werden
 abgelehnt, denn deren Abfrage könnte Ihre Netzwerk-Anmeldedaten an den Server senden.
+
+Unter KDE Plasma zeigt Dolphin die Datei, wenn es Ihr Standard-Dateimanager ist, auch wenn ein anderer
+Dateimanager installiert ist.
 
 Jede Notiz hat:
 

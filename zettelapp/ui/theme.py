@@ -326,10 +326,24 @@ def _linux_accent(dark: bool) -> str | None:
     return _accent_shade(color, dark) if color else None
 
 
-def _desktop_accent(dark: bool) -> str | None:
+def _read_desktop_accent(dark: bool) -> str | None:
     if sys.platform == "win32":
         return _windows_accent(dark)
     return _linux_accent(dark)
+
+
+_accent_used: str | None = None  # the desktop accent the current theme was built with
+
+
+def _desktop_accent(dark: bool) -> str | None:
+    global _accent_used
+    _accent_used = _read_desktop_accent(dark)
+    return _accent_used
+
+
+def desktop_accent_changed() -> bool:
+    """Whether the desktop's accent colour is no longer the one the theme was built with."""
+    return _read_desktop_accent(current().dark) != _accent_used
 
 
 def _gnome_color_scheme() -> bool | None:
@@ -371,29 +385,24 @@ def _on_gnome() -> bool:
     return "gnome" in desktops
 
 
-class _GnomeStyleWatch(QObject):
-    """Calls back when GNOME's dark style changes, as the settings portal announces it."""
+class _PortalWatch(QObject):
+    """Calls back when the settings portal announces a change to one appearance setting."""
 
-    def __init__(self, callback: Callable[[], None], parent: QObject | None = None):
+    def __init__(self, key: str, callback: Callable[[], None], parent: QObject | None = None):
         super().__init__(parent)
+        self.key = key
         self.callback = callback
 
     @Slot(QDBusMessage)
     def changed(self, message: QDBusMessage) -> None:
-        args = message.arguments()
-        if args[:2] == ["org.freedesktop.appearance", "color-scheme"]:
+        if message.arguments()[:2] == ["org.freedesktop.appearance", self.key]:
             self.callback()
 
 
-def watch_gnome_dark_style(callback: Callable[[], None], parent: QObject) -> bool:
-    """On GNOME, call *callback* whenever the dark style is switched. Qt's own
-    colorSchemeChanged misses the switch to light when it started out guessing light (see
-    _gnome_color_scheme), so the portal is listened to directly. False elsewhere."""
-    if not _on_gnome():
-        return False
+def _watch_portal(key: str, callback: Callable[[], None], parent: QObject) -> bool:
     from PySide6.QtDBus import QDBusConnection
 
-    watch = _GnomeStyleWatch(callback, parent)
+    watch = _PortalWatch(key, callback, parent)
     return QDBusConnection.sessionBus().connect(
         "org.freedesktop.portal.Desktop",
         "/org/freedesktop/portal/desktop",
@@ -402,6 +411,22 @@ def watch_gnome_dark_style(callback: Callable[[], None], parent: QObject) -> boo
         watch,
         SLOT("changed(QDBusMessage)"),
     )
+
+
+def watch_gnome_dark_style(callback: Callable[[], None], parent: QObject) -> bool:
+    """On GNOME, call *callback* whenever the dark style is switched. Qt's own
+    colorSchemeChanged misses the switch to light when it started out guessing light (see
+    _gnome_color_scheme), so the portal is listened to directly. False elsewhere."""
+    return _on_gnome() and _watch_portal("color-scheme", callback, parent)
+
+
+def watch_desktop_accent(callback: Callable[[], None], parent: QObject) -> bool:
+    """On a Linux desktop, call *callback* when the settings portal announces a new accent
+    colour (GNOME 47+, KDE Plasma 6). Windows announces it as a theme change to the windows,
+    which the main window passes on. False without a desktop."""
+    if sys.platform != "linux" or QGuiApplication.platformName() in _NO_DESKTOP:
+        return False
+    return _watch_portal("accent-color", callback, parent)
 
 
 @contextmanager

@@ -1114,5 +1114,8 @@
  "The text of the whole program": "Der Text im ganzen Programm",
  "Theme": "Design",
  "Use the theme's colour": "Farbe des Designs verwenden",
- "The image on the clipboard could not be read. Copy it again, then paste.": "Das Bild in der Zwischenablage konnte nicht gelesen werden. Kopieren Sie es erneut und fügen Sie es dann ein."
+ "The image on the clipboard could not be read. Copy it again, then paste.": "Das Bild in der Zwischenablage konnte nicht gelesen werden. Kopieren Sie es erneut und fügen Sie es dann ein.",
+ "Reading view": "Leseansicht",
+ "Hide the text and read the note, or drag to resize it": "Text ausblenden und die Notiz lesen oder ziehen, um die Größe zu ändern",
+ "Show the text beside the preview to edit the note": "Text neben der Vorschau zeigen, um die Notiz zu bearbeiten"
 }

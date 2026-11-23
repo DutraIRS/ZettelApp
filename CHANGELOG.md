@@ -16,6 +16,12 @@ All notable changes to ZettelApp are documented here. The format follows
   of their edge that folds them away to give the note more room, and brings them back; dragging the edge resizes them
   and a double-click on it folds them too. *View ▸ Note List* (Ctrl+Shift+L) and *View ▸ Links
   Panel* (Ctrl+Shift+K) do the same, and ZettelApp remembers each panel's state.
+- **Reading view** (roadmap item 9): the third editor mode shows the note alone, as a centred
+  column of comfortable width at the editor's text size, with the title and source link locked
+  (an empty source link is left out). A tab between the text and the preview folds the text away
+  and brings it back, like the side panels' tabs and in line with them. The mode chosen is kept
+  for the next start; a new note still opens with its text.
+- **The adventure card's story** is set in justified paragraphs with space between them.
 - **Android (alpha)** (roadmap item 5): a native Kotlin/Compose app in `android/` runs the Qt-free
   Python core on device through Chaquopy, with a notes list, title search, editing and creating
   notes, a tag filter, links and backlinks, a graph, Insights, flashcard review, the trash and
@@ -97,6 +103,14 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Fixed
 
+- The preview spaced paragraphs, headings and lists unevenly and used a smaller text than the
+  editor. Every block now leaves the same space below it, a heading more above it, and the
+  preview follows the editor's text size (also in Review and Ask).
+- A change of the desktop's accent colour was followed only after a restart. The app now
+  follows it at once: on Windows, on GNOME 47+ and on KDE Plasma 6.
+- KDE Plasma: *Show in folder* and local file links opened whichever file manager owned the
+  `org.freedesktop.FileManager1` D-Bus name (Nautilus, when installed). When Dolphin is the
+  default file manager, Dolphin now shows the file.
 - Windows: file dialogs (insert image, link to a file, mind map export, save graph image) opened
   the working folder, which from the Start-menu shortcut is the install folder. They now open the
   folder used last, or Documents.

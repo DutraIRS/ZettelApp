@@ -1083,5 +1083,8 @@
  "The text of the whole program": "プログラム全体の文字",
  "Theme": "テーマ",
  "Use the theme's colour": "テーマの色を使う",
- "The image on the clipboard could not be read. Copy it again, then paste.": "クリップボードの画像を読み取れませんでした。もう一度コピーしてから貼り付けてください。"
+ "The image on the clipboard could not be read. Copy it again, then paste.": "クリップボードの画像を読み取れませんでした。もう一度コピーしてから貼り付けてください。",
+ "Reading view": "閲覧表示",
+ "Hide the text and read the note, or drag to resize it": "テキストを隠してノートを読む、ドラッグでサイズ変更",
+ "Show the text beside the preview to edit the note": "プレビューの横にテキストを表示してノートを編集"
 }

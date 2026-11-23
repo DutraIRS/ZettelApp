@@ -25,7 +25,7 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 
 | 다운로드 | 이럴 때 사용 |
 |---|---|
-| `ZettelApp-Linux-amd64.deb` | Debian, Ubuntu, Mint 등 `.deb` 기반 배포판. `sudo apt install ./ZettelApp-Linux-amd64.deb`로 설치하거나 소프트웨어 센터에서 열면 이후 업데이트도 제공돼요. |
+| `ZettelApp-Linux-amd64.deb` | Debian, Ubuntu, Mint 등 `.deb` 기반 배포판. `sudo apt install ./ZettelApp-Linux-amd64.deb`로 설치하거나 소프트웨어 센터에서 열어요. |
 | `ZettelApp-Linux-x86_64.tar.gz` | 다른 배포판, 또는 설치 없이 사용: 원하는 곳에 압축을 풀고 `ZettelApp/zettelapp`을 실행하세요. |
 
 두 패키지 모두 Python과 Qt를 포함해요. 64비트 데스크톱(X11 또는 Wayland — GNOME, KDE 등)과 표준 그래픽 라이브러리가 필요해요. 터미널에서 다운로드를 확인하려면:
@@ -73,6 +73,8 @@ API 키는 Secret Service(GNOME Keyring 또는 KWallet)에 저장되고, 키링�
 Anki, Zotero, 데스크톱 통합, 백업 설정이 있어요.
 
 앱은 시스템의 **밝게/어둡게** 설정과 **강조 색상**을 따라요. *보기 ▸ 테마*에서 테마를 고정할 수 있어요.
+
+앱을 연 채로 강조 색을 바꿔도 바로 따라가요.
 
 *검정 (OLED)*은 OLED 화면을 위해 완전한 검정 위에 그린 어두운 테마예요. *옵션 ▸ 일반*에서 **기본 색상**(버튼 등 강조 요소), **보조 색상**(링크), **강조 색상**(선택한 텍스트와 찾기 결과), **글자 색상**을 직접 고를 수 있어요. *테마 색상 사용*을 누르면 원래대로 돌아가요.
 

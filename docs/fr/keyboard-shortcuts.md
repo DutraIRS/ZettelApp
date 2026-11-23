@@ -13,7 +13,7 @@
 | Créer un lien vers une note | Ctrl+K |
 | Insérer une image | Ctrl+Shift+I |
 | Ajouter une carte mémoire | Ctrl+Shift+F |
-| Basculer entre édition / vue partagée / aperçu | Ctrl+E |
+| Basculer entre édition / vue partagée / lecture | Ctrl+E |
 | Dupliquer la note | Ctrl+D |
 | Déplacer la note dans la Corbeille | Ctrl+Delete |
 | Mettre les notes sélectionnées à la Corbeille (dans la liste des notes) | Del |
@@ -38,6 +38,7 @@
 | Plein écran | F11 |
 | Masquer ou afficher la liste des notes | Ctrl+Shift+L, ou cliquer sur l'onglet de son bord (faire glisser le bord pour redimensionner) |
 | Masquer ou afficher le panneau des liens | Ctrl+Shift+K, ou cliquer sur l'onglet de son bord |
+| Masquer le texte de la note pour lire, ou le réafficher | cliquer sur l'onglet entre le texte et l'aperçu |
 
 ## Fichiers et application
 

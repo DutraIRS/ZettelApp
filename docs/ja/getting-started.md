@@ -23,7 +23,7 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 
 | ダウンロード | 次の場合に使う |
 |---|---|
-| `ZettelApp-Linux-amd64.deb` | Debian、Ubuntu、Mint など `.deb` 系のディストリビューション。`sudo apt install ./ZettelApp-Linux-amd64.deb` でインストールするか、ソフトウェアセンターで開くと、その後の更新も提案されます。 |
+| `ZettelApp-Linux-amd64.deb` | Debian、Ubuntu、Mint など `.deb` 系のディストリビューション。`sudo apt install ./ZettelApp-Linux-amd64.deb` でインストールするか、ソフトウェアセンターで開きます。 |
 | `ZettelApp-Linux-x86_64.tar.gz` | その他のディストリビューション、またはインストールしない場合: 任意の場所に展開し、`ZettelApp/zettelapp` を実行します。 |
 
 どちらも Python と Qt を同梱しています。64 ビットのデスクトップ (X11 または Wayland — GNOME、KDE など) と、その標準的なグラフィックライブラリが必要です。ターミナルでダウンロードを確認するには:
@@ -62,6 +62,8 @@ API キーは Secret Service (GNOME Keyring または KWallet) に保存され�
 **オプション** (レールの下部、または*ツール ▸ オプション…*、Ctrl+,) には、テーマ、エディターの文字サイズ、リンク候補、リンクの種類、AI、MCP サーバー、Anki、Zotero、デスクトップ統合、バックアップなどの設定があります。
 
 アプリはシステムの**ライト / ダーク**設定と**アクセントカラー**に従います。*表示 ▸ テーマ*でテーマを固定することもできます。
+
+アプリを開いたままアクセントカラーを変えても、すぐに反映されます。
 
 *ブラック (OLED)* は、OLED 画面向けに真っ黒を背景にしたダークテーマです。*オプション ▸ 全般*では、**メインの色**(ボタンなどのアクセント)、**サブの色**(リンク)、**強調表示の色**(選択したテキストと検索結果)、**文字の色**を自分で選べます。*テーマの色を使う*で元に戻せます。
 

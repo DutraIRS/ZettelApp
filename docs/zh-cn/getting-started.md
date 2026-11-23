@@ -23,7 +23,7 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 
 | 下载 | 适用场景 |
 |---|---|
-| `ZettelApp-Linux-amd64.deb` | Debian、Ubuntu、Mint 或其他基于 `.deb` 的发行版。使用 `sudo apt install ./ZettelApp-Linux-amd64.deb` 安装,或在软件中心中打开,之后它会提供更新。 |
+| `ZettelApp-Linux-amd64.deb` | Debian、Ubuntu、Mint 或其他基于 `.deb` 的发行版。使用 `sudo apt install ./ZettelApp-Linux-amd64.deb` 安装,或在软件中心中打开。 |
 | `ZettelApp-Linux-x86_64.tar.gz` | 其他发行版,或无需安装:解压到任意位置并运行 `ZettelApp/zettelapp`。 |
 
 两者都内置 Python 和 Qt;需要 64 位桌面环境(X11 或 Wayland — GNOME、KDE 等)及其标准图形库。要在终端中校验下载:
@@ -62,6 +62,8 @@ API 密钥存储在 Secret Service(GNOME Keyring 或 KWallet)中;没有密钥环
 **选项**(导航栏底部,或*工具 ▸ 选项…*,Ctrl+,)包含各项偏好设置:主题、编辑器文字大小、链接建议、链接类型、AI、MCP 服务器、Anki、Zotero、桌面集成和备份。
 
 应用会跟随系统的**浅色/深色**设置和**强调色**。你可以在*视图 ▸ 主题*中强制指定主题。
+
+在应用打开时更改强调色,应用会立即跟随。
 
 *纯黑 (OLED)* 是以纯黑为背景的深色主题,适合 OLED 屏幕。在*选项 ▸ 常规*中,你可以自选**主色**(按钮和其他强调元素)、**辅助色**(链接)、**高亮色**(选中的文字和查找结果)和**文字颜色**;*使用主题颜色*可恢复原来的颜色。
 

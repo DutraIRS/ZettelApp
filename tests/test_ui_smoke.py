@@ -877,9 +877,15 @@ def test_note_list_orders_by_closeness_to_the_open_note(window):
     assert settings.get(settings.NOTES_SORT) == "meaning"  # the default order
     window.list.refresh()
     window.open_note(cats.id)
-    pump(500)  # the meaning index is built in the background
-    order = [row["id"] for row in window.list.model.rows]
-    assert order[:2] == [cats.id, kittens.id]
+
+    def first_two() -> list[str]:
+        return [row["id"] for row in window.list.model.rows][:2]
+
+    for _attempt in range(100):  # the meaning index is built in the background (slow CI too)
+        pump(100)
+        if first_two() == [cats.id, kittens.id]:
+            break
+    assert first_two() == [cats.id, kittens.id]
 
     distance = next(a for a in window.list.sort_button.menu().actions() if a.data() == "distance")
     distance.trigger()

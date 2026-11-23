@@ -54,6 +54,7 @@ GRAPH_HIDDEN_TAGS = "graph/hiddenTags"  # notes with these tags are left out of 
 GRAPH_UNGROUPED_TAGS = "graph/ungroupedTags"  # tags that don't form groups or clusters
 NOTE_LIST_HIDDEN = "layout/noteListHidden"  # the note list is folded away
 LINKS_PANEL_HIDDEN = "layout/linksPanelHidden"  # the links and suggestions panel is folded away
+EDITOR_VIEW_MODE = "layout/editorViewMode"  # 0 the text, 1 text and preview, 2 reading
 
 # Search ---------------------------------------------------------------------
 SEARCH_FUZZY_WEIGHT = "search/fuzzyWeight"
@@ -72,6 +73,7 @@ SEARCH_ADAPTIVE_STATE = "search/adaptiveState"
 DEFAULTS: dict[str, Any] = {
     NOTE_LIST_HIDDEN: False,
     LINKS_PANEL_HIDDEN: False,
+    EDITOR_VIEW_MODE: 1,
     THEME: "system",
     UI_LANGUAGE: "system",
     EDITOR_FONT_SIZE: 11,

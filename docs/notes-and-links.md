@@ -6,8 +6,11 @@ Notes are written in **Markdown**: `**bold**`, `*italic*`, `# headings`, lists, 
 `` `code` ``, fenced code blocks, tables and `~~strikethrough~~`. The toolbar above the editor inserts the
 common ones, and Ctrl+B / Ctrl+I work as usual. Lists continue when you press Enter.
 
-The editor has three modes (Ctrl+E cycles through them): **Edit**, **Split** (text and preview side by
-side) and **Preview**.
+The editor has three modes (Ctrl+E cycles through them): **Edit**, **Split** (text and preview side by side)
+and **Reading view**: the preview alone, as a column of comfortable width, with the title and source link locked
+so nothing changes by accident. The tab between the text and the preview folds the text away to read and
+brings it back (drag it to resize). The mode you choose is kept for the next start; a new note always opens
+with its text, ready to write.
 
 For safety, raw HTML in a note is shown as text and never rendered. Links in the preview open only web
 pages (`http`, `https`), e-mail (`mailto`), notes, Zotero items and local files (shown in your file manager,
@@ -31,6 +34,9 @@ Clicking the link in the preview, or Ctrl+clicking it in the editor, opens **you
 selected**. The file itself is never opened or run. Only paths on a local drive are allowed: network
 (UNC) paths such as `\\server\share\file.pdf` are refused, because looking them up can send your network
 credentials to that server.
+
+On KDE Plasma, when Dolphin is your default file manager, Dolphin shows the file even if another file
+manager is installed.
 
 Every note has:
 

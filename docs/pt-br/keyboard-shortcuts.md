@@ -14,7 +14,7 @@ depois a letra sublinhada.
 | Link para nota | Ctrl+K |
 | Inserir imagem | Ctrl+Shift+I |
 | Adicionar flashcard | Ctrl+Shift+F |
-| Alternar edição / divisão / pré-visualização | Ctrl+E |
+| Alternar edição / divisão / leitura | Ctrl+E |
 | Duplicar nota | Ctrl+D |
 | Mover nota para a lixeira | Ctrl+Delete |
 | Mover as notas selecionadas para a lixeira (na lista de notas) | Del |
@@ -39,6 +39,7 @@ depois a letra sublinhada.
 | Tela cheia | F11 |
 | Ocultar ou mostrar a lista de notas | Ctrl+Shift+L, ou clique na aba da borda (arraste a borda para redimensionar) |
 | Ocultar ou mostrar o painel de links | Ctrl+Shift+K, ou clique na aba da borda |
+| Ocultar o texto da nota para ler, ou mostrá-lo de novo | clique na aba entre o texto e a pré-visualização |
 
 ## Arquivos e aplicativo
 

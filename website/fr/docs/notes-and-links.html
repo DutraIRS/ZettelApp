@@ -4,8 +4,11 @@
 <code>`code`</code>, blocs de code clôturés, tableaux et <code>~~texte barré~~</code>. La barre d’outils au-dessus de l’éditeur
 insère les éléments courants, et Ctrl+B / Ctrl+I fonctionnent comme d’habitude. Les listes continuent
 lorsque vous appuyez sur Entrée.</p>
-<p>L’éditeur propose trois modes (Ctrl+E permet de passer de l’un à l’autre) : <strong>Édition</strong>, <strong>Split</strong> (texte et aperçu
-côte à côte) et <strong>Aperçu</strong>.</p>
+<p>L’éditeur propose trois modes (Ctrl+E permet de passer de l’un à l’autre) : <strong>Édition</strong>, <strong>Split</strong> (texte et
+aperçu côte à côte) et <strong>Mode lecture</strong> : l’aperçu seul, en une colonne de largeur confortable, avec le
+titre et le lien source verrouillés pour que rien ne change par mégarde. L’onglet entre le texte et l’aperçu
+masque le texte pour lire et le fait revenir (faites-le glisser pour redimensionner). Le mode choisi est
+conservé au prochain démarrage ; une nouvelle note s’ouvre toujours avec son texte, prête à être écrite.</p>
 <p>Par sécurité, le HTML brut d’une note est affiché comme texte et n’est jamais rendu. Dans l’aperçu, les liens
 ouvrent uniquement des pages Web (<code>http</code>, <code>https</code>), des e-mails (<code>mailto</code>), des notes, des éléments Zotero
 et des fichiers locaux (affichés dans votre gestionnaire de fichiers ; consultez <a href="#links-to-local-files">Liens vers des fichiers locaux</a>). Consultez <a href="privacy-and-security.html">Confidentialité et sécurité</a>.</p>
@@ -26,6 +29,8 @@ copié dans le coffre.</p>
 le fichier sélectionné</strong>. Le fichier lui-même n’est jamais ouvert ni exécuté. Seuls les chemins sur un disque local
 sont autorisés : les chemins réseau (UNC) comme <code>\\server\share\file.pdf</code> sont refusés, car leur consultation
 pourrait transmettre vos identifiants réseau à ce serveur.</p>
+<p>Sous KDE Plasma, quand Dolphin est votre gestionnaire de fichiers par défaut, c’est Dolphin qui montre le
+fichier, même si un autre gestionnaire est installé.</p>
 <p>Chaque note possède :</p>
 <ul>
 <li>un <strong>titre</strong> (le grand champ en haut) ;</li>

@@ -1083,5 +1083,8 @@
  "The text of the whole program": "整个程序的文字",
  "Theme": "主题",
  "Use the theme's colour": "使用主题颜色",
- "The image on the clipboard could not be read. Copy it again, then paste.": "无法读取剪贴板中的图片。请重新复制，然后粘贴。"
+ "The image on the clipboard could not be read. Copy it again, then paste.": "无法读取剪贴板中的图片。请重新复制，然后粘贴。",
+ "Reading view": "阅读视图",
+ "Hide the text and read the note, or drag to resize it": "隐藏文本并阅读笔记,或拖动调整大小",
+ "Show the text beside the preview to edit the note": "在预览旁显示文本以编辑笔记"
 }

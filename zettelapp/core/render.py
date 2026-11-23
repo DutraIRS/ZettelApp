@@ -41,6 +41,7 @@ _MD_ESCAPE = re.compile(r"([\\`*_\[\]<>()#!|])")
 _QA_PREFIX = re.compile(r"^(\s*)(Q|A|Question|Answer)\s*:", re.I | re.M)
 _DISPLAY_ALONE = re.compile(r'<p>\s*<span class="math-display">(<img [^>]*>)</span>\s*</p>')
 _DISPLAY_SPAN = re.compile(r'<span class="math-display">(<img [^>]*>)</span>')
+_PICTURE_ALONE = re.compile(r"<p>\s*(<img [^>]*>)\s*</p>")
 
 
 def _escape_md(text: str) -> str:
@@ -217,7 +218,9 @@ class NoteRenderer:
     def render(self, text: str) -> str:
         out = self.md.render(self._prepare(text))
         # A formula alone in its paragraph is centred; one inside a sentence stays inline.
-        out = _DISPLAY_ALONE.sub(r'<p align="center">\1</p>', out)
+        out = _DISPLAY_ALONE.sub(r'<p align="center" class="picture">\1</p>', out)
+        # A picture alone in its paragraph is not a line of text: no line spacing under it.
+        out = _PICTURE_ALONE.sub(r'<p class="picture">\1</p>', out)
         return _DISPLAY_SPAN.sub(r"\1", out)
 
 

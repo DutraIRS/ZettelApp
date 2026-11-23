@@ -14,7 +14,7 @@ y luego la letra subrayada.
 | Enlazar a nota | Ctrl+K |
 | Insertar imagen | Ctrl+Shift+I |
 | Añadir tarjeta | Ctrl+Shift+F |
-| Alternar edición / dividida / vista previa | Ctrl+E |
+| Alternar edición / dividida / lectura | Ctrl+E |
 | Duplicar nota | Ctrl+D |
 | Mover nota a la papelera | Ctrl+Supr |
 | Mover las notas seleccionadas a la papelera (en la lista de notas) | Supr |
@@ -39,6 +39,7 @@ y luego la letra subrayada.
 | Pantalla completa | F11 |
 | Ocultar o mostrar la lista de notas | Ctrl+Shift+L, o clic en la pestaña de su borde (arrastra el borde para cambiar el tamaño) |
 | Ocultar o mostrar el panel de enlaces | Ctrl+Shift+K, o clic en la pestaña de su borde |
+| Ocultar el texto de la nota para leer, o volver a mostrarlo | clic en la pestaña entre el texto y la vista previa |
 
 ## Archivos y aplicación
 

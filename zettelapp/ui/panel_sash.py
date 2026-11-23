@@ -49,6 +49,10 @@ class PanelFold:
     def shown(self) -> bool:
         return not self.panel.isHidden()
 
+    def available(self) -> bool:
+        """Whether the sash belongs on screen: the splitter and the pane beside the panel are."""
+        return self.splitter.isVisible() and not self.editor.isHidden()
+
     def edge(self, parent: QWidget) -> int:
         """The x, in *parent*, of the line between the panel and the editor."""
         left = self.panel_on_left()
@@ -97,7 +101,7 @@ class PanelSash(QWidget):
         top = splitter.mapTo(parent, QPoint(0, 0)).y()
         x = self.fold.edge(parent) - SASH_WIDTH // 2
         self.setGeometry(x, top, SASH_WIDTH, max(splitter.height(), 1))
-        self.setVisible(splitter.isVisible())
+        self.setVisible(self.fold.available())
         self.raise_()
 
     def eventFilter(self, watched, event) -> bool:  # noqa: N802 - Qt API
@@ -146,10 +150,18 @@ class PanelSash(QWidget):
 class CollapseButton(QToolButton):
     """The tab on the sash: a click folds the panel away or brings it back, a drag resizes."""
 
-    def __init__(self, fold: PanelFold, sash: PanelSash, tips: tuple[str, str], parent: QWidget):
+    def __init__(
+        self,
+        fold: PanelFold,
+        sash: PanelSash,
+        tips: tuple[str, str],
+        parent: QWidget,
+        floor: QWidget | None = None,
+    ):
         super().__init__(parent)
         self.fold = fold
         self.sash = sash
+        self.floor = floor  # its parent or a child: stand as high above its bottom as other tabs
         self.tips = tips  # (when shown: hide it, when hidden: show it)
         self._hover = False
         self._pressed_at: QPointF | None = None
@@ -174,7 +186,11 @@ class CollapseButton(QToolButton):
         if not sash.isVisible():
             self.setVisible(False)
             return
-        y = sash.y() + max(sash.height() - self.height() - TAB_BOTTOM, 0)
+        bottom = sash.y() + sash.height()
+        if self.floor is not None:
+            floor = self.floor.mapTo(self.parentWidget(), QPoint(0, self.floor.height())).y()
+            bottom = min(floor, self.parentWidget().height())
+        y = max(bottom - self.height() - TAB_BOTTOM, sash.y())
         x = sash.x() if self.fold.panel_on_left() else sash.x() + SASH_WIDTH - self.width()
         self.setGeometry(x, y, self.width(), self.height())
         self.setVisible(True)
@@ -186,6 +202,7 @@ class CollapseButton(QToolButton):
             QEvent.Type.Move,
             QEvent.Type.Show,
             QEvent.Type.Hide,
+            QEvent.Type.ZOrderChange,  # the sash rose: stay above it
         ):
             self.place()
         return False

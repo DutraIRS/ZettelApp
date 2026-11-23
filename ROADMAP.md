@@ -55,10 +55,12 @@ live, file dialogs, Show in folder, window identity, notifications, second launc
   from the GNOME overview or KRunner, bring the window forward (activation tokens are passed on and
   unit-tested; the on-screen click was never done).
 - [ ] **KDE**: KWallet as the Secret Service (the test machine ran GNOME Keyring under Plasma); *Show in
-  folder* preferring Dolphin when it is the default file manager but another one owns the D-Bus name;
+  folder* preferring Dolphin when it is the default file manager but another one owns the D-Bus name
+  (*done 2026-11-23*, to check on Plasma);
   pasting images on real Plasma hardware (Klipper served them empty in the VM).
-- [ ] **A live accent colour change** is followed only after a restart (light and dark are followed
-  live), on Linux as on Windows.
+- [✓] **A live accent colour change** is followed only after a restart (light and dark are followed
+  live), on Linux as on Windows. *Done 2026-11-23:* the portal's accent-color signal and Qt's theme
+  change; checks on each desktop in [PLATFORM_CHECKS.md](PLATFORM_CHECKS.md).
 - [ ] **Fractional scaling (125-200 %), keyboard layouts and input methods (IBus, Fcitx), and Orca.**
 
 ## 3. Signed Windows builds
@@ -141,8 +143,11 @@ is open on two machines.
 
 ## 9. Reading and editing (requested 23 November 2026)
 
-- [ ] **The adventure card's text**: justified, with space between paragraphs (Euterpes' tutorial card
-  too).
-- [ ] **A view-only mode**: fold the Markdown editor away, like the side panels, and read the note in the
-  preview alone. On Android this should be the default.
-- [ ] **Preview spacing**: paragraphs, headings and lists in the preview are still spaced unevenly.
+- [✓] **The adventure card's text**: justified, with space between paragraphs (Euterpes' tutorial card
+  too). *Done 2026-11-23.*
+- [✓] **A view-only mode**: fold the Markdown editor away, like the side panels, and read the note in the
+  preview alone. *Done 2026-11-23 on the desktop:* the Reading view (title and source locked, a
+  centred column), a tab between text and preview, the mode remembered.
+- [ ] **Reading as Android's default**: the Android app opens notes in a reading view first.
+- [✓] **Preview spacing**: paragraphs, headings and lists in the preview are still spaced unevenly.
+  *Done 2026-11-23:* one spacing step for every block, the editor's text size.

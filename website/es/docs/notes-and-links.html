@@ -3,8 +3,11 @@
 <p>Las notas se escriben en <strong>Markdown</strong>: <code>**negrita**</code>, <code>*cursiva*</code>, <code># encabezados</code>, listas, <code>&gt; citas</code>,
 <code>`código`</code>, bloques de código delimitados, tablas y <code>~~tachado~~</code>. La barra de herramientas sobre el editor inserta los
 más comunes, y Ctrl+B / Ctrl+I funcionan como siempre. Las listas continúan al pulsar Enter.</p>
-<p>El editor tiene tres modos (Ctrl+E alterna entre ellos): <strong>Editar</strong>, <strong>Dividir</strong> (texto y vista previa uno junto
-al otro) y <strong>Vista previa</strong>.</p>
+<p>El editor tiene tres modos (Ctrl+E alterna entre ellos): <strong>Editar</strong>, <strong>Dividir</strong> (texto y vista previa uno
+junto al otro) y <strong>Vista de lectura</strong>: solo la vista previa, en una columna de ancho cómodo, con el título y
+el enlace de origen bloqueados para que nada cambie por accidente. La pestaña entre el texto y la vista
+previa oculta el texto para leer y lo vuelve a mostrar (arrástrala para cambiar el tamaño). El modo que
+elijas se recuerda en el próximo inicio; una nota nueva siempre se abre con su texto, lista para escribir.</p>
 <p>Por seguridad, el HTML sin procesar de una nota se muestra como texto y nunca se renderiza. Los enlaces de la vista previa solo abren páginas
 web (<code>http</code>, <code>https</code>), correo electrónico (<code>mailto</code>), notas, elementos de Zotero y archivos locales (se muestran en tu gestor de archivos,
 consulta <a href="#links-to-local-files">Enlaces a archivos locales</a>). Consulta <a href="privacy-and-security.html">Privacidad y seguridad</a>.</p>
@@ -24,6 +27,8 @@ hace lo mismo. El archivo se enlaza donde está; no se copia nada a la bóveda.<
 seleccionado</strong>. El archivo en sí nunca se abre ni se ejecuta. Solo se permiten rutas de una unidad local: las rutas de red
 (UNC) como <code>\\servidor\recurso\archivo.pdf</code> se rechazan, porque consultarlas puede enviar tus credenciales de red
 a ese servidor.</p>
+<p>En KDE Plasma, cuando Dolphin es tu gestor de archivos predeterminado, Dolphin muestra el archivo aunque
+haya otro gestor instalado.</p>
 <p>Cada nota tiene:</p>
 <ul>
 <li>un <strong>título</strong> (el campo grande de la parte superior);</li>

@@ -14,7 +14,7 @@ poi la lettera sottolineata.
 | Collega a nota | Ctrl+K |
 | Inserisci immagine | Ctrl+Shift+I |
 | Aggiungi flashcard | Ctrl+Shift+F |
-| Alterna modifica / divisa / anteprima | Ctrl+E |
+| Alterna modifica / divisa / lettura | Ctrl+E |
 | Duplica nota | Ctrl+D |
 | Sposta nota nel cestino | Ctrl+Delete |
 | Sposta le note selezionate nel cestino (nell'elenco delle note) | Del |
@@ -39,6 +39,7 @@ poi la lettera sottolineata.
 | Schermo intero | F11 |
 | Nascondere o mostrare l'elenco delle note | Ctrl+Shift+L, o clic sulla linguetta sul bordo (trascina il bordo per ridimensionare) |
 | Nascondere o mostrare il pannello dei collegamenti | Ctrl+Shift+K, o clic sulla linguetta sul bordo |
+| Nascondere il testo della nota per leggere, o mostrarlo di nuovo | clic sulla linguetta tra testo e anteprima |
 
 ## File e app
 

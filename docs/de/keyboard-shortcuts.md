@@ -14,7 +14,7 @@ Tastenzugriffstasten: Drücken Sie **Alt** und danach den unterstrichenen Buchst
 | Link zu Notiz | Ctrl+K |
 | Bild einfügen | Ctrl+Shift+I |
 | Lernkarte hinzufügen | Ctrl+Shift+F |
-| Bearbeiten / Geteilte Ansicht / Vorschau umschalten | Ctrl+E |
+| Bearbeiten / Geteilte Ansicht / Leseansicht umschalten | Ctrl+E |
 | Notiz duplizieren | Ctrl+D |
 | Notiz in den Papierkorb verschieben | Ctrl+Delete |
 | Ausgewählte Notizen in den Papierkorb verschieben (in der Notizliste) | Del |
@@ -39,6 +39,7 @@ Tastenzugriffstasten: Drücken Sie **Alt** und danach den unterstrichenen Buchst
 | Vollbild | F11 |
 | Notizliste aus- oder einblenden | Ctrl+Shift+L oder die Lasche am Rand anklicken (den Rand ziehen ändert die Größe) |
 | Link-Leiste aus- oder einblenden | Ctrl+Shift+K oder die Lasche am Rand anklicken |
+| Notiztext zum Lesen ausblenden oder wieder einblenden | die Lasche zwischen Text und Vorschau anklicken |
 
 ## Dateien und App
 

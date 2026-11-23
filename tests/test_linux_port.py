@@ -429,6 +429,7 @@ def test_show_in_folder_selects_a_file_and_opens_a_folder(monkeypatch, tmp_path)
     note.parent.mkdir()
     note.write_text("x", encoding="utf-8")
     selected, opened = [], []
+    monkeypatch.setattr(linuxintegration, "_dolphin_select", lambda p: False)
     monkeypatch.setattr(
         linuxintegration, "_file_manager_show_items", lambda p: selected.append(p) or True
     )
@@ -443,6 +444,40 @@ def test_show_in_folder_selects_a_file_and_opens_a_folder(monkeypatch, tmp_path)
     monkeypatch.setattr(linuxintegration, "_file_manager_show_items", lambda p: False)
     linuxintegration.reveal_in_file_manager(note)
     assert opened == [str(note.parent), str(note.parent)]
+
+
+@_linux
+@pytest.mark.parametrize(
+    ("desktop", "default", "installed", "used"),
+    [
+        ("KDE", "org.kde.dolphin.desktop", True, True),
+        ("KDE", "org.gnome.Nautilus.desktop", True, False),  # the user chose another one
+        ("KDE", "org.kde.dolphin.desktop", False, False),  # not on PATH: in a Flatpak, say
+        ("GNOME", "org.kde.dolphin.desktop", True, False),
+    ],
+)
+def test_kde_shows_files_in_dolphin_when_it_is_the_default(
+    monkeypatch, tmp_path, desktop, default, installed, used
+):
+    """Whatever file manager owns org.freedesktop.FileManager1, Plasma's default one selects."""
+    from PySide6.QtCore import QProcess
+
+    from zettelapp import linuxintegration
+
+    started = []
+    monkeypatch.setenv("XDG_CURRENT_DESKTOP", desktop)
+    monkeypatch.setattr(linuxintegration, "_default_folder_handler", lambda: default)
+    monkeypatch.setattr(
+        linuxintegration.shutil, "which", lambda name: "/usr/bin/dolphin" if installed else None
+    )
+    monkeypatch.setattr(
+        QProcess,
+        "startDetached",
+        staticmethod(lambda program, args: started.append([program, *args]) or (True, 1)),
+    )
+    note = tmp_path / "note.md"
+    assert linuxintegration._dolphin_select(note) is used
+    assert started == ([["/usr/bin/dolphin", "--select", str(note)]] if used else [])
 
 
 @_linux
@@ -550,7 +585,7 @@ def test_gnome_dark_style_watch_reacts_only_to_the_color_scheme(desktop, monkeyp
     from zettelapp.ui import theme
 
     calls = []
-    watch = theme._GnomeStyleWatch(lambda: calls.append(1), QObject())
+    watch = theme._PortalWatch("color-scheme", lambda: calls.append(1), QObject())
     for namespace, key in [
         ("org.freedesktop.appearance", "color-scheme"),
         ("org.gnome.desktop.interface", "color-scheme"),
@@ -564,6 +599,21 @@ def test_gnome_dark_style_watch_reacts_only_to_the_color_scheme(desktop, monkeyp
     assert calls == [1]
     monkeypatch.setenv("XDG_CURRENT_DESKTOP", "XFCE")
     assert theme.watch_gnome_dark_style(lambda: None, QObject()) is False
+
+
+def test_a_new_desktop_accent_is_noticed_but_not_the_apps_own_re_theme(monkeypatch):
+    """The accent is followed live; re-theming with the same accent changes nothing."""
+    from zettelapp.ui import theme
+
+    accent = {"now": "#3584e4"}
+    monkeypatch.setattr(theme, "_read_desktop_accent", lambda dark: accent["now"])
+    theme.build_theme("light")
+    monkeypatch.setattr(theme, "_current", theme.build_theme("light"))
+    assert not theme.desktop_accent_changed()
+    accent["now"] = "#e66100"
+    assert theme.desktop_accent_changed()
+    monkeypatch.setattr(theme, "_current", theme.build_theme("light"))
+    assert not theme.desktop_accent_changed()
 
 
 @pytest.mark.parametrize(

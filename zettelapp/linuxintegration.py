@@ -4,14 +4,16 @@
   open the matching note. A user-local desktop file registers the handler
   (what a system package's .desktop file does automatically), and the handler
   only accepts zettelapp://note/<id> (see core.security);
-- revealing files in the file manager, selecting them, through the
-  org.freedesktop.FileManager1 D-Bus service (a plain folder opens otherwise).
+- revealing files in the file manager, selecting them: with Dolphin on KDE Plasma when it
+  is the default file manager, else through the org.freedesktop.FileManager1 D-Bus service,
+  which another file manager may own (a plain folder opens otherwise).
 """
 
 from __future__ import annotations
 
 import os
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
@@ -117,12 +119,42 @@ def reveal_in_file_manager(path: str | Path) -> None:
 
         QDesktopServices.openUrl(QUrl.fromLocalFile(str(path)))
         return
-    if not path.is_dir() and path.exists() and _file_manager_show_items(path):
-        return
+    if not path.is_dir() and path.exists():
+        if _dolphin_select(path) or _file_manager_show_items(path):
+            return
     from PySide6.QtCore import QUrl
     from PySide6.QtGui import QDesktopServices
 
     QDesktopServices.openUrl(QUrl.fromLocalFile(str(path if path.is_dir() else path.parent)))
+
+
+def _dolphin_select(target: Path) -> bool:
+    """On KDE Plasma with Dolphin as the default file manager, select *target* in Dolphin: the
+    FileManager1 name may belong to another file manager (Nautilus, say, installed alongside)."""
+    desktops = {d.strip().casefold() for d in os.environ.get("XDG_CURRENT_DESKTOP", "").split(":")}
+    dolphin = shutil.which("dolphin")
+    if "kde" not in desktops or dolphin is None:
+        return False
+    if _default_folder_handler() != "org.kde.dolphin.desktop":
+        return False
+    from PySide6.QtCore import QProcess
+
+    return QProcess.startDetached(dolphin, ["--select", str(target.absolute())])[0]
+
+
+def _default_folder_handler() -> str:
+    """The desktop file that opens folders (inode/directory), as xdg-mime reports it."""
+    try:
+        result = subprocess.run(  # noqa: S603 - fixed argument list
+            ["xdg-mime", "query", "default", "inode/directory"],  # noqa: S607
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired):
+        return ""
+    return result.stdout.strip()
 
 
 def _file_manager_show_items(target: str | Path) -> bool:

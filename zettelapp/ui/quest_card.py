@@ -8,6 +8,7 @@ gently pulsing outline around that control, then settles into a still one.
 
 from __future__ import annotations
 
+import html
 from collections.abc import Callable
 from dataclasses import dataclass
 
@@ -182,6 +183,19 @@ class ProgressDots(QWidget):
                 painter.drawEllipse(center, 2.5, 2.5)
 
 
+PARAGRAPH_GAP = 8  # px between the story's paragraphs
+
+
+def story_html(text: str) -> str:
+    """The story as justified paragraphs, one per line of `text`, with a gap between them."""
+    paragraphs = [html.escape(line) for line in text.split("\n") if line.strip()]
+    return "".join(
+        f'<p align="justify" style="margin-top:0; margin-bottom:'
+        f'{PARAGRAPH_GAP if i < len(paragraphs) - 1 else 0}px">{line}</p>'
+        for i, line in enumerate(paragraphs)
+    )
+
+
 @dataclass
 class CardContent:
     image: str
@@ -263,8 +277,9 @@ class QuestCard(QFrame):
         text.addLayout(buttons)
         body.addLayout(text)
         outer.addLayout(body)
-        for w in (self.title, self.story, self.task, self.hint, self.kicker):
+        for w in (self.title, self.task, self.hint, self.kicker):
             w.setTextFormat(Qt.TextFormat.PlainText)
+        self.story.setTextFormat(Qt.TextFormat.RichText)  # justified paragraphs, escaped
         self._primary_slot: Callable[[], None] | None = None
         self._secondary_slot: Callable[[], None] | None = None
         self.primary.clicked.connect(lambda: self._primary_slot and self._primary_slot())
@@ -293,7 +308,7 @@ class QuestCard(QFrame):
         self.dots.set_states(c.progress or [])
         self.title.setText(c.title)
         self.setAccessibleName(c.title)
-        self.story.setText(c.story)
+        self.story.setText(story_html(c.story))
         self.story.setVisible(bool(c.story))
         self.task.setText(c.task)
         self.task_box.setVisible(bool(c.task))

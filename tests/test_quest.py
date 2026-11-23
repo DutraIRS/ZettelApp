@@ -272,3 +272,14 @@ def test_bundled_quest_illustrations_are_complete():
         assert not image.isNull(), name
         assert (image.width(), image.height()) == (1200, 400), name
         assert path.stat().st_size < 400_000, name
+
+
+def test_the_story_reads_as_justified_escaped_paragraphs():
+    from zettelapp.ui.quest_card import PARAGRAPH_GAP, story_html
+
+    html = story_html("First <b>line</b>.\n\nSecond line.")
+    assert html.count("<p ") == 2  # blank lines make no empty paragraph
+    assert html.count('align="justify"') == 2
+    assert "&lt;b&gt;" in html  # the story is text, never markup
+    assert f"margin-bottom:{PARAGRAPH_GAP}px" in html
+    assert html.endswith('margin-bottom:0px">Second line.</p>')  # no gap after the last one

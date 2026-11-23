@@ -23,7 +23,7 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 
 | Téléchargement | Quand l’utiliser |
 |---|---|
-| `ZettelApp-Linux-amd64.deb` | Debian, Ubuntu, Mint ou une autre distribution basée sur `.deb`. Installez-le avec `sudo apt install ./ZettelApp-Linux-amd64.deb`, ou ouvrez-le dans votre logithèque, qui proposera ensuite les mises à jour. |
+| `ZettelApp-Linux-amd64.deb` | Debian, Ubuntu, Mint ou une autre distribution basée sur `.deb`. Installez-le avec `sudo apt install ./ZettelApp-Linux-amd64.deb`, ou ouvrez-le dans votre logithèque. |
 | `ZettelApp-Linux-x86_64.tar.gz` | Toute autre distribution, ou sans installation : décompressez-le où vous voulez et lancez `ZettelApp/zettelapp`. |
 
 Les deux embarquent Python et Qt ; ils nécessitent un bureau 64 bits (X11 ou Wayland — GNOME, KDE et
@@ -65,6 +65,8 @@ La **barre de navigation** à gauche permet de passer d’une page à l’autre 
 **Options** (en bas de la barre ou dans *Outils ▸ Options…*, Ctrl+,) regroupe les préférences : thème, taille du texte de l’éditeur, suggestions de liens, types de liens, IA, serveur MCP, Anki, Zotero, intégration au bureau et sauvegardes.
 
 L’application suit le réglage **clair/sombre** et la **couleur d’accentuation** du système. Vous pouvez imposer un thème dans *Affichage ▸ Thème*.
+
+Si vous changez la couleur d’accent pendant que l’app est ouverte, elle suit aussitôt.
 
 *Noir (OLED)* est le thème sombre sur un noir pur, pour les écrans OLED. Dans *Options ▸ Général*, vous pouvez
 choisir votre **couleur principale** (boutons et autres accents), votre **couleur secondaire** (liens), votre

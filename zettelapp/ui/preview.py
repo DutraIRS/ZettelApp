@@ -34,24 +34,42 @@ def math_href(latex: str, display: bool) -> str:
     return (MATH_DISPLAY_SCHEME if display else MATH_SCHEME) + mathrender.encode(latex)
 
 
-def preview_css() -> str:
+READING_LINE = 34  # the reading column's width, in multiples of the font's pixel size (~70 letters)
+MARGIN = 8  # px around the text beside the editor, in Review and in Ask
+READING_MARGIN = 24  # px at least, either side of the reading column
+
+
+def preview_css(px: int = 14) -> str:
+    """The preview's style for a body font *px* pixels high: one spacing step for every block.
+
+    Paragraphs, lists, quotes and code all leave one step below them; a heading leaves two
+    above (it starts a section) and half a step below (it belongs to what follows).
+    """
     t = theme.current()
     italic = ", ".join(f"'{family}'" for family in theme.ITALIC_FONTS)
+    step = round(px * 0.75)
+    block = f"margin: 0 0 {step}px 0;"
     return f"""
-body {{ color: {t.text}; }}
-h1 {{ font-size: 20pt; font-weight: 600; margin: 14px 0 6px 0; }}
-h2 {{ font-size: 15pt; font-weight: 600; margin: 14px 0 6px 0; }}
-h3, h4, h5, h6 {{ font-size: 12pt; font-weight: 600; margin: 12px 0 4px 0; }}
-p {{ margin: 0 0 9px 0; line-height: 150%; }}
+body {{ color: {t.text}; font-size: {px}px; }}
+h1 {{ font-size: {round(px * 1.6)}px; font-weight: 600; margin: {step * 2}px 0 {step // 2}px 0; }}
+h2 {{ font-size: {round(px * 1.3)}px; font-weight: 600; margin: {step * 2}px 0 {step // 2}px 0; }}
+h3, h4, h5, h6 {{ font-size: {round(px * 1.1)}px; font-weight: 600;
+    margin: {round(step * 1.5)}px 0 {step // 2}px 0; }}
+p {{ {block} line-height: 150%; }}
+p.picture {{ line-height: 100%; }}
+ul, ol {{ {block} }}
+li {{ margin: 0 0 {step // 3}px 0; line-height: 150%; }}
 em, i {{ font-family: {italic}; }}
 a {{ color: {t.link}; text-decoration: none; }}
 a.new-note {{ color: {t.text_muted}; text-decoration: underline; }}
 a.file {{ color: {t.link}; text-decoration: underline; }}
-a.task {{ color: {t.link}; text-decoration: none; font-size: 13pt; }}
+a.task {{ color: {t.link}; text-decoration: none; font-size: {round(px * 1.25)}px; }}
 a.broken {{ color: {t.text_muted}; }}
 code {{ font-family: 'Cascadia Code', Consolas, monospace; background-color: {t.window}; }}
-pre {{ font-family: 'Cascadia Code', Consolas, monospace; background-color: {t.window}; padding: 8px; }}
-blockquote {{ color: {t.text_secondary}; margin-left: 12px; }}
+pre {{ font-family: 'Cascadia Code', Consolas, monospace; background-color: {t.window};
+    padding: 8px; {block} }}
+blockquote {{ color: {t.text_secondary}; margin: 0 0 {step}px {step * 2}px; }}
+table {{ {block} }}
 th {{ font-weight: 600; text-align: left; }}
 td, th {{ padding: 3px 8px; border: 1px solid {t.border}; }}
 .missing-image {{ color: {t.text_muted}; }}
@@ -76,7 +94,35 @@ class NotePreview(QTextBrowser):
         self.setOpenExternalLinks(False)
         self.anchorClicked.connect(self._on_anchor)
         self.highlighted.connect(self._on_hover)
-        self.document().setDocumentMargin(4)
+        self.reading = False
+        self.document().setDocumentMargin(MARGIN)
+
+    def set_font_size(self, size: float) -> None:
+        """Read in the editor's font size (points); shown from the next render."""
+        self.setFont(theme.ui_font(size))
+
+    def set_reading(self, reading: bool) -> None:
+        """Lay the note out as a centred column of comfortable width, to read it."""
+        self.reading = reading
+        self._place_column()
+
+    def _place_column(self) -> None:
+        width = self.viewport().width()
+        side = MARGIN
+        if self.reading:
+            line = READING_LINE * QFontInfo(self.font()).pixelSize()
+            side = max(READING_MARGIN, (width - line) // 2)
+        root = self.document().rootFrame()
+        frame = root.frameFormat()
+        if (frame.leftMargin(), frame.rightMargin()) != (side, side):
+            frame.setLeftMargin(side)
+            frame.setRightMargin(side)
+            frame.setTopMargin(READING_MARGIN if self.reading else MARGIN)
+            root.setFrameFormat(frame)
+
+    def resizeEvent(self, event) -> None:  # noqa: N802 - Qt API
+        super().resizeEvent(event)
+        self._place_column()
 
     def set_renderer(self, renderer: NoteRenderer) -> None:
         self.renderer = renderer
@@ -85,8 +131,9 @@ class NotePreview(QTextBrowser):
         if self.renderer is None:
             return
         scroll = self.verticalScrollBar().value()
-        self.document().setDefaultStyleSheet(preview_css())
+        self.document().setDefaultStyleSheet(preview_css(QFontInfo(self.font()).pixelSize()))
         self.setHtml(self.renderer.render(text))
+        self._place_column()
         self.verticalScrollBar().setValue(scroll)
 
     def contextMenuEvent(self, event) -> None:  # noqa: N802 - Qt API
