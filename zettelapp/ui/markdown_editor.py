@@ -335,6 +335,8 @@ class MarkdownEditor(QPlainTextEdit):
         kept = [c for c in self.extra_cursors if c.position() != where]
         if len(kept) != len(self.extra_cursors):  # Alt+click on a caret removes it
             self.extra_cursors = kept
+        elif where == self.textCursor().position() and self.extra_cursors:
+            self.setTextCursor(self.extra_cursors.pop())  # the main one too: the last added leads
         elif where != self.textCursor().position():
             self.extra_cursors.append(QTextCursor(self.textCursor()))
             self.setTextCursor(clicked)

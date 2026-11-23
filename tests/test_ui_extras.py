@@ -3,7 +3,6 @@
 # ruff: noqa: F811  (the `window` fixture is imported, then used as a test argument)
 
 import os
-import sys
 from datetime import UTC, datetime, timedelta
 
 import pytest
@@ -74,6 +73,10 @@ def test_checklist_toggles_from_the_preview_and_continues_on_enter(window):
     editor._toggle_task(0)
     editor._toggle_task(1)
     assert editor.body.toPlainText() == "- [x] one\n- [ ] two"
+    editor.body.undo()  # Ctrl+Z takes a tick back, one box at a time
+    assert editor.body.toPlainText() == "- [x] one\n- [x] two"
+    editor.body.undo()
+    assert editor.body.toPlainText() == "- [ ] one\n- [x] two"
     editor.body.setPlainText("- [ ] a")
     editor.body.moveCursor(editor.body.textCursor().MoveOperation.End)
     editor.body.keyPressEvent(
@@ -278,7 +281,6 @@ def test_a_note_time_without_a_zone_does_not_crash_the_editor():
     assert "2024" in friendly_time("2024-01-01T12:00:00+00:00")
 
 
-@pytest.mark.skipif(sys.platform == "win32", reason="Windows reopens the last folder itself")
 def test_file_dialogs_reopen_the_last_folder_used(window, monkeypatch, tmp_path):
     from PySide6.QtWidgets import QFileDialog
 
@@ -310,3 +312,56 @@ def test_replaced_suggestion_rows_are_hidden_at_once(window):
     old = [side.suggestions.itemAt(i).widget() for i in range(side.suggestions.count())]
     side.set_suggestions([Suggestion(window.vault.create_note("B").id, "B", 0.8)])
     assert old and all(w.isHidden() for w in old)
+
+
+def test_file_dialogs_open_the_last_folder_or_documents_never_the_working_folder(
+    window, tmp_path, monkeypatch
+):
+    from pathlib import Path
+
+    from zettelapp.ui import widgets
+
+    monkeypatch.chdir(tmp_path)  # like the install folder, when started from a shortcut
+    first = Path(widgets.dialog_start("Graph.png"))
+    assert first.name == "Graph.png" and first.parent != tmp_path
+    chosen = tmp_path / "exports"
+    chosen.mkdir()
+    widgets.remember_folder(str(chosen / "Graph.png"))
+    assert Path(widgets.dialog_start("Map.svg")) == chosen / "Map.svg"
+    assert Path(widgets.dialog_start()) == chosen
+
+
+def test_every_menu_item_has_its_own_access_key(window):
+    from PySide6.QtGui import QAction
+
+    from zettelapp.ui.main_window import _access_key, unique_access_keys
+
+    actions = [QAction(t) for t in ("&Save", "&Search", "Cu&t", "&Trash", "Save &&&Quit")]
+    unique_access_keys(actions)
+    assert [a.text() for a in actions] == ["&Save", "S&earch", "Cu&t", "T&rash", "Save &&&Quit"]
+
+    menus = [a.menu() for a in window.menuBar().actions() if a.menu() is not None]
+    for menu in menus:
+        keys = [_access_key(a.text()) for a in menu.actions() if a.text()]
+        letters = [k[1] for k in keys if k is not None]
+        assert len(letters) == len(set(letters)), menu.title()
+
+
+def test_a_message_on_screen_follows_a_theme_switch(window):
+    from zettelapp.ui import theme
+
+    window._set_theme("light")
+    window.info.show_message("Saved", "success")
+    light = theme.current().surface
+    window._set_theme("dark")
+    assert theme.current().surface in window.info.styleSheet()
+    assert light not in window.info.styleSheet()
+
+
+def test_an_alarm_or_a_link_brings_a_maximised_window_back_maximised(window):
+    from PySide6.QtCore import Qt
+
+    window.setWindowState(Qt.WindowState.WindowMaximized | Qt.WindowState.WindowMinimized)
+    window.bring_forward()
+    assert window.windowState() & Qt.WindowState.WindowMaximized
+    assert not window.windowState() & Qt.WindowState.WindowMinimized

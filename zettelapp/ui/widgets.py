@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import sys
 from collections.abc import Callable
 from pathlib import Path
 
@@ -74,11 +73,9 @@ _LAST_FOLDER_KEY = "dialogs/lastFolder"
 def dialog_start(name: str = "") -> str:
     """Where a file dialog without a folder of its own opens, with *name* proposed.
 
-    Windows reopens the folder last used in the app by itself. Elsewhere such a dialog
-    would open the process's working folder (often the home folder, sometimes "/"), so
-    it opens the folder last used here instead, or Documents the first time."""
-    if sys.platform == "win32":
-        return name
+    Left to itself, such a dialog opens the process's working folder: the install folder
+    when ZettelApp starts from its Windows shortcut, the home folder or "/" on Linux. So it
+    opens the folder last used here instead, or Documents the first time."""
     from zettelapp import settings
     from zettelapp.paths import documents_dir
 
@@ -90,7 +87,7 @@ def dialog_start(name: str = "") -> str:
 
 def remember_folder(path: str) -> None:
     """Note the folder of a file chosen in a dialog that used dialog_start()."""
-    if path and sys.platform != "win32":
+    if path:
         from zettelapp import settings
 
         settings.store().setValue(_LAST_FOLDER_KEY, str(Path(path).parent))
@@ -386,6 +383,7 @@ class InfoBar(QFrame):
         row.addWidget(self.close_button)
         self._timer = QTimer(self, singleShot=True, timeout=self.hide)
         self._callback: Callable | None = None
+        self._kind = "info"
         self.action.clicked.connect(self._run)
 
     def show_message(
@@ -396,14 +394,8 @@ class InfoBar(QFrame):
         callback: Callable | None = None,
         timeout_ms: int = 8000,
     ) -> None:
-        t = theme.current()
-        color = {"info": t.accent, "success": t.success, "error": t.danger}.get(kind, t.accent)
-        self.setStyleSheet(
-            f"InfoBar {{ background: {t.surface}; border: 1px solid {t.border};"
-            f" border-left: 4px solid {color}; border-radius: 6px; }}"
-        )
-        glyph = {"info": "info", "success": "check", "error": "info"}[kind]
-        self.icon.setPixmap(icons.icon(glyph, color).pixmap(18, 18))
+        self._kind = kind
+        self.refresh_style()
         self.text.setText(text)
         self.action.setVisible(bool(action))
         self.action.setText(action or "")
@@ -412,6 +404,18 @@ class InfoBar(QFrame):
         self._timer.stop()
         if timeout_ms:
             self._timer.start(timeout_ms)
+
+    def refresh_style(self) -> None:
+        """Colour the strip from the current theme (again after a theme switch)."""
+        t = theme.current()
+        kind = self._kind
+        color = {"info": t.accent, "success": t.success, "error": t.danger}.get(kind, t.accent)
+        self.setStyleSheet(
+            f"InfoBar {{ background: {t.surface}; border: 1px solid {t.border};"
+            f" border-left: 4px solid {color}; border-radius: 6px; }}"
+        )
+        glyph = {"info": "info", "success": "check", "error": "info"}.get(kind, "info")
+        self.icon.setPixmap(icons.icon(glyph, color).pixmap(18, 18))
 
     def _run(self) -> None:
         if self._callback:

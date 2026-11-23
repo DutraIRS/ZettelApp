@@ -97,6 +97,14 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Fixed
 
+- Windows: file dialogs (insert image, link to a file, mind map export, save graph image) opened
+  the working folder, which from the Start-menu shortcut is the install folder. They now open the
+  folder used last, or Documents.
+- A maximised window came back un-maximised after clicking an alarm or a `zettelapp://` link.
+- Menu access keys were used twice in some menus (in English, and more in translations); every
+  item now has its own, in every language.
+- A message strip on screen kept the old theme's colours after a theme switch.
+- Alt+click on the caret just added takes it away again.
 - Icons follow a theme switch made while ZettelApp runs (*View ▸ Theme*, or the system turning dark);
   they kept the old theme's colour, nearly invisible on dark.
 - In the find bar, Tab goes from the search straight to *Replace with*.
