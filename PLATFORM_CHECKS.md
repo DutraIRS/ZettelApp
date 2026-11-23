@@ -76,7 +76,13 @@ the page icon; Ctrl+E cycles). Check, with the note above:
   right, the tab's chevron points the other way.
 - At **150 % scaling**, nothing is cut and the three tabs still line up.
 
-- [ ] Windows
+- [x] Windows: as described, driven on the Windows platform in English, Arabic, Japanese and
+  Chinese, light and dark, 100 % and 150 %. The three tabs share one height (y = 773 at 100 %,
+  569 at 150 %); in Reading view the text's tab sits 32 px right of the note list's (mirrored in
+  Arabic); the column is centred (120 px a side at 1440 px wide, 24 px when narrow); typing in
+  the locked title changes nothing; no tab in Edit mode. Two fixes: *Editor text size* wasn't
+  applied at start (the text was always 11 pt, the preview smaller), and after writing a new note
+  the next note stayed in Split view instead of going back to Reading view. Both fixed with tests.
 - [ ] GNOME
 - [ ] KDE
 
@@ -88,7 +94,9 @@ below, so it sits with the text it introduces; list items are evenly spaced; **n
 the picture**. Change *Options ▸ General ▸ Editor text size* (try 9 and 16): the preview follows.
 Also look at a flashcard in *Review* and an answer in *Ask*: same spacing, nothing broken.
 
-- [ ] Windows
+- [x] Windows: as described at 9, 11 and 16 pt; no gap under the picture. Lines were 150 % of
+  Qt's line spacing (about twice the font size, which read as double-spaced); now 125 %. The
+  website's screenshots were refreshed with it.
 - [ ] GNOME
 - [ ] KDE
 
@@ -99,7 +107,9 @@ in **justified paragraphs with a gap between them**: the prologue's three paragr
 story, a clue, the finale. Check in English, Arabic (justified right to left) and Japanese or
 Chinese (no odd stretching), at 100 % and 150 %, light and dark. Nothing cut at the card's bottom.
 
-- [ ] Windows
+- [x] Windows: as described in English and Arabic. Chinese showed odd stretching: Qt justifies
+  at spaces only, so the gaps around Latin words ("Ask", "AI") went wide. Chinese and Japanese
+  are now aligned to the start (fixed with a test).
 - [ ] GNOME
 - [ ] KDE
 
@@ -117,7 +127,10 @@ follows again. With a primary colour of your own set in *Options ▸ General*, a
 - KDE Plasma 6: *System Settings ▸ Colours & Themes ▸ Colours ▸ Accent colour* (a custom colour,
   then "From wallpaper").
 
-- [ ] Windows
+- [x] Windows: as described with *Use System Setting* and *Dark*. The accent was switched the
+  way Settings does it (the `Explorer\Accent` palette and the `ImmersiveColorSet` broadcast):
+  red → green → purple followed within a second; with an own primary colour (#ff8800) a desktop
+  change left it alone. The desktop's values were restored afterwards.
 - [ ] GNOME
 - [ ] KDE
 
@@ -128,15 +141,17 @@ Fixed on every OS by the KDE pass (the switch to light was missed): the whole wi
 icons included, in both directions, also with a message strip showing (export a mind map just
 before switching). The earlier Windows pass never switched Windows itself.
 
-- [ ] Windows (*Settings ▸ Personalisation ▸ Colours ▸ Choose your mode*)
+- [x] Windows (*Settings ▸ Personalisation ▸ Colours ▸ Choose your mode*): as described, dark →
+  light → dark with a message strip showing; window, icons and strip all switched each way.
 - [ ] GNOME (re-check after this round's changes)
 - [ ] KDE (re-check after this round's changes)
 
 ## 2. Windows only
 
-- [ ] **Tests and lint**: `.venv\Scripts\python -m pytest` all passing (Linux: 545 passed,
+- [x] **Tests and lint**: `.venv\Scripts\python -m pytest` all passing (Linux: 545 passed,
   14 skipped; Windows skips the Linux-only ones), `ruff check .`, `ruff format --check .`,
-  `python tools/i18n.py check` (1027/1027 in every language).
+  `python tools/i18n.py check` (1027/1027 in every language). *Windows: 490 passed, 70 skipped;
+  ruff clean; 1027/1027 in all ten languages.*
 - [ ] **Microsoft Store package** (`dist/ZettelApp.msix`, built with `-SignMsixForTesting` to
   install it locally): installs and starts from the Start menu with its logo; *Options ▸ Desktop
   integration* offers no link registration (the manifest registers `zettelapp://`), and a
@@ -146,10 +161,12 @@ before switching). The earlier Windows pass never switched Windows itself.
 - [ ] **Alarm toast click** with the window maximised and then minimised: the note opens and
   the window comes back maximised (the toast's look was confirmed; the click after the fix was
   not watched).
-- [ ] **Options ▸ AI assistant** wording, by eye: save a key, read the hint ("Key … saved on this
-  computer."), delete it.
-- [ ] **Show in folder** (*Export* result, a `file:///` link in a note): Explorer opens with the
-  file selected, as before (Linux-only code changed; Windows should be unchanged).
+- [x] **Options ▸ AI assistant** wording, by eye: save a key, read the hint ("Key … saved on this
+  computer."), delete it. *Windows: "Key “Platform check” saved on this computer.", read back
+  from Credential Manager, then "… deleted from this computer." and gone from `cmdkey /list`.*
+- [x] **Show in folder** (*Export* result, a `file:///` link in a note): Explorer opens with the
+  file selected, as before (Linux-only code changed; Windows should be unchanged). *Windows: both
+  routes opened Explorer on the folder with the file selected (read back from the Shell).*
 
 ## 3. GNOME only
 
