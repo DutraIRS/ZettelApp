@@ -51,6 +51,15 @@ live, file dialogs, Show in folder, window identity, notifications, second launc
 
 - [ ] **Flathub and the Snap Store**: rework the Flatpak manifest for offline builds (the PySide6 base
   app and pinned, checksummed Python sources), build and test both, then submit.
+- [ ] **Check that 1.4.0 is live in all three stores** (submitted 23 November 2026):
+  - [ ] **Microsoft Store**: certification passes and https://apps.microsoft.com/detail/9PB0HCDXF63D
+    opens the listing (the website's Windows button already points there).
+  - [ ] **Snap Store**: `snap info zettelapp` finds it and `sudo snap install zettelapp` works (the
+    upload said "released to stable", but the store did not list it yet). Ask on the Snapcraft forum
+    for `password-manager-service` to connect automatically; until then API keys stay in memory only
+    unless the user runs `sudo snap connect zettelapp:password-manager-service`.
+  - [ ] **Flathub**: the submission is accepted and `flatpak install flathub io.github.dutrairs.zettelapp`
+    works; then merge the website pull request that points the Flatpak line at Flathub (#27).
 - [ ] **Alarm click and second launch, on screen**: clicking an alarm notification, and a second launch
   from the GNOME overview or KRunner, bring the window forward (activation tokens are passed on and
   unit-tested; the on-screen click was never done).
