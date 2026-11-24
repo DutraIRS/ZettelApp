@@ -215,6 +215,11 @@ class NoteRenderer:
         )
         return f'<span class="math-display">{image}</span>' if display else image
 
+    def set_line_breaks(self, on: bool) -> None:
+        """Whether a single line break starts a new line (ZettelApp's way, as the editor shows
+        it) or lines join into one paragraph until a blank line (standard Markdown)."""
+        self.md.options["breaks"] = on
+
     def render(self, text: str) -> str:
         out = self.md.render(self._prepare(text))
         # A formula alone in its paragraph is centred; one inside a sentence stays inline.

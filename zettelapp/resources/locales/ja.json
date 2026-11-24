@@ -1090,5 +1090,15 @@
  "Registered by the ZettelApp package.": "ZettelApp のパッケージによって登録されています。",
  "Minimise": "最小化",
  "Maximise": "最大化",
- "Restore Down": "元に戻す (縮小)"
+ "Restore Down": "元に戻す (縮小)",
+ "Preview and Reading view": "プレビューと閲覧表示",
+ "Line breaks": "改行",
+ "A single line break starts a new line": "1 回の改行で新しい行にする",
+ "Lines join into one paragraph (standard Markdown)": "行を 1 つの段落につなげる (標準の Markdown)",
+ "Alignment": "配置",
+ "Start": "行頭揃え",
+ "Justified": "両端揃え",
+ "Line spacing": "行間",
+ "Space between paragraphs": "段落の間隔",
+ "The space under each paragraph, as a share of the text size": "各段落の下の間隔 (文字サイズに対する割合)"
 }

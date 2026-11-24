@@ -12,6 +12,8 @@ Quelllink gesperrt, damit sich nichts versehentlich ändert. Die Lasche zwischen
 den Text zum Lesen aus und wieder ein (ziehen ändert die Größe). Der gewählte Modus bleibt beim nächsten
 Start erhalten; eine neue Notiz öffnet sich immer mit ihrem Text, bereit zum Schreiben.
 
+*Optionen ▸ Allgemein ▸ Vorschau und Leseansicht* legt fest, wie die Vorschau den Text setzt: ob ein einfacher Zeilenumbruch eine neue Zeile beginnt (wie im Editor) oder Zeilen bis zu einer Leerzeile zu einem Absatz verbunden werden (Standard-Markdown), Ausrichtung am Anfang oder Blocksatz, Zeilenabstand und Abstand zwischen Absätzen.
+
 Aus Sicherheitsgründen wird rohes HTML in einer Notiz als Text angezeigt und nie dargestellt. Links in der
 Vorschau öffnen nur Webseiten (`http`, `https`), E-Mail-Adressen (`mailto`), Notizen, Zotero-Einträge und
 lokale Dateien (werden in Ihrem Dateimanager angezeigt, siehe [Links zu lokalen Dateien](#links-to-local-files)).

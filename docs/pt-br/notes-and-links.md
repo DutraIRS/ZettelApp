@@ -12,6 +12,8 @@ de origem travados para nada mudar sem querer. A aba entre o texto e a pré-visu
 ler e o traz de volta (arraste-a para redimensionar). O modo escolhido é mantido na próxima abertura; uma
 nota nova sempre abre com o texto, pronta para escrever.
 
+*Opções ▸ Geral ▸ Pré-visualização e modo leitura* define como a pré-visualização dispõe o texto: se uma única quebra de linha começa uma nova linha (como no editor) ou se as linhas se juntam num só parágrafo até uma linha em branco (Markdown padrão), o alinhamento no início ou justificado, o espaçamento entre linhas e o espaço entre parágrafos.
+
 Por segurança, HTML bruto em uma nota é exibido como texto e nunca renderizado. Os links na pré-visualização abrem apenas páginas
 web (`http`, `https`), e-mail (`mailto`), notas, itens do Zotero e arquivos locais (mostrados no seu gerenciador de arquivos,
 veja [Links para arquivos locais](#links-to-local-files)). Veja [Privacidade e segurança](privacy-and-security.md).

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from collections.abc import Callable
 from pathlib import Path
 
@@ -9,6 +10,7 @@ from PySide6.QtCore import QPoint, QPointF, Qt, QUrl, Signal
 from PySide6.QtGui import QDesktopServices, QFontInfo, QImage, QTextDocument
 from PySide6.QtWidgets import QTextBrowser
 
+from zettelapp import settings
 from zettelapp.core.render import (
     ASSET_SCHEME,
     MATH_DISPLAY_SCHEME,
@@ -39,26 +41,28 @@ MARGIN = 8  # px around the text beside the editor, in Review and in Ask
 READING_MARGIN = 24  # px at least, either side of the reading column
 
 
-def preview_css(px: int = 14) -> str:
+def preview_css(px: int = 14, line_spacing: int = 125, paragraph_spacing: int = 75) -> str:
     """The preview's style for a body font *px* pixels high: one spacing step for every block.
 
     Paragraphs, lists, quotes and code all leave one step below them; a heading leaves two
-    above (it starts a section) and half a step below (it belongs to what follows).
+    above (it starts a section) and half a step below (it belongs to what follows). The step
+    is *paragraph_spacing* percent of the text size, and lines are *line_spacing* percent apart.
     """
     t = theme.current()
     italic = ", ".join(f"'{family}'" for family in theme.ITALIC_FONTS)
-    step = round(px * 0.75)
+    step = round(px * paragraph_spacing / 100)
     block = f"margin: 0 0 {step}px 0;"
+    lines = f"line-height: {line_spacing}%;"
     return f"""
 body {{ color: {t.text}; font-size: {px}px; }}
 h1 {{ font-size: {round(px * 1.6)}px; font-weight: 600; margin: {step * 2}px 0 {step // 2}px 0; }}
 h2 {{ font-size: {round(px * 1.3)}px; font-weight: 600; margin: {step * 2}px 0 {step // 2}px 0; }}
 h3, h4, h5, h6 {{ font-size: {round(px * 1.1)}px; font-weight: 600;
     margin: {round(step * 1.5)}px 0 {step // 2}px 0; }}
-p {{ {block} line-height: 125%; }}
+p {{ {block} {lines} }}
 p.picture {{ line-height: 100%; }}
 ul, ol {{ {block} }}
-li {{ margin: 0 0 {step // 3}px 0; line-height: 125%; }}
+li {{ margin: 0 0 {step // 3}px 0; {lines} }}
 em, i {{ font-family: {italic}; }}
 a {{ color: {t.link}; text-decoration: none; }}
 a.new-note {{ color: {t.text_muted}; text-decoration: underline; }}
@@ -74,6 +78,12 @@ th {{ font-weight: 600; text-align: left; }}
 td, th {{ padding: 3px 8px; border: 1px solid {t.border}; }}
 .missing-image {{ color: {t.text_muted}; }}
 """
+
+
+def justified(html: str) -> str:
+    """*html* with its paragraphs and list items justified. Qt's style sheets don't know
+    text-align: justify, only the align attribute; a centred formula keeps its own."""
+    return re.sub(r"<(p|li)>", r'<\1 align="justify">', html)
 
 
 class NotePreview(QTextBrowser):
@@ -131,8 +141,18 @@ class NotePreview(QTextBrowser):
         if self.renderer is None:
             return
         scroll = self.verticalScrollBar().value()
-        self.document().setDefaultStyleSheet(preview_css(QFontInfo(self.font()).pixelSize()))
-        self.setHtml(self.renderer.render(text))
+        self.document().setDefaultStyleSheet(
+            preview_css(
+                QFontInfo(self.font()).pixelSize(),
+                settings.get(settings.PREVIEW_LINE_SPACING),
+                settings.get(settings.PREVIEW_PARAGRAPH_SPACING),
+            )
+        )
+        self.renderer.set_line_breaks(settings.get(settings.PREVIEW_LINE_BREAKS))
+        html = self.renderer.render(text)
+        if settings.get(settings.PREVIEW_ALIGN) == "justify":
+            html = justified(html)
+        self.setHtml(html)
         self._place_column()
         self.verticalScrollBar().setValue(scroll)
 

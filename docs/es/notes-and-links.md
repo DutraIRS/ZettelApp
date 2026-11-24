@@ -12,6 +12,8 @@ el enlace de origen bloqueados para que nada cambie por accidente. La pestaña e
 previa oculta el texto para leer y lo vuelve a mostrar (arrástrala para cambiar el tamaño). El modo que
 elijas se recuerda en el próximo inicio; una nota nueva siempre se abre con su texto, lista para escribir.
 
+*Opciones ▸ General ▸ Vista previa y vista de lectura* define cómo la vista previa dispone el texto: si un solo salto de línea empieza una línea nueva (como en el editor) o las líneas se unen en un solo párrafo hasta una línea en blanco (Markdown estándar), la alineación al inicio o justificada, el interlineado y el espacio entre párrafos.
+
 Por seguridad, el HTML sin procesar de una nota se muestra como texto y nunca se renderiza. Los enlaces de la vista previa solo abren páginas
 web (`http`, `https`), correo electrónico (`mailto`), notas, elementos de Zotero y archivos locales (se muestran en tu gestor de archivos,
 consulta [Enlaces a archivos locales](#links-to-local-files)). Consulta [Privacidad y seguridad](privacy-and-security.md).

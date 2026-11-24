@@ -1090,5 +1090,15 @@
  "Registered by the ZettelApp package.": "ZettelApp 패키지가 등록했어요.",
  "Minimise": "최소화",
  "Maximise": "최대화",
- "Restore Down": "이전 크기로 복원"
+ "Restore Down": "이전 크기로 복원",
+ "Preview and Reading view": "미리 보기와 읽기 보기",
+ "Line breaks": "줄 바꿈",
+ "A single line break starts a new line": "줄 바꿈 한 번으로 새 줄 시작",
+ "Lines join into one paragraph (standard Markdown)": "줄을 한 문단으로 합치기 (표준 Markdown)",
+ "Alignment": "정렬",
+ "Start": "시작 맞춤",
+ "Justified": "양쪽 맞춤",
+ "Line spacing": "줄 간격",
+ "Space between paragraphs": "문단 간격",
+ "The space under each paragraph, as a share of the text size": "각 문단 아래 간격 (글자 크기 대비 비율)"
 }

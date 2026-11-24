@@ -16,6 +16,13 @@ All notable changes to ZettelApp are documented here. The format follows
 - **Notes in the rail (or Ctrl+1) brings a folded note list back**: there is nothing else to see
   on that page. Opening a note from the graph or elsewhere still leaves the list as it was.
 
+### Added
+
+- **Preview and Reading view options** (*Options ▸ General*): whether a single line break starts a
+  new line or lines join into one paragraph (standard Markdown), alignment at the start or
+  justified, line spacing and the space between paragraphs. They apply wherever notes are shown
+  read-only: the preview, the Reading view, Review and Ask.
+
 ### Fixed
 
 - **Imports from Obsidian**: links by path (`[[Folder/Note]]`) and to a block (`[[Note^id]]`)

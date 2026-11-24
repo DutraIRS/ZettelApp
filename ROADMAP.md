@@ -14,12 +14,6 @@ getting in touch on [GitHub](https://github.com/DutraIRS/ZettelApp).
   *k* configurable) instead of the most related notes.
 - [ ] **Review before sending**: a checklist of the notes about to be sent, to untick any first.
 
-### Preview
-
-- [ ] **Text options**: line breaks (a single line break starts a new line, or lines join into one
-  paragraph as in standard Markdown), alignment (start or justified), line spacing and paragraph
-  spacing. Markdown is parsed by markdown-it-py; the preview's layout is ZettelApp's own.
-
 ### Insights
 
 - [ ] **Network metrics**: the degree distribution (and how close it is to a power law), hubs by

@@ -1090,5 +1090,15 @@
  "Registered by the ZettelApp package.": "已由 ZettelApp 软件包注册。",
  "Minimise": "最小化",
  "Maximise": "最大化",
- "Restore Down": "向下还原"
+ "Restore Down": "向下还原",
+ "Preview and Reading view": "预览和阅读视图",
+ "Line breaks": "换行",
+ "A single line break starts a new line": "单个换行即另起一行",
+ "Lines join into one paragraph (standard Markdown)": "各行合并为一个段落（标准 Markdown）",
+ "Alignment": "对齐",
+ "Start": "起始对齐",
+ "Justified": "两端对齐",
+ "Line spacing": "行距",
+ "Space between paragraphs": "段落间距",
+ "The space under each paragraph, as a share of the text size": "每段下方的间距，相对于文字大小的比例"
 }

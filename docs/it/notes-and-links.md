@@ -12,6 +12,8 @@ bloccati perché nulla cambi per sbaglio. La linguetta tra testo e anteprima nas
 lo riporta (trascinala per ridimensionare). La modalità scelta resta al prossimo avvio; una nota nuova si
 apre sempre con il suo testo, pronta da scrivere.
 
+*Opzioni ▸ Generale ▸ Anteprima e vista lettura* stabilisce come l'anteprima dispone il testo: se un solo a capo inizia una nuova riga (come nell'editor) o le righe si uniscono in un solo paragrafo fino a una riga vuota (Markdown standard), l'allineamento all'inizio o giustificato, l'interlinea e lo spazio tra i paragrafi.
+
 Per sicurezza, l'HTML grezzo in una nota viene mostrato come testo e non viene mai interpretato. I collegamenti nell'anteprima aprono solo pagine
 web (`http`, `https`), e-mail (`mailto`), note, elementi di Zotero e file locali (mostrati nel tuo gestore di file,
 vedi [Collegamenti a file locali](#links-to-local-files)). Vedi [Privacy e sicurezza](privacy-and-security.md).

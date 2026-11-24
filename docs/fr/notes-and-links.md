@@ -13,6 +13,8 @@ titre et le lien source verrouillés pour que rien ne change par mégarde. L’o
 masque le texte pour lire et le fait revenir (faites-le glisser pour redimensionner). Le mode choisi est
 conservé au prochain démarrage ; une nouvelle note s’ouvre toujours avec son texte, prête à être écrite.
 
+*Options ▸ Général ▸ Aperçu et mode lecture* règle la mise en page de l’aperçu : un simple retour à la ligne commence une nouvelle ligne (comme dans l’éditeur) ou les lignes forment un seul paragraphe jusqu’à une ligne vide (Markdown standard), l’alignement au début ou justifié, l’interligne et l’espace entre les paragraphes.
+
 Par sécurité, le HTML brut d’une note est affiché comme texte et n’est jamais rendu. Dans l’aperçu, les liens
 ouvrent uniquement des pages Web (`http`, `https`), des e-mails (`mailto`), des notes, des éléments Zotero
 et des fichiers locaux (affichés dans votre gestionnaire de fichiers ; consultez [Liens vers des fichiers locaux](#links-to-local-files)). Consultez [Confidentialité et sécurité](privacy-and-security.md).

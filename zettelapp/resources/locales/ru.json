@@ -1152,5 +1152,15 @@
  "Registered by the ZettelApp package.": "Зарегистрировано пакетом ZettelApp.",
  "Minimise": "Свернуть",
  "Maximise": "Развернуть",
- "Restore Down": "Свернуть в окно"
+ "Restore Down": "Свернуть в окно",
+ "Preview and Reading view": "Просмотр и режим чтения",
+ "Line breaks": "Переносы строк",
+ "A single line break starts a new line": "Одиночный перенос начинает новую строку",
+ "Lines join into one paragraph (standard Markdown)": "Строки объединяются в один абзац (стандартный Markdown)",
+ "Alignment": "Выравнивание",
+ "Start": "По началу",
+ "Justified": "По ширине",
+ "Line spacing": "Межстрочный интервал",
+ "Space between paragraphs": "Отступ между абзацами",
+ "The space under each paragraph, as a share of the text size": "Отступ под каждым абзацем относительно размера текста"
 }

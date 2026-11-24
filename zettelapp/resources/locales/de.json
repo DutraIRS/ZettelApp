@@ -1121,5 +1121,15 @@
  "Registered by the ZettelApp package.": "Vom ZettelApp-Paket registriert.",
  "Minimise": "Minimieren",
  "Maximise": "Maximieren",
- "Restore Down": "Verkleinern"
+ "Restore Down": "Verkleinern",
+ "Preview and Reading view": "Vorschau und Leseansicht",
+ "Line breaks": "Zeilenumbrüche",
+ "A single line break starts a new line": "Ein einfacher Zeilenumbruch beginnt eine neue Zeile",
+ "Lines join into one paragraph (standard Markdown)": "Zeilen werden zu einem Absatz verbunden (Standard-Markdown)",
+ "Alignment": "Ausrichtung",
+ "Start": "Anfang",
+ "Justified": "Blocksatz",
+ "Line spacing": "Zeilenabstand",
+ "Space between paragraphs": "Abstand zwischen Absätzen",
+ "The space under each paragraph, as a share of the text size": "Der Abstand unter jedem Absatz, im Verhältnis zur Textgröße"
 }

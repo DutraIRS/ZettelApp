@@ -1121,5 +1121,15 @@
  "Registered by the ZettelApp package.": "Registrado por el paquete de ZettelApp.",
  "Minimise": "Minimizar",
  "Maximise": "Maximizar",
- "Restore Down": "Restaurar"
+ "Restore Down": "Restaurar",
+ "Preview and Reading view": "Vista previa y vista de lectura",
+ "Line breaks": "Saltos de línea",
+ "A single line break starts a new line": "Un solo salto de línea empieza una línea nueva",
+ "Lines join into one paragraph (standard Markdown)": "Las líneas se unen en un solo párrafo (Markdown estándar)",
+ "Alignment": "Alineación",
+ "Start": "Inicio",
+ "Justified": "Justificado",
+ "Line spacing": "Interlineado",
+ "Space between paragraphs": "Espacio entre párrafos",
+ "The space under each paragraph, as a share of the text size": "El espacio bajo cada párrafo, en proporción al tamaño del texto"
 }
