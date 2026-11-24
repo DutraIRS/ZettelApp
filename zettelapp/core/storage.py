@@ -173,6 +173,11 @@ def split_query(query: str) -> tuple[str, list[str]]:
     return " ".join(re.sub(r"(?:^|\s)tag:\S+", " ", query).split()), tags
 
 
+def _like_escape(text: str) -> str:
+    """*text* inside a LIKE pattern with ESCAPE '\\': its \\, % and _ match only themselves."""
+    return text.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
+
+
 def _clean_alarm(value: str | None) -> str:
     """An alarm as a timezone-aware UTC ISO string, or "" when it isn't a valid time."""
     if not value:
@@ -556,9 +561,7 @@ class Vault:
     def _resync_references(self, titles: set[str], skip: str) -> None:
         """Re-resolve [[Title]] links in other notes after a note is created or renamed."""
         for title in titles:
-            pattern = (
-                "%[[" + title.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
-            )
+            pattern = "%[[" + _like_escape(title) + "%"
             rows = self.conn.execute(
                 "SELECT id, body FROM notes WHERE deleted = 0 AND id != ? AND body LIKE ? ESCAPE '\\'",
                 (skip, pattern),
@@ -757,7 +760,7 @@ class Vault:
             sql = "SELECT id FROM notes n WHERE 1 = 1" + deleted_clause
             params: list[str] = []
             for t in tokens:
-                like = "%" + t.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_") + "%"
+                like = "%" + _like_escape(t) + "%"
                 sql += (
                     " AND (n.title LIKE ? ESCAPE '\\' OR n.body LIKE ? ESCAPE '\\' OR EXISTS "
                     "(SELECT 1 FROM tags t WHERE t.note_id = n.id AND t.tag LIKE ? ESCAPE '\\'))"
