@@ -198,7 +198,7 @@ class MainWindow(QMainWindow):
         root = QHBoxLayout(central)
         root.setContentsMargins(0, 0, 0, 0)
         root.setSpacing(0)
-        self.nav = NavRail(self.show_page, lambda: self.open_options(), self.donate)
+        self.nav = NavRail(self.choose_page, lambda: self.open_options(), self.donate)
         root.addWidget(self.nav)
         right = QWidget()
         right.setObjectName("Page")
@@ -417,7 +417,7 @@ class MainWindow(QMainWindow):
             self._action(
                 v,
                 f"&{_(text)}",
-                lambda _unused=False, n=i: self.show_page(n),
+                lambda _unused=False, n=i: self.choose_page(n),
                 f"Ctrl+{i + 1}",
                 glyph,
             )
@@ -595,6 +595,13 @@ class MainWindow(QMainWindow):
         self.nav.select(index)
         self.pages.setCurrentIndex(index)
         self.graph.set_focus_note(self.current_note_id())
+
+    def choose_page(self, index: int) -> None:
+        """A page the user picked (the rail, Ctrl+1 to 5): asking for Notes also brings a folded
+        note list back, as there is nothing else to see there."""
+        self.show_page(index)
+        if index == 0 and not self.folds["list"][0].shown():
+            self.toggle_panel("list", True)
 
     def show_local_graph(self, note_id: str | None) -> None:
         self.show_page(1)

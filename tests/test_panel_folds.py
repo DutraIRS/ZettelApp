@@ -80,3 +80,20 @@ def test_dragging_resizes_within_the_panels_limits(window):
     assert window.list.width() >= window.list.minimumWidth()
     sash.place()
     assert abs(sash.geometry().center().x() - fold.edge(page)) <= 3
+
+
+def test_choosing_notes_brings_the_folded_note_list_back(window):
+    from PySide6.QtCore import Qt
+    from PySide6.QtTest import QTest
+
+    window.toggle_panel("list", False)
+    window.choose_page(1)  # another page leaves the fold alone
+    assert window.list.isHidden()
+    QTest.mouseClick(window.nav.buttons[0], Qt.MouseButton.LeftButton)  # the rail's Notes
+    assert not window.list.isHidden() and window.pages.currentIndex() == 0
+    window.toggle_panel("list", False)
+    QTest.mouseClick(window.nav.buttons[0], Qt.MouseButton.LeftButton)  # already on Notes
+    assert not window.list.isHidden()
+    window.toggle_panel("list", False)
+    window.show_page(0)  # opening a note from elsewhere keeps the user's fold
+    assert window.list.isHidden()

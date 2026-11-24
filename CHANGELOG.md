@@ -13,6 +13,8 @@ All notable changes to ZettelApp are documented here. The format follows
   Windows' title bar above the menu bar. The window still snaps, resizes from every edge, keeps its
   shadow and rounded corners, and maximises on a double click. Linux keeps the desktop's own title
   bar.
+- **Notes in the rail (or Ctrl+1) brings a folded note list back**: there is nothing else to see
+  on that page. Opening a note from the graph or elsewhere still leaves the list as it was.
 
 ## [1.4.0] - 2026-11-23
 
