@@ -238,6 +238,13 @@ and the Snap:
 - [ ] An API key is kept between starts (Secret portal or keyring).
 - [ ] An alarm notification shows and its click opens the note.
 - [ ] File dialogs are the desktop's own and can reach `~/Documents`.
+- [ ] *Options ▸ MCP server* shows `flatpak run --command=zettelapp-mcp io.github.dutrairs.zettelapp`
+  (Flatpak) or `snap run zettelapp.zettelapp-mcp` (Snap). Pasted into Claude Desktop or Claude Code
+  on the host, a client lists the tools with the switch on and is refused with it off.
+- [ ] *Add to Claude Desktop* writes the host's `~/.config/Claude/claude_desktop_config.json`, not
+  one inside `~/.var/app` or `~/snap`. In the Snap the `home` plug can't write hidden folders, so
+  expect a clear error there; the copied snippet still works.
+- [ ] An alarm whose note text contains `<b>bold</b>` shows the tags as text, not bold.
 
 ## Already confirmed (no need to repeat)
 
