@@ -1242,5 +1242,8 @@
  "Reading view": "عرض القراءة",
  "Hide the text and read the note, or drag to resize it": "إخفاء النص وقراءة الملاحظة، أو اسحب لتغيير حجمه",
  "Show the text beside the preview to edit the note": "إظهار النص بجانب المعاينة لتحرير الملاحظة",
- "Registered by the ZettelApp package.": "مسجّلة بواسطة حزمة ZettelApp."
+ "Registered by the ZettelApp package.": "مسجّلة بواسطة حزمة ZettelApp.",
+ "Minimise": "تصغير",
+ "Maximise": "تكبير",
+ "Restore Down": "استعادة لأسفل"
 }

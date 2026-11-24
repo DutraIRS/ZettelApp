@@ -1087,5 +1087,8 @@
  "Reading view": "阅读视图",
  "Hide the text and read the note, or drag to resize it": "隐藏文本并阅读笔记,或拖动调整大小",
  "Show the text beside the preview to edit the note": "在预览旁显示文本以编辑笔记",
- "Registered by the ZettelApp package.": "已由 ZettelApp 软件包注册。"
+ "Registered by the ZettelApp package.": "已由 ZettelApp 软件包注册。",
+ "Minimise": "最小化",
+ "Maximise": "最大化",
+ "Restore Down": "向下还原"
 }

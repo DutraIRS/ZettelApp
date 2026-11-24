@@ -6,6 +6,14 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- **One top row on Windows** (roadmap item 10): the app's icon, the menus, the window's title and
+  the minimise, maximise and close buttons share one row in the theme's colours, instead of
+  Windows' title bar above the menu bar. The window still snaps, resizes from every edge, keeps its
+  shadow and rounded corners, and maximises on a double click. Linux keeps the desktop's own title
+  bar.
+
 ## [1.4.0] - 2026-11-23
 
 ### Added

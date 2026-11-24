@@ -1087,5 +1087,8 @@
  "Reading view": "읽기 보기",
  "Hide the text and read the note, or drag to resize it": "텍스트를 숨기고 노트 읽기, 끌어서 크기 조정",
  "Show the text beside the preview to edit the note": "미리 보기 옆에 텍스트를 표시하여 노트 편집",
- "Registered by the ZettelApp package.": "ZettelApp 패키지가 등록했어요."
+ "Registered by the ZettelApp package.": "ZettelApp 패키지가 등록했어요.",
+ "Minimise": "최소화",
+ "Maximise": "최대화",
+ "Restore Down": "이전 크기로 복원"
 }

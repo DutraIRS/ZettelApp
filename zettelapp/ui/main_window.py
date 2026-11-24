@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QHBoxLayout,
     QMainWindow,
+    QMenuBar,
     QMessageBox,
     QSplitter,
     QStackedWidget,
@@ -59,7 +60,7 @@ from zettelapp.paths import (
     local_data_dir,
     resource_path,
 )
-from zettelapp.ui import icons, theme
+from zettelapp.ui import icons, theme, title_bar
 from zettelapp.ui.ask_page import AskPage
 from zettelapp.ui.dialogs import (
     AboutDialog,
@@ -258,6 +259,8 @@ class MainWindow(QMainWindow):
         self._notifier = None
         self._wire()
         self.quest = Quest(self)
+        self.title_bar: title_bar.TitleBar | None = None  # Windows: the window's own top row
+        self._frame: title_bar.WindowFrame | None = None
         self._build_menus()
         self.status_vault = label("", "caption")
         self.status_counts = label("", "caption")
@@ -327,8 +330,21 @@ class MainWindow(QMainWindow):
         menu.addAction(action)
         return action
 
+    def _menu_bar(self) -> QMenuBar:
+        """The bar the menus go in: in the window's own title bar on Windows, else Qt's.
+
+        Once the title bar holds the menus, menuBar() must not be called: Qt would put a new,
+        empty menu bar in its place (use menuWidget())."""
+        if not title_bar.wanted():
+            return self.menuBar()
+        bar = title_bar.MenuBar()
+        self.title_bar = title_bar.TitleBar(self, bar)
+        self._frame = title_bar.WindowFrame(self, self.title_bar)
+        self.setMenuWidget(self.title_bar)
+        return bar
+
     def _build_menus(self) -> None:
-        bar = self.menuBar()
+        bar = self._menu_bar()
         f = bar.addMenu(_("&File"))
         self._action(f, "&New Note", self.new_note, QKeySequence.StandardKey.New, "add")
         self._action(f, "New &Vault…", self.new_vault_dialog, None, "folder")
@@ -1449,6 +1465,16 @@ class MainWindow(QMainWindow):
         super().changeEvent(event)
         if event.type() == QEvent.Type.ThemeChange:
             self.desktopThemeChanged.emit()
+        elif event.type() == QEvent.Type.WindowStateChange and self.title_bar is not None:
+            self.title_bar.sync()  # Maximise or Restore Down
+
+    def nativeEvent(self, kind, message):  # noqa: N802 - Qt API
+        """Let the title bar answer Windows' questions about the frame (Windows only)."""
+        if self._frame is not None:
+            answer = self._frame.handle(message)
+            if answer is not None:
+                return True, answer
+        return super().nativeEvent(kind, message)
 
     def settings_changed(self) -> None:
         theme.apply_theme(
@@ -1510,6 +1536,8 @@ class MainWindow(QMainWindow):
 
     def showEvent(self, event) -> None:  # noqa: N802
         super().showEvent(event)
+        if self._frame is not None:
+            self._frame.restyle()  # the frame's snapping, shadow and animations, first time only
         winintegration.set_window_frame_dark(int(self.winId()), theme.current().dark)
 
     # --- updates --------------------------------------------------------------

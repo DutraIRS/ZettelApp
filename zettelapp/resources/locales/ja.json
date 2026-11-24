@@ -1087,5 +1087,8 @@
  "Reading view": "閲覧表示",
  "Hide the text and read the note, or drag to resize it": "テキストを隠してノートを読む、ドラッグでサイズ変更",
  "Show the text beside the preview to edit the note": "プレビューの横にテキストを表示してノートを編集",
- "Registered by the ZettelApp package.": "ZettelApp のパッケージによって登録されています。"
+ "Registered by the ZettelApp package.": "ZettelApp のパッケージによって登録されています。",
+ "Minimise": "最小化",
+ "Maximise": "最大化",
+ "Restore Down": "元に戻す (縮小)"
 }

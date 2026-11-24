@@ -5,12 +5,12 @@ platform session can be done start to finish without asking what to look at. It 
 with every change that touches the interface, theming, files, notifications or packaging. Items
 belong to the next release, **1.4.0**; once it ships, the checked items are removed.
 
-Last updated: 23 November 2026 (Reading view, preview spacing, the adventure card, live accent,
+Last updated: 24 November 2026 (the window's top row on Windows; earlier: Reading view, preview spacing, the adventure card, live accent,
 Dolphin, plus everything the earlier Windows, GNOME and KDE passes could not reach).
 
 ## How to work through it
 
-- Branch **`android-port`** (pull it first). Don't touch the `android/` folder.
+- Branch **`desktop-aesthetics`** (pull it first). Don't touch the `android/` folder.
 - Run from source unless an item says otherwise: `.venv\Scripts\python -m zettelapp` on Windows,
   `.venv/bin/python -m zettelapp` on Linux. Use a throwaway vault (*File ▸ New Vault…*), not your
   own notes.
@@ -146,11 +146,32 @@ before switching). The earlier Windows pass never switched Windows itself.
 - [ ] GNOME (re-check after this round's changes)
 - [ ] KDE (re-check after this round's changes)
 
+### 1.6 The window's top row (new)
+
+On **Windows**, the app's icon, the menus, the window's title (muted, centred) and the minimise,
+maximise and close buttons share one row in the theme's sidebar colour, instead of Windows'
+title bar above the menu bar. With the rail at the left it forms one L around the page. The window
+still drags by the empty row (double-click maximises), snaps (drag to an edge, Win+arrows),
+resizes from every edge and corner, keeps its shadow and rounded corners, and maximises to the
+screen's free area. Close turns red on hover. In Arabic the row is mirrored: buttons at the left,
+all six menus at the right.
+
+On **GNOME and KDE** nothing changes: the desktop's own title bar, Qt's menu bar under it.
+
+- [x] Windows (11, 125 % scaling, from source): as described in light, dark and black. Windows'
+  own `WM_NCHITTEST` answers: caption over the empty row, the title and the icon; client over the
+  menus and the three buttons; the matching edge or corner at each side. Maximised, the client area
+  equals the work area exactly (1920 × 1020) and the button reads "Restore Down". Win+Left snapped
+  it to the left at full height. Close's red hover and the Arabic row were checked on screen; the
+  row's menus had shrunk to the » button right to left (a Qt quirk), fixed with a test.
+- [ ] GNOME: the desktop's own title bar and Qt's menu bar, as before.
+- [ ] KDE: the desktop's own title bar and Qt's menu bar, as before.
+
 ## 2. Windows only
 
 - [x] **Tests and lint**: `.venv\Scripts\python -m pytest` all passing (Linux: 545 passed,
   14 skipped; Windows skips the Linux-only ones), `ruff check .`, `ruff format --check .`,
-  `python tools/i18n.py check` (1027/1027 in every language). *Windows: 490 passed, 70 skipped;
+  `python tools/i18n.py check` (1030/1030 in every language). *Windows: 490 passed, 70 skipped;
   ruff clean; 1027/1027 in all ten languages.*
 - [x] **Microsoft Store package** (`dist/ZettelApp.msix`, built with a test signature (since removed) to
   install it locally): installs and starts from the Start menu with its logo; *Options ▸ Desktop

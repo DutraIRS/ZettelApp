@@ -1149,5 +1149,8 @@
  "Reading view": "Режим чтения",
  "Hide the text and read the note, or drag to resize it": "Скрыть текст и читать заметку или перетащить, чтобы изменить размер",
  "Show the text beside the preview to edit the note": "Показать текст рядом с просмотром, чтобы редактировать заметку",
- "Registered by the ZettelApp package.": "Зарегистрировано пакетом ZettelApp."
+ "Registered by the ZettelApp package.": "Зарегистрировано пакетом ZettelApp.",
+ "Minimise": "Свернуть",
+ "Maximise": "Развернуть",
+ "Restore Down": "Свернуть в окно"
 }

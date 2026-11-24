@@ -1118,5 +1118,8 @@
  "Reading view": "Leseansicht",
  "Hide the text and read the note, or drag to resize it": "Text ausblenden und die Notiz lesen oder ziehen, um die Größe zu ändern",
  "Show the text beside the preview to edit the note": "Text neben der Vorschau zeigen, um die Notiz zu bearbeiten",
- "Registered by the ZettelApp package.": "Vom ZettelApp-Paket registriert."
+ "Registered by the ZettelApp package.": "Vom ZettelApp-Paket registriert.",
+ "Minimise": "Minimieren",
+ "Maximise": "Maximieren",
+ "Restore Down": "Verkleinern"
 }

@@ -1118,5 +1118,8 @@
  "Reading view": "Mode lecture",
  "Hide the text and read the note, or drag to resize it": "Masquer le texte et lire la note, ou faire glisser pour le redimensionner",
  "Show the text beside the preview to edit the note": "Afficher le texte à côté de l'aperçu pour modifier la note",
- "Registered by the ZettelApp package.": "Enregistré par le paquet ZettelApp."
+ "Registered by the ZettelApp package.": "Enregistré par le paquet ZettelApp.",
+ "Minimise": "Réduire",
+ "Maximise": "Agrandir",
+ "Restore Down": "Restaurer"
 }

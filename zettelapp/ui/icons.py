@@ -290,6 +290,11 @@ def _icon_family() -> str | None:
     return None
 
 
+def font_family() -> str | None:
+    """Windows' icon font (Segoe Fluent Icons or Segoe MDL2 Assets), or None where it is missing."""
+    return _icon_family()
+
+
 def clear_cache() -> None:
     _pixmap.cache_clear()
     _tinted.cache_clear()
