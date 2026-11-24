@@ -1109,5 +1109,21 @@
  "Review before sending": "发送前检查",
  "See the notes about to be sent, and untick any to leave out": "查看将要发送的笔记，取消勾选不想发送的",
  "These notes will be sent to {provider} with your question. Untick any to leave out.": "这些笔记将与你的问题一起发送给 {provider}。取消勾选不想发送的笔记。",
- "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "你的问题和所选范围内的笔记将使用你的 API 密钥发送给 {provider}。除此之外，没有任何内容会离开这台电脑。"
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "你的问题和所选范围内的笔记将使用你的 API 密钥发送给 {provider}。除此之外，没有任何内容会离开这台电脑。",
+ "Bridges (betweenness)": "桥梁（介数）",
+ "Central notes (PageRank)": "核心笔记（PageRank）",
+ "Clustering": "聚类系数",
+ "Connected parts": "连通部分",
+ "Degree distribution": "度分布",
+ "from {k} links on; distance {ks}": "从 {k} 个链接起；距离 {ks}",
+ "How many notes have each number of linked notes": "拥有各个链接笔记数的笔记数量",
+ "Linked notes": "链接笔记",
+ "Network": "网络",
+ "Notes linked from notes that are themselves well linked": "被链接良好的笔记所链接的笔记",
+ "Power law": "幂律",
+ "Share": "占比",
+ "the largest holds {share} of notes": "最大的部分包含 {share} 的笔记",
+ "The share of shortest paths between other notes that pass through each note": "其他笔记之间的最短路径中经过每条笔记的占比",
+ "Too few linked notes to fit": "链接的笔记太少，无法拟合",
+ "transitivity {value}": "传递性 {value}"
 }

@@ -1109,5 +1109,21 @@
  "Review before sending": "送信前に確認",
  "See the notes about to be sent, and untick any to leave out": "送信されるノートを確認し、外したいもののチェックを外します",
  "These notes will be sent to {provider} with your question. Untick any to leave out.": "これらのノートが質問と一緒に {provider} に送信されます。外したいもののチェックを外してください。",
- "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "質問と選んだ範囲のノートが、あなたの API キーを使って {provider} に送信されます。それ以外はこのコンピューターの外に出ません。"
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "質問と選んだ範囲のノートが、あなたの API キーを使って {provider} に送信されます。それ以外はこのコンピューターの外に出ません。",
+ "Bridges (betweenness)": "橋渡し (媒介中心性)",
+ "Central notes (PageRank)": "中心的なノート (PageRank)",
+ "Clustering": "クラスタリング",
+ "Connected parts": "連結成分",
+ "Degree distribution": "次数分布",
+ "from {k} links on; distance {ks}": "{k} リンク以上; 距離 {ks}",
+ "How many notes have each number of linked notes": "リンクされたノートの数ごとのノート数",
+ "Linked notes": "リンクされたノート",
+ "Network": "ネットワーク",
+ "Notes linked from notes that are themselves well linked": "よくリンクされたノートからリンクされているノート",
+ "Power law": "べき乗則",
+ "Share": "割合",
+ "the largest holds {share} of notes": "最大の成分にノートの {share}",
+ "The share of shortest paths between other notes that pass through each note": "ほかのノート同士の最短経路のうち、各ノートを通る割合",
+ "Too few linked notes to fit": "リンクされたノートが少なすぎて推定できません",
+ "transitivity {value}": "推移性 {value}"
 }

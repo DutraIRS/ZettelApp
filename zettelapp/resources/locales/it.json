@@ -1140,5 +1140,21 @@
  "Review before sending": "Controlla prima di inviare",
  "See the notes about to be sent, and untick any to leave out": "Vedi le note che stanno per essere inviate e togli la spunta a quelle da escludere",
  "These notes will be sent to {provider} with your question. Untick any to leave out.": "Queste note verranno inviate a {provider} con la tua domanda. Togli la spunta a quelle da escludere.",
- "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "La tua domanda e le note dell'ambito scelto verranno inviate a {provider} usando la tua chiave API. Nient'altro lascia questo computer."
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "La tua domanda e le note dell'ambito scelto verranno inviate a {provider} usando la tua chiave API. Nient'altro lascia questo computer.",
+ "Bridges (betweenness)": "Ponti (intermediazione)",
+ "Central notes (PageRank)": "Note centrali (PageRank)",
+ "Clustering": "Raggruppamento",
+ "Connected parts": "Parti connesse",
+ "Degree distribution": "Distribuzione dei gradi",
+ "from {k} links on; distance {ks}": "da {k} collegamenti in su; distanza {ks}",
+ "How many notes have each number of linked notes": "Quante note hanno ciascun numero di note collegate",
+ "Linked notes": "Note collegate",
+ "Network": "Rete",
+ "Notes linked from notes that are themselves well linked": "Note collegate da note a loro volta ben collegate",
+ "Power law": "Legge di potenza",
+ "Share": "Quota",
+ "the largest holds {share} of notes": "la più grande contiene il {share} delle note",
+ "The share of shortest paths between other notes that pass through each note": "La quota dei cammini più brevi tra altre note che passa per ciascuna nota",
+ "Too few linked notes to fit": "Troppe poche note collegate per stimarla",
+ "transitivity {value}": "transitività {value}"
 }

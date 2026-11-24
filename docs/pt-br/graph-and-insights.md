@@ -85,6 +85,7 @@ A página **Insights** (Ctrl+3) resume o seu cofre:
 - **Notas adicionadas por mês** nos últimos 12 meses.
 - **Principais tags**, **Links por tipo** e as **Notas mais conectadas** (clique em uma barra para abrir a nota).
 - **Tópicos**: clusters k-means das suas notas com suas palavras-chave e tamanhos.
+- **Rede**: como os links se distribuem e quais notas mantêm a rede unida. *Partes conectadas* (e a parcela das notas na maior), o coeficiente de *agrupamento* (com que frequência as vizinhas de uma nota se ligam entre si) e a transitividade, um expoente α de *lei de potência* para a distribuição de grau (ajustado por máxima verossimilhança quando pelo menos 50 notas formam a cauda; a distância diz o quão bom é o ajuste, 0 sendo perfeito), a própria *distribuição de grau*, as *pontes* (intermediação: a parcela dos caminhos mais curtos entre outras notas que passa por cada nota) e as *notas centrais* (PageRank). Clique numa barra para abrir a nota.
 
 Todo gráfico tem um botão **Mostrar como tabela** (o ícone de lista) com os mesmos números em forma de tabela, e as barras
 mostram seu valor ao passar o mouse.

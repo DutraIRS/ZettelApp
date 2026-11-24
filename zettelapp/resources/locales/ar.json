@@ -1264,5 +1264,21 @@
  "Review before sending": "المراجعة قبل الإرسال",
  "See the notes about to be sent, and untick any to leave out": "اطّلع على الملاحظات التي ستُرسل، وألغِ تحديد ما تريد استبعاده",
  "These notes will be sent to {provider} with your question. Untick any to leave out.": "ستُرسل هذه الملاحظات إلى {provider} مع سؤالك. ألغِ تحديد ما تريد استبعاده.",
- "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "سيُرسل سؤالك وملاحظات النطاق المختار إلى {provider} باستخدام مفتاح API الخاص بك. لا يغادر هذا الحاسوب شيء آخر."
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "سيُرسل سؤالك وملاحظات النطاق المختار إلى {provider} باستخدام مفتاح API الخاص بك. لا يغادر هذا الحاسوب شيء آخر.",
+ "Bridges (betweenness)": "الجسور (البينية)",
+ "Central notes (PageRank)": "الملاحظات المركزية (PageRank)",
+ "Clustering": "التجمّع",
+ "Connected parts": "الأجزاء المتصلة",
+ "Degree distribution": "توزيع الدرجات",
+ "from {k} links on; distance {ks}": "من {k} روابط فأكثر؛ المسافة {ks}",
+ "How many notes have each number of linked notes": "كم ملاحظة لكل عدد من الملاحظات المرتبطة",
+ "Linked notes": "الملاحظات المرتبطة",
+ "Network": "الشبكة",
+ "Notes linked from notes that are themselves well linked": "ملاحظات ترتبط بها ملاحظات جيدة الارتباط",
+ "Power law": "قانون القوة",
+ "Share": "الحصة",
+ "the largest holds {share} of notes": "الأكبر يضم {share} من الملاحظات",
+ "The share of shortest paths between other notes that pass through each note": "حصة أقصر المسارات بين الملاحظات الأخرى التي تمر عبر كل ملاحظة",
+ "Too few linked notes to fit": "الملاحظات المرتبطة أقل من أن تسمح بالتقدير",
+ "transitivity {value}": "التعدّي {value}"
 }

@@ -983,6 +983,12 @@
    "zettelapp/core/starter.py:268"
   ]
  },
+ "Bridges (betweenness)": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:390"
+  ]
+ },
  "Build a mind map from this note's links": {
   "plural": null,
   "where": [
@@ -1030,7 +1036,7 @@
  "cards today": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:394"
+   "zettelapp/ui/insights.py:441"
   ]
  },
  "Central idea": {
@@ -1038,6 +1044,12 @@
   "where": [
    "zettelapp/ui/mindmap.py:252",
    "zettelapp/ui/mindmap.py:136"
+  ]
+ },
+ "Central notes (PageRank)": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:397"
   ]
  },
  "Change link type": {
@@ -1171,7 +1183,7 @@
  "Click a bar to open the note": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:344"
+   "zettelapp/ui/insights.py:352"
   ]
  },
  "Click Add tag under the title, type a word and press Enter. Or write a word with # in front of it in the text.": {
@@ -1245,13 +1257,19 @@
  "Cluster": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:461"
+   "zettelapp/ui/insights.py:508"
   ]
  },
  "Cluster {n}: {keywords}": {
   "plural": null,
   "where": [
    "zettelapp/ui/graph_page.py:507"
+  ]
+ },
+ "Clustering": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:373"
   ]
  },
  "Clusters": {
@@ -1327,6 +1345,12 @@
   "plural": null,
   "where": [
    "zettelapp/ui/review_page.py:446"
+  ]
+ },
+ "Connected parts": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:372"
   ]
  },
  "Connected to Zotero.": {
@@ -1628,6 +1652,12 @@
    "zettelapp/ui/settings_dialog.py:1034"
   ]
  },
+ "Degree distribution": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:383"
+  ]
+ },
  "Del": {
   "plural": null,
   "where": [
@@ -1834,7 +1864,7 @@
  "Due for review": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:325"
+   "zettelapp/ui/insights.py:333"
   ]
  },
  "Due today": {
@@ -1962,7 +1992,7 @@
  "Every note is linked": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:391"
+   "zettelapp/ui/insights.py:438"
   ]
  },
  "Evidence (log-likelihood ratio per feature):": {
@@ -2176,7 +2206,7 @@
    "zettelapp/ui/editor.py:346",
    "zettelapp/ui/editor.py:360",
    "zettelapp/ui/editor.py:852",
-   "zettelapp/ui/insights.py:324"
+   "zettelapp/ui/insights.py:332"
   ]
  },
  "Flashcards (spaced repetition)": {
@@ -2274,6 +2304,12 @@
   "plural": null,
   "where": [
    "zettelapp/ui/quest.py:368"
+  ]
+ },
+ "from {k} links on; distance {ks}": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:538"
   ]
  },
  "From: {note_title}": {
@@ -2460,6 +2496,12 @@
   "plural": null,
   "where": [
    "zettelapp/ui/widgets.py:445"
+  ]
+ },
+ "How many notes have each number of linked notes": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:385"
   ]
  },
  "How many of the most relevant notes to send with the question": {
@@ -2651,7 +2693,7 @@
   "plural": null,
   "where": [
    "zettelapp/ui/dialogs.py:504",
-   "zettelapp/ui/insights.py:312",
+   "zettelapp/ui/insights.py:320",
    "zettelapp/ui/main_window.py:89"
   ]
  },
@@ -2919,7 +2961,7 @@
  "Link them to grow your network": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:391"
+   "zettelapp/ui/insights.py:438"
   ]
  },
  "Link to a Fil&e…": {
@@ -2960,7 +3002,7 @@
   "where": [
    "zettelapp/ui/dialogs.py:269",
    "zettelapp/ui/dialogs.py:276",
-   "zettelapp/ui/insights.py:435"
+   "zettelapp/ui/insights.py:482"
   ]
  },
  "Link type “{name}” has an unknown arrow tip: {value}": {
@@ -3009,6 +3051,12 @@
    "zettelapp/ui/mindmap.py:52"
   ]
  },
+ "Linked notes": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:548"
+  ]
+ },
  "Linked. The model will learn from this choice.": {
   "plural": null,
   "where": [
@@ -3018,9 +3066,9 @@
  "Links": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:435",
-   "zettelapp/ui/insights.py:442",
-   "zettelapp/ui/insights.py:321",
+   "zettelapp/ui/insights.py:482",
+   "zettelapp/ui/insights.py:489",
+   "zettelapp/ui/insights.py:329",
    "zettelapp/ui/side_panel.py:153"
   ]
  },
@@ -3033,7 +3081,7 @@
  "Links by type": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:340"
+   "zettelapp/ui/insights.py:348"
   ]
  },
  "Links, in notes and in the program": {
@@ -3226,7 +3274,7 @@
  "Most connected notes": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:344"
+   "zettelapp/ui/insights.py:352"
   ]
  },
  "Most linked": {
@@ -3336,6 +3384,12 @@
   "plural": null,
   "where": [
    "zettelapp/ui/zotero_dialog.py:71"
+  ]
+ },
+ "Network": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:368"
   ]
  },
  "New": {
@@ -3575,7 +3629,8 @@
   "plural": null,
   "where": [
    "zettelapp/ui/editor.py:282",
-   "zettelapp/ui/insights.py:442"
+   "zettelapp/ui/insights.py:489",
+   "zettelapp/ui/insights.py:556"
   ]
  },
  "Note &List": {
@@ -3626,9 +3681,10 @@
    "zettelapp/ui/dialogs.py:482",
    "zettelapp/ui/dialogs.py:266",
    "zettelapp/ui/dialogs.py:502",
-   "zettelapp/ui/insights.py:419",
-   "zettelapp/ui/insights.py:461",
-   "zettelapp/ui/insights.py:320",
+   "zettelapp/ui/insights.py:466",
+   "zettelapp/ui/insights.py:548",
+   "zettelapp/ui/insights.py:508",
+   "zettelapp/ui/insights.py:328",
    "zettelapp/ui/main_window.py:87",
    "zettelapp/ui/note_list.py:265",
    "zettelapp/ui/note_list.py:338",
@@ -3638,7 +3694,7 @@
  "Notes added per month": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:335"
+   "zettelapp/ui/insights.py:343"
   ]
  },
  "Notes are saved automatically. Your vault is a folder with a SQLite database and an assets folder; open another one from File ▸ Open Vault.": {
@@ -3650,7 +3706,13 @@
  "Notes grouped by meaning (LSA embeddings); k chosen by silhouette score": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:350"
+   "zettelapp/ui/insights.py:358"
+  ]
+ },
+ "Notes linked from notes that are themselves well linked": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:399"
   ]
  },
  "Notes sent with the question": {
@@ -3687,7 +3749,7 @@
  "Nothing to show yet": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:120"
+   "zettelapp/ui/insights.py:127"
   ]
  },
  "Number of clusters. Auto picks k with the best silhouette score.": {
@@ -3986,6 +4048,12 @@
    "zettelapp/ui/side_panel.py:54"
   ]
  },
+ "Power law": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:374"
+  ]
+ },
  "Practice quiz": {
   "plural": null,
   "where": [
@@ -4146,8 +4214,8 @@
  "Refresh": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:313",
-   "zettelapp/ui/insights.py:313"
+   "zettelapp/ui/insights.py:321",
+   "zettelapp/ui/insights.py:321"
   ]
  },
  "Refresh list": {
@@ -4596,6 +4664,12 @@
    "zettelapp/ui/editor.py:177"
   ]
  },
+ "Share": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:556"
+  ]
+ },
  "Shared keywords (TF-IDF cosine)": {
   "plural": null,
   "where": [
@@ -4641,7 +4715,7 @@
  "Show as table": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:249"
+   "zettelapp/ui/insights.py:257"
   ]
  },
  "Show at most": {
@@ -5002,7 +5076,7 @@
   "plural": null,
   "where": [
    "zettelapp/ui/graph_page.py:204",
-   "zettelapp/ui/insights.py:419",
+   "zettelapp/ui/insights.py:466",
    "zettelapp/ui/widgets.py:447"
   ]
  },
@@ -5054,7 +5128,7 @@
    "zettelapp/ui/graph_page.py:174",
    "zettelapp/ui/graph_page.py:215",
    "zettelapp/ui/graph_page.py:575",
-   "zettelapp/ui/insights.py:322"
+   "zettelapp/ui/insights.py:330"
   ]
  },
  "Tags gather notes": {
@@ -5289,10 +5363,16 @@
    "zettelapp/ui/main_window.py:1453"
   ]
  },
+ "the largest holds {share} of notes": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:524"
+  ]
+ },
  "The last 12 months": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:335"
+   "zettelapp/ui/insights.py:343"
   ]
  },
  "The linked note gets the same link seen from its side (discussed_by::[[A]] for discusses::[[B]]), and loses it again when you delete the link.": {
@@ -5420,6 +5500,12 @@
   "plural": null,
   "where": [
    "zettelapp/core/llm.py:313"
+  ]
+ },
+ "The share of shortest paths between other notes that pass through each note": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:392"
   ]
  },
  "The Silver Thread": {
@@ -5652,22 +5738,34 @@
    "zettelapp/ui/dialogs.py:490"
   ]
  },
+ "Too few linked notes to fit": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:534"
+  ]
+ },
  "Top tags": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:338"
+   "zettelapp/ui/insights.py:346"
   ]
  },
  "Topics (k-means clusters)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:348"
+   "zettelapp/ui/insights.py:356"
   ]
  },
  "Trained on {linked} linked and {unlinked} unlinked note pairs from {n} note.": {
   "plural": "Trained on {linked} linked and {unlinked} unlinked note pairs from {n} notes.",
   "where": [
    "zettelapp/ui/settings_dialog.py:633"
+  ]
+ },
+ "transitivity {value}": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/insights.py:530"
   ]
  },
  "Trash": {
@@ -5758,7 +5856,7 @@
  "Unlinked notes": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:323"
+   "zettelapp/ui/insights.py:331"
   ]
  },
  "Unsafe path in archive: {name!r}": {
@@ -6236,7 +6334,7 @@
  "{n} in Trash": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:382"
+   "zettelapp/ui/insights.py:429"
   ]
  },
  "{n} item": {
@@ -6255,7 +6353,7 @@
   "plural": "{n} links",
   "where": [
    "zettelapp/ui/graph_page.py:556",
-   "zettelapp/ui/insights.py:82",
+   "zettelapp/ui/insights.py:89",
    "zettelapp/ui/main_window.py:1363",
    "zettelapp/ui/main_window.py:1310",
    "zettelapp/ui/main_window.py:981",
@@ -6278,7 +6376,7 @@
   "plural": "{n} notes",
   "where": [
    "zettelapp/ui/graph_page.py:555",
-   "zettelapp/ui/insights.py:80",
+   "zettelapp/ui/insights.py:87",
    "zettelapp/ui/main_window.py:1362",
    "zettelapp/ui/main_window.py:1309",
    "zettelapp/ui/main_window.py:979"
@@ -6311,7 +6409,7 @@
  "{n} per note": {
   "plural": null,
   "where": [
-   "zettelapp/ui/insights.py:386"
+   "zettelapp/ui/insights.py:433"
   ]
  },
  "{n} replaced": {

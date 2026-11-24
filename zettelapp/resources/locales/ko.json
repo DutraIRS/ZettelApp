@@ -1109,5 +1109,21 @@
  "Review before sending": "보내기 전에 확인",
  "See the notes about to be sent, and untick any to leave out": "보낼 노트를 보고, 빼고 싶은 노트의 선택을 해제해요",
  "These notes will be sent to {provider} with your question. Untick any to leave out.": "이 노트들이 질문과 함께 {provider}에 전송돼요. 빼고 싶은 노트의 선택을 해제하세요.",
- "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "질문과 선택한 범위의 노트가 API 키를 사용해 {provider}에 전송돼요. 그 외에는 이 컴퓨터 밖으로 나가지 않아요."
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "질문과 선택한 범위의 노트가 API 키를 사용해 {provider}에 전송돼요. 그 외에는 이 컴퓨터 밖으로 나가지 않아요.",
+ "Bridges (betweenness)": "다리 (매개 중심성)",
+ "Central notes (PageRank)": "중심 노트 (PageRank)",
+ "Clustering": "군집화",
+ "Connected parts": "연결된 부분",
+ "Degree distribution": "차수 분포",
+ "from {k} links on; distance {ks}": "링크 {k}개 이상; 거리 {ks}",
+ "How many notes have each number of linked notes": "연결된 노트 수별 노트 개수",
+ "Linked notes": "연결된 노트",
+ "Network": "네트워크",
+ "Notes linked from notes that are themselves well linked": "잘 연결된 노트들이 링크하는 노트",
+ "Power law": "거듭제곱 법칙",
+ "Share": "비율",
+ "the largest holds {share} of notes": "가장 큰 부분에 노트의 {share}",
+ "The share of shortest paths between other notes that pass through each note": "다른 노트들 사이의 최단 경로 중 각 노트를 지나는 비율",
+ "Too few linked notes to fit": "연결된 노트가 너무 적어 추정할 수 없어요",
+ "transitivity {value}": "이행성 {value}"
 }

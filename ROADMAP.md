@@ -8,12 +8,6 @@ getting in touch on [GitHub](https://github.com/DutraIRS/ZettelApp).
 
 ## Next
 
-### Insights
-
-- [ ] **Network metrics**: the degree distribution (and how close it is to a power law), hubs by
-  degree, betweenness and PageRank, and the clustering coefficient, to see which notes hold the
-  network together.
-
 ### Graph
 
 - [ ] **Arrow tips at each end**: a directed link type can have a different tip at each end; an

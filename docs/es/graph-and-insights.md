@@ -85,6 +85,7 @@ La página **Estadísticas** (Ctrl+3) resume tu bóveda:
 - **Notas añadidas por mes** durante los últimos 12 meses.
 - **Etiquetas principales**, **Enlaces por tipo** y las **Notas más conectadas** (haz clic en una barra para abrir la nota).
 - **Temas**: grupos k-means de tus notas con sus palabras clave y tamaños.
+- **Red**: cómo se reparten los enlaces y qué notas mantienen unida la red. *Partes conectadas* (y la proporción de notas en la mayor), el coeficiente de *agrupamiento* (con qué frecuencia las vecinas de una nota se enlazan entre sí) y la transitividad, un exponente α de *ley de potencia* para la distribución de grado (ajustado por máxima verosimilitud cuando al menos 50 notas forman su cola; la distancia indica lo bueno que es el ajuste, siendo 0 perfecto), la propia *distribución de grado*, los *puentes* (intermediación: la proporción de caminos más cortos entre otras notas que pasa por cada nota) y las *notas centrales* (PageRank). Haz clic en una barra para abrir la nota.
 
 Cada gráfico tiene un botón **Mostrar como tabla** (el icono de lista) con los mismos números en una tabla, y las barras
 muestran su valor al pasar el cursor.

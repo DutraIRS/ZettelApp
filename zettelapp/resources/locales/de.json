@@ -1140,5 +1140,21 @@
  "Review before sending": "Vor dem Senden prüfen",
  "See the notes about to be sent, and untick any to leave out": "Die Notizen sehen, die gesendet werden, und abwählen, was nicht mit soll",
  "These notes will be sent to {provider} with your question. Untick any to leave out.": "Diese Notizen werden mit Ihrer Frage an {provider} gesendet. Wählen Sie ab, was nicht mit soll.",
- "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "Ihre Frage und die Notizen im gewählten Bereich werden mit Ihrem API-Schlüssel an {provider} gesendet. Sonst verlässt nichts diesen Computer."
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "Ihre Frage und die Notizen im gewählten Bereich werden mit Ihrem API-Schlüssel an {provider} gesendet. Sonst verlässt nichts diesen Computer.",
+ "Bridges (betweenness)": "Brücken (Betweenness)",
+ "Central notes (PageRank)": "Zentrale Notizen (PageRank)",
+ "Clustering": "Clustering",
+ "Connected parts": "Zusammenhängende Teile",
+ "Degree distribution": "Gradverteilung",
+ "from {k} links on; distance {ks}": "ab {k} Links; Abstand {ks}",
+ "How many notes have each number of linked notes": "Wie viele Notizen wie viele verknüpfte Notizen haben",
+ "Linked notes": "Verknüpfte Notizen",
+ "Network": "Netzwerk",
+ "Notes linked from notes that are themselves well linked": "Notizen, auf die gut verknüpfte Notizen verweisen",
+ "Power law": "Potenzgesetz",
+ "Share": "Anteil",
+ "the largest holds {share} of notes": "der größte umfasst {share} der Notizen",
+ "The share of shortest paths between other notes that pass through each note": "Der Anteil der kürzesten Wege zwischen anderen Notizen, die durch jede Notiz führen",
+ "Too few linked notes to fit": "Zu wenige verknüpfte Notizen für eine Anpassung",
+ "transitivity {value}": "Transitivität {value}"
 }

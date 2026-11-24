@@ -57,5 +57,6 @@ La page **Insights** (Ctrl+3) résume votre coffre :
 - **Notes ajoutées par mois** au cours des 12 derniers mois.
 - **Tags principaux**, **Liens par type** et **Notes les plus connectées** (cliquez sur une barre pour ouvrir la note).
 - **Sujets** : clusters k-means des notes, avec leurs mots-clés et leur taille.
+- **Réseau** : comment les liens se répartissent et quelles notes tiennent le réseau ensemble. Les *parties connexes* (et la part des notes dans la plus grande), le coefficient de *regroupement* (à quelle fréquence les voisines d'une note sont liées entre elles) et la transitivité, un exposant α de *loi de puissance* pour la distribution des degrés (ajusté par maximum de vraisemblance dès qu'au moins 50 notes forment sa queue ; la distance dit à quel point l'ajustement est bon, 0 étant parfait), la *distribution des degrés* elle-même, les *ponts* (intermédiarité : la part des plus courts chemins entre d'autres notes qui passent par chaque note) et les *notes centrales* (PageRank). Cliquez sur une barre pour ouvrir la note.
 
 Chaque graphique possède un bouton **Afficher sous forme de tableau** (icône de liste) qui affiche les mêmes valeurs sous forme de tableau ; survolez les barres pour voir leur valeur.

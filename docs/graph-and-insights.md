@@ -85,6 +85,7 @@ The **Insights** page (Ctrl+3) summarises your vault:
 - **Notes added per month** over the last 12 months.
 - **Top tags**, **Links by type** and the **Most connected notes** (click a bar to open the note).
 - **Topics**: k-means clusters of your notes with their keywords and sizes.
+- **Network**: how the links are spread and which notes hold the network together. *Connected parts* (and the share of notes in the largest), the *clustering* coefficient (how often a note's neighbours link each other) and transitivity, a *power-law* exponent α for the degree distribution (fitted by maximum likelihood once at least 50 notes form its tail; the distance says how close the fit is, 0 being perfect), the *degree distribution* itself, *bridges* (betweenness: the share of shortest paths between other notes through each note) and *central notes* (PageRank). Click a bar to open the note.
 
 Every chart has a **Show as table** button (the list icon) with the same numbers as a table, and bars
 show their value on hover.

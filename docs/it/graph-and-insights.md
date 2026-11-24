@@ -85,6 +85,7 @@ La pagina **Statistiche** (Ctrl+3) riassume il tuo vault:
 - **Note aggiunte per mese** negli ultimi 12 mesi.
 - **Tag principali**, **Collegamenti per tipo** e **Note più connesse** (clicca una barra per aprire la nota).
 - **Argomenti**: cluster k-means delle tue note con le loro parole chiave e dimensioni.
+- **Rete**: come si distribuiscono i collegamenti e quali note tengono unita la rete. *Parti connesse* (e la quota di note nella più grande), il coefficiente di *raggruppamento* (quanto spesso le vicine di una nota sono collegate tra loro) e la transitività, un esponente α di *legge di potenza* per la distribuzione dei gradi (stimato per massima verosimiglianza quando almeno 50 note ne formano la coda; la distanza dice quanto è buono l'adattamento, 0 è perfetto), la *distribuzione dei gradi* stessa, i *ponti* (intermediazione: la quota dei cammini più brevi tra altre note che passa per ciascuna nota) e le *note centrali* (PageRank). Fai clic su una barra per aprire la nota.
 
 Ogni grafico ha un pulsante **Mostra come tabella** (l'icona a elenco) con gli stessi numeri in forma di tabella, e le barre
 mostrano il loro valore al passaggio del mouse.

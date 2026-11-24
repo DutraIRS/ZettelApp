@@ -26,6 +26,10 @@ All notable changes to ZettelApp are documented here. The format follows
   first*): with *Current note and linked notes*, every note within the depth chosen goes, nearest
   first, instead of only the most relevant. **Review before sending** shows the notes about to be
   sent, to untick any first.
+- **Network measures in Insights**: connected parts, the clustering coefficient and transitivity,
+  the degree distribution with a power-law exponent (fitted by maximum likelihood when the vault
+  is big enough), and the notes that bridge the network (betweenness) or sit at its centre
+  (PageRank).
 
 ### Fixed
 

@@ -1171,5 +1171,21 @@
  "Review before sending": "Проверить перед отправкой",
  "See the notes about to be sent, and untick any to leave out": "Посмотреть заметки, которые будут отправлены, и снять отметку с лишних",
  "These notes will be sent to {provider} with your question. Untick any to leave out.": "Эти заметки будут отправлены в {provider} вместе с вашим вопросом. Снимите отметку с тех, что не нужно отправлять.",
- "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "Ваш вопрос и заметки выбранной области будут отправлены в {provider} с вашим API-ключом. Больше ничего не покидает этот компьютер."
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "Ваш вопрос и заметки выбранной области будут отправлены в {provider} с вашим API-ключом. Больше ничего не покидает этот компьютер.",
+ "Bridges (betweenness)": "Мосты (посредничество)",
+ "Central notes (PageRank)": "Центральные заметки (PageRank)",
+ "Clustering": "Кластеризация",
+ "Connected parts": "Связные части",
+ "Degree distribution": "Распределение степеней",
+ "from {k} links on; distance {ks}": "от {k} связей; расстояние {ks}",
+ "How many notes have each number of linked notes": "Сколько заметок имеют каждое число связанных заметок",
+ "Linked notes": "Связанные заметки",
+ "Network": "Сеть",
+ "Notes linked from notes that are themselves well linked": "Заметки, на которые ссылаются хорошо связанные заметки",
+ "Power law": "Степенной закон",
+ "Share": "Доля",
+ "the largest holds {share} of notes": "в самой большой {share} заметок",
+ "The share of shortest paths between other notes that pass through each note": "Доля кратчайших путей между другими заметками, проходящих через каждую заметку",
+ "Too few linked notes to fit": "Слишком мало связанных заметок для оценки",
+ "transitivity {value}": "транзитивность {value}"
 }
