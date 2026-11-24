@@ -53,9 +53,60 @@ def test_the_toast_is_sent_by_windows_powershell(monkeypatch):
         .endswith(r"system32\windowspowershell\v1.0\powershell.exe")
     )
     script = base64.b64decode(args[-1]).decode("utf-16-le")
-    assert "CreateToastNotifier('ZettelApp.Desktop')" in script
-    assert "It''s time" in script  # quoted for PowerShell
-    assert "zettelapp://note/20260101000000" in script
+    assert script == winintegration.toast_script(
+        winintegration.toast_xml("It's time", "Body", "zettelapp://note/20260101000000", TEXT),
+        "ZettelApp.Desktop",
+    )
+
+
+# PowerShell ends a single-quoted string at any of these, not only the ASCII apostrophe
+QUOTES = "'‘’‚‛"
+
+
+def _decoded_strings(script: str) -> list[str]:
+    import re
+
+    return [
+        base64.b64decode(data).decode("utf-8")
+        for data in re.findall(r"FromBase64String\('([A-Za-z0-9+/=]*)'\)", script)
+    ]
+
+
+def test_note_text_never_reaches_the_toast_script_as_code():
+    title = "Meeting’+(Start-Process notepad)+’ " + QUOTES
+    xml = winintegration.toast_xml(title, "Don’t " + QUOTES, "zettelapp://note/1", TEXT)
+    script = winintegration.toast_script(xml, "App‘Id")
+    assert not any(q in script for q in QUOTES[1:])  # no typographic quote at all
+    assert "Start-Process" not in script and "Meeting" not in script
+    # the only single quotes are the script's own, around fixed words and base64 data
+    assert _decoded_strings(script) == [xml, "App‘Id"]
+
+
+@pytest.mark.skipif(sys.platform != "win32", reason="Windows PowerShell")
+def test_powershell_reads_the_data_back_unchanged(tmp_path):
+    import subprocess
+
+    marker = tmp_path / "ran"
+    value = f"x’+(New-Item '{marker}')+’ " + QUOTES + " Don’t"
+    script = winintegration.toast_script(value, "id")
+    # run only the decoding: print what LoadXml would have been given
+    decode = script.split("$xml.LoadXml(", 1)[1].split(");$toast", 1)[0]
+    out = subprocess.run(
+        [
+            "powershell.exe",
+            "-NoProfile",
+            "-NonInteractive",
+            "-EncodedCommand",
+            base64.b64encode(
+                f"[Console]::OutputEncoding = [Text.Encoding]::UTF8; {decode}".encode("utf-16-le")
+            ).decode("ascii"),
+        ],
+        capture_output=True,
+        timeout=60,
+    )
+    assert out.returncode == 0, out.stderr
+    assert out.stdout.decode("utf-8").strip() == value
+    assert not marker.exists()
 
 
 @pytest.mark.skipif(sys.platform != "win32", reason="Windows API")

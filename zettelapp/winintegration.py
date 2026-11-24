@@ -138,6 +138,31 @@ def toast_xml(title: str, body: str, url: str, text: ToastText, icon: Path | Non
     )
 
 
+def toast_script(xml: str, app_id: str) -> str:
+    """The PowerShell that shows *xml* as a toast from *app_id*.
+
+    Neither value is put in the script as text: PowerShell also ends a single-quoted string at
+    the typographic quotes U+2018 to U+201B, so a note title could close the string and run
+    commands. Both go in base64 (letters, digits, + / =) and are decoded inside PowerShell."""
+    import base64
+
+    def decoded(value: str) -> str:
+        data = base64.b64encode(value.encode("utf-8")).decode("ascii")
+        return f"[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('{data}'))"
+
+    return (
+        "$ErrorActionPreference = 'Stop';"
+        "[void][Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications,"
+        " ContentType = WindowsRuntime];"
+        "[void][Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom, ContentType = WindowsRuntime];"
+        "$xml = New-Object Windows.Data.Xml.Dom.XmlDocument;"
+        f"$xml.LoadXml({decoded(xml)});"
+        "$toast = [Windows.UI.Notifications.ToastNotification]::new($xml);"
+        f"[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier({decoded(app_id)})"
+        ".Show($toast)"
+    )
+
+
 def show_toast(
     title: str, body: str, note_id: str, text: ToastText, icon: Path | None = None
 ) -> bool:
@@ -156,21 +181,7 @@ def show_toast(
     import base64
 
     xml = toast_xml(title, body, f"{URL_SCHEME}://note/{note_id}", text, icon)
-
-    def quoted(text: str) -> str:  # a PowerShell single-quoted string
-        return "'" + text.replace("'", "''") + "'"
-
-    script = (
-        "$ErrorActionPreference = 'Stop';"
-        "[void][Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications,"
-        " ContentType = WindowsRuntime];"
-        "[void][Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom, ContentType = WindowsRuntime];"
-        "$xml = New-Object Windows.Data.Xml.Dom.XmlDocument;"
-        f"$xml.LoadXml({quoted(xml)});"
-        "$toast = [Windows.UI.Notifications.ToastNotification]::new($xml);"
-        f"[Windows.UI.Notifications.ToastNotificationManager]::CreateToastNotifier({quoted(app_id)})"
-        ".Show($toast)"
-    )
+    script = toast_script(xml, app_id)
     root = os.environ.get("SystemRoot", r"C:\Windows")
     powershell = Path(root) / "System32" / "WindowsPowerShell" / "v1.0" / "powershell.exe"
     try:
