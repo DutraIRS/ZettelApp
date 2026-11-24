@@ -37,6 +37,11 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Fixed
 
+- **The website on phones**: links to a section (*Download*, *Features*) no longer hide its heading
+  under the header; the menus close once a link in them is followed (and on Escape); the Linux
+  install commands stay on one line and scroll sideways instead of breaking mid-word, and read
+  left to right on the Arabic page; in Arabic the menu
+  opens under its button. A screenshot opens full size when tapped (the dark one in dark mode).
 - **Imports from Obsidian**: links by path (`[[Folder/Note]]`) and to a block (`[[Note^id]]`)
   now link to the note; where two notes share a name, a bare link goes to the one nearest the
   vault's root, and links to a title that two notes share name the note by its id, so they

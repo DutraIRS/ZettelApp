@@ -172,6 +172,8 @@ kbd {
   .lang-switch { position: static; margin-inline-start: auto; }
   .lang-switch-panel { right: var(--gutter); }
   [dir="rtl"] .lang-switch-panel { right: auto; left: var(--gutter); }
+  /* The menu opens under its button, which sits at the left in right-to-left pages. */
+  [dir="rtl"] .menu-panel { right: auto; left: var(--gutter); }
 }
 @media (min-width: 600px) and (max-width: 899.98px) {
   .hbtn.donate { padding: 0 14px; }
@@ -219,6 +221,10 @@ h1, h2, h3 { font-family: var(--font-display); line-height: 1.2; }
 
 /* Sections ---------------------------------------------------------------- */
 .section { padding: 64px 0; }
+/* In-page links (#features, #download…) land below the sticky header, not under it. */
+main [id] { scroll-margin-top: 72px; }
+/* A screenshot opens full size when clicked (phones show it too small to read). */
+.shot-link { display: block; border-radius: var(--radius); cursor: zoom-in; }
 .section.tinted { background: var(--surface-2); }
 .section-title { font-size: clamp(1.6rem, 4vw, 2.2rem); text-align: center; margin: 0 0 10px; }
 .section-lead { text-align: center; color: var(--muted); max-width: 680px; margin: 0 auto 32px; }
@@ -275,6 +281,16 @@ h1, h2, h3 { font-family: var(--font-display); line-height: 1.2; }
 .specs dd { margin: 0 0 12px; color: var(--muted); }
 .specs dd:last-child { margin-bottom: 0; }
 @media (min-width: 860px) { .download { grid-template-columns: 1fr 1fr; } }
+
+/* Linux install commands: each stays on one line and scrolls sideways if it is wider than the
+   screen, instead of breaking mid-word. The grid's columns must be allowed to be narrower
+   than such a line, or the page itself would grow wider than the screen. */
+.download > * { min-width: 0; }
+.download .fine code {
+  display: inline-block; max-width: 100%; overflow-x: auto; white-space: nowrap;
+  vertical-align: bottom; overscroll-behavior-x: contain;
+  direction: ltr; unicode-bidi: isolate; /* a command reads left to right, even on an Arabic page */
+}
 
 .support { text-align: center; max-width: 720px; }
 .support h2 { font-size: clamp(1.5rem, 3.6vw, 2rem); margin: 0 0 10px; }
