@@ -13,7 +13,7 @@ base-version: "6.11"
 command: zettelapp
 finish-args:
   - --share=ipc
-  - --socket=x11
+  - --socket=fallback-x11
   - --socket=wayland
   - --device=dri
   - --share=network
@@ -21,7 +21,6 @@ finish-args:
   - --talk-name=org.freedesktop.secrets
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.freedesktop.FileManager1
-  - --talk-name=org.freedesktop.portal.Desktop
 cleanup-commands:
   - /app/cleanup-BaseApp.sh
 # The release workflow builds a bundle from it (job `flatpak`). Build locally, from a clean
