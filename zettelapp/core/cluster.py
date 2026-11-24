@@ -30,7 +30,7 @@ class Clustering:
     silhouette: float | None = None
 
     def label_of(self) -> dict[str, int]:
-        return {note_id: int(c) for note_id, c in zip(self.ids, self.labels)}
+        return {note_id: int(c) for note_id, c in zip(self.ids, self.labels, strict=True)}
 
 
 def embed_notes(

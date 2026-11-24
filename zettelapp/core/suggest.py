@@ -165,7 +165,10 @@ class NaiveBayesLinkModel:
         """Symmetric KL divergence between the class-conditional distributions."""
         p, q = np.exp(self.log_probs[1]), np.exp(self.log_probs[0])
         kl = ((p - q) * (self.log_probs[1] - self.log_probs[0])).sum(axis=1)
-        return {f.key: float(v) if on else 0.0 for f, v, on in zip(self.features, kl, self.enabled)}
+        return {
+            f.key: float(v) if on else 0.0
+            for f, v, on in zip(self.features, kl, self.enabled, strict=True)
+        }
 
 
 @dataclass(frozen=True)
@@ -383,7 +386,7 @@ class LinkSuggester:
             contributions = sorted(
                 (
                     (f.label, float(r))
-                    for f, r, on in zip(FEATURES, ratios[k], self.model.enabled)
+                    for f, r, on in zip(FEATURES, ratios[k], self.model.enabled, strict=True)
                     if on
                 ),
                 key=lambda item: -abs(item[1]),
@@ -394,7 +397,7 @@ class LinkSuggester:
                     title=self.notes[cid].title or "Untitled",
                     probability=float(probs[k]),
                     contributions=contributions,
-                    features={f.key: float(v) for f, v in zip(FEATURES, x_top[k])},
+                    features={f.key: float(v) for f, v in zip(FEATURES, x_top[k], strict=True)},
                 )
             )
         return out

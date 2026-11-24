@@ -106,7 +106,9 @@ def _download_file(
         os.replace(part, target)
     except (OSError, http.client.HTTPException) as exc:
         reason = getattr(exc, "reason", exc)
-        raise ModelError(_("Could not download the language model: {error}").format(error=reason))
+        raise ModelError(
+            _("Could not download the language model: {error}").format(error=reason)
+        ) from exc
     finally:
         part.unlink(missing_ok=True)
     return done + size

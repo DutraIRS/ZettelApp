@@ -66,7 +66,7 @@ def test_fallbacks_agree_with_rapidfuzz(monkeypatch):
     monkeypatch.setattr(similarity, "_RFLevenshtein", None)
     monkeypatch.setattr(similarity, "_RFJaroWinkler", None)
     slow = [(levenshtein_distance(a, b), jaro_winkler_similarity(a, b)) for a, b in pairs]
-    for (d1, j1), (d2, j2) in zip(fast, slow):
+    for (d1, j1), (d2, j2) in zip(fast, slow, strict=True):
         assert d1 == d2
         assert j1 == pytest.approx(j2, abs=1e-9)
 

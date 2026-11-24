@@ -154,7 +154,7 @@ class Graph3DView(QWidget):
             label_font = theme.ui_font(9, theme.QFont.Weight.DemiBold)
             label_metrics = QFontMetricsF(label_font)
             taken: list[QRectF] = []  # group names already placed, so none covers another
-            for group, _idx, d, region in self._group_regions(screen, depth):
+            for group, _idx, _depth, region in self._group_regions(screen, depth):
                 fill = QColor(self.data.group_color(group))
                 fill.setAlphaF(0.18)
                 stroke = QColor(self.data.group_color(group))

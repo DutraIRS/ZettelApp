@@ -342,7 +342,7 @@ class ReviewPage(QWidget):
         self.show_button.setVisible(False)
         if q.kind == "flashcard":
             state = self.window.vault.review_state(q.card_id)
-            for b, grade in zip(self.grade_buttons, ("again", "hard", "good", "easy")):
+            for b, grade in zip(self.grade_buttons, ("again", "hard", "good", "easy"), strict=True):
                 days = schedule(state, grade).interval
                 b.setToolTip(
                     n_("Next review in {n} day", "Next review in {n} days", days).format(n=days)

@@ -418,7 +418,7 @@ def _import_markdown_files(
 
     # Map file stems (how Obsidian links) and titles to the new notes.
     created: dict[str, Note] = {}
-    for path, meta, body, title in parsed:
+    for path, meta, _body, title in parsed:
         wanted = meta.get("id") if isinstance(meta.get("id"), str) else None
         note_id = (
             wanted if is_valid_note_id(wanted) and not vault.note_exists(wanted, True) else None
@@ -466,7 +466,7 @@ def _import_markdown_files(
                     return None
         return None
 
-    for path, meta, body, title in parsed:
+    for path, meta, body, _title in parsed:
         note = created[str(path)]
 
         def relink(m: re.Match) -> str:
@@ -480,15 +480,15 @@ def _import_markdown_files(
             alias = m.group("alias") or (target if fold(target) != fold(linked.title) else None)
             return f"{prefix}[[{linked.title or linked.id}{'|' + alias if alias else ''}]]"
 
-        def embed(m: re.Match) -> str:
+        def embed(m: re.Match, path: Path = path) -> str:
             name = image_ref(path, m.group(1))
             return f"![]({'asset:' + name})" if name else m.group(0)
 
-        def md_image(m: re.Match) -> str:
+        def md_image(m: re.Match, path: Path = path) -> str:
             name = image_ref(path, m.group(2))
             return f"![{m.group(1)}](asset:{name})" if name else m.group(0)
 
-        def md_link(m: re.Match) -> str:
+        def md_link(m: re.Match, path: Path = path) -> str:
             target = Path(unquote(m.group(2)))
             try:
                 linked = created.get(str((path.parent / target).resolve()))

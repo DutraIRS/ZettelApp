@@ -211,7 +211,7 @@ def build_demo(vault: Vault) -> dict[str, str]:
             created=when.astimezone(UTC).isoformat(timespec="seconds"),
         )
         ids[title] = note.id
-    for title, tags, body in NOTES:
+    for title, _tags, body in NOTES:
         note = vault.get_note(ids[title])
         note.body = body
         if title == "Spaced repetition":

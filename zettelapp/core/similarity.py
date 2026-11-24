@@ -101,7 +101,7 @@ def _jaro_winkler_python(a: str, b: str, prefix_weight: float = 0.1) -> float:
     if jaro <= 0.7:  # Winkler's boost threshold
         return jaro
     prefix = 0
-    for ca, cb in zip(a[:4], b[:4]):
+    for ca, cb in zip(a[:4], b[:4], strict=False):
         if ca != cb:
             break
         prefix += 1

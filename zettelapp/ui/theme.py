@@ -42,7 +42,9 @@ CATEGORICAL_DARK = [
     "#9085e9",
     "#e66767",
 ]
-_DARK_STEP = {light.lower(): dark for light, dark in zip(CATEGORICAL_LIGHT, CATEGORICAL_DARK)}
+_DARK_STEP = {
+    light.lower(): dark for light, dark in zip(CATEGORICAL_LIGHT, CATEGORICAL_DARK, strict=True)
+}
 
 UI_FONTS = {
     "win32": ["Segoe UI Variable Text", "Segoe UI", "Arial"],
@@ -245,7 +247,7 @@ def _kde_accent() -> str | None:
     import os
 
     config = os.environ.get("XDG_CONFIG_HOME") or str(Path.home() / ".config")
-    kde = configparser.ConfigParser(interpolation=None, strict=False)
+    kde = configparser.ConfigParser(interpolation=None, strict=True)
     try:
         kde.read(Path(config) / "kdeglobals", encoding="utf-8")
     except configparser.Error:

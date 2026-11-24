@@ -42,7 +42,7 @@ def test_registry():
     assert zai.effective_base_url() == "https://api.z.ai/api/coding/paas/v4"
     assert LLMSettings(effort="bogus").effective_effort() == "medium"
     with pytest.raises(LLMError):
-        LLMSettings(provider="nope").info
+        _ = LLMSettings(provider="nope").info
 
 
 @pytest.mark.parametrize(

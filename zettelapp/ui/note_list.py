@@ -64,8 +64,8 @@ class NoteListModel(QAbstractListModel):
         super().__init__()
         self.rows: list[dict] = []
 
-    def rowCount(self, parent=QModelIndex()) -> int:  # noqa: N802
-        return 0 if parent.isValid() else len(self.rows)
+    def rowCount(self, parent: QModelIndex | None = None) -> int:  # noqa: N802
+        return 0 if parent is not None and parent.isValid() else len(self.rows)
 
     def data(self, index, role=Qt.ItemDataRole.DisplayRole):
         if not index.isValid():

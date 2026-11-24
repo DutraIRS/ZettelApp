@@ -56,7 +56,9 @@ def test_svg_icon_is_pixel_identical_to_the_png(qapp):
 
     png = QImage(str(ROOT / "website" / "assets" / "icon-512.png"))
     assert png.size().width() == 512
-    differences = [abs(a - b) for a, b in zip(_pixels(_render(512)), _pixels(png)) if a != b]
+    differences = [
+        abs(a - b) for a, b in zip(_pixels(_render(512)), _pixels(png), strict=True) if a != b
+    ]
     assert max(differences, default=0) <= 1
     assert len(differences) <= 512 // 16
 
@@ -65,6 +67,6 @@ def test_svg_icon_is_pixel_identical_to_the_png(qapp):
 def test_svg_icon_scales_like_the_drawn_icon(qapp, size):
     """At other sizes only anti-aliasing rounding may differ: one level on a few edge pixels."""
     rendered, drawn = _pixels(_render(size)), _pixels(make_icon.draw(size))
-    differences = [abs(a - b) for a, b in zip(rendered, drawn) if a != b]
+    differences = [abs(a - b) for a, b in zip(rendered, drawn, strict=True) if a != b]
     assert max(differences, default=0) <= 1
     assert len(differences) <= size // 16
