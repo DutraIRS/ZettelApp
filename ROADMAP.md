@@ -151,3 +151,29 @@ is open on two machines.
 - [ ] **Reading as Android's default**: the Android app opens notes in a reading view first.
 - [✓] **Preview spacing**: paragraphs, headings and lists in the preview are still spaced unevenly.
   *Done 2026-11-23:* one spacing step for every block, the editor's text size.
+
+## 10. Code structure (from the 24 November 2026 review)
+
+The review's security and documentation findings are fixed. These are larger refactors, recorded
+here instead of being rushed. Each step lands separately with the test suite green, and no
+behaviour changes.
+
+- [ ] **One platform interface** (needed before macOS, item 4). A `platform/` package with a
+  `Platform` protocol: reveal in file manager, register links, notifications, credential store,
+  paths, theme and accent. `windows.py`, `linux.py` and, later, `macos.py` implement it, and one is
+  chosen at start-up. This replaces 72 `sys.platform`/`IS_WINDOWS` checks across 16 files, and
+  `winintegration.py` stops being the Linux entry point too. Plan: introduce the protocol with
+  today's code behind it, then move one concern at a time (paths, then reveal, notifications,
+  links, keyring).
+- [ ] **Split `Vault`** (1,184 lines, 89 methods) by concern, keeping `Vault` as a thin facade
+  so callers don't change: schema and migrations, notes and trash, tags, links and link types,
+  search, alarms, review data, images and backups. Each part gets its own test file.
+- [ ] **Slim `MainWindow` and `OptionsDialog`**: move each Options page into its own class in
+  `ui/options/`, and the main window's menu, tray, alarm and import/export handling into small
+  controllers.
+- [ ] **Long functions**: `editor.py` (the editor's set-up), `graph_page.py`, `graph3d.paintEvent`,
+  `importer._import_markdown_files` and `mathrender.command` are split into named steps. 25
+  functions exceed ruff's complexity limit of 10.
+- [ ] **Stricter lint**: bugbear (B) is on as of this review. Next, line length (E501, 165 lines
+  over 100 columns, mostly long strings to rewrap) and complexity (C901, at a limit that today's
+  code passes, then lowered as the functions above are split).
