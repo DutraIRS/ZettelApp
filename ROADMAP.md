@@ -1,194 +1,84 @@
 # Roadmap
 
-Ideas and planned work for ZettelApp. Suggestions are welcome in
-[GitHub issues](https://github.com/DutraIRS/ZettelApp/issues).
+Planned work for ZettelApp. What has already shipped is in the [CHANGELOG](CHANGELOG.md).
+Suggestions are welcome in [GitHub issues](https://github.com/DutraIRS/ZettelApp/issues).
 
-**Companies can sponsor a specific roadmap item** through [Ko-fi](https://ko-fi.com/dutrairs) or by getting in
-touch on [GitHub](https://github.com/DutraIRS/ZettelApp).
+**Companies can sponsor a specific roadmap item** through [Ko-fi](https://ko-fi.com/dutrairs) or by
+getting in touch on [GitHub](https://github.com/DutraIRS/ZettelApp).
 
-Linux support was requested for 1.0, evaluated, and **deferred because it is not quick**: it needed
-careful work across the whole app rather than a small addition. It has since shipped — see item 2.
+## Next
 
-## 1. App localisation (many languages)
+### Ask your notes
 
-**Status: done in 1.1.** The app, its documentation and the website are available in English, Spanish,
-Portuguese (Brazil), French, German, Italian, Russian, Simplified Chinese, Japanese, Korean and Arabic
-(right to left). The language follows your system or the installer's choice, and can be changed in
-*Tools ▸ Options ▸ General*.
+- [ ] **Neighbours as context**: send the open note's *k*-hop neighbours (all notes within *k* links,
+  *k* configurable) instead of the most related notes.
+- [ ] **Review before sending**: a checklist of the notes about to be sent, to untick any first.
 
-Still to do:
+### Preview
 
-- A review of every catalogue by a native speaker. Corrections are welcome as GitHub issues or pull
-  requests against `zettelapp/resources/locales/<language>.json` and `docs/<language>/`.
-- More languages: `python tools/i18n.py extract` lists every string in
-  `zettelapp/resources/locales/messages.json`, and `python tools/i18n.py check` reports what a catalogue is
-  missing.
+- [ ] **Text options**: line breaks (a single line break starts a new line, or lines join into one
+  paragraph as in standard Markdown), alignment (start or justified), line spacing and paragraph
+  spacing. Markdown is parsed by markdown-it-py; the preview's layout is ZettelApp's own.
 
-## 2. Linux (.deb, portable archive, Flatpak, Snap)
+### Insights
 
-**Status: done in 1.4** (from the original evaluation and checklist):
+- [ ] **Network metrics**: the degree distribution (and how close it is to a power law), hubs by
+  degree, betweenness and PageRank, and the clustering coefficient, to see which notes hold the
+  network together.
 
-- [x] **Icons**: every icon is painted with QPainter through a bundled shape library (`ui/iconshapes.py`),
-  so the app looks right without Windows' *Segoe Fluent Icons* font and without any icon theme.
-- [x] **Paths**: XDG locations — notes default to `~/Documents/ZettelApp` via `xdg-user-dir`, settings in
-  `~/.config/ZettelApp`, caches in `~/.cache/ZettelApp`.
-- [x] **API keys**: stored with the Secret Service through libsecret (GNOME Keyring / KWallet); the
-  Windows Credential Manager path is untouched and the memory-only fallback remains.
-- [x] **Links**: the `.deb` ships a `.desktop` file with `MimeType=x-scheme-handler/zettelapp;`; other
-  installs register a user-local desktop entry from *Options ▸ Desktop integration*.
-- [x] **Theme**: follows the desktop's light/dark preference and accent colour (GNOME via `gsettings`,
-  KDE via `kdeglobals`), with per-platform font stacks.
-- [x] **Packaging**: a PyInstaller build on Linux packed into a portable `.tar.gz` and a `.deb`
-  (`packaging/build-linux.sh`), a Flatpak manifest (`packaging/flatpak/`, freedesktop 24.08) and a Snap
-  recipe (`packaging/snap/`, core24 + GNOME). AppImage was dropped in favour of the portable archive:
-  it covers the same "run anywhere" need without bundling a runtime. Store listings (Flathub, Snap
-  Store) are planned — the release workflow can already publish the Snap when credentials exist.
-- [x] **CI**: Ubuntu jobs run the tests and build the packages on every pull request; releases carry
-  the `.deb` and `.tar.gz` alongside the Windows installer.
+### Graph
 
-Checked on real GNOME 48 and Plasma 6.3 Wayland sessions on 23 November 2026 (dark style at start and
-live, file dialogs, Show in folder, window identity, notifications, second launch). Still open:
+- [ ] **Arrow tips at each end**: a directed link type can have a different tip at each end; an
+  undirected one can have tips too, the same at both ends.
+- [ ] **Diffusion**: pick a note and a measure (link distance, or links weighted by similarity) and
+  watch its influence spread through the network.
 
-- [x] **Flathub: dropped** (24 November 2026). Flathub's Generative AI policy forbids AI-written
-  manifests and AI-made submissions, so ZettelApp is not submitted there. The Flatpak stays available as
-  a file on each GitHub release (`flatpak install --user ./ZettelApp-Linux-x86_64.flatpak`).
-- [ ] **Check that 1.4.0 is live in both stores** (submitted 23 November 2026):
-  - [ ] **Microsoft Store**: certification passes and https://apps.microsoft.com/detail/9PB0HCDXF63D
-    opens the listing (the website's Windows button already points there).
-  - [ ] **Snap Store**: `snap info zettelapp` finds it and `sudo snap install zettelapp` works (the
-    upload said "released to stable", but the store did not list it yet). Ask on the Snapcraft forum
-    for `password-manager-service` to connect automatically; until then API keys stay in memory only
-    unless the user runs `sudo snap connect zettelapp:password-manager-service`.
-- [ ] **Alarm click and second launch, on screen**: clicking an alarm notification, and a second launch
-  from the GNOME overview or KRunner, bring the window forward (activation tokens are passed on and
-  unit-tested; the on-screen click was never done).
-- [ ] **KDE**: KWallet as the Secret Service (the test machine ran GNOME Keyring under Plasma); *Show in
-  folder* preferring Dolphin when it is the default file manager but another one owns the D-Bus name
-  (*done 2026-11-23*, to check on Plasma);
-  pasting images on real Plasma hardware (Klipper served them empty in the VM).
-- [✓] **A live accent colour change** is followed only after a restart (light and dark are followed
-  live), on Linux as on Windows. *Done 2026-11-23:* the portal's accent-color signal and Qt's theme
-  change; checks on each desktop in [PLATFORM_CHECKS.md](PLATFORM_CHECKS.md).
-- [ ] **Fractional scaling (125-200 %), keyboard layouts and input methods (IBus, Fcitx), and Orca.**
+### Imports from other apps
 
-## 3. Signed Windows builds
+A test import (24 November 2026) showed what still goes wrong for people coming from elsewhere:
 
-Sign `ZettelApp.exe`, `zettelapp-mcp.exe` and the installer with a code-signing certificate, so Microsoft
-Defender SmartScreen stops warning on first run. The release workflow already has a place for a signing
-step.
+- [ ] **Obsidian**: links by path (`[[Folder/Note]]`) and to blocks (`[[Note^id]]`) are not
+  resolved; with two notes of the same name, a bare link should go to the one nearest the vault's
+  root.
+- [ ] **Evernote**: list items come out with the text on a line of its own (Evernote 10 wraps each
+  item in a `<div>`), tables are not Markdown tables, and code blocks are not fenced.
 
-## 4. macOS
+### Website
 
-A universal `.app` bundle and `.dmg`, after the Linux work: icon fallback, Keychain for API keys and
-platform paths.
+- [ ] **The mobile layout**: the site is hard to use on a phone.
+- [ ] **A Google Play link**, ready for when the Android app is listed.
 
-## 5. Android (mobile app)
+### Linux
 
-**Status: in progress.** The core (storage, models, Markdown rendering, Anki
-export, security) is plain Python and runs on Android through
-[Chaquopy](https://chaquo.com/chaquopy/); a native Kotlin/Compose screen calls
-it through the small, Qt-free `zettelapp.mobile` facade (`android/` holds the
-Gradle project).
+- [ ] **Snap Store**: check that `snap info zettelapp` finds 1.4.0 and `sudo snap install zettelapp`
+  works, and ask on the Snapcraft forum for `password-manager-service` to connect automatically
+  (until then API keys stay in memory unless the user runs
+  `sudo snap connect zettelapp:password-manager-service`).
+- [ ] **What only a real desktop can confirm** (alarm clicks, KWallet, fractional scaling, input
+  methods, Orca) is listed in [PLATFORM_CHECKS.md](PLATFORM_CHECKS.md).
 
-What works:
+### Android
 
-- Notes list with search and a tag filter, editing and creating notes, links,
-  backlinks and flashcards under each note, a graph, Insights and flashcard
-  review. The vault lives in the app's private storage (scoped storage won't
-  let SQLite open a database in the shared `Documents` folder).
-- `zettelapp://note/<id>` deep links open the matching note.
-- API keys stay in memory for the session (Android has no shared secret store
-  the app could use yet).
-- AnkiDroid availability checks and `zotero://` links through Android intents.
+**In progress** (`android/`): a native Kotlin/Compose app runs ZettelApp's Python core on the
+device through [Chaquopy](https://chaquo.com/chaquopy/). It has the note list with search and tag
+filter, editing, links, backlinks, flashcards, a graph, Insights, review and `zettelapp://` links.
 
-Still to do:
+- [ ] **Open notes in a reading view** first, as the desktop's Reading view.
+- [ ] **The Markdown preview**, a force-directed graph and translated screens.
+- [ ] **A vault in shared storage**, through the Storage Access Framework.
+- [ ] **Semantic search and *Ask your notes*** on the device (they need Android builds of
+  onnxruntime and tokenizers), and flashcard export to AnkiDroid.
+- [ ] **A signed release** and the Google Play listing.
 
-- Semantic search and *Ask your notes* on device (needs onnxruntime/tokenizers
-  Android wheels), on-device flashcard export to AnkiDroid, a release pipeline
-  with signing, and store listings.
-- The Markdown renderer in the preview, a force-directed graph, translated
-  phone screens, and opening a vault in shared storage through the Storage
-  Access Framework.
+## Later
 
-## 6. Sync between devices
-
-Optional sync of a vault between computers. Options include a change log in the database merged through
-a folder you already sync, or a self-hosted service. The goal is to avoid conflicts when the same vault
-is open on two machines.
-
-## 7. More ideas
-
-- **More uses for the local language model** that semantic search can download: link suggestions and
-  *Ask your notes*, fully offline. They would be optional additions alongside LSA.
-- **Import PDF annotations** from Zotero into literature notes.
-- **Zotero group libraries** in the reference search.
-- **Plugins**: a small extension API for custom link-suggestion features, exporters and importers.
+- **Sync between devices**: a vault shared between computers without conflicts when it is open on
+  two of them, through a change log merged via a folder you already sync, or a self-hosted service.
+- **The local language model** (the one semantic search downloads) for link suggestions and *Ask
+  your notes*, fully offline, alongside LSA.
+- **Zotero**: PDF annotations into literature notes, and group libraries in the reference search.
+- **Plugins**: a small extension API for link-suggestion features, exporters and importers.
 - **Daily notes and templates.**
-- **Mind map ↔ notes**: turn a mind map's ideas into linked notes in one step.
-- **Accessibility audit** with Windows Narrator, and a high-contrast theme.
+- **Mind map to notes**: turn a mind map's ideas into linked notes in one step.
 - **Bulk editing**: tag, retype links or export a hand-picked selection of notes.
-
-## 8. Graph, links and the note list (requested November 2026)
-
-**Status: done, unreleased.**
-
-- [x] **Graph filters**: tick link types and tags to show or hide them in the graph, and choose which tags
-  form groups and count for clusters.
-- [x] **Local graph**: says which note it is centred on (the open note), or that it shows all notes when
-  none is open.
-- [x] **Link types list** in *Options*: rows no longer overlap until clicked.
-- [x] **Reverse names in notes**: with a directed type such as *discusses* / *discussed by*, write
-  `discussed_by:: [[...]]` from the other end; an unnamed reverse is called "Reverse <name>".
-- [x] **Mirror new links**: an option in *Options* writes a new `link_type:: [[A]]` into the linked note
-  too, at its top or bottom (off by default).
-- [x] **Note list ordered by closeness** to the open note, by meaning (LSA, the new default) or by fewest
-  links; it follows the open note as you move between notes.
-- [x] **`---` is always a horizontal rule** in the preview, like in the editor (no setext headings or
-  indented code blocks that the editor doesn't show).
-- [x] **Cloze cards**: the blank is shown and scrolled into view, and revealing fills it in place.
-- [x] **Undirected links written in both notes** show once.
-- [x] **Graph selection**: a click on empty space clears the selected note.
-
-## 9. Reading and editing (requested 23 November 2026)
-
-- [✓] **The adventure card's text**: justified, with space between paragraphs (Euterpes' tutorial card
-  too). *Done 2026-11-23.*
-- [✓] **A view-only mode**: fold the Markdown editor away, like the side panels, and read the note in the
-  preview alone. *Done 2026-11-23 on the desktop:* the Reading view (title and source locked, a
-  centred column), a tab between text and preview, the mode remembered.
-- [ ] **Reading as Android's default**: the Android app opens notes in a reading view first.
-- [✓] **Preview spacing**: paragraphs, headings and lists in the preview are still spaced unevenly.
-  *Done 2026-11-23:* one spacing step for every block, the editor's text size.
-
-## 10. One top row on Windows, as GitHub Desktop's (requested 23 November 2026)
-
-Windows draws its own title bar (in the user's accent colour, when they chose that) above the menu
-bar. Instead, the app's icon, the menus, the note's name (muted, centred) and the minimise, maximise
-and close buttons should share **one row**, in the theme's colours. Euterpes did it the same day
-(`euterpes/ui/title_bar.py`, its roadmap item G23); the same approach fits here.
-
-- [✓] **The look**: paint the row in the **sidebar's colour**, not the window's, so with the rail at the
-  left it forms one L around the page and the page starts inside it with one straight edge. Close turns
-  red (`#c42b1c`) on hover, as Windows does; the buttons are 46 × 32 px with Segoe Fluent Icons glyphs
-  (E921, E922/E923, E8BB), plain characters where the font is missing.
-- [✓] **The behaviour stays native**: set `Qt.FramelessWindowHint` before the first show, then on the
-  first `showEvent` put back `WS_THICKFRAME | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX |
-  WS_MAXIMIZEBOX` and extend the DWM frame by one pixel, so the window still snaps, animates, keeps its
-  shadow and rounded corners. In `nativeEvent`, answer `WM_NCCALCSIZE` with 0 (all client area; inset a
-  maximised window by its frame so nothing hangs off the screen) and `WM_NCHITTEST` with the edges
-  (resize), `HTCAPTION` over the empty row (drag, double-click to maximise) and `HTCLIENT` over menus
-  and buttons.
-- [✓] **Pitfalls to avoid**: calling `winId()` while answering `WM_NCCALCSIZE` recurses while the native
-  window is being made: use the message's own `hWnd`, and answer nothing until restyled. Once the row
-  holds the menus, never call `QMainWindow.menuBar()`: Qt silently replaces the row with a new, empty
-  menu bar. ZettelApp calls it in `main_window.py` and `quest_card.py`; use `menuWidget()`.
-- [✓] **Windows only** (`platformName() == "windows"`): Linux keeps the desktop's title bar, and tests
-  (offscreen) keep Qt's menu bar.
-- *Done when* the row shows in every theme, the window drags, snaps, resizes from every edge and
-  maximises to the screen's free area (checked with Windows' own `WM_NCHITTEST` answers), and a test
-  covers the hit rules. It needs a check on a Windows machine, as the Linux VM can't show it.
-- *Done 2026-11-24 on Windows* (`zettelapp/ui/title_bar.py`): checked on Windows 11 at 125 % in
-  every theme, with Windows' own hit-test answers, maximising and snapping (PLATFORM_CHECKS 1.6).
-  It shows the window's title (the vault's name). Two fixes beyond Euterpes': right to left, Qt's
-  menu bar shrank to its » button in the row; and Close's red hover lost to the row's own hover
-  rule (CSS specificity). Still to check on GNOME and KDE that nothing changed there.
+- **Accessibility**: an audit with Narrator and Orca, and a high-contrast theme.
