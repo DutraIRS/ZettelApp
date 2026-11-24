@@ -49,6 +49,13 @@ def _text(value: str) -> str:
     return json.dumps(value, ensure_ascii=False)
 
 
+def _plain(body: str) -> str:
+    """*body* with markup characters escaped: servers that support body markup (GNOME Shell,
+    KDE Plasma) would otherwise turn note text like <a href=…> or <img src=…> into a link or
+    load an image. The summary (title) is plain text by the spec and needs no escaping."""
+    return body.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
 class DesktopNotifier(QObject):
     """Show notifications whose click calls back with a key (a note id)."""
 
@@ -88,7 +95,7 @@ class DesktopNotifier(QObject):
                 "0",
                 _text(self.icon),
                 _text(title),
-                _text(body),
+                _text(_plain(body)),
                 f"[{_text('default')}, {_text(action)}]",
                 f"{{{_text('desktop-entry')}: <{_text(DESKTOP_ENTRY)}>}}",
                 str(TIMEOUT_MS),

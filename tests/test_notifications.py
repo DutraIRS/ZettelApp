@@ -24,7 +24,8 @@ def test_notifier_sends_a_typed_gdbus_call(monkeypatch):
     monkeypatch.setattr(DesktopNotifier, "_listen", lambda self: None)
     notifier = DesktopNotifier(lambda key: None, "/icon.png")
     notifier.gdbus = "/usr/bin/gdbus"
-    assert notifier.notify('Say "hi"', "line\nbreak", "20260101120000", "Open note", lambda: None)
+    body = 'line\nbreak <a href="https://x">&</a>'
+    assert notifier.notify('Say "hi"', body, "20260101120000", "Open note", lambda: None)
     args = started[0]
     assert args[args.index("--method") + 1] == "org.freedesktop.Notifications.Notify"
     # GVariant text: strings quoted and escaped, the id a plain 0 typed by gdbus as uint32.
@@ -33,7 +34,7 @@ def test_notifier_sends_a_typed_gdbus_call(monkeypatch):
         "0",
         '"/icon.png"',
         '"Say \\"hi\\""',
-        '"line\\nbreak"',
+        '"line\\nbreak &lt;a href=\\"https://x\\"&gt;&amp;&lt;/a&gt;"',  # markup escaped
         '["default", "Open note"]',
         '{"desktop-entry": <"io.github.dutrairs.zettelapp">}',
         "15000",
