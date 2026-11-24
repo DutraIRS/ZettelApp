@@ -84,8 +84,9 @@ Notes can come from imports, the web or AI answers, so ZettelApp treats their co
 - **AI safety.** The AI model gets no tools, so instructions hidden in a note can't make it act, and its
   answer is rendered with the same safe renderer. API keys stay in the system keyring and are removed from
   error messages.
-- **MCP server and its switch.** MCP clients can reach your notes only while ZettelApp is open **and** the
-  MCP switch in its status bar is on. The switch is off every time ZettelApp starts and is never saved.
+- **MCP server and its switch.** ZettelApp's MCP server answers only while ZettelApp is open **and** the
+  MCP switch in its status bar is on. The switch is your consent, not a lock: any program running as
+  you, including an MCP client with its own file tools, can still read the vault's files directly. The switch is off every time ZettelApp starts and is never saved.
   The server is read-only by default, runs only when your MCP client starts it, and uses standard
   input/output with no network port. See [MCP server](mcp-server.md).
 

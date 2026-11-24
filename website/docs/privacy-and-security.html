@@ -142,8 +142,9 @@ a Windows named pipe, or a user-only local socket on Linux — that only your us
 <li><strong>AI safety.</strong> The AI model gets no tools, so instructions hidden in a note can't make it act, and its
 answer is rendered with the same safe renderer. API keys stay in the system keyring and are removed from
 error messages.</li>
-<li><strong>MCP server and its switch.</strong> MCP clients can reach your notes only while ZettelApp is open <strong>and</strong> the
-MCP switch in its status bar is on. The switch is off every time ZettelApp starts and is never saved.
+<li><strong>MCP server and its switch.</strong> ZettelApp's MCP server answers only while ZettelApp is open <strong>and</strong> the
+MCP switch in its status bar is on. The switch is your consent, not a lock: any program running as
+you, including an MCP client with its own file tools, can still read the vault's files directly. The switch is off every time ZettelApp starts and is never saved.
 The server is read-only by default, runs only when your MCP client starts it, and uses standard
 input/output with no network port. See <a href="mcp-server.html">MCP server</a>.</li>
 </ul>

@@ -142,8 +142,10 @@ canalización con nombre de Windows (o un socket local solo para tu usuario, en 
 <li><strong>Seguridad de la IA.</strong> El modelo de IA no recibe herramientas, así que las instrucciones ocultas en una nota no pueden hacerlo actuar, y su
 respuesta se renderiza con el mismo renderizador seguro. Las claves de API permanecen en el Administrador de credenciales y se eliminan de los
 mensajes de error.</li>
-<li><strong>Servidor MCP y su interruptor.</strong> Los clientes MCP solo pueden acceder a tus notas mientras ZettelApp está abierto <strong>y</strong> el
-interruptor MCP de su barra de estado está activado. El interruptor está desactivado cada vez que se inicia ZettelApp y nunca se guarda.
+<li><strong>Servidor MCP y su interruptor.</strong> El servidor MCP de ZettelApp solo responde mientras ZettelApp está abierto <strong>y</strong> el
+interruptor MCP de su barra de estado está activado. El interruptor es tu consentimiento, no un candado:
+cualquier programa que se ejecute con tu usuario, incluido un cliente MCP con sus propias herramientas de
+archivos, puede seguir leyendo directamente los archivos de la bóveda. El interruptor está desactivado cada vez que se inicia ZettelApp y nunca se guarda.
 El servidor es de solo lectura por defecto, se ejecuta solo cuando tu cliente MCP lo inicia y usa la entrada/salida
 estándar sin puerto de red. Consulta <a href="mcp-server.html">Servidor MCP</a>.</li>
 </ul>

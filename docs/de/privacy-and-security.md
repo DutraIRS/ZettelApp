@@ -65,7 +65,7 @@ nicht vertrauenswürdig:
 - **`zettelapp://`-Links** (für Anki-Karten) können ausschließlich *eine Notiz anhand ihrer ID öffnen*. Alle anderen Anfragen werden ignoriert.
 - **Nur eine Instanz pro Benutzer.** Ein zweiter Start übergibt seine Anfrage über eine Windows-Named-Pipe (unter Linux über einen lokalen Socket, auf den nur Ihr Benutzerkonto zugreift) an die bereits laufende App.
 - **KI-Sicherheit.** Das KI-Modell erhält keine Tools. Versteckte Anweisungen in einer Notiz können es daher nicht zu Aktionen veranlassen; seine Antwort wird mit demselben sicheren Renderer angezeigt. API-Schlüssel bleiben im Anmeldeinformations-Manager und werden aus Fehlermeldungen entfernt.
-- **MCP-Server und Schalter.** MCP-Clients können nur dann auf Ihre Notizen zugreifen, wenn ZettelApp geöffnet **und** der MCP-Schalter in der Statusleiste eingeschaltet ist. Bei jedem Start ist der Schalter aus und wird nie gespeichert. Standardmäßig ist der Server schreibgeschützt. Er läuft nur, wenn Ihr MCP-Client ihn startet, und verwendet Standardein- und -ausgabe ohne Netzwerkport. Siehe [MCP-Server](mcp-server.md).
+- **MCP-Server und Schalter.** Der MCP-Server von ZettelApp antwortet nur, wenn ZettelApp geöffnet **und** der MCP-Schalter in der Statusleiste eingeschaltet ist. Der Schalter ist Ihre Zustimmung, keine Sperre: Jedes Programm, das unter Ihrem Konto läuft, auch ein MCP-Client mit eigenen Dateiwerkzeugen, kann die Dateien des Tresors weiterhin direkt lesen. Bei jedem Start ist der Schalter aus und wird nie gespeichert. Standardmäßig ist der Server schreibgeschützt. Er läuft nur, wenn Ihr MCP-Client ihn startet, und verwendet Standardein- und -ausgabe ohne Netzwerkport. Siehe [MCP-Server](mcp-server.md).
 
 ## Deinstallieren
 

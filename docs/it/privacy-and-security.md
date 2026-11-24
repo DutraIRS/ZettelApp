@@ -84,8 +84,10 @@ Le note possono provenire da importazioni, dal web o da risposte dell'IA, quindi
 - **Sicurezza dell'IA.** Il modello di IA non ha strumenti, quindi le istruzioni nascoste in una nota non possono farlo agire, e la sua
   risposta viene mostrata con lo stesso renderer sicuro. Le chiavi API restano in Gestione credenziali e sono rimosse dai
   messaggi di errore.
-- **Il server MCP e il suo interruttore.** I client MCP possono raggiungere le tue note solo mentre ZettelApp è aperto **e**
-  l'interruttore MCP nella sua barra di stato è attivo. L'interruttore è disattivato a ogni avvio di ZettelApp e non viene mai salvato.
+- **Il server MCP e il suo interruttore.** Il server MCP di ZettelApp risponde solo mentre ZettelApp è aperto **e**
+  l'interruttore MCP nella sua barra di stato è attivo. L'interruttore è il tuo consenso, non un lucchetto:
+  qualsiasi programma eseguito con il tuo utente, compreso un client MCP con propri strumenti per i file,
+  può comunque leggere direttamente i file del vault. L'interruttore è disattivato a ogni avvio di ZettelApp e non viene mai salvato.
   Il server è in sola lettura per impostazione predefinita, viene eseguito solo quando il tuo client MCP lo avvia e usa standard
   input/output senza alcuna porta di rete. Vedi [Server MCP](mcp-server.md).
 

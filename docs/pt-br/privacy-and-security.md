@@ -84,8 +84,10 @@ As notas podem vir de importações, da web ou de respostas de IA, então o Zett
 - **Segurança da IA.** O modelo de IA não recebe ferramentas, então instruções escondidas em uma nota não podem fazê-lo agir, e sua
   resposta é renderizada com o mesmo renderizador seguro. As chaves de API ficam no Gerenciador de Credenciais e são removidas das
   mensagens de erro.
-- **Servidor MCP e seu interruptor.** Os clientes MCP só alcançam suas notas enquanto o ZettelApp está aberto **e** o
-  interruptor MCP na barra de status dele está ligado. O interruptor fica desligado toda vez que o ZettelApp inicia e nunca é salvo.
+- **Servidor MCP e seu interruptor.** O servidor MCP do ZettelApp só responde enquanto o ZettelApp está aberto **e** o
+  interruptor MCP na barra de status dele está ligado. O interruptor é o seu consentimento, não uma tranca:
+  qualquer programa rodando com o seu usuário, inclusive um cliente MCP com ferramentas de arquivo próprias,
+  ainda pode ler os arquivos do cofre diretamente. O interruptor fica desligado toda vez que o ZettelApp inicia e nunca é salvo.
   O servidor é somente leitura por padrão, roda apenas quando seu cliente MCP o inicia e usa a entrada/saída
   padrão, sem porta de rede. Veja [Servidor MCP](mcp-server.md).
 
