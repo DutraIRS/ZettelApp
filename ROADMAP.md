@@ -49,8 +49,16 @@ Still to do:
 Checked on real GNOME 48 and Plasma 6.3 Wayland sessions on 23 November 2026 (dark style at start and
 live, file dialogs, Show in folder, window identity, notifications, second launch). Still open:
 
-- [ ] **Flathub and the Snap Store**: rework the Flatpak manifest for offline builds (the PySide6 base
-  app and pinned, checksummed Python sources), build and test both, then submit.
+- [x] **Flathub: dropped** (24 November 2026). Flathub's Generative AI policy forbids AI-written
+  manifests and AI-made submissions, so ZettelApp is not submitted there. The Flatpak stays available as
+  a file on each GitHub release (`flatpak install --user ./ZettelApp-Linux-x86_64.flatpak`).
+- [ ] **Check that 1.4.0 is live in both stores** (submitted 23 November 2026):
+  - [ ] **Microsoft Store**: certification passes and https://apps.microsoft.com/detail/9PB0HCDXF63D
+    opens the listing (the website's Windows button already points there).
+  - [ ] **Snap Store**: `snap info zettelapp` finds it and `sudo snap install zettelapp` works (the
+    upload said "released to stable", but the store did not list it yet). Ask on the Snapcraft forum
+    for `password-manager-service` to connect automatically; until then API keys stay in memory only
+    unless the user runs `sudo snap connect zettelapp:password-manager-service`.
 - [ ] **Alarm click and second launch, on screen**: clicking an alarm notification, and a second launch
   from the GNOME overview or KRunner, bring the window forward (activation tokens are passed on and
   unit-tested; the on-screen click was never done).
