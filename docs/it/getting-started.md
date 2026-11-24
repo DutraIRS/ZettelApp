@@ -9,6 +9,7 @@ ZettelApp funziona su **Windows 10 (21H2 o successivo), Windows 11 e desktop Lin
 
 | Download | Usalo quando |
 |---|---|
+| [Microsoft Store](https://apps.microsoft.com/detail/9PB0HCDXF63D) | Il modo più semplice: si installa dallo Store, si aggiorna da sola e non mostra avvisi di SmartScreen. |
 | `ZettelApp-Setup.exe` | Vuoi una normale installazione con una voce nel menu Start, un programma di disinstallazione in *Impostazioni ▸ App* e collegamenti `zettelapp://` che aprono le note da Anki. Non servono privilegi di amministratore: viene installato solo per il tuo account. |
 | `ZettelApp-Portable.zip` | Non puoi installare software, oppure vuoi eseguirlo da una chiavetta USB. Decomprimilo ovunque ed esegui `ZettelApp.exe`. |
 
