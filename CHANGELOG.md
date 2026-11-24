@@ -6,6 +6,31 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ## [Unreleased]
 
+### Security
+
+- **Windows alarm toasts no longer build PowerShell from note text.** A title or text with a
+  typographic quote (‘ ’ ‚ ‛) could end PowerShell's string and run commands, from a note
+  imported from someone else's archive or synced into a shared vault. The toast's text now reaches
+  PowerShell in base64. The same bug kept alarms such as “Don’t forget” from showing at all.
+- Imported alarms whose time has passed come in as already announced.
+- **Linux alarm notifications** show the note's text as plain text: markup such as links or
+  images in a note is no longer drawn by GNOME Shell or KDE Plasma.
+- **Releases**: the signing certificate and the Snap Store credentials are given only to the steps
+  that use them, and third-party actions are pinned to commits.
+
+### Fixed
+
+- **MCP in the Flatpak and the Snap**: *Options ▸ MCP server* now points clients at
+  `flatpak run` or `snap run`, which reach the app's MCP switch, and *Add to Claude Desktop*
+  writes Claude Desktop's real configuration file instead of one inside the sandbox.
+- `SHA256SUMS.txt` on the release page also lists the `.flatpak` and `.snap` downloads.
+
+### Changed
+
+- Docs: 1.4.x is the supported version in SECURITY.md; the README says imports are checked and
+  size-limited (not "sandboxed"); and the MCP switch is described as a consent switch for
+  ZettelApp's server, not a lock against other programs (all 11 languages).
+
 ## [1.4.0] - 2026-11-23
 
 ### Added
