@@ -30,6 +30,7 @@ from zettelapp.core.models import (
     Note,
     least_used_line_style,
     sanitize_mindmap,
+    utc_now,
 )
 from zettelapp.core.security import (
     MAX_ARCHIVE_MANIFEST_BYTES,
@@ -296,6 +297,10 @@ def _import_data(
         note.mindmap = sanitize_mindmap(raw.get("mindmap")) if raw.get("mindmap") else None
         note.alarm = _str(raw.get("alarm"), 40)
         vault.save_note(note, touch=False)
+        if note.alarm and note.alarm <= utc_now():
+            # An alarm whose time has passed comes in as already announced: importing someone
+            # else's archive shouldn't make a notification pop up straight away.
+            vault.mark_alarm_fired(note.id)
         result.notes += 1
 
     for raw in data.get("links") or []:

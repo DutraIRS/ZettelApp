@@ -602,3 +602,25 @@ def test_markdown_folder_import_does_not_follow_links_out_of_the_folder(vault, t
     result = import_path(vault, folder)
     assert [n.title for n in vault.all_notes()] == ["note"]
     assert result.images == 0
+
+
+def test_imported_alarms_in_the_past_do_not_fire_but_future_ones_do(vault):
+    from datetime import UTC, datetime, timedelta
+
+    past = (datetime.now(UTC) - timedelta(days=1)).isoformat()
+    future = (datetime.now(UTC) + timedelta(days=1)).isoformat()
+    import_data(
+        vault,
+        {
+            "format": "zettelapp",
+            "version": 1,
+            "notes": [
+                {"id": "20200101000000", "title": "Old", "alarm": past},
+                {"id": "20200101000001", "title": "Later", "alarm": future},
+            ],
+        },
+    )
+    assert vault.due_alarms() == []
+    assert vault.pending_alarm_count() == 1
+    later = (datetime.now(UTC) + timedelta(days=2)).isoformat()
+    assert [n.title for n in vault.due_alarms(later)] == ["Later"]
