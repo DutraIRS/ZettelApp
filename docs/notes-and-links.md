@@ -260,7 +260,7 @@ The search box (Ctrl+F) looks through titles, text and tags, ignores accents, an
 so `forget` finds *forgetting*. Add `tag:name` to keep only the notes with a tag, for example
 `memory tag:psychology`. The best matches come first and each one shows the part of the note around your
 word; without a query, notes follow the order picked with the sort button next to the tag filter (*Last edited*, *Created*, *Title*, *Most
-linked*, *Closest in meaning to the open note* or *Fewest links from the open note*). The last two put
+linked*, *Closest in meaning to the open note* or *Fewest links away from the open note*). The last two put
 the open note first and follow it as you move between notes; *Closest in meaning*, the default, compares
 the notes' words (LSA) and catches up a moment after you edit.
 

@@ -1024,7 +1024,7 @@
  "Choose which tags the graph shows and which ones form groups": "选择图谱显示哪些标签以及哪些标签构成分组",
  "Closest in meaning to the open note": "与打开的笔记含义最接近",
  "Don't change the linked note": "不修改被链接的笔记",
- "Fewest links from the open note": "离打开的笔记链接最少",
+ "Fewest links away from the open note": "与打开的笔记链接距离最近",
  "In a note, write {example}, or {reverse} for the other direction.": "在笔记中写 {example}，反方向写 {reverse}。",
  "Let this tag form a group and count for clusters": "让此标签构成分组并参与聚类",
  "Link types shown in the graph": "图谱中显示的链接类型",

@@ -1024,7 +1024,7 @@
  "Choose which tags the graph shows and which ones form groups": "그래프에 표시할 태그와 그룹을 이룰 태그를 고릅니다",
  "Closest in meaning to the open note": "열린 노트와 의미가 가까운 순",
  "Don't change the linked note": "링크된 노트를 바꾸지 않음",
- "Fewest links from the open note": "열린 노트에서 링크 수가 적은 순",
+ "Fewest links away from the open note": "열린 노트에서 링크로 가까운 순",
  "In a note, write {example}, or {reverse} for the other direction.": "노트에 {example}처럼 쓰고, 반대 방향은 {reverse}처럼 씁니다.",
  "Let this tag form a group and count for clusters": "이 태그가 그룹을 이루고 클러스터에도 쓰이게 하기",
  "Link types shown in the graph": "그래프에 표시되는 링크 유형",

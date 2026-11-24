@@ -1055,7 +1055,7 @@
  "Choose which tags the graph shows and which ones form groups": "Scegli quali tag mostra il grafo e quali formano gruppi",
  "Closest in meaning to the open note": "Più vicine per significato alla nota aperta",
  "Don't change the linked note": "Non modificare la nota collegata",
- "Fewest links from the open note": "Meno collegamenti dalla nota aperta",
+ "Fewest links away from the open note": "Più vicine per collegamenti alla nota aperta",
  "In a note, write {example}, or {reverse} for the other direction.": "In una nota, scrivi {example}, o {reverse} per l’altra direzione.",
  "Let this tag form a group and count for clusters": "Lascia che questo tag formi un gruppo e conti per i cluster",
  "Link types shown in the graph": "Tipi di collegamento mostrati nel grafo",

@@ -1179,7 +1179,7 @@
  "Choose which tags the graph shows and which ones form groups": "اختر الوسوم التي يعرضها المخطط والوسوم التي تكوّن مجموعات",
  "Closest in meaning to the open note": "الأقرب معنىً إلى الملاحظة المفتوحة",
  "Don't change the linked note": "لا تغيّر الملاحظة المرتبطة",
- "Fewest links from the open note": "أقل عدد من الروابط من الملاحظة المفتوحة",
+ "Fewest links away from the open note": "الأقرب عبر الروابط إلى الملاحظة المفتوحة",
  "In a note, write {example}, or {reverse} for the other direction.": "في ملاحظة، اكتب {example}، أو {reverse} للاتجاه الآخر.",
  "Let this tag form a group and count for clusters": "اسمح لهذا الوسم بتكوين مجموعة واحتسابه في العناقيد",
  "Link types shown in the graph": "أنواع الروابط المعروضة في المخطط",

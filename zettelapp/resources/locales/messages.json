@@ -2078,7 +2078,7 @@
    "zettelapp/ui/settings_dialog.py:563"
   ]
  },
- "Fewest links from the open note": {
+ "Fewest links away from the open note": {
   "plural": null,
   "where": [
    "zettelapp/ui/note_list.py:314"

@@ -1024,7 +1024,7 @@
  "Choose which tags the graph shows and which ones form groups": "グラフに表示するタグと、グループを作るタグを選びます",
  "Closest in meaning to the open note": "開いているノートと意味が近い順",
  "Don't change the linked note": "リンク先のノートを変更しない",
- "Fewest links from the open note": "開いているノートからのリンク数が少ない順",
+ "Fewest links away from the open note": "開いているノートからリンクをたどって近い順",
  "In a note, write {example}, or {reverse} for the other direction.": "ノートに {example} と書きます。逆向きは {reverse} です。",
  "Let this tag form a group and count for clusters": "このタグでグループを作り、クラスタにも使う",
  "Link types shown in the graph": "グラフに表示するリンクの種類",

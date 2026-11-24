@@ -1086,7 +1086,7 @@
  "Choose which tags the graph shows and which ones form groups": "Выберите, какие теги показывает граф и какие образуют группы",
  "Closest in meaning to the open note": "Ближайшие по смыслу к открытой заметке",
  "Don't change the linked note": "Не менять связанную заметку",
- "Fewest links from the open note": "Меньше всего связей от открытой заметки",
+ "Fewest links away from the open note": "Ближайшие по связям к открытой заметке",
  "In a note, write {example}, or {reverse} for the other direction.": "В заметке напишите {example} или {reverse} для обратного направления.",
  "Let this tag form a group and count for clusters": "Разрешить этому тегу образовывать группу и учитываться в кластерах",
  "Link types shown in the graph": "Типы связей, показанные в графе",
