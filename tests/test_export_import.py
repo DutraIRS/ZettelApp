@@ -602,3 +602,38 @@ def test_markdown_folder_import_does_not_follow_links_out_of_the_folder(vault, t
     result = import_path(vault, folder)
     assert [n.title for n in vault.all_notes()] == ["note"]
     assert result.images == 0
+
+
+def test_obsidian_links_by_path_and_to_blocks_and_same_named_notes(vault, tmp_path):
+    root = tmp_path / "obsidian"
+    (root / "Projects" / "Sub").mkdir(parents=True)
+    (root / "Hub.md").write_text(
+        "[[Projects/Sub/Deep note|deep]], [[Atomic notes^abc123]], [[Atomic notes]] and "
+        "[[Projects/Atomic notes]]\n",
+        encoding="utf-8",
+    )
+    (root / "Atomic notes.md").write_text("At the root. ^abc123\n", encoding="utf-8")
+    (root / "Projects" / "Atomic notes.md").write_text("In a folder.\n", encoding="utf-8")
+    (root / "Projects" / "Sub" / "Deep note.md").write_text("Deep.\n", encoding="utf-8")
+    import_path(vault, root)
+    hub = next(n for n in vault.all_notes() if n.title == "Hub")
+    targets = [vault.get_note(link.dst).body.strip() for link in vault.links_from(hub.id)]
+    assert sorted(targets) == ["At the root. ^abc123", "Deep.", "In a folder."]
+    assert "[[Deep note|deep]]" in hub.body and "^abc123" not in hub.body
+
+
+def test_evernote_10_lists_tables_and_code_blocks():
+    from zettelapp.core.enex import enml_to_markdown
+
+    enml = (
+        "<en-note><ul><li><div>one</div></li><li><div>two</div><ul><li><div>nested</div></li>"
+        "</ul></li></ul><ol><li><p>first</p></li><li><div>second</div></li></ol>"
+        "<ul><li><div><en-todo checked='true'/>done</div></li></ul>"
+        "<table><tr><td><div>a</div></td><td>b | c</td></tr><tr><td>d</td></tr></table>"
+        '<div style="--en-codeblock: true;"><div>x = 1</div><div>y = 2</div></div>'
+        "<div>after</div></en-note>"
+    )
+    assert enml_to_markdown(enml, lambda *_: "") == (
+        "- one\n- two\n  - nested\n\n1. first\n2. second\n\n- [x] done\n\n"
+        "| a | b \| c |\n| --- | --- |\n| d |  |\n\n```\nx = 1\ny = 2\n```\n\nafter"
+    )

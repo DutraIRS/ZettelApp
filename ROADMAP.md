@@ -33,16 +33,6 @@ getting in touch on [GitHub](https://github.com/DutraIRS/ZettelApp).
 - [ ] **Diffusion**: pick a note and a measure (link distance, or links weighted by similarity) and
   watch its influence spread through the network.
 
-### Imports from other apps
-
-A test import (24 November 2026) showed what still goes wrong for people coming from elsewhere:
-
-- [ ] **Obsidian**: links by path (`[[Folder/Note]]`) and to blocks (`[[Note^id]]`) are not
-  resolved; with two notes of the same name, a bare link should go to the one nearest the vault's
-  root.
-- [ ] **Evernote**: list items come out with the text on a line of its own (Evernote 10 wraps each
-  item in a `<div>`), tables are not Markdown tables, and code blocks are not fenced.
-
 ### Website
 
 - [ ] **The mobile layout**: the site is hard to use on a phone.

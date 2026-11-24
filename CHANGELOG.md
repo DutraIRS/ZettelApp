@@ -16,6 +16,16 @@ All notable changes to ZettelApp are documented here. The format follows
 - **Notes in the rail (or Ctrl+1) brings a folded note list back**: there is nothing else to see
   on that page. Opening a note from the graph or elsewhere still leaves the list as it was.
 
+### Fixed
+
+- **Imports from Obsidian**: links by path (`[[Folder/Note]]`) and to a block (`[[Note^id]]`)
+  now link to the note; where two notes share a name, a bare link goes to the one nearest the
+  vault's root, and links to a title that two notes share name the note by its id, so they
+  can't land on the wrong one (also a note of that name already in the vault).
+- **Imports from Evernote**: list items from Evernote 10 keep their text on the bullet's line,
+  checklist items in a list become checklist lines, tables become Markdown tables, and code
+  blocks are fenced.
+
 ## [1.4.0] - 2026-11-23
 
 ### Added
