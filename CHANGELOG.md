@@ -30,6 +30,10 @@ All notable changes to ZettelApp are documented here. The format follows
   the degree distribution with a power-law exponent (fitted by maximum likelihood when the vault
   is big enough), and the notes that bridge the network (betweenness) or sit at its centre
   (PageRank).
+- **Arrow tips at each end** (*Options ▸ Link types ▸ Tip at the start*): a directed link type can
+  start with a different tip from the one it ends with, and an undirected type can have tips, the
+  same at both ends. Graph, samples and the SVG, GraphML and DOT exports draw them. The vault's
+  schema goes to version 6; older ZettelApp versions won't open a vault after this one has.
 
 ### Fixed
 

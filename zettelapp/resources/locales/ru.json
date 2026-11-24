@@ -1187,5 +1187,8 @@
  "the largest holds {share} of notes": "в самой большой {share} заметок",
  "The share of shortest paths between other notes that pass through each note": "Доля кратчайших путей между другими заметками, проходящих через каждую заметку",
  "Too few linked notes to fit": "Слишком мало связанных заметок для оценки",
- "transitivity {value}": "транзитивность {value}"
+ "transitivity {value}": "транзитивность {value}",
+ "None": "Нет",
+ "Tip at the start": "Наконечник в начале",
+ "Tips at both ends": "Наконечники на обоих концах"
 }

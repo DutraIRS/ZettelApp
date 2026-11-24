@@ -176,6 +176,7 @@ class _LinkSample(QWidget):
             self.lt.line_style,
             self.lt.tip,
             width=2.2,
+            start_arrow=self.lt.start_tip,
         )
         font = theme.ui_font(8.5)
         p.setFont(font)
@@ -740,6 +741,14 @@ class OptionsDialog(QDialog):
             self.type_arrow.addItem(_(name), key)
         self.type_arrow.currentIndexChanged.connect(self._type_edited)
         form.addRow(_("Arrow tip"), self.type_arrow)
+        self.type_start = QComboBox()
+        self.type_start.setAccessibleName(_("Tip at the start"))
+        self.type_start.setIconSize(LIST_ICON)
+        self.type_start.addItem(_("None"), "none")
+        for key, name in ARROW_TIP_NAMES.items():
+            self.type_start.addItem(_(name), key)
+        self.type_start.currentIndexChanged.connect(self._type_edited)
+        form.addRow(_("Tip at the start"), self.type_start)
         editor_lay.addLayout(form)
         self.type_sample = _LinkSample()
         editor_lay.addWidget(self.type_sample)
@@ -804,6 +813,7 @@ class OptionsDialog(QDialog):
         self.type_directed.setChecked(lt.directed)
         self.type_line.setCurrentIndex(max(0, self.type_line.findData(lt.line_style)))
         self.type_arrow.setCurrentIndex(max(0, self.type_arrow.findData(lt.arrow)))
+        self.type_start.setCurrentIndex(max(0, self.type_start.findData(lt.start_arrow)))
         self._loading_type = False
         self.remove_type_button.setEnabled(not lt.builtin)
         self.remove_type_button.setToolTip(
@@ -827,6 +837,7 @@ class OptionsDialog(QDialog):
             self.type_reverse.setText(lt.inverse_label)
         lt.line_style = self.type_line.currentData()
         lt.arrow = self.type_arrow.currentData()
+        lt.start_arrow = self.type_start.currentData()
         self._refresh_type()
 
     def _refresh_type(self) -> None:
@@ -840,6 +851,10 @@ class OptionsDialog(QDialog):
         item.setIcon(type_icon(lt))
         self._type_form.setRowVisible(self.type_reverse, lt.directed)
         self._type_form.setRowVisible(self.type_arrow, lt.directed)  # no arrow without a direction
+        # an undirected type's tips look the same from both notes
+        self._type_form.labelForField(self.type_start).setText(
+            _("Tip at the start") if lt.directed else _("Tips at both ends")
+        )
         swatch = QPixmap(32, 32)
         swatch.setDevicePixelRatio(2)
         swatch.fill(Qt.GlobalColor.transparent)
@@ -855,6 +870,11 @@ class OptionsDialog(QDialog):
             self.type_line.setItemIcon(i, sample_icon(color, self.type_line.itemData(i), None))
         for i in range(self.type_arrow.count()):
             self.type_arrow.setItemIcon(i, sample_icon(color, "solid", self.type_arrow.itemData(i)))
+        for i in range(self.type_start.count()):
+            key = self.type_start.itemData(i)
+            start = None if key == "none" else key
+            end = lt.tip if lt.directed else start
+            self.type_start.setItemIcon(i, sample_icon(color, "solid", end, start_arrow=start))
         self.type_sample.set_type(lt)
         type_id = lt.id or slugify_type(lt.label)
         reverse = None

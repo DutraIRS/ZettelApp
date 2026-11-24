@@ -1125,5 +1125,8 @@
  "the largest holds {share} of notes": "가장 큰 부분에 노트의 {share}",
  "The share of shortest paths between other notes that pass through each note": "다른 노트들 사이의 최단 경로 중 각 노트를 지나는 비율",
  "Too few linked notes to fit": "연결된 노트가 너무 적어 추정할 수 없어요",
- "transitivity {value}": "이행성 {value}"
+ "transitivity {value}": "이행성 {value}",
+ "None": "없음",
+ "Tip at the start": "시작 화살촉",
+ "Tips at both ends": "양 끝 화살촉"
 }

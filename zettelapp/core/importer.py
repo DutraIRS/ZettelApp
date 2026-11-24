@@ -24,6 +24,7 @@ from zettelapp.core.enex import enml_to_markdown, read_enex
 from zettelapp.core.models import (
     ARROW_TIPS,
     LINE_STYLES,
+    START_TIPS,
     TEXT_ORIGINS,
     Flashcard,
     LinkType,
@@ -184,6 +185,7 @@ def _validate_link_style(raw: dict) -> None:
     for key, allowed, message in (
         ("line_style", LINE_STYLES, _("Link type “{name}” has an unknown line style: {value}")),
         ("arrow", ARROW_TIPS, _("Link type “{name}” has an unknown arrow tip: {value}")),
+        ("start_arrow", START_TIPS, _("Link type “{name}” has an unknown arrow tip: {value}")),
     ):
         value = raw.get(key)
         if value is not None and (not isinstance(value, str) or value not in allowed):
@@ -245,6 +247,8 @@ def _import_data(
                 bool(raw.get("directed", True)),
                 line_style=line_style,
                 arrow=raw.get("arrow") or (existing.arrow if existing else "triangle"),
+                start_arrow=raw.get("start_arrow")
+                or (existing.start_arrow if existing else "none"),
             )
         )
         existing_types[imported.id] = imported

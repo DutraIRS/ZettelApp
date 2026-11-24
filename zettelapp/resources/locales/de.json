@@ -1156,5 +1156,8 @@
  "the largest holds {share} of notes": "der größte umfasst {share} der Notizen",
  "The share of shortest paths between other notes that pass through each note": "Der Anteil der kürzesten Wege zwischen anderen Notizen, die durch jede Notiz führen",
  "Too few linked notes to fit": "Zu wenige verknüpfte Notizen für eine Anpassung",
- "transitivity {value}": "Transitivität {value}"
+ "transitivity {value}": "Transitivität {value}",
+ "None": "Keine",
+ "Tip at the start": "Spitze am Anfang",
+ "Tips at both ends": "Spitzen an beiden Enden"
 }

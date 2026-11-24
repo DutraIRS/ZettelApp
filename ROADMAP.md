@@ -10,8 +10,6 @@ getting in touch on [GitHub](https://github.com/DutraIRS/ZettelApp).
 
 ### Graph
 
-- [ ] **Arrow tips at each end**: a directed link type can have a different tip at each end; an
-  undirected one can have tips too, the same at both ends.
 - [ ] **Diffusion**: pick a note and a measure (link distance, or links weighted by similarity) and
   watch its influence spread through the network.
 

@@ -1125,5 +1125,8 @@
  "the largest holds {share} of notes": "最大の成分にノートの {share}",
  "The share of shortest paths between other notes that pass through each note": "ほかのノート同士の最短経路のうち、各ノートを通る割合",
  "Too few linked notes to fit": "リンクされたノートが少なすぎて推定できません",
- "transitivity {value}": "推移性 {value}"
+ "transitivity {value}": "推移性 {value}",
+ "None": "なし",
+ "Tip at the start": "始点の矢じり",
+ "Tips at both ends": "両端の矢じり"
 }

@@ -200,6 +200,7 @@ class Graph3DView(QWidget):
             color.setAlphaF(alpha * (0.35 if focus is not None and not highlighted else 1.0))
             radius = node_radius(self.data.degree.get(link.dst, 0)) * (0.55 + 0.6 * depth[b])
             tip = self.data.link_tip(link) if highlighted else None
+            start = self.data.link_start_tip(link) if highlighted else None
             shape = edge_shape(
                 link,
                 QPointF(*screen[a]),
@@ -208,12 +209,17 @@ class Graph3DView(QWidget):
                 radius,
                 tip is not None,
                 tip or "triangle",
+                start_arrow=start,
+                source_radius=node_radius(self.data.degree.get(link.src, 0))
+                * (0.55 + 0.6 * depth[a]),
             )
             width = 2.4 if highlighted else 1.0 + d
             painter.setPen(link_pen(color, width, self.data.link_style(link)))
             painter.drawPath(shape.path)
             if shape.arrow is not None:
                 draw_tip(painter, shape.arrow, color, width, shape.filled)
+            if shape.start is not None:
+                draw_tip(painter, shape.start, color, width, shape.start_filled)
 
         order = np.argsort(depth)
         by_degree = sorted(self.data.ids, key=lambda i: -self.data.degree.get(i, 0))

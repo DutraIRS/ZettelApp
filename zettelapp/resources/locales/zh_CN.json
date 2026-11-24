@@ -1125,5 +1125,8 @@
  "the largest holds {share} of notes": "最大的部分包含 {share} 的笔记",
  "The share of shortest paths between other notes that pass through each note": "其他笔记之间的最短路径中经过每条笔记的占比",
  "Too few linked notes to fit": "链接的笔记太少，无法拟合",
- "transitivity {value}": "传递性 {value}"
+ "transitivity {value}": "传递性 {value}",
+ "None": "无",
+ "Tip at the start": "起点箭头",
+ "Tips at both ends": "两端箭头"
 }

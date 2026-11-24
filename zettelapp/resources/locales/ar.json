@@ -1280,5 +1280,8 @@
  "the largest holds {share} of notes": "الأكبر يضم {share} من الملاحظات",
  "The share of shortest paths between other notes that pass through each note": "حصة أقصر المسارات بين الملاحظات الأخرى التي تمر عبر كل ملاحظة",
  "Too few linked notes to fit": "الملاحظات المرتبطة أقل من أن تسمح بالتقدير",
- "transitivity {value}": "التعدّي {value}"
+ "transitivity {value}": "التعدّي {value}",
+ "None": "لا شيء",
+ "Tip at the start": "رأس عند البداية",
+ "Tips at both ends": "رأسان عند الطرفين"
 }

@@ -45,6 +45,15 @@ def node_radius(degree: int) -> float:
     return 7.0 + min(16.0, math.sqrt(degree) * 3.2)
 
 
+def _tips(shape: EdgeShape) -> list[tuple[QPainterPath, bool]]:
+    """A link's tips (start and target) with whether each is filled."""
+    return [
+        (path, filled)
+        for path, filled in ((shape.arrow, shape.filled), (shape.start, shape.start_filled))
+        if path is not None
+    ]
+
+
 class EdgeLabel(QGraphicsItem):
     """The type of a highlighted link, on a pill so it stays readable over other links."""
 
@@ -252,20 +261,17 @@ class Graph2DView(QGraphicsView):
         # One item for the lines of each link type and one for their tips, which are
         # drawn solid (and filled) whatever the line style.
         lines: dict[str, QPainterPath] = {}
-        tips: dict[str, QPainterPath] = {}
-        filled: dict[str, bool] = {}
+        tips: dict[tuple[str, bool], QPainterPath] = {}  # (type, filled) -> its tips
         for i, link in enumerate(self.data.links):
             shape = self._edge(i)
             if shape is None:
                 continue
             lines.setdefault(link.type, QPainterPath()).addPath(shape.path)
-            if shape.arrow is not None:
-                tips.setdefault(link.type, QPainterPath()).addPath(shape.arrow)
-                filled[link.type] = shape.filled
+            for tip, filled in _tips(shape):
+                tips.setdefault((link.type, filled), QPainterPath()).addPath(tip)
         for type_id, path in lines.items():
-            self.edge_items += self._edge_items(
-                type_id, path, tips.get(type_id), filled.get(type_id, False), 1.6, 0.55, 1
-            )
+            own = [(p, f) for (t, f), p in tips.items() if t == type_id]
+            self.edge_items += self._edge_items(type_id, path, own, 1.6, 0.55, 1)
         if self.show_groups:
             for group, members in self.data.members().items():
                 pts = [self.positions[m] for m in members if m in self.positions]
@@ -308,14 +314,15 @@ class Graph2DView(QGraphicsView):
             node_radius(self.data.degree.get(link.dst, 0)),
             tip is not None,
             tip or "triangle",
+            start_arrow=self.data.link_start_tip(link),
+            source_radius=node_radius(self.data.degree.get(link.src, 0)),
         )
 
     def _edge_items(
         self,
         type_id: str,
         lines: QPainterPath,
-        tips: QPainterPath | None,
-        filled: bool,
+        tips: list[tuple[QPainterPath, bool]],
         width: float,
         alpha: float,
         z: float,
@@ -328,8 +335,8 @@ class Graph2DView(QGraphicsView):
         line = QGraphicsPathItem(lines)
         line.setPen(link_pen(color, width, lt.line_style if lt else "solid"))
         items = [line]
-        if tips is not None:
-            tip = QGraphicsPathItem(tips)
+        for path, filled in tips:
+            tip = QGraphicsPathItem(path)
             tip.setPen(tip_pen(color, width, filled))
             tip.setBrush(color if filled else Qt.BrushStyle.NoBrush)
             items.append(tip)
@@ -366,7 +373,7 @@ class Graph2DView(QGraphicsView):
             if shape is None:
                 continue
             self.overlay_items += self._edge_items(
-                link.type, shape.path, shape.arrow, shape.filled, 2.6, 1.0, 1.5
+                link.type, shape.path, _tips(shape), 2.6, 1.0, 1.5
             )
         font = theme.ui_font(8)
         here = QPointF(*self.positions[focus])
