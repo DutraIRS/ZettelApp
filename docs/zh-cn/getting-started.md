@@ -8,6 +8,7 @@ ZettelApp 可在 **Windows 10(21H2 或更高版本)、Windows 11(64 位)以及�
 
 | 下载 | 适用情况 |
 |---|---|
+| [Microsoft Store](https://apps.microsoft.com/detail/9PB0HCDXF63D) | 最简单的方式：从应用商店安装，自动更新，不会出现 SmartScreen 警告。 |
 | `ZettelApp-Setup.exe` | 你想要常规安装:带有开始菜单条目、位于 *设置 ▸ 应用* 中的卸载程序,以及可从 Anki 打开笔记的 `zettelapp://` 链接。无需管理员权限:仅为你的账户安装。 |
 | `ZettelApp-Portable.zip` | 你无法安装软件,或者想从 U 盘运行。解压到任意位置并运行 `ZettelApp.exe`。 |
 

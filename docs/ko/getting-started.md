@@ -9,6 +9,7 @@ ZettelApp은 **Windows 10(21H2 이상), Windows 11, 그리고 최근 64비트 Li
 
 | 다운로드 | 이럴 때 사용하세요 |
 |---|---|
+| [Microsoft Store](https://apps.microsoft.com/detail/9PB0HCDXF63D) | 가장 쉬운 방법입니다. 스토어에서 설치하고, 자동으로 업데이트되며, SmartScreen 경고가 나타나지 않습니다. |
 | `ZettelApp-Setup.exe` | 시작 메뉴 항목, *설정 ▸ 앱*의 제거 프로그램, Anki에서 노트를 여는 `zettelapp://` 링크가 있는 일반적인 설치를 원할 때. 관리자 권한은 필요 없어요. 내 계정에만 설치돼요. |
 | `ZettelApp-Portable.zip` | 소프트웨어를 설치할 수 없거나 USB 드라이브에서 실행하고 싶을 때. 아무 곳에나 압축을 풀고 `ZettelApp.exe`를 실행하세요. |
 

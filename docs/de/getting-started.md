@@ -9,6 +9,7 @@ ZettelApp läuft unter **Windows 10 (21H2 oder höher), Windows 11 und aktuellen
 
 | Download | Verwenden Sie diese Version, wenn … |
 |---|---|
+| [Microsoft Store](https://apps.microsoft.com/detail/9PB0HCDXF63D) | Der einfachste Weg: Installation aus dem Store, automatische Updates und keine SmartScreen-Warnung. |
 | `ZettelApp-Setup.exe` | Sie eine normale Installation mit Eintrag im Startmenü, Deinstallationsprogramm unter *Einstellungen ▸ Apps* und `zettelapp://`-Links wünschen, die Notizen aus Anki öffnen. Administratorrechte sind nicht erforderlich: Die Installation gilt nur für Ihr Konto. |
 | `ZettelApp-Portable.zip` | Sie keine Software installieren können oder die App von einem USB-Laufwerk ausführen möchten. Entpacken Sie das Archiv an einem beliebigen Ort und starten Sie `ZettelApp.exe`. |
 
