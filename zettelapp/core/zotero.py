@@ -16,7 +16,7 @@ import urllib.parse
 import urllib.request
 from dataclasses import dataclass, field
 
-from zettelapp.core.security import ZOTERO_KEY_RE, is_zotero_url
+from zettelapp.core.security import ZOTERO_KEY_RE, is_zotero_url, loopback_http
 from zettelapp.core.textutil import normalize_tag
 from zettelapp.i18n import _
 
@@ -173,13 +173,8 @@ class ZoteroClient:
     """Read-only client for Zotero's local API on this computer."""
 
     def __init__(self, port: int = DEFAULT_PORT, timeout: float = 6.0):
-        if not 1 <= int(port) <= 65535:
-            raise ValueError("Invalid port")
-        self.base = f"http://127.0.0.1:{int(port)}/api/users/0"
+        self.base, self._opener = loopback_http(port, "/api/users/0")
         self.timeout = timeout
-        self._opener = urllib.request.build_opener(
-            urllib.request.ProxyHandler({})
-        )  # never use a proxy
 
     def _get(self, path: str, params: dict | None = None):
         url = self.base + path + ("?" + urllib.parse.urlencode(params) if params else "")

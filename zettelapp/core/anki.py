@@ -22,7 +22,7 @@ from pathlib import Path
 from zettelapp import androidintegration
 from zettelapp.core.models import Flashcard, Note
 from zettelapp.core.render import NoteRenderer
-from zettelapp.core.security import app_url, is_valid_asset_name
+from zettelapp.core.security import app_url, is_valid_asset_name, loopback_http
 from zettelapp.i18n import _
 
 IS_ANDROID = androidintegration.IS_ANDROID
@@ -191,12 +191,8 @@ class AnkiConnect:
     """Minimal AnkiConnect client. Only talks to the local machine."""
 
     def __init__(self, port: int = 8765, timeout: float = 8.0):
-        if not 1 <= int(port) <= 65535:
-            raise ValueError("Invalid port")
-        self.url = f"http://127.0.0.1:{int(port)}"
+        self.url, self._opener = loopback_http(port)
         self.timeout = timeout
-        # No proxy: requests must never leave this computer.
-        self._opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
 
     def invoke(self, action: str, **params):
         payload = json.dumps({"action": action, "version": 6, "params": params}).encode("utf-8")

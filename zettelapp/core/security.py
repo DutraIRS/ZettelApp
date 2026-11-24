@@ -12,6 +12,7 @@ import posixpath
 import re
 import sys
 import unicodedata
+import urllib.request
 import zipfile
 from pathlib import Path, PurePosixPath
 from typing import TypeGuard
@@ -42,6 +43,15 @@ _CONTROL_CHARS = re.compile(r"[\x00-\x1f\x7f]")
 
 class UnsafeInputError(ValueError):
     """Raised when input fails validation."""
+
+
+def loopback_http(port: int, path: str = "") -> tuple[str, urllib.request.OpenerDirector]:
+    """The URL http://127.0.0.1:<port><path> and an opener that never uses a proxy, so requests
+    to a local app (Anki, Zotero) can't leave this computer. ValueError for an invalid port."""
+    if not 1 <= int(port) <= 65535:
+        raise ValueError("Invalid port")
+    opener = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+    return f"http://127.0.0.1:{int(port)}{path}", opener
 
 
 def is_valid_note_id(value: object) -> TypeGuard[str]:
