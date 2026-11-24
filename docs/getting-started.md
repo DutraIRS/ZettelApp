@@ -9,6 +9,7 @@ it from the [latest release](https://github.com/DutraIRS/ZettelApp/releases/late
 
 | Download | Use it when |
 |---|---|
+| [Microsoft Store](https://apps.microsoft.com/detail/9PB0HCDXF63D) | The easiest way: it installs from the Store, updates itself and shows no SmartScreen warning. |
 | `ZettelApp-Setup.exe` | You want a normal installation with a Start menu entry, an uninstaller in *Settings ▸ Apps*, and `zettelapp://` links that open notes from Anki. No administrator rights are needed: it installs for your account only. |
 | `ZettelApp-Portable.zip` | You can't install software, or you want to run it from a USB drive. Unzip it anywhere and run `ZettelApp.exe`. |
 
