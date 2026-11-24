@@ -158,7 +158,9 @@ def _import_archive(vault: Vault, zf: zipfile.ZipFile) -> ImportResult:
         return _import_data(vault, data, asset_map, result)
 
 
-def _str(value, limit: int) -> str:
+def _clipped(value, limit: int) -> str:
+    """*value* cut to *limit* characters, or "" if it isn't a string: imports are lenient, unlike
+    MCP tool input (mcp_server._string_arg), which is refused."""
     return value[:limit] if isinstance(value, str) else ""
 
 
@@ -240,9 +242,9 @@ def _import_data(
         imported = vault.save_link_type(
             LinkType(
                 raw["id"],
-                _str(raw.get("label"), 60),
-                _str(raw.get("inverse_label"), 60),
-                _str(raw.get("color"), 7),
+                _clipped(raw.get("label"), 60),
+                _clipped(raw.get("inverse_label"), 60),
+                _clipped(raw.get("color"), 7),
                 bool(raw.get("directed", True)),
                 line_style=line_style,
                 arrow=raw.get("arrow") or (existing.arrow if existing else "triangle"),
@@ -255,7 +257,7 @@ def _import_data(
     pending: list[tuple[Note, dict]] = []
     for raw in raw_notes:
         old_id = raw.get("id")
-        title, body = _str(raw.get("title"), MAX_TITLE), _str(raw.get("body"), MAX_BODY)
+        title, body = _clipped(raw.get("title"), MAX_TITLE), _clipped(raw.get("body"), MAX_BODY)
         if is_valid_note_id(old_id):
             current = vault.get_note(old_id)
             if current is not None and current.title == title and current.body == body:
@@ -284,8 +286,8 @@ def _import_data(
         return WIKILINK_RE.sub(relink, body)
 
     for note, raw in pending:
-        note.body = remap_body(_str(raw.get("body"), MAX_BODY))
-        note.url = _str(raw.get("url"), 2048)
+        note.body = remap_body(_clipped(raw.get("body"), MAX_BODY))
+        note.url = _clipped(raw.get("url"), 2048)
         image = raw.get("image")
         note.image = asset_map.get(image, image) if isinstance(image, str) else ""
         raw_tags = raw.get("tags")
@@ -295,7 +297,7 @@ def _import_data(
             else []
         )
         note.mindmap = sanitize_mindmap(raw.get("mindmap")) if raw.get("mindmap") else None
-        note.alarm = _str(raw.get("alarm"), 40)
+        note.alarm = _clipped(raw.get("alarm"), 40)
         vault.save_note(note, touch=False)
         if note.alarm and note.alarm <= utc_now():
             # An alarm whose time has passed comes in as already announced: importing someone
@@ -312,7 +314,7 @@ def _import_data(
         if (
             src
             and dst
-            and vault.add_link(src, dst, _str(raw.get("type"), 40) or "related", "manual")
+            and vault.add_link(src, dst, _clipped(raw.get("type"), 40) or "related", "manual")
         ):
             result.links += 1
 
@@ -321,14 +323,14 @@ def _import_data(
             continue
         raw_note_id = raw.get("note_id")
         note_id = id_map.get(raw_note_id) if isinstance(raw_note_id, str) else None
-        front = _str(raw.get("front"), 20_000)
+        front = _clipped(raw.get("front"), 20_000)
         if note_id and front:
             vault.save_card(
                 Flashcard(
                     None,
                     note_id,
                     remap_body(front),
-                    remap_body(_str(raw.get("back"), 20_000)),
+                    remap_body(_clipped(raw.get("back"), 20_000)),
                     "cloze" if raw.get("kind") == "cloze" else "basic",
                 )
             )
@@ -337,9 +339,9 @@ def _import_data(
     for raw in data.get("tag_relationships") or []:
         if not isinstance(raw, dict):
             continue
-        source, target = _str(raw.get("source"), 60), _str(raw.get("target"), 60)
+        source, target = _clipped(raw.get("source"), 60), _clipped(raw.get("target"), 60)
         try:
-            vault.add_tag_relationship(source, target, _str(raw.get("type"), 20))
+            vault.add_tag_relationship(source, target, _clipped(raw.get("type"), 20))
         except VaultError as exc:
             result.warn(
                 _("Skipped the tag relationship {source} → {target}: {error}").format(
@@ -557,11 +559,11 @@ def import_enex(vault: Vault, path: Path) -> ImportResult:
 
             when = datetime.fromisoformat(raw.created) if raw.created else datetime.now()
             note = vault.create_note(
-                title=_str(raw.title, MAX_TITLE),
+                title=_clipped(raw.title, MAX_TITLE),
                 note_id=vault.new_note_id(when.astimezone()),
                 created=raw.created,
             )
-            note.body = _str(enml_to_markdown(raw.content, media), MAX_BODY) + "\n"
+            note.body = _clipped(enml_to_markdown(raw.content, media), MAX_BODY) + "\n"
             note.tags = [t for t in (normalize_tag(tag) for tag in raw.tags) if t][:200]
             note.url = raw.url[:2048] if is_openable_url(raw.url) else ""
             vault.save_note(note, touch=False)

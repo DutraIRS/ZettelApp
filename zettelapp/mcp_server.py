@@ -126,7 +126,7 @@ def _int(args: dict, key: str, default: int, low: int, high: int) -> int:
     return max(low, min(high, int(value)))
 
 
-def _str(
+def _string_arg(
     args: dict, key: str, default: str = "", limit: int = 10_000, required: bool = False
 ) -> str:
     value = args.get(key, default)
@@ -420,7 +420,7 @@ class ZettelMcpServer:
         return note
 
     def _search_notes(self, args: dict) -> dict:
-        query = _str(args, "query", limit=500)
+        query = _string_arg(args, "query", limit=500)
         limit = _int(args, "limit", 10, 1, 50)
         ids = self.vault.search(query)[:limit]
         notes = {n.id: n for n in self.vault.notes_by_ids(ids)}
@@ -571,8 +571,8 @@ class ZettelMcpServer:
 
     def _create_note(self, args: dict) -> dict:
         self._ensure_writable()
-        title = _str(args, "title", limit=MAX_TITLE, required=True)
-        body = _str(args, "body", limit=MAX_BODY)
+        title = _string_arg(args, "title", limit=MAX_TITLE, required=True)
+        body = _string_arg(args, "body", limit=MAX_BODY)
         tags = _str_list(args, "tags", limit=50)
         note = self.vault.create_note(title=title, body=body, tags=tags)
         log.info("Created note %s via MCP", note.id)
@@ -583,7 +583,7 @@ class ZettelMcpServer:
         src, dst = _note_id(args, "src"), _note_id(args, "dst")
         self._require_note(src)
         self._require_note(dst)
-        link_type = _str(args, "type", "related", limit=40) or "related"
+        link_type = _string_arg(args, "type", "related", limit=40) or "related"
         if link_type not in self.vault.link_type_map():
             raise ToolInputError(f"Unknown link type {link_type!r}; see list_link_types.")
         added = self.vault.add_link(src, dst, link_type, origin="manual")
