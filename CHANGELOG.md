@@ -6,6 +6,12 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- **A Google Play button on the website** (all 11 languages), shown to Android visitors in place
+  of the desktop downloads. It stays out of the site until the app is listed: then set
+  `GOOGLE_PLAY_LISTED` in `tools/website.py` and rebuild.
+
 ## [1.4.0] - 2026-11-23
 
 ### Added
