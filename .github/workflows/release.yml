@@ -57,12 +57,17 @@ jobs:
   release:
     runs-on: windows-latest
     needs: [linux]
-    env:
-      # Official releases must be signed unless an unsigned release is explicitly approved.
-      SIGN_CERT: ${{ secrets.WINDOWS_SIGNING_CERT_BASE64 }}
-      ZETTELAPP_SIGN_PASSWORD: ${{ secrets.WINDOWS_SIGNING_CERT_PASSWORD }}
+    # The signing certificate and its password are given only to the Build step, never to the
+    # job: pip, the tests and Chocolatey's package scripts run third-party code.
     steps:
       - uses: actions/checkout@v7
+      - name: Check for a signing certificate
+        id: signing
+        shell: pwsh
+        env:
+          SIGN_CERT: ${{ secrets.WINDOWS_SIGNING_CERT_BASE64 }}
+        run: |
+          "signed=$(if ($env:SIGN_CERT) { 'true' } else { 'false' })" >> $env:GITHUB_OUTPUT
       - uses: actions/setup-python@v7
         with:
           python-version: "3.14"
@@ -91,24 +96,32 @@ jobs:
           exit $LASTEXITCODE
       - name: Audit installed dependencies
         run: python -m pip_audit --progress-spinner off
+      # Official releases must be signed unless an unsigned release is explicitly approved.
       - name: Require signing or explicit unsigned approval
-        if: env.SIGN_CERT == '' && vars.ALLOW_UNSIGNED_RELEASE != 'true'
+        if: steps.signing.outputs.signed != 'true' && vars.ALLOW_UNSIGNED_RELEASE != 'true'
         shell: pwsh
         run: throw "Signing certificate is absent. Set ALLOW_UNSIGNED_RELEASE=true only for an explicitly approved unsigned release."
       - name: Install Inno Setup
         run: choco install innosetup --no-progress -y
-      - name: Prepare signing certificate
-        if: env.SIGN_CERT != ''
-        shell: pwsh
-        run: |
-          $pfx = Join-Path $env:RUNNER_TEMP "signing.pfx"
-          [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:SIGN_CERT))
-          "ZETTELAPP_SIGN_PFX=$pfx" >> $env:GITHUB_ENV
       - name: Build
         shell: pwsh
-        run: ./packaging/build.ps1
+        env:
+          SIGN_CERT: ${{ secrets.WINDOWS_SIGNING_CERT_BASE64 }}
+          ZETTELAPP_SIGN_PASSWORD: ${{ secrets.WINDOWS_SIGNING_CERT_PASSWORD }}
+        run: |
+          # The certificate exists on disk only while this step runs.
+          $pfx = Join-Path $env:RUNNER_TEMP "signing.pfx"
+          try {
+            if ($env:SIGN_CERT) {
+              [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:SIGN_CERT))
+              $env:ZETTELAPP_SIGN_PFX = $pfx
+            }
+            ./packaging/build.ps1
+          } finally {
+            Remove-Item $pfx -ErrorAction SilentlyContinue
+          }
       - name: Verify Authenticode signatures
-        if: env.SIGN_CERT != ''
+        if: steps.signing.outputs.signed == 'true'
         shell: pwsh
         run: |
           foreach ($path in @("dist/ZettelApp/ZettelApp.exe", "dist/ZettelApp/zettelapp-mcp.exe", "dist/ZettelApp-Setup.exe")) {
@@ -178,16 +191,20 @@ jobs:
   snap:
     runs-on: ubuntu-24.04
     needs: [release, flatpak]
-    env:
-      SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+    # The Snap Store credentials are given only to the step that uploads (see the release job).
     steps:
       - uses: actions/checkout@v7
+      - name: Check for Snap Store credentials
+        id: store
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
+        run: echo "publish=$([ -n "$SNAPCRAFT_STORE_CREDENTIALS" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
       # snapcraft looks for snap/snapcraft.yaml in the project's root.
       - name: Put the Snap recipe where snapcraft looks
         run: cp -r packaging/snap snap
       - name: Build the Snap
         id: build
-        uses: snapcore/action-build@v1
+        uses: snapcore/action-build@3bdaa03e1ba6bf59a65f84a751d943d549a54e79 # v1.3.0
       - name: Name the Snap
         run: mv "${{ steps.build.outputs.snap }}" ZettelApp-Linux-amd64.snap
       - uses: actions/upload-artifact@v7
@@ -198,12 +215,18 @@ jobs:
       - uses: actions/download-artifact@v7
         with:
           name: flatpak-bundle
+      # SHA256SUMS.txt was published by the release job; it gets the Snap and Flatpak lines too.
       - name: Attach the Snap and the Flatpak bundle to the GitHub release
         if: github.event_name == 'push'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release upload "${{ github.ref_name }}" ZettelApp-Linux-amd64.snap             ZettelApp-Linux-x86_64.flatpak --clobber
+          gh release download "${{ github.ref_name }}" --pattern SHA256SUMS.txt
+          sed -i 's/\r$//' SHA256SUMS.txt  # written on Windows
+          sha256sum ZettelApp-Linux-amd64.snap ZettelApp-Linux-x86_64.flatpak >> SHA256SUMS.txt
+          gh release upload "${{ github.ref_name }}" ZettelApp-Linux-amd64.snap             ZettelApp-Linux-x86_64.flatpak SHA256SUMS.txt --clobber
       - name: Publish to the Snap Store
-        if: github.event_name == 'push' && env.SNAPCRAFT_STORE_CREDENTIALS != ''
+        if: github.event_name == 'push' && steps.store.outputs.publish == 'true'
+        env:
+          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_STORE_CREDENTIALS }}
         run: snapcraft upload --release=stable ZettelApp-Linux-amd64.snap
