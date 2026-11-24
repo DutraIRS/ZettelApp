@@ -156,8 +156,8 @@ jobs:
   flatpak:
     runs-on: ubuntu-24.04
     needs: [linux]
-    # The image has flatpak-builder and the KDE 6.11 runtime and SDK; the PySide base app comes
-    # from Flathub (--install-deps-from). The build itself runs offline, as on Flathub.
+    # The image has flatpak-builder and the KDE 6.11 runtime and SDK; the PySide base app is
+    # installed from Flathub first (updating the image's runtime fails in the container). The build itself runs offline, as on Flathub.
     container:
       image: ghcr.io/flathub-infra/flatpak-github-actions:kde-6.11
       options: --privileged
@@ -165,7 +165,8 @@ jobs:
       - uses: actions/checkout@v7
       - name: Build the Flatpak bundle
         run: |
-          flatpak-builder --force-clean --disable-rofiles-fuse --install-deps-from=flathub --repo=build/repo build/app             packaging/flatpak/io.github.dutrairs.zettelapp.yml
+          flatpak install -y --noninteractive flathub io.qt.PySide.BaseApp//6.11
+          flatpak-builder --force-clean --disable-rofiles-fuse --repo=build/repo build/app             packaging/flatpak/io.github.dutrairs.zettelapp.yml
           mkdir -p dist
           # --runtime-repo: installing the bundle fetches the runtime from Flathub.
           flatpak build-bundle --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo             build/repo dist/ZettelApp-Linux-x86_64.flatpak io.github.dutrairs.zettelapp
