@@ -40,6 +40,8 @@ LLM_MODEL = "llm/model"
 LLM_BASE_URL = "llm/baseUrl"
 LLM_EFFORT = "llm/effort"
 LLM_CONTEXT_NOTES = "llm/contextNotes"
+LLM_CONTEXT_MODE = "llm/contextMode"  # relevant (the best matches) | all (every note in scope)
+LLM_REVIEW_CONTEXT = "llm/reviewContext"  # show the notes to send, to untick any first
 LLM_PRIVACY_ACK = "llm/privacyAcknowledged"
 MCP_ALLOW_WRITES = "mcp/allowWrites"
 UPDATE_CHECK = "updates/checkAtStart"
@@ -78,6 +80,8 @@ SEARCH_ADAPTIVE_STATE = "search/adaptiveState"
 
 DEFAULTS: dict[str, Any] = {
     PREVIEW_LINE_BREAKS: True,
+    LLM_CONTEXT_MODE: "relevant",
+    LLM_REVIEW_CONTEXT: False,
     PREVIEW_ALIGN: "start",
     PREVIEW_LINE_SPACING: 125,
     PREVIEW_PARAGRAPH_SPACING: 75,

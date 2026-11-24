@@ -1255,5 +1255,14 @@
  "Justified": "ضبط",
  "Line spacing": "تباعد الأسطر",
  "Space between paragraphs": "المسافة بين الفقرات",
- "The space under each paragraph, as a share of the text size": "المسافة أسفل كل فقرة، نسبةً إلى حجم النص"
+ "The space under each paragraph, as a share of the text size": "المسافة أسفل كل فقرة، نسبةً إلى حجم النص",
+ "Send": "إرسال",
+ "Notes to send": "الملاحظات المراد إرسالها",
+ "The most relevant notes": "أكثر الملاحظات صلة",
+ "Every note in the scope, nearest first": "كل ملاحظات النطاق، الأقرب أولًا",
+ "With the current note and linked notes, every note in the scope means its neighbours up to the depth chosen, the nearest first": "مع «الملاحظة الحالية والملاحظات المرتبطة»، تعني كل ملاحظات النطاق جيرانها حتى العمق المختار، الأقرب أولًا",
+ "Review before sending": "المراجعة قبل الإرسال",
+ "See the notes about to be sent, and untick any to leave out": "اطّلع على الملاحظات التي ستُرسل، وألغِ تحديد ما تريد استبعاده",
+ "These notes will be sent to {provider} with your question. Untick any to leave out.": "ستُرسل هذه الملاحظات إلى {provider} مع سؤالك. ألغِ تحديد ما تريد استبعاده.",
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "سيُرسل سؤالك وملاحظات النطاق المختار إلى {provider} باستخدام مفتاح API الخاص بك. لا يغادر هذا الحاسوب شيء آخر."
 }

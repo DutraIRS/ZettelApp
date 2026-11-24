@@ -55,6 +55,8 @@ Credential Manager, or the Secret Service — GNOME Keyring or KWallet — on Li
 Type a question and press **Ask** (Ctrl+Enter). Choose where to look with **Search in**: the entire
 collection, the open note and its linked notes, or the notes with a tag. Choose **how many notes** to send.
 
+**Send** chooses what goes with the question: *The most relevant notes* (the number in the box), or *Every note in the scope, nearest first*. With *Current note and linked notes*, the second sends the open note's neighbours up to the depth chosen (its *k*-hop neighbourhood), the nearest first, as many as fit. Tick **Review before sending** to see the list of notes first and untick any to leave out.
+
 What happens:
 
 1. ZettelApp finds the most relevant notes **on your computer**, using the same TF-IDF and LSA

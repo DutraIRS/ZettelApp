@@ -35,6 +35,8 @@ Ask utilise **votre propre compte** chez le fournisseur choisi ; celui-ci vous f
 
 Saisissez une question et appuyez sur **Ask** (Ctrl+Enter). Choisissez où chercher dans **Rechercher dans** : toute la collection, la note ouverte et ses notes liées, ou les notes portant un tag. Choisissez le nombre de notes à envoyer.
 
+**Envoyer** choisit ce qui part avec la question : *Les notes les plus pertinentes* (le nombre dans la case) ou *Toutes les notes de la portée, les plus proches d'abord*. Avec *Note actuelle et notes liées*, la seconde option envoie les voisines de la note ouverte jusqu'à la profondeur choisie (son voisinage à *k* pas), les plus proches d'abord, autant qu'il en tient. Cochez **Vérifier avant d'envoyer** pour voir d'abord la liste des notes et décocher celles à laisser de côté.
+
 Déroulement :
 
 1. ZettelApp trouve les notes les plus pertinentes **sur votre ordinateur**, en utilisant les mêmes similarités TF-IDF et LSA que le [suggesteur de liens](link-suggestions.md). Avec *Note actuelle et notes liées*, la note ouverte apparaît toujours en premier.

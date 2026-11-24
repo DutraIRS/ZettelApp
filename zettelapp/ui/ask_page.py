@@ -6,6 +6,9 @@ from PySide6.QtCore import Qt, QTimer, Signal
 from PySide6.QtGui import QGuiApplication, QKeySequence, QShortcut
 from PySide6.QtWidgets import (
     QCheckBox,
+    QComboBox,
+    QDialog,
+    QDialogButtonBox,
     QHBoxLayout,
     QListWidget,
     QListWidgetItem,
@@ -19,7 +22,15 @@ from PySide6.QtWidgets import (
 
 from zettelapp import settings
 from zettelapp.core import apikeys, secrets
-from zettelapp.core.llm import LLMSettings, retrieve_context, stream_answer
+from zettelapp.core.graph import hop_distances
+from zettelapp.core.llm import (
+    ContextNote,
+    LLMSettings,
+    pack_context,
+    retrieve_context,
+    scope_context,
+    stream_answer,
+)
 from zettelapp.core.render import NoteRenderer
 from zettelapp.i18n import _
 from zettelapp.ui import icons
@@ -35,6 +46,53 @@ def current_llm_settings() -> LLMSettings:
         base_url=settings.get(settings.LLM_BASE_URL, "") or "",
         effort=settings.get(settings.LLM_EFFORT),
     )
+
+
+def review_context(parent: QWidget, context: list[ContextNote], provider: str) -> list[str] | None:
+    """Ask which of the notes about to be sent may go: the ids kept, in order, or None when
+    the question is not to be sent after all."""
+    dialog = QDialog(parent)
+    dialog.setWindowTitle(_("Review before sending"))
+    dialog.resize(460, 520)
+    layout = QVBoxLayout(dialog)
+    layout.addWidget(
+        label(
+            _(
+                "These notes will be sent to {provider} with your question. Untick any to leave "
+                "out."
+            ).format(provider=provider),
+            wrap=True,
+        )
+    )
+    notes = QListWidget()
+    notes.setAccessibleName(_("Notes to send"))
+    for note in context:
+        item = QListWidgetItem(note.title or _("Untitled"))
+        item.setData(Qt.ItemDataRole.UserRole, note.id)
+        item.setFlags(item.flags() | Qt.ItemFlag.ItemIsUserCheckable)
+        item.setCheckState(Qt.CheckState.Checked)
+        notes.addItem(item)
+    layout.addWidget(notes, 1)
+    buttons = QDialogButtonBox(QDialogButtonBox.StandardButton.Cancel)
+    send = buttons.addButton(_("Send"), QDialogButtonBox.ButtonRole.AcceptRole)
+    send.setProperty("accent", True)
+    buttons.accepted.connect(dialog.accept)
+    buttons.rejected.connect(dialog.reject)
+    layout.addWidget(buttons)
+    dialog.notes = notes  # for tests
+
+    def kept() -> list[str]:
+        return [
+            notes.item(i).data(Qt.ItemDataRole.UserRole)
+            for i in range(notes.count())
+            if notes.item(i).checkState() == Qt.CheckState.Checked
+        ]
+
+    notes.itemChanged.connect(lambda _item: send.setEnabled(bool(kept())))
+    send.setEnabled(bool(context))
+    if dialog.exec() != QDialog.DialogCode.Accepted:
+        return None
+    return kept()
 
 
 class AskPage(QWidget):
@@ -75,12 +133,38 @@ class AskPage(QWidget):
         row.addWidget(label(_("Search in"), "secondary"))
         self.scope = ScopePicker()
         row.addWidget(self.scope, 1)
+        ask.body.addLayout(row)
+        row = QHBoxLayout()
+        row.addWidget(label(_("Send"), "secondary"))
+        self.send_mode = QComboBox()
+        self.send_mode.setAccessibleName(_("Notes to send"))
+        self.send_mode.addItem(_("The most relevant notes"), "relevant")
+        self.send_mode.addItem(_("Every note in the scope, nearest first"), "all")
+        self.send_mode.setToolTip(
+            _(
+                "With the current note and linked notes, every note in the scope means its "
+                "neighbours up to the depth chosen, the nearest first"
+            )
+        )
+        self.send_mode.setCurrentIndex(
+            max(0, self.send_mode.findData(settings.get(settings.LLM_CONTEXT_MODE)))
+        )
+        row.addWidget(self.send_mode)
         self.limit = QSpinBox()
         self.limit.setRange(1, 40)
         self.limit.setValue(settings.get(settings.LLM_CONTEXT_NOTES))
         self.limit.setSuffix(" notes")
         self.limit.setToolTip(_("How many of the most relevant notes to send with the question"))
         row.addWidget(self.limit)
+        self.review = QCheckBox(_("Review before sending"))
+        self.review.setToolTip(_("See the notes about to be sent, and untick any to leave out"))
+        self.review.setChecked(settings.get(settings.LLM_REVIEW_CONTEXT))
+        row.addWidget(self.review)
+        row.addStretch(1)
+        self.send_mode.currentIndexChanged.connect(
+            lambda: self.limit.setVisible(self.send_mode.currentData() == "relevant")
+        )
+        self.limit.setVisible(self.send_mode.currentData() == "relevant")
         self.stop_button = QPushButton(_("Stop"))
         self.stop_button.setIcon(icons.icon("stop"))
         self.stop_button.clicked.connect(self.stop)
@@ -198,13 +282,21 @@ class AskPage(QWidget):
                 self.configureRequested.emit()
             return
         if not settings.get(settings.LLM_PRIVACY_ACK):
-            box = QMessageBox(
-                QMessageBox.Icon.Information,
-                _("Before you ask"),
+            sent = (
                 _(
                     "Your question and the most relevant notes (up to {limit}) will be sent to "
                     "{provider} using your API key. Nothing else leaves this computer."
-                ).format(limit=self.limit.value(), provider=info.label),
+                )
+                if self.send_mode.currentData() == "relevant"
+                else _(
+                    "Your question and the notes in the chosen scope will be sent to {provider} "
+                    "using your API key. Nothing else leaves this computer."
+                )
+            )
+            box = QMessageBox(
+                QMessageBox.Icon.Information,
+                _("Before you ask"),
+                sent.format(limit=self.limit.value(), provider=info.label),
                 QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel,
                 self,
             )
@@ -215,15 +307,23 @@ class AskPage(QWidget):
             if dont.isChecked():
                 settings.put(settings.LLM_PRIVACY_ACK, True)
         settings.put(settings.LLM_CONTEXT_NOTES, self.limit.value())
-        ids = self.window.resolve_scope(*self.scope.value())
+        settings.put(settings.LLM_CONTEXT_MODE, self.send_mode.currentData())
+        settings.put(settings.LLM_REVIEW_CONTEXT, self.review.isChecked())
+        mode, depth, tag = self.scope.value()
+        ids = self.window.resolve_scope(mode, depth, tag)
         notes = [n for n in vault.all_notes() if n.id in ids]
-        mode = self.scope.value()[0]
-        focus = (
-            [self.window.current_note_id()]
-            if mode == "subgraph" and self.window.current_note_id()
-            else []
-        )
-        context = retrieve_context(notes, question, self.limit.value(), focus_ids=focus)
+        current = self.window.current_note_id()
+        focus = [current] if mode == "subgraph" and current else []
+        if self.send_mode.currentData() == "all":
+            distances = hop_distances(focus, vault.all_links(), depth) if focus else None
+            context = scope_context(notes, question, distances)
+        else:
+            context = retrieve_context(notes, question, self.limit.value(), focus_ids=focus)
+        if self.review.isChecked():
+            kept = review_context(self, context, info.label)
+            if not kept:
+                return
+            context = pack_context(notes, kept)  # left-out notes may leave room for cut ones
         self.show_sources(context)
         self.question_text = question
         self.answer_text = ""

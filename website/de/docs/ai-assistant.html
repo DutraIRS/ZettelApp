@@ -62,6 +62,7 @@ Ihnen ab. ZettelApp hat keinen eigenen KI-Dienst. Ihr API-Schlüssel wird im <st
 <p>Geben Sie eine Frage ein und drücken Sie <strong>Fragen</strong> (Ctrl+Enter). Unter <strong>Suchen in</strong> wählen Sie, wo
 gesucht wird: in der gesamten Sammlung, der geöffneten Notiz und ihren verknüpften Notizen oder in den
 Notizen mit einem Tag. Legen Sie die <strong>Anzahl der Notizen</strong> fest, die gesendet werden sollen.</p>
+<p><strong>Senden</strong> legt fest, was mit der Frage mitgeht: <em>Die relevantesten Notizen</em> (die Zahl im Feld) oder <em>Alle Notizen im Bereich, die nächsten zuerst</em>. Mit <em>Aktuelle Notiz und verknüpfte Notizen</em> sendet die zweite Option die Nachbarn der offenen Notiz bis zur gewählten Tiefe (ihre <em>k</em>-Schritt-Nachbarschaft), die nächsten zuerst, so viele wie passen. Mit <strong>Vor dem Senden prüfen</strong> sehen Sie die Liste der Notizen vorher und können abwählen, was nicht mit soll.</p>
 <p>So funktioniert es:</p>
 <ol>
 <li>ZettelApp findet <strong>auf Ihrem Computer</strong> die relevantesten Notizen. Dafür verwendet es dieselbe TF-IDF- und LSA-Ähnlichkeit wie der <a href="link-suggestions.html">Linkvorschlag</a>. Bei <em>Aktuelle Notiz und verknüpfte Notizen</em> steht die geöffnete Notiz immer an erster Stelle.</li>

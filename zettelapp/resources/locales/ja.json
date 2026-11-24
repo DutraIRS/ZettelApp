@@ -1100,5 +1100,14 @@
  "Justified": "両端揃え",
  "Line spacing": "行間",
  "Space between paragraphs": "段落の間隔",
- "The space under each paragraph, as a share of the text size": "各段落の下の間隔 (文字サイズに対する割合)"
+ "The space under each paragraph, as a share of the text size": "各段落の下の間隔 (文字サイズに対する割合)",
+ "Send": "送信",
+ "Notes to send": "送信するノート",
+ "The most relevant notes": "関連性の高いノート",
+ "Every note in the scope, nearest first": "範囲内のすべてのノート (近い順)",
+ "With the current note and linked notes, every note in the scope means its neighbours up to the depth chosen, the nearest first": "「現在のノートとリンクされたノート」では、範囲内のすべてのノートとは、選んだ深さまでの近くのノートのことです (近い順)",
+ "Review before sending": "送信前に確認",
+ "See the notes about to be sent, and untick any to leave out": "送信されるノートを確認し、外したいもののチェックを外します",
+ "These notes will be sent to {provider} with your question. Untick any to leave out.": "これらのノートが質問と一緒に {provider} に送信されます。外したいもののチェックを外してください。",
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "質問と選んだ範囲のノートが、あなたの API キーを使って {provider} に送信されます。それ以外はこのコンピューターの外に出ません。"
 }

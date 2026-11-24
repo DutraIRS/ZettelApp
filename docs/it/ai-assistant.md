@@ -55,6 +55,8 @@ file di impostazioni.
 Scrivi una domanda e premi **Chiedi** (Ctrl+Enter). Scegli dove cercare con **Cerca in**: l'intera
 raccolta, la nota aperta e le sue note collegate oppure le note con un tag. Scegli **quante note** inviare.
 
+**Invia** sceglie cosa parte con la domanda: *Le note più pertinenti* (il numero nella casella) oppure *Tutte le note dell'ambito, prima le più vicine*. Con *Nota corrente e note collegate*, la seconda opzione invia le vicine della nota aperta fino alla profondità scelta (il suo vicinato a *k* passi), prima le più vicine, quante ne entrano. Spunta **Controlla prima di inviare** per vedere prima l'elenco delle note e togliere la spunta a quelle da escludere.
+
 Cosa succede:
 
 1. ZettelApp trova le note più pertinenti **sul tuo computer**, usando la stessa similarità TF-IDF e LSA

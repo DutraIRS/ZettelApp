@@ -1162,5 +1162,14 @@
  "Justified": "По ширине",
  "Line spacing": "Межстрочный интервал",
  "Space between paragraphs": "Отступ между абзацами",
- "The space under each paragraph, as a share of the text size": "Отступ под каждым абзацем относительно размера текста"
+ "The space under each paragraph, as a share of the text size": "Отступ под каждым абзацем относительно размера текста",
+ "Send": "Отправить",
+ "Notes to send": "Заметки для отправки",
+ "The most relevant notes": "Самые подходящие заметки",
+ "Every note in the scope, nearest first": "Все заметки области, сначала ближайшие",
+ "With the current note and linked notes, every note in the scope means its neighbours up to the depth chosen, the nearest first": "С «Текущая заметка и связанные заметки» все заметки области — это её соседи до выбранной глубины, сначала ближайшие",
+ "Review before sending": "Проверить перед отправкой",
+ "See the notes about to be sent, and untick any to leave out": "Посмотреть заметки, которые будут отправлены, и снять отметку с лишних",
+ "These notes will be sent to {provider} with your question. Untick any to leave out.": "Эти заметки будут отправлены в {provider} вместе с вашим вопросом. Снимите отметку с тех, что не нужно отправлять.",
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "Ваш вопрос и заметки выбранной области будут отправлены в {provider} с вашим API-ключом. Больше ничего не покидает этот компьютер."
 }

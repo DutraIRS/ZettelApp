@@ -1100,5 +1100,14 @@
  "Justified": "两端对齐",
  "Line spacing": "行距",
  "Space between paragraphs": "段落间距",
- "The space under each paragraph, as a share of the text size": "每段下方的间距，相对于文字大小的比例"
+ "The space under each paragraph, as a share of the text size": "每段下方的间距，相对于文字大小的比例",
+ "Send": "发送",
+ "Notes to send": "要发送的笔记",
+ "The most relevant notes": "最相关的笔记",
+ "Every note in the scope, nearest first": "范围内的所有笔记，近的在前",
+ "With the current note and linked notes, every note in the scope means its neighbours up to the depth chosen, the nearest first": "选择“当前笔记及其链接笔记”时，范围内的所有笔记即它在所选深度内的相邻笔记，近的在前",
+ "Review before sending": "发送前检查",
+ "See the notes about to be sent, and untick any to leave out": "查看将要发送的笔记，取消勾选不想发送的",
+ "These notes will be sent to {provider} with your question. Untick any to leave out.": "这些笔记将与你的问题一起发送给 {provider}。取消勾选不想发送的笔记。",
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "你的问题和所选范围内的笔记将使用你的 API 密钥发送给 {provider}。除此之外，没有任何内容会离开这台电脑。"
 }

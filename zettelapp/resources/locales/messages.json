@@ -592,19 +592,19 @@
  "Add your Anthropic API key in Tools ▸ Options ▸ AI assistant first.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:263"
+   "zettelapp/core/llm.py:293"
   ]
  },
  "Add your {label} API key in Options to ask questions about your notes. Open Options now?": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:192"
+   "zettelapp/ui/ask_page.py:276"
   ]
  },
  "Add your {label} API key in Tools ▸ Options ▸ AI assistant first.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:398"
+   "zettelapp/core/llm.py:428"
   ]
  },
  "Address (http, https or mailto):": {
@@ -743,37 +743,37 @@
  "Answer": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:98"
+   "zettelapp/ui/ask_page.py:182"
   ]
  },
  "Answer complete.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:265"
+   "zettelapp/ui/ask_page.py:365"
   ]
  },
  "Answer copied.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:290"
+   "zettelapp/ui/ask_page.py:390"
   ]
  },
  "Anthropic is having trouble right now (error {status_code}). Try again later.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:292"
+   "zettelapp/core/llm.py:322"
   ]
  },
  "Anthropic rejected the API key. Check it in Tools ▸ Options ▸ AI assistant.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:277"
+   "zettelapp/core/llm.py:307"
   ]
  },
  "Anthropic returned an error: {scrub}": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:297"
+   "zettelapp/core/llm.py:327"
   ]
  },
  "API key": {
@@ -819,7 +819,7 @@
  "Ask": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:89",
+   "zettelapp/ui/ask_page.py:173",
    "zettelapp/ui/main_window.py:91"
   ]
  },
@@ -832,7 +832,7 @@
  "Ask a question about your notes, e.g. “How does spaced repetition relate to active recall?”  (Ctrl+Enter to ask)": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:66"
+   "zettelapp/ui/ask_page.py:124"
   ]
  },
  "Ask about this note…": {
@@ -844,7 +844,7 @@
  "Ask your notes": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:57",
+   "zettelapp/ui/ask_page.py:115",
    "zettelapp/ui/dialogs.py:506"
   ]
  },
@@ -857,7 +857,7 @@
  "Asking {label} ({len} notes sent)…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:236"
+   "zettelapp/ui/ask_page.py:336"
   ]
  },
  "Auto k": {
@@ -932,7 +932,7 @@
  "Before you ask": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:203"
+   "zettelapp/ui/ask_page.py:298"
   ]
  },
  "Begin the adventure": {
@@ -1049,7 +1049,7 @@
  "Change…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:60"
+   "zettelapp/ui/ask_page.py:118"
   ]
  },
  "Chapter {n} of {total}": {
@@ -1307,8 +1307,8 @@
  "Connect an AI provider": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:185",
-   "zettelapp/ui/ask_page.py:191"
+   "zettelapp/ui/ask_page.py:269",
+   "zettelapp/ui/ask_page.py:275"
   ]
  },
  "Connect an AI provider to ask questions about your notes (Ask page). Keys are stored in the system keyring, never in plain files. You can save several keys per provider and pick the one to use. Only your question and the most relevant notes are sent.": {
@@ -1338,7 +1338,7 @@
  "Connected to {provider}. {n} model available.": {
   "plural": "Connected to {provider}. {n} models available.",
   "where": [
-   "zettelapp/core/llm.py:521"
+   "zettelapp/core/llm.py:551"
   ]
  },
  "Contains": {
@@ -1363,7 +1363,7 @@
  "Copy": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:99",
+   "zettelapp/ui/ask_page.py:183",
    "zettelapp/ui/settings_dialog.py:1183",
    "zettelapp/ui/settings_dialog.py:1195"
   ]
@@ -1401,7 +1401,7 @@
  "Could not get an answer.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:270"
+   "zettelapp/ui/ask_page.py:370"
   ]
  },
  "Could not open vault": {
@@ -1420,7 +1420,7 @@
  "Could not reach Anthropic. Check your internet connection.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:304"
+   "zettelapp/core/llm.py:334"
   ]
  },
  "Could not reach Zotero. Make sure Zotero 7 or later is running.": {
@@ -1432,7 +1432,7 @@
  "Could not reach {label}. Check your internet connection and the API address.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:456"
+   "zettelapp/core/llm.py:486"
   ]
  },
  "Could not read from the system keyring.": {
@@ -1762,7 +1762,7 @@
  "Don't show this again": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:211"
+   "zettelapp/ui/ask_page.py:303"
   ]
  },
  "Donate": {
@@ -1945,6 +1945,12 @@
   "plural": null,
   "where": [
    "zettelapp/ui/widgets.py:437"
+  ]
+ },
+ "Every note in the scope, nearest first": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/ask_page.py:142"
   ]
  },
  "Every note is a star, and every link a line between two stars.": {
@@ -2459,7 +2465,7 @@
  "How many of the most relevant notes to send with the question": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:82"
+   "zettelapp/ui/ask_page.py:157"
   ]
  },
  "How the link reads from the note it points to": {
@@ -3411,7 +3417,7 @@
  "no API key": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:145"
+   "zettelapp/ui/ask_page.py:229"
   ]
  },
  "No flashcards are due. Great job! Add more from a note's Flashcards tab.": {
@@ -3501,7 +3507,7 @@
  "No system keyring was found, so keys are kept only until ZettelApp closes.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:157",
+   "zettelapp/ui/ask_page.py:241",
    "zettelapp/ui/settings_dialog.py:119"
   ]
  },
@@ -3611,7 +3617,7 @@
  "Note: {model} is not in the provider's model list.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:527"
+   "zettelapp/core/llm.py:557"
   ]
  },
  "Notes": {
@@ -3650,7 +3656,14 @@
  "Notes sent with the question": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:114"
+   "zettelapp/ui/ask_page.py:198"
+  ]
+ },
+ "Notes to send": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/ask_page.py:68",
+   "zettelapp/ui/ask_page.py:140"
   ]
  },
  "Notes with tag": {
@@ -3752,13 +3765,13 @@
  "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:153"
+   "zettelapp/ui/ask_page.py:237"
   ]
  },
  "Only your question and the notes listed above are sent to {label}. The model gets no tools and cannot change your notes. Your API key is kept in the system keyring.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:148"
+   "zettelapp/ui/ask_page.py:232"
   ]
  },
  "Open": {
@@ -4049,7 +4062,7 @@
  "Question": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:71"
+   "zettelapp/ui/ask_page.py:129"
   ]
  },
  "Question and answer": {
@@ -4085,13 +4098,13 @@
  "Rate limit or quota reached. Wait a moment and try again.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:442"
+   "zettelapp/core/llm.py:472"
   ]
  },
  "Rate limit or usage limit reached. Wait a moment and try again.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:288"
+   "zettelapp/core/llm.py:318"
   ]
  },
  "Reading view": {
@@ -4398,6 +4411,13 @@
    "zettelapp/ui/quest.py:352"
   ]
  },
+ "Review before sending": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/ask_page.py:55",
+   "zettelapp/ui/ask_page.py:159"
+  ]
+ },
  "Right-click links an idea to a note": {
   "plural": null,
   "where": [
@@ -4425,7 +4445,7 @@
  "Save as note": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:100"
+   "zettelapp/ui/ask_page.py:184"
   ]
  },
  "Save graph as image": {
@@ -4450,7 +4470,7 @@
  "Search in": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:75"
+   "zettelapp/ui/ask_page.py:133"
   ]
  },
  "Search notes (Ctrl+F) · tag:name filters": {
@@ -4481,6 +4501,12 @@
   "plural": null,
   "where": [
    "zettelapp/ui/settings_dialog.py:213"
+  ]
+ },
+ "See the notes about to be sent, and untick any to leave out": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/ask_page.py:160"
   ]
  },
  "Seen from Note B: {reverse}": {
@@ -4537,6 +4563,13 @@
   "plural": null,
   "where": [
    "zettelapp/ui/settings_dialog.py:419"
+  ]
+ },
+ "Send": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/ask_page.py:77",
+   "zettelapp/ui/ask_page.py:138"
   ]
  },
  "Session complete": {
@@ -4779,13 +4812,13 @@
  "Sources": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:301"
+   "zettelapp/ui/ask_page.py:401"
   ]
  },
  "Sources sent": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:112"
+   "zettelapp/ui/ask_page.py:196"
   ]
  },
  "Space": {
@@ -4851,14 +4884,14 @@
  "Stop": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:84"
+   "zettelapp/ui/ask_page.py:168"
   ]
  },
  "Stopped.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:275",
-   "zettelapp/ui/ask_page.py:286"
+   "zettelapp/ui/ask_page.py:375",
+   "zettelapp/ui/ask_page.py:386"
   ]
  },
  "strong": {
@@ -5102,20 +5135,20 @@
  "The answer was cut off at the length limit.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:334",
-   "zettelapp/core/llm.py:382"
+   "zettelapp/core/llm.py:364",
+   "zettelapp/core/llm.py:412"
   ]
  },
  "The API address is not a valid URL.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:123"
+   "zettelapp/core/llm.py:121"
   ]
  },
  "The API address must use https:// (plain http:// is allowed only for localhost).": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:127"
+   "zettelapp/core/llm.py:125"
   ]
  },
  "The archive contains too many files.": {
@@ -5295,13 +5328,19 @@
  "The model declined to answer this question.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:332"
+   "zettelapp/core/llm.py:362"
   ]
  },
  "The model or API address was not found. Check Tools ▸ Options ▸ AI assistant.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:439"
+   "zettelapp/core/llm.py:469"
+  ]
+ },
+ "The most relevant notes": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/ask_page.py:141"
   ]
  },
  "The other types are {types}. The side panel on the right lists each link with its type, and the note at the other end shows it under **Backlinks**, read the other way round.": {
@@ -5319,37 +5358,37 @@
  "The provider declined to answer this question.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:380"
+   "zettelapp/core/llm.py:410"
   ]
  },
  "The provider returned an error: {scrub}": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:367"
+   "zettelapp/core/llm.py:397"
   ]
  },
  "The provider sent an unexpected model list.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:486"
+   "zettelapp/core/llm.py:516"
   ]
  },
  "The question is too long. Shorten it and try again.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:509"
+   "zettelapp/core/llm.py:539"
   ]
  },
  "The request to Anthropic timed out. Try again.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:302"
+   "zettelapp/core/llm.py:332"
   ]
  },
  "The response was unexpectedly large and was stopped.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:352"
+   "zettelapp/core/llm.py:382"
   ]
  },
  "The Riddle Door": {
@@ -5380,7 +5419,7 @@
  "The selected model was not found. Choose another model in Tools ▸ Options ▸ AI assistant.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:283"
+   "zettelapp/core/llm.py:313"
   ]
  },
  "The Silver Thread": {
@@ -5467,6 +5506,12 @@
    "zettelapp/ui/settings_dialog.py:920"
   ]
  },
+ "These notes will be sent to {provider} with your question. Untick any to leave out.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/ask_page.py:60"
+  ]
+ },
  "thinking": {
   "plural": null,
   "where": [
@@ -5476,8 +5521,8 @@
  "This API key is not allowed to use the selected model.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:280",
-   "zettelapp/core/llm.py:438"
+   "zettelapp/core/llm.py:310",
+   "zettelapp/core/llm.py:468"
   ]
  },
  "This archive contains neither a ZettelApp export nor Markdown files.": {
@@ -5647,7 +5692,7 @@
  "Type a question first.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:507"
+   "zettelapp/core/llm.py:537"
   ]
  },
  "Type in several places at once": {
@@ -5695,7 +5740,7 @@
  "Unknown AI provider: {provider!r}": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:142"
+   "zettelapp/core/llm.py:140"
   ]
  },
  "Unknown author": {
@@ -5738,7 +5783,8 @@
  "Untitled": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:298",
+   "zettelapp/ui/ask_page.py:70",
+   "zettelapp/ui/ask_page.py:398",
    "zettelapp/ui/editor.py:207",
    "zettelapp/ui/main_window.py:642",
    "zettelapp/ui/main_window.py:875",
@@ -5873,6 +5919,12 @@
    "zettelapp/ui/dialogs.py:730"
   ]
  },
+ "With the current note and linked notes, every note in the scope means its neighbours up to the depth chosen, the nearest first": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/ask_page.py:144"
+  ]
+ },
  "Write a little more to get suggestions.": {
   "plural": null,
   "where": [
@@ -5954,7 +6006,13 @@
  "Your question and the most relevant notes (up to {limit}) will be sent to {provider} using your API key. Nothing else leaves this computer.": {
   "plural": null,
   "where": [
-   "zettelapp/ui/ask_page.py:204"
+   "zettelapp/ui/ask_page.py:286"
+  ]
+ },
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": {
+  "plural": null,
+  "where": [
+   "zettelapp/ui/ask_page.py:291"
   ]
  },
  "Your thread hums with meaning.": {
@@ -6271,19 +6329,19 @@
  "{provider} is having trouble right now (error {code}). Try again later.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:445"
+   "zettelapp/core/llm.py:475"
   ]
  },
  "{provider} rejected the API key. Check it in Tools ▸ Options ▸ AI assistant.": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:435"
+   "zettelapp/core/llm.py:465"
   ]
  },
  "{provider} returned an error ({code}): {detail}": {
   "plural": null,
   "where": [
-   "zettelapp/core/llm.py:449"
+   "zettelapp/core/llm.py:479"
   ]
  },
  "{score} of {n} correct": {

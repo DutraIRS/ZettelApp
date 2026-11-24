@@ -1100,5 +1100,14 @@
  "Justified": "양쪽 맞춤",
  "Line spacing": "줄 간격",
  "Space between paragraphs": "문단 간격",
- "The space under each paragraph, as a share of the text size": "각 문단 아래 간격 (글자 크기 대비 비율)"
+ "The space under each paragraph, as a share of the text size": "각 문단 아래 간격 (글자 크기 대비 비율)",
+ "Send": "보내기",
+ "Notes to send": "보낼 노트",
+ "The most relevant notes": "가장 관련 있는 노트",
+ "Every note in the scope, nearest first": "범위의 모든 노트, 가까운 순",
+ "With the current note and linked notes, every note in the scope means its neighbours up to the depth chosen, the nearest first": "'현재 노트와 연결된 노트'에서는 범위의 모든 노트가 선택한 깊이까지의 이웃 노트예요(가까운 순)",
+ "Review before sending": "보내기 전에 확인",
+ "See the notes about to be sent, and untick any to leave out": "보낼 노트를 보고, 빼고 싶은 노트의 선택을 해제해요",
+ "These notes will be sent to {provider} with your question. Untick any to leave out.": "이 노트들이 질문과 함께 {provider}에 전송돼요. 빼고 싶은 노트의 선택을 해제하세요.",
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "질문과 선택한 범위의 노트가 API 키를 사용해 {provider}에 전송돼요. 그 외에는 이 컴퓨터 밖으로 나가지 않아요."
 }

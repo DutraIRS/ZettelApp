@@ -1131,5 +1131,14 @@
  "Justified": "Justificado",
  "Line spacing": "Espaçamento entre linhas",
  "Space between paragraphs": "Espaço entre parágrafos",
- "The space under each paragraph, as a share of the text size": "O espaço abaixo de cada parágrafo, em relação ao tamanho do texto"
+ "The space under each paragraph, as a share of the text size": "O espaço abaixo de cada parágrafo, em relação ao tamanho do texto",
+ "Send": "Enviar",
+ "Notes to send": "Notas a enviar",
+ "The most relevant notes": "As notas mais relevantes",
+ "Every note in the scope, nearest first": "Todas as notas do escopo, as mais próximas primeiro",
+ "With the current note and linked notes, every note in the scope means its neighbours up to the depth chosen, the nearest first": "Com «Nota atual e notas ligadas», todas as notas do escopo são as vizinhas dela até a profundidade escolhida, as mais próximas primeiro",
+ "Review before sending": "Revisar antes de enviar",
+ "See the notes about to be sent, and untick any to leave out": "Veja as notas que serão enviadas e desmarque as que quiser deixar de fora",
+ "These notes will be sent to {provider} with your question. Untick any to leave out.": "Estas notas serão enviadas a {provider} com sua pergunta. Desmarque as que quiser deixar de fora.",
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "Sua pergunta e as notas do escopo escolhido serão enviadas a {provider} usando sua chave de API. Nada mais sai deste computador."
 }

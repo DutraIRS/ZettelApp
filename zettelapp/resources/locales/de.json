@@ -1131,5 +1131,14 @@
  "Justified": "Blocksatz",
  "Line spacing": "Zeilenabstand",
  "Space between paragraphs": "Abstand zwischen Absätzen",
- "The space under each paragraph, as a share of the text size": "Der Abstand unter jedem Absatz, im Verhältnis zur Textgröße"
+ "The space under each paragraph, as a share of the text size": "Der Abstand unter jedem Absatz, im Verhältnis zur Textgröße",
+ "Send": "Senden",
+ "Notes to send": "Zu sendende Notizen",
+ "The most relevant notes": "Die relevantesten Notizen",
+ "Every note in the scope, nearest first": "Alle Notizen im Bereich, die nächsten zuerst",
+ "With the current note and linked notes, every note in the scope means its neighbours up to the depth chosen, the nearest first": "Mit „Aktuelle Notiz und verknüpfte Notizen“ sind alle Notizen im Bereich ihre Nachbarn bis zur gewählten Tiefe, die nächsten zuerst",
+ "Review before sending": "Vor dem Senden prüfen",
+ "See the notes about to be sent, and untick any to leave out": "Die Notizen sehen, die gesendet werden, und abwählen, was nicht mit soll",
+ "These notes will be sent to {provider} with your question. Untick any to leave out.": "Diese Notizen werden mit Ihrer Frage an {provider} gesendet. Wählen Sie ab, was nicht mit soll.",
+ "Your question and the notes in the chosen scope will be sent to {provider} using your API key. Nothing else leaves this computer.": "Ihre Frage und die Notizen im gewählten Bereich werden mit Ihrem API-Schlüssel an {provider} gesendet. Sonst verlässt nichts diesen Computer."
 }

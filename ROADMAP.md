@@ -8,12 +8,6 @@ getting in touch on [GitHub](https://github.com/DutraIRS/ZettelApp).
 
 ## Next
 
-### Ask your notes
-
-- [ ] **Neighbours as context**: send the open note's *k*-hop neighbours (all notes within *k* links,
-  *k* configurable) instead of the most related notes.
-- [ ] **Review before sending**: a checklist of the notes about to be sent, to untick any first.
-
 ### Insights
 
 - [ ] **Network metrics**: the degree distribution (and how close it is to a power law), hubs by

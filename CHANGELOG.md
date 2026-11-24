@@ -22,6 +22,10 @@ All notable changes to ZettelApp are documented here. The format follows
   new line or lines join into one paragraph (standard Markdown), alignment at the start or
   justified, line spacing and the space between paragraphs. They apply wherever notes are shown
   read-only: the preview, the Reading view, Review and Ask.
+- **Ask your notes: send the open note's neighbours** (*Send ▸ Every note in the scope, nearest
+  first*): with *Current note and linked notes*, every note within the depth chosen goes, nearest
+  first, instead of only the most relevant. **Review before sending** shows the notes about to be
+  sent, to untick any first.
 
 ### Fixed
 
