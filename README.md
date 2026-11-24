@@ -51,7 +51,7 @@ Atomic notes, typed links, mind maps, flashcards, a 2D/3D knowledge graph, and l
   KDE), or a black theme for OLED screens and colours of your own, with standard menus and shortcuts,
   per-user installers and daily backups.
 - **Private and safe by design**: works offline; nothing leaves your computer unless you ask for it, apart
-  from one small, optional update check at start-up. Notes can't run scripts, imports are sandboxed, and
+  from one small, optional update check at start-up. Notes can't run scripts, imports are checked and size-limited, and
   API keys never touch disk in plain text.
 
 ## Install

@@ -23,7 +23,7 @@ in the changelog unless you prefer otherwise.
 
 | Version | Supported |
 |---|---|
-| 1.3.x | ✅ |
+| 1.4.x | ✅ |
 | older | ❌ |
 
 Security fixes go into the latest release. Please update through *Help ▸ Check for Updates*.
