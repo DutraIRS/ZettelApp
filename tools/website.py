@@ -13,6 +13,7 @@ and its strict Content-Security-Policy.
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -22,6 +23,11 @@ CONTENT = Path(__file__).resolve().parent / "site_content"
 GITHUB = "https://github.com/DutraIRS/ZettelApp"
 KOFI = "https://ko-fi.com/dutrairs"
 RATIONAL_WEB = "https://github.com/DutraIRS/Rational-Web"
+# The landing pages carry a Google Play button (between <!-- google-play --> comments) that
+# download.js shows to Android visitors. It stays out of the site until the app is listed:
+# set this to True and rebuild when https://play.google.com/store/apps/details?id=com.dutrairs.zettelapp
+# is live.
+GOOGLE_PLAY_LISTED = False
 
 
 # Sidebar order (file stem, label).
@@ -468,7 +474,13 @@ def landing(folder: str) -> tuple[dict, str]:
     code = folder or "en"
     data = json.loads((CONTENT / "landing" / f"{code}.json").read_text(encoding="utf-8"))
     main = (CONTENT / "landing" / f"{code}.html").read_text(encoding="utf-8")
-    return data, main
+    return data, google_play(main, GOOGLE_PLAY_LISTED)
+
+
+def google_play(main: str, listed: bool) -> str:
+    """Keep the Google Play buttons (without their marker comments) or drop them."""
+    pattern = r"[ \t]*<!-- google-play\b.*?-->\n(.*?)[ \t]*<!-- /google-play -->\n"
+    return re.sub(pattern, (lambda m: m[1]) if listed else "", main, flags=re.S)
 
 
 def landing_body(folder: str):

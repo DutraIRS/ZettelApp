@@ -105,7 +105,9 @@ Still to do:
 
 - Semantic search and *Ask your notes* on device (needs onnxruntime/tokenizers
   Android wheels), on-device flashcard export to AnkiDroid, a release pipeline
-  with signing, and store listings.
+  with signing, and store listings. The website's Google Play button (shown to
+  Android visitors) is ready: once the listing is live, set `GOOGLE_PLAY_LISTED`
+  in `tools/website.py` and rebuild the site.
 - The Markdown renderer in the preview, a force-directed graph, translated
   phone screens, and opening a vault in shared storage through the Storage
   Access Framework.

@@ -143,7 +143,7 @@ def test_every_landing_page_has_the_csp_both_language_widgets_and_no_rational_ex
         assert "_rational" not in text and "<style" not in text and "data-rw" not in text
 
 
-def _downloads_shown(user_agent: str, platform: str = "") -> list[str]:
+def _downloads_shown(user_agent: str, platform: str = "", play: bool = False) -> list[str]:
     """Which download buttons download.js leaves visible, in order (run with Node.js)."""
     script = (build_site.ROOT / "website" / "assets" / "download.js").read_text(encoding="utf-8")
     harness = (
@@ -156,11 +156,14 @@ def _downloads_shown(user_agent: str, platform: str = "") -> list[str]:
         "var win = el('windows', { children: [el('setup', {cls: 'button primary'})] });\n"
         "var lin = el('linux', { hidden: true, children: [el('deb', {cls: 'button primary', pkg: 'deb'}),"
         " el('tar', {cls: 'button secondary', pkg: 'tar'}), el('exe', {cls: 'button secondary'})] });\n"
+        "var and = el('android', { hidden: true, children: [el('play', {cls: 'button primary'})] });\n"
+        f"var listed = {json.dumps(play)};\n"
         "Object.defineProperty(globalThis, 'navigator', { configurable: true, value:"
         f" {{ userAgent: {json.dumps(user_agent)}, platform: {json.dumps(platform)} }} }});\n"
-        "globalThis.document = { querySelectorAll(s) { return s.indexOf('windows') >= 0 ? [win] : [lin]; } };\n"
+        "globalThis.document = { querySelectorAll(s) { if (s.indexOf('android') >= 0) return listed ? [and] : [];"
+        " return s.indexOf('windows') >= 0 ? [win] : [lin]; } };\n"
         + script
-        + "\nvar out = [win, lin].filter(function (b) { return !b.hidden; })[0];\n"
+        + "\nvar out = [and, win, lin].filter(function (b) { return !b.hidden; })[0];\n"
         "console.log(JSON.stringify(out.children.map(function (c) {"
         " return c.name + (c.className.indexOf('primary') >= 0 ? '*' : ''); })));\n"
     )
@@ -180,7 +183,10 @@ def test_download_buttons_follow_the_visitors_system():
     assert _downloads_shown(windows, "Win32") == ["setup*"]
     assert _downloads_shown(ubuntu, "Linux x86_64") == ["deb*", "tar", "exe"]
     assert _downloads_shown(fedora, "Linux x86_64") == ["tar*", "deb", "exe"]
-    assert _downloads_shown(android, "Linux armv8l") == ["setup*"]  # no phone build here
+    assert _downloads_shown(android, "Linux armv8l") == ["setup*"]  # not on Google Play yet
+    assert _downloads_shown(android, "Linux armv8l", play=True) == ["play*"]
+    assert _downloads_shown(windows, "Win32", play=True) == ["setup*"]
+    assert _downloads_shown(ubuntu, "Linux x86_64", play=True) == ["deb*", "tar", "exe"]
     assert _downloads_shown(arm, "Linux aarch64") == ["setup*"]  # no ARM build: all releases
 
 
@@ -192,3 +198,21 @@ def test_landing_pages_link_the_linux_packages_by_their_fixed_names():
         assert "releases/latest/download/ZettelApp-Linux-amd64.deb" in text
         assert "releases/latest/download/ZettelApp-Linux-x86_64.tar.gz" in text
         assert "assets/download.js" in text
+
+
+def test_google_play_buttons_stay_out_of_the_site_until_the_app_is_listed():
+    for folder in ["", *website.LANGS]:
+        source = (website.CONTENT / "landing" / f"{folder or 'en'}.html").read_text(
+            encoding="utf-8"
+        )
+        assert source.count('data-os="android" hidden') == 2, folder
+        assert source.count("details?id=com.dutrairs.zettelapp") == 2, folder
+        listed = website.google_play(source, listed=True)
+        assert listed.count('data-os="android" hidden') == 2 and "google-play" not in listed
+        unlisted = website.google_play(source, listed=False)
+        assert 'data-os="android"' not in unlisted and "play.google.com" not in unlisted
+        assert unlisted.count('data-os="linux" hidden') == 2
+    if not website.GOOGLE_PLAY_LISTED:
+        for folder in ["", *website.LANGS]:
+            page = build_site.ROOT / "website" / folder / "index.html"
+            assert "play.google.com" not in page.read_text(encoding="utf-8"), page
