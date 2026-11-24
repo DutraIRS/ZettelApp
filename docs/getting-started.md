@@ -28,7 +28,7 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 |---|---|
 | `ZettelApp-Linux-amd64.deb` | Debian, Ubuntu, Mint or another `.deb`-based distribution. Install it with `sudo apt install ./ZettelApp-Linux-amd64.deb`, or open it in your software centre. |
 | `ZettelApp-Linux-x86_64.tar.gz` | Any other distribution, or no installation: unpack it anywhere and run `ZettelApp/zettelapp`. |
-| `ZettelApp-Linux-x86_64.flatpak` | If you use Flatpak: `flatpak install --user ./ZettelApp-Linux-x86_64.flatpak` (the runtime comes from Flathub). |
+| [Flathub](https://flathub.org/apps/io.github.dutrairs.zettelapp) | If you use Flatpak: `flatpak install flathub io.github.dutrairs.zettelapp`, or search for ZettelApp in your software centre. |
 | `zettelapp` (Snap) | From the Snap Store: `sudo snap install zettelapp`. |
 
 Both bundle Python and Qt; they need a 64-bit desktop (X11 or Wayland — GNOME, KDE and others) with

@@ -26,7 +26,7 @@ Get-FileHash .\ZettelApp-Setup.exe -Algorithm SHA256
 |---|---|
 | `ZettelApp-Linux-amd64.deb` | Debian、Ubuntu、Mint 或其他基于 `.deb` 的发行版。使用 `sudo apt install ./ZettelApp-Linux-amd64.deb` 安装,或在软件中心中打开。 |
 | `ZettelApp-Linux-x86_64.tar.gz` | 其他发行版,或无需安装:解压到任意位置并运行 `ZettelApp/zettelapp`。 |
-| `ZettelApp-Linux-x86_64.flatpak` | 如果你使用 Flatpak:`flatpak install --user ./ZettelApp-Linux-x86_64.flatpak`(运行时从 Flathub 获取)。 |
+| [Flathub](https://flathub.org/apps/io.github.dutrairs.zettelapp) | 如果你使用 Flatpak：`flatpak install flathub io.github.dutrairs.zettelapp`，或在软件中心搜索 ZettelApp。 |
 | `zettelapp` (Snap) | 从 Snap Store 安装:`sudo snap install zettelapp`。 |
 
 两者都内置 Python 和 Qt;需要 64 位桌面环境(X11 或 Wayland — GNOME、KDE 等)及其标准图形库。要在终端中校验下载:
