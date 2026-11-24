@@ -1,11 +1,16 @@
 app-id: io.github.dutrairs.zettelapp
-runtime: org.freedesktop.Platform
-runtime-version: "24.08"
-sdk: org.freedesktop.Sdk
+# PySide6 comes from Flathub's PySide base app (on the KDE runtime); every other Python
+# package is a checksummed source in python3-deps.yaml, so the build needs no network
+# (as Flathub requires). Regenerate that file when requirements.txt changes:
+#   flatpak-pip-generator --runtime=org.kde.Sdk//6.11 --requirements-file=<requirements.txt
+#     without PySide6> --prefer-wheels=numpy,onnxruntime,tokenizers,rapidfuzz,pydantic-core,
+#     jiter,pyyaml,hf-xet,protobuf,markupsafe --yaml --output python3-deps
+runtime: org.kde.Platform
+runtime-version: "6.11"
+sdk: org.kde.Sdk
+base: io.qt.PySide.BaseApp
+base-version: "6.11"
 command: zettelapp
-# Home: vaults live wherever the user keeps them. Network: the update check, AI providers,
-# Zotero and Anki. Secrets: the API keys go through org.freedesktop.secrets. FileManager1:
-# "reveal in file manager". DRI: the 3D graph renders on the GPU.
 finish-args:
   - --share=ipc
   - --socket=x11
@@ -17,22 +22,19 @@ finish-args:
   - --talk-name=org.freedesktop.Notifications
   - --talk-name=org.freedesktop.FileManager1
   - --talk-name=org.freedesktop.portal.Desktop
+cleanup-commands:
+  - /app/cleanup-BaseApp.sh
 # The release workflow builds a bundle from it (job `flatpak`). Build locally, from a clean
 # checkout (the whole folder is copied in), with:
 #   flatpak-builder --force-clean --install-deps-from=flathub --install --user build/flatpak packaging/flatpak/io.github.dutrairs.zettelapp.yml
-# For Flathub, the source becomes the release tag and the wheels become listed sources.
+# Flathub's copy of this manifest takes its source from the release tag instead of the folder.
 modules:
+  - python3-deps.yaml
   - name: zettelapp
     buildsystem: simple
-    # pip downloads the wheels, so the build needs the network (Flathub wants the wheels
-    # listed as sources instead, e.g. with flatpak-pip-generator).
-    build-options:
-      build-args:
-        - --share=network
     build-commands:
-      # The freedesktop 24.08 runtime ships Python 3.12; PySide6 and the other wheels are abi3 or
-      # have CPython 3.12 builds. The app and the zettelapp-mcp entry point land in /app/bin.
-      - pip3 install --verbose --root=/ --prefix=/app .
+      # Dependencies are already installed (python3-deps.yaml and the base app's PySide6).
+      - pip3 install --verbose --no-index --no-deps --no-build-isolation --prefix=${FLATPAK_DEST} .
       - install -Dm644 packaging/io.github.dutrairs.zettelapp.desktop
         /app/share/applications/io.github.dutrairs.zettelapp.desktop
       - install -Dm644 packaging/io.github.dutrairs.zettelapp.metainfo.xml
