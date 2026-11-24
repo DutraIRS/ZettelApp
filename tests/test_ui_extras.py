@@ -472,3 +472,43 @@ def test_closing_the_vault_drops_a_pending_reorder(window, monkeypatch):
     window.close_vault()
     pump(500)
     assert errors == []
+
+
+def test_flatpak_and_snap_builds_start_the_mcp_server_through_their_sandbox(monkeypatch):
+    from pathlib import Path
+
+    from zettelapp.ui import settings_dialog
+
+    for name in ("FLATPAK_ID", "SNAP", "SNAP_NAME", "SNAP_INSTANCE_NAME", "SNAP_REAL_HOME"):
+        monkeypatch.delenv(name, raising=False)
+    monkeypatch.setattr(settings_dialog.sys, "platform", "linux")
+    vault = Path("/home/u/Documents/ZettelApp")
+
+    monkeypatch.setenv("FLATPAK_ID", "io.github.dutrairs.zettelapp")
+    monkeypatch.setenv("HOME", "/home/u")
+    monkeypatch.setenv("USERPROFILE", "/home/u")  # what Path.home() reads on Windows
+    monkeypatch.setenv("XDG_CONFIG_HOME", "/home/u/.var/app/io.github.dutrairs.zettelapp/config")
+    monkeypatch.delenv("HOST_XDG_CONFIG_HOME", raising=False)
+    assert settings_dialog.mcp_command(vault, True) == (
+        "flatpak",
+        ["run", "--command=zettelapp-mcp", "io.github.dutrairs.zettelapp"]
+        + ["--vault", str(vault), "--allow-writes"],
+        {},
+    )
+    assert settings_dialog.claude_desktop_config_path() == Path(
+        "/home/u/.config/Claude/claude_desktop_config.json"
+    )
+
+    monkeypatch.delenv("FLATPAK_ID")
+    monkeypatch.setenv("SNAP", "/snap/zettelapp/12")
+    monkeypatch.setenv("SNAP_NAME", "zettelapp")
+    monkeypatch.setenv("HOME", "/home/u/snap/zettelapp/12")
+    monkeypatch.setenv("SNAP_REAL_HOME", "/home/u")
+    assert settings_dialog.mcp_command(None, False) == (
+        "snap",
+        ["run", "zettelapp.zettelapp-mcp"],
+        {},
+    )
+    assert settings_dialog.claude_desktop_config_path() == Path(
+        "/home/u/.config/Claude/claude_desktop_config.json"
+    )

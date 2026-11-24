@@ -126,6 +126,15 @@ def mcp_command(vault: Path | None, allow_writes: bool) -> tuple[str, list[str],
         args.append("--allow-writes")
     if winintegration.is_packaged():  # Microsoft Store build
         return str(winintegration.mcp_alias()), args, {}
+    # Flatpak and Snap: the client runs on the host, where the sandbox's Python and paths
+    # don't exist. Start the server through the sandbox instead; it then shares the app's
+    # runtime folder, so it sees the app's MCP switch.
+    if flatpak_id := os.environ.get("FLATPAK_ID"):
+        return "flatpak", ["run", "--command=zettelapp-mcp", flatpak_id, *args], {}
+    if os.environ.get("SNAP") and (
+        snap := os.environ.get("SNAP_INSTANCE_NAME") or os.environ.get("SNAP_NAME")
+    ):
+        return "snap", ["run", f"{snap}.zettelapp-mcp", *args], {}
     if getattr(sys, "frozen", False):
         suffix = ".exe" if sys.platform == "win32" else ""
         return str(Path(sys.executable).with_name(f"zettelapp-mcp{suffix}")), args, {}
@@ -136,6 +145,11 @@ def mcp_command(vault: Path | None, allow_writes: bool) -> tuple[str, list[str],
 def claude_desktop_config_path() -> Path:
     if sys.platform == "win32":
         base = Path(os.environ.get("APPDATA", Path.home() / "AppData" / "Roaming"))
+    elif os.environ.get("FLATPAK_ID"):  # XDG_CONFIG_HOME points inside ~/.var/app here
+        base = Path(os.environ.get("HOST_XDG_CONFIG_HOME") or (Path.home() / ".config"))
+    elif os.environ.get("SNAP"):  # HOME is the snap's own folder here
+        home = os.environ.get("SNAP_REAL_HOME") or str(Path.home())
+        base = Path(home) / ".config"
     else:
         base = Path(os.environ.get("XDG_CONFIG_HOME") or (Path.home() / ".config"))
     return base / "Claude" / "claude_desktop_config.json"
