@@ -5,7 +5,9 @@ platform session can be done start to finish without asking what to look at. It 
 with every change that touches the interface, theming, files, notifications or packaging. Items
 belong to the next release, **1.4.0**; once it ships, the checked items are removed.
 
-Last updated: 24 November 2026 (the window's top row on Windows; earlier: Reading view, preview spacing, the adventure card, live accent,
+Last updated: 24 November 2026 (1.7–1.12: arrow tips, network measures, Ask's review, preview
+options, the rail and sort menu, Obsidian folders; reference screenshots from Windows in
+[WINDOWS_SCREENSHOTS/](WINDOWS_SCREENSHOTS/); earlier: the window's top row on Windows, Reading view, preview spacing, the adventure card, live accent,
 Dolphin, plus everything the earlier Windows, GNOME and KDE passes could not reach).
 
 ## How to work through it
@@ -167,12 +169,122 @@ On **GNOME and KDE** nothing changes: the desktop's own title bar, Qt's menu bar
 - [ ] GNOME: the desktop's own title bar and Qt's menu bar, as before.
 - [ ] KDE: the desktop's own title bar and Qt's menu bar, as before.
 
+### 1.7 Arrow tips at both ends (new)
+
+*Options ▸ Link types*, pick **Supports**: a new row **Tip at the start** offers None, Filled
+triangle, Open, Diamond, Circle and Bar, each with a sample icon; set **Circle**. The sample
+under the form draws a circle at Note A and the triangle at Note B. Pick **Related to**
+(undirected): the row reads **Tips at both ends**; set **Diamond**: the sample has a diamond at
+each end. OK, then in the **Graph** (2D) select a note with a Supports and a Related to link: the
+selected links show the same tips, crisp at any zoom, and the legend at the right shows them too.
+In 3D, a selected link draws its start tip. *File ▸ Export…* as a static website: the link
+samples on a note's page show both tips in a browser. Compare with
+[`tips-options-light.png`](WINDOWS_SCREENSHOTS/tips-options-light.png) /
+[`-dark`](WINDOWS_SCREENSHOTS/tips-options-dark.png) and
+[`tips-graph-light.png`](WINDOWS_SCREENSHOTS/tips-graph-light.png) /
+[`-dark`](WINDOWS_SCREENSHOTS/tips-graph-dark.png). The vault's schema goes to 6: a vault opened
+here won't open in 1.3.x (expected).
+
+- [x] Windows (real window, 125 %, light and dark): the Link types form, its sample and the 2D
+  graph and legend as in the screenshots: Related to has a diamond at both ends, Supports a
+  circle then a triangle. Not looked at: zoom, 3D and the static website.
+- [ ] GNOME
+- [ ] KDE
+
+### 1.8 Network measures in Insights (new)
+
+*Insights*, scrolled to the bottom (the demo vault, *Help ▸ Start the Adventure*, or any vault with
+a few dozen linked notes): three tiles (**connected parts** with the largest's share,
+**clustering** with transitivity, the **power-law exponent** or "Too few linked notes to fit"),
+a **Degree distribution** bar chart, and **Bridges (betweenness)** and **Central notes
+(PageRank)** bar lists; hovering a bar shows its value, clicking a note's bar opens it, the list
+button at each card's corner shows the numbers as a table. Nothing is cut at 150 % and the page
+stays responsive while it computes (it runs in the background). Compare with
+[`insights-network-light.png`](WINDOWS_SCREENSHOTS/insights-network-light.png) /
+[`-dark`](WINDOWS_SCREENSHOTS/insights-network-dark.png).
+
+- [x] Windows: the tiles and the three charts as in the screenshots with the demo vault (28
+  notes: 7 parts, clustering 0.17, too few notes to fit), light and dark. Hover, click, the
+  tables and 150 % not tried.
+- [ ] GNOME
+- [ ] KDE
+
+### 1.9 Ask your notes: Send and Review before sending (new)
+
+*Ask*: under *Search in* a **Send** row has *The most relevant notes* / *Every note in the scope,
+nearest first* and a **Review before sending** check box (both remembered after a restart; the
+note limit hides with *Every note*). With an API key set (any provider; a wrong key is fine, the
+review comes before the request), type a question and Ask: a **Review before sending** window
+lists the notes, all ticked; unticking every note greys **Send**; **Cancel** sends nothing.
+Compare with [`ask-send-light.png`](WINDOWS_SCREENSHOTS/ask-send-light.png) and
+[`ask-review-light.png`](WINDOWS_SCREENSHOTS/ask-review-light.png) /
+[`-dark`](WINDOWS_SCREENSHOTS/ask-review-dark.png). The review window is the desktop's own
+(title bar, it centres over ZettelApp, Esc cancels).
+
+- [x] Windows: the Send row, the check box and the review window as in the screenshots, light and
+  dark (the window opened directly, not through a real request). Restart, Esc and unticking
+  every note not tried (the last is unit-tested).
+- [ ] GNOME
+- [ ] KDE
+
+### 1.10 Preview and Reading view options (new)
+
+*Options ▸ General ▸ Preview and Reading view*: **Line breaks** (*Lines join into one paragraph*),
+**Alignment** (*Justified*), **Line spacing** (160 %) and **Space between paragraphs** (120 %).
+With the note at the top of this file in Reading view: paragraphs are justified to both edges
+(the last line of each stays at the start; in Arabic, justified right to left), lines and
+paragraphs open up as set, and two lines written one under the other join into one paragraph.
+The centred formula stays centred. Back to the defaults: as in 1.2. The same options apply in
+*Review* and *Ask*. Compare with
+[`preview-options-light.png`](WINDOWS_SCREENSHOTS/preview-options-light.png) and
+[`preview-justified-light.png`](WINDOWS_SCREENSHOTS/preview-justified-light.png).
+
+- [x] Windows: the options and the Reading view as in the screenshots (justified, 160 % and
+  120 %; the last line of each paragraph at the start). Arabic, Review and Ask not tried.
+- [ ] GNOME
+- [ ] KDE
+
+### 1.11 Notes in the rail brings the note list back; the sort menu (changed)
+
+Fold the note list away (its tab), go to *Graph*, then click **Notes** in the rail (or Ctrl+1):
+the list comes back. Opening a note from the graph leaves a folded list folded. The note list's
+sort menu says **Fewest links away from the open note** (in every language, a wording about
+distance, not about notes with few links).
+
+- [x] Windows: as described, scripted in a real window: the rail's Notes button brought the
+  folded list back, opening a note from the graph left it folded, the sort menu has the new
+  wording (Ctrl+1 runs the same action as the button).
+- [ ] GNOME
+- [ ] KDE
+
+### 1.12 Importing an Obsidian vault through the desktop's folder dialog (changed)
+
+The import code is covered by tests; what's left is the desktop's part. Make a small vault:
+
+```sh
+mkdir -p ~/obsidian-test/Projects/Sub && cd ~/obsidian-test
+printf '[[Projects/Sub/Deep note|deep]], [[Atomic notes^abc123]] and [[Projects/Atomic notes]]\n' > Hub.md
+printf 'At the root. ^abc123\n' > 'Atomic notes.md'
+printf 'In a folder.\n' > 'Projects/Atomic notes.md'
+printf 'Deep.\n' > 'Projects/Sub/Deep note.md'
+```
+
+*File ▸ Import Markdown Folder…*, choose the folder in the desktop's own folder dialog: four notes; *Hub*'s three
+links go to *Deep note*, the root *Atomic notes* and the one in *Projects*.
+
+- [ ] GNOME
+- [ ] KDE
+
 ## 2. Windows only
 
 - [x] **Tests and lint**: `.venv\Scripts\python -m pytest` all passing (Linux: 545 passed,
   14 skipped; Windows skips the Linux-only ones), `ruff check .`, `ruff format --check .`,
   `python tools/i18n.py check` (1030/1030 in every language). *Windows: 490 passed, 70 skipped;
-  ruff clean; 1027/1027 in all ten languages.*
+  ruff clean; 1027/1027 in all ten languages.* *Windows again on 24 November, after 1.7–1.12:
+  529 passed, 70 skipped; ruff clean; 1068/1068 in all ten languages; `packaging/build.ps1`
+  built the app (self-tests passed), the installer, the portable zip and the MSIX. Linux: run
+  the same three commands and `packaging/build-linux.sh` (no new dependencies since the last
+  Linux pass).*
 - [x] **Microsoft Store package** (`dist/ZettelApp.msix`, built with a test signature (since removed) to
   install it locally): installs and starts from the Start menu with its logo; *Options ▸ Desktop
   integration* offers no link registration (the manifest registers `zettelapp://`), and a
