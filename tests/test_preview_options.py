@@ -57,7 +57,7 @@ def test_lines_can_join_and_paragraphs_be_justified_and_spaced(preview):
     assert int(fmt.alignment()) & 0x8  # justified
     assert fmt.lineHeight() == 160
     assert fmt.lineHeightType() == QTextBlockFormat.LineHeightTypes.ProportionalHeight.value
-    pixels = preview.fontInfo().pixelSize()
+    pixels = preview.pixel_size()
     assert fmt.bottomMargin() == round(pixels * 1.0)
     item = next(f for t, f in blocks if t == "an item")
     assert int(item.alignment()) & 0x8

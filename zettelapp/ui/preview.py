@@ -122,11 +122,20 @@ class NotePreview(QTextBrowser):
         self.reading = reading
         self._place_column()
 
+    def pixel_size(self) -> int:
+        """The text's size in pixels. Without the font itself (no fonts found, as on Qt's
+        offscreen platform on Windows) Qt answers -1: then it is worked out from the points."""
+        size = QFontInfo(self.font()).pixelSize()
+        if size > 0:
+            return size
+        points = self.font().pointSizeF()
+        return max(1, round((points if points > 0 else 10) * self.logicalDpiY() / 72))
+
     def _side(self) -> int:
         """The space either side of the text: the reading column's margins, or MARGIN."""
         if not self.reading:
             return MARGIN
-        line = READING_LINE * QFontInfo(self.font()).pixelSize()
+        line = READING_LINE * self.pixel_size()
         return max(READING_MARGIN, (self.viewport().width() - line) // 2)
 
     def column_width(self) -> int:
@@ -170,7 +179,7 @@ class NotePreview(QTextBrowser):
         self._pictures_for = None
         self.document().setDefaultStyleSheet(
             preview_css(
-                QFontInfo(self.font()).pixelSize(),
+                self.pixel_size(),
                 settings.get(settings.PREVIEW_LINE_SPACING),
                 settings.get(settings.PREVIEW_PARAGRAPH_SPACING),
             )
@@ -203,7 +212,7 @@ class NotePreview(QTextBrowser):
         latex = mathrender.decode(text[len(MATH_DISPLAY_SCHEME if display else MATH_SCHEME) :])
         if not latex:
             return None
-        size = QFontInfo(self.font()).pixelSize()
+        size = self.pixel_size()
         color = theme.current().text
         ratio = max(1.0, self.devicePixelRatioF())
         return mathrender.render(
