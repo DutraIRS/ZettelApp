@@ -8,16 +8,6 @@ getting in touch on [GitHub](https://github.com/DutraIRS/ZettelApp).
 
 ## Next
 
-### Graph
-
-- [ ] **Diffusion**: pick a note and a measure (link distance, or links weighted by similarity) and
-  watch its influence spread through the network.
-
-### Website
-
-- [ ] **The mobile layout**: the site is hard to use on a phone.
-- [ ] **A Google Play link**, ready for when the Android app is listed.
-
 ### Linux
 
 - [ ] **Snap Store**: check that `snap info zettelapp` finds 1.4.0 and `sudo snap install zettelapp`
@@ -26,6 +16,11 @@ getting in touch on [GitHub](https://github.com/DutraIRS/ZettelApp).
   `sudo snap connect zettelapp:password-manager-service`).
 - [ ] **What only a real desktop can confirm** (alarm clicks, KWallet, fractional scaling, input
   methods, Orca) is listed in [PLATFORM_CHECKS.md](PLATFORM_CHECKS.md).
+- [ ] XFCE, GNOME, KDE tests: make sure the app behaves correctly on these desktop environments.
+
+Stop and handle. We'll bump the version and make the new release everywhere.
+
+Back to windows and checkout to android-port branch.
 
 ### Android
 
