@@ -4,9 +4,9 @@ Adapted from Euterpes' text ribbon. The sash is a six-pixel strip standing on th
 handle between a side panel (the note list or the links panel) and the editor: solid, with a
 resize cursor and a highlighted hover. Dragging it resizes the panel; a double-click hides or
 shows it. Halfway down, a tab pops out of the sash into the editor: a rounded rectangle in the
-accent colour, square where it grows out of the sash, with grip dots on the wall and a chevron
-pointing where the panel will go. A click (or Space when it has the keyboard focus) folds the
-panel away or brings it back; dragging the tab resizes like the sash. With the panel hidden the
+accent colour, square where it grows out of the sash, with a chevron pointing where the panel
+will go (the grip dots are the sash's own, halfway down). A click (or Space when it has the
+keyboard focus) folds the panel away or brings it back; dragging the tab resizes like the sash. With the panel hidden the
 sash and the tab stay at the editor's edge, to bring it back. Everything follows the layout
 direction, so in Arabic the note list folds to the right.
 """
@@ -231,16 +231,12 @@ class CollapseButton(QToolButton):
         ink = QColor(t.on_accent)
         painter.setBrush(ink)
         left = self.fold.panel_on_left()
-        wall_x = SASH_WIDTH / 2 if left else self.width() - SASH_WIDTH / 2
         middle = self.height() / 2
-        for dot in range(GRIP_DOTS):
-            y = middle + (dot - (GRIP_DOTS - 1) / 2) * GRIP_GAP
-            painter.drawEllipse(QPointF(wall_x, y), GRIP_DOT / 2, GRIP_DOT / 2)
-        reach_x = SASH_WIDTH + TAB_REACH / 2 if left else TAB_REACH / 2
-        # The chevron points where the panel goes: towards its side to hide it, away to show.
+        # Only a chevron: the grip dots belong to the sash, halfway down the panel's edge.
+        # It points where the panel goes: towards its side to hide it, away to show it.
         towards_panel = self.fold.shown()
         pointing_left = left == towards_panel
-        self._chevron(painter, ink, reach_x, middle, pointing_left)
+        self._chevron(painter, ink, self.width() / 2, middle, pointing_left)
         if self.hasFocus():
             focus = QPen(QColor(t.text), 1.0, Qt.PenStyle.DotLine)
             painter.setPen(focus)
