@@ -247,6 +247,7 @@ def bundle_to_dict(bundle: Bundle) -> dict:
                 "directed": t.directed,
                 "line_style": t.line_style,
                 "arrow": t.arrow,
+                "start_arrow": t.start_arrow,
             }
             for t in bundle.link_types
         ],
@@ -463,24 +464,34 @@ _SVG_TIPS = {
 def _svg_link(
     x1: float, y1: float, x2: float, y2: float, lt: LinkType | None, width: float, end_gap: float
 ) -> str:
-    """A link drawn in its type's colour, line style and arrow tip; *end_gap* keeps the
-    tip clear of the target note's circle."""
+    """A link drawn in its type's colour, line style and arrow tips; *end_gap* keeps the
+    tips clear of the notes' circles."""
     color = lt.color if lt else "#8a8a8a"
     length = math.hypot(x2 - x1, y2 - y1)
-    tip = _SVG_TIPS.get(lt.tip) if lt and lt.tip and length > end_gap + 12 else None
     parts = []
-    if tip:
-        ux, uy = (x2 - x1) / length, (y2 - y1) / length
-        x2, y2 = x2 - ux * end_gap, y2 - uy * end_gap
+    ends = 2 if lt and lt.tip and lt.start_tip else 1
+    room = ends * (end_gap + 12)  # enough line left for the tips to show
+
+    def tip_at(x: float, y: float, ux: float, uy: float, name: str | None) -> tuple[float, float]:
+        """Draw the tip *name* pointing at (x, y) along (ux, uy); where the line now ends."""
+        tip = _SVG_TIPS.get(name) if name and length > room else None
+        if tip is None:
+            return x, y
+        x, y = x - ux * end_gap, y - uy * end_gap
         outline, filled, back = tip
         angle = math.degrees(math.atan2(uy, ux))
         fill = color if filled else "none"
         parts.append(
-            f'<path d="{outline}" transform="translate({x2:.1f} {y2:.1f}) rotate({angle:.1f})" '
+            f'<path d="{outline}" transform="translate({x:.1f} {y:.1f}) rotate({angle:.1f})" '
             f'fill="{fill}" stroke="{color}" stroke-width="{width:g}" stroke-linejoin="round" '
             'stroke-linecap="round"/>'
         )
-        x2, y2 = x2 - ux * back, y2 - uy * back
+        return x - ux * back, y - uy * back
+
+    if length:
+        ux, uy = (x2 - x1) / length, (y2 - y1) / length
+        x2, y2 = tip_at(x2, y2, ux, uy, lt.tip if lt else None)
+        x1, y1 = tip_at(x1, y1, -ux, -uy, lt.start_tip if lt else None)
     dashes = stroke_dashes(lt.line_style) if lt else []
     dash = (
         ' stroke-linecap="round" stroke-dasharray="'
@@ -683,6 +694,7 @@ def _write_graphml(bundle: Bundle, path: Path) -> None:
         ("color", "edge"),
         ("line_style", "edge"),
         ("arrow", "edge"),
+        ("start_arrow", "edge"),
     ]
     for name, scope in keys:
         ET.SubElement(
@@ -719,6 +731,7 @@ def _write_graphml(bundle: Bundle, path: Path) -> None:
             ("color", lt.color if lt else "#8a8a8a"),
             ("line_style", lt.line_style if lt else "solid"),
             ("arrow", (lt.tip or "none") if lt else "triangle"),
+            ("start_arrow", (lt.start_tip or "none") if lt else "none"),
         ):
             ET.SubElement(edge, f"{{{ns}}}data", key=f"edge_{name}").text = value
     ET.ElementTree(root).write(path, encoding="utf-8", xml_declaration=True)
@@ -763,7 +776,12 @@ def _dot(bundle: Bundle, title: str) -> str:
         ]
         if lt is not None:
             attrs.append(f"style={_DOT_STYLES.get(lt.line_style, 'dashed')}")
-            attrs.append(f"arrowhead={_DOT_ARROWS[lt.tip]}" if lt.tip else "dir=none")
+            if lt.start_tip:  # tips at both ends (also an undirected type's)
+                attrs.append("dir=both")
+                attrs.append(f"arrowtail={_DOT_ARROWS[lt.start_tip]}")
+                attrs.append(f"arrowhead={_DOT_ARROWS[lt.tip]}" if lt.tip else "arrowhead=none")
+            else:
+                attrs.append(f"arrowhead={_DOT_ARROWS[lt.tip]}" if lt.tip else "dir=none")
         lines.append(f"  {_dot_str(l.src)} -> {_dot_str(l.dst)} [{', '.join(attrs)}];")
     lines.append("}")
     return "\n".join(lines) + "\n"

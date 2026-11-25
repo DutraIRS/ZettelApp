@@ -115,22 +115,33 @@ def draw_sample(
     width: float = 1.8,
     size: float = ARROW_SIZE,
     scale: float = 1.0,
+    start_arrow: str | None = None,
 ) -> None:
-    """A straight link from *start* to *end* with its tip (if any) touching *end*."""
+    """A straight link from *start* to *end* with its tips (if any) touching the ends."""
     dx, dy = end.x() - start.x(), end.y() - start.y()
     length = (dx * dx + dy * dy) ** 0.5 or 1.0
     ux, uy = dx / length, dy / length
     tip = tip_shape(end, ux, uy, arrow, size) if arrow else None
+    back = tip_shape(start, -ux, -uy, start_arrow, size) if start_arrow else None
     stop = tip.length if tip else 0.0
+    begin = back.length if back else 0.0
     painter.setBrush(Qt.BrushStyle.NoBrush)
     painter.setPen(link_pen(color, width, line_style, scale))
-    painter.drawLine(start, QPointF(end.x() - ux * stop, end.y() - uy * stop))
-    if tip is not None:
-        draw_tip(painter, tip.path, color, width, tip.filled)
+    painter.drawLine(
+        QPointF(start.x() + ux * begin, start.y() + uy * begin),
+        QPointF(end.x() - ux * stop, end.y() - uy * stop),
+    )
+    for shape in (tip, back):
+        if shape is not None:
+            draw_tip(painter, shape.path, color, width, shape.filled)
 
 
 def sample_icon(
-    color: QColor, line_style: str, arrow: str | None, size: QSize = LIST_ICON
+    color: QColor,
+    line_style: str,
+    arrow: str | None,
+    size: QSize = LIST_ICON,
+    start_arrow: str | None = None,
 ) -> QIcon:
     """A small picture of a line, drawn at twice the size for sharp high-DPI screens."""
     w, h = size.width(), size.height()
@@ -151,6 +162,7 @@ def sample_icon(
         width=1.6 if small else 1.8,
         size=min(ARROW_SIZE, h * 0.42) * (0.8 if small else 1.0),
         scale=0.55 if small else 1.0,
+        start_arrow=start_arrow,
     )
     p.end()
     return QIcon(px)
@@ -162,4 +174,4 @@ def type_color(lt: LinkType) -> QColor:
 
 def type_icon(lt: LinkType, size: QSize = LIST_ICON) -> QIcon:
     """The link type's colour, line style and (if directed) arrow tip."""
-    return sample_icon(type_color(lt), lt.line_style, lt.tip, size)
+    return sample_icon(type_color(lt), lt.line_style, lt.tip, size, lt.start_tip)

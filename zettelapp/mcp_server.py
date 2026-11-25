@@ -558,6 +558,7 @@ class ZettelMcpServer:
                     "color": t.color,
                     "line_style": t.line_style,
                     "arrow": t.tip or "none",
+                    "start_arrow": t.start_tip or "none",
                 }
                 for t in self.vault.link_types()
             ]

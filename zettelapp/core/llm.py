@@ -20,8 +20,6 @@ from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
 from urllib.parse import urlsplit
 
-import numpy as np
-
 from zettelapp.core.models import Note
 from zettelapp.core.similarity import SemanticIndex
 from zettelapp.core.textutil import tokenize
@@ -177,23 +175,55 @@ def retrieve_context(
     chosen = [i for i in dict.fromkeys(focus_ids) if i in by_id]
     wanted = max(int(limit), len(chosen))
     if len(chosen) < wanted and live:
-        index = SemanticIndex(
-            {n.id: tokenize(n.title) * 2 + tokenize(n.body) + list(n.tags) for n in live}
-        )
-        query = index.vectorize(tokenize(question))
-        scores = index.cosine_all(query)
-        lsa = index.lsa_all(query)
-        if lsa is not None:
-            scores = 0.5 * scores + 0.5 * lsa
-        for i in np.argsort(-scores):
-            if len(chosen) >= wanted or scores[i] <= 0:
+        scores = relevance(live, question)
+        for note_id in sorted(scores, key=lambda i: -scores[i]):
+            if len(chosen) >= wanted or scores[note_id] <= 0:
                 break
-            if index.ids[i] not in chosen:
-                chosen.append(index.ids[i])
+            if note_id not in chosen:
+                chosen.append(note_id)
+    return pack_context(live, chosen)
 
+
+def scope_context(
+    notes: list[Note], question: str, distances: dict[str, int] | None = None
+) -> list[ContextNote]:
+    """Every note in *notes*, not only the best matches: the nearest first when *distances*
+    (links away from the open note) are given, then the most relevant to *question*. As many
+    as fit in MAX_CONTEXT_CHARS are sent."""
+    live = [n for n in notes if not n.deleted]
+    scores = relevance(live, question) if live else {}
+    far = len(live) + 1
+
+    def order(note: Note) -> tuple:
+        return ((distances or {}).get(note.id, far), -scores.get(note.id, 0.0), note.title)
+
+    return pack_context(live, [n.id for n in sorted(live, key=order)])
+
+
+def relevance(notes: list[Note], question: str) -> dict[str, float]:
+    """How well each note matches *question*: TF-IDF cosine, averaged with LSA when the
+    collection is big enough for it."""
+    index = SemanticIndex(
+        {n.id: tokenize(n.title) * 2 + tokenize(n.body) + list(n.tags) for n in notes}
+    )
+    query = index.vectorize(tokenize(question))
+    scores = index.cosine_all(query)
+    lsa = index.lsa_all(query)
+    if lsa is not None:
+        scores = 0.5 * scores + 0.5 * lsa
+    return {note_id: float(scores[i]) for i, note_id in enumerate(index.ids)}
+
+
+def pack_context(notes: list[Note], chosen: list[str]) -> list[ContextNote]:
+    """The *chosen* notes, in order, as they will be sent: the total size is capped at
+    MAX_CONTEXT_CHARS, a note cut to fit ends with a visible marker, and notes that do not
+    fit are left out."""
+    by_id = {n.id: n for n in notes}
     context: list[ContextNote] = []
     used = 0
     for note_id in chosen:
+        if note_id not in by_id:
+            continue
         n = by_id[note_id]
         body = n.body
         room = MAX_CONTEXT_CHARS - used

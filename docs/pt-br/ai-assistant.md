@@ -55,6 +55,8 @@ arquivos de configuração.
 Digite uma pergunta e pressione **Perguntar** (Ctrl+Enter). Escolha onde procurar em **Buscar em**: a coleção
 inteira, a nota aberta e suas notas ligadas ou as notas com uma tag. Escolha **quantas notas** enviar.
 
+**Enviar** escolhe o que vai com a pergunta: *As notas mais relevantes* (o número na caixa) ou *Todas as notas do escopo, as mais próximas primeiro*. Com *Nota atual e notas ligadas*, a segunda opção envia as vizinhas da nota aberta até a profundidade escolhida (a vizinhança de *k* passos), as mais próximas primeiro, tantas quantas couberem. Marque **Revisar antes de enviar** para ver a lista de notas antes e desmarcar as que quiser deixar de fora.
+
 O que acontece:
 
 1. O ZettelApp encontra as notas mais relevantes **no seu computador**, usando a mesma similaridade TF-IDF e LSA

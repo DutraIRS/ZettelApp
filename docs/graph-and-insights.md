@@ -76,6 +76,22 @@ neutral grey "Other" colour. **Link types** use a second cue besides colour: eac
 Choose them in *Tools ▸ Options ▸ Link types* (see [Your own link types](notes-and-links.md#your-own-link-types)).
 The legend always names everything, so nothing depends on colour alone.
 
+### Diffusion
+
+Select a note (or open one in the editor) and click **Diffusion** to watch its influence spread
+through the network in a short loop of five steps. Choose how it spreads:
+
+- **By link distance**: one link further at each step, fading evenly with distance.
+- **By links weighted by similarity**: a random walk with restart. Influence flows along links in
+  proportion to how alike the linked notes are (cosine similarity of their LSA embeddings), and a
+  share returns to the note it started from, so notes that are both close and alike end up with
+  the most (the note's personalised PageRank).
+
+Notes go from deep red (the most influence) through orange to yellow (a little; in dark mode, from
+bright orange to brown); notes not reached yet turn grey and the group areas fade back. The legend
+explains the colours. Click **Stop**, change the graph or leave the page to go back to the usual
+colours.
+
 ## Insights
 
 The **Insights** page (Ctrl+3) summarises your vault:
@@ -85,6 +101,7 @@ The **Insights** page (Ctrl+3) summarises your vault:
 - **Notes added per month** over the last 12 months.
 - **Top tags**, **Links by type** and the **Most connected notes** (click a bar to open the note).
 - **Topics**: k-means clusters of your notes with their keywords and sizes.
+- **Network**: how the links are spread and which notes hold the network together. *Connected parts* (and the share of notes in the largest), the *clustering* coefficient (how often a note's neighbours link each other) and transitivity, a *power-law* exponent α for the degree distribution (fitted by maximum likelihood once at least 50 notes form its tail; the distance says how close the fit is, 0 being perfect), the *degree distribution* itself, *bridges* (betweenness: the share of shortest paths between other notes through each note) and *central notes* (PageRank). Click a bar to open the note.
 
 Every chart has a **Show as table** button (the list icon) with the same numbers as a table, and bars
 show their value on hover.

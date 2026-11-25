@@ -28,7 +28,13 @@ from PySide6.QtWidgets import (
 )
 
 from zettelapp import settings
-from zettelapp.core.cluster import cluster_notes
+from zettelapp.core.cluster import cluster_notes, embed_notes
+from zettelapp.core.diffusion import (
+    distance_frames,
+    sample_frames,
+    similarity_weights,
+    weighted_frames,
+)
 from zettelapp.core.graph import force_layout, merge_reciprocal, subgraph
 from zettelapp.i18n import _, n_
 from zettelapp.ui import icons, theme
@@ -50,6 +56,7 @@ from zettelapp.ui.workers import run_task
 # Layouts and clusterings kept for switching views quickly. Editing a note changes their keys
 # (the vault's generation), so without a limit they would pile up for the whole session.
 CACHE_SIZE = 8
+DIFFUSION_FRAME_MS = 700  # one of the loop's five frames
 
 
 def _remember(cache: dict, key: tuple, value) -> None:
@@ -217,6 +224,36 @@ class GraphPage(QWidget):
             _("Choose which tags the graph shows and which ones form groups")
         )
         group(self.group_box, self.labels_box, self.types_button, self.tags_button)
+        self.diffuse_button = QToolButton()
+        self.diffuse_button.setText(_("Diffusion"))
+        self.diffuse_button.setIcon(icons.icon("play"))
+        self.diffuse_button.setToolButtonStyle(Qt.ToolButtonStyle.ToolButtonTextBesideIcon)
+        self.diffuse_button.setCheckable(True)
+        self.diffuse_button.setToolTip(
+            _(
+                "Watch the selected note's influence spread through the network (the note "
+                "open in the editor if none is selected)"
+            )
+        )
+        self.diffuse_button.toggled.connect(self._diffusion_toggled)
+        self.diffuse_measure = QComboBox()
+        self.diffuse_measure.setAccessibleName(_("Diffusion measure"))
+        self.diffuse_measure.addItem(_("By link distance"), "distance")
+        self.diffuse_measure.addItem(_("By links weighted by similarity"), "similarity")
+        self.diffuse_measure.setToolTip(
+            _(
+                "Link distance: one link further at each step. Weighted by similarity: "
+                "influence flows more along links between notes alike in meaning."
+            )
+        )
+        self.diffuse_measure.currentIndexChanged.connect(self._restart_diffusion)
+        group(self.diffuse_button, self.diffuse_measure)
+        self._diffusion: list[dict[str, float]] = []
+        self._diffusion_step = 0
+        self._diffusion_request = 0
+        self._diffusion_timer = QTimer(
+            self, interval=DIFFUSION_FRAME_MS, timeout=self._next_diffusion_frame
+        )
         self.search = SearchBox(_("Find in graph"))
         self.search.setFixedWidth(200)
         self.search.returnPressed.connect(self._find)
@@ -266,7 +303,7 @@ class GraphPage(QWidget):
         legend.setFixedWidth(250)
         legend_layout = QVBoxLayout(legend)
         legend_layout.setContentsMargins(12, 12, 12, 12)
-        self.legend_title = label(_("Groups"), "section")
+        self.legend_title = label(_("Groups"), "section", wrap=True)  # a long note title wraps
         legend_layout.addWidget(self.legend_title)
         self.legend = QListWidget()
         self.legend.setAccessibleName(_("Groups legend"))
@@ -302,6 +339,7 @@ class GraphPage(QWidget):
         return self.view3d if self.dim_group.checkedId() == 1 else self.view2d
 
     def _dims_changed(self, index: int) -> None:
+        self.stop_diffusion()  # before the switch: it clears the view it played in
         self.stack.setCurrentIndex(index)
         self.spin.setVisible(index == 1)
         if index == 0:
@@ -412,10 +450,126 @@ class GraphPage(QWidget):
         settings.put(key, sorted(chosen))
         self._filter_timer.start()
 
+    # --- diffusion ------------------------------------------------------------------------
+
+    def _diffusion_toggled(self, on: bool) -> None:
+        if on:
+            self._start_diffusion()
+        else:
+            self.stop_diffusion()
+
+    def _restart_diffusion(self) -> None:
+        if self.diffuse_button.isChecked():
+            self._start_diffusion()
+
+    def stop_diffusion(self) -> None:
+        """Back to the usual colours (also when the graph is redrawn or left)."""
+        self._diffusion_request += 1
+        self._diffusion_timer.stop()
+        self._diffusion = []
+        if self.diffuse_button.isChecked():
+            self.diffuse_button.blockSignals(True)
+            self.diffuse_button.setChecked(False)
+            self.diffuse_button.blockSignals(False)
+        self.diffuse_button.setIcon(icons.icon("play"))
+        self.diffuse_button.setText(_("Diffusion"))
+        view = self._view()
+        if view.data.heat is not None:
+            view.data.heat = None
+            self._repaint(groups=True)
+            vault = self.window.vault
+            self._fill_legend(view.data, vault.link_types() if vault is not None else [])
+
+    def _start_diffusion(self) -> None:
+        view = self._view()
+        data = view.data
+        source = view.selected if view.selected in data.titles else None
+        source = source or (self.focus_id if self.focus_id in data.titles else None)
+        if source is None or self.window.vault is None:
+            self.stop_diffusion()
+            self.status.emit(_("Select a note in the graph to start a diffusion from."))
+            return
+        measure = self.diffuse_measure.currentData()
+        links = list(data.links)
+        notes = []
+        if measure == "similarity":
+            notes = [n for n in map(self.window.vault.get_note, data.ids) if n is not None]
+        self._diffusion_request += 1
+        request = self._diffusion_request
+
+        def work():
+            if measure == "distance":
+                return sample_frames(distance_frames(source, links))
+            index, x = embed_notes(notes)
+            vectors = {note_id: x[index.position[note_id]] for note_id in index.ids}
+            return sample_frames(weighted_frames(source, similarity_weights(links, vectors)))
+
+        def done(frames) -> None:
+            if request != self._diffusion_request or view is not self._view():
+                return
+            self._diffusion = frames
+            self._diffusion_step = 0
+            self.diffuse_button.setIcon(icons.icon("stop"))
+            self.diffuse_button.setText(_("Stop"))
+            self._show_diffusion_legend(data.titles.get(source, ""))
+            self._next_diffusion_frame()
+            self._repaint(groups=True)  # the group areas step back while it plays
+            self._diffusion_timer.start()
+
+        run_task(work, on_done=done, on_error=lambda _msg: self.stop_diffusion())
+
+    def _next_diffusion_frame(self) -> None:
+        if not self._diffusion:
+            return
+        self._view().data.heat = self._diffusion[self._diffusion_step % len(self._diffusion)]
+        self._diffusion_step += 1
+        self._repaint()
+
+    def _repaint(self, groups: bool = False) -> None:
+        view = self._view()
+        if isinstance(view, Graph2DView):
+            if groups:
+                view.schedule_edges()  # redraws the group areas too
+            view.scene().update()
+        else:
+            view.update()
+
+    def _show_diffusion_legend(self, title: str) -> None:
+        data = self._view().data
+        short = title if len(title) <= 40 else title[:39] + "…"
+        self.legend_title.setText(_("Diffusion from “{title}”").format(title=short))
+        self.legend.clear()
+        saved = data.heat
+        for heat, text in (
+            ({"x": 1.0}, _("The most influence")),
+            ({"x": 0.4}, _("Some influence")),
+            ({"x": 0.05}, _("A little")),
+            ({}, _("Not reached yet")),
+        ):
+            data.heat = heat
+            item = QListWidgetItem(_dot(data.node_color("x")), text)
+            item.setData(Qt.ItemDataRole.UserRole, None)
+            self.legend.addItem(item)
+        data.heat = saved
+        self.quality.setText(
+            _("The influence moves one link further at each step, then starts again.")
+            if self.diffuse_measure.currentData() == "distance"
+            else _(
+                "A random walk with restart: influence flows along links in proportion to "
+                "how alike the linked notes are (LSA embeddings), and a share returns to the "
+                "start."
+            )
+        )
+
+    def hideEvent(self, event) -> None:  # noqa: N802
+        self.stop_diffusion()
+        super().hideEvent(event)
+
     def refresh(self) -> None:
         vault = self.window.vault
         if vault is None or not self.isVisible():
             return
+        self.stop_diffusion()
         types = vault.link_types()
         type_map = {lt.id: lt for lt in types}
         # Notes with a hidden tag are left out, except the one a local graph is about.
@@ -600,6 +754,8 @@ class GraphPage(QWidget):
 
     def _legend_clicked(self, item: QListWidgetItem) -> None:
         group = item.data(Qt.ItemDataRole.UserRole)
+        if group is None:  # the diffusion's key
+            return
         view = self._view()
         members = [n for n, g in view.data.group_of.items() if g == group] if group != -1 else []
         if isinstance(view, Graph2DView):

@@ -2,13 +2,15 @@
 
 from __future__ import annotations
 
+import re
 from collections.abc import Callable
 from pathlib import Path
 
-from PySide6.QtCore import QPoint, QPointF, Qt, QUrl, Signal
+from PySide6.QtCore import QPoint, QPointF, Qt, QTimer, QUrl, Signal
 from PySide6.QtGui import QDesktopServices, QFontInfo, QImage, QTextDocument
 from PySide6.QtWidgets import QTextBrowser
 
+from zettelapp import settings
 from zettelapp.core.render import (
     ASSET_SCHEME,
     MATH_DISPLAY_SCHEME,
@@ -39,26 +41,28 @@ MARGIN = 8  # px around the text beside the editor, in Review and in Ask
 READING_MARGIN = 24  # px at least, either side of the reading column
 
 
-def preview_css(px: int = 14) -> str:
+def preview_css(px: int = 14, line_spacing: int = 125, paragraph_spacing: int = 75) -> str:
     """The preview's style for a body font *px* pixels high: one spacing step for every block.
 
     Paragraphs, lists, quotes and code all leave one step below them; a heading leaves two
-    above (it starts a section) and half a step below (it belongs to what follows).
+    above (it starts a section) and half a step below (it belongs to what follows). The step
+    is *paragraph_spacing* percent of the text size, and lines are *line_spacing* percent apart.
     """
     t = theme.current()
     italic = ", ".join(f"'{family}'" for family in theme.ITALIC_FONTS)
-    step = round(px * 0.75)
+    step = round(px * paragraph_spacing / 100)
     block = f"margin: 0 0 {step}px 0;"
+    lines = f"line-height: {line_spacing}%;"
     return f"""
 body {{ color: {t.text}; font-size: {px}px; }}
 h1 {{ font-size: {round(px * 1.6)}px; font-weight: 600; margin: {step * 2}px 0 {step // 2}px 0; }}
 h2 {{ font-size: {round(px * 1.3)}px; font-weight: 600; margin: {step * 2}px 0 {step // 2}px 0; }}
 h3, h4, h5, h6 {{ font-size: {round(px * 1.1)}px; font-weight: 600;
     margin: {round(step * 1.5)}px 0 {step // 2}px 0; }}
-p {{ {block} line-height: 125%; }}
+p {{ {block} {lines} }}
 p.picture {{ line-height: 100%; }}
 ul, ol {{ {block} }}
-li {{ margin: 0 0 {step // 3}px 0; line-height: 125%; }}
+li {{ margin: 0 0 {step // 3}px 0; {lines} }}
 em, i {{ font-family: {italic}; }}
 a {{ color: {t.link}; text-decoration: none; }}
 a.new-note {{ color: {t.text_muted}; text-decoration: underline; }}
@@ -74,6 +78,12 @@ th {{ font-weight: 600; text-align: left; }}
 td, th {{ padding: 3px 8px; border: 1px solid {t.border}; }}
 .missing-image {{ color: {t.text_muted}; }}
 """
+
+
+def justified(html: str) -> str:
+    """*html* with its paragraphs and list items justified. Qt's style sheets don't know
+    text-align: justify, only the align attribute; a centred formula keeps its own."""
+    return re.sub(r"<(p|li)>", r'<\1 align="justify">', html)
 
 
 class NotePreview(QTextBrowser):
@@ -96,6 +106,12 @@ class NotePreview(QTextBrowser):
         self.highlighted.connect(self._on_hover)
         self.reading = False
         self.document().setDocumentMargin(MARGIN)
+        self._text: str | None = None  # the Markdown shown, to lay pictures out again
+        self._pictures_for: int | None = None  # the column width the pictures were sized for
+        # Pictures are sized when loaded; when the column's width changes (the window resized,
+        # Reading view's wider column) they are loaded again for the new width.
+        self._resize_pictures = QTimer(self, singleShot=True, interval=120)
+        self._resize_pictures.timeout.connect(self._rerender)
 
     def set_font_size(self, size: float) -> None:
         """Read in the editor's font size (points); shown from the next render."""
@@ -106,12 +122,34 @@ class NotePreview(QTextBrowser):
         self.reading = reading
         self._place_column()
 
-    def _place_column(self) -> None:
+    def pixel_size(self) -> int:
+        """The text's size in pixels. Without the font itself (no fonts found, as on Qt's
+        offscreen platform on Windows) Qt answers -1: then it is worked out from the points."""
+        size = QFontInfo(self.font()).pixelSize()
+        if size > 0:
+            return size
+        points = self.font().pointSizeF()
+        return max(1, round((points if points > 0 else 10) * self.logicalDpiY() / 72))
+
+    def _side(self) -> int:
+        """The space either side of the text: the reading column's margins, or MARGIN."""
+        if not self.reading:
+            return MARGIN
+        line = READING_LINE * self.pixel_size()
+        return max(READING_MARGIN, (self.viewport().width() - line) // 2)
+
+    def column_width(self) -> int:
+        """The width the text is laid out in, between the side margins, with room kept for the
+        vertical scroll bar so that it showing up doesn't change the width."""
         width = self.viewport().width()
-        side = MARGIN
-        if self.reading:
-            line = READING_LINE * QFontInfo(self.font()).pixelSize()
-            side = max(READING_MARGIN, (width - line) // 2)
+        bar = self.verticalScrollBar()
+        if not bar.isVisible():
+            width -= bar.sizeHint().width()
+        margin = round(self.document().documentMargin())
+        return width - 2 * (self._side() + margin)
+
+    def _place_column(self) -> None:
+        side = self._side()
         root = self.document().rootFrame()
         frame = root.frameFormat()
         if (frame.leftMargin(), frame.rightMargin()) != (side, side):
@@ -123,6 +161,12 @@ class NotePreview(QTextBrowser):
     def resizeEvent(self, event) -> None:  # noqa: N802 - Qt API
         super().resizeEvent(event)
         self._place_column()
+        if self._pictures_for is not None and self.column_width() != self._pictures_for:
+            self._resize_pictures.start()
+
+    def _rerender(self) -> None:
+        if self._text is not None and self.column_width() != self._pictures_for:
+            self.show_markdown(self._text)
 
     def set_renderer(self, renderer: NoteRenderer) -> None:
         self.renderer = renderer
@@ -131,8 +175,20 @@ class NotePreview(QTextBrowser):
         if self.renderer is None:
             return
         scroll = self.verticalScrollBar().value()
-        self.document().setDefaultStyleSheet(preview_css(QFontInfo(self.font()).pixelSize()))
-        self.setHtml(self.renderer.render(text))
+        self._text = text
+        self._pictures_for = None
+        self.document().setDefaultStyleSheet(
+            preview_css(
+                self.pixel_size(),
+                settings.get(settings.PREVIEW_LINE_SPACING),
+                settings.get(settings.PREVIEW_PARAGRAPH_SPACING),
+            )
+        )
+        self.renderer.set_line_breaks(settings.get(settings.PREVIEW_LINE_BREAKS))
+        html = self.renderer.render(text)
+        if settings.get(settings.PREVIEW_ALIGN) == "justify":
+            html = justified(html)
+        self.setHtml(html)
         self._place_column()
         self.verticalScrollBar().setValue(scroll)
 
@@ -156,7 +212,7 @@ class NotePreview(QTextBrowser):
         latex = mathrender.decode(text[len(MATH_DISPLAY_SCHEME if display else MATH_SCHEME) :])
         if not latex:
             return None
-        size = QFontInfo(self.font()).pixelSize()
+        size = self.pixel_size()
         color = theme.current().text
         ratio = max(1.0, self.devicePixelRatioF())
         return mathrender.render(
@@ -173,7 +229,10 @@ class NotePreview(QTextBrowser):
                 path = self.asset_path(text[len(ASSET_SCHEME) :])
                 if path is not None:
                     image = QImage(str(path))
-                    max_width = max(200, self.viewport().width() - 24)
+                    # A picture fits the text's column: wider, it stuck out of the reading
+                    # column and the view scrolled sideways.
+                    self._pictures_for = self.column_width()
+                    max_width = max(64, self._pictures_for)
                     if image.width() > max_width:
                         image = image.scaledToWidth(
                             max_width, Qt.TransformationMode.SmoothTransformation

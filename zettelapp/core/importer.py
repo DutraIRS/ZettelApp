@@ -24,6 +24,7 @@ from zettelapp.core.enex import enml_to_markdown, read_enex
 from zettelapp.core.models import (
     ARROW_TIPS,
     LINE_STYLES,
+    START_TIPS,
     TEXT_ORIGINS,
     Flashcard,
     LinkType,
@@ -184,6 +185,7 @@ def _validate_link_style(raw: dict) -> None:
     for key, allowed, message in (
         ("line_style", LINE_STYLES, _("Link type “{name}” has an unknown line style: {value}")),
         ("arrow", ARROW_TIPS, _("Link type “{name}” has an unknown arrow tip: {value}")),
+        ("start_arrow", START_TIPS, _("Link type “{name}” has an unknown arrow tip: {value}")),
     ):
         value = raw.get(key)
         if value is not None and (not isinstance(value, str) or value not in allowed):
@@ -245,6 +247,8 @@ def _import_data(
                 bool(raw.get("directed", True)),
                 line_style=line_style,
                 arrow=raw.get("arrow") or (existing.arrow if existing else "triangle"),
+                start_arrow=raw.get("start_arrow")
+                or (existing.start_arrow if existing else "none"),
             )
         )
         existing_types[imported.id] = imported
@@ -426,15 +430,29 @@ def _import_markdown_files(
             or when.astimezone().isoformat(timespec="seconds"),
         )
     # How other files may name each note: its file name (with or without Notion's ID) and the
-    # aliases in its front matter.
+    # aliases in its front matter. Where two files share a name, a bare link goes to the one
+    # nearest the root, as in Obsidian; a link by path ([[Folder/Note]]) names either exactly.
     stems: dict[str, Note] = {}
-    for path, meta, _body, _title in parsed:
+    paths: dict[str, Note] = {}
+    for path, meta, _body, _title in sorted(parsed, key=lambda p: (len(p[0].parts), str(p[0]))):
+        paths[fold(path.relative_to(root).with_suffix("").as_posix())] = created[str(path)]
         note = created[str(path)]
         aliases = meta.get("aliases") or meta.get("alias") or []
         aliases = [aliases] if isinstance(aliases, str) else aliases
         for name in (path.stem, _NOTION_ID_RE.sub("", path.stem), *aliases):
             if isinstance(name, str) and name.strip():
                 stems.setdefault(fold(name.strip()), note)
+
+    # A title two notes share (two imported files, or one already in the vault) would link to
+    # either: such links name the note by its id, with the title as the text shown.
+    title_count: dict[str, int] = {}
+    for existing in vault.all_notes():
+        title_count[fold(existing.title)] = title_count.get(fold(existing.title), 0) + 1
+
+    def wikilink(linked: Note, alias: str | None) -> str:
+        if title_count.get(fold(linked.title), 0) > 1 or not linked.title:
+            return f"[[{linked.id}|{alias or linked.title or linked.id}]]"
+        return f"[[{linked.title}{'|' + alias if alias else ''}]]"
 
     def image_ref(source: Path, target: str) -> str | None:
         target = target.split("#")[0].split("?")[0]
@@ -463,15 +481,19 @@ def _import_markdown_files(
         note = created[str(path)]
 
         def relink(m: re.Match) -> str:
-            target = m.group("target").strip()
-            linked = stems.get(
-                fold(Path(target).stem if target.lower().endswith(".md") else target)
+            # [[Note^block]] links to a block of the note: ZettelApp links to the note.
+            target = m.group("target").split("^")[0].strip()
+            if target.lower().endswith(".md"):
+                target = target[:-3]
+            name = target.rsplit("/", 1)[-1].strip()
+            linked = (paths.get(fold(target.strip("/"))) if "/" in target else None) or stems.get(
+                fold(name)
             )
             if linked is None:
                 return m.group(0)
             prefix = f"{m.group('type')}:: " if m.group("type") else ""
-            alias = m.group("alias") or (target if fold(target) != fold(linked.title) else None)
-            return f"{prefix}[[{linked.title or linked.id}{'|' + alias if alias else ''}]]"
+            alias = m.group("alias") or (name if fold(name) != fold(linked.title) else None)
+            return prefix + wikilink(linked, alias)
 
         def embed(m: re.Match) -> str:
             name = image_ref(path, m.group(1))
@@ -492,7 +514,7 @@ def _import_markdown_files(
                 return m.group(0)
             text = m.group(1).strip()
             alias = text if text and fold(text) != fold(linked.title) else None
-            return f"[[{linked.title or linked.id}{'|' + alias if alias else ''}]]"
+            return wikilink(linked, alias)
 
         body = _EMBED_RE.sub(embed, body)
         body = _MD_IMAGE_RE.sub(md_image, body)

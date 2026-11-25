@@ -167,6 +167,7 @@ zettelapp/
     search.py      hybrid search for the note list; adaptive.py: learning from feedback
     embeddings.py  optional semantic search: model download, vectors, inference
     cluster.py     k-means, hierarchical clustering, silhouette, cluster keywords
+    network.py     degree distribution, power-law fit, betweenness, PageRank, clustering
     graph.py       subgraphs and force-directed layout (2D/3D)
     render.py      safe Markdown rendering (notes, exports, Anki)
     export.py      export formats; importer.py: imports

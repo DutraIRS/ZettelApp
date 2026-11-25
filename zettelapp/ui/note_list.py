@@ -311,7 +311,7 @@ class NoteListPanel(QWidget):
             (_("Title"), "title"),
             (_("Most linked"), "links"),
             (_("Closest in meaning to the open note"), "meaning"),
-            (_("Fewest links from the open note"), "distance"),
+            (_("Fewest links away from the open note"), "distance"),
         ):
             if key == "meaning":
                 sort_menu.addSeparator()

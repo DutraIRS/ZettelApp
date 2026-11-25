@@ -155,10 +155,11 @@ class Graph3DView(QWidget):
             label_metrics = QFontMetricsF(label_font)
             taken: list[QRectF] = []  # group names already placed, so none covers another
             for group, _idx, d, region in self._group_regions(screen, depth):
+                diffusing = self.data.heat is not None  # then the groups step back
                 fill = QColor(self.data.group_color(group))
-                fill.setAlphaF(0.18)
+                fill.setAlphaF(0.06 if diffusing else 0.18)
                 stroke = QColor(self.data.group_color(group))
-                stroke.setAlphaF(0.55)
+                stroke.setAlphaF(0.2 if diffusing else 0.55)
                 painter.setPen(QPen(stroke, 1.4))
                 painter.setBrush(fill)
                 painter.drawPath(region)
@@ -200,6 +201,7 @@ class Graph3DView(QWidget):
             color.setAlphaF(alpha * (0.35 if focus is not None and not highlighted else 1.0))
             radius = node_radius(self.data.degree.get(link.dst, 0)) * (0.55 + 0.6 * depth[b])
             tip = self.data.link_tip(link) if highlighted else None
+            start = self.data.link_start_tip(link) if highlighted else None
             shape = edge_shape(
                 link,
                 QPointF(*screen[a]),
@@ -208,12 +210,17 @@ class Graph3DView(QWidget):
                 radius,
                 tip is not None,
                 tip or "triangle",
+                start_arrow=start,
+                source_radius=node_radius(self.data.degree.get(link.src, 0))
+                * (0.55 + 0.6 * depth[a]),
             )
             width = 2.4 if highlighted else 1.0 + d
             painter.setPen(link_pen(color, width, self.data.link_style(link)))
             painter.drawPath(shape.path)
             if shape.arrow is not None:
                 draw_tip(painter, shape.arrow, color, width, shape.filled)
+            if shape.start is not None:
+                draw_tip(painter, shape.start, color, width, shape.start_filled)
 
         order = np.argsort(depth)
         by_degree = sorted(self.data.ids, key=lambda i: -self.data.degree.get(i, 0))
@@ -230,11 +237,20 @@ class Graph3DView(QWidget):
                 * (0.55 + 0.6 * d)
                 * min(1.6, self.zoom_level**0.5)
             )
-            color = QColor(self.data.group_color(self.data.group_of.get(node)))
-            dim = focus is not None and node != focus and node not in neighbors
-            color.setAlphaF((0.35 + 0.65 * d) * (0.3 if dim else 1.0))
-            painter.setPen(QPen(t.q("surface"), 1.5))
+            color = QColor(self.data.node_color(node))
+            heat = self.data.heat_of(node)
+            dim = (focus is not None and node != focus and node not in neighbors) or heat == 0
+            alpha = 0.9 + 0.1 * d if heat else 0.35 + 0.65 * d  # reached notes stay vivid
+            color.setAlphaF(alpha * (0.3 if dim else 1.0))
             p = QPointF(*screen[i])
+            if heat:  # a glow that grows with the note's share of the influence
+                glow = QColor(color)
+                glow.setAlphaF(0.35 * (0.35 + 0.65 * d))
+                painter.setPen(Qt.PenStyle.NoPen)
+                painter.setBrush(glow)
+                reach = r + 2 + 9.0 * heat**0.5
+                painter.drawEllipse(p, reach, reach)
+            painter.setPen(QPen(t.q("surface"), 1.5))
             # Lit from the upper left, so each note reads as a sphere, not a flat disc.
             shade = QRadialGradient(p.x() - r * 0.35, p.y() - r * 0.4, r * 1.35)
             shade.setColorAt(0.0, color.lighter(165))

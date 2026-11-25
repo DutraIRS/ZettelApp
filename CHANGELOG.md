@@ -6,6 +6,76 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-11-25
+
+### Changed
+
+- **One top row on Windows** (roadmap item 10): the app's icon, the menus, the window's title and
+  the minimise, maximise and close buttons share one row in the theme's colours, instead of
+  Windows' title bar above the menu bar. The window still snaps, resizes from every edge, keeps its
+  shadow and rounded corners, and maximises on a double click. Linux keeps the desktop's own title
+  bar.
+- **Notes in the rail (or Ctrl+1) brings a folded note list back**: there is nothing else to see
+  on that page. Opening a note from the graph or elsewhere still leaves the list as it was.
+
+### Added
+
+- **Diffusion in the graph** (*Graph ▸ Diffusion*): select a note and watch its influence spread
+  through the network in a five-step loop, by link distance (one link further at each step) or by
+  links weighted by similarity (a random walk with restart that favours links between notes alike
+  in meaning). Notes run from deep red to yellow as their share falls, unreached notes turn grey,
+  and the legend explains the colours; in 2D and 3D.
+- **Preview and Reading view options** (*Options ▸ General*): whether a single line break starts a
+  new line or lines join into one paragraph (standard Markdown), alignment at the start or
+  justified, line spacing and the space between paragraphs. They apply wherever notes are shown
+  read-only: the preview, the Reading view, Review and Ask.
+- **Ask your notes: send the open note's neighbours** (*Send ▸ Every note in the scope, nearest
+  first*): with *Current note and linked notes*, every note within the depth chosen goes, nearest
+  first, instead of only the most relevant. **Review before sending** shows the notes about to be
+  sent, to untick any first.
+- **Network measures in Insights**: connected parts, the clustering coefficient and transitivity,
+  the degree distribution with a power-law exponent (fitted by maximum likelihood when the vault
+  is big enough), and the notes that bridge the network (betweenness) or sit at its centre
+  (PageRank).
+- **Arrow tips at each end** (*Options ▸ Link types ▸ Tip at the start*): a directed link type can
+  start with a different tip from the one it ends with, and an undirected type can have tips, the
+  same at both ends. Graph, samples and the SVG, GraphML and DOT exports draw them. The vault's
+  schema goes to version 6; older ZettelApp versions won't open a vault after this one has.
+
+### Fixed
+
+- **The first window fits the screen**: on its first start the window took 1440 × 900 whatever the
+  screen, so on a small one (a 1366 × 768 laptop) it ran off the edge, and Xfce leaves it there.
+  It now shrinks to the screen's free area.
+- **Pictures fit the Reading view's column**: a picture was scaled to the whole preview's width, so
+  in Reading view a wide one stuck out of the centred column and the preview scrolled sideways (a
+  little in Split view too). It now fits the text's width, and follows it: a picture kept the
+  size it was loaded at, so after switching to Reading view or resizing the window it was sized
+  for the old layout.
+- **Diffusion's legend title wraps**: *Diffusion from “…”* was cut off at the legend's edge when
+  the note's title was long ("Welcome to ZettelAp"); it now goes onto a second line.
+- **An alarm's notification has an Open note button on KDE Plasma and GNOME**: they made the
+  notification's only action the click on it and showed no button. The button is now sent too,
+  except to Xfce's notification service, which already showed it.
+- **The website on phones**: links to a section (*Download*, *Features*) no longer hide its heading
+  under the header; the menus close once a link in them is followed (and on Escape); the Linux
+  install commands stay on one line and scroll sideways instead of breaking mid-word, and read
+  left to right on the Arabic page; in Arabic the menu
+  opens under its button. A screenshot opens full size when tapped (the dark one in dark mode).
+- **The mind map** no longer opens with the central idea highlighted, and a click on the empty
+  canvas lets go of the selected idea, as in the graph. The first arrow key picks the central
+  idea.
+- **The window's top row on Windows**: the menus sat a few pixels above the row's middle; they
+  now line up with the icon, the title and the window buttons.
+- **The fold tabs** show only their chevron: the grip dots are the sash's own, halfway down.
+- **Imports from Obsidian**: links by path (`[[Folder/Note]]`) and to a block (`[[Note^id]]`)
+  now link to the note; where two notes share a name, a bare link goes to the one nearest the
+  vault's root, and links to a title that two notes share name the note by its id, so they
+  can't land on the wrong one (also a note of that name already in the vault).
+- **Imports from Evernote**: list items from Evernote 10 keep their text on the bullet's line,
+  checklist items in a list become checklist lines, tables become Markdown tables, and code
+  blocks are fenced.
+
 ## [1.4.0] - 2026-11-23
 
 ### Added

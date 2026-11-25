@@ -786,6 +786,13 @@ QScrollBar::add-line, QScrollBar::sub-line, QScrollBar::add-page, QScrollBar::su
 QMenuBar {{ background: {t.window}; padding: 2px 4px; }}
 QMenuBar::item {{ padding: 5px 10px; border-radius: 4px; background: transparent; }}
 QMenuBar::item:selected {{ background: {t.hover}; }}
+QWidget#TitleBar {{ background: {t.sidebar}; }}
+QWidget#TitleBar QMenuBar {{ background: transparent; padding: 0; }}
+QLabel#TitleText {{ color: {t.text_muted}; }}
+QWidget#TitleBar QToolButton {{ border: none; border-radius: 0; background: transparent;
+    color: {t.text}; padding: 0; }}
+QWidget#TitleBar QToolButton:hover {{ background: {t.hover}; }}
+QWidget#TitleBar QToolButton#TitleButton_close:hover {{ background: #c42b1c; color: #ffffff; }}
 QMenu {{ background: {t.surface}; border: 1px solid {t.border}; border-radius: 8px; padding: 4px; }}
 QMenu::item {{ padding: 6px 28px 6px 12px; border-radius: 4px; }}
 QMenu::item:selected {{ background: {t.hover}; color: {t.text}; }}

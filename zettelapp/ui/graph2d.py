@@ -39,10 +39,20 @@ from zettelapp.ui.graph_common import (
 from zettelapp.ui.link_style import link_pen, tip_pen
 
 LANE_SPREAD = 20.0  # scene units between links that join the same two notes
+GLOW = 9.0  # how far a diffusion's glow reaches past the most influenced note
 
 
 def node_radius(degree: int) -> float:
     return 7.0 + min(16.0, math.sqrt(degree) * 3.2)
+
+
+def _tips(shape: EdgeShape) -> list[tuple[QPainterPath, bool]]:
+    """A link's tips (start and target) with whether each is filled."""
+    return [
+        (path, filled)
+        for path, filled in ((shape.arrow, shape.filled), (shape.start, shape.start_filled))
+        if path is not None
+    ]
 
 
 class EdgeLabel(QGraphicsItem):
@@ -73,7 +83,6 @@ class NodeItem(QGraphicsObject):
         self.note_id = note_id
         data = view.data
         self.radius = node_radius(data.degree.get(note_id, 0))
-        self.color = data.group_color(data.group_of.get(note_id))
         self.title = data.titles.get(note_id) or "Untitled"
         self.pixmap: QPixmap | None = None
         if note_id in data.images:
@@ -98,7 +107,7 @@ class NodeItem(QGraphicsObject):
         self.label_visible = True
 
     def boundingRect(self) -> QRectF:  # noqa: N802
-        r = self.radius + 3
+        r = self.radius + 3 + GLOW  # room for a diffusion's glow
         return QRectF(-max(r, 80), -r, max(2 * r, 160), 2 * r + 22)
 
     def shape(self) -> QPainterPath:
@@ -111,12 +120,20 @@ class NodeItem(QGraphicsObject):
     def paint(self, painter: QPainter, option, widget=None) -> None:
         t = theme.current()
         view = self.view
+        heat = view.data.heat_of(self.note_id)
         dimmed = view.hover_set is not None and self.note_id not in view.hover_set
-        painter.setOpacity(0.25 if dimmed else 1.0)
+        painter.setOpacity(0.25 if dimmed else 0.45 if heat == 0 else 1.0)
         r = self.radius
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        color = view.data.node_color(self.note_id)
+        if heat:  # a glow that grows with the note's share of the influence
+            glow = QColor(color)
+            glow.setAlphaF(0.35)
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.setBrush(glow)
+            painter.drawEllipse(QPointF(0, 0), r + 2 + GLOW * heat**0.5, r + 2 + GLOW * heat**0.5)
         painter.setPen(QPen(t.q("surface"), 2))  # surface ring keeps overlapping marks legible
-        painter.setBrush(self.color)
+        painter.setBrush(color)
         painter.drawEllipse(QPointF(0, 0), r, r)
         if self.pixmap is not None:
             clip = QPainterPath()
@@ -252,20 +269,17 @@ class Graph2DView(QGraphicsView):
         # One item for the lines of each link type and one for their tips, which are
         # drawn solid (and filled) whatever the line style.
         lines: dict[str, QPainterPath] = {}
-        tips: dict[str, QPainterPath] = {}
-        filled: dict[str, bool] = {}
+        tips: dict[tuple[str, bool], QPainterPath] = {}  # (type, filled) -> its tips
         for i, link in enumerate(self.data.links):
             shape = self._edge(i)
             if shape is None:
                 continue
             lines.setdefault(link.type, QPainterPath()).addPath(shape.path)
-            if shape.arrow is not None:
-                tips.setdefault(link.type, QPainterPath()).addPath(shape.arrow)
-                filled[link.type] = shape.filled
+            for tip, filled in _tips(shape):
+                tips.setdefault((link.type, filled), QPainterPath()).addPath(tip)
         for type_id, path in lines.items():
-            self.edge_items += self._edge_items(
-                type_id, path, tips.get(type_id), filled.get(type_id, False), 1.6, 0.55, 1
-            )
+            own = [(p, f) for (t, f), p in tips.items() if t == type_id]
+            self.edge_items += self._edge_items(type_id, path, own, 1.6, 0.55, 1)
         if self.show_groups:
             for group, members in self.data.members().items():
                 pts = [self.positions[m] for m in members if m in self.positions]
@@ -283,6 +297,8 @@ class Graph2DView(QGraphicsView):
                 stroke.setAlphaF(0.9 if chosen else 0.35)
                 hull.setPen(QPen(stroke, 2.4 if chosen else 1))
                 hull.setZValue(0)
+                if self.data.heat is not None:  # a diffusion plays: the groups step back
+                    hull.setOpacity(0.35)
                 scene.addItem(hull)
                 self.hull_items.append(hull)
                 top = region.boundingRect()
@@ -308,14 +324,15 @@ class Graph2DView(QGraphicsView):
             node_radius(self.data.degree.get(link.dst, 0)),
             tip is not None,
             tip or "triangle",
+            start_arrow=self.data.link_start_tip(link),
+            source_radius=node_radius(self.data.degree.get(link.src, 0)),
         )
 
     def _edge_items(
         self,
         type_id: str,
         lines: QPainterPath,
-        tips: QPainterPath | None,
-        filled: bool,
+        tips: list[tuple[QPainterPath, bool]],
         width: float,
         alpha: float,
         z: float,
@@ -328,8 +345,8 @@ class Graph2DView(QGraphicsView):
         line = QGraphicsPathItem(lines)
         line.setPen(link_pen(color, width, lt.line_style if lt else "solid"))
         items = [line]
-        if tips is not None:
-            tip = QGraphicsPathItem(tips)
+        for path, filled in tips:
+            tip = QGraphicsPathItem(path)
             tip.setPen(tip_pen(color, width, filled))
             tip.setBrush(color if filled else Qt.BrushStyle.NoBrush)
             items.append(tip)
@@ -366,7 +383,7 @@ class Graph2DView(QGraphicsView):
             if shape is None:
                 continue
             self.overlay_items += self._edge_items(
-                link.type, shape.path, shape.arrow, shape.filled, 2.6, 1.0, 1.5
+                link.type, shape.path, _tips(shape), 2.6, 1.0, 1.5
             )
         font = theme.ui_font(8)
         here = QPointF(*self.positions[focus])

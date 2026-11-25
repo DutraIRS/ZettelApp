@@ -27,12 +27,14 @@ from PySide6.QtWidgets import (
 )
 
 from zettelapp.core.cluster import cluster_notes
+from zettelapp.core.network import NetworkStats, network_stats
 from zettelapp.i18n import _, n_
 from zettelapp.ui import theme
 from zettelapp.ui.widgets import Card, label, tool_button
 from zettelapp.ui.workers import run_task
 
 BAR = 18.0  # bar thickness (capped below 24 px)
+DEGREE_COLUMNS = 15  # the degree distribution's last column gathers this many links and more
 
 
 def _ticks(value: float) -> tuple[float, float]:
@@ -71,6 +73,11 @@ def _rounded_bar(rect: QRectF, horizontal: bool, radius: float = 4.0) -> QPainte
         path.lineTo(rect.right(), rect.bottom())
     path.closeSubpath()
     return path
+
+
+def _shown(unit: str, value: float) -> str:
+    """A bar's value: a count, or a share of the whole as a percentage."""
+    return f"{value:.1%}" if unit == "share" else _compact(value)
 
 
 def _counted(unit: str, value: float) -> str:
@@ -120,7 +127,8 @@ class BarChart(QWidget):
             painter.drawText(self.rect(), Qt.AlignmentFlag.AlignCenter, _("Nothing to show yet"))
             return
         metrics, label_w, left, width = self._geometry()
-        top_value = max(max(r[1] for r in self.rows), 1)
+        # counts start their axis at one; shares (0..1) at their largest
+        top_value = max(max(r[1] for r in self.rows), 1e-9 if self.unit == "share" else 1)
         painter.setFont(theme.ui_font(9))
         painter.setPen(QPen(t.q("axis"), 1))
         painter.drawLine(QPointF(left, 4), QPointF(left, len(self.rows) * (BAR + 12) + 4))
@@ -140,7 +148,7 @@ class BarChart(QWidget):
             painter.drawText(
                 QRectF(left + w + 6, y, 80, BAR),
                 Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter,
-                _compact(value),
+                _shown(self.unit, value),
             )
 
     def _row_at(self, pos: QPointF) -> int | None:
@@ -355,6 +363,45 @@ class InsightsPage(QWidget):
         grid.addWidget(self.hubs_card, 2, 0)
         grid.addWidget(self.clusters_card, 2, 1)
         layout.addLayout(grid)
+
+        # The network: how links are spread, and which notes hold it together.
+        layout.addWidget(label(_("Network"), "section"))
+        network_tiles = QHBoxLayout()
+        network_tiles.setSpacing(12)
+        for key, text in (
+            ("parts", _("Connected parts")),
+            ("clustering", _("Clustering")),
+            ("power", _("Power law")),
+        ):
+            self.tiles[key] = StatTile(text)
+            network_tiles.addWidget(self.tiles[key])
+        layout.addLayout(network_tiles)
+        network = QGridLayout()
+        network.setSpacing(12)
+        self.degrees_chart = ColumnChart()
+        self.degrees_card = ChartCard(
+            _("Degree distribution"),
+            self.degrees_chart,
+            _("How many notes have each number of linked notes"),
+        )
+        self.between_chart = BarChart("share")
+        self.between_chart.rowClicked.connect(lambda note_id: self.openNote.emit(str(note_id)))
+        self.between_card = ChartCard(
+            _("Bridges (betweenness)"),
+            self.between_chart,
+            _("The share of shortest paths between other notes that pass through each note"),
+        )
+        self.rank_chart = BarChart("share")
+        self.rank_chart.rowClicked.connect(lambda note_id: self.openNote.emit(str(note_id)))
+        self.rank_card = ChartCard(
+            _("Central notes (PageRank)"),
+            self.rank_chart,
+            _("Notes linked from notes that are themselves well linked"),
+        )
+        network.addWidget(self.degrees_card, 0, 0, 1, 2)
+        network.addWidget(self.between_card, 1, 0)
+        network.addWidget(self.rank_card, 1, 1)
+        layout.addLayout(network)
         layout.addStretch(1)
 
     def showEvent(self, event) -> None:  # noqa: N802
@@ -461,3 +508,50 @@ class InsightsPage(QWidget):
             self.clusters_card.set_table([_("Cluster"), _("Notes")], [(r[0], r[1]) for r in rows])
 
         run_task(cluster_notes, notes, "kmeans", None, on_done=done)
+
+        def network_done(stats: NetworkStats) -> None:
+            if request != self._request:
+                return
+            self._show_network(stats, titles)
+
+        run_task(network_stats, [n.id for n in notes], links, on_done=network_done)
+
+    def _show_network(self, stats: NetworkStats, titles: dict[str, str]) -> None:
+        notes = len(stats.degrees)
+        parts = stats.components
+        self.tiles["parts"].set(
+            f"{len(parts):,}",
+            _("the largest holds {share} of notes").format(share=f"{parts[0] / notes:.0%}")
+            if parts
+            else "",
+        )
+        self.tiles["clustering"].set(
+            f"{stats.clustering:.2f}",
+            _("transitivity {value}").format(value=f"{stats.transitivity:.2f}"),
+        )
+        fit = stats.power_law
+        if fit is None:
+            self.tiles["power"].set("–", _("Too few linked notes to fit"))
+        else:
+            self.tiles["power"].set(
+                f"α ≈ {fit.alpha:.2f}",
+                _("from {k} links on; distance {ks}").format(k=fit.k_min, ks=f"{fit.ks:.2f}"),
+            )
+        top = max(stats.distribution, default=0)
+        last = min(top, DEGREE_COLUMNS)
+        columns = [
+            (str(k), stats.distribution.get(k, 0)) for k in range(0, last + (top <= DEGREE_COLUMNS))
+        ]
+        if top > DEGREE_COLUMNS:
+            columns.append((f"{last}+", sum(c for k, c in stats.distribution.items() if k >= last)))
+        self.degrees_chart.set_rows(columns)
+        self.degrees_card.set_table([_("Linked notes"), _("Notes")], columns)
+        for chart, card, values in (
+            (self.between_chart, self.between_card, stats.betweenness),
+            (self.rank_chart, self.rank_card, stats.pagerank),
+        ):
+            best = [i for i in sorted(values, key=lambda i: -values[i])[:10] if values[i] > 0]
+            chart.set_rows([(titles.get(i, i), values[i], None, i) for i in best])
+            card.set_table(
+                [_("Note"), _("Share")], [(titles.get(i, i), f"{values[i]:.1%}") for i in best]
+            )

@@ -369,6 +369,31 @@ def _rewind_to_schema_2(folder):
     conn.close()
 
 
+def test_upgrade_from_schema_5_adds_start_tips_that_change_nothing(tmp_path):
+    import sqlite3
+
+    folder = tmp_path / "v5"
+    v = Vault.open(folder)
+    v.save_link_type(LinkType("", "Rhymes with", "Rhymes with", "#123456", directed=False))
+    v.close()
+    conn = sqlite3.connect(folder / Vault.DB_NAME)
+    conn.execute("ALTER TABLE link_types DROP COLUMN start_arrow")
+    conn.execute("UPDATE meta SET value = '5' WHERE key = 'schema_version'")
+    conn.commit()
+    conn.close()
+    v = Vault.open(folder)
+    try:
+        types = v.link_type_map()
+        assert {t.start_arrow for t in types.values()} == {"none"}
+        assert types["rhymes_with"].tip is None  # undirected, still without tips
+        assert types["supports"].tip == "triangle" and types["supports"].start_tip is None
+        types["supports"].start_arrow = "circle"
+        v.save_link_type(types["supports"])
+        assert v.link_type_map()["supports"].start_tip == "circle"
+    finally:
+        v.close()
+
+
 def test_upgrade_from_schema_2_keeps_how_links_looked(tmp_path):
     folder = tmp_path / "old"
     v = Vault.open(folder)
@@ -377,7 +402,9 @@ def test_upgrade_from_schema_2_keeps_how_links_looked(tmp_path):
     _rewind_to_schema_2(folder)
     v = Vault.open(folder)
     try:
-        assert v.get_meta("schema_version") == "5"
+        from zettelapp.core.storage import SCHEMA_VERSION
+
+        assert v.get_meta("schema_version") == str(SCHEMA_VERSION)
         looks = {t.id: (t.line_style, t.arrow) for t in v.link_types()}
         # Schema 2 took the dash from the type's place in the list and drew open arrows.
         assert looks == {

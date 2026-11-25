@@ -176,6 +176,7 @@ class _LinkSample(QWidget):
             self.lt.line_style,
             self.lt.tip,
             width=2.2,
+            start_arrow=self.lt.start_tip,
         )
         font = theme.ui_font(8.5)
         p.setFont(font)
@@ -348,6 +349,34 @@ class OptionsDialog(QDialog):
         self.autosave.setSuffix(" ms")
         self.autosave.setValue(settings.get(settings.AUTOSAVE_MS))
         form.addRow(_("Save after typing stops for"), self.autosave)
+        form.addRow(label(_("Preview and Reading view"), "section"))
+        self.line_breaks = QComboBox()
+        self.line_breaks.addItem(_("A single line break starts a new line"), True)
+        self.line_breaks.addItem(_("Lines join into one paragraph (standard Markdown)"), False)
+        self.line_breaks.setCurrentIndex(0 if settings.get(settings.PREVIEW_LINE_BREAKS) else 1)
+        form.addRow(_("Line breaks"), self.line_breaks)
+        self.text_align = QComboBox()
+        self.text_align.addItem(_("Start"), "start")
+        self.text_align.addItem(_("Justified"), "justify")
+        self.text_align.setCurrentIndex(
+            max(0, self.text_align.findData(settings.get(settings.PREVIEW_ALIGN)))
+        )
+        form.addRow(_("Alignment"), self.text_align)
+        self.line_spacing = QSpinBox()
+        self.line_spacing.setRange(100, 250)
+        self.line_spacing.setSingleStep(5)
+        self.line_spacing.setSuffix(" %")
+        self.line_spacing.setValue(settings.get(settings.PREVIEW_LINE_SPACING))
+        form.addRow(_("Line spacing"), self.line_spacing)
+        self.paragraph_spacing = QSpinBox()
+        self.paragraph_spacing.setRange(0, 250)
+        self.paragraph_spacing.setSingleStep(5)
+        self.paragraph_spacing.setSuffix(" %")
+        self.paragraph_spacing.setToolTip(
+            _("The space under each paragraph, as a share of the text size")
+        )
+        self.paragraph_spacing.setValue(settings.get(settings.PREVIEW_PARAGRAPH_SPACING))
+        form.addRow(_("Space between paragraphs"), self.paragraph_spacing)
         lay.addLayout(form)
         self.update_check = QCheckBox(_("Check for updates when ZettelApp starts"))
         self.update_check.setToolTip(
@@ -712,6 +741,14 @@ class OptionsDialog(QDialog):
             self.type_arrow.addItem(_(name), key)
         self.type_arrow.currentIndexChanged.connect(self._type_edited)
         form.addRow(_("Arrow tip"), self.type_arrow)
+        self.type_start = QComboBox()
+        self.type_start.setAccessibleName(_("Tip at the start"))
+        self.type_start.setIconSize(LIST_ICON)
+        self.type_start.addItem(_("None"), "none")
+        for key, name in ARROW_TIP_NAMES.items():
+            self.type_start.addItem(_(name), key)
+        self.type_start.currentIndexChanged.connect(self._type_edited)
+        form.addRow(_("Tip at the start"), self.type_start)
         editor_lay.addLayout(form)
         self.type_sample = _LinkSample()
         editor_lay.addWidget(self.type_sample)
@@ -776,6 +813,7 @@ class OptionsDialog(QDialog):
         self.type_directed.setChecked(lt.directed)
         self.type_line.setCurrentIndex(max(0, self.type_line.findData(lt.line_style)))
         self.type_arrow.setCurrentIndex(max(0, self.type_arrow.findData(lt.arrow)))
+        self.type_start.setCurrentIndex(max(0, self.type_start.findData(lt.start_arrow)))
         self._loading_type = False
         self.remove_type_button.setEnabled(not lt.builtin)
         self.remove_type_button.setToolTip(
@@ -799,6 +837,7 @@ class OptionsDialog(QDialog):
             self.type_reverse.setText(lt.inverse_label)
         lt.line_style = self.type_line.currentData()
         lt.arrow = self.type_arrow.currentData()
+        lt.start_arrow = self.type_start.currentData()
         self._refresh_type()
 
     def _refresh_type(self) -> None:
@@ -812,6 +851,10 @@ class OptionsDialog(QDialog):
         item.setIcon(type_icon(lt))
         self._type_form.setRowVisible(self.type_reverse, lt.directed)
         self._type_form.setRowVisible(self.type_arrow, lt.directed)  # no arrow without a direction
+        # an undirected type's tips look the same from both notes
+        self._type_form.labelForField(self.type_start).setText(
+            _("Tip at the start") if lt.directed else _("Tips at both ends")
+        )
         swatch = QPixmap(32, 32)
         swatch.setDevicePixelRatio(2)
         swatch.fill(Qt.GlobalColor.transparent)
@@ -827,6 +870,11 @@ class OptionsDialog(QDialog):
             self.type_line.setItemIcon(i, sample_icon(color, self.type_line.itemData(i), None))
         for i in range(self.type_arrow.count()):
             self.type_arrow.setItemIcon(i, sample_icon(color, "solid", self.type_arrow.itemData(i)))
+        for i in range(self.type_start.count()):
+            key = self.type_start.itemData(i)
+            start = None if key == "none" else key
+            end = lt.tip if lt.directed else start
+            self.type_start.setItemIcon(i, sample_icon(color, "solid", end, start_arrow=start))
         self.type_sample.set_type(lt)
         type_id = lt.id or slugify_type(lt.label)
         reverse = None
@@ -1370,6 +1418,10 @@ class OptionsDialog(QDialog):
                 _("Restart ZettelApp to apply the new language."),
             )
         settings.put(settings.EDITOR_FONT_SIZE, self.font_size.value())
+        settings.put(settings.PREVIEW_LINE_BREAKS, self.line_breaks.currentData())
+        settings.put(settings.PREVIEW_ALIGN, self.text_align.currentData())
+        settings.put(settings.PREVIEW_LINE_SPACING, self.line_spacing.value())
+        settings.put(settings.PREVIEW_PARAGRAPH_SPACING, self.paragraph_spacing.value())
         settings.put(settings.AUTOSAVE_MS, self.autosave.value())
         settings.put(settings.UPDATE_CHECK, self.update_check.isChecked())
         settings.put(settings.LINK_MIRROR, self.link_mirror.currentData())

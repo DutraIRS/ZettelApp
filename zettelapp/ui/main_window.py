@@ -15,6 +15,7 @@ from PySide6.QtWidgets import (
     QFileDialog,
     QHBoxLayout,
     QMainWindow,
+    QMenuBar,
     QMessageBox,
     QSplitter,
     QStackedWidget,
@@ -59,7 +60,7 @@ from zettelapp.paths import (
     local_data_dir,
     resource_path,
 )
-from zettelapp.ui import icons, theme
+from zettelapp.ui import icons, theme, title_bar
 from zettelapp.ui.ask_page import AskPage
 from zettelapp.ui.dialogs import (
     AboutDialog,
@@ -179,6 +180,17 @@ def unique_access_keys(actions) -> None:
         used.add(plain[spot].lower())
 
 
+FIRST_SIZE = QSize(1440, 900)
+FRAME_ROOM = QSize(40, 60)  # left for the desktop's title bar and borders
+
+
+def first_window_size(available: QSize, minimum: QSize) -> QSize:
+    """The window's size on its first start: the usual size, shrunk to fit the screen's free
+    area (not every desktop pulls a window back on screen, Xfce doesn't), never below the
+    minimum."""
+    return FIRST_SIZE.boundedTo(available - FRAME_ROOM).expandedTo(minimum)
+
+
 class MainWindow(QMainWindow):
     desktopThemeChanged = Signal()  # the system's theme changed, its accent colour perhaps
 
@@ -197,7 +209,7 @@ class MainWindow(QMainWindow):
         root = QHBoxLayout(central)
         root.setContentsMargins(0, 0, 0, 0)
         root.setSpacing(0)
-        self.nav = NavRail(self.show_page, lambda: self.open_options(), self.donate)
+        self.nav = NavRail(self.choose_page, lambda: self.open_options(), self.donate)
         root.addWidget(self.nav)
         right = QWidget()
         right.setObjectName("Page")
@@ -258,6 +270,8 @@ class MainWindow(QMainWindow):
         self._notifier = None
         self._wire()
         self.quest = Quest(self)
+        self.title_bar: title_bar.TitleBar | None = None  # Windows: the window's own top row
+        self._frame: title_bar.WindowFrame | None = None
         self._build_menus()
         self.status_vault = label("", "caption")
         self.status_counts = label("", "caption")
@@ -327,8 +341,21 @@ class MainWindow(QMainWindow):
         menu.addAction(action)
         return action
 
+    def _menu_bar(self) -> QMenuBar:
+        """The bar the menus go in: in the window's own title bar on Windows, else Qt's.
+
+        Once the title bar holds the menus, menuBar() must not be called: Qt would put a new,
+        empty menu bar in its place (use menuWidget())."""
+        if not title_bar.wanted():
+            return self.menuBar()
+        bar = title_bar.MenuBar()
+        self.title_bar = title_bar.TitleBar(self, bar)
+        self._frame = title_bar.WindowFrame(self, self.title_bar)
+        self.setMenuWidget(self.title_bar)
+        return bar
+
     def _build_menus(self) -> None:
-        bar = self.menuBar()
+        bar = self._menu_bar()
         f = bar.addMenu(_("&File"))
         self._action(f, "&New Note", self.new_note, QKeySequence.StandardKey.New, "add")
         self._action(f, "New &Vault…", self.new_vault_dialog, None, "folder")
@@ -401,7 +428,7 @@ class MainWindow(QMainWindow):
             self._action(
                 v,
                 f"&{_(text)}",
-                lambda _unused=False, n=i: self.show_page(n),
+                lambda _unused=False, n=i: self.choose_page(n),
                 f"Ctrl+{i + 1}",
                 glyph,
             )
@@ -579,6 +606,13 @@ class MainWindow(QMainWindow):
         self.nav.select(index)
         self.pages.setCurrentIndex(index)
         self.graph.set_focus_note(self.current_note_id())
+
+    def choose_page(self, index: int) -> None:
+        """A page the user picked (the rail, Ctrl+1 to 5): asking for Notes also brings a folded
+        note list back, as there is nothing else to see there."""
+        self.show_page(index)
+        if index == 0 and not self.folds["list"][0].shown():
+            self.toggle_panel("list", True)
 
     def show_local_graph(self, note_id: str | None) -> None:
         self.show_page(1)
@@ -1449,6 +1483,16 @@ class MainWindow(QMainWindow):
         super().changeEvent(event)
         if event.type() == QEvent.Type.ThemeChange:
             self.desktopThemeChanged.emit()
+        elif event.type() == QEvent.Type.WindowStateChange and self.title_bar is not None:
+            self.title_bar.sync()  # Maximise or Restore Down
+
+    def nativeEvent(self, kind, message):  # noqa: N802 - Qt API
+        """Let the title bar answer Windows' questions about the frame (Windows only)."""
+        if self._frame is not None:
+            answer = self._frame.handle(message)
+            if answer is not None:
+                return True, answer
+        return super().nativeEvent(kind, message)
 
     def settings_changed(self) -> None:
         theme.apply_theme(
@@ -1501,7 +1545,9 @@ class MainWindow(QMainWindow):
         if isinstance(geometry, QByteArray):
             self.restoreGeometry(geometry)
         else:
-            self.resize(1440, 900)
+            screen = self.screen()
+            available = screen.availableGeometry().size() if screen else FIRST_SIZE
+            self.resize(first_window_size(available, self.minimumSize()))
         split = store.value("window/splitter")
         if isinstance(split, QByteArray):
             self.splitter.restoreState(split)
@@ -1510,6 +1556,8 @@ class MainWindow(QMainWindow):
 
     def showEvent(self, event) -> None:  # noqa: N802
         super().showEvent(event)
+        if self._frame is not None:
+            self._frame.restyle()  # the frame's snapping, shadow and animations, first time only
         winintegration.set_window_frame_dark(int(self.winId()), theme.current().dark)
 
     # --- updates --------------------------------------------------------------

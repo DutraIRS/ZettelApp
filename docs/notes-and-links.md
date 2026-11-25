@@ -12,6 +12,8 @@ so nothing changes by accident. The tab between the text and the preview folds t
 brings it back (drag it to resize). The mode you choose is kept for the next start; a new note always opens
 with its text, ready to write.
 
+*Options ▸ General ▸ Preview and Reading view* sets how the preview lays the text out: whether a single line break starts a new line (as in the editor) or lines join into one paragraph until a blank line (standard Markdown), alignment at the start or justified, line spacing, and the space between paragraphs.
+
 For safety, raw HTML in a note is shown as text and never rendered. Links in the preview open only web
 pages (`http`, `https`), e-mail (`mailto`), notes, Zotero items and local files (shown in your file manager,
 see [Links to local files](#links-to-local-files)). See [Privacy and security](privacy-and-security.md).
@@ -260,7 +262,7 @@ The search box (Ctrl+F) looks through titles, text and tags, ignores accents, an
 so `forget` finds *forgetting*. Add `tag:name` to keep only the notes with a tag, for example
 `memory tag:psychology`. The best matches come first and each one shows the part of the note around your
 word; without a query, notes follow the order picked with the sort button next to the tag filter (*Last edited*, *Created*, *Title*, *Most
-linked*, *Closest in meaning to the open note* or *Fewest links from the open note*). The last two put
+linked*, *Closest in meaning to the open note* or *Fewest links away from the open note*). The last two put
 the open note first and follow it as you move between notes; *Closest in meaning*, the default, compares
 the notes' words (LSA) and catches up a moment after you edit.
 

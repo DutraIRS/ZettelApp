@@ -46,6 +46,8 @@ Geben Sie eine Frage ein und drücken Sie **Fragen** (Ctrl+Enter). Unter **Suche
 gesucht wird: in der gesamten Sammlung, der geöffneten Notiz und ihren verknüpften Notizen oder in den
 Notizen mit einem Tag. Legen Sie die **Anzahl der Notizen** fest, die gesendet werden sollen.
 
+**Senden** legt fest, was mit der Frage mitgeht: *Die relevantesten Notizen* (die Zahl im Feld) oder *Alle Notizen im Bereich, die nächsten zuerst*. Mit *Aktuelle Notiz und verknüpfte Notizen* sendet die zweite Option die Nachbarn der offenen Notiz bis zur gewählten Tiefe (ihre *k*-Schritt-Nachbarschaft), die nächsten zuerst, so viele wie passen. Mit **Vor dem Senden prüfen** sehen Sie die Liste der Notizen vorher und können abwählen, was nicht mit soll.
+
 So funktioniert es:
 
 1. ZettelApp findet **auf Ihrem Computer** die relevantesten Notizen. Dafür verwendet es dieselbe TF-IDF- und LSA-Ähnlichkeit wie der [Linkvorschlag](link-suggestions.md). Bei *Aktuelle Notiz und verknüpfte Notizen* steht die geöffnete Notiz immer an erster Stelle.

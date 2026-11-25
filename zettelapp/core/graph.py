@@ -52,6 +52,25 @@ def subgraph(
     return seen
 
 
+def hop_distances(
+    seeds: Iterable[str], links: Iterable[Link], depth: int, types: set[str] | None = None
+) -> dict[str, int]:
+    """How many links away from the nearest seed each note within *depth* links is (seeds 0),
+    following links in both directions."""
+    adj = adjacency(links, types)
+    distance = dict.fromkeys(seeds, 0)
+    queue = deque(distance)
+    while queue:
+        node = queue.popleft()
+        if distance[node] >= depth:
+            continue
+        for nb in adj.get(node, ()):
+            if nb not in distance:
+                distance[nb] = distance[node] + 1
+                queue.append(nb)
+    return distance
+
+
 def force_layout(
     nodes: Sequence[str],
     edges: Iterable[tuple[str, str]],

@@ -472,3 +472,17 @@ def test_closing_the_vault_drops_a_pending_reorder(window, monkeypatch):
     window.close_vault()
     pump(500)
     assert errors == []
+
+
+def test_the_first_window_fits_the_screen():
+    """With no saved geometry the window took 1440 x 900 whatever the screen: on a laptop's
+    1366 x 768 it ran off the bottom, and Xfce doesn't pull it back."""
+    from PySide6.QtCore import QSize
+
+    from zettelapp.ui.main_window import first_window_size
+
+    minimum = QSize(980, 640)
+    assert first_window_size(QSize(2560, 1400), minimum) == QSize(1440, 900)
+    laptop = first_window_size(QSize(1366, 740), minimum)
+    assert laptop.width() <= 1366 - 40 and laptop.height() <= 740 - 60
+    assert first_window_size(QSize(800, 560), minimum) == minimum  # never below the minimum

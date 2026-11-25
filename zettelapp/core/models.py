@@ -117,6 +117,9 @@ DASH_PATTERNS: dict[str, tuple[float, ...]] = {
 }
 # The tip at the target end of a directed link; undirected links have none.
 ARROW_TIPS = ("triangle", "open", "diamond", "circle", "bar")
+# The tip at the start of a link: none, or one of the above. An undirected link draws it at
+# both ends, so it looks the same from either note.
+START_TIPS = ("none", *ARROW_TIPS)
 # Before schema 3 a type's dash followed its place in the list, cycling through these,
 # and every arrow was open.
 LEGACY_LINE_STYLES = ("solid", "dashed", "dotted", "dash_dot", "dash_dot_dot")
@@ -133,14 +136,21 @@ class LinkType:
     builtin: bool = False
     line_style: str = "solid"
     arrow: str = "triangle"
+    start_arrow: str = "none"
 
     def label_for(self, outgoing: bool) -> str:
         return self.label if outgoing or not self.directed else self.inverse_label
 
     @property
     def tip(self) -> str | None:
-        """The arrow tip drawn at the target, or None for an undirected type."""
-        return self.arrow if self.directed else None
+        """The arrow tip drawn at the target: *arrow* for a directed type; for an undirected
+        one, its start tip (the same at both ends), or None."""
+        return self.arrow if self.directed else self.start_tip
+
+    @property
+    def start_tip(self) -> str | None:
+        """The tip drawn where the link starts, or None."""
+        return self.start_arrow if self.start_arrow in ARROW_TIPS else None
 
 
 def stroke_dashes(line_style: str, scale: float = 1.0) -> list[float]:

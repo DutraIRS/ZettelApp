@@ -77,6 +77,23 @@ Typen haben eine Pfeilspitze, zum Beispiel ein Dreieck oder eine Raute. Wählen 
 Optionen ▸ Linktypen* aus (siehe [Eigene Linktypen](notes-and-links.md#your-own-link-types)). Die Legende
 benennt alles, damit die Bedeutung nicht allein von der Farbe abhängt.
 
+### Diffusion
+
+Wähle eine Notiz aus (oder öffne eine im Editor) und klicke auf **Diffusion**, um zu sehen, wie sich
+ihr Einfluss in einer kurzen Schleife aus fünf Schritten im Netzwerk ausbreitet. Wähle, wie er sich
+ausbreitet:
+
+- **Nach Linkabstand**: bei jedem Schritt einen Link weiter, gleichmäßig schwächer mit dem Abstand.
+- **Nach Links, gewichtet nach Ähnlichkeit**: ein Random Walk mit Neustart. Der Einfluss fließt über
+  Links im Verhältnis dazu, wie ähnlich sich die verlinkten Notizen sind (Kosinusähnlichkeit ihrer
+  LSA-Embeddings), und ein Teil kehrt zur Ausgangsnotiz zurück. So erhalten Notizen, die nah *und*
+  ähnlich sind, am meisten (der personalisierte PageRank der Notiz).
+
+Die Notizen reichen von Dunkelrot (der meiste Einfluss) über Orange bis Gelb (ein wenig; im dunklen
+Modus von hellem Orange bis Braun); noch nicht erreichte Notizen werden grau, und die Gruppenflächen
+treten zurück. Die Legende erklärt die Farben. Klicke auf **Stopp**, ändere den Graphen oder verlasse
+die Seite, um zu den üblichen Farben zurückzukehren.
+
 ## Einblicke
 
 Die Seite **Einblicke** (Ctrl+3) fasst Ihren Tresor zusammen:
@@ -85,6 +102,7 @@ Die Seite **Einblicke** (Ctrl+3) fasst Ihren Tresor zusammen:
 - **Pro Monat hinzugefügte Notizen** der letzten 12 Monate.
 - **Häufigste Tags**, **Links nach Typ** und **Am stärksten verknüpfte Notizen** (klicken Sie auf einen Balken, um die Notiz zu öffnen).
 - **Themen**: k-means-Cluster Ihrer Notizen mit Stichwörtern und Anzahl.
+- **Netzwerk**: wie sich die Links verteilen und welche Notizen das Netzwerk zusammenhalten. *Zusammenhängende Teile* (und der Anteil der Notizen im größten), der *Clustering*-Koeffizient (wie oft die Nachbarn einer Notiz untereinander verknüpft sind) und die Transitivität, ein *Potenzgesetz*-Exponent α für die Gradverteilung (per Maximum-Likelihood geschätzt, sobald mindestens 50 Notizen seinen Schwanz bilden; der Abstand zeigt, wie gut die Anpassung ist, 0 ist perfekt), die *Gradverteilung* selbst, *Brücken* (Betweenness: der Anteil der kürzesten Wege zwischen anderen Notizen durch jede Notiz) und *zentrale Notizen* (PageRank). Ein Klick auf einen Balken öffnet die Notiz.
 
 Jedes Diagramm hat eine Schaltfläche **Als Tabelle anzeigen** (Listensymbol), die dieselben Werte als Tabelle
 darstellt. Wenn Sie auf einen Balken zeigen, wird dessen Wert angezeigt.

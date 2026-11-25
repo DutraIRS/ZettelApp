@@ -109,6 +109,10 @@ class _MarkdownWriter(HTMLParser):
         self.links: list[tuple[str | None, int]] = []  # safe href, where its text starts
         self.pre = 0
         self.skip = 0  # inside <en-crypt>, <script> or <style>
+        self.item = -1  # where the text of the list item just started, until it has some
+        self.divs: list[bool] = []  # for each open <div>, whether it is a code block
+        self.tables: list[list[list[str]]] = []  # rows of cells, for each open table
+        self.cell = -1  # where the open cell's text starts
 
     def _newline(self, blank: bool = False) -> None:
         text = "".join(self.out)
@@ -128,7 +132,19 @@ class _MarkdownWriter(HTMLParser):
             return
         if self.skip:
             return
-        if tag in ("p", "blockquote", "table", "ul", "ol", "pre") or re.fullmatch(r"h[1-6]", tag):
+        # Evernote 10 wraps each list item's text in a <div> (or <p>): it is not a new line.
+        item_start = self.item >= 0 and not "".join(self.out[self.item :]).strip()
+        if tag == "div":
+            code = "--en-codeblock:true" in (a.get("style") or "").replace(" ", "")
+            self.divs.append(code)
+            if code:
+                self._newline(blank=True)
+                self.out.append("```\n")
+                self.pre += 1
+                return
+        if item_start and tag in ("div", "p", "br"):
+            pass
+        elif tag in ("p", "blockquote", "table", "ul", "ol", "pre") or re.fullmatch(r"h[1-6]", tag):
             self._newline(blank=not self.lists)
         elif tag in ("div", "br", "tr"):
             self._newline()
@@ -158,8 +174,13 @@ class _MarkdownWriter(HTMLParser):
                 kind[1] += 1
             else:
                 self.out.append(f"{indent}- ")
-        elif tag in ("td", "th"):
-            self.out.append(" | ")
+            self.item = len(self.out)
+        elif tag == "table":
+            self.tables.append([])
+        elif tag == "tr" and self.tables:
+            self.tables[-1].append([])
+        elif tag in ("td", "th") and self.tables:
+            self.cell = len(self.out)
         elif tag == "hr":
             self._newline(blank=True)
             self.out.append("---")
@@ -169,8 +190,13 @@ class _MarkdownWriter(HTMLParser):
             self.links.append((href if is_openable_url(href) else None, len(self.out)))
             self.out.append("[")
         elif tag == "en-todo":
-            self._newline()
-            self.out.append("- [x] " if a.get("checked") == "true" else "- [ ] ")
+            box = "- [x] " if a.get("checked") == "true" else "- [ ] "
+            if item_start:  # a checklist item: the box takes the bullet's place
+                marker = self.out[self.item - 1]
+                self.out[self.item - 1] = marker[: len(marker) - len(marker.lstrip())] + box
+            else:
+                self._newline()
+                self.out.append(box)
         elif tag == "en-media":
             self.out.append(self.media(a.get("hash", ""), a.get("type", "")))
 
@@ -206,8 +232,37 @@ class _MarkdownWriter(HTMLParser):
             if self.lists:
                 self.lists.pop()
             self._newline(blank=not self.lists)
-        elif tag in ("p", "blockquote", "table") or re.fullmatch(r"h[1-6]", tag):
-            self._newline(blank=True)
+            self.item = -1
+        elif tag == "li":
+            self.item = -1
+        elif tag == "div" and self.divs:
+            if self.divs.pop():  # the end of a code block
+                self.pre = max(0, self.pre - 1)
+                self._newline()
+                self.out.append("```")
+                self._newline(blank=True)
+        elif tag in ("td", "th") and self.tables and self.tables[-1] and self.cell >= 0:
+            text = re.sub(r"\s+", " ", "".join(self.out[self.cell :])).strip()
+            del self.out[self.cell :]
+            self.tables[-1][-1].append(text.replace("|", "\\|"))
+            self.cell = -1
+        elif tag == "table" and self.tables:
+            self._table(self.tables.pop())
+        elif tag in ("p", "blockquote") or re.fullmatch(r"h[1-6]", tag):
+            self._newline(blank=not self.lists)  # inside a list, the next item follows
+
+    def _table(self, rows: list[list[str]]) -> None:
+        """A Markdown table: the first row as its header, every row as wide as the widest."""
+        rows = [row for row in rows if row]
+        if not rows:
+            return
+        width = max(len(row) for row in rows)
+        rows = [row + [""] * (width - len(row)) for row in rows]
+        self._newline(blank=True)
+        lines = ["| " + " | ".join(rows[0]) + " |", "|" + " --- |" * width]
+        lines += ["| " + " | ".join(row) + " |" for row in rows[1:]]
+        self.out.append("\n".join(lines))
+        self._newline(blank=True)
 
     def handle_startendtag(self, tag: str, attrs) -> None:
         self.handle_starttag(tag, attrs)

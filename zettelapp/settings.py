@@ -40,6 +40,8 @@ LLM_MODEL = "llm/model"
 LLM_BASE_URL = "llm/baseUrl"
 LLM_EFFORT = "llm/effort"
 LLM_CONTEXT_NOTES = "llm/contextNotes"
+LLM_CONTEXT_MODE = "llm/contextMode"  # relevant (the best matches) | all (every note in scope)
+LLM_REVIEW_CONTEXT = "llm/reviewContext"  # show the notes to send, to untick any first
 LLM_PRIVACY_ACK = "llm/privacyAcknowledged"
 MCP_ALLOW_WRITES = "mcp/allowWrites"
 UPDATE_CHECK = "updates/checkAtStart"
@@ -54,6 +56,12 @@ GRAPH_HIDDEN_TAGS = "graph/hiddenTags"  # notes with these tags are left out of 
 GRAPH_UNGROUPED_TAGS = "graph/ungroupedTags"  # tags that don't form groups or clusters
 NOTE_LIST_HIDDEN = "layout/noteListHidden"  # the note list is folded away
 LINKS_PANEL_HIDDEN = "layout/linksPanelHidden"  # the links and suggestions panel is folded away
+PREVIEW_LINE_BREAKS = "preview/lineBreaks"  # a single line break starts a new line
+PREVIEW_ALIGN = "preview/align"  # start | justify
+PREVIEW_LINE_SPACING = "preview/lineSpacing"  # percent of the text size
+PREVIEW_PARAGRAPH_SPACING = (
+    "preview/paragraphSpacing"  # space under a block, percent of the text size
+)
 EDITOR_VIEW_MODE = "layout/editorViewMode"  # 0 the text, 1 text and preview, 2 reading
 
 # Search ---------------------------------------------------------------------
@@ -71,6 +79,12 @@ SEARCH_ADAPTIVE_ENABLED = "search/adaptiveEnabled"
 SEARCH_ADAPTIVE_STATE = "search/adaptiveState"
 
 DEFAULTS: dict[str, Any] = {
+    PREVIEW_LINE_BREAKS: True,
+    LLM_CONTEXT_MODE: "relevant",
+    LLM_REVIEW_CONTEXT: False,
+    PREVIEW_ALIGN: "start",
+    PREVIEW_LINE_SPACING: 125,
+    PREVIEW_PARAGRAPH_SPACING: 75,
     NOTE_LIST_HIDDEN: False,
     LINKS_PANEL_HIDDEN: False,
     EDITOR_VIEW_MODE: 1,

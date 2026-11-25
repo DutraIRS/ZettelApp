@@ -25,6 +25,7 @@ from zettelapp.core.models import (
     LEGACY_ARROW,
     LEGACY_LINE_STYLES,
     LINE_STYLES,
+    START_TIPS,
     TAG_RELATION_TYPES,
     TEXT_ORIGINS,
     Flashcard,
@@ -63,7 +64,8 @@ from zettelapp.i18n import _
 # 3: link_types.line_style and link_types.arrow store how each link type is drawn
 # 4: notes.alarm and notes.alarm_fired remind the user of a note at a chosen time
 # 5: tag_relationships stores the optional tag ontology
-SCHEMA_VERSION = 5
+# 6: link_types.start_arrow stores the tip at a link's start (both ends when undirected)
+SCHEMA_VERSION = 6
 MAX_TITLE = 500
 MAX_BODY = 5_000_000
 
@@ -106,7 +108,8 @@ CREATE TABLE IF NOT EXISTS link_types (
     builtin INTEGER NOT NULL DEFAULT 0,
     position INTEGER NOT NULL DEFAULT 0,
     line_style TEXT NOT NULL DEFAULT 'solid',
-    arrow TEXT NOT NULL DEFAULT 'triangle'
+    arrow TEXT NOT NULL DEFAULT 'triangle',
+    start_arrow TEXT NOT NULL DEFAULT 'none'
 );
 CREATE TABLE IF NOT EXISTS links (
     src TEXT NOT NULL REFERENCES notes(id) ON DELETE CASCADE,
@@ -314,7 +317,17 @@ class Vault:
                 if int(version) < 4:
                     self._upgrade_to_v4()
                 # 5 only adds tag_relationships, which _SCHEMA has just created.
+                if int(version) < 6:
+                    self._upgrade_to_v6()
                 self._set_meta("schema_version", str(SCHEMA_VERSION))
+
+    def _upgrade_to_v6(self) -> None:
+        """Add the tip at each link type's start: none, so every type looks as it did."""
+        columns = {r["name"] for r in self.conn.execute("PRAGMA table_info(link_types)")}
+        if "start_arrow" not in columns:
+            self.conn.execute(
+                "ALTER TABLE link_types ADD COLUMN start_arrow TEXT NOT NULL DEFAULT 'none'"
+            )
 
     def _upgrade_to_v4(self) -> None:
         """Add the per-note alarm."""
@@ -898,7 +911,7 @@ class Vault:
     def _insert_link_type(self, lt: LinkType, position: int) -> None:
         self.conn.execute(
             "INSERT OR REPLACE INTO link_types (id, label, inverse_label, color, directed, builtin, "
-            "position, line_style, arrow) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "position, line_style, arrow, start_arrow) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (
                 lt.id,
                 lt.label,
@@ -909,6 +922,7 @@ class Vault:
                 position,
                 lt.line_style,
                 lt.arrow,
+                lt.start_arrow,
             ),
         )
 
@@ -923,6 +937,7 @@ class Vault:
                 bool(r["builtin"]),
                 r["line_style"] if r["line_style"] in LINE_STYLES else "solid",
                 r["arrow"] if r["arrow"] in ARROW_TIPS else "triangle",
+                r["start_arrow"] if r["start_arrow"] in START_TIPS else "none",
             )
             for r in self.conn.execute("SELECT * FROM link_types ORDER BY position, label")
         ]
@@ -940,6 +955,8 @@ class Vault:
             lt.line_style = "solid"
         if lt.arrow not in ARROW_TIPS:
             lt.arrow = "triangle"
+        if lt.start_arrow not in START_TIPS:
+            lt.start_arrow = "none"
         lt.label = lt.label.strip()[:60] or lt.id
         if lt.directed:
             lt.inverse_label = lt.inverse_label.strip()[:60] or default_reverse_name(lt.label)[:60]

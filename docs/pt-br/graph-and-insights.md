@@ -76,6 +76,23 @@ cinza neutra "Outros". Os **Tipos de link** usam uma segunda pista além da cor:
 Escolha-os em *Ferramentas ▸ Opções ▸ Tipos de link* (veja [Seus próprios tipos de link](notes-and-links.md#your-own-link-types)).
 A legenda sempre nomeia tudo, então nada depende apenas da cor.
 
+### Difusão
+
+Selecione uma nota (ou abra uma no editor) e clique em **Difusão** para ver a influência dela se espalhar
+pela rede, em um ciclo curto de cinco passos. Escolha como ela se espalha:
+
+- **Por distância em links**: um link a mais a cada passo, enfraquecendo de forma uniforme com a
+  distância.
+- **Por links ponderados por similaridade**: um passeio aleatório com reinício. A influência flui pelos
+  links na proporção de quão parecidas são as notas ligadas (similaridade de cosseno dos embeddings LSA
+  delas), e uma parte volta à nota de partida, então as notas próximas *e* parecidas ficam com mais (o
+  PageRank personalizado da nota).
+
+As notas vão do vermelho escuro (a maior influência) ao amarelo, passando pelo laranja (um pouco; no
+modo escuro, do laranja vivo ao marrom); as notas ainda não alcançadas ficam cinza e as áreas dos grupos
+se apagam. A legenda explica as cores. Clique em **Parar**, mude o grafo ou saia da página para voltar
+às cores de sempre.
+
 ## Insights
 
 A página **Insights** (Ctrl+3) resume o seu cofre:
@@ -85,6 +102,7 @@ A página **Insights** (Ctrl+3) resume o seu cofre:
 - **Notas adicionadas por mês** nos últimos 12 meses.
 - **Principais tags**, **Links por tipo** e as **Notas mais conectadas** (clique em uma barra para abrir a nota).
 - **Tópicos**: clusters k-means das suas notas com suas palavras-chave e tamanhos.
+- **Rede**: como os links se distribuem e quais notas mantêm a rede unida. *Partes conectadas* (e a parcela das notas na maior), o coeficiente de *agrupamento* (com que frequência as vizinhas de uma nota se ligam entre si) e a transitividade, um expoente α de *lei de potência* para a distribuição de grau (ajustado por máxima verossimilhança quando pelo menos 50 notas formam a cauda; a distância diz o quão bom é o ajuste, 0 sendo perfeito), a própria *distribuição de grau*, as *pontes* (intermediação: a parcela dos caminhos mais curtos entre outras notas que passa por cada nota) e as *notas centrais* (PageRank). Clique numa barra para abrir a nota.
 
 Todo gráfico tem um botão **Mostrar como tabela** (o ícone de lista) com os mesmos números em forma de tabela, e as barras
 mostram seu valor ao passar o mouse.

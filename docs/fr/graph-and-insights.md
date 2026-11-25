@@ -49,6 +49,24 @@ Lorsque **Groupe** est activé, les notes portant le même tag ou appartenant au
 
 Les couleurs des groupes et graphiques proviennent d’une palette **validée pour les déficiences de la vision des couleurs**, en mode clair comme en mode sombre. Elles sont attribuées dans un ordre fixe et ne sont jamais réutilisées : au-delà du huitième groupe, les suivants partagent la couleur grise neutre « Other ». Les **types de liens** utilisent aussi la forme des lignes : chacune possède son propre style (plein, tireté, pointillé, etc.) et les liens orientés ont une pointe (triangle, losange…). Choisissez-les dans *Outils ▸ Options ▸ Types de lien* (voir [Vos propres types de liens](notes-and-links.md#your-own-link-types)). La légende nomme toujours chaque élément ; l’information ne dépend donc pas uniquement des couleurs.
 
+### Diffusion
+
+Sélectionnez une note (ou ouvrez-en une dans l’éditeur) et cliquez sur **Diffusion** pour voir son
+influence se propager dans le réseau, en une courte boucle de cinq étapes. Choisissez comment elle se
+propage :
+
+- **Par distance en liens** : un lien plus loin à chaque étape, en s’atténuant régulièrement avec la
+  distance.
+- **Par liens pondérés par la similarité** : une marche aléatoire avec redémarrage. L’influence circule
+  par les liens en proportion de la ressemblance des notes liées (similarité cosinus de leurs
+  plongements LSA), et une part revient à la note de départ : les notes à la fois proches *et*
+  semblables en reçoivent le plus (le PageRank personnalisé de la note).
+
+Les notes vont du rouge foncé (la plus forte influence) au jaune en passant par l’orange (un peu ; en
+mode sombre, de l’orange vif au brun) ; les notes pas encore atteintes passent au gris et les zones des
+groupes s’estompent. La légende explique les couleurs. Cliquez sur **Arrêter**, modifiez le graphe ou
+quittez la page pour retrouver les couleurs habituelles.
+
 ## Insights
 
 La page **Insights** (Ctrl+3) résume votre coffre :
@@ -57,5 +75,6 @@ La page **Insights** (Ctrl+3) résume votre coffre :
 - **Notes ajoutées par mois** au cours des 12 derniers mois.
 - **Tags principaux**, **Liens par type** et **Notes les plus connectées** (cliquez sur une barre pour ouvrir la note).
 - **Sujets** : clusters k-means des notes, avec leurs mots-clés et leur taille.
+- **Réseau** : comment les liens se répartissent et quelles notes tiennent le réseau ensemble. Les *parties connexes* (et la part des notes dans la plus grande), le coefficient de *regroupement* (à quelle fréquence les voisines d'une note sont liées entre elles) et la transitivité, un exposant α de *loi de puissance* pour la distribution des degrés (ajusté par maximum de vraisemblance dès qu'au moins 50 notes forment sa queue ; la distance dit à quel point l'ajustement est bon, 0 étant parfait), la *distribution des degrés* elle-même, les *ponts* (intermédiarité : la part des plus courts chemins entre d'autres notes qui passent par chaque note) et les *notes centrales* (PageRank). Cliquez sur une barre pour ouvrir la note.
 
 Chaque graphique possède un bouton **Afficher sous forme de tableau** (icône de liste) qui affiche les mêmes valeurs sous forme de tableau ; survolez les barres pour voir leur valeur.

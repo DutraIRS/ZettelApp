@@ -368,7 +368,8 @@ class QuestCard(QFrame):
             for other in others:  # stack above another notice in the same corner
                 if rect.intersects(other):
                     rect.moveBottom(other.top() - 8)
-            top = w.menuBar().height() + 8 if w.menuBar().isVisible() else 8
+            bar = w.menuWidget()  # the menu bar, or on Windows the title bar holding it
+            top = bar.height() + 8 if bar is not None and bar.isVisible() else 8
             if rect.top() < top:
                 rect.moveTop(top)
             return rect
