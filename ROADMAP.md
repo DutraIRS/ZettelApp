@@ -14,8 +14,6 @@ getting in touch on [GitHub](https://github.com/DutraIRS/ZettelApp).
   works, and ask on the Snapcraft forum for `password-manager-service` to connect automatically
   (until then API keys stay in memory unless the user runs
   `sudo snap connect zettelapp:password-manager-service`).
-- [ ] **What only a real desktop can confirm** (alarm clicks, KWallet, fractional scaling, input
-  methods, Orca) is listed in [PLATFORM_CHECKS.md](PLATFORM_CHECKS.md).
 
 Back to windows and checkout to android-port branch.
 
