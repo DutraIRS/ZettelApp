@@ -489,7 +489,7 @@
  "Add child\tTab": {
   "plural": null,
   "where": [
-   "zettelapp/ui/mindmap.py:386"
+   "zettelapp/ui/mindmap.py:397"
   ]
  },
  "Add child idea (Tab)": {
@@ -516,7 +516,7 @@
   "plural": null,
   "where": [
    "zettelapp/ui/editor.py:294",
-   "zettelapp/ui/mindmap.py:405"
+   "zettelapp/ui/mindmap.py:416"
   ]
  },
  "Add key": {
@@ -571,7 +571,7 @@
  "Add sibling\tEnter": {
   "plural": null,
   "where": [
-   "zettelapp/ui/mindmap.py:387"
+   "zettelapp/ui/mindmap.py:398"
   ]
  },
  "Add tag": {
@@ -1244,7 +1244,7 @@
   "plural": null,
   "where": [
    "zettelapp/ui/quest.py:660",
-   "zettelapp/ui/title_bar.py:170",
+   "zettelapp/ui/title_bar.py:171",
    "zettelapp/ui/update_notice.py:93"
   ]
  },
@@ -1692,7 +1692,7 @@
  "Delete": {
   "plural": null,
   "where": [
-   "zettelapp/ui/mindmap.py:403",
+   "zettelapp/ui/mindmap.py:414",
    "zettelapp/ui/settings_dialog.py:983"
   ]
  },
@@ -2234,7 +2234,7 @@
   "where": [
    "zettelapp/ui/editor.py:309",
    "zettelapp/ui/graph_page.py:288",
-   "zettelapp/ui/mindmap.py:406"
+   "zettelapp/ui/mindmap.py:417"
   ]
  },
  "Flashcard from text": {
@@ -3043,7 +3043,7 @@
  "Link to note…": {
   "plural": null,
   "where": [
-   "zettelapp/ui/mindmap.py:394"
+   "zettelapp/ui/mindmap.py:405"
   ]
  },
  "Link type": {
@@ -3210,7 +3210,7 @@
  "Maximise": {
   "plural": null,
   "where": [
-   "zettelapp/ui/title_bar.py:168"
+   "zettelapp/ui/title_bar.py:169"
   ]
  },
  "MCP is off: AI agents can no longer reach your notes.": {
@@ -3269,7 +3269,7 @@
    "zettelapp/ui/editor.py:332",
    "zettelapp/ui/editor.py:772",
    "zettelapp/ui/mindmap.py:119",
-   "zettelapp/ui/mindmap.py:422"
+   "zettelapp/ui/mindmap.py:433"
   ]
  },
  "Mind map exported": {
@@ -3287,7 +3287,7 @@
  "Minimise": {
   "plural": null,
   "where": [
-   "zettelapp/ui/title_bar.py:166"
+   "zettelapp/ui/title_bar.py:167"
   ]
  },
  "Minimum match": {
@@ -3949,7 +3949,7 @@
  "Open linked note": {
   "plural": null,
   "where": [
-   "zettelapp/ui/mindmap.py:398"
+   "zettelapp/ui/mindmap.py:409"
   ]
  },
  "Open note": {
@@ -4376,7 +4376,7 @@
  "Remove note link": {
   "plural": null,
   "where": [
-   "zettelapp/ui/mindmap.py:400"
+   "zettelapp/ui/mindmap.py:411"
   ]
  },
  "Remove note picture": {
@@ -4413,7 +4413,7 @@
   "plural": null,
   "where": [
    "zettelapp/ui/dialogs.py:527",
-   "zettelapp/ui/mindmap.py:389",
+   "zettelapp/ui/mindmap.py:400",
    "zettelapp/ui/settings_dialog.py:981"
   ]
  },
@@ -4493,7 +4493,7 @@
  "Restore Down": {
   "plural": null,
   "where": [
-   "zettelapp/ui/title_bar.py:168"
+   "zettelapp/ui/title_bar.py:169"
   ]
  },
  "Restore {n} note": {

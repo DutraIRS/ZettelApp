@@ -68,7 +68,7 @@ the page icon; Ctrl+E cycles). Check, with the note above:
   **same text size as the editor**; on a narrow window the column fills the width with a margin.
 - The **title and the source link can't be edited** (click and type: nothing changes); an empty
   source link is **hidden**; the formatting buttons are greyed.
-- A **tab between the text and the preview** (accent colour, chevron, grip dots) folds the text away
+- A **tab between the text and the preview** (accent colour and a chevron) folds the text away
   and brings it back. It sits at **exactly the same height as the note list's and the links
   panel's tabs**; in Reading view it sits just right of the note list's tab. Dragging it resizes
   the text; double-clicking the thin strip under it folds too. In Edit mode it is gone.
@@ -166,6 +166,7 @@ On **GNOME and KDE** nothing changes: the desktop's own title bar, Qt's menu bar
   equals the work area exactly (1920 × 1020) and the button reads "Restore Down". Win+Left snapped
   it to the left at full height. Close's red hover and the Arabic row were checked on screen; the
   row's menus had shrunk to the » button right to left (a Qt quirk), fixed with a test.
+  The menus sat 3 px above the row's middle; centred (25 November).
 - [ ] GNOME: the desktop's own title bar and Qt's menu bar, as before.
 - [ ] KDE: the desktop's own title bar and Qt's menu bar, as before.
 

@@ -47,6 +47,12 @@ All notable changes to ZettelApp are documented here. The format follows
   install commands stay on one line and scroll sideways instead of breaking mid-word, and read
   left to right on the Arabic page; in Arabic the menu
   opens under its button. A screenshot opens full size when tapped (the dark one in dark mode).
+- **The mind map** no longer opens with the central idea highlighted, and a click on the empty
+  canvas lets go of the selected idea, as in the graph. The first arrow key picks the central
+  idea.
+- **The window's top row on Windows**: the menus sat a few pixels above the row's middle; they
+  now line up with the icon, the title and the window buttons.
+- **The fold tabs** show only their chevron: the grip dots are the sash's own, halfway down.
 - **Imports from Obsidian**: links by path (`[[Folder/Note]]`) and to a block (`[[Note^id]]`)
   now link to the note; where two notes share a name, a bare link goes to the one nearest the
   vault's root, and links to a title that two notes share name the note by its id, so they

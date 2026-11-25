@@ -1007,3 +1007,33 @@ def test_graph_diffusion_loops_five_frames_from_the_selected_note_and_stops(wind
     pump(200)
     graph.refresh()  # redrawing the graph ends it
     assert not graph.diffuse_button.isChecked() and not graph._diffusion_timer.isActive()
+
+
+def test_mindmap_starts_with_nothing_selected_and_a_click_on_the_canvas_clears_it(window):
+    from PySide6.QtCore import QPoint, Qt
+    from PySide6.QtTest import QTest
+
+    from zettelapp.core.models import new_mindmap_node
+    from zettelapp.ui.mindmap import MindMapView
+
+    root = new_mindmap_node("Root")
+    child = new_mindmap_node("Child")
+    root["children"].append(child)
+    view = MindMapView(window)
+    view.resize(600, 400)
+    view.show()
+    view.set_mindmap(root)
+    pump(50)
+    assert view.selected_id is None  # no idea highlighted when the map opens
+
+    node = view.mapFromScene(view.node_items[child["id"]].sceneBoundingRect().center())
+    QTest.mouseClick(view.viewport(), Qt.MouseButton.LeftButton, pos=node)
+    assert view.selected_id == child["id"]
+    QTest.mouseClick(view.viewport(), Qt.MouseButton.LeftButton, pos=QPoint(3, 3))
+    assert view.selected_id is None  # the empty canvas lets go, as in the graph
+
+    QTest.keyClick(view, Qt.Key.Key_Right)  # the first arrow picks the central idea
+    assert view.selected_id == root["id"]
+    QTest.keyClick(view, Qt.Key.Key_Right)
+    assert view.selected_id == child["id"]
+    view.close()

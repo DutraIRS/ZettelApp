@@ -127,7 +127,7 @@ class MindMapView(QGraphicsView):
 
     def set_mindmap(self, root: dict | None) -> None:
         self.root = copy.deepcopy(root) if root else None
-        self.selected_id = self.root["id"] if self.root else None
+        self.selected_id = None  # nothing picked until a click (or an arrow key)
         self.rebuild()
         self.fit()
 
@@ -359,7 +359,10 @@ class MindMapView(QGraphicsView):
         return False
 
     def _navigate(self, key) -> None:
-        node, parent = _find(self.root, self.selected_id or self.root["id"])
+        if self.selected_id is None:  # the first arrow picks the central idea
+            self.select(self.root["id"])
+            return
+        node, parent = _find(self.root, self.selected_id)
         if node is None:
             return
         if key == Qt.Key.Key_Left and parent:
@@ -371,6 +374,14 @@ class MindMapView(QGraphicsView):
             i = siblings.index(node) + (-1 if key == Qt.Key.Key_Up else 1)
             if 0 <= i < len(siblings):
                 self.select(siblings[i]["id"])
+
+    def mousePressEvent(self, event) -> None:  # noqa: N802
+        item = self.itemAt(event.position().toPoint())
+        while item is not None and not isinstance(item, _NodeItem):
+            item = item.parentItem()
+        if item is None:  # a click on the empty canvas lets go of the selected idea
+            self.select(None)
+        super().mousePressEvent(event)
 
     def wheelEvent(self, event) -> None:  # noqa: N802
         factor = 1.15 if event.angleDelta().y() > 0 else 1 / 1.15
