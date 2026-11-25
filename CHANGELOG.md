@@ -6,6 +6,8 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-11-25
+
 ### Changed
 
 - **One top row on Windows** (roadmap item 10): the app's icon, the menus, the window's title and

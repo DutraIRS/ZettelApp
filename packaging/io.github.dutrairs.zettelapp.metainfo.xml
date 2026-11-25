@@ -64,6 +64,13 @@
     <keyword>markdown</keyword>
   </keywords>
   <releases>
+    <release version="1.5.0" date="2026-11-25">
+      <description>
+        <p>Diffusion in the graph, network measures in Insights, arrow tips at both ends of a link,
+          Preview and Reading view options, a review of the notes Ask sends, and fixes from the
+          Windows, GNOME, KDE and Xfce passes.</p>
+      </description>
+    </release>
     <release version="1.4.0" date="2026-11-23">
       <description>
         <p>ZettelApp on Linux (.deb, portable archive, Snap and Flatpak) and in the Microsoft Store.

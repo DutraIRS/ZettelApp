@@ -1,6 +1,6 @@
 """ZettelApp: a Zettelkasten note-taking app."""
 
-__version__ = "1.4.0"
+__version__ = "1.5.0"
 
 APP_NAME = "ZettelApp"
 ORG_NAME = "ZettelApp"
