@@ -18,6 +18,49 @@ def _own_local_data(tmp_path_factory, monkeypatch):
     monkeypatch.setenv("XDG_CACHE_HOME", str(tmp_path_factory.mktemp("cache")))
 
 
+def _delete_top_level_widgets() -> None:
+    """Close and delete every top-level widget now. Pytest runs no event loop, so a bare
+    deleteLater() never happens on its own: without this, every window an earlier test made
+    stays alive and each app-wide restyle (apply_theme) walks all of them."""
+    qtwidgets = sys.modules.get("PySide6.QtWidgets")
+    if qtwidgets is None:
+        return
+    app = qtwidgets.QApplication.instance()
+    if app is None:
+        return
+    from PySide6.QtCore import QEvent, Qt, QThreadPool
+
+    # Only windows nobody owns. Popups belong to something that deletes them itself (a combo
+    # box's list, a button's menu, a completer's list, which has no parent), and deleting one
+    # under its owner crashes when the owner goes.
+    windows = [
+        widget
+        for widget in app.topLevelWidgets()
+        if widget.parent() is None and widget.windowType() != Qt.WindowType.Popup
+    ]
+    if not windows:
+        return
+    # Let background work finish and hand its results over while its receivers still exist:
+    # a result delivered after its service was deleted raises "Signal source has been deleted"
+    # in whichever test happens to be running.
+    for widget in windows:
+        for pool in widget.findChildren(QThreadPool):
+            pool.waitForDone(20000)
+    QThreadPool.globalInstance().waitForDone(20000)
+    app.processEvents()
+    for widget in windows:
+        widget.close()
+        widget.deleteLater()
+    app.sendPostedEvents(None, QEvent.Type.DeferredDelete)
+
+
+@pytest.fixture(autouse=True)
+def _tidy_widgets_after_each_test():
+    """Leave no window behind for the next test (runs after the test's own fixtures)."""
+    yield
+    _delete_top_level_widgets()
+
+
 @pytest.fixture(autouse=True, scope="session")
 def _tidy_qt_at_exit():
     """Let go of every widget and queued event before Python shuts down, so Qt does not crash

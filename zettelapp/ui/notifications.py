@@ -27,6 +27,11 @@ SERVICE = "org.freedesktop.Notifications"
 PATH = "/org/freedesktop/Notifications"
 DESKTOP_ENTRY = DESKTOP_ID  # lets the desktop show our icon and name
 TIMEOUT_MS = 15000
+# Notification services that draw the "default" action as a button. The others (GNOME Shell,
+# Plasma, dunst, mako) make it the click on the notification and show no button, so the note's
+# action is also sent under its own key, which they show as a button.
+SHOWS_DEFAULT_AS_BUTTON = frozenset({"Xfce Notify Daemon"})
+OPEN_ACTIONS = ("default", "open")
 
 
 def use_activation_token(token: object) -> bool:
@@ -60,6 +65,27 @@ class DesktopNotifier(QObject):
         self._keys: dict[int, str] = {}  # notification id -> key
         self._tokens: dict[int, str] = {}  # notification id -> activation token of its click
         self._listening = False
+        self._server: str | None = None
+
+    def server_name(self) -> str:
+        """The notification service's name ("Plasma", "gnome-shell", "Xfce Notify Daemon"); empty
+        when it doesn't answer. Asked once."""
+        if self._server is None:
+            from PySide6.QtDBus import QDBusConnection, QDBusInterface
+
+            reply = QDBusInterface(SERVICE, PATH, SERVICE, QDBusConnection.sessionBus()).call(
+                "GetServerInformation"
+            )
+            args = reply.arguments()
+            self._server = str(args[0]) if args else ""
+        return self._server
+
+    def actions(self, label: str) -> list[str]:
+        """Notify's actions (key, label pairs): a click on the notification and, where the
+        service doesn't draw that as a button, an Open note button."""
+        if self.server_name() in SHOWS_DEFAULT_AS_BUTTON:
+            return ["default", label]
+        return ["default", label, "open", label]
 
     def available(self) -> bool:
         return self.gdbus is not None
@@ -89,7 +115,7 @@ class DesktopNotifier(QObject):
                 _text(self.icon),
                 _text(title),
                 _text(body),
-                f"[{_text('default')}, {_text(action)}]",
+                "[" + ", ".join(_text(a) for a in self.actions(action)) + "]",
                 f"{{{_text('desktop-entry')}: <{_text(DESKTOP_ENTRY)}>}}",
                 str(TIMEOUT_MS),
             ]
@@ -140,7 +166,7 @@ class DesktopNotifier(QObject):
     def _invoked(self, notification_id: int, action: str) -> None:
         key = self._keys.pop(notification_id, None)
         token = self._tokens.pop(notification_id, None)
-        if key is not None and action == "default":
+        if key is not None and action in OPEN_ACTIONS:
             use_activation_token(token)
             self.on_click(key)
 

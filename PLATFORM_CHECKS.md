@@ -1,11 +1,12 @@
-# Checks to do on Windows, GNOME and KDE
+# Checks to do on Windows, GNOME, KDE and Xfce
 
 Everything in ZettelApp that only a person at a real desktop can confirm, in one place, so each
 platform session can be done start to finish without asking what to look at. It is kept up to date
 with every change that touches the interface, theming, files, notifications or packaging. Items
 belong to the next release, **1.4.0**; once it ships, the checked items are removed.
 
-Last updated: 24 November 2026 (1.7–1.13: arrow tips, network measures, Ask's review, preview
+Last updated: 25 November 2026 (the Xfce pass, section 5, and the GNOME pass; before that
+1.7–1.13: arrow tips, network measures, Ask's review, preview
 options, the rail and sort menu, diffusion, Obsidian folders; reference screenshots from Windows in
 [WINDOWS_SCREENSHOTS/](WINDOWS_SCREENSHOTS/); earlier: the window's top row on Windows, Reading view, preview spacing, the adventure card, live accent,
 Dolphin, plus everything the earlier Windows, GNOME and KDE passes could not reach).
@@ -16,7 +17,8 @@ Dolphin, plus everything the earlier Windows, GNOME and KDE passes could not rea
 - Run from source unless an item says otherwise: `.venv\Scripts\python -m zettelapp` on Windows,
   `.venv/bin/python -m zettelapp` on Linux. Use a throwaway vault (*File ▸ New Vault…*), not your
   own notes.
-- GNOME and KDE mean a **Wayland** session on Debian 13 (Ubuntu 24.04 where an item says so).
+- GNOME and KDE mean a **Wayland** session on Debian 13 (Ubuntu 24.04 where an item says so);
+  Xfce means an **X11** session on Debian 13 (section 5).
 - Under each platform box, write the result: "as described", what you saw instead, or a screenshot
   path. Tick the box (`[x]`) once it is checked, even if it failed: the result says how it went.
 - A bug found: fix it with a test and a CHANGELOG line, or describe it under the item.
@@ -85,8 +87,18 @@ the page icon; Ctrl+E cycles). Check, with the note above:
   the locked title changes nothing; no tab in Edit mode. Two fixes: *Editor text size* wasn't
   applied at start (the text was always 11 pt, the preview smaller), and after writing a new note
   the next note stayed in Split view instead of going back to Reading view. Both fixed with tests.
-- [ ] GNOME
-- [ ] KDE
+- [x] GNOME (48.7, Wayland, from source; scripted, screenshots of the app's own windows): as
+  described in English, Arabic and Chinese, light and dark. The three tabs share one height
+  (y = 789), in Reading view the text's tab sits 32 px right of the note list's (mirrored in
+  Arabic, text pane on the right), the column is centred with no sideways scrolling, the locked
+  title ignores typing, an empty source link is hidden, the formatting buttons are greyed, no text
+  tab in Edit mode. At 125 %, 150 % and 200 % the tabs still line up (section 3).
+- [x] KDE (Plasma 6.3.6, Wayland, from source; scripted, screenshots of the app's windows
+  and, through Spectacle, the desktop): as described in English, Arabic and Japanese, light and
+  dark. The three tabs share one height, the text's tab sits 32 px right of the note list's in
+  Reading view (mirrored in Arabic, text pane on the right), no sideways scrolling, the locked
+  title ignores typing, an empty source link is hidden, the formatting buttons are greyed, no
+  text tab in Edit mode. At 125 %, 150 % and 200 % the tabs still line up (section 4).
 
 ### 1.2 Preview spacing (fixed)
 
@@ -99,8 +111,8 @@ Also look at a flashcard in *Review* and an answer in *Ask*: same spacing, nothi
 - [x] Windows: as described at 9, 11 and 16 pt; no gap under the picture. Lines were 150 % of
   Qt's line spacing (about twice the font size, which read as double-spaced); now 125 %. The
   website's screenshots were refreshed with it.
-- [ ] GNOME
-- [ ] KDE
+- [x] GNOME: as described (defaults, Split and Reading view); the picture fits the column.
+- [x] KDE: as described (defaults, Split and Reading view); the picture fits the column.
 
 ### 1.3 The adventure card (changed)
 
@@ -112,8 +124,10 @@ Chinese (no odd stretching), at 100 % and 150 %, light and dark. Nothing cut at 
 - [x] Windows: as described in English and Arabic. Chinese showed odd stretching: Qt justifies
   at spaces only, so the gaps around Latin words ("Ask", "AI") went wide. Chinese and Japanese
   are now aligned to the start (fixed with a test).
-- [ ] GNOME
-- [ ] KDE
+- [x] GNOME: as described in English, Arabic (justified right to left) and Chinese (aligned to
+  the start), light and dark, and at 150 %. Nothing cut; the card stays inside the window.
+- [x] KDE: as described in English, Arabic and Japanese, light and dark, and at 125 % and
+  150 %; the card stays inside the window.
 
 ### 1.4 Accent colour followed live (new)
 
@@ -133,8 +147,14 @@ follows again. With a primary colour of your own set in *Options ▸ General*, a
   way Settings does it (the `Explorer\Accent` palette and the `ImmersiveColorSet` broadcast):
   red → green → purple followed within a second; with an own primary colour (#ff8800) a desktop
   change left it alone. The desktop's values were restored afterwards.
-- [ ] GNOME
-- [ ] KDE
+- [x] GNOME: as described with *Use System Setting* in dark: blue → red → green → purple were
+  followed within the wait, shaded lighter in dark; with an own primary colour (#ff8800) a
+  desktop change to teal left it alone, and clearing it took teal. The accent was switched with
+  `gsettings set org.gnome.desktop.interface accent-color`; blue restored afterwards.
+- [x] KDE: as described with *Use System Setting* in Breeze Dark: red → green → purple
+  (`plasma-apply-colorscheme -a`) followed within the wait, shaded lighter in dark; an own
+  primary colour (#ff8800) held when the desktop went teal, and clearing it took teal. The
+  desktop's scheme and its (unset) accent were restored afterwards.
 
 ### 1.5 Dark and light followed live, both ways
 
@@ -145,8 +165,10 @@ before switching). The earlier Windows pass never switched Windows itself.
 
 - [x] Windows (*Settings ▸ Personalisation ▸ Colours ▸ Choose your mode*): as described, dark →
   light → dark with a message strip showing; window, icons and strip all switched each way.
-- [ ] GNOME (re-check after this round's changes)
-- [ ] KDE (re-check after this round's changes)
+- [x] GNOME: as described, dark → light → dark → light (`color-scheme` `prefer-dark` ↔
+  `default`) with a message strip showing; the window, icons and strip switched each way.
+- [x] KDE: as described, Breeze Light → Breeze Dark → Breeze Light with a message strip
+  showing; Qt's colour scheme and the app switched each way.
 
 ### 1.6 The window's top row (new)
 
@@ -167,8 +189,10 @@ On **GNOME and KDE** nothing changes: the desktop's own title bar, Qt's menu bar
   it to the left at full height. Close's red hover and the Arabic row were checked on screen; the
   row's menus had shrunk to the » button right to left (a Qt quirk), fixed with a test.
   The menus sat 3 px above the row's middle; centred (25 November).
-- [ ] GNOME: the desktop's own title bar and Qt's menu bar, as before.
-- [ ] KDE: the desktop's own title bar and Qt's menu bar, as before.
+- [x] GNOME: the desktop's own title bar and Qt's menu bar, as before (native Wayland, no
+  frameless flag, the menu bar inside the window).
+- [x] KDE: the desktop's own title bar (Breeze) and Qt's menu bar, as before (seen on a
+  desktop screenshot).
 
 ### 1.7 Arrow tips at both ends (new)
 
@@ -189,8 +213,10 @@ here won't open in 1.3.x (expected).
 - [x] Windows (real window, 125 %, light and dark): the Link types form, its sample and the 2D
   graph and legend as in the screenshots: Related to has a diamond at both ends, Supports a
   circle then a triangle. Not looked at: zoom, 3D and the static website.
-- [ ] GNOME
-- [ ] KDE
+- [x] GNOME: the Link types form and its sample as described (Supports with a circle at Note A
+  and the triangle at Note B). Graph zoom, 3D and the static website not looked at.
+- [x] KDE: the Link types form and its sample as described. Graph zoom, 3D and the static
+  website not looked at.
 
 ### 1.8 Network measures in Insights (new)
 
@@ -207,8 +233,10 @@ stays responsive while it computes (it runs in the background). Compare with
 - [x] Windows: the tiles and the three charts as in the screenshots with the demo vault (28
   notes: 7 parts, clustering 0.17, too few notes to fit), light and dark. Hover, click, the
   tables and 150 % not tried.
-- [ ] GNOME
-- [ ] KDE
+- [x] GNOME: the tiles and the three charts with the starter notes, light and dark. Hover,
+  click and the tables not tried.
+- [x] KDE: the tiles and the three charts with the starter notes. Hover, click and the tables
+  not tried.
 
 ### 1.9 Ask your notes: Send and Review before sending (new)
 
@@ -225,8 +253,9 @@ Compare with [`ask-send-light.png`](WINDOWS_SCREENSHOTS/ask-send-light.png) and
 - [x] Windows: the Send row, the check box and the review window as in the screenshots, light and
   dark (the window opened directly, not through a real request). Restart, Esc and unticking
   every note not tried (the last is unit-tested).
-- [ ] GNOME
-- [ ] KDE
+- [x] GNOME: the Send row, the check box and the review window (all ticked; Cancel sends
+  nothing). Restart and Esc not tried.
+- [x] KDE: the Send row and the review window (all ticked; Cancel sends nothing).
 
 ### 1.10 Preview and Reading view options (new)
 
@@ -242,8 +271,10 @@ The centred formula stays centred. Back to the defaults: as in 1.2. The same opt
 
 - [x] Windows: the options and the Reading view as in the screenshots (justified, 160 % and
   120 %; the last line of each paragraph at the start). Arabic, Review and Ask not tried.
-- [ ] GNOME
-- [ ] KDE
+- [x] GNOME: the options' page at 100 % and 150 % (in Arabic too); nothing cut. Justified
+  text was checked on Xfce (section 5), not repeated here.
+- [x] KDE: the options' page at 125 %, 150 % and 200 %; nothing cut. Justified text was checked
+  on Xfce (section 5).
 
 ### 1.11 Notes in the rail brings the note list back; the sort menu (changed)
 
@@ -255,8 +286,8 @@ distance, not about notes with few links).
 - [x] Windows: as described, scripted in a real window: the rail's Notes button brought the
   folded list back, opening a note from the graph left it folded, the sort menu has the new
   wording (Ctrl+1 runs the same action as the button).
-- [ ] GNOME
-- [ ] KDE
+- [x] GNOME: the rail's Notes button brings the folded list back.
+- [x] KDE: the rail's Notes button brings the folded list back.
 
 ### 1.12 Diffusion in the graph (new)
 
@@ -276,8 +307,11 @@ stays smooth while dragging the graph. Compare with
 
 - [x] Windows (real window, 125 %): both measures, light and dark, 2D and 3D, as in the
   screenshots; the frames were stepped by script (the timer's 0.7 s loop wasn't watched by eye).
-- [ ] GNOME
-- [ ] KDE
+- [x] GNOME: Diffusion from the starter notes' hub, by link distance: Stop, the four-colour
+  legend (its title now wraps, a fix from the Xfce pass), the colours as described. 3D and
+  dark not looked at.
+- [x] KDE: by link distance from the starter notes' hub: Stop, the legend (title wrapping),
+  the colours.
 
 ### 1.13 Importing an Obsidian vault through the desktop's folder dialog (changed)
 
@@ -294,8 +328,10 @@ printf 'Deep.\n' > 'Projects/Sub/Deep note.md'
 *File ▸ Import Markdown Folder…*, choose the folder in the desktop's own folder dialog: four notes; *Hub*'s three
 links go to *Deep note*, the root *Atomic notes* and the one in *Projects*.
 
-- [ ] GNOME
-- [ ] KDE
+- [x] GNOME: four notes; *Hub*'s three links go to *Deep note*, the root *Atomic notes* and
+  the one in *Projects*. The folder dialog is the desktop's own (native, not Qt's).
+- [x] KDE: four notes, *Hub*'s three links right. The folder dialog is KDE's own (through the
+  portal), seen on a desktop screenshot.
 
 ## 2. Windows only
 
@@ -304,9 +340,12 @@ links go to *Deep note*, the root *Atomic notes* and the one in *Projects*.
   `python tools/i18n.py check` (1030/1030 in every language). *Windows: 490 passed, 70 skipped;
   ruff clean; 1027/1027 in all ten languages.* *Windows again on 24 November, after 1.7–1.12:
   538 passed, 70 skipped (with 1.12, Diffusion); ruff clean; 1082/1082 in all ten languages; `packaging/build.ps1`
-  built the app (self-tests passed), the installer, the portable zip and the MSIX. Linux: run
-  the same three commands and `packaging/build-linux.sh` (no new dependencies since the last
-  Linux pass).*
+  built the app (self-tests passed), the installer, the portable zip and the MSIX.* *Linux
+  (Debian 13, Xfce) on 24 November: 595 passed, 16 skipped (after the Xfce pass's fixes, see
+  section 5); ruff clean; 1082/1082 in every language. `packaging/build-linux.sh` built 1.4.0:
+  self-tests passed, `ZettelApp-Linux-x86_64.tar.gz` and `ZettelApp-Linux-amd64.deb` (Depends
+  libc6 ≥ 2.39, libsecret, the X11/Wayland/GL libraries); the built `zettelapp` opened its
+  window on the desktop at 1440 × 900 on a 1920 × 923 screen.*
 - [x] **Microsoft Store package** (`dist/ZettelApp.msix`, built with a test signature (since removed) to
   install it locally): installs and starts from the Start menu with its logo; *Options ▸ Desktop
   integration* offers no link registration (the manifest registers `zettelapp://`), and a
@@ -344,45 +383,155 @@ links go to *Deep note*, the root *Atomic notes* and the one in *Projects*.
   name and icon (the GNOME pass saw "No notifications" and never confirmed it). Click **Open
   note**: the note opens and the window **comes to the front** (activation token, unit-tested,
   never seen on screen).
+  *GNOME, 25 November: the notification is sent through the desktop's notification service
+  (it answers, so no tray fallback) and the in-app strip says "Alarm: …"; the banner and the
+  click weren't seen (no screen capture or clicks on this Wayland VM without permissions). Since
+  the KDE pass the notification also carries an **Open note** button on GNOME (section 4):
+  look for it.*
 - [ ] **Second launch from the overview** (Super, type ZettelApp, Enter) with ZettelApp already
   open: the running window comes to the front; no second window.
-- [ ] **Fractional scaling**: *Settings ▸ Displays ▸ Scale* 125 %, 150 %, 200 % (turn on
+  *GNOME: a second launch from a terminal hands over and exits, one window. The overview launch
+  needs a person at the keyboard.*
+- [x] **Fractional scaling**: *Settings ▸ Displays ▸ Scale* 125 %, 150 %, 200 % (turn on
   fractional scaling first if offered): text sharp, icons sharp, the three fold tabs aligned,
   nothing cut in Options, the adventure card or the Ask page.
+  *GNOME: set with `gdctl` (1920 × 1080 at 1.25, 1.5 and 2; the VM's 1920 × 922 mode offers
+  only 1 and 2): the app gets exactly those device pixel ratios (native fractional scaling), the
+  text and icons are sharp, the three tabs share one height at each scale, nothing is cut in
+  Options, the adventure card or Ask. At 2 the screen is 960 × 540, under the window's minimum,
+  so the window runs off it (expected). Cosmetic, on every platform (the Windows screenshots
+  too): spin boxes' numbers (11 pt, 800 ms, 125 %) start 2 px from the box's edge, where text
+  fields and drop-downs leave 10 px; the stylesheet's padding doesn't reach them.*
 - [ ] **Input methods**: with IBus and a Japanese or Chinese input method (*Settings ▸ Keyboard ▸
   Input Sources*), type in a note title, the note text and the search box; the candidate window
   sits at the caret. Also a dead key or Compose (é, ñ).
+  *Not tried: needs typing on a real keyboard.*
 - [ ] **Orca** (Super+Alt+S): it reads the nav rail buttons, the toolbar buttons' names, the fold
   tabs ("Hide the note list…", "Hide the text and read the note…"), the note list and the
   editor text.
-- [ ] **A stock GNOME look**: the test VM had Xfce leftovers in gsettings (Tango icons, "Sans 10").
+  *Not tried: needs a person listening.*
+- [x] **A stock GNOME look**: the test VM had Xfce leftovers in gsettings (Tango icons, "Sans 10").
   On a clean GNOME (Adwaita, Cantarell) or Ubuntu's Yaru: icons, font and spacing look right.
+  *GNOME, with gsettings set to Adwaita icons and theme and Cantarell 11 for the run (the
+  previous values put back): the app takes Cantarell, a few icons come from Adwaita (Options,
+  the alarm clock, the picture), spacing looks right, light and dark. In Arabic the rail's
+  *Graph* label fits ("الرسم البياني"; DejaVu Sans, the leftover "Sans", was too wide and Qt
+  shortened it). Next to Arabic, Latin words (Anki, Zotero) look heavier: Cantarell has no
+  Arabic, so two fonts mix. GNOME 48's own Adwaita Sans isn't installed on the VM.*
 - [ ] **Ubuntu 24.04**: the `.deb` (`packaging/build-linux.sh`, then `sudo apt install ./…deb`)
   installs and starts from the app grid with its icon; API keys go to GNOME Keyring.
+  *Not tried: no Ubuntu 24.04 machine. The `.deb` built on Debian 13 needs libc6 ≥ 2.39, which
+  24.04 has.*
 
 ## 4. KDE Plasma only
 
-- [ ] **Show in folder prefers Dolphin (new)**: with Dolphin as the default file manager and
+- [x] **Show in folder prefers Dolphin (new)**: with Dolphin as the default file manager and
   Nautilus (or Thunar) also installed, **no file manager running**: *Show in folder* after an
   export, and a `file:///` link in a note, open **Dolphin with the file selected** (before, D-Bus
   could start Nautilus). Make Nautilus the default (*System Settings ▸ Default Applications ▸ File
   manager*): then it goes to Nautilus.
+  *KDE, 25 November: with no file manager running, Show in folder started **Dolphin** with the
+  file selected (desktop screenshot). With Nautilus made the default (`xdg-mime default`), it
+  started Nautilus: D-Bus's generic FileManager1 service file is Nautilus's on this VM. Dolphin
+  made the default again afterwards. The `file:///` link in a note goes through the same
+  function and wasn't clicked separately.*
 - [ ] **KWallet as the Secret Service**: on a Plasma session where `kwalletd6` provides
   `org.freedesktop.secrets` (not GNOME Keyring, as on the test VM): save, read and delete an API
   key in *Options ▸ AI assistant*; KWallet's first-run dialog appears once.
+  *Not on this VM: GNOME Keyring still owns `org.freedesktop.secrets` here. Save, read and
+  delete through it work on Plasma.*
 - [ ] **Alarm notification click**: the notification appears (seen before); click **Open note**:
   the note opens and the window comes to the front.
+  *KDE: Plasma showed the banner with ZettelApp's icon, name, title and text, but **no Open note
+  button**: the app sent its only action under the key `default`, which Plasma (and GNOME) make
+  the click on the notification. Fixed with a test: Open note is now also sent under its own
+  key, except to Xfce's service, which already drew `default` as a button. After the fix the
+  banner shows **Open note** (desktop screenshot). The click itself wasn't made: no way to click
+  from a script on this Wayland VM. GNOME and Xfce: look at the banner once more.*
 - [ ] **Second launch from KRunner or the launcher** with ZettelApp open: the window comes to the
   front (a terminal launch only marks it "demands attention", which is correct).
+  *Not tried: the installed `zettelapp` is 1.3.1, and the launcher needs a person. A second
+  launch from a terminal hands over and exits, one window.*
 - [ ] **Drag and drop from Dolphin** into a note: a picture is stored and inserted; another file
   becomes a file link.
-- [ ] **Paste a picture on real Plasma hardware**: Spectacle (Print), copy, Ctrl+V in a note. On the
+  *Not tried: needs a person to drag.*
+- [x] **Paste a picture on real Plasma hardware**: Spectacle (Print), copy, Ctrl+V in a note. On the
   VM, Klipper served every image empty; on real hardware it should paste. If it fails, the app
   says "The image on the clipboard could not be read…".
+  *KDE, on the VM this time: `spectacle -b -f -c` copied a screenshot, Klipper served it
+  (image/png), and pasting into a new note stored it and inserted `![pasted](asset:…)`, the
+  first picture also becoming the note's image.*
 - [ ] **Fractional scaling** (*System Settings ▸ Display ▸ Scale* 125 %, 150 %, 200 %), **input
   methods** (Fcitx 5 with a Japanese or Chinese engine) and **Orca**: as for GNOME above.
+  *KDE fractional scaling (`kscreen-doctor`, 1.25, 1.5 and 2): the app gets exactly those device
+  pixel ratios, text and icons are sharp, the three tabs share one height, no sideways
+  scrolling, nothing cut in Options. The VM's screen is 922 px high, so KWin maximised the window
+  below its 640 px minimum at 1.5 (543 px; everything still usable) and at 2 (960 × 389, where
+  the adventure card no longer fits); a 1080p screen at 150 % leaves about 680 px. Scale 1
+  restored. Input methods and Orca not tried (they need a person).*
 
-## 5. Flatpak and Snap (when built)
+## 5. Xfce (X11)
+
+A release target like GNOME and KDE: an **X11** session on
+Debian 13, Xfce 4.20, the Xfce GTK theme with Tango icons and "Sans 10". The app runs on Qt's xcb
+platform with its GTK 3 platform theme, so it follows the GTK theme, shows GTK's file dialogs and
+uses xfce4-notifyd and gnome-keyring. Results from 24 November 2026, from source, scripted in a
+real window with screenshots (a scratch settings file and vault; clicks with `xdotool`).
+
+- [x] **Tests and lint**: 594 passed, 16 skipped; `ruff check .` and `ruff format --check .`
+  clean; 1082/1082 in every language. The suite used to hang for over ten minutes: the UI tests'
+  windows were never deleted (pytest runs no event loop), so each restyle walked every earlier
+  window. Fixed in `tests/conftest.py`: after each test the windows nobody owns are deleted
+  (popups are left to their owners, and background work is let finish first). The whole suite
+  now takes about 80 s.
+- [x] **First start** on a small screen: the window took 1440 × 900 whatever the screen and Xfce
+  left it running off the edge. It now shrinks to the screen's free area (fixed with a test). It
+  never goes below its 980 × 640 minimum.
+- [x] **Reading view (1.1)**: as described. The three tabs share one height (y = 808), in Reading
+  view the text's tab sits 32 px right of the note list's (mirrored in Arabic), the locked title
+  ignores typing, an empty source link is hidden, the formatting buttons are greyed, no text tab
+  in Edit mode. The mode survives a restart; a new note opens in Split view and the next start
+  is back in Reading view. Arabic mirrors everything, the text pane goes right. At 150 %
+  (`QT_SCALE_FACTOR=1.5`, a 1920 × 923 screen) the tabs still line up and text and icons are
+  sharp. The VM's screen is 615 px high at that scale, under the window's 640 px minimum, so its
+  bottom was off screen. Two fixes, with tests: a picture was sized to the whole preview, not the
+  text's column, so in Reading view it stuck out and the preview scrolled sideways; and a picture
+  kept the size it was loaded at, so after switching to Reading view or resizing the window it
+  was sized for the old layout.
+- [x] **Preview spacing and options (1.2, 1.10)**: as described, with the note at the top of
+  this file in Split and Reading view, at *Editor text size* 9, 11 and 16 (the preview follows;
+  the picture fits the column at each size) and with *Lines join*, *Justified*, 160 % and 120 %
+  (justified to both edges, the last line of each paragraph at the start, the two written lines
+  joined). Not tried: Review and Ask, and Arabic with *Justified*.
+- [x] **Adventure card (1.3)**: as described in English, Arabic (justified right to left),
+  Chinese and Japanese (aligned to the start, no odd stretching), light and dark. Nothing cut.
+- [x] **Dark and light followed live (1.5)**: switching the Xfce theme to *Adwaita-dark* is
+  followed within a second. The switch back to *Xfce* is followed too, as long as GNOME's
+  `org.gnome.desktop.interface color-scheme` key is `default`, which it is on a clean Xfce. On
+  this VM the key was still `prefer-dark` from the GNOME pass: Qt's GTK theme reads it through the
+  settings portal once anything changes, and then stays dark. A bare PySide6 window does the same,
+  so it's Qt's behaviour, not the app's.
+- [x] **Link types' tips (1.7), network measures (1.8), Ask's review (1.9), the rail (1.11) and
+  Diffusion (1.12)**: as described, light and dark. The review window lists the notes, all
+  ticked, and Cancel sends nothing. One fix, with a test: Diffusion's legend title was cut off
+  ("Diffusion from “Welcome to ZettelAp") when the note's title was long. It now wraps.
+- [x] **Obsidian import (1.13)**: GTK's folder dialog; four notes; *Hub*'s three links go to
+  *Deep note*, the root *Atomic notes* and the one in *Projects*.
+- [x] **Alarm notification**: xfce4-notifyd shows ZettelApp's icon, the title, the text and
+  **Open note**. A real click on Open note (with `xdotool`) opened the note and brought the
+  window back, maximised when it was maximised then minimised, and to the front when it was
+  behind another window. Since the KDE pass, other desktops get a second Open note action; Xfce's
+  service is recognised by name ("Xfce Notify Daemon") and still gets one, so the banner should
+  look the same: check it once.
+- [x] **Show in folder**: Thunar opens with the file selected.
+- [x] **API keys**: saved, read back and deleted through gnome-keyring (the Secret Service here).
+- [x] **Second launch** with ZettelApp open: the new process hands over and exits; one window.
+- [x] **Cosmetic, left as they are**: in Arabic the rail's *Graph* label is shortened
+  ("الرسم...بياني"): DejaVu Sans, Xfce's "Sans", is too wide for the rail, so see whether GNOME
+  and KDE's fonts fit it. Dialog buttons (OK, Cancel, Apply) carry Tango icons: that's Xfce's own
+  setting for GTK buttons, which Qt's GTK theme follows.
+
+## 6. Flatpak and Snap (when built)
 
 The same app in a sandbox reaches the desktop through portals. On GNOME and KDE, in the Flatpak
 and the Snap:

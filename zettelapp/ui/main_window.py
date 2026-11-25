@@ -180,6 +180,17 @@ def unique_access_keys(actions) -> None:
         used.add(plain[spot].lower())
 
 
+FIRST_SIZE = QSize(1440, 900)
+FRAME_ROOM = QSize(40, 60)  # left for the desktop's title bar and borders
+
+
+def first_window_size(available: QSize, minimum: QSize) -> QSize:
+    """The window's size on its first start: the usual size, shrunk to fit the screen's free
+    area (not every desktop pulls a window back on screen, Xfce doesn't), never below the
+    minimum."""
+    return FIRST_SIZE.boundedTo(available - FRAME_ROOM).expandedTo(minimum)
+
+
 class MainWindow(QMainWindow):
     desktopThemeChanged = Signal()  # the system's theme changed, its accent colour perhaps
 
@@ -1534,7 +1545,9 @@ class MainWindow(QMainWindow):
         if isinstance(geometry, QByteArray):
             self.restoreGeometry(geometry)
         else:
-            self.resize(1440, 900)
+            screen = self.screen()
+            available = screen.availableGeometry().size() if screen else FIRST_SIZE
+            self.resize(first_window_size(available, self.minimumSize()))
         split = store.value("window/splitter")
         if isinstance(split, QByteArray):
             self.splitter.restoreState(split)

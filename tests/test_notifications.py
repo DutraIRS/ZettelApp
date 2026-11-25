@@ -24,6 +24,7 @@ def test_notifier_sends_a_typed_gdbus_call(monkeypatch):
     monkeypatch.setattr(DesktopNotifier, "_listen", lambda self: None)
     notifier = DesktopNotifier(lambda key: None, "/icon.png")
     notifier.gdbus = "/usr/bin/gdbus"
+    notifier._server = "Xfce Notify Daemon"  # draws "default" as the Open note button
     assert notifier.notify('Say "hi"', "line\nbreak", "20260101120000", "Open note", lambda: None)
     args = started[0]
     assert args[args.index("--method") + 1] == "org.freedesktop.Notifications.Notify"
@@ -38,6 +39,32 @@ def test_notifier_sends_a_typed_gdbus_call(monkeypatch):
         '{"desktop-entry": <"io.github.dutrairs.zettelapp">}',
         "15000",
     ]
+
+
+def test_plasma_and_gnome_get_an_open_note_button(monkeypatch):
+    """Plasma and GNOME Shell make the "default" action the click on the notification and draw
+    no button for it: Open note is also sent under its own key, which they show as a button,
+    and either one opens the note."""
+    from zettelapp.ui.notifications import DesktopNotifier
+
+    started = []
+    monkeypatch.setattr(
+        "zettelapp.ui.notifications.QProcess.start", lambda self: started.append(self.arguments())
+    )
+    monkeypatch.setattr(DesktopNotifier, "_listen", lambda self: None)
+    clicked = []
+    notifier = DesktopNotifier(clicked.append)
+    notifier.gdbus = "/usr/bin/gdbus"
+    for server in ("Plasma", "gnome-shell", ""):
+        notifier._server = server
+        assert notifier.actions("Open note") == ["default", "Open note", "open", "Open note"]
+    assert notifier.notify("t", "b", "k", "Open note", lambda: None)
+    assert '["default", "Open note", "open", "Open note"]' in started[0]
+    notifier._keys[7] = "20260101120000"
+    notifier._invoked(7, "open")  # the button
+    notifier._keys[8] = "20260101120001"
+    notifier._invoked(8, "other")  # an action that isn't ours
+    assert clicked == ["20260101120000"]
 
 
 def test_notifier_without_gdbus_declines():
