@@ -5,7 +5,7 @@ numpy==2.5.4
 rapidfuzz==3.14.6
 genanki==0.13.1
 markdown-it-py==4.3.0
-PyYAML==6.0.3
+PyYAML==6.0.4
 anthropic==2.12.0
 onnxruntime==1.32.0
 tokenizers==0.23.3
