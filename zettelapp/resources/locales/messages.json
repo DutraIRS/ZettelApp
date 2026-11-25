@@ -4795,7 +4795,7 @@
  "Show in file manager: {path}": {
   "plural": null,
   "where": [
-   "zettelapp/ui/preview.py:239"
+   "zettelapp/ui/preview.py:248"
   ]
  },
  "Show in folder": {
