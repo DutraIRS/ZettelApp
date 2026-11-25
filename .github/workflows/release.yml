@@ -116,7 +116,7 @@ jobs:
             if ($signature.Status -ne "Valid") { throw "$path signature is $($signature.Status)" }
           }
       - name: Download the Linux packages
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: linux-packages
           path: dist
@@ -195,7 +195,7 @@ jobs:
           name: snap
           path: ZettelApp-Linux-amd64.snap
           retention-days: 7
-      - uses: actions/download-artifact@v7
+      - uses: actions/download-artifact@v8
         with:
           name: flatpak-bundle
       - name: Attach the Snap and the Flatpak bundle to the GitHub release
