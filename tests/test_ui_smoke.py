@@ -988,6 +988,8 @@ def test_graph_diffusion_loops_five_frames_from_the_selected_note_and_stops(wind
     assert graph._diffusion[0] == {a.id: 1.0}
     assert set(graph._diffusion[-1]) == {a.id, b.id, c.id}  # Delta is never reached
     assert view.data.heat is not None and "Alpha" in graph.legend_title.text()
+    graph._show_diffusion_legend("Welcome to ZettelApp, a long title")  # wraps, isn't cut off
+    assert graph.legend_title.minimumSizeHint().width() <= graph.legend_title.parentWidget().width()
     seen = {frozenset(view.data.heat)}
     for _step in range(5):
         graph._next_diffusion_frame()

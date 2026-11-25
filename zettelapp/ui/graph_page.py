@@ -303,7 +303,7 @@ class GraphPage(QWidget):
         legend.setFixedWidth(250)
         legend_layout = QVBoxLayout(legend)
         legend_layout.setContentsMargins(12, 12, 12, 12)
-        self.legend_title = label(_("Groups"), "section")
+        self.legend_title = label(_("Groups"), "section", wrap=True)  # a long note title wraps
         legend_layout.addWidget(self.legend_title)
         self.legend = QListWidget()
         self.legend.setAccessibleName(_("Groups legend"))

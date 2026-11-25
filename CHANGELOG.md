@@ -42,6 +42,19 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Fixed
 
+- **The first window fits the screen**: on its first start the window took 1440 × 900 whatever the
+  screen, so on a small one (a 1366 × 768 laptop) it ran off the edge, and Xfce leaves it there.
+  It now shrinks to the screen's free area.
+- **Pictures fit the Reading view's column**: a picture was scaled to the whole preview's width, so
+  in Reading view a wide one stuck out of the centred column and the preview scrolled sideways (a
+  little in Split view too). It now fits the text's width, and follows it: a picture kept the
+  size it was loaded at, so after switching to Reading view or resizing the window it was sized
+  for the old layout.
+- **Diffusion's legend title wraps**: *Diffusion from “…”* was cut off at the legend's edge when
+  the note's title was long ("Welcome to ZettelAp"); it now goes onto a second line.
+- **An alarm's notification has an Open note button on KDE Plasma and GNOME**: they made the
+  notification's only action the click on it and showed no button. The button is now sent too,
+  except to Xfce's notification service, which already showed it.
 - **The website on phones**: links to a section (*Download*, *Features*) no longer hide its heading
   under the header; the menus close once a link in them is followed (and on Escape); the Linux
   install commands stay on one line and scroll sideways instead of breaking mid-word, and read
