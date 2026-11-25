@@ -6,6 +6,11 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- **The Snap Store's badge** on the website's Download section (in each language Snapcraft offers)
+  and in the README, which now also lists the Microsoft Store, the Snap and the Flatpak bundle.
+
 ## [1.5.0] - 2026-11-25
 
 ### Changed

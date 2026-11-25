@@ -78,3 +78,11 @@ SOFTWARE.
 
 The Windows installer is built with [Inno Setup](https://jrsoftware.org/isinfo.php) (Inno Setup
 License). Its translations come from the Inno Setup project.
+
+## Website
+
+The "Get it from the Snap Store" badges in `website/assets/badges/` are Canonical's official Snap Store
+badges, unmodified, from [snapcraft.io](https://snapcraft.io/) (see
+[snap-store-badges](https://github.com/snapcore/snap-store-badges)); the Snapcraft logo in them is
+licensed under [CC BY-ND 2.0 UK](https://creativecommons.org/licenses/by-nd/2.0/uk/). Snap and Snapcraft
+are trademarks of Canonical Ltd.

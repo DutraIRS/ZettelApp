@@ -292,6 +292,11 @@ main [id] { scroll-margin-top: 72px; }
   direction: ltr; unicode-bidi: isolate; /* a command reads left to right, even on an Arabic page */
 }
 
+/* The Snap Store's own badge (unmodified, CC BY-ND), at the buttons' height. */
+.store-badge { margin: 6px 0 12px; }
+.store-badge a { display: inline-block; border-radius: 8px; line-height: 0; }
+.store-badge img { display: block; width: auto; height: 48px; }
+
 .support { text-align: center; max-width: 720px; }
 .support h2 { font-size: clamp(1.5rem, 3.6vw, 2rem); margin: 0 0 10px; }
 .support > p:first-of-type { color: var(--muted); margin: 0 0 20px; }

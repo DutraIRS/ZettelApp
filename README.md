@@ -8,9 +8,10 @@
 Atomic notes, typed links, mind maps, flashcards, a 2D/3D knowledge graph, and link suggestions that learn from you.</p>
 
 <p align="center">
-  <a href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe"><b>Download for Windows</b></a> ·
-  <a href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Portable.zip">Portable .zip</a> ·
-  <a href="https://github.com/DutraIRS/ZettelApp/releases/latest"><b>Linux</b> (.deb, .tar.gz)</a> ·
+  <a href="https://apps.microsoft.com/detail/9PB0HCDXF63D"><b>Microsoft Store</b></a> ·
+  <a href="https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe">Windows installer</a> ·
+  <a href="https://snapcraft.io/zettelapp"><b>Snap Store</b></a> ·
+  <a href="https://github.com/DutraIRS/ZettelApp/releases/latest">Linux (.deb, .tar.gz, .flatpak)</a> ·
   <a href="https://dutrairs.github.io/ZettelApp/">Website</a> ·
   <a href="https://dutrairs.github.io/ZettelApp/docs/">Documentation</a>
 </p>
@@ -58,19 +59,31 @@ Atomic notes, typed links, mind maps, flashcards, a 2D/3D knowledge graph, and l
 
 ### Windows
 
-Download **[ZettelApp-Setup.exe](https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe)**
+Get it from the **[Microsoft Store](https://apps.microsoft.com/detail/9PB0HCDXF63D)** (it updates
+itself and shows no SmartScreen warning), or download
+**[ZettelApp-Setup.exe](https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Setup.exe)**
 (per-user, no admin rights needed) or the
 **[portable zip](https://github.com/DutraIRS/ZettelApp/releases/latest/download/ZettelApp-Portable.zip)**.
 Requires Windows 10 (21H2+) or 11, 64-bit.
 
 ### Linux
 
-From the [latest release](https://github.com/DutraIRS/ZettelApp/releases/latest):
+<a href="https://snapcraft.io/zettelapp"><picture>
+    <source srcset="website/assets/badges/snap-store-en-white.svg" media="(prefers-color-scheme: dark)">
+    <img src="website/assets/badges/snap-store-en-black.svg" alt="Get it from the Snap Store" height="48">
+  </picture></a>
+
+From the **[Snap Store](https://snapcraft.io/zettelapp)**: `sudo snap install zettelapp` (it updates
+itself, on any distribution with snapd). To keep API keys in the system keyring, also run
+`sudo snap connect zettelapp:password-manager-service`.
+
+Or from the [latest release](https://github.com/DutraIRS/ZettelApp/releases/latest):
 
 | Download | Use it when |
 |---|---|
 | `ZettelApp-Linux-amd64.deb` | You use Debian, Ubuntu, Mint or another `.deb`-based distribution: install it with `sudo apt install ./ZettelApp-Linux-amd64.deb` (or open it in your software centre). |
 | `ZettelApp-Linux-x86_64.tar.gz` | You want a portable build, or use another distribution: unpack it anywhere and run `ZettelApp/zettelapp`. |
+| `ZettelApp-Linux-x86_64.flatpak` | You prefer Flatpak: `flatpak install --user ./ZettelApp-Linux-x86_64.flatpak` (a bundle, not on Flathub). |
 
 Officially supported: **Debian 13 and Ubuntu 24.04 LTS or newer** (and distributions built on them,
 such as Linux Mint 22). The portable archive also runs on other 64-bit distributions with glibc 2.39 or
@@ -78,8 +91,8 @@ newer (Fedora 40+, Arch, openSUSE Tumbleweed…), without official testing.
 
 Both bundle Python and Qt; they need a 64-bit desktop (X11 or Wayland, GNOME, KDE and others) with the
 standard graphics libraries, listed in the `.deb`'s dependencies. API keys are stored in the Secret
-Service (GNOME Keyring or KWallet); without a keyring ZettelApp keeps them in memory only. A Flatpak
-manifest and a Snap recipe live in the repository (`packaging/`), with store listings planned.
+Service (GNOME Keyring or KWallet); without a keyring ZettelApp keeps them in memory only. The Flatpak
+manifest and the Snap recipe live in the repository (`packaging/`).
 
 Checksums are listed on the [release page](https://github.com/DutraIRS/ZettelApp/releases/latest). See
 [Getting started](docs/getting-started.md).

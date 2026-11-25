@@ -8,15 +8,6 @@ getting in touch on [GitHub](https://github.com/DutraIRS/ZettelApp).
 
 ## Next
 
-### Linux
-
-- [ ] **Snap Store**: check that `snap info zettelapp` finds 1.5.0 and `sudo snap install zettelapp`
-  works, and ask on the Snapcraft forum for `password-manager-service` to connect automatically
-  (until then API keys stay in memory unless the user runs
-  `sudo snap connect zettelapp:password-manager-service`).
-
-Back to windows and checkout to android-port branch.
-
 ### Android
 
 **In progress** (`android/`): a native Kotlin/Compose app runs ZettelApp's Python core on the
