@@ -123,3 +123,15 @@ def test_close_turns_red_on_hover_and_the_others_take_the_theme_s_hover(window):
 
     assert hovered(bar.buttons["close"]) == "#c42b1c"
     assert hovered(bar.buttons["minimise"]) not in ("#c42b1c", theme.current().sidebar)
+
+
+def test_the_icon_menus_title_and_buttons_share_the_row_s_middle(window):
+    _shown, bar, _frame = window
+    middle = bar.height() / 2
+    for widget in (bar._icon, bar._title, *bar.buttons.values()):
+        geometry = widget.geometry()
+        assert abs(geometry.y() + geometry.height() / 2 - middle) <= 0.5, widget
+    # A menu bar draws its items at its own top: what matters is where the items are.
+    for action in bar.menus.actions():
+        item = bar.menus.actionGeometry(action).translated(bar.menus.pos())
+        assert abs(item.y() + item.height() / 2 - middle) <= 1, action.text()

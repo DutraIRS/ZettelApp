@@ -124,8 +124,9 @@ class TitleBar(QWidget):
         self._title.setSizePolicy(QSizePolicy.Policy.Ignored, QSizePolicy.Policy.Preferred)
         for label in (self._icon, self._title):
             label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
-        row.addWidget(self._icon)
-        row.addWidget(menus)
+        row.addWidget(self._icon, 0, Qt.AlignmentFlag.AlignVCenter)
+        # Centred: the menu bar is shorter than the row, and a row lays it out at the top.
+        row.addWidget(menus, 0, Qt.AlignmentFlag.AlignVCenter)
         row.addWidget(self._title, 1)
         self.buttons: dict[str, QToolButton] = {}
         for name, slot in (
