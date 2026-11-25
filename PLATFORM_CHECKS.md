@@ -5,8 +5,8 @@ platform session can be done start to finish without asking what to look at. It 
 with every change that touches the interface, theming, files, notifications or packaging. Items
 belong to the next release, **1.4.0**; once it ships, the checked items are removed.
 
-Last updated: 24 November 2026 (1.7–1.12: arrow tips, network measures, Ask's review, preview
-options, the rail and sort menu, Obsidian folders; reference screenshots from Windows in
+Last updated: 24 November 2026 (1.7–1.13: arrow tips, network measures, Ask's review, preview
+options, the rail and sort menu, diffusion, Obsidian folders; reference screenshots from Windows in
 [WINDOWS_SCREENSHOTS/](WINDOWS_SCREENSHOTS/); earlier: the window's top row on Windows, Reading view, preview spacing, the adventure card, live accent,
 Dolphin, plus everything the earlier Windows, GNOME and KDE passes could not reach).
 
@@ -257,7 +257,28 @@ distance, not about notes with few links).
 - [ ] GNOME
 - [ ] KDE
 
-### 1.12 Importing an Obsidian vault through the desktop's folder dialog (changed)
+### 1.12 Diffusion in the graph (new)
+
+*Graph*, select a note with a few links (the demo vault's *Spaced repetition*), click
+**Diffusion**: the button turns to **Stop**, the legend to *Diffusion from “…”* with four colours,
+and the notes light up step by step, five steps in a loop: deep red at the start, then orange and
+yellow further out (bright orange to brown in dark mode); unreached notes grey, the group areas
+faded back. Switch the measure to *By links weighted by similarity*: it restarts. **Stop**,
+switching 2D/3D, changing a filter or leaving the page all bring the usual colours back. With no
+note selected or open, it says to select one. In 3D the same colours, on the spheres. The loop
+stays smooth while dragging the graph. Compare with
+[`diffusion-distance-1-light.png`](WINDOWS_SCREENSHOTS/diffusion-distance-1-light.png),
+[`-3-`](WINDOWS_SCREENSHOTS/diffusion-distance-3-light.png),
+[`-5-`](WINDOWS_SCREENSHOTS/diffusion-distance-5-light.png),
+[`diffusion-similarity-5-dark.png`](WINDOWS_SCREENSHOTS/diffusion-similarity-5-dark.png) and
+[`diffusion-3d-light.png`](WINDOWS_SCREENSHOTS/diffusion-3d-light.png).
+
+- [x] Windows (real window, 125 %): both measures, light and dark, 2D and 3D, as in the
+  screenshots; the frames were stepped by script (the timer's 0.7 s loop wasn't watched by eye).
+- [ ] GNOME
+- [ ] KDE
+
+### 1.13 Importing an Obsidian vault through the desktop's folder dialog (changed)
 
 The import code is covered by tests; what's left is the desktop's part. Make a small vault:
 
@@ -281,7 +302,7 @@ links go to *Deep note*, the root *Atomic notes* and the one in *Projects*.
   14 skipped; Windows skips the Linux-only ones), `ruff check .`, `ruff format --check .`,
   `python tools/i18n.py check` (1030/1030 in every language). *Windows: 490 passed, 70 skipped;
   ruff clean; 1027/1027 in all ten languages.* *Windows again on 24 November, after 1.7–1.12:
-  529 passed, 70 skipped; ruff clean; 1068/1068 in all ten languages; `packaging/build.ps1`
+  538 passed, 70 skipped (with 1.12, Diffusion); ruff clean; 1082/1082 in all ten languages; `packaging/build.ps1`
   built the app (self-tests passed), the installer, the portable zip and the MSIX. Linux: run
   the same three commands and `packaging/build-linux.sh` (no new dependencies since the last
   Linux pass).*
