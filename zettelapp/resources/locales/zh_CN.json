@@ -1128,5 +1128,19 @@
  "transitivity {value}": "传递性 {value}",
  "None": "无",
  "Tip at the start": "起点箭头",
- "Tips at both ends": "两端箭头"
+ "Tips at both ends": "两端箭头",
+ "Diffusion": "扩散",
+ "Diffusion measure": "扩散方式",
+ "By link distance": "按链接距离",
+ "By links weighted by similarity": "按相似度加权的链接",
+ "Watch the selected note's influence spread through the network (the note open in the editor if none is selected)": "观看所选笔记的影响如何在网络中扩散（未选择时为编辑器中打开的笔记）",
+ "Link distance: one link further at each step. Weighted by similarity: influence flows more along links between notes alike in meaning.": "链接距离：每一步前进一个链接。按相似度加权：影响更多地沿含义相近的笔记之间的链接流动。",
+ "Select a note in the graph to start a diffusion from.": "请在图中选择一条笔记作为扩散的起点。",
+ "Diffusion from “{title}”": "从“{title}”扩散",
+ "The most influence": "影响最大",
+ "Some influence": "有一些影响",
+ "A little": "少许",
+ "Not reached yet": "尚未到达",
+ "The influence moves one link further at each step, then starts again.": "影响每一步前进一个链接，然后重新开始。",
+ "A random walk with restart: influence flows along links in proportion to how alike the linked notes are (LSA embeddings), and a share returns to the start.": "带重启的随机游走：影响沿链接按所连笔记的相似程度（LSA 嵌入）流动，并有一部分回到起点。"
 }

@@ -93,6 +93,20 @@ neutral grey &quot;Other&quot; colour. <strong>Link types</strong> use a second 
 (solid, dashed, dotted and so on), and directed types draw an arrow tip such as a triangle or a diamond.
 Choose them in <em>Tools ▸ Options ▸ Link types</em> (see <a href="notes-and-links.html#your-own-link-types">Your own link types</a>).
 The legend always names everything, so nothing depends on colour alone.</p>
+<h3 id="diffusion">Diffusion</h3>
+<p>Select a note (or open one in the editor) and click <strong>Diffusion</strong> to watch its influence spread
+through the network in a short loop of five steps. Choose how it spreads:</p>
+<ul>
+<li><strong>By link distance</strong>: one link further at each step, fading evenly with distance.</li>
+<li><strong>By links weighted by similarity</strong>: a random walk with restart. Influence flows along links in
+proportion to how alike the linked notes are (cosine similarity of their LSA embeddings), and a
+share returns to the note it started from, so notes that are both close and alike end up with
+the most (the note's personalised PageRank).</li>
+</ul>
+<p>Notes go from deep red (the most influence) through orange to yellow (a little; in dark mode, from
+bright orange to brown); notes not reached yet turn grey and the group areas fade back. The legend
+explains the colours. Click <strong>Stop</strong>, change the graph or leave the page to go back to the usual
+colours.</p>
 <h2 id="insights">Insights</h2>
 <p>The <strong>Insights</strong> page (Ctrl+3) summarises your vault:</p>
 <ul>

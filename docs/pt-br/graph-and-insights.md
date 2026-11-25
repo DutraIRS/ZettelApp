@@ -76,6 +76,23 @@ cinza neutra "Outros". Os **Tipos de link** usam uma segunda pista além da cor:
 Escolha-os em *Ferramentas ▸ Opções ▸ Tipos de link* (veja [Seus próprios tipos de link](notes-and-links.md#your-own-link-types)).
 A legenda sempre nomeia tudo, então nada depende apenas da cor.
 
+### Difusão
+
+Selecione uma nota (ou abra uma no editor) e clique em **Difusão** para ver a influência dela se espalhar
+pela rede, em um ciclo curto de cinco passos. Escolha como ela se espalha:
+
+- **Por distância em links**: um link a mais a cada passo, enfraquecendo de forma uniforme com a
+  distância.
+- **Por links ponderados por similaridade**: um passeio aleatório com reinício. A influência flui pelos
+  links na proporção de quão parecidas são as notas ligadas (similaridade de cosseno dos embeddings LSA
+  delas), e uma parte volta à nota de partida, então as notas próximas *e* parecidas ficam com mais (o
+  PageRank personalizado da nota).
+
+As notas vão do vermelho escuro (a maior influência) ao amarelo, passando pelo laranja (um pouco; no
+modo escuro, do laranja vivo ao marrom); as notas ainda não alcançadas ficam cinza e as áreas dos grupos
+se apagam. A legenda explica as cores. Clique em **Parar**, mude o grafo ou saia da página para voltar
+às cores de sempre.
+
 ## Insights
 
 A página **Insights** (Ctrl+3) resume o seu cofre:

@@ -18,6 +18,11 @@ All notable changes to ZettelApp are documented here. The format follows
 
 ### Added
 
+- **Diffusion in the graph** (*Graph ▸ Diffusion*): select a note and watch its influence spread
+  through the network in a five-step loop, by link distance (one link further at each step) or by
+  links weighted by similarity (a random walk with restart that favours links between notes alike
+  in meaning). Notes run from deep red to yellow as their share falls, unreached notes turn grey,
+  and the legend explains the colours; in 2D and 3D.
 - **Preview and Reading view options** (*Options ▸ General*): whether a single line break starts a
   new line or lines join into one paragraph (standard Markdown), alignment at the start or
   justified, line spacing and the space between paragraphs. They apply wherever notes are shown

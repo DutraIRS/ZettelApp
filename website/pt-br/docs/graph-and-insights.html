@@ -93,6 +93,21 @@ cinza neutra &quot;Outros&quot;. Os <strong>Tipos de link</strong> usam uma segu
 (sólida, tracejada, pontilhada e assim por diante), e os tipos direcionados desenham uma ponta de seta, como um triângulo ou um losango.
 Escolha-os em <em>Ferramentas ▸ Opções ▸ Tipos de link</em> (veja <a href="notes-and-links.html#your-own-link-types">Seus próprios tipos de link</a>).
 A legenda sempre nomeia tudo, então nada depende apenas da cor.</p>
+<h3 id="difusao">Difusão</h3>
+<p>Selecione uma nota (ou abra uma no editor) e clique em <strong>Difusão</strong> para ver a influência dela se espalhar
+pela rede, em um ciclo curto de cinco passos. Escolha como ela se espalha:</p>
+<ul>
+<li><strong>Por distância em links</strong>: um link a mais a cada passo, enfraquecendo de forma uniforme com a
+distância.</li>
+<li><strong>Por links ponderados por similaridade</strong>: um passeio aleatório com reinício. A influência flui pelos
+links na proporção de quão parecidas são as notas ligadas (similaridade de cosseno dos embeddings LSA
+delas), e uma parte volta à nota de partida, então as notas próximas <em>e</em> parecidas ficam com mais (o
+PageRank personalizado da nota).</li>
+</ul>
+<p>As notas vão do vermelho escuro (a maior influência) ao amarelo, passando pelo laranja (um pouco; no
+modo escuro, do laranja vivo ao marrom); as notas ainda não alcançadas ficam cinza e as áreas dos grupos
+se apagam. A legenda explica as cores. Clique em <strong>Parar</strong>, mude o grafo ou saia da página para voltar
+às cores de sempre.</p>
 <h2 id="insights">Insights</h2>
 <p>A página <strong>Insights</strong> (Ctrl+3) resume o seu cofre:</p>
 <ul>

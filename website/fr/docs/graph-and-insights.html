@@ -66,6 +66,22 @@
 <h3 id="groupes-et-couleurs">Groupes et couleurs</h3>
 <p>Lorsque <strong>Groupe</strong> est activé, les notes portant le même tag ou appartenant au même cluster sont rapprochées, et chaque groupe reçoit une zone légèrement ombrée avec son nom. La légende indique la taille des groupes. Cliquez sur l’un d’eux pour mettre ses notes en évidence.</p>
 <p>Les couleurs des groupes et graphiques proviennent d’une palette <strong>validée pour les déficiences de la vision des couleurs</strong>, en mode clair comme en mode sombre. Elles sont attribuées dans un ordre fixe et ne sont jamais réutilisées : au-delà du huitième groupe, les suivants partagent la couleur grise neutre « Other ». Les <strong>types de liens</strong> utilisent aussi la forme des lignes : chacune possède son propre style (plein, tireté, pointillé, etc.) et les liens orientés ont une pointe (triangle, losange…). Choisissez-les dans <em>Outils ▸ Options ▸ Types de lien</em> (voir <a href="notes-and-links.html#your-own-link-types">Vos propres types de liens</a>). La légende nomme toujours chaque élément ; l’information ne dépend donc pas uniquement des couleurs.</p>
+<h3 id="diffusion">Diffusion</h3>
+<p>Sélectionnez une note (ou ouvrez-en une dans l’éditeur) et cliquez sur <strong>Diffusion</strong> pour voir son
+influence se propager dans le réseau, en une courte boucle de cinq étapes. Choisissez comment elle se
+propage :</p>
+<ul>
+<li><strong>Par distance en liens</strong> : un lien plus loin à chaque étape, en s’atténuant régulièrement avec la
+distance.</li>
+<li><strong>Par liens pondérés par la similarité</strong> : une marche aléatoire avec redémarrage. L’influence circule
+par les liens en proportion de la ressemblance des notes liées (similarité cosinus de leurs
+plongements LSA), et une part revient à la note de départ : les notes à la fois proches <em>et</em>
+semblables en reçoivent le plus (le PageRank personnalisé de la note).</li>
+</ul>
+<p>Les notes vont du rouge foncé (la plus forte influence) au jaune en passant par l’orange (un peu ; en
+mode sombre, de l’orange vif au brun) ; les notes pas encore atteintes passent au gris et les zones des
+groupes s’estompent. La légende explique les couleurs. Cliquez sur <strong>Arrêter</strong>, modifiez le graphe ou
+quittez la page pour retrouver les couleurs habituelles.</p>
 <h2 id="insights">Insights</h2>
 <p>La page <strong>Insights</strong> (Ctrl+3) résume votre coffre :</p>
 <ul>

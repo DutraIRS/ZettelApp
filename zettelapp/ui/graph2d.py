@@ -39,6 +39,7 @@ from zettelapp.ui.graph_common import (
 from zettelapp.ui.link_style import link_pen, tip_pen
 
 LANE_SPREAD = 20.0  # scene units between links that join the same two notes
+GLOW = 9.0  # how far a diffusion's glow reaches past the most influenced note
 
 
 def node_radius(degree: int) -> float:
@@ -82,7 +83,6 @@ class NodeItem(QGraphicsObject):
         self.note_id = note_id
         data = view.data
         self.radius = node_radius(data.degree.get(note_id, 0))
-        self.color = data.group_color(data.group_of.get(note_id))
         self.title = data.titles.get(note_id) or "Untitled"
         self.pixmap: QPixmap | None = None
         if note_id in data.images:
@@ -107,7 +107,7 @@ class NodeItem(QGraphicsObject):
         self.label_visible = True
 
     def boundingRect(self) -> QRectF:  # noqa: N802
-        r = self.radius + 3
+        r = self.radius + 3 + GLOW  # room for a diffusion's glow
         return QRectF(-max(r, 80), -r, max(2 * r, 160), 2 * r + 22)
 
     def shape(self) -> QPainterPath:
@@ -120,12 +120,20 @@ class NodeItem(QGraphicsObject):
     def paint(self, painter: QPainter, option, widget=None) -> None:
         t = theme.current()
         view = self.view
+        heat = view.data.heat_of(self.note_id)
         dimmed = view.hover_set is not None and self.note_id not in view.hover_set
-        painter.setOpacity(0.25 if dimmed else 1.0)
+        painter.setOpacity(0.25 if dimmed else 0.45 if heat == 0 else 1.0)
         r = self.radius
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
+        color = view.data.node_color(self.note_id)
+        if heat:  # a glow that grows with the note's share of the influence
+            glow = QColor(color)
+            glow.setAlphaF(0.35)
+            painter.setPen(Qt.PenStyle.NoPen)
+            painter.setBrush(glow)
+            painter.drawEllipse(QPointF(0, 0), r + 2 + GLOW * heat**0.5, r + 2 + GLOW * heat**0.5)
         painter.setPen(QPen(t.q("surface"), 2))  # surface ring keeps overlapping marks legible
-        painter.setBrush(self.color)
+        painter.setBrush(color)
         painter.drawEllipse(QPointF(0, 0), r, r)
         if self.pixmap is not None:
             clip = QPainterPath()
@@ -289,6 +297,8 @@ class Graph2DView(QGraphicsView):
                 stroke.setAlphaF(0.9 if chosen else 0.35)
                 hull.setPen(QPen(stroke, 2.4 if chosen else 1))
                 hull.setZValue(0)
+                if self.data.heat is not None:  # a diffusion plays: the groups step back
+                    hull.setOpacity(0.35)
                 scene.addItem(hull)
                 self.hull_items.append(hull)
                 top = region.boundingRect()

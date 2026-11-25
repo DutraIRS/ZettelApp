@@ -76,6 +76,23 @@ grigio neutro «Altro». I **tipi di collegamento** usano un secondo indizio olt
 Scegli in *Strumenti ▸ Opzioni ▸ Tipi di collegamento* (vedi [I tuoi tipi di collegamento](notes-and-links.md#your-own-link-types)).
 La legenda nomina sempre tutto, quindi nulla dipende dal solo colore.
 
+### Diffusione
+
+Seleziona una nota (o aprine una nell’editor) e fai clic su **Diffusione** per guardare la sua influenza
+diffondersi nella rete, in un breve ciclo di cinque passi. Scegli come si diffonde:
+
+- **Per distanza in collegamenti**: un collegamento più in là a ogni passo, attenuandosi in modo
+  uniforme con la distanza.
+- **Per collegamenti pesati per somiglianza**: una passeggiata aleatoria con riavvio. L’influenza scorre
+  lungo i collegamenti in proporzione a quanto si somigliano le note collegate (somiglianza del coseno
+  dei loro embedding LSA), e una parte torna alla nota di partenza, così le note vicine *e* simili ne
+  ricevono di più (il PageRank personalizzato della nota).
+
+Le note vanno dal rosso scuro (la maggiore influenza) al giallo passando per l’arancione (poca; in
+modalità scura, dall’arancione acceso al marrone); le note non ancora raggiunte diventano grigie e le
+aree dei gruppi si attenuano. La legenda spiega i colori. Fai clic su **Ferma**, cambia il grafo o lascia
+la pagina per tornare ai colori consueti.
+
 ## Statistiche
 
 La pagina **Statistiche** (Ctrl+3) riassume il tuo vault:

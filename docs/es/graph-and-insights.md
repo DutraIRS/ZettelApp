@@ -76,6 +76,23 @@ color gris neutro «Otros». Los **tipos de enlace** usan una segunda pista adem
 Elígelos en *Herramientas ▸ Opciones ▸ Tipos de enlace* (consulta [Tus propios tipos de enlace](notes-and-links.md#your-own-link-types)).
 La leyenda siempre nombra todo, así que nada depende solo del color.
 
+### Difusión
+
+Selecciona una nota (o abre una en el editor) y haz clic en **Difusión** para ver cómo su influencia se
+extiende por la red en un bucle corto de cinco pasos. Elige cómo se extiende:
+
+- **Por distancia en enlaces**: un enlace más en cada paso, debilitándose de forma uniforme con la
+  distancia.
+- **Por enlaces ponderados por similitud**: un paseo aleatorio con reinicio. La influencia fluye por los
+  enlaces en proporción a lo parecidas que son las notas enlazadas (similitud del coseno de sus
+  embeddings LSA), y una parte vuelve a la nota de partida, así que las notas cercanas *y* parecidas
+  acaban con más (el PageRank personalizado de la nota).
+
+Las notas van del rojo oscuro (la mayor influencia) al amarillo pasando por el naranja (un poco; en modo
+oscuro, del naranja brillante al marrón); las notas aún no alcanzadas se vuelven grises y las áreas de
+los grupos se atenúan. La leyenda explica los colores. Haz clic en **Detener**, cambia el grafo o sal de
+la página para volver a los colores habituales.
+
 ## Estadísticas
 
 La página **Estadísticas** (Ctrl+3) resume tu bóveda:

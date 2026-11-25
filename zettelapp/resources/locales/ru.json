@@ -1190,5 +1190,19 @@
  "transitivity {value}": "транзитивность {value}",
  "None": "Нет",
  "Tip at the start": "Наконечник в начале",
- "Tips at both ends": "Наконечники на обоих концах"
+ "Tips at both ends": "Наконечники на обоих концах",
+ "Diffusion": "Диффузия",
+ "Diffusion measure": "Мера диффузии",
+ "By link distance": "По расстоянию в связях",
+ "By links weighted by similarity": "По связям, взвешенным по сходству",
+ "Watch the selected note's influence spread through the network (the note open in the editor if none is selected)": "Посмотреть, как влияние выбранной заметки распространяется по сети (заметки, открытой в редакторе, если ничего не выбрано)",
+ "Link distance: one link further at each step. Weighted by similarity: influence flows more along links between notes alike in meaning.": "Расстояние в связях: на каждом шаге на одну связь дальше. С весами по сходству: влияние сильнее течёт по связям между близкими по смыслу заметками.",
+ "Select a note in the graph to start a diffusion from.": "Выберите в графе заметку, с которой начнётся диффузия.",
+ "Diffusion from “{title}”": "Диффузия от «{title}»",
+ "The most influence": "Наибольшее влияние",
+ "Some influence": "Некоторое влияние",
+ "A little": "Немного",
+ "Not reached yet": "Ещё не достигнута",
+ "The influence moves one link further at each step, then starts again.": "Влияние продвигается на одну связь за шаг, затем всё начинается снова.",
+ "A random walk with restart: influence flows along links in proportion to how alike the linked notes are (LSA embeddings), and a share returns to the start.": "Случайное блуждание с возвратом: влияние течёт по связям пропорционально сходству связанных заметок (эмбеддинги LSA), а часть возвращается к началу."
 }

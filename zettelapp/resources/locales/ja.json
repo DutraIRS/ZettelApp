@@ -1128,5 +1128,19 @@
  "transitivity {value}": "推移性 {value}",
  "None": "なし",
  "Tip at the start": "始点の矢じり",
- "Tips at both ends": "両端の矢じり"
+ "Tips at both ends": "両端の矢じり",
+ "Diffusion": "拡散",
+ "Diffusion measure": "拡散の尺度",
+ "By link distance": "リンク距離で",
+ "By links weighted by similarity": "類似度で重み付けしたリンクで",
+ "Watch the selected note's influence spread through the network (the note open in the editor if none is selected)": "選択したノートの影響がネットワークに広がる様子を見る（選択がなければエディターで開いているノート）",
+ "Link distance: one link further at each step. Weighted by similarity: influence flows more along links between notes alike in meaning.": "リンク距離：1 ステップごとに 1 リンク先へ。類似度で重み付け：意味の近いノート同士のリンクほど影響が多く流れます。",
+ "Select a note in the graph to start a diffusion from.": "拡散の起点にするノートをグラフで選択してください。",
+ "Diffusion from “{title}”": "「{title}」からの拡散",
+ "The most influence": "最も大きな影響",
+ "Some influence": "ある程度の影響",
+ "A little": "わずか",
+ "Not reached yet": "まだ届いていない",
+ "The influence moves one link further at each step, then starts again.": "影響は 1 ステップごとに 1 リンク先へ進み、最後まで行くと最初から繰り返します。",
+ "A random walk with restart: influence flows along links in proportion to how alike the linked notes are (LSA embeddings), and a share returns to the start.": "リスタート付きランダムウォーク：影響はリンクでつながるノート同士の類似度（LSA 埋め込み）に比例してリンクを流れ、一部は起点に戻ります。"
 }

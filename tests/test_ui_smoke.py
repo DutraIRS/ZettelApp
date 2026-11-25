@@ -956,3 +956,54 @@ def test_an_undirected_link_type_has_no_reverse_name(window):
         LinkType("", "Linkoso", "Linkoso (reverse)", "#123456", False)
     )
     assert saved.inverse_label == "Linkoso"
+
+
+def test_graph_diffusion_loops_five_frames_from_the_selected_note_and_stops(window):
+    vault = window.vault
+    a = vault.create_note("Alpha", "Memory and recall. [[Beta]]", [])
+    b = vault.create_note("Beta", "Recall and memory. [[Gamma]]", [])
+    c = vault.create_note("Gamma", "Cooking pasta.", [])
+    vault.create_note("Delta", "Alone.", [])
+    vault.save_note(a, touch=False)
+    vault.save_note(b, touch=False)
+    window.show_page(1)
+    pump(400)
+    graph = window.graph
+    view = graph.view2d
+    messages = []
+    graph.status.connect(messages.append)
+
+    view.select(None)
+    graph.focus_id = None
+    graph.diffuse_button.click()  # no note to start from
+    pump(100)
+    assert not graph.diffuse_button.isChecked() and view.data.heat is None
+    assert "Select a note" in messages[-1]
+
+    view.select(a.id)
+    graph.diffuse_button.click()
+    pump(200)
+    assert graph.diffuse_button.isChecked()
+    assert len(graph._diffusion) == 5
+    assert graph._diffusion[0] == {a.id: 1.0}
+    assert set(graph._diffusion[-1]) == {a.id, b.id, c.id}  # Delta is never reached
+    assert view.data.heat is not None and "Alpha" in graph.legend_title.text()
+    seen = {frozenset(view.data.heat)}
+    for _step in range(5):
+        graph._next_diffusion_frame()
+        seen.add(frozenset(view.data.heat))
+    assert len(seen) > 1  # it moves, and loops back to the start
+
+    graph.diffuse_measure.setCurrentIndex(1)  # restarts, weighted by similarity
+    pump(400)
+    last = graph._diffusion[-1]
+    assert last[a.id] == 1.0 and last[b.id] > last.get(c.id, 0)
+
+    graph.diffuse_button.click()  # stop
+    assert view.data.heat is None and not graph._diffusion_timer.isActive()
+    assert "Alpha" not in graph.legend_title.text()
+
+    graph.diffuse_button.click()
+    pump(200)
+    graph.refresh()  # redrawing the graph ends it
+    assert not graph.diffuse_button.isChecked() and not graph._diffusion_timer.isActive()

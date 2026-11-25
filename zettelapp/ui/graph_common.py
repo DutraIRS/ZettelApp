@@ -24,6 +24,10 @@ from zettelapp.ui import theme
 from zettelapp.ui.link_style import ARROW_SIZE, tip_shape
 
 MAX_GROUP_COLORS = 8  # categorical palette size; further groups fold into "Other"
+# A diffusion's ramp (a little influence, the most): vivid at both ends, the most standing out
+# from the surface (darker on light, brighter on dark).
+HEAT_LIGHT = ("#fed976", "#b30018")
+HEAT_DARK = ("#a1401a", "#ffb35c")
 
 
 @dataclass
@@ -37,6 +41,26 @@ class GraphData:
     images: dict[str, Path] = field(default_factory=dict)
     types: dict[str, LinkType] = field(default_factory=dict)
     focus: str | None = None
+    # While a diffusion plays: each reached note's share of the influence (0-1].
+    heat: dict[str, float] | None = None
+
+    def node_color(self, node: str) -> QColor:
+        """A note's fill: its group's colour, or during a diffusion a saturated warm ramp
+        from yellow (a little influence) to deep red, or from brown to bright orange in
+        dark mode (the most); notes not reached yet recede into grey."""
+        if self.heat is None:
+            return self.group_color(self.group_of.get(node))
+        t = theme.current()
+        value = self.heat.get(node, 0.0)
+        if value <= 0:
+            return _blend(t.q("text_muted"), t.q("surface"), 0.45)
+        low, high = HEAT_DARK if t.dark else HEAT_LIGHT
+        return _blend(QColor(high), QColor(low), value)
+
+    def heat_of(self, node: str) -> float | None:
+        """The note's share of the influence while a diffusion plays (0 if not reached yet),
+        or None when none plays."""
+        return None if self.heat is None else self.heat.get(node, 0.0)
 
     def group_color(self, group: int | None) -> QColor:
         t = theme.current()
@@ -88,6 +112,15 @@ class GraphData:
             if g is not None and g < MAX_GROUP_COLORS:
                 out.setdefault(g, []).append(node)
         return out
+
+
+def _blend(color: QColor, background: QColor, share: float) -> QColor:
+    """*color* at *share* over *background*, as one opaque colour."""
+    return QColor(
+        round(color.red() * share + background.red() * (1 - share)),
+        round(color.green() * share + background.green() * (1 - share)),
+        round(color.blue() * share + background.blue() * (1 - share)),
+    )
 
 
 def parallel_lanes(links: list[Link]) -> list[float]:

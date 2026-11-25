@@ -93,6 +93,21 @@ color gris neutro «Otros». Los <strong>tipos de enlace</strong> usan una segun
 (continua, de guiones, punteada, etc.), y los tipos dirigidos dibujan una punta de flecha como un triángulo o un rombo.
 Elígelos en <em>Herramientas ▸ Opciones ▸ Tipos de enlace</em> (consulta <a href="notes-and-links.html#your-own-link-types">Tus propios tipos de enlace</a>).
 La leyenda siempre nombra todo, así que nada depende solo del color.</p>
+<h3 id="difusion">Difusión</h3>
+<p>Selecciona una nota (o abre una en el editor) y haz clic en <strong>Difusión</strong> para ver cómo su influencia se
+extiende por la red en un bucle corto de cinco pasos. Elige cómo se extiende:</p>
+<ul>
+<li><strong>Por distancia en enlaces</strong>: un enlace más en cada paso, debilitándose de forma uniforme con la
+distancia.</li>
+<li><strong>Por enlaces ponderados por similitud</strong>: un paseo aleatorio con reinicio. La influencia fluye por los
+enlaces en proporción a lo parecidas que son las notas enlazadas (similitud del coseno de sus
+embeddings LSA), y una parte vuelve a la nota de partida, así que las notas cercanas <em>y</em> parecidas
+acaban con más (el PageRank personalizado de la nota).</li>
+</ul>
+<p>Las notas van del rojo oscuro (la mayor influencia) al amarillo pasando por el naranja (un poco; en modo
+oscuro, del naranja brillante al marrón); las notas aún no alcanzadas se vuelven grises y las áreas de
+los grupos se atenúan. La leyenda explica los colores. Haz clic en <strong>Detener</strong>, cambia el grafo o sal de
+la página para volver a los colores habituales.</p>
 <h2 id="estadisticas">Estadísticas</h2>
 <p>La página <strong>Estadísticas</strong> (Ctrl+3) resume tu bóveda:</p>
 <ul>

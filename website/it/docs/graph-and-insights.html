@@ -93,6 +93,21 @@ grigio neutro «Altro». I <strong>tipi di collegamento</strong> usano un second
 (continua, tratteggiata, punteggiata e così via) e i tipi orientati disegnano una punta di freccia come un triangolo o un rombo.
 Scegli in <em>Strumenti ▸ Opzioni ▸ Tipi di collegamento</em> (vedi <a href="notes-and-links.html#your-own-link-types">I tuoi tipi di collegamento</a>).
 La legenda nomina sempre tutto, quindi nulla dipende dal solo colore.</p>
+<h3 id="diffusione">Diffusione</h3>
+<p>Seleziona una nota (o aprine una nell’editor) e fai clic su <strong>Diffusione</strong> per guardare la sua influenza
+diffondersi nella rete, in un breve ciclo di cinque passi. Scegli come si diffonde:</p>
+<ul>
+<li><strong>Per distanza in collegamenti</strong>: un collegamento più in là a ogni passo, attenuandosi in modo
+uniforme con la distanza.</li>
+<li><strong>Per collegamenti pesati per somiglianza</strong>: una passeggiata aleatoria con riavvio. L’influenza scorre
+lungo i collegamenti in proporzione a quanto si somigliano le note collegate (somiglianza del coseno
+dei loro embedding LSA), e una parte torna alla nota di partenza, così le note vicine <em>e</em> simili ne
+ricevono di più (il PageRank personalizzato della nota).</li>
+</ul>
+<p>Le note vanno dal rosso scuro (la maggiore influenza) al giallo passando per l’arancione (poca; in
+modalità scura, dall’arancione acceso al marrone); le note non ancora raggiunte diventano grigie e le
+aree dei gruppi si attenuano. La legenda spiega i colori. Fai clic su <strong>Ferma</strong>, cambia il grafo o lascia
+la pagina per tornare ai colori consueti.</p>
 <h2 id="statistiche">Statistiche</h2>
 <p>La pagina <strong>Statistiche</strong> (Ctrl+3) riassume il tuo vault:</p>
 <ul>

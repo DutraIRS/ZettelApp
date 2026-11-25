@@ -1159,5 +1159,19 @@
  "transitivity {value}": "transitividade {value}",
  "None": "Nenhuma",
  "Tip at the start": "Ponta no início",
- "Tips at both ends": "Pontas nas duas extremidades"
+ "Tips at both ends": "Pontas nas duas extremidades",
+ "Diffusion": "Difusão",
+ "Diffusion measure": "Medida da difusão",
+ "By link distance": "Por distância em links",
+ "By links weighted by similarity": "Por links ponderados por similaridade",
+ "Watch the selected note's influence spread through the network (the note open in the editor if none is selected)": "Veja a influência da nota selecionada se espalhar pela rede (a nota aberta no editor, se nenhuma estiver selecionada)",
+ "Link distance: one link further at each step. Weighted by similarity: influence flows more along links between notes alike in meaning.": "Distância em links: um link a mais a cada passo. Ponderada por similaridade: a influência flui mais pelos links entre notas de significado parecido.",
+ "Select a note in the graph to start a diffusion from.": "Selecione uma nota no grafo para começar a difusão a partir dela.",
+ "Diffusion from “{title}”": "Difusão a partir de “{title}”",
+ "The most influence": "A maior influência",
+ "Some influence": "Alguma influência",
+ "A little": "Um pouco",
+ "Not reached yet": "Ainda não alcançada",
+ "The influence moves one link further at each step, then starts again.": "A influência avança um link a cada passo e depois recomeça.",
+ "A random walk with restart: influence flows along links in proportion to how alike the linked notes are (LSA embeddings), and a share returns to the start.": "Um passeio aleatório com reinício: a influência flui pelos links na proporção de quão parecidas são as notas ligadas (embeddings LSA), e uma parte volta ao início."
 }

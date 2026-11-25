@@ -77,6 +77,23 @@ Typen haben eine Pfeilspitze, zum Beispiel ein Dreieck oder eine Raute. Wählen 
 Optionen ▸ Linktypen* aus (siehe [Eigene Linktypen](notes-and-links.md#your-own-link-types)). Die Legende
 benennt alles, damit die Bedeutung nicht allein von der Farbe abhängt.
 
+### Diffusion
+
+Wähle eine Notiz aus (oder öffne eine im Editor) und klicke auf **Diffusion**, um zu sehen, wie sich
+ihr Einfluss in einer kurzen Schleife aus fünf Schritten im Netzwerk ausbreitet. Wähle, wie er sich
+ausbreitet:
+
+- **Nach Linkabstand**: bei jedem Schritt einen Link weiter, gleichmäßig schwächer mit dem Abstand.
+- **Nach Links, gewichtet nach Ähnlichkeit**: ein Random Walk mit Neustart. Der Einfluss fließt über
+  Links im Verhältnis dazu, wie ähnlich sich die verlinkten Notizen sind (Kosinusähnlichkeit ihrer
+  LSA-Embeddings), und ein Teil kehrt zur Ausgangsnotiz zurück. So erhalten Notizen, die nah *und*
+  ähnlich sind, am meisten (der personalisierte PageRank der Notiz).
+
+Die Notizen reichen von Dunkelrot (der meiste Einfluss) über Orange bis Gelb (ein wenig; im dunklen
+Modus von hellem Orange bis Braun); noch nicht erreichte Notizen werden grau, und die Gruppenflächen
+treten zurück. Die Legende erklärt die Farben. Klicke auf **Stopp**, ändere den Graphen oder verlasse
+die Seite, um zu den üblichen Farben zurückzukehren.
+
 ## Einblicke
 
 Die Seite **Einblicke** (Ctrl+3) fasst Ihren Tresor zusammen:

@@ -76,6 +76,22 @@ neutral grey "Other" colour. **Link types** use a second cue besides colour: eac
 Choose them in *Tools ▸ Options ▸ Link types* (see [Your own link types](notes-and-links.md#your-own-link-types)).
 The legend always names everything, so nothing depends on colour alone.
 
+### Diffusion
+
+Select a note (or open one in the editor) and click **Diffusion** to watch its influence spread
+through the network in a short loop of five steps. Choose how it spreads:
+
+- **By link distance**: one link further at each step, fading evenly with distance.
+- **By links weighted by similarity**: a random walk with restart. Influence flows along links in
+  proportion to how alike the linked notes are (cosine similarity of their LSA embeddings), and a
+  share returns to the note it started from, so notes that are both close and alike end up with
+  the most (the note's personalised PageRank).
+
+Notes go from deep red (the most influence) through orange to yellow (a little; in dark mode, from
+bright orange to brown); notes not reached yet turn grey and the group areas fade back. The legend
+explains the colours. Click **Stop**, change the graph or leave the page to go back to the usual
+colours.
+
 ## Insights
 
 The **Insights** page (Ctrl+3) summarises your vault:

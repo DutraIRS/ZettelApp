@@ -1283,5 +1283,19 @@
  "transitivity {value}": "التعدّي {value}",
  "None": "لا شيء",
  "Tip at the start": "رأس عند البداية",
- "Tips at both ends": "رأسان عند الطرفين"
+ "Tips at both ends": "رأسان عند الطرفين",
+ "Diffusion": "الانتشار",
+ "Diffusion measure": "مقياس الانتشار",
+ "By link distance": "حسب المسافة بالروابط",
+ "By links weighted by similarity": "حسب الروابط المرجّحة بالتشابه",
+ "Watch the selected note's influence spread through the network (the note open in the editor if none is selected)": "شاهد تأثير الملاحظة المحددة ينتشر عبر الشبكة (الملاحظة المفتوحة في المحرر إن لم تُحدَّد ملاحظة)",
+ "Link distance: one link further at each step. Weighted by similarity: influence flows more along links between notes alike in meaning.": "المسافة بالروابط: رابط واحد أبعد في كل خطوة. المرجّحة بالتشابه: يتدفق التأثير أكثر عبر الروابط بين الملاحظات المتقاربة في المعنى.",
+ "Select a note in the graph to start a diffusion from.": "حدّد ملاحظة في الرسم البياني ليبدأ الانتشار منها.",
+ "Diffusion from “{title}”": "الانتشار من «{title}»",
+ "The most influence": "التأثير الأكبر",
+ "Some influence": "بعض التأثير",
+ "A little": "قليل",
+ "Not reached yet": "لم يصل إليها بعد",
+ "The influence moves one link further at each step, then starts again.": "يتقدم التأثير رابطًا واحدًا في كل خطوة، ثم يبدأ من جديد.",
+ "A random walk with restart: influence flows along links in proportion to how alike the linked notes are (LSA embeddings), and a share returns to the start.": "مشي عشوائي مع العودة: يتدفق التأثير عبر الروابط بقدر تشابه الملاحظات المرتبطة (تضمينات LSA)، ويعود جزء منه إلى البداية."
 }

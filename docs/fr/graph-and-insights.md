@@ -49,6 +49,24 @@ Lorsque **Groupe** est activé, les notes portant le même tag ou appartenant au
 
 Les couleurs des groupes et graphiques proviennent d’une palette **validée pour les déficiences de la vision des couleurs**, en mode clair comme en mode sombre. Elles sont attribuées dans un ordre fixe et ne sont jamais réutilisées : au-delà du huitième groupe, les suivants partagent la couleur grise neutre « Other ». Les **types de liens** utilisent aussi la forme des lignes : chacune possède son propre style (plein, tireté, pointillé, etc.) et les liens orientés ont une pointe (triangle, losange…). Choisissez-les dans *Outils ▸ Options ▸ Types de lien* (voir [Vos propres types de liens](notes-and-links.md#your-own-link-types)). La légende nomme toujours chaque élément ; l’information ne dépend donc pas uniquement des couleurs.
 
+### Diffusion
+
+Sélectionnez une note (ou ouvrez-en une dans l’éditeur) et cliquez sur **Diffusion** pour voir son
+influence se propager dans le réseau, en une courte boucle de cinq étapes. Choisissez comment elle se
+propage :
+
+- **Par distance en liens** : un lien plus loin à chaque étape, en s’atténuant régulièrement avec la
+  distance.
+- **Par liens pondérés par la similarité** : une marche aléatoire avec redémarrage. L’influence circule
+  par les liens en proportion de la ressemblance des notes liées (similarité cosinus de leurs
+  plongements LSA), et une part revient à la note de départ : les notes à la fois proches *et*
+  semblables en reçoivent le plus (le PageRank personnalisé de la note).
+
+Les notes vont du rouge foncé (la plus forte influence) au jaune en passant par l’orange (un peu ; en
+mode sombre, de l’orange vif au brun) ; les notes pas encore atteintes passent au gris et les zones des
+groupes s’estompent. La légende explique les couleurs. Cliquez sur **Arrêter**, modifiez le graphe ou
+quittez la page pour retrouver les couleurs habituelles.
+
 ## Insights
 
 La page **Insights** (Ctrl+3) résume votre coffre :

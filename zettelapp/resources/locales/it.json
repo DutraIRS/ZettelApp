@@ -1159,5 +1159,19 @@
  "transitivity {value}": "transitività {value}",
  "None": "Nessuna",
  "Tip at the start": "Punta all'inizio",
- "Tips at both ends": "Punte a entrambe le estremità"
+ "Tips at both ends": "Punte a entrambe le estremità",
+ "Diffusion": "Diffusione",
+ "Diffusion measure": "Misura della diffusione",
+ "By link distance": "Per distanza in collegamenti",
+ "By links weighted by similarity": "Per collegamenti pesati per somiglianza",
+ "Watch the selected note's influence spread through the network (the note open in the editor if none is selected)": "Guarda l’influenza della nota selezionata diffondersi nella rete (quella aperta nell’editor se non ne è selezionata nessuna)",
+ "Link distance: one link further at each step. Weighted by similarity: influence flows more along links between notes alike in meaning.": "Distanza in collegamenti: un collegamento più in là a ogni passo. Pesata per somiglianza: l’influenza scorre di più lungo i collegamenti tra note di significato simile.",
+ "Select a note in the graph to start a diffusion from.": "Seleziona nel grafo una nota da cui far partire la diffusione.",
+ "Diffusion from “{title}”": "Diffusione da “{title}”",
+ "The most influence": "La maggiore influenza",
+ "Some influence": "Un po’ di influenza",
+ "A little": "Poca",
+ "Not reached yet": "Non ancora raggiunta",
+ "The influence moves one link further at each step, then starts again.": "L’influenza avanza di un collegamento a ogni passo, poi ricomincia.",
+ "A random walk with restart: influence flows along links in proportion to how alike the linked notes are (LSA embeddings), and a share returns to the start.": "Una passeggiata aleatoria con riavvio: l’influenza scorre lungo i collegamenti in proporzione a quanto si somigliano le note collegate (embedding LSA), e una parte torna all’inizio."
 }
